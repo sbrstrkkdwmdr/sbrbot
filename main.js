@@ -267,8 +267,6 @@ client.on('message', message =>{
         
         case 'giveadmin':
             message.channel.send("haha no")
-            setTimeout(3000)
-            message.channel.send("haha no")
         //if(user.ID = 503794887318044675){
         //roles.create        
         //let rName =("admin")
