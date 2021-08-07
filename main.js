@@ -286,8 +286,8 @@ client.on('message', message =>{
 
     default: 
         embed
-        .setTitle("Error 400/404")
-        .setDescription("This command was not correctly formatted or doesn't exist")
+            .setTitle("Error 400/404")
+            .setDescription("This command was not correctly formatted or doesn't exist")
     message.channel.send(embed)
         console.log('command error - default message.') 
     }
