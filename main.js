@@ -14,10 +14,13 @@ client.commands = new Discord.Collection();
 client.once('ready', () => {
     console.log('kwsmrksnsm is online!'); //message shown when bot turns on
 
-    client.user.setActivity('stuff',
-     { type: 'WATCHING', 
-    url: "https://youtube.com/saberstrkkdwmdr" })
-     .catch(console.error);
+    client.user.setPresence({
+    status: 'online',    
+    activity: {
+    name: 'things',
+    type: 'WATCHING', 
+    url: "https://youtube.com/saberstrkkdwmdr"}
+})
 })
 
 client.on('message', message =>{
