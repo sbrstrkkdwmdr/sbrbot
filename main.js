@@ -14,7 +14,10 @@ client.commands = new Discord.Collection();
 client.once('ready', () => {
     console.log('kwsmrksnsm is online!'); //message shown when bot turns on
 
-    client.user.setActivity('youtube.com/saberstrkkdwmdr', { type: 'WATCHING' }).catch(console.error);
+    client.user.setActivity('stuff',
+     { type: 'WATCHING', 
+    url: "https://youtube.com/saberstrkkdwmdr" })
+     .catch(console.error);
 })
 
 client.on('message', message =>{
@@ -81,9 +84,11 @@ client.on('message', message =>{
     case 'join':
         if(message.member.roles.cache.has('652396229208047619')){
         message.channel.send("Error 403: Forbidden. You already have this role")
-    } else {
+    } else if(message.member.roles.has(652389627717746699)) {
         message.channel.send('adding role to user')
         message.member.roles.add('652396229208047619')
+    } else {
+        message.channel.send("Error 403: Forbidden")
     }
         break;
     
