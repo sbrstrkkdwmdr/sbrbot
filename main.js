@@ -11,13 +11,6 @@ const { monitorEventLoopDelay } = require('perf_hooks');
 
 client.commands = new Discord.Collection();
 
-const commandFiles = fs.readdirSync(__dirname +'/commands/').filter(file => file.endsWith('.js'));
-for(const file of commandFiles){
-    const command = require(`./commands/${file}`); //opens the folder to run commands
-
-    client.commands.set(command.name, command);
-}
-
 client.once('ready', () => {
     console.log('kwsmrksnsm is online!'); //message shown when bot turns on
 
