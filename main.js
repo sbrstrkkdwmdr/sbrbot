@@ -17,7 +17,7 @@ client.once('ready', () => {
     client.user.setPresence({
     status: 'online',    
     activity: {
-    name: 'things',
+    name: 'this server',
     type: 'WATCHING', 
     url: "https://youtube.com/saberstrkkdwmdr"}
 })
