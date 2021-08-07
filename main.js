@@ -290,10 +290,8 @@ client.on('message', message =>{
                 break;    */
 
     default: 
-        embed
-            .setTitle("Error 400/404")
-            .setDescription("This command was not correctly formatted or doesn't exist")
-    message.channel.send(embed)
+    message.channel.send("Error 400 Bad Request or Error 404 Not Found")
+    message.channel.send("command sent either does not exist or was formatted incorrectly")
         console.log('command error - default message.') 
     }
 }); //^ all of these run the command files necessary.
