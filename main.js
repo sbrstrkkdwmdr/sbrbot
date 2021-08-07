@@ -142,7 +142,7 @@ client.on('message', message =>{
     case 'pingperson':
         if(message.member.hasPermission('ADMINISTRATOR')){ //they need admin
         let user = message.mentions.users.first(); //gets the pinged user's ID
-        message.channel.send(`sup  ${user} `); //user.username is the pinged user
+        message.channel.send(`${user} `); //user.username is the pinged user
         message.delete();
         }
         else message.channel.send("Error 401: Unauthorised")
