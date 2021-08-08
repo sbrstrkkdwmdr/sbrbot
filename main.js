@@ -290,7 +290,7 @@ client.on('message', message =>{
                     message.channel.send(` ${user} Blue Budgie`)
                 }
                 break;    */
-            case 'msg':
+            /*case 'msg':
                 if(message.member.hasPermission('ADMINISTRATOR')){
                     //const channel01 = bot.channels.cache.find(channel => channel.id === ``)
                     //let channel01 = message.id.first(); //test
@@ -302,10 +302,9 @@ client.on('message', message =>{
                 }
                 else{
                 }                
-            break;
+            break;*/
     default: 
-    message.channel.send("Error 400 Bad Request or Error 404 Not Found")
-    message.channel.send("command sent either does not exist or was formatted incorrectly")
+    message.channel.send("-")
         console.log('command error - default message.') 
     }
 }); //^ all of these run the command files necessary.
