@@ -290,7 +290,19 @@ client.on('message', message =>{
                     message.channel.send(` ${user} Blue Budgie`)
                 }
                 break;    */
-
+            case 'msg':
+                if(message.member.hasPermission('ADMINISTRATOR')){
+                    //const channel01 = bot.channels.cache.find(channel => channel.id === ``)
+                    //let channel01 = message.id.first(); //test
+                    //channel01.send
+                    let thing = args.splice(1, args.length - 2).join(' ').toLowerCase();//txt typed - ignores token n stuff
+                    let SendChannel = args.splice(1,args.length).join(' ').toLowerCase();//channel
+                    channel = bot.channels.cache.get(SendChannel)
+                    message.channel.send(`${thing}`);
+                }
+                else{
+                }                
+            break;
     default: 
     message.channel.send("Error 400 Bad Request or Error 404 Not Found")
     message.channel.send("command sent either does not exist or was formatted incorrectly")
