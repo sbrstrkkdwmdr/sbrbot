@@ -264,7 +264,8 @@ client.on('message', message =>{
 
         case '727':
             message.channel.send("あんたがそれを見た時")
-        
+            break;
+            
         case 'giveadmin':
             message.channel.send("haha no")
         //if(user.ID = 503794887318044675){
