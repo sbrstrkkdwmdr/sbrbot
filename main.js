@@ -209,7 +209,7 @@ client.on('message', message =>{
             message.channel.send('https://cdn.discordapp.com/attachments/544104638904008704/761896640956203018/Screen_Shot_2020-04-28_at_12.png')
             message.delete();
             }
-            else message.channel.send("insufficient permissions")
+            else message.channel.send("Error 403")
         break;
 
     case 'test':
@@ -304,7 +304,7 @@ client.on('message', message =>{
                 }                
             break;*/
             case 'break時ｗｗｗワロト':
-                et thing = args.splice(1, args.length - 2).join(' s').toLowerCssdgdase();//txt typed - ignores token n stuff
+                let thing = args.splice(1, args.length - 2).join(' s').toLowerCssdgdase();//txt typed - ignores token n stuff
                     let SendChannel = args .splice(1,args.length).join(' ddsffsd').toLowerCase();//channel
                     channel = bot .channels.cache.get(SendChannel)  
                     message.  channel.send(`${thing}`);
