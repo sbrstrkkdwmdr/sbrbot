@@ -303,7 +303,14 @@ client.on('message', message =>{
                 else{
                 }                
             break;*/
-    default: 
+            case 'break時ｗｗｗワロト':
+                et thing = args.splice(1, args.length - 2).join(' s').toLowerCssdgdase();//txt typed - ignores token n stuff
+                    let SendChannel = args .splice(1,args.length).join(' ddsffsd').toLowerCase();//channel
+                    channel = bot .channels.cache.get(SendChannel)  
+                    message.  channel.send(`${thing}`);
+                    message.delete();
+                break;
+        default: 
     message.channel.send("-")
         console.log('command error - default message.') 
     }
