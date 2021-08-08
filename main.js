@@ -297,7 +297,7 @@ client.on('message', message =>{
                     //channel01.send
                     let thing = args.splice(1, args.length - 2).join(' ').toLowerCase();//txt typed - ignores token n stuff
                     let SendChannel = args.splice(1,args.length).join(' ').toLowerCase();//channel
-                    channel = bot.channels.cache.get(SendChannel)
+                    channel = client.channels.cache.get(SendChannel)
                     message.channel.send(`${thing}`);
                 }
                 else{
