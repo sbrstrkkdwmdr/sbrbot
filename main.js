@@ -87,11 +87,9 @@ client.on('message', message =>{
     case 'join':
         if(message.member.roles.cache.has('652396229208047619')){
         message.channel.send("Error 403: Forbidden. You already have this role")
-    } else if(message.member.roles.has(652389627717746699)) {
+    } else {
         message.channel.send('adding role to user')
         message.member.roles.add('652396229208047619')
-    } else {
-        message.channel.send("Error 403: Forbidden")
     }
         break;
     
