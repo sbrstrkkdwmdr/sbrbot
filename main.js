@@ -301,48 +301,13 @@ client.on('message', message =>{
                 else{
                 }                
             break;*/
-            case 'break時ｗｗｗワロト':
+            /*            case 'break時ｗｗｗワロト':
                 let thing = args.splice(1, args.length - 2).join(' s').toLowerCssdgdase();//txt typed - ignores token n stuff
                     let SendChannel = args .splice(1,args.length).join(' ddsffsd').toLowerCase();//channel
                     channel = bot .channels.cache.get(SendChannel)  
                     message.  channel.send(`${thing}`);
                     message.delete();
-                break;
-            case 'harumachi clover':
-            const pppppp = new Discord.MessageEmbed()
-            .setColor('#FFFFFF')
-            .setTitle('harumachi clover')
-            .setAuthor('')
-            .addFields(
-                {name: 'a', value: "I WOULD RATHER BURN IN HELL THAN HEAR me no mae no"},
-                {name: 'a', value: "tobira o aketara harukaze"},
-                {name: 'a', value: "tori tachi mo kigi de machiawase"},
-                {name: 'a', value: "kimi e mukau shingō wa aozora iro"},
-                {name: 'a', value: "kakedase ba ii"},
-                {name: 'a', value: "uusdsohbdouweouhshgsohsojhsdhsdolghjslghsdjkhgsjdkghsdkljghsldjkhgdsjlkhgjsdhsdklhsjdkhsdkhjkds"},
-            )
-            .setTimestamp()
-            channel.send({embeds: [pppppp] });
-            break;
-                        case 'yokoe':
-            const pppppp = new Discord.MessageEmbed()
-            .setColor('#FFFFFF')
-            .setTitle('Yokoe Review')
-            .setAuthor('')
-            .addFields(
-                {name: 'a', value: "Don't watch him, his content is so cringe. I FUCKING HATE THIS GUY I WOULD BREAK EVERY SINGLE BONE IN HIS BODY IF I WOULD SEE HIM AT THE STREETS, THIS MAN DESTROYS OSU COMMUNITY STUPID PIECE OF FUCKING SHIT, THIS IS SOME TIKTOK LEVEL VIDEO QUALITY AND EFFORT, IF YOU GET ENTERTAINED BY THIS CONTENT, YOU ARE PROBABLY 9 YEARS OLD 13R54UY80ASDUGF-0U1H230AYGBOIURYOAIUSHDFLIUQWE8ORYGQWYGOFAHSBVDF8O712G34 STOP POSTING ABOUT HARUMACHI CLOVER, I'M TIRED OF SEEING IT, YOUTUBE SHOWS ME THIS PIECE OF SHIT, I SEE IT EVERYWHERE, ON INSTAGRAM AS WELL, I WAS IN A DISCORD SERVER RIGHT? AND WHEN I SAW THIS PATHETIC HUMAN BEING I WANTED TO JUMP OUT OF MY WINDOW, BUT IT WAS CLOSED AND I WAS TOO LAZY TO OPEN IT."},             
-                {name: 'a', value: "0/10 I NEVER CRINGED SO BADLY WHILE WATCHING SOMEONE'S WORK"}, 
-                {name: 'a', value: "I WOULD RATHER BURN IN HELL THAN HEAR me no mae no"},
-                {name: 'a', value: "tobira o aketara harukaze"},
-                {name: 'a', value: "tori tachi mo kigi de machiawase"},
-                {name: 'a', value: "kimi e mukau shingō wa aozora iro"},
-                {name: 'a', value: "kakedase ba ii"},
-                {name: 'a', value: "WHILE HE SITS ON FUCKING TOILET AND HE IS BOTH PRETENDING TO PLAY AND TO TAKE A SHIT, IT WOULD BE MORE ENTERTAINING IF HE WAS ACTUALLY TAKING A CRAP TO THE TOILET"},
-            )
-            .setTimestamp()
-            channel.send({embeds: [pppppp] });
-            break;
-            
+                break;*/
         default: 
     message.channel.send("-")
         console.log('command error - default message.') 
