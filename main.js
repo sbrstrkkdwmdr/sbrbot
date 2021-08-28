@@ -126,7 +126,7 @@ client.on('message', message =>{
     case 'roll':
         if(message.member.hasPermission('SEND_MESSAGES')){
         let user = message.author
-        let score = 4
+        let score = Math.floor(Math.random () * 100 + 1) 
         message.channel.send(` ${user} has rolled a(n) ${score} `)
         if (score == 69){
             message.channel.send("funny number")
