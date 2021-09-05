@@ -49,11 +49,11 @@ client.on('message', message =>{
         break;
 
     case  'links':
-        message.channel.send('here you go! https://sites.google.com/view/a-thingf/home');
+        client.commands.get('links').execute(message, args)
         break;
     
     case 'help':
-        message.channel.send('commands listed here - https://sites.google.com/view/sbrbot/home')
+        client.commands.get('help').execute(message, args)
         break;
 
     case 'purge':
@@ -61,158 +61,89 @@ client.on('message', message =>{
         break;
 
     case 'info':
-        message.channel.send('bot coded by SaberStrike')
+        client.commands.get('info').execute(message, args)
         break;
 
     case 'join':
-        if(message.member.roles.cache.has('652396229208047619')){
-        message.channel.send("Error 403: Forbidden. You already have this role")
-    } else {
-        message.channel.send('adding role to user')
-        message.member.roles.add('652396229208047619')
-    }
+        client.commands.get('join').execute(message, args)
         break;
     
 
     case 'roll':
-        if(message.member.hasPermission('SEND_MESSAGES')){
-        let user = message.author
-        let score = Math.floor(Math.random () * 100 + 1) 
-        message.channel.send(` ${user} has rolled a(n) ${score} `)
-        if (score == 69){
-            message.channel.send("funny number")
-        }
-        else if (score == 100){
-            message.channel.send("SS")
-        }
-        }
+        client.commands.get('roll').execute(message, args)
     break; 
 
     case 'pingperson':
-        if(message.member.hasPermission('ADMINISTRATOR')){ //they need admin
-        let user = message.mentions.users.first(); //gets the pinged user's ID
-        message.channel.send(`${user} `); //user.username is the pinged user
-        message.delete();
-        }
-        else message.channel.send("Error 401: Unauthorised")
+        client.commands.get('pingperson').execute(message, args)
     break;
 
     case 'enjoygame':
-        message.channel.send("farm bad enjoy game good 😎")
+        client.commands.get('enjoygame').execute(message, args)
 
     break;
 
     case 'rs':
-        message.channel.send("I'm not an osu! bot. go use owobot or something")
+        client.commands.get('rs').execute(message, args)
         break;
 
     case 'rate-osu-play':
-        if(message.member.hasPermission('SEND_MESSAGES')){//the if is to make the let score only affect this command. idk why, but it sometimes breaks other commands
-            let score = Math.floor(Math.random() * 100 + 1)
-            message.channel.send(`I rate this play a ${score}/100`)
-            if (score == 69 ) {
-                message.channel.send("funny number")
-            }
-        }
+        client.commands.get('rate-osu-play').execute(message, args)
         break;
 
     case 'osuhow':
-        message.channel.send(":osuHOW:")
-        message.delete();
+        client.commands.get('osuhow').execute(message, args)
         break;
 
     case 'unread':
-        message.delete();
+        client.commands.get('unread').execute(message, args)
         break;
 
     case 'rate-osu-play-else':
-            if(message.member.hasPermission('SEND_MESSAGES')){//the if is to make the let user only affect this command. idk why, but it sometimes breaks other commands
-                let user = message.mentions.users.first()
-                let score = Math.floor(Math.random() * 100 + 1)
-                message.channel.send(`I rate ${user}'s play a ${score}/100`)
-                if (score == 69 ) {
-                    message.channel.send("funny number")
-                }
-            }
-            break;
+        client.commands.get('rate-osu-play-else').execute(message, args)
+        break;
 
     case 'hentai':
-        message.channel.send("go to horny jail, you disgust me")
-        message.channel.send("https://cdn.discordapp.com/attachments/544104638904008704/761896640956203018/Screen_Shot_2020-04-28_at_12.png")
+        client.commands.get('hentai').execute(message, args)
         break;
 
     case 'horny':
-        message.delete();
-        message.channel.send("go to horny jail")
-        message.channel.send("https://cdn.discordapp.com/attachments/544104638904008704/761896640956203018/Screen_Shot_2020-04-28_at_12.png")
+        client.commands.get('horny').execute(message, args)
         break;
 
     case 'hornyjail':
-            if(message.member.hasPermission('ADMINISTRATOR')){ //need admin
-            let user = message.mentions.users.first(); //gets the pinged user's ID
-            message.channel.send(`go to horny jail ${user}`); //user.username is the pinged user
-            message.channel.send('https://cdn.discordapp.com/attachments/544104638904008704/761896640956203018/Screen_Shot_2020-04-28_at_12.png')
-            message.delete();
-            }
-            else message.channel.send("insufficient permissions")
+        client.commands.get('hornyjail').execute(message, args)
         break;
 
     case 'test':
-            message.channel.send("there's a test?")
+        client.commands.get('test').execute(message, args)
         break;
 
     case 'idk':
-        if(message.member.hasPermission('SEND_MESSAGES')){
-            message.channel.send("well I don't know either.")
-        }
-        else{
-            message.channel.send("well I don't know either. do you?")
-        }
+        client.commands.get('idk').execute(message, args)
         break;
 
     case 'token':
-        if(message.member.hasPermission('ADMINISTRATOR')){
-            message.channel.send("Admin should already know the bot token.")
-        }
-        else{
-            message.channel.send("the bot token.")
-        }
+        client.commands.get('token').execute(message, args)
         break;
-
-        case 'semen':
-            message.channel.send("?")
-        break;
-
-        case 'femboy':
-            message.channel.send("if you want astolfo x felix hentai just search it yourself.")
-            break;
-            
-        case '177013':
-            message.channel.send("nice wholesome story.")
-            break;
 
         case '':
             message.channel.send("you gonna finish writing the command?")
         break; 
 
         case '1-2':
-            message.channel.send("+1k pp")
+            client.commands.get('1-2').execute(message, args)
             break;
 
         case '727':
-            message.channel.send("あんたがそれを見た時")
+            client.commands.get('727').execute(message, args)
             break;
             
         case 'giveadmin':
-            message.channel.send("haha no")
-        //if(user.ID = 503794887318044675){
-        //roles.create        
-        //let rName =("admin")
-        //message.channel.send(`${rNew.ID}`)
-        //}
+            client.commands.get('giveadmin').execute(message, args)
         break;
 
             case 'break時ｗｗｗワロト':
+                client.commands.get('break').execute(message, args)
                 break;
 
 
