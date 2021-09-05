@@ -11,6 +11,13 @@ const { monitorEventLoopDelay } = require('perf_hooks');
 
 client.commands = new Discord.Collection();
 
+const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
+for(const file of commandFiles){
+    const command = require(`./commands/${file}`);
+
+    client.commands.set(command.name, command);
+}
+
 client.once('ready', () => {
     console.log('kwsmrksnsm is online!'); //message shown when bot turns on
 
@@ -34,18 +41,11 @@ client.on('message', message =>{
     switch (command)
     {
     case 'ping':
-         message.channel.send('pong!');
+         client.commands.get('ping').execute(message, args)
          break; 
 
     case 'insult':
-        if(message.member.hasPermission('SEND_MESSAGES')){ //the if is to make the let user only affect this command. idk why, but it sometimes breaks other commands
-        let user = message.mentions.users.first();
-        message.channel.send(`${user}はキモいです。うんこ食べてくださいｗｗｗ`)
-        message.delete();
-        }
-        else{
-            message.channel.send('command error?')
-        }
+        client.commands.get('insult').execute(message, args)
         break;
 
     case  'links':
@@ -56,29 +56,9 @@ client.on('message', message =>{
         message.channel.send('commands listed here - https://sites.google.com/view/sbrbot/home')
         break;
 
-    /*case 'restart':
-        if(message.member.hasPermission('ADMINISTRATOR')){
-        message.channel.send('restarting bot...')
-        console.log('bot has restarted')
-        (client.destroy())
-        (() => client.login('NzU1MjIwOTg5NDk0OTUxOTk3.X2AIWw.ebo8K60jWyQ1XL-HophjRma_J9c'))
-
-        }
-        else {
-            message.channel.send ('nah')
-        }
-        
-        break; */
-    
-/*      case 'breakbot':
-        if(message.member.hasPermission('ADMINISTRATOR')){
-        message.channel.send('turning off bot...')
-        .then(msg => client.destroy())
-        }
-        else {
-            message.channel.send('nah')
-        }
-        break;       */ 
+    case 'purge':
+        client.commands.get('purge').execute(message,args);
+        break;
 
     case 'info':
         message.channel.send('bot coded by SaberStrike')
@@ -92,35 +72,6 @@ client.on('message', message =>{
         message.member.roles.add('652396229208047619')
     }
         break;
-    
-/*    case 'message':
-        let GetText = args.splice(1, args.length - 2).join(' ').toLowerCase(); // get txt
-        let SendChannel = args.splice(1, args.length).join(' ').toLowerCase(); //channel token
-        channel = bot.channels.cache.get(SendChannel); 
-        channel.send(GetText);
-            
-        break; */
-
-/*    case 'inv':
-        embed = new Discord.MessageEmbed();
-        switch(args[1]){
-            case 'create':
-                let channel = message.channel;
-                channel.createInvite
-                (invite=>{
-                    embed
-                    .setTitle(`message.author.username + "'s Invite"`)
-                    .addDescription(`"https://discord.gg/" + invite.code`)
-                    message.reply(embed);
-                }) 
-                break;
-            default:
-                embed
-                    .setTitle("error")
-                    .setDescription("This command was not correctly formatted or doesn't exist (err:inv)")
-                message.channel.send(embed)
-        }
-        break;*/
     
 
     case 'roll':
@@ -185,10 +136,6 @@ client.on('message', message =>{
             }
             break;
 
-/*    case 'kick':
-        message.reply("command unavaliable")         
-        break;*/
-
     case 'hentai':
         message.channel.send("go to horny jail, you disgust me")
         message.channel.send("https://cdn.discordapp.com/attachments/544104638904008704/761896640956203018/Screen_Shot_2020-04-28_at_12.png")
@@ -207,20 +154,12 @@ client.on('message', message =>{
             message.channel.send('https://cdn.discordapp.com/attachments/544104638904008704/761896640956203018/Screen_Shot_2020-04-28_at_12.png')
             message.delete();
             }
-            else message.channel.send("Error 403")
+            else message.channel.send("insufficient permissions")
         break;
 
     case 'test':
             message.channel.send("there's a test?")
         break;
-
-   /* case 'purge':
-        message.channel.send("Error 403: Forbidden")
-        //if(message.member.hasPermission('MANAGE_MESSAGES')){
-        //    let score = endsWith();
-        //    message.delete(score);
-        //}
-        break; */
 
     case 'idk':
         if(message.member.hasPermission('SEND_MESSAGES')){
@@ -273,45 +212,29 @@ client.on('message', message =>{
         //}
         break;
 
-/*        case 'duck':
-            if(message.member.hasPermission("SEND_MESSAGES")){
-                let user = ALL.member
-                message.reply('DUCK')
-                message.channel.send(` ${user} DUCK`)
-            }
-            break;*/
-        
-       /*     case 'blue.budgie':
-                if(message.member.hasPermission("SEND_MESSAGES")){
-                    let user = ALL.member
-                    message.reply('Blue Budgie')
-                    message.channel.send(` ${user} Blue Budgie`)
-                }
-                break;    */
-            /*case 'msg':
-                if(message.member.hasPermission('ADMINISTRATOR')){
-                    //const channel01 = bot.channels.cache.find(channel => channel.id === ``)
-                    //let channel01 = message.id.first(); //test
-                    //channel01.send
-                    let thing = args.splice(1, args.length - 2).join(' ').toLowerCase();//txt typed - ignores token n stuff
-                    let SendChannel = args.splice(1,args.length).join(' ').toLowerCase();//channel
-                    channel = client.channels.cache.get(SendChannel)
-                    message.channel.send(`${thing}`);
-                }
-                else{
-                }                
-            break;*/
-            /*            case 'break時ｗｗｗワロト':
-                let thing = args.splice(1, args.length - 2).join(' s').toLowerCssdgdase();//txt typed - ignores token n stuff
-                    let SendChannel = args .splice(1,args.length).join(' ddsffsd').toLowerCase();//channel
-                    channel = bot .channels.cache.get(SendChannel)  
-                    message.  channel.send(`${thing}`);
-                    message.delete();
-                break;*/
-        default: 
-    message.channel.send("-")
+            case 'break時ｗｗｗワロト':
+                break;
+
+
+    default: 
+    message.channel.send("Error 400 Bad Request or Error 404 Not Found")
+    message.channel.send("command sent either does not exist or was formatted incorrectly")
         console.log('command error - default message.') 
     }
+
+    //insert loop
+/*
+    for (;;) {
+        Thread.sleep(5 * 1000)
+        let SendingChannelw = 875352853684822056
+        let d1 = new
+        let d2 = dat
+        let THINGYYY = GET (`https://osutrack-api.ameo.dev/hiscores?user={SaberStrike}&mode={mode}&from={from}&to={to}`)
+        message.SendingChannelw.send(`${THINGYYY}`)
+        //875352853684822056
+        //GET https://osutrack-api.ameo.dev/hiscores?user={user}&mode={mode}&from={YESTERDAY}&to={TODAY}
+    }*/
+
 }); //^ all of these run the command files necessary.
 
 client.login('NzU1MjIwOTg5NDk0OTUxOTk3.X2AIWw.ebo8K60jWyQ1XL-HophjRma_J9c') //turns on the bot
