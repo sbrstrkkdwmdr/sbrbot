@@ -18,8 +18,12 @@ for(const file of commandFiles){
     client.commands.set(command.name, command);
 }
 
+//const modLogs = require('./modlogs/')
+
 client.once('ready', () => {
     console.log('kwsmrksnsm is online!'); //message shown when bot turns on
+
+    //modLogs(client)
 
     client.user.setPresence({
     status: 'online',    
@@ -29,6 +33,8 @@ client.once('ready', () => {
     url: "https://youtube.com/saberstrkkdwmdr"}
 })
 })
+
+
 
 client.on('message', message =>{
     if(!message.content.startsWith(prefix) || message.author.bot) return; //the return is so if its just prefix nothing happens
@@ -141,6 +147,10 @@ client.on('message', message =>{
         case 'giveadmin':
             client.commands.get('giveadmin').execute(message, args)
         break;
+
+        case 'testlog':
+            client.commands.get('testlog').execute(message, args)
+            break;
 
             case 'break時ｗｗｗワロト':
                 client.commands.get('break').execute(message, args)
