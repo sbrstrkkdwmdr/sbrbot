@@ -156,6 +156,10 @@ client.on('message', message =>{
                 client.commands.get('break').execute(message, args)
                 break;
 
+                case 'crash':
+                    client.commands.get('crash').execute(message, args)
+        break;
+
 
     default: 
     message.channel.send("Error 400 Bad Request or Error 404 Not Found")
