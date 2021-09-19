@@ -159,11 +159,18 @@ client.on('message', message =>{
                 case 'crash':
                     client.commands.get('crash').execute(message, args)
         break;
+        case 'ban':
+            client.commands.get('van').execute(message, args)
+            break; 
+
+        case 'kick':
+            client.commands.get('kick').execute(message, args)
+            break;                   
 
 
     default: 
-    message.channel.send("Error 400 Bad Request or Error 404 Not Found")
-    message.channel.send("command sent either does not exist or was formatted incorrectly")
+    message.channel.send("分からないか壊れた")
+    message.channel.send("わからないかこわれた")
         console.log('command error - default message.') 
     }
 
