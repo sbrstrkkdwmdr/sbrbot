@@ -1,9 +1,8 @@
 module.exports = {
-    name: 'ban',
+    name: 'unchi',
     description: '',
     execute(message, args) {
-        message.channel.send("no")   
-        message.channel.send("fuck you")
+        message.channel.send("ウンチ美味しい")   
     }
 }
 //client.commands.get('').execute(message, args)

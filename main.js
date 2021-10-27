@@ -29,7 +29,7 @@ client.once('ready', () => {
     status: 'online',    
     activity: {
     name: 'this server',
-    type: 'WATCHING', 
+    type: 'CUSTOM_STATUS', 
     url: "https://youtube.com/saberstrkkdwmdr"}
 })
 })
@@ -132,41 +132,51 @@ client.on('message', message =>{
         client.commands.get('token').execute(message, args)
         break;
 
-        case '':
-            message.channel.send("you gonna finish writing the command?")
+    case '':
+        message.channel.send("you gonna finish writing the command?")
+    break; 
+
+    case '1-2':
+        client.commands.get('1-2').execute(message, args)
+        break;
+
+    case '727':
+       client.commands.get('727').execute(message, args)
+        break;
+            
+    case 'giveadmin':
+        client.commands.get('giveadmin').execute(message, args)
+        break;
+
+    case 'testlog':
+        client.commands.get('testlog').execute(message, args)
+        break;
+
+    case 'break時ｗｗｗワロト':
+        client.commands.get('break').execute(message, args)
+        break;
+
+    case 'crash':
+        client.commands.get('crash').execute(message, args)
+        break;
+    case 'ban':
+        client.commands.get('van').execute(message, args)
         break; 
 
-        case '1-2':
-            client.commands.get('1-2').execute(message, args)
-            break;
-
-        case '727':
-            client.commands.get('727').execute(message, args)
-            break;
+    case 'kick':
+        client.commands.get('kick').execute(message, args)
+        break;   
             
-        case 'giveadmin':
-            client.commands.get('giveadmin').execute(message, args)
+    case 'unchi':
+       client.commands.get('unchi').execute(message, args)
+      break;       
+
+    case 'unko':
+        client.commands.get('unko').execute(message, args)
+        break;      
+    case 'avatar':
+        client.commands.get('avatar').execute(message, args, Discord)
         break;
-
-        case 'testlog':
-            client.commands.get('testlog').execute(message, args)
-            break;
-
-            case 'break時ｗｗｗワロト':
-                client.commands.get('break').execute(message, args)
-                break;
-
-                case 'crash':
-                    client.commands.get('crash').execute(message, args)
-        break;
-        case 'ban':
-            client.commands.get('van').execute(message, args)
-            break; 
-
-        case 'kick':
-            client.commands.get('kick').execute(message, args)
-            break;                   
-
 
     default: 
     message.channel.send("分からないか壊れた")
