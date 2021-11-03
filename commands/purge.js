@@ -2,7 +2,7 @@ module.exports = {
     name: 'purge',
     description: 'ERADICATE',
     async execute(message, args) {
-        if(message.member.hasPermission('ADMINISTRATOR')){
+        if(message.author.id == '503794887318044675'){
         let user = message.mentions.users.first();
         if(!args[0]) return message.reply("integer needed");
         if(isNaN(args[0])) return message.reply("integer needed");
