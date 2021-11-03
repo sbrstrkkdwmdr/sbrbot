@@ -46,84 +46,80 @@ client.on('message', message =>{
 //commands below
     switch (command)
     {
-    case 'ping':
-         client.commands.get('ping').execute(message, args)
-         break; 
 
-    case 'insult':
-        client.commands.get('insult').execute(message, args)
+    case 'test':
+        client.commands.get('test').execute(message, args)
         break;
 
+    //HELPFUL ---------------------------------------
+
+    case 'ping':
+        client.commands.get('ping').execute(message, args)
+        break; 
     case  'links':
         client.commands.get('links').execute(message, args)
         break;
     
     case 'help':
         client.commands.get('help').execute(message, args)
+        break;  
+        
+        case 'info':
+            client.commands.get('info').execute(message, args)
+            break;
+    //UNCATEGORISED ------------------------------------------------------
+    case 'unchi':
+        client.commands.get('unchi').execute(message, args)
+       break;       
+ 
+     case 'unko':
+         client.commands.get('unko').execute(message, args)
+         break;      
+     case 'avatar':
+         client.commands.get('avatar').execute(message, args, Discord)
+         break;
+    case 'giveadmin':
+        client.commands.get('giveadmin').execute(message, args)
         break;
-
-    case 'purge':
-        client.commands.get('purge').execute(message,args);
+    case 'token':
+        client.commands.get('token').execute(message, args)
         break;
-
-    case 'info':
-        client.commands.get('info').execute(message, args)
-        break;
-
-    case 'join':
-        client.commands.get('join').execute(message, args)
-        break;
-    
-
     case 'roll':
         client.commands.get('roll').execute(message, args)
-    break; 
+        break; 
 
     case 'pingperson':
         client.commands.get('pingperson').execute(message, args)
-    break;
-
-    case 'enjoygame':
-        client.commands.get('enjoygame').execute(message, args)
-
-    break;
-
-    case 'rs':
-        client.commands.get('rs').execute(message, args)
-        break;
-
-    case 'rate-osu-play':
-        client.commands.get('rate-osu-play').execute(message, args)
-        break;
-
-    case 'osuhow':
-        client.commands.get('osuhow').execute(message, args)
         break;
 
     case 'unread':
         client.commands.get('unread').execute(message, args)
         break;
-
-    case 'rate-osu-play-else':
-        client.commands.get('rate-osu-play-else').execute(message, args)
-        break;
-
-    case 'test':
-        client.commands.get('test').execute(message, args)
-        break;
-
     case 'idk':
         client.commands.get('idk').execute(message, args)
         break;
 
-    case 'token':
-        client.commands.get('token').execute(message, args)
-        break;
-
     case '':
         message.channel.send("you gonna finish writing the command?")
-    break; 
+        break; 
 
+    //FUN --------------------------------------------------------------------
+    case 'ghostping':
+        client.commands.get('ghostping').execute(message, args)
+        break;
+    case 'insult':
+        client.commands.get('insult').execute(message, args)
+        break;
+    
+    //SBR ONLY --------------------------------------------------------
+    case 'testlog':
+        client.commands.get('testlog').execute(message, args)
+        break;
+    case 'join':
+        client.commands.get('join').execute(message, args)
+        break;
+
+    //OSU -----------------------------------------------------------
     case '1-2':
         client.commands.get('1-2').execute(message, args)
         break;
@@ -131,30 +127,25 @@ client.on('message', message =>{
     case '727':
        client.commands.get('727').execute(message, args)
         break;
-            
-    case 'giveadmin':
-        client.commands.get('giveadmin').execute(message, args)
-        break;
 
-    case 'testlog':
-        client.commands.get('testlog').execute(message, args)
+    case 'rate-osu-play-else':
+        client.commands.get('rate-osu-play-else').execute(message, args)
         break;
-            
-    case 'unchi':
-       client.commands.get('unchi').execute(message, args)
-      break;       
-
-    case 'unko':
-        client.commands.get('unko').execute(message, args)
-        break;      
-    case 'avatar':
-        client.commands.get('avatar').execute(message, args, Discord)
+    case 'enjoygame':
+        client.commands.get('enjoygame').execute(message, args)
         break;
     
-    case 'ghostping':
-        client.commands.get('ghostping').execute(message, args)
+    case 'rs':
+        client.commands.get('rs').execute(message, args)
         break;
-
+    
+    case 'rate-osu-play':
+        client.commands.get('rate-osu-play').execute(message, args)
+        break;
+    
+    case 'osuhow':
+        client.commands.get('osuhow').execute(message, args)
+        break;
     //HENTAI-----------------------------------------------------------------------------------------
 
 
@@ -189,11 +180,11 @@ client.on('message', message =>{
         client.commands.get('pixiv').execute(message, args)
         break;
 
-
     //ADMIN-----------------------------------------------------------------------------------------
-    
-    
-    
+    case 'purge':
+        client.commands.get('purge').execute(message,args);
+        break;
+
     case 'unban':
         client.commands.get('unban').execute(message, args)
         break;
@@ -212,6 +203,14 @@ client.on('message', message =>{
     case 'kick':
         client.commands.get('kick').execute(message, args, Discord)
         break;   
+
+    case 'serverlist':
+        client.commands.get('serverlist').execute(message, args, Discord, client, guild)
+        break;
+
+    case 'guildid':
+        client.commands.get('guildid').execute(message, args)
+        break;
     
 
     default: 

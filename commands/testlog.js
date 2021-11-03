@@ -2,14 +2,17 @@ module.exports = {
     name: 'testlog',
     description: '',
     execute(message, args) {
-        const channelId = '884598096280027136'
-        const { guild } = message
-
-        if(message.member.hasPermission('ADMINISTRATOR')){
-            const channel = guild.channels.cache.get(channelId)
-            let user = message.author
-            channel.send(`a ${user}`)
-        }  
+        let we = message.guild.id
+        if(we != 652388389529714709){
+            message.channel.send("this command does not work here")
+  } else {
+            message.channel.send("wee")
+            if(message.member.hasPermission('ADMINISTRATOR')){
+                const channel = guild.channels.cache.get(channelId)
+                let user = message.author
+                message.channel.send(`a ${user}`)
+            }
+        }
     }
 }
 //client.commands.get('').execute(message, args)
