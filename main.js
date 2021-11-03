@@ -67,14 +67,7 @@ client.on('message', message =>{
         case 'info':
             client.commands.get('info').execute(message, args)
             break;
-    //UNCATEGORISED ------------------------------------------------------
-    case 'unchi':
-        client.commands.get('unchi').execute(message, args)
-       break;       
- 
-     case 'unko':
-         client.commands.get('unko').execute(message, args)
-         break;      
+    //UNCATEGORISED -----GENERAL?-------------------------------------------------
      case 'avatar':
          client.commands.get('avatar').execute(message, args, Discord)
          break;
@@ -110,6 +103,13 @@ client.on('message', message =>{
     case 'insult':
         client.commands.get('insult').execute(message, args)
         break;
+     case 'unchi':
+        client.commands.get('unchi').execute(message, args)
+       break;       
+ 
+     case 'unko':
+         client.commands.get('unko').execute(message, args)
+         break;      
     
     //SBR ONLY --------------------------------------------------------
     case 'testlog':

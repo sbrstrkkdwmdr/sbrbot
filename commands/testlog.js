@@ -4,7 +4,7 @@ module.exports = {
     execute(message, args) {
         let we = message.guild.id
         if(we != 652388389529714709){
-            message.channel.send("this command does not work here")
+
   } else {
             message.channel.send("wee")
             if(message.member.hasPermission('ADMINISTRATOR')){

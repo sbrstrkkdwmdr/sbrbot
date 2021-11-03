@@ -4,7 +4,7 @@ module.exports = {
     execute(message, args) {
         let we = message.guild.id
         if(we != 652388389529714709){
-            message.channel.send("that command does not work here")
+
  } else {
             const channelId = '884598096280027136'
             const { guild } = message
