@@ -108,18 +108,6 @@ client.on('message', message =>{
         client.commands.get('rate-osu-play-else').execute(message, args)
         break;
 
-    case 'hentai':
-        client.commands.get('hentai').execute(message, args)
-        break;
-
-    case 'horny':
-        client.commands.get('horny').execute(message, args)
-        break;
-
-    case 'hornyjail':
-        client.commands.get('hornyjail').execute(message, args)
-        break;
-
     case 'test':
         client.commands.get('test').execute(message, args)
         break;
@@ -151,21 +139,6 @@ client.on('message', message =>{
     case 'testlog':
         client.commands.get('testlog').execute(message, args)
         break;
-
-    case 'break時ｗｗｗワロト':
-        client.commands.get('break').execute(message, args)
-        break;
-
-    case 'crash':
-        client.commands.get('crash').execute(message, args)
-        break;
-    case 'ban':
-        client.commands.get('ban').execute(message, args)
-        break; 
-
-    case 'kick':
-        client.commands.get('kick').execute(message, args, Discord)
-        break;   
             
     case 'unchi':
        client.commands.get('unchi').execute(message, args)
@@ -181,9 +154,64 @@ client.on('message', message =>{
     case 'ghostping':
         client.commands.get('ghostping').execute(message, args)
         break;
+
+    //HENTAI-----------------------------------------------------------------------------------------
+
+
+    case 'hentai':
+        client.commands.get('hentai').execute(message, args)
+        break;
+
+    case 'horny':
+        client.commands.get('horny').execute(message, args)
+        break;
+
+    case 'hornyjail':
+        client.commands.get('hornyjail').execute(message, args)
+        break;
+
+    case 'danbooru':
+        client.commands.get('danbooru').execute(message, args)
+        break;
+    case 'lolibooru':
+        client.commands.get('lolibooru').execute(message, args)
+        break;
+
+    case 'yanderegen':
+        client.commands.get('yanderegen').execute(message, args)
+        break;
+
+    case 'konachangen':
+        client.commands.get('konachengen').execute(message, args)
+        break;
+    case 'pixiv':
+        client.commands.get('pixiv').execute(message, args)
+        break;
+
+
+    //ADMIN-----------------------------------------------------------------------------------------
+    
+    
+    
     case 'unban':
         client.commands.get('unban').execute(message, args)
         break;
+
+    case 'break時ｗｗｗワロト':
+        client.commands.get('break').execute(message, args)
+        break;
+
+    case 'crash':
+        client.commands.get('crash').execute(message, args)
+        break;
+    case 'ban':
+        client.commands.get('ban').execute(message, args)
+        break; 
+
+    case 'kick':
+        client.commands.get('kick').execute(message, args, Discord)
+        break;   
+    
 
     default: 
     message.channel.send("分からないか壊れた")
