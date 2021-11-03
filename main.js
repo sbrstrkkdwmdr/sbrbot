@@ -182,8 +182,9 @@ client.on('message', message =>{
         break;
 
     case 'konachangen':
-        client.commands.get('konachengen').execute(message, args)
+        client.commands.get('konachangen').execute(message, args)
         break;
+        
     case 'pixiv':
         client.commands.get('pixiv').execute(message, args)
         break;
