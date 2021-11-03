@@ -4,8 +4,12 @@ module.exports = {
     execute(message, args) {
         if(message.member.hasPermission('SEND_MESSAGES')){
             let user = message.mentions.users.first();
+            if(user = 'undefined'){
+                message.channel.send("a user needs to be mentioned")
+            }
+            else{
             message.channel.send(`${user}はキモいです。うんこ食べてくださいｗｗｗ`)
-            message.delete();
+            message.delete();}
             }
             else{
                 message.channel.send('command error?')

@@ -160,11 +160,11 @@ client.on('message', message =>{
         client.commands.get('crash').execute(message, args)
         break;
     case 'ban':
-        client.commands.get('van').execute(message, args)
+        client.commands.get('ban').execute(message, args)
         break; 
 
     case 'kick':
-        client.commands.get('kick').execute(message, args)
+        client.commands.get('kick').execute(message, args, Discord)
         break;   
             
     case 'unchi':
@@ -176,6 +176,13 @@ client.on('message', message =>{
         break;      
     case 'avatar':
         client.commands.get('avatar').execute(message, args, Discord)
+        break;
+    
+    case 'ghostping':
+        client.commands.get('ghostping').execute(message, args)
+        break;
+    case 'unban':
+        client.commands.get('unban').execute(message, args)
         break;
 
     default: 
