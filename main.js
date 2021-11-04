@@ -211,7 +211,10 @@ client.on('message', message =>{
     case 'guildid':
         client.commands.get('guildid').execute(message, args)
         break;
-    
+
+    case 'gleave':
+        client.commands.get('gleave').execute(message, args, client)
+        break;
 
     default: 
     message.channel.send("分からないか壊れた")
