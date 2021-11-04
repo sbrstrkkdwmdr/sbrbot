@@ -205,7 +205,7 @@ client.on('message', message =>{
         break;   
 
     case 'serverlist':
-        client.commands.get('serverlist').execute(message, args, Discord, client, guild)
+        client.commands.get('serverlist').execute(message, args, Discord, client)
         break;
 
     case 'guildid':
