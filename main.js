@@ -103,13 +103,17 @@ client.on('message', message =>{
     case 'insult':
         client.commands.get('insult').execute(message, args)
         break;
-     case 'unchi':
+    case 'unchi':
         client.commands.get('unchi').execute(message, args)
-       break;       
+        break;       
  
-     case 'unko':
-         client.commands.get('unko').execute(message, args)
-         break;      
+    case 'unko':
+        client.commands.get('unko').execute(message, args)
+        break;      
+    
+    case 'rdmpoem':
+        client.commands.get('rdmpoem').execute(message, args)
+        break;
     
     //SBR ONLY --------------------------------------------------------
     case 'testlog':
