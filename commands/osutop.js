@@ -1,9 +1,9 @@
 module.exports = {
-    name: 'rs',
+    name: 'osutop',
     description: '',
     execute(message, args, Discord) {
         const url = new URL(
-            "https://osu.ppy.sh/api/v2/users/1/recent_activity"
+            "https://osu.ppy.sh/api/v2/users/1/"
         );
         
         let params = {
@@ -27,9 +27,13 @@ module.exports = {
             .setAuthor(``)
             .setColor("9AAAC0")
             .addField(`${avatar} ${username}`)
-            .addField(`${maptitle} [${mapdiff}] +${mods} ${mapstar}`)
-            .addField(`${mapacc} | ${hitcount} | ${mappp} | ${mapscore}`)
-            .addField(`${mapgraph}`)
+            .addField(`Rank #${userrank} global | #${usercountryrank} ${usercountry}`)
+            .addField(`acc: ${useraccuracy}% | ${userpp}pp`)
+            .addField(`${maptitle1} [${mapdifficulty1}] | ${scorepp1}`)
+            .addField(`${maptitle2} [${mapdifficulty2}] | ${scorepp2}`)
+            .addField(`${maptitle3} [${mapdifficulty3}] | ${scorepp3}`)
+            .addField(`${maptitle4} [${mapdifficulty4}] | ${scorepp4}`)
+            .addField(`${maptitle5} [${mapdifficulty5}] | ${scorepp5}`)
             .setFooter("");
         message.channel.send(embed)
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  

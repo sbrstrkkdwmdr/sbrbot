@@ -1,9 +1,9 @@
 module.exports = {
-    name: 'rs',
+    name: 'osu',
     description: '',
     execute(message, args, Discord) {
         const url = new URL(
-            "https://osu.ppy.sh/api/v2/users/1/recent_activity"
+            "https://osu.ppy.sh/api/v2/users/1/"
         );
         
         let params = {
@@ -27,9 +27,12 @@ module.exports = {
             .setAuthor(``)
             .setColor("9AAAC0")
             .addField(`${avatar} ${username}`)
-            .addField(`${maptitle} [${mapdiff}] +${mods} ${mapstar}`)
-            .addField(`${mapacc} | ${hitcount} | ${mappp} | ${mapscore}`)
-            .addField(`${mapgraph}`)
+            .addField(`Rank #${userrank} global | #${usercountryrank} ${usercountry}`)
+            .addField(`acc: ${useraccuracy}% | ${userpp}pp`)
+            .addField(`${userplaycount} plays`)
+            .addField(`${userrankgrades}`)
+            .addField(`${userliveicon}`)
+            .addField(`${userrankgraph}`)
             .setFooter("");
         message.channel.send(embed)
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
