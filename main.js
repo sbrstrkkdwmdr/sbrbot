@@ -139,10 +139,6 @@ client.on('message', message =>{
         client.commands.get('enjoygame').execute(message, args)
         break;
     
-    case 'rs':
-        client.commands.get('rs').execute(message, args)
-        break;
-    
     case 'rate-osu-play':
         client.commands.get('rate-osu-play').execute(message, args)
         break;
@@ -150,6 +146,19 @@ client.on('message', message =>{
     case 'osuhow':
         client.commands.get('osuhow').execute(message, args)
         break;
+
+    case 'rs':
+        client.commands.get('rs').execute(message, args)
+        break;
+
+    case 'osu':
+        client.commands.get('osu').execute(message, args)
+        break;
+
+    case 'osutop':
+        client.commands.get('osutop').execute(message, args)
+        break;
+
     //HENTAI-----------------------------------------------------------------------------------------
 
 
