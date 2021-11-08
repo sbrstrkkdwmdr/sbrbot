@@ -1,5 +1,5 @@
 module.exports = {
-    name: 'rs',
+    name: 'rsplus',
     description: '',
     execute(message, args, Discord) {
         let pickeduser = args[0]
@@ -8,7 +8,7 @@ module.exports = {
         );
         
         let params = {
-            "limit": "1",
+            "limit": "5",
             "offset": "1",
         };
         Object.keys(params)
@@ -24,6 +24,8 @@ module.exports = {
             headers,
         }).then(response => response.json());
 
+        const embed = require ("response.json");
+
         let embed = new Discord.RichEmbed
             .setAuthor(``)
             .setColor("9AAAC0")
@@ -31,6 +33,7 @@ module.exports = {
             .addField(`${maptitle} [${mapdiff}] +${mods} ${mapstar}`)
             .addField(`${mapacc} | ${hitcount} | ${mappp} | ${mapscore}`)
             .addField(`${mapgraph}`)
+            // do this five times?
             .setFooter("");
         message.channel.send(embed)
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
