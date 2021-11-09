@@ -24,8 +24,6 @@ module.exports = {
             headers,
         }).then(response => response.json());
 
-        const embed = require ("response.json");
-
         let embed = new Discord.RichEmbed
             .setAuthor(``)
             .setColor("9AAAC0")
