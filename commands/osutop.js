@@ -2,13 +2,20 @@ module.exports = {
     name: 'osutop',
     description: '',
     execute(message, args, Discord) {
+        let pickeduser = args[0]
+        let pickedpageX = args[1]
+        if(pickedpageX = 0){
+            let pickedpage = 1
+        } else {
+            let pickedpage = args[1]
+        }
         const url = new URL(
-            "https://osu.ppy.sh/api/v2/users/1/"
+            `"https://osu.ppy.sh/api/v2/users/${pickeduser}/scores/best/`
         );
         
         let params = {
-            "limit": "10",
-            "offset": "1",
+            "limit": "5",
+            "offset": `${pickedpage}`,
         };
         Object.keys(params)
             .forEach(key => url.searchParams.append(key, params[key]));
