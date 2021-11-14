@@ -242,7 +242,7 @@ client.on('message', message =>{
         break;
 
     default: 
-        console.log('command error - default message.') 
+        break;
     }
     //NON COMMAND STUFF--------------------------
 
