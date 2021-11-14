@@ -114,6 +114,10 @@ client.on('message', message =>{
     case '8ball':
         client.commands.get('8ball').execute(message, args)
         break;
+
+    case 'emojify':
+        client.commands.get('emojify').execute(message, args)
+        break;
     
     //SBR ONLY --------------------------------------------------------
     case 'testlog':

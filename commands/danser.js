@@ -3,11 +3,12 @@ module.exports = {
     description: '',
     execute(message, args) {
         message.channel.send("https://discord.gg/UTPvbe8")
-      /*  if(args[0] != help){
-            
+      /*  if(args[0] == help){
+         message.channel.send("ask here")
+         message.channel.send
         }
         else{
-            message.channel.send("ask here")
+          
         }*/
     }
 }
