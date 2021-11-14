@@ -95,6 +95,11 @@ client.on('message', message =>{
 
     case 'image':
         client.commands.get('image').execute(message, args, Discord, client)
+        break;
+
+    case 'ytsearch':
+        client.commands.get('ytsearch').execute(message, args, Discord, client)
+        break;
 
     //FUN --------------------------------------------------------------------
     case 'ghostping':
