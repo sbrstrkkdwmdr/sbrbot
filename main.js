@@ -115,8 +115,8 @@ client.on('message', message =>{
         client.commands.get('unko').execute(message, args)
         break;      
     
-    case 'rdmpoem':
-        client.commands.get('rdmpoem').execute(message, args)
+    case '8ball':
+        client.commands.get('8ball').execute(message, args)
         break;
     
     //SBR ONLY --------------------------------------------------------
@@ -165,6 +165,10 @@ client.on('message', message =>{
 
     case 'osutest':
 //        client.commands.get('osutest').execute(message, args, Discord)
+        break;
+
+    case 'danser':
+        client.commands.get('danser').execute(message, args)
         break;
 
     //HENTAI-----------------------------------------------------------------------------------------
