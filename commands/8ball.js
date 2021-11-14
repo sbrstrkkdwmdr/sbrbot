@@ -4,7 +4,8 @@ module.exports = {
     execute(message, args) {
         let rdm = ["yes", "no clue.", "知らない", "nope", "yeah", "definitely maybe not", "nah", "yeah of course", "絶対!!!", "多分", 
         "i didn't quite catch that, ask again?", "ehhhhhhh", ""];
-        message.channel.send(`${rdm}`)   
+        let ball = rdm[Math.floor(Math.random() * rdm.length)];
+        message.channel.send(`${ball}`)   
     }
 }
 //client.commands.get('').execute(message, args)
