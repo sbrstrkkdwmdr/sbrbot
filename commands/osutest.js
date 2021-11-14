@@ -1,4 +1,4 @@
-
+const get = require('node-fetch2');
 module.exports = {
     name: 'osutest',
     description: '',
@@ -31,7 +31,7 @@ module.exports = {
             "Accept": "application/json",
         };
         
-        fetch(url, {
+        get(url, {
             method: "GET",
             headers,
         }).then(response => response.json());

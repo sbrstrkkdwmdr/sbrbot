@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js'); //uses discord.js to run
 const { ALL } = require('dns');
 const { create } = require('domain');
@@ -13,7 +12,7 @@ const { monitorEventLoopDelay } = require('perf_hooks');
 
 client.commands = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js' || '.mjs'));
+const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
 for(const file of commandFiles){
     const command = require(`./commands/${file}`);
 
@@ -98,6 +97,9 @@ client.on('message', message =>{
         message.channel.send("you gonna finish writing the command?")
         break; 
 
+    case 'image':
+        client.commands.get('image').execute(message, args, Discord, client)
+
     //FUN --------------------------------------------------------------------
     case 'ghostping':
         client.commands.get('ghostping').execute(message, args)
@@ -150,19 +152,19 @@ client.on('message', message =>{
         break;
 
     case 'rs':
-        client.commands.get('rs').execute(message, args, Discord)
+      //  client.commands.get('rs').execute(message, args, Discord)
         break;
 
     case 'osu':
-        client.commands.get('osu').execute(message, args, Discord)
+    //    client.commands.get('osu').execute(message, args, Discord)
         break;
 
     case 'osutop':
-        client.commands.get('osutop').execute(message, args, Discord)
+  //      client.commands.get('osutop').execute(message, args, Discord)
         break;
 
     case 'osutest':
-        client.commands.get('osutest').execute(message, args, Discord, fetch)
+//        client.commands.get('osutest').execute(message, args, Discord)
         break;
 
     //HENTAI-----------------------------------------------------------------------------------------
@@ -236,10 +238,11 @@ client.on('message', message =>{
         break;
 
     default: 
-    message.channel.send("分からないか壊れた")
-    message.channel.send("わからないかこわれた")
         console.log('command error - default message.') 
     }
+    //NON COMMAND STUFF--------------------------
+
+//    client.get("")
 
     //insert loop
 /*

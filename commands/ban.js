@@ -22,6 +22,8 @@ module.exports = {
         })
     } else { message.channel.send("That user is no longer here.")}
     } else { message.channel.send("No user has been mentioned")}
+} else {
+    message.channel.send("no. cope harder")
 }
     }
 }
