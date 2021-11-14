@@ -93,10 +93,6 @@ client.on('message', message =>{
         client.commands.get('idk').execute(message, args)
         break;
 
-    case '':
-        message.channel.send("you gonna finish writing the command?")
-        break; 
-
     case 'image':
         client.commands.get('image').execute(message, args, Discord, client)
 
