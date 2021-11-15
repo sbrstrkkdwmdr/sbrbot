@@ -14,7 +14,7 @@ module.exports = {
   name: 'ping',
   aliases: [],
   description: 'Get bot ping.',
-  async execute(client, message) {
+  async execute(client, message, args, Discord) {
     const ping = await getDBPingData();
     const messagePing = Date.now(); // start before message sent
     const msg = await message.channel.send('Loading...');

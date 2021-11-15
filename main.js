@@ -55,7 +55,7 @@ client.on('message', message =>{
     //HELPFUL ---------------------------------------
 
     case 'ping':
-        client.commands.get('ping').execute(message, args)
+        client.commands.get('ping').execute(message, args, client, Discord)
         break; 
     case  'links':
         client.commands.get('links').execute(message, args)
@@ -65,9 +65,9 @@ client.on('message', message =>{
         client.commands.get('help').execute(message, args)
         break;  
         
-        case 'info':
-            client.commands.get('info').execute(message, args)
-            break;
+    case 'info':
+        client.commands.get('info').execute(message, args)
+        break;
     //UNCATEGORISED -----GENERAL?-------------------------------------------------
      case 'avatar':
          client.commands.get('avatar').execute(message, args, Discord)
