@@ -245,6 +245,11 @@ client.on('message', message =>{
     case 'gleave':
         client.commands.get('gleave').execute(message, args, client)
         break;
+    
+    case 'remind':
+        client.commands.get('remind').execute(message, args, client, Discord)
+    
+    //MUSIC --------------------
 
     default: 
         break;
