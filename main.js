@@ -160,18 +160,22 @@ client.on('message', message =>{
 
     case 'rs':
       //  client.commands.get('rs').execute(message, args, Discord)
+        client.commands.get('WIP').execute(message, args)
         break;
 
     case 'osu':
     //    client.commands.get('osu').execute(message, args, Discord)
+        client.commands.get('WIP').execute(message, args)
         break;
 
     case 'osutop':
   //      client.commands.get('osutop').execute(message, args, Discord)
+        client.commands.get('WIP').execute(message, args)
         break;
 
     case 'osutest':
 //        client.commands.get('osutest').execute(message, args, Discord)
+      client.commands.get('WIP').execute(message, args)
         break;
 
     case 'danser':
