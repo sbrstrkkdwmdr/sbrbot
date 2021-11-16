@@ -1,16 +1,18 @@
-/*module.exports = {
+module.exports = {
     name: 'ping',
     description: 'ping',
-    execute(message, args) {
-        message.channel.send('pong!');   
+    execute(message, args, client, Discord) {
+      message.channel.send('pong!');   
+      message.channel.send(`Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
     }
-}*/
+}
 // @ts-check // Can be removed, used to check typings and valid actions
 
 const { MessageEmbed } = require('discord.js');
 const quick = require('quick.db');
 
-module.exports = {
+//BELOW IS SOME VERSION I FOUND ON CODELYON DISCORD. IDK WHAT TO CHANGE TO FIX IT
+/*module.exports = {
   name: 'ping',
   aliases: [],
   description: 'Get bot ping.',
@@ -57,4 +59,4 @@ async function getDBPingData() {
     quick.delete('QR=.'); // try deleteing
   } catch (error) {}
   return { endGet, endWright, avarage }; // return the ping data
-}
+}*/
