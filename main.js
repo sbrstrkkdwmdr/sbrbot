@@ -2,6 +2,8 @@ const Discord = require('discord.js'); //uses discord.js to run
 const { ALL } = require('dns');
 const { create } = require('domain');
 const fetch = require('node-fetch');
+const ytld = require ('ytdl-core');
+const queue = new Map();
 
 const client = new Discord.Client();
 
