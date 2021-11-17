@@ -365,6 +365,10 @@ client.on('message', message =>{
         dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         serverQueue.textChannel.send(`added **${song.title}** to queue`);
       }
+      let MOTHERTRIGGER = ["your mother", "your mum", "your mom", "yo mumma", "yo momma", "ur mum", "ur mom", "u mum", "u mom"]
+      if(!message.content.startsWith(MOTHERTRIGGER)){
+          message.channel.send("yeah, she's 300 feet away from your house with a chonkl")
+      }
     //NON COMMAND STUFF--------------------------
 
 //    client.get("")
