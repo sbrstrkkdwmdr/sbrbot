@@ -18,11 +18,11 @@ module.exports = {
 
         const wrongtime = new Discord.MessageEmbed()
             .setColor('#F30B04')
-            .setDescription(`**Sorry I only do d, m, h, or s.**`)
+            .setDescription(`**Incorrect time format: d, m, h, or s.**`)
 
         const reminderembed = new Discord.MessageEmbed()
             .setColor('#F30B04')
-            .setDescription(`**Please tell me what you want to be reminded off**`)
+            .setDescription(`**Error: no reminder text**`)
 
         if (!args[0]) return message.channel.send(notime)
         if (
@@ -38,14 +38,14 @@ module.exports = {
 
         const remindertime = new Discord.MessageEmbed()
         .setColor('#33F304')
-        .setDescription(`\**Your reminder will go off in ${time}**`)
+        .setDescription(`\**A reminder has been set to go off in ${time}**`)
 
         message.channel.send(remindertime)
 
         const reminderdm = new Discord.MessageEmbed()
         .setColor('#7289DA')
         .setTitle('**REMINDER**')
-        .setDescription(`**It has been ${time} here is your reminder:** ${reminder}`)  
+        .setDescription(`**${reminder}`)  
 
         setTimeout(async function () {
            try{
