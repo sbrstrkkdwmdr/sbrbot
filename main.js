@@ -2,14 +2,15 @@ const Discord = require('discord.js'); //uses discord.js to run
 const { ALL } = require('dns');
 const { create } = require('domain');
 const fetch = require('node-fetch');
-const ytld = require ('ytdl-core');
+
+const ytdl = require("ytdl-core");
 const queue = new Map();
 
 const client = new Discord.Client();
 
 const prefix = 'sbr-'; //prefix
 
-const fs = require ('fs');
+const fs = require('fs');
 const { monitorEventLoopDelay } = require('perf_hooks');
 
 client.commands = new Discord.Collection();
@@ -45,7 +46,8 @@ client.on('message', message =>{
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase(); //idk what this does i forgot
 
-
+    const serverQueue = queue.get(message.guild.id);
+    
 //commands below
     switch (command)
     {
@@ -259,19 +261,24 @@ client.on('message', message =>{
     
     //MUSIC --------------------
     case 'play':
-//        execute(message, serverQueue);
+        //client.commands.get('musicplay').execute(message, args, client, serverQueue, Discord, ytdl)
+        //execute(message, serverQueue);
         client.commands.get('WIP').execute(message, args)
-        break;
+        break; 
     case 'skip':
+        //client.commands.get('musicskip').execute(message, args, client, serverQueue, Discord, ytdl)
         //skip(message, serverQueue);
         client.commands.get('WIP').execute(message, args)
         break;
+        
     case 'stop':
+        //client.commands.get('musicstop').execute(message, args, client, serverQueue, Discord, ytdl)
         //stop(message, serverQueue);
         client.commands.get('WIP').execute(message, args)
         break;
 
     case `disconnect`:
+        //client.commands.get('musicstop').execute(message, args, client, serverQueue, Discord, ytdl)
         //stop(message, serverQueue);
         client.commands.get('WIP').execute(message, args)
         break;
@@ -279,7 +286,27 @@ client.on('message', message =>{
     default: 
         break;
     }
-    async function execute(message, serverQueue) {
+     /* let MOTHERTRIGGER2 = "you know who else"
+    if(m){}*/
+    //NON COMMAND STUFF--------------------------
+
+//    client.get("")
+
+    //insert loop
+/*
+    for (;;) {
+        Thread.sleep(5 * 1000)
+        let SendingChannelw = 875352853684822056
+        let d1 = new
+        let d2 = dat
+        let THINGYYY = GET (`https://osutrack-api.ameo.dev/hiscores?user={SaberStrike}&mode={mode}&from={from}&to={to}`)
+        message.SendingChannelw.send(`${THINGYYY}`)
+        //875352853684822056
+        //GET https://osutrack-api.ameo.dev/hiscores?user={user}&mode={mode}&from={YESTERDAY}&to={TODAY}
+    }*/
+   /* 
+   //MUSIC BOT ASYNC FUNCTION
+   async function execute(message, serverQueue) {
         const args = message.content.split(" ");
       
         const voiceChannel = message.member.voice.channel;
@@ -370,24 +397,13 @@ client.on('message', message =>{
           .on("error", error => console.error(error));
         dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         serverQueue.textChannel.send(`added **${song.title}** to queue`);
-      }
-    //NON COMMAND STUFF--------------------------
-
-//    client.get("")
-
-    //insert loop
-/*
-    for (;;) {
-        Thread.sleep(5 * 1000)
-        let SendingChannelw = 875352853684822056
-        let d1 = new
-        let d2 = dat
-        let THINGYYY = GET (`https://osutrack-api.ameo.dev/hiscores?user={SaberStrike}&mode={mode}&from={from}&to={to}`)
-        message.SendingChannelw.send(`${THINGYYY}`)
-        //875352853684822056
-        //GET https://osutrack-api.ameo.dev/hiscores?user={user}&mode={mode}&from={YESTERDAY}&to={TODAY}
-    }*/
+      }*/
 
 }); //^ all of these run the command files necessary.
+//let MOTHERTRIGGER = ["your mother", "your mum", "your mom", "yo mumma", "yo momma", "ur mum", "ur mom", "u mum", "u mom"]
+//if(!message.content.startsWith(MOTHERTRIGGER)){
+//    message.channel.send("yeah, she's 300 feet away from your house with a chonkl")
+//}
+
 
 client.login('NzU1MjIwOTg5NDk0OTUxOTk3.X2AIWw.ebo8K60jWyQ1XL-HophjRma_J9c') //turns on the bot
