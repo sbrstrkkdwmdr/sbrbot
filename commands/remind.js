@@ -14,7 +14,7 @@ module.exports = {
 
         const notime = new Discord.MessageEmbed()
             .setColor('#F30B04')
-            .setDescription(`**Please specify the time!**`)
+            .setDescription(`**Error: no time specified**`)
 
         const wrongtime = new Discord.MessageEmbed()
             .setColor('#F30B04')

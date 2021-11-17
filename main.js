@@ -33,7 +33,7 @@ client.once('ready', () => {
     status: 'online',    
     activity: {
     name: 'this server',
-    type: 'CUSTOM_STATUS', 
+    type: 'WATCHING', 
     url: "https://youtube.com/saberstrkkdwmdr"}
 })
 })
@@ -178,7 +178,7 @@ client.on('message', message =>{
         break;
 
     case 'osutest':
-//        client.commands.get('osutest').execute(message, args, Discord)
+//        client.commands.get('osutest').execute(message, args, Discord, fetch)
       client.commands.get('WIP').execute(message, args)
         break;
 
