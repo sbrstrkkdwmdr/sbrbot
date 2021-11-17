@@ -96,11 +96,13 @@ client.on('message', message =>{
         break;
 
     case 'image':
-        client.commands.get('image').execute(message, args, Discord, client)
+        //client.commands.get('image').execute(message, args, Discord, client)
+        client.commands.get('WIP').execute(message, args)
         break;
 
     case 'ytsearch':
-        client.commands.get('ytsearch').execute(message, args, Discord, client)
+//        client.commands.get('ytsearch').execute(message, args, Discord, client)
+        client.commands.get('WIP').execute(message, args)
         break;
 
     //FUN --------------------------------------------------------------------
@@ -257,17 +259,21 @@ client.on('message', message =>{
     
     //MUSIC --------------------
     case 'play':
-        execute(message, serverQueue);
+//        execute(message, serverQueue);
+        client.commands.get('WIP').execute(message, args)
         break;
     case 'skip':
-        skip(message, serverQueue);
+        //skip(message, serverQueue);
+        client.commands.get('WIP').execute(message, args)
         break;
     case 'stop':
-        stop(message, serverQueue);
+        //stop(message, serverQueue);
+        client.commands.get('WIP').execute(message, args)
         break;
 
     case `disconnect`:
-        stop(message, serverQueue);
+        //stop(message, serverQueue);
+        client.commands.get('WIP').execute(message, args)
         break;
 
     default: 
