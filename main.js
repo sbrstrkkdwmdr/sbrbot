@@ -258,6 +258,7 @@ client.on('message', message =>{
     
     case 'remind':
         client.commands.get('remind').execute(message, args, client, Discord)
+        break;
     
     //MUSIC --------------------
     case 'play':
