@@ -98,11 +98,13 @@ client.on('message', message =>{
         break;
 
     case 'image':
-        client.commands.get('image').execute(message, args, Discord, client)
+        //client.commands.get('image').execute(message, args, Discord, client)
+        client.commands.get('WIP').execute(message, args)
         break;
 
     case 'ytsearch':
-        client.commands.get('ytsearch').execute(message, args, Discord, client)
+//        client.commands.get('ytsearch').execute(message, args, Discord, client)
+        client.commands.get('WIP').execute(message, args)
         break;
 
     //FUN --------------------------------------------------------------------
@@ -268,6 +270,7 @@ client.on('message', message =>{
         //skip(message, serverQueue);
         client.commands.get('WIP').execute(message, args)
         break;
+        
     case 'stop':
         //client.commands.get('musicstop').execute(message, args, client, serverQueue, Discord, ytdl)
         //stop(message, serverQueue);
