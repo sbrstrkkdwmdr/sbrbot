@@ -369,6 +369,8 @@ client.on('message', message =>{
       if(!message.content.startsWith(MOTHERTRIGGER)){
           message.channel.send("yeah, she's 300 feet away from your house with a chonkl")
       }
+      let MOTHERTRIGGER2 = "you know who else"
+    if(m)
     //NON COMMAND STUFF--------------------------
 
 //    client.get("")
