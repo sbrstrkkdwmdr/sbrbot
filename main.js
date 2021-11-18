@@ -130,6 +130,10 @@ client.on('message', message =>{
         client.commands.get('emojify').execute(message, args)
         break;
     
+    case 'truthordare':
+        client.commands.get('truthordare').execute(message, args)
+        break;
+    
     //SBR ONLY --------------------------------------------------------
     case 'testlog':
         client.commands.get('testlog').execute(message, args)
