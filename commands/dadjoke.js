@@ -10,7 +10,10 @@ module.exports = {
     "I was wondering where this bat was coming from, then it hit me",
     "I don't trust atoms, they make up everything!",
     "you matter. unless you're multiplied by the speed of light, then you energy",
-    "I heard to put alcohol in an elevator. Really lifts your spirits"
+    "I heard to put alcohol in an elevator. Really lifts your spirits",
+    "A cheese factory exploded one day. Nothing left except de-brie",
+    "I got into a heated argument with a snowman. He lost his cool and had a meltdown",
+    ""
     
 ];
         let dadjoke = rdm[Math.floor(Math.random() * rdm.length)];
