@@ -286,9 +286,6 @@ client.on('message', message =>{
         //stop(message, serverQueue);
         client.commands.get('WIP').execute(message, args)
         break;
-
-    default: 
-        break;
     }
      /* let MOTHERTRIGGER2 = "you know who else"
     if(m){}*/
