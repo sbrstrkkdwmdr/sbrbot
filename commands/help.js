@@ -2,7 +2,7 @@ module.exports = {
     name: 'help',
     description: '',
     execute(message, args, currentDate) {
-        message.channel.send('commands listed here - https://sites.google.com/view/sbrbot/home') 
+        message.channel.send('commands listed here - https://sbrstrkkdwmdr.github.io/sbr-web/botcmd') 
         console.log(`${currentDate}`)  
         console.log("command executed - help")
         let consoleloguserweeee = message.author
