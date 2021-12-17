@@ -5,6 +5,10 @@ module.exports = {
         message.delete();
         message.channel.send("go to horny jail")
         message.channel.send("https://cdn.discordapp.com/attachments/544104638904008704/761896640956203018/Screen_Shot_2020-04-28_at_12.png") 
+        console.log("command executed - horny")
+        let consoleloguserweeee = message.author
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("")
     }
 }
 //client.commands.get('').execute(message, args)

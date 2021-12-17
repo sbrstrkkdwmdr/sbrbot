@@ -3,6 +3,10 @@ module.exports = {
     description: 'insult',
     execute(message, args) {
         if(message.member.hasPermission('SEND_MESSAGES')){
+            console.log("command executed - insult")
+            let consoleloguserweeee = message.author
+            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            console.log("")
             let user = message.mentions.users.first();
             if(user = 'undefined'){
                 message.channel.send("a user needs to be mentioned")

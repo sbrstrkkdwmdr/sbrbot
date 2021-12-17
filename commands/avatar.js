@@ -4,8 +4,13 @@ module.exports = {
     name: 'avatar',
     description: '',
     execute(message, args, Discord) {
+        console.log("command executed - avatar")
+        let consoleloguserweeee = message.author
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log(`mentions - ${message.mentions.users.size}`)
+        console.log("")
         if (!message.mentions.users.size) {
-            message.channel.send('Nobody was mentioned');
+            message.channel.send('This command requires someone to be mentioned.');
             return;}
         else {
             let user = message.mentions.users.first();

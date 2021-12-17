@@ -97,4 +97,8 @@ function play(guild, song) {
   dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
   serverQueue.textChannel.send(`added **${song.title}** to queue`);
 }
+console.log("executed command - musicstop")
+let consoleloguserweeee = message.author
+console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+console.log("")
 }}

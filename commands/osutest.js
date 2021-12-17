@@ -50,6 +50,10 @@ module.exports = {
             .setFooter("");
         message.channel.send(embed)*/
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
-    }
+        console.log("command executed - osutest")
+        let consoleloguserweeee = message.author
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("")    
+}
 }
 //client.commands.get('').execute(message, args)

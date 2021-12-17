@@ -4,7 +4,6 @@ module.exports = {
     execute(message, args) {
         let we = message.guild.id
         if(we != 652388389529714709){
-
   } else {
             message.channel.send("wee")
             if(message.member.hasPermission('ADMINISTRATOR')){
@@ -13,6 +12,10 @@ module.exports = {
                 message.channel.send(`a ${user}`)
             }
         }
+        console.log("command executed - testlog")
+        let consoleloguserweeee = message.author
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("")
     }
 }
 //client.commands.get('').execute(message, args)

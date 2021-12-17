@@ -35,6 +35,11 @@ module.exports = {
             .addField(`${userrankgraph}`)
             .setFooter("");
         message.channel.send(embed)
+        
+        console.log("executed command - osu")
+        let consoleloguserweeee = message.author
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("")
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
     }
 }

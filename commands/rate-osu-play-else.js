@@ -6,6 +6,11 @@ module.exports = {
             let user = message.mentions.users.first()
             let score = Math.floor(Math.random() * 100 + 1)
             message.channel.send(`I rate ${user}'s play a ${score}/100`)
+            console.log("command executed - rate-osu-play-else")
+            let consoleloguserweeee = message.author
+            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            console.log(`play rated ${score}/100`)
+            console.log("")
             if (score == 69 ) {
                 message.channel.send("funny number")
             }

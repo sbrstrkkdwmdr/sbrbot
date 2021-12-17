@@ -4,6 +4,12 @@ module.exports = {
     execute(message, args, client, Discord) {
       message.channel.send('pong!');   
       message.channel.send(`Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
+
+      console.log("command executed - ping")
+      let consoleloguserweeee = message.author
+      console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+      console.log(`Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`)
+      console.log("")
     }
 }
 // @ts-check // Can be removed, used to check typings and valid actions

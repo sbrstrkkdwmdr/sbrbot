@@ -12,10 +12,19 @@ module.exports = {
         message.delete();
         await message.channel.messages.fetch({limit: args[0]}).then(messages =>{
             message.channel.bulkDelete(messages);
+            console.log("command executed - purge")
+            let consoleloguserweeee = message.author
+            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            console.log(`deleted message count - ${args[0]}`)
+            console.log("")
         });
         }
         else{
-        
+            console.log("command executed - purge")
+            let consoleloguserweeee = message.author
+            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            console.log("command failed - insufficient perms")
+            console.log("")
         }
     }
 }

@@ -97,4 +97,8 @@ module.exports = {
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
     serverQueue.textChannel.send(`added **${song.title}** to queue`);
   }
+  console.log("command executed - musicskip")
+  let consoleloguserweeee = message.author
+  console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+  console.log("")
 }}

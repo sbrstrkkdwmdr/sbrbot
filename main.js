@@ -129,6 +129,10 @@ client.on('message', message =>{
     case 'emojify':
         client.commands.get('emojify').execute(message, args)
         break;
+
+    case 'dadjoke':
+        client.commands.get('dadjoke').execute(message, args)
+        break;
     
     //SBR ONLY --------------------------------------------------------
     case 'testlog':
@@ -262,6 +266,7 @@ client.on('message', message =>{
 
     case 'banid':
         client.commands.get('banid').execute(message, args, Discord)
+        break;
     
     //MUSIC --------------------
     case 'play':
@@ -285,6 +290,11 @@ client.on('message', message =>{
         //client.commands.get('musicstop').execute(message, args, client, serverQueue, Discord, ytdl)
         //stop(message, serverQueue);
         client.commands.get('WIP').execute(message, args)
+        break;
+    
+    default:
+        console.log("command executed - default (possible mispelt command)")
+        console.log("")
         break;
     }
      /* let MOTHERTRIGGER2 = "you know who else"

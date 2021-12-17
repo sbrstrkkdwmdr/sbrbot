@@ -43,6 +43,11 @@ module.exports = {
             .addField(`${maptitle5} [${mapdifficulty5}] | ${scorepp5}`)
             .setFooter("");
         message.channel.send(embed)
+
+        console.log("command executed - osutop")
+        let consoleloguserweeee = message.author
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("")
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
     }
 }

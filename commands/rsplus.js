@@ -34,6 +34,11 @@ module.exports = {
             // do this five times?
             .setFooter("");
         message.channel.send(embed)
+
+        console.log("command executed - rsplus")
+        let consoleloguserweeee = message.author
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("")
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
     }
 }

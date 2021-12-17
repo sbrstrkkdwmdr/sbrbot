@@ -31,6 +31,9 @@ module.exports = {
         }
         message.delete();
         message.channel.send(sentence)
-
+        console.log("command executed - emojify")
+        let consoleloguserweeee = message.author
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("")
     }
 }
