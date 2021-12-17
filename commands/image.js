@@ -4,8 +4,9 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'image',
     description: 'Search images through google images',
-    async execute(message, args, Discord) {
+    async execute(message, args, Discord, currentDate) {
         message.channel.send("WIP")
+        console.log(`${currentDate}`)
         console.log("command executed - image")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

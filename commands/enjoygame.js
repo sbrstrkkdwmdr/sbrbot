@@ -1,8 +1,9 @@
 module.exports = {
     name: 'enjoygame',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate) {
         message.channel.send("farm bad enjoy game good 😎")
+        console.log(`${currentDate}`)
         console.log("command executed - enjoygame")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

@@ -3,7 +3,8 @@ const { DiscordAPIError } = require("discord.js");
 module.exports = {
     name: 'avatar',
     description: '',
-    execute(message, args, Discord) {
+    execute(message, args, Discord, currentDate) {
+        console.log(`${currentDate}`)
         console.log("command executed - avatar")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

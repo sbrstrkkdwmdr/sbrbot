@@ -1,9 +1,10 @@
 module.exports = {
     name: 'hentai',
-    execute(message, args) {
+    execute(message, args, currentDate) {
         if(message.channel.nsfw) {
         let pp = Math.floor(Math.random () * 70005 + 1)
         message.channel.send(`https://nhentai.net/g/${pp}`)
+        console.log(`${currentDate}`)
         console.log("command executed - hentai")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
@@ -12,6 +13,7 @@ module.exports = {
     }
         else {
             message.channel.send("this channel is not NSFW")
+            console.log(`${currentDate}`)
             console.log("command executed - hentai")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

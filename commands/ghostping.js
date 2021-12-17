@@ -3,11 +3,12 @@ const { User } = require("discord.js")
 module.exports = {
     name: 'ghostping',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate) {
         if(message.member.hasPermission('ADMINISTRATOR')){
             let pinged = message.mentions.users.first();
             if(pinged = 'undefined'){
                 message.channel.send("user ID undefined")
+                console.log(`${currentDate}`)
                 console.log("command executed - ghostping")
                 let consoleloguserweeee = message.author
                 console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
@@ -16,6 +17,7 @@ module.exports = {
             }
             else{
             message.delete();
+            console.log(`${currentDate}`)
             console.log("command executed - ghostping")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
@@ -26,6 +28,7 @@ module.exports = {
         else{
             let dum = message.author
             message.channel.send(`${dum} that won't work`)
+            console.log(`${currentDate}`)
             console.log("command executed - ghostping")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

@@ -1,10 +1,10 @@
 module.exports = {
     name: 'ping',
     description: 'ping',
-    execute(message, args, client, Discord) {
+    execute(message, args, client, Discord, currentDate) {
       message.channel.send('pong!');   
       message.channel.send(`Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
-
+      console.log(`${currentDate}`)
       console.log("command executed - ping")
       let consoleloguserweeee = message.author
       console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

@@ -1,8 +1,9 @@
 module.exports = {
     name: 'unko',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate) {
         message.channel.send("ウンコご飯食べたい")   
+        console.log(`${currentDate}`)
         console.log("command executed - unko")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

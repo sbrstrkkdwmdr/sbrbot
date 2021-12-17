@@ -1,8 +1,9 @@
 module.exports = {
     name: 'WIP',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate) {
         message.channel.send("the current command is unavailable")
+        console.log(`${currentDate}`)
         console.log("command executed - WIP")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

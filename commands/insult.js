@@ -1,8 +1,9 @@
 module.exports = {
     name: 'insult',
     description: 'insult',
-    execute(message, args) {
+    execute(message, args, currentDate) {
         if(message.member.hasPermission('SEND_MESSAGES')){
+            console.log(`${currentDate}`)
             console.log("command executed - insult")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

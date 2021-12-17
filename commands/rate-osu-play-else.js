@@ -1,11 +1,12 @@
 module.exports = {
     name: 'rate-osu-play-else',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate) {
         if(message.member.hasPermission('SEND_MESSAGES')){//the if is to make the let user only affect this command. idk why, but it sometimes breaks other commands
             let user = message.mentions.users.first()
             let score = Math.floor(Math.random() * 100 + 1)
             message.channel.send(`I rate ${user}'s play a ${score}/100`)
+            console.log(`${currentDate}`)
             console.log("command executed - rate-osu-play-else")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

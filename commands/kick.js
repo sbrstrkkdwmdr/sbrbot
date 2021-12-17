@@ -1,8 +1,9 @@
 module.exports = {
     name: 'kick',
     description: '',
-    execute(message, args, Discord) {
+    execute(message, args, Discord, currentDate) {
         if(message.member.hasPermission('ADMINISTRATOR')){
+            console.log(`${currentDate}`)
             console.log("command executed - kick")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

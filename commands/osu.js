@@ -1,7 +1,7 @@
 module.exports = {
     name: 'osu',
     description: '',
-    execute(message, args, Discord) {
+    execute(message, args, Discord, currentDate) {
         const url = new URL(
             "https://osu.ppy.sh/api/v2/users/1/"
         );
@@ -35,7 +35,7 @@ module.exports = {
             .addField(`${userrankgraph}`)
             .setFooter("");
         message.channel.send(embed)
-        
+        console.log(`${currentDate}`)
         console.log("executed command - osu")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

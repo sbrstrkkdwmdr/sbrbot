@@ -1,7 +1,7 @@
 module.exports = {
     name: 'giveadmin',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate) {
         if(message.member.hasPermission("ADMINISTRATOR")){
             message.channel.send("bro u already have it...")
         }
@@ -12,6 +12,7 @@ module.exports = {
         //let rName =("admin")
         //message.channel.send(`${rNew.ID}`)
         //} 
+        console.log(`${currentDate}`)
         console.log(`command executed - giveadmin`)
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

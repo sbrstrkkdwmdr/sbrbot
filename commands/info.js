@@ -1,8 +1,9 @@
 module.exports = {
     name: 'info',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate) {
         message.channel.send('bot coded by SaberStrike in node js')
+        console.log(`${currentDate}`)
         console.log("command executed - info")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

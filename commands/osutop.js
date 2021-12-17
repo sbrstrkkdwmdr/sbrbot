@@ -1,7 +1,7 @@
 module.exports = {
     name: 'osutop',
     description: '',
-    execute(message, args, Discord) {
+    execute(message, args, Discord, currentDate) {
         let pickeduser = args[0]
         let pickedpageX = args[1]
         if(pickedpageX = 0){
@@ -43,7 +43,7 @@ module.exports = {
             .addField(`${maptitle5} [${mapdifficulty5}] | ${scorepp5}`)
             .setFooter("");
         message.channel.send(embed)
-
+        console.log(`${currentDate}`)
         console.log("command executed - osutop")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

@@ -2,7 +2,7 @@ module.exports = {
     name : 'emojify',
     description : 'Make any sentence out of emoji\'s',
 
-    execute : async(message, args) => {
+    execute : async(message, args, currentDate) => {
         let sentence = '';
 
         let chars = {
@@ -31,6 +31,7 @@ module.exports = {
         }
         message.delete();
         message.channel.send(sentence)
+        console.log(`${currentDate}`)
         console.log("command executed - emojify")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

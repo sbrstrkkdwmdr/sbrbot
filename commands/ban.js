@@ -1,7 +1,7 @@
 module.exports = {
     name: 'ban',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate) {
         if(message.member.hasPermission('ADMINISTRATOR')){
         let user = message.mentions.users.first();
         if(user){
@@ -15,6 +15,7 @@ module.exports = {
         )
         .then(() => {
             message.reply(`successfully banned ${user.tag} (AKA ${user.id})`);
+            console.log(`${currentDate}`)
             console.log("command executed - ban")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

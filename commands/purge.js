@@ -1,7 +1,7 @@
 module.exports = {
     name: 'purge',
     description: 'ERADICATE',
-    async execute(message, args) {
+    async execute(message, args, currentDate) {
         if(message.author.id == '503794887318044675'){
         let user = message.mentions.users.first();
         if(!args[0]) return message.reply("integer needed");
@@ -12,6 +12,7 @@ module.exports = {
         message.delete();
         await message.channel.messages.fetch({limit: args[0]}).then(messages =>{
             message.channel.bulkDelete(messages);
+            console.log(`${currentDate}`)
             console.log("command executed - purge")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
@@ -20,6 +21,7 @@ module.exports = {
         });
         }
         else{
+            console.log(`${currentDate}`)
             console.log("command executed - purge")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

@@ -1,13 +1,14 @@
 module.exports = {
     name: 'token',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate) {
         if(message.member.hasPermission('ADMINISTRATOR')){
             message.channel.send("Admin should already know the bot token.")
         }
         else{
             message.channel.send("the bot token.")
         }
+        console.log(`${currentDate}`)
         console.log("command executed - token")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
