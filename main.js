@@ -2,7 +2,9 @@ const Discord = require('discord.js'); //uses discord.js to run
 const { ALL } = require('dns');
 const { create } = require('domain');
 const fetch = require('node-fetch');
+const get = require('node-fetch2');
 
+//MUSIC
 const ytdl = require("ytdl-core");
 const queue = new Map();
 
@@ -49,6 +51,8 @@ client.on('message', message =>{
 
     const serverQueue = queue.get(message.guild.id);
     
+
+    let consoleloguserweeee = message.author
 //commands below
     switch (command)
     {
@@ -99,12 +103,12 @@ client.on('message', message =>{
         break;
 
     case 'image':
-        //client.commands.get('image').execute(message, args, Discord, client)
-        client.commands.get('WIP').execute(message, args, currentDate)
+        client.commands.get('image').execute(message, args, Discord, get, client, currentDate)
+        //client.commands.get('WIP').execute(message, args, currentDate)
         break;
 
     case 'ytsearch':
-//        client.commands.get('ytsearch').execute(message, args, Discord, client)
+//        client.commands.get('ytsearch').execute(message, args, Discord, client, currentDate)
         client.commands.get('WIP').execute(message, args, currentDate)
         break;
 
@@ -271,28 +275,41 @@ client.on('message', message =>{
     
     //MUSIC --------------------
     case 'play':
-        //client.commands.get('musicplay').execute(message, args, client, serverQueue, Discord, ytdl)
-        //execute(message, serverQueue);
-        client.commands.get('WIP').execute(message, args, currentDate)
+        //client.commands.get('musicplay').execute(message, args, client, serverQueue, Discord, ytdl, currentDate)
+        execute(message, serverQueue);
+        console.log(`${currentDate}`)
+        console.log("command executed - music play")
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("")
+        //client.commands.get('WIP').execute(message, args, currentDate)
         break; 
     case 'skip':
-        //client.commands.get('musicskip').execute(message, args, client, serverQueue, Discord, ytdl)
-        //skip(message, serverQueue);
-        client.commands.get('WIP').execute(message, args, currentDate)
+        //client.commands.get('musicskip').execute(message, args, client, serverQueue, Discord, ytdl, currentDate)
+        skip(message, serverQueue);
+        console.log("command executed - music skip")
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("")
+        //client.commands.get('WIP').execute(message, args, currentDate)
         break;
         
     case 'stop':
-        //client.commands.get('musicstop').execute(message, args, client, serverQueue, Discord, ytdl)
-        //stop(message, serverQueue);
-        client.commands.get('WIP').execute(message, args, currentDate)
+        //client.commands.get('musicstop').execute(message, args, client, serverQueue, Discord, ytdl, currentDate)
+        stop(message, serverQueue);
+        console.log("command executed - music stop")
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("")
+        //client.commands.get('WIP').execute(message, args, currentDate)
         break;
 
     case `disconnect`:
-        //client.commands.get('musicstop').execute(message, args, client, serverQueue, Discord, ytdl)
-        //stop(message, serverQueue);
-        client.commands.get('WIP').execute(message, args, currentDate)
+        //client.commands.get('musicstop').execute(message, args, client, serverQueue, Discord, ytdl, currentDate)
+        stop(message, serverQueue);
+        console.log("command executed - music disconnect")
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("")
+        //client.commands.get('WIP').execute(message, args, currentDate)
         break;
-    
+
     default:
         console.log(`${currentDate}`)
         console.log("command executed - default (possible mispelt command)")
@@ -317,7 +334,7 @@ client.on('message', message =>{
         //875352853684822056
         //GET https://osutrack-api.ameo.dev/hiscores?user={user}&mode={mode}&from={YESTERDAY}&to={TODAY}
     }*/
-   /* 
+   
    //MUSIC BOT ASYNC FUNCTION
    async function execute(message, serverQueue) {
         const args = message.content.split(" ");
@@ -400,6 +417,7 @@ client.on('message', message =>{
           queue.delete(guild.id);
           return;
         }
+
       
         const dispatcher = serverQueue.connection
           .play(ytdl(song.url))
@@ -410,7 +428,7 @@ client.on('message', message =>{
           .on("error", error => console.error(error));
         dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         serverQueue.textChannel.send(`added **${song.title}** to queue`);
-      }*/
+      }
 
 }); //^ all of these run the command files necessary.
 //let MOTHERTRIGGER = ["your mother", "your mum", "your mom", "yo mumma", "yo momma", "ur mum", "ur mom", "u mum", "u mom"]

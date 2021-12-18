@@ -1,17 +1,14 @@
-const get = require('node-fetch2');
-const Discord = require('discord.js');
-
 module.exports = {
     name: 'image',
     description: 'Search images through google images',
-    async execute(message, args, Discord, currentDate) {
-        message.channel.send("WIP")
+    async execute(message, args, Discord, get, client, currentDate) {
+        //message.channel.send("WIP")
         console.log(`${currentDate}`)
         console.log("command executed - image")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
-/*        if (!args.length) return message.channel.send('Please specify the name of the image you want to search.')
+       if (!args.length) return message.channel.send('Please specify the name of the image you want to search.')
         
         // Note that ephemeral messages are only available with Interactions, so we can't make the response here as an ephemeral.
         // Meaning People can search dirty things and the image will be seen by everyone, It's up to you on how you can make this safe.
@@ -21,9 +18,10 @@ module.exports = {
         
         const cx = process.env.GOOGLE_CX // Watch the video to get your google cx.
         const key = process.env.GOOGLE_KEY // Watch the video to get your google api key.
+        let searchthing = args.slice().join(' ')
 
         let res = await get(
-            `https://customsearch.googleapis.com/customsearch/v1?q=${args.join(' ')}&cx=${cx}&key=${key}&searchType=image`
+            `https://customsearch.googleapis.com/customsearch/v1?q=${searchthing}&cx=${cx}&key=${key}&searchType=image`
         ).catch(e => console.log(e));
         
         if (!res) return message.channel.send('Unable to fetch the requested image.');
@@ -37,8 +35,8 @@ module.exports = {
                 new Discord.MessageEmbed()
                     .setColor('RANDOM')
                     .setImage(res.items[0].link)
-                    .setTitle(`Image result for ${args.join(' ')}`)
+                    .setTitle(`Image result for ${searchthing}`)
             ]
-        });*/
+        });
     }
 }
