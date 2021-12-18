@@ -1,8 +1,8 @@
 module.exports = {
     name: 'gleave',
     description: '',
-    execute(message, args, client, currentDate) {
-        console.log(`${currentDate}`)
+    execute(message, args, client, currentDate, currentDateISO) {
+        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - guild leave")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

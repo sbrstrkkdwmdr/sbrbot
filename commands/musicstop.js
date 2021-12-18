@@ -1,7 +1,7 @@
 module.exports = {
   name: 'stop',
   description: '',
-  execute(message, args, client, serverQueue, Discord, ytdl, currentDate) {
+  execute(message, args, client, serverQueue, Discord, ytdl, currentDate, currentDateISO) {
   
   stop(message, serverQueue);
 
@@ -97,7 +97,7 @@ function play(guild, song) {
   dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
   serverQueue.textChannel.send(`added **${song.title}** to queue`);
 }
-console.log(`${currentDate}`)
+console.log(`${currentDateISO} | ${currentDate}`)
 console.log("executed command - musicstop")
 let consoleloguserweeee = message.author
 console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

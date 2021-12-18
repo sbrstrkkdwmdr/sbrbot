@@ -1,7 +1,7 @@
 module.exports = {
     name: 'rsplus',
     description: '',
-    execute(message, args, Discord, currentDate) {
+    execute(message, args, Discord, currentDate, currentDateISO) {
         let pickeduser = args[0]
         const url = new URL(
             `https://osu.ppy.sh/api/v2/users/${pickeduser}/recent_activity`
@@ -34,7 +34,7 @@ module.exports = {
             // do this five times?
             .setFooter("");
         message.channel.send(embed)
-        console.log(`${currentDate}`)
+        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - rsplus")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

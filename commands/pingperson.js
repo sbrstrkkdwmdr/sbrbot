@@ -1,12 +1,12 @@
 module.exports = {
     name: 'pingperson',
     description: '',
-    execute(message, args, currentDate) {
+    execute(message, args, currentDate, currentDateISO) {
         if(message.member.hasPermission('ADMINISTRATOR')){ //they need admin
             let user = message.mentions.users.first(); //gets the pinged user's ID
             message.channel.send(`${user} `); //user.username is the pinged user
             message.delete();
-            console.log(`${currentDate}`)
+            console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - pingperson")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
@@ -14,7 +14,7 @@ module.exports = {
             console.log("")
             }
             else {message.channel.send("Error 401: Unauthorised") 
-            console.log(`${currentDate}`) 
+            console.log(`${currentDateISO} | ${currentDate}`) 
                     console.log("command executed - pingperson")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

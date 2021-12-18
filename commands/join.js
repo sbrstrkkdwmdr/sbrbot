@@ -1,8 +1,8 @@
 module.exports = {
     name: 'join',
     description: '',
-    execute(message, args, currentDate) {
-        console.log(`${currentDate}`)
+    execute(message, args, currentDate, currentDateISO) {
+        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - join")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

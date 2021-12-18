@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 module.exports = {
     name: 'osutest',
     description: '',
-    execute(message, args, Discord, fetch, currentDate) {
+    execute(message, args, Discord, fetch, currentDate, currentDateISO) {
         const pickeduserX = args[0]
         const pickedpageX = args[1]
         /*if(pickedpageX == 0){
@@ -50,7 +50,7 @@ module.exports = {
             .setFooter("");
         message.channel.send(embed)*/
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
-        console.log(`${currentDate}`)
+        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osutest")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

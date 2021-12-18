@@ -1,7 +1,7 @@
 module.exports = {
     name: 'dadjoke',
     description: '',
-    execute(message, args, currentDate) {
+    execute(message, args, currentDate, currentDateISO) {
         let rdm = ["I'm not shellfish! I only crab what I need", "I like to tell dad jokes. He laughs at them",
     "What did the tomato say to the slower tomato? Ketchup!", "YOUR MOM", "Time flies like an arrow. Fruit flies like a banana", 
     "To the guy who invented zero, thanks for nothing!", "Did you hear about the restaurant on the moon? It tastes good, but there's no atmosphere",
@@ -18,7 +18,7 @@ module.exports = {
 ];
         let dadjoke = rdm[Math.floor(Math.random() * rdm.length)];
         message.channel.send(`${dadjoke}`)   
-        console.log(`${currentDate}`)
+        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - dadjoke")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
