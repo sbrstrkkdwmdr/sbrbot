@@ -168,6 +168,10 @@ client.on('message', message =>{
     case 'time':
         client.commands.get('time').execute(message, args, currentDate, currentDateISO)
         break;
+
+    case 'amoggers':
+        client.commands.get('amoggers').execute(message, args, Discord, currentDate, currentDateISO)
+        break;
     
     //SBR ONLY --------------------------------------------------------
     case 'testlog':
