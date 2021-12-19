@@ -5,11 +5,17 @@ module.exports = {
 
     execute(message, args, client, Discord, currentDate, currentDateISO) {
         if(message.author.id == '503794887318044675')
-{        let w = args.splice(0,100).join(" ");
-        let a = ["WATCHING", "PLAYING", "STREAMING", "LISTENING"]
+{        let w = args.splice(1,100).join(" ");
+        const a = ["WATCHING", "PLAYING", "STREAMING", "LISTENING"];
+        a[0] = "WATCHING";
+        a[1] = "PLAYING";
+        a[2] = "STREAMING";
+        a[3] = "LISTENING";
         let b = a[Math.floor(Math.random() * a.length)];
+        let d = args[0];
+        let c = a[d];
 
-        client.user.setPresence({ activities: [{ name: w, type: b}], status: `dnd`,});
+        client.user.setPresence({ activities: [{ name: w, type: c}], status: `dnd`,});
 
         message.reply("status set!")
         console.log(`${currentDateISO} | ${currentDate}`)
