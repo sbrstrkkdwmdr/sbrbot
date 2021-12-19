@@ -3,12 +3,15 @@ const { ALL } = require('dns');
 const { create } = require('domain');
 const fetch = require('node-fetch');
 const get = require('node-fetch2');
+//added in discordjs 13
+const { Client, Intents } = require('discord.js');
 
 //MUSIC
 const ytdl = require("ytdl-core");
 const queue = new Map();
 
-const client = new Discord.Client();
+//const client = new Discord.Client();
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
 const prefix = 'sbr-'; //prefix
 
@@ -23,7 +26,6 @@ for(const file of commandFiles){
 
     client.commands.set(command.name, command);
 }
-
 //const modLogs = require('./modlogs/')
 /*if (!Date.prototype.toISOString) {
     (function() {
@@ -59,14 +61,7 @@ client.once('ready', () => {
     console.log("")
 
     //modLogs(client)
-
-    client.user.setPresence({
-    status: 'online',    
-    activity: {
-    name: 'this server',
-    type: 'CUSTOM_STATUS', 
-    url: "https://youtube.com/saberstrkkdwmdr"}
-})
+client.user.setPresence({ activities: [{ name: "you", type: 'WATCHING', video_url: 'https://youtube.com/saberstrkkdwmdr'}], status: `dnd`,});
 })
 
 client.on('message', message =>{
@@ -76,10 +71,9 @@ client.on('message', message =>{
     const command = args.shift().toLowerCase(); //idk what this does i forgot
 
     const serverQueue = queue.get(message.guild.id);
-    
+    const botOwners = ['503794887318044675'];
 
     let consoleloguserweeee = message.author
-//commands below
     switch (command)
     {
 
@@ -182,7 +176,7 @@ client.on('message', message =>{
         break;
 
     //OSU -----------------------------------------------------------
-    case '1-2':
+   /* case '1-2':
         client.commands.get('1-2').execute(message, args, currentDate, currentDateISO)
         break;
 
@@ -203,7 +197,7 @@ client.on('message', message =>{
     
     case 'osuhow':
         client.commands.get('osuhow').execute(message, args, currentDate, currentDateISO)
-        break;
+        break;*/
 
     case 'rs':
       //  client.commands.get('rs').execute(message, args, Discord)
@@ -306,7 +300,13 @@ client.on('message', message =>{
     case 'banid':
         client.commands.get('banid').execute(message, args, Discord, currentDate, currentDateISO)
         break;
-    
+
+    case 'botstatus':
+        client.commands.get('botstatus').execute(message, args, client, Discord, currentDate, currentDateISO)
+        break;
+    case 'refresh':
+        client.commands.get('refresh').execute(message, args, client, Discord, currentDate, currentDateISO)
+        break;
     //MUSIC --------------------
     case 'play':
         //client.commands.get('musicplay').execute(message, args, client, serverQueue, Discord, ytdl, currentDate)

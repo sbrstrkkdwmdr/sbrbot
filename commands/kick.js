@@ -2,7 +2,7 @@ module.exports = {
     name: 'kick',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO) {
-        if(message.member.hasPermission('ADMINISTRATOR')){
+        if(message.member.permissions.has('ADMINISTRATOR')){
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - kick")
             let consoleloguserweeee = message.author

@@ -9,7 +9,10 @@ module.exports = {
         console.log("")
         if(message.author.id = 503794887318044675){
         let guildID = client.guilds.cache.get(args[0]);
-        if(!guildID){ return(false) }
+        if(!guildID){
+        message.reply("id bro");
+        return(false)
+        }
         return guildID.leave();
 
         console.log(`left guild - ${guildID}`)

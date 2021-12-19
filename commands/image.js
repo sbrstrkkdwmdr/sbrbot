@@ -18,7 +18,7 @@ module.exports = {
         
         const cx = process.env.GOOGLE_CX // Watch the video to get your google cx.
         const key = process.env.GOOGLE_KEY // Watch the video to get your google api key.
-        let searchthing = args.slice().join(' ')
+        let searchthing = args.splice(0,100).join(" ")
 
         let res = await get(
             `https://customsearch.googleapis.com/customsearch/v1?q=${searchthing}&cx=${cx}&key=${key}&searchType=image`

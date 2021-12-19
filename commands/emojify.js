@@ -3,7 +3,7 @@ module.exports = {
     description : 'Make any sentence out of emoji\'s',
 
     execute : async(message, args, currentDate, currentDateISO) => {
-        let sentence = '';
+if(message.author.id == '503794887318044675'){        let sentence = '';
 
         let chars = {
             char1: ':one:',
@@ -30,7 +30,7 @@ module.exports = {
             else sentence += e
         }
         message.delete();
-        message.channel.send(sentence)
+        message.channel.send(`${sentence}`)}
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - emojify")
         let consoleloguserweeee = message.author

@@ -6,7 +6,7 @@ module.exports = {
         if(we != 652388389529714709){
   } else {
             message.channel.send("wee")
-            if(message.member.hasPermission('ADMINISTRATOR')){
+            if(message.member.permissions.has('ADMINISTRATOR')){
                 const channel = guild.channels.cache.get(channelId)
                 let user = message.author
                 message.channel.send(`a ${user}`)

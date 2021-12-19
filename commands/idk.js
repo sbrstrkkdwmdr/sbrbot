@@ -2,7 +2,7 @@ module.exports = {
     name: 'idk',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
-        if(message.member.hasPermission('SEND_MESSAGES')){
+        if(message.member.permissions.has('SEND_MESSAGES')){
             message.channel.send("well I don't know either.")
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - idk")

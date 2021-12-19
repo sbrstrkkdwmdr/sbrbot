@@ -2,7 +2,7 @@ module.exports = {
     name: 'ban',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
-        if(message.member.hasPermission('ADMINISTRATOR')){
+        if(message.member.permissions.has('ADMINISTRATOR')){
         let user = message.mentions.users.first();
         if(user){
         let member = message.guild.member(user);

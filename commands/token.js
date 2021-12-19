@@ -2,7 +2,7 @@ module.exports = {
     name: 'token',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
-        if(message.member.hasPermission('ADMINISTRATOR')){
+        if(message.member.permissions.has('ADMINISTRATOR')){
             message.channel.send("Admin should already know the bot token.")
         }
         else{

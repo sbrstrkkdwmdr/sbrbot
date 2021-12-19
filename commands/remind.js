@@ -14,17 +14,17 @@ module.exports = {
 
         const notime = new Discord.MessageEmbed()
             .setColor('#F30B04')
-            .setDescription(`**Please specify the time!**`)
+            .setTitle(`**Please specify the time!**`);
 
         const wrongtime = new Discord.MessageEmbed()
             .setColor('#F30B04')
-            .setDescription(`**Incorrect time format: d, m, h, or s.**`)
+            .setTitle(`**Incorrect time format: d, m, h, or s.**`);
 
         const reminderembed = new Discord.MessageEmbed()
             .setColor('#F30B04')
-            .setDescription(`**Error: no reminder text**`)
+            .setTitle(`**Error: no reminder text**`);
 
-        if (!args[0]) return message.channel.send(notime)
+        if (!args[0]) return message.channel.send({ embeds: [notime] })
         if (
             !args[0].endsWith("d") &&   
             !args[0].endsWith("m") &&
@@ -33,24 +33,24 @@ module.exports = {
         )
 
 
-            return message.channel.send(wrongtime)
-        if (!reminder) return message.channel.send(reminderembed)
+            return message.channel.send({ embeds: [wrongtime] })
+        if (!reminder) return message.channel.send({ embeds: [reminderembed] })
 
         const remindertime = new Discord.MessageEmbed()
         .setColor('#33F304')
-        .setDescription(`\**A reminder has been set to go off in ${time}**`)
+        .setTitle(`\**A reminder has been set to go off in ${time}**`);
 
-        message.channel.send(remindertime)
+        message.channel.send({ embeds: [remindertime] })
 
         const reminderdm = new Discord.MessageEmbed()
         .setColor('#7289DA')
         .setTitle('**REMINDER**')
-        .setDescription(`**${reminder}`)  
+        .setDescription(`**${reminder}`);
 
         (async function () {
            try{
 
-            await user.send(reminderdm)
+            await user.send({ embeds: [reminderdm] })
            }catch(err){
 
            } 
@@ -63,3 +63,11 @@ module.exports = {
         console.log("")
     }
 }
+/*
+
+            let Embed = new Discord.MessageEmbed()
+            .setColor(0xFFC1EC)
+            .setTitle("amoggers")
+            .setImage(`https://media.discordapp.net/attachments/724514625005158403/921733161229107210/amoggers.png`);
+            message.reply({ embeds: [Embed] });
+             */

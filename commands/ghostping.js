@@ -4,9 +4,9 @@ module.exports = {
     name: 'ghostping',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
-        if(message.member.hasPermission('ADMINISTRATOR')){
+        if(message.member.permissions.has('ADMINISTRATOR')){
             let pinged = message.mentions.users.first();
-            if(pinged = 'undefined'){
+            if(!pinged){
                 message.channel.send("user ID undefined")
                 console.log(`${currentDateISO} | ${currentDate}`)
                 console.log("command executed - ghostping")
@@ -21,7 +21,6 @@ module.exports = {
             console.log("command executed - ghostping")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            console.log(`pinged user - ${pinged}`)
             console.log("")
             }
         }

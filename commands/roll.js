@@ -2,7 +2,7 @@ module.exports = {
     name: 'roll',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
-        if(message.member.hasPermission('SEND_MESSAGES')){
+        if(message.member.permissions.has('SEND_MESSAGES')){
             let user = message.author
             let w = args.slice(0).join(' ')
             if(w > 0){

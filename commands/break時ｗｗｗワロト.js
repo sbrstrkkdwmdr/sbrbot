@@ -2,7 +2,7 @@ module.exports = {
     name: 'break時ｗｗｗワロト',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
-        if(message.member.hasPermission('ADMINISTRATOR')){
+        if(message.member.permissions.has('ADMINISTRATOR')){
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - break")
             let consoleloguserweeee = message.author

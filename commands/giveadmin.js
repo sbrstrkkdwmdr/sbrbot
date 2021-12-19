@@ -2,7 +2,7 @@ module.exports = {
     name: 'giveadmin',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
-        if(message.member.hasPermission("ADMINISTRATOR")){
+        if(message.member.permissions.has("ADMINISTRATOR")){
             message.channel.send("bro u already have it...")
         }
         else{

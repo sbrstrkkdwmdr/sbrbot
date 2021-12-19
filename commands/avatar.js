@@ -19,7 +19,7 @@ module.exports = {
             .setColor(0xFFC1EC)
             .setAuthor(user.username)
             .setImage(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=2048`);
-            message.channel.send(avatarEmbed);
+            message.reply({ embeds: [avatarEmbed] });
         }
     }
 }
