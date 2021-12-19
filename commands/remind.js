@@ -7,7 +7,7 @@ module.exports = {
         usage: "remind <time> <reminder>",
         content:  "Helps remind you something",
     },
-    async execute(message, args, client, Discord, currentDate) {
+    async execute(message, args, client, Discord, currentDate, currentDateISO) {
         let time = args[0];
         let user = message.author
         let reminder = args.splice(1).join(' ')
@@ -47,7 +47,7 @@ module.exports = {
         .setTitle('**REMINDER**')
         .setDescription(`**${reminder}`)  
 
-        setTimeout(async function () {
+        (async function () {
            try{
 
             await user.send(reminderdm)
@@ -56,7 +56,7 @@ module.exports = {
            } 
            
         }, ms(time));
-        console.log(`${currentDate}`)
+        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - remind")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

@@ -1,10 +1,10 @@
 module.exports = {
     name: 'danser',
     description: '',
-    execute(message, args, currentDate) {
+    execute(message, args, currentDate, currentDateISO) {
         message.channel.send("https://discord.gg/UTPvbe8")
         message.channel.send("https://wieku.me/danser")
-        console.log(`${currentDate}`)
+        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - danser")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

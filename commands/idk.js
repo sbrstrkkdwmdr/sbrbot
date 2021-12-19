@@ -1,10 +1,10 @@
 module.exports = {
     name: 'idk',
     description: '',
-    execute(message, args, currentDate) {
+    execute(message, args, currentDate, currentDateISO) {
         if(message.member.hasPermission('SEND_MESSAGES')){
             message.channel.send("well I don't know either.")
-            console.log(`${currentDate}`)
+            console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - idk")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
@@ -12,7 +12,7 @@ module.exports = {
         }
         else{
             message.channel.send("well I don't know either. do you?")
-            console.log(`${currentDate}`)
+            console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - idk")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

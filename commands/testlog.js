@@ -1,7 +1,7 @@
 module.exports = {
     name: 'testlog',
     description: '',
-    execute(message, args, currentDate) {
+    execute(message, args, currentDate, currentDateISO) {
         let we = message.guild.id
         if(we != 652388389529714709){
   } else {
@@ -12,7 +12,7 @@ module.exports = {
                 message.channel.send(`a ${user}`)
             }
         }
-        console.log(`${currentDate}`)
+        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - testlog")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

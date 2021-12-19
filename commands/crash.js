@@ -1,10 +1,10 @@
 module.exports = {
     name: 'crash',
     description: '',
-    execute(message, args, currentDate) {
+    execute(message, args, currentDate, currentDateISO) {
         if(message.author.id == '503794887318044675'){
           message.delete();
-          console.log(`${currentDate}`)
+          console.log(`${currentDateISO} | ${currentDate}`)
           console.log("command executed - force crash")
           let consoleloguserweeee = message.author
           console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)

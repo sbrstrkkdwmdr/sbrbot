@@ -1,7 +1,7 @@
 module.exports = {
     name: 'roll',
     description: '',
-    execute(message, args, currentDate) {
+    execute(message, args, currentDate, currentDateISO) {
         if(message.member.hasPermission('SEND_MESSAGES')){
             let user = message.author
             let w = args.slice(0).join(' ')
@@ -17,7 +17,7 @@ module.exports = {
             else{
             let score = Math.floor(Math.random () * 100 + 1)
             message.channel.send(` ${user} has rolled a(n) ${score} `)
-            console.log(`${currentDate}`)
+            console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - roll")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
