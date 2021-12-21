@@ -107,6 +107,9 @@ module.exports = {
             case 'stop':
                 message.channel.send("Disconnects the bot from vc.\nUsage:`sbr-stop`")
                 break;
+            case 'node_modules':
+                message.channel.send("A big folder that lets stuff run in nodejs. \n||Still not as big as your mum :kekw: :troll: :pepelaugh:||")
+                break;
             case 'osu':
                 message.channel.send("Sends information about the mentioned user's osu! profile.\nUsage:`sbr-osu @username`")
                 break;
