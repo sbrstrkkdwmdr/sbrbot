@@ -45,7 +45,7 @@ module.exports = {
         const reminderdm = new Discord.MessageEmbed()
         .setColor('#7289DA')
         .setTitle('**REMINDER**')
-        .setDescription(`**${reminder}`);
+        .setDescription(`**${reminder}**`);
 
         async function reminderlmao() {
            try{
