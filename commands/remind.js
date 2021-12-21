@@ -47,19 +47,23 @@ module.exports = {
         .setTitle('**REMINDER**')
         .setDescription(`**${reminder}`);
 
-        (async function () {
+        async function reminderlmao() {
            try{
-
-            await user.send({ embeds: [reminderdm] })
+            setTimeout(() => {
+                user.send({ embeds: [reminderdm] })
+            }, ms(`${time}`));
            }catch(err){
-
+            console.log("reminder error")
            } 
            
-        }, ms(time));
+        }
+        reminderlmao();
+
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - remind")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log(ms(time))
         console.log("")
     }
 }
