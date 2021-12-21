@@ -3,6 +3,8 @@ const { ALL } = require('dns');
 const { create } = require('domain');
 const fetch = require('node-fetch');
 const get = require('node-fetch2');
+const wait = require('util').promisify(setTimeout);
+const {Player} = require('discord-player');
 //added in discordjs 13
 const { Client, Intents } = require('discord.js');
 
@@ -11,12 +13,19 @@ const ytdl = require("ytdl-core");
 const queue = new Map();
 
 //const client = new Discord.Client();
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MEMBERS,
+    Intents.FLAGS.GUILD_PRESENCES,
+    Intents.FLAGS.GUILD_VOICE_STATES,
+    ] });
 
 const prefix = 'sbr-'; //prefix
 
 const fs = require('fs');
 const { monitorEventLoopDelay } = require('perf_hooks');
+const { setInterval } = require('timers/promises');
 
 client.commands = new Discord.Collection();
 
@@ -122,7 +131,7 @@ client.on('message', message =>{
         client.commands.get('idk').execute(message, args, currentDate, currentDateISO)
         break;
 
-    case 'image':
+    case 'image': s
         client.commands.get('image').execute(message, args, Discord, get, client, currentDate, currentDateISO)
         //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
@@ -310,42 +319,55 @@ client.on('message', message =>{
     //MUSIC --------------------
     case 'play':
         //client.commands.get('musicplay').execute(message, args, client, serverQueue, Discord, ytdl, currentDate)
-        execute(message, serverQueue);
-        console.log(`${currentDate}`)
+        
+        //execute(message, serverQueue);
+        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music play")
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
-        //client.commands.get('WIP').execute(message, args, currentDate)
+        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break; 
     case 'skip':
-        //client.commands.get('musicskip').execute(message, args, client, serverQueue, Discord, ytdl, currentDate)
-        skip(message, serverQueue);
+        //client.commands.get('musicskip').execute(message, args, client, Discord, ytdl, currentDate)
+        //skip(message, serverQueue);
+        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music skip")
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
-        //client.commands.get('WIP').execute(message, args, currentDate)
+        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
         
     case 'stop':
-        //client.commands.get('musicstop').execute(message, args, client, serverQueue, Discord, ytdl, currentDate)
-        stop(message, serverQueue);
+        //client.commands.get('musicstop').execute(message, args, client, Discord, ytdl, currentDate)
+        //stop(message, serverQueue);
+        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music stop")
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
-        //client.commands.get('WIP').execute(message, args, currentDate)
+        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case `disconnect`:
-        //client.commands.get('musicstop').execute(message, args, client, serverQueue, Discord, ytdl, currentDate)
-        stop(message, serverQueue);
+        //client.commands.get('musicstop').execute(message, args, client, Discord, ytdl, currentDate)
+        //stop(message, serverQueue);
+        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music disconnect")
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
-        //client.commands.get('WIP').execute(message, args, currentDate)
+        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        break;
+
+    case 'queue':
+//        client.commands.get('musicqueue').execute(message, args, client, Discord, ytdl, currentDate)
+console.log(`${currentDateISO} | ${currentDate}`)
+        console.log("command executed - music queue")
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("")
+        client.commands.get('WIP').execute(message, args, currentDate)
         break;
 
     default:
-        console.log(`${currentDate}`)
+      console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - default (possible mispelt command)")
         console.log("")
         break;
@@ -370,26 +392,29 @@ client.on('message', message =>{
     }*/
    
    //MUSIC BOT ASYNC FUNCTION
-   async function execute(message, serverQueue) {
-        const args = message.content.split(" ");
-      
-        const voiceChannel = message.member.voice.channel;
+ /*  async function execute(message, serverQueue) {
+    
+    const str = message.content.slice(prefix.length).split(" ");
+
+    let user = await message.member.fetch();
+        const voiceChannel = await user.voice.channel;;
         if (!voiceChannel)
-          return message.channel.send(
+          return message.send(
             "ur not in vc smh my head"
           );
-        const permissions = voiceChannel.permissionsFor(message.client.user);
-        if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
+        
+        if (!message.member.permissions.has("CONNECT") || !message.member.permissions.has("SPEAK")) {
           return message.channel.send(
             "no perms xd"
           );
         }
       
-        const songInfo = await ytdl.getInfo(args[1]);
+        const songInfo = await ytdl.getInfo(str[1]);
         const song = {
               title: songInfo.videoDetails.title,
               url: songInfo.videoDetails.video_url,
          };
+        
       
         if (!serverQueue) {
           const queueContruct = {
@@ -421,7 +446,7 @@ client.on('message', message =>{
       }
       
       function skip(message, serverQueue) {
-        if (!message.member.voice.channel)
+        if (!voiceChannel)
           return message.channel.send(
             "u need to be in vc to skip"
           );
@@ -431,7 +456,7 @@ client.on('message', message =>{
       }
       
       function stop(message, serverQueue) {
-        if (!message.member.voice.channel)
+        if (!voiceChannel)
           return message.channel.send(
             "u need to be in vc to stop"
           );
@@ -462,7 +487,41 @@ client.on('message', message =>{
           .on("error", error => console.error(error));
         dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         serverQueue.textChannel.send(`added **${song.title}** to queue`);
-      }
+      }*/
+      
+      
+      /*const player = new Player(client);
+
+player.on('error', (queue, error) => {
+  console.log(`[${queue.guild.name}] Error emitted from the queue: ${error.message}`);
+});
+
+player.on('connectionError', (queue, error) => {
+  console.log(`[${queue.guild.name}] Error emitted from the connection: ${error.message}`);
+});
+
+player.on('trackStart', (queue, track) => {
+  queue.metadata.send(`▶ | Started playing: **${track.title}** in **${queue.connection.channel.name}**!`);
+});
+
+player.on('trackAdd', (queue, track) => {
+  queue.metadata.send(`🎶 | Track **${track.title}** queued!`);
+});
+
+player.on('botDisconnect', queue => {
+  queue.metadata.send('❌ | I was manually disconnected from the voice channel, clearing queue!');
+});
+
+player.on('channelEmpty', queue => {
+  queue.metadata.send('❌ | Nobody is in the voice channel, leaving...');
+});
+
+player.on('queueEnd', queue => {
+  queue.metadata.send('✅ | Queue finished!');
+
+
+
+});*/
 
 }); //^ all of these run the command files necessary.
 //let MOTHERTRIGGER = ["your mother", "your mum", "your mom", "yo mumma", "yo momma", "ur mum", "ur mom", "u mum", "u mom"]
