@@ -67,6 +67,7 @@ client.once('ready', () => {
     console.log(`--------------------------------------------------------------------------------------`)
     console.log(`${currentDateISO} | ${currentDate}`)
     console.log('kwsmrksnsm is online!'); //message shown when bot turns on
+    console.log(`API Latency is ${Math.round(client.ws.ping)}ms`);
     console.log("")
 
     //modLogs(client)
@@ -140,6 +141,9 @@ client.on('message', message =>{
 //        client.commands.get('ytsearch').execute(message, args, Discord, client, currentDate, currentDateISO)
         client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
+    case 'active':
+      client.commands.get('active').execute(message, args, Discord, currentDate, currentDateISO)
+      break;
 
     //FUN --------------------------------------------------------------------
     case 'ghostping':
