@@ -279,7 +279,7 @@ client.on('message', message =>{
 
     //ADMIN-----------------------------------------------------------------------------------------
     case 'purge':
-        client.commands.get('purge').execute(message,args, currentDate, currentDateISO)
+        client.commands.get('purge').execute(message, args, client, Discord, currentDate, currentDateISO)
         break;
 
     case 'unban':
