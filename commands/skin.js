@@ -48,8 +48,36 @@ module.exports = {
                 message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/image/10ud/a")
                 break;
 
+            case 'b1':
+                message.reply("https://drive.google.com/drive/u/0/folders/1OexvvV4Zshw3P3R1N0bS3sQD_WEhlQKv")
+                break;
+
+            case 'b2':
+                message.reply("https://drive.google.com/drive/u/0/folders/18t7KxG2scQgm43DW930cSmaUXbYEpCdK")
+                break;
+
+            case 'b3':
+                message.reply("https://mega.nz/file/PVFgBbYB#LVnrsI1leThv8f35PDM7kt3yHgcwhD9WB2Wkq696aEQ")
+                break;
+
+            case 'b4':
+                message.reply("https://www.reddit.com/r/OsuSkins/comments/m9vcti/amogus_skin/")
+                break;
+
+            case 'b5':
+                message.reply("https://drive.google.com/file/d/1Jomy1k00Q6VLqOQgq_ifgDy5MV_nMZje/view")
+                break;
+
+            case 'b6':
+                message.reply("https://drive.google.com/file/d/1-pRLecUTaoUNXpHj1TLSMBayvWC09CT2/view")
+                break;
+
+            case 'b7':
+                message.reply("https://drive.google.com/file/d/171NdVkA-tmm43n8iqsRJeNQ0QCffj6ab/view")
+                break;
+
             default:
-            message.channel.send("***SKINS*** \n1 - custom\n2 - customv2\n3 - Type X\n4 - Type Y \n5 - Type Z\n6 - SaberStrike 0\n7 - SaberStrike 1\n8 - sbr\n9 - prjct sbr\n10 - SBR UnDefined")
+            message.channel.send("***SKINS*** \n```json\n1 - SaberStrikeCustom\n2 - SaberStrikeCustomv2\n3 - Type X\n4 - Type Y \n5 - Type Z\n6 - SaberStrike『0』\n7 - SaberStrike『1』(most unique cursor dance one)\n8 - sbr\n9 - prjct sbr\n10 - SBR UnDefined\nb1 - Cark\nb2 - Koifish\nb3 - Kanojo Mizuhara\nb4 - Saber's AMOGUS\nb5 - SaberStrike『0』_-Levi-_ edit\nb6 - SaberStrike『Soragaton』\Nb7 - sbr 『-hANOJI』```")
 
         }}
         console.log(`${currentDateISO} | ${currentDate}`)
