@@ -132,14 +132,14 @@ client.on('message', message =>{
         client.commands.get('idk').execute(message, args, currentDate, currentDateISO)
         break;
 
-    case 'image': s
+    case 'image':
         client.commands.get('image').execute(message, args, Discord, get, client, currentDate, currentDateISO)
         //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'ytsearch':
-//        client.commands.get('ytsearch').execute(message, args, Discord, client, currentDate, currentDateISO)
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('ytsearch').execute(message, args, Discord, client, currentDate, currentDateISO)
+        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
     case 'active':
       client.commands.get('active').execute(message, args, Discord, currentDate, currentDateISO)

@@ -185,7 +185,7 @@ module.exports = {
                 message.channel.send("Random yande.re image.\nUsage:`sbr-yanderegen` \nNSFW channels only")
                 break;
             case 'ytsearch':
-                message.channel.send("YT search.\nUsage:`sbr-ytsearch amogus` \nDoesn't work... yet.")
+                message.channel.send("Sends the first result of a search on youtube.\nUsage:`sbr-ytsearch osus` \n")
                 break;
             default:
                 message.channel.send(`command "${helper}" not found`)

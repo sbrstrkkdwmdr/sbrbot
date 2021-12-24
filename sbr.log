@@ -1,3 +1,12 @@
+SOME IMPORTANT STUFF
+cmd command - node . >> sbr.log
+Powershell command - node . | Out-File sbr.log -encoding oem -append
+NUL comes from incorrect text encoding
+ASCII is not recommended bcs of funny characters
+oem recommended bcs it's the first one i tested that doesn't either misread japanese text nor put NUL everywhere
+
+ACTUAL LOGS BELOW
+
 kwsmrksnsm is online!
 command executed - roll
 requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
@@ -2094,4 +2103,252 @@ kwsmrksnsm is online!
 2021-12-22T01:53:26.760Z | Wed Dec 22 2021 12:53:26 GMT+1100 (Australian Eastern Daylight Time)
 kwsmrksnsm is online!
 API Latency is -1ms
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ 
+ 2 0 2 1 - 1 2 - 2 4 T 2 3 : 1 5 : 0 7 . 7 1 3 Z   |   S a t   D e c   2 5   2 0 2 1   1 0 : 1 5 : 0 7   G M T + 1 1 0 0   ( A u s t r a l i a n   E a s t e r n   D a y l i g h t   T i m e ) 
+ 
+ k w s m r k s n s m   i s   o n l i n e ! 
+ 
+ A P I   L a t e n c y   i s   - 1 m s 
+ 
+ 
+ 
+ 2 0 2 1 - 1 2 - 2 4 T 2 3 : 1 5 : 0 7 . 7 1 3 Z   |   S a t   D e c   2 5   2 0 2 1   1 0 : 1 5 : 0 7   G M T + 1 1 0 0   ( A u s t r a l i a n   E a s t e r n   D a y l i g h t   T i m e ) 
+ 
+ c o m m a n d   e x e c u t e d   -   h e l p 
+ 
+ r e q u e s t e d   b y   5 0 3 7 9 4 8 8 7 3 1 8 0 4 4 6 7 5   a k a   S T%� b T%� r S t r i � U%%e �� � �� W%�� � �� � �� ]%�� c%�� � �� #�� � �� � �� � # 3 1 8 5 
+ 
+ 
+ 
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ 
+ 2 0 2 1 - 1 2 - 2 4 T 2 3 : 2 2 : 5 1 . 5 3 4 Z   |   S a t   D e c   2 5   2 0 2 1   1 0 : 2 2 : 5 1   G M T + 1 1 0 0   ( A u s t r a l i a n   E a s t e r n   D a y l i g h t   T i m e ) 
+ 
+ k w s m r k s n s m   i s   o n l i n e ! 
+ 
+ A P I   L a t e n c y   i s   - 1 m s 
+ 
+ 
+ 
+ 2 0 2 1 - 1 2 - 2 4 T 2 3 : 2 2 : 5 1 . 5 3 4 Z   |   S a t   D e c   2 5   2 0 2 1   1 0 : 2 2 : 5 1   G M T + 1 1 0 0   ( A u s t r a l i a n   E a s t e r n   D a y l i g h t   T i m e ) 
+ 
+ c o m m a n d   e x e c u t e d   -   h e l p 
+ 
+ r e q u e s t e d   b y   5 0 3 7 9 4 8 8 7 3 1 8 0 4 4 6 7 5   a k a   S T%� b T%� r S t r i � U%%e �� � �� W%�� � �� � �� ]%�� c%�� � �� #�� � �� � �� � # 3 1 8 5 
+ 
+ 
+ 
+ 
+^NUL characters are from using powershell without defining the encoding
+--------------------------------------------------------------------------------------
+2021-12-24T23:25:43.145Z | Sat Dec 25 2021 10:25:43 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+2021-12-24T23:25:43.145Z | Sat Dec 25 2021 10:25:43 GMT+1100 (Australian Eastern Daylight Time)
+command executed - help
+requested by 503794887318044675 aka S??b??rStri???e?????????????????????????????????#3185
+
+-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   
+   
+   2   0   2   1   -   1   2   -   2   4   T   2   3   :   3   0   :   2   6   .   6   7   3   Z       |       S   a   t       D   e   c       2   5       2   0   2   1       1   0   :   3   0   :   2   6       G   M   T   +   1   1   0   0       (   A   u   s   t   r   a   l   i   a   n       E   a   s   t   e   r   n       D   a   y   l   i   g   h   t       T   i   m   e   )   
+   
+   k   w   s   m   r   k   s   n   s   m       i   s       o   n   l   i   n   e   !   
+   
+   A   P   I       L   a   t   e   n   c   y       i   s       -   1   m   s   
+   
+   
+   
+   2   0   2   1   -   1   2   -   2   4   T   2   3   :   3   0   :   2   6   .   6   7   3   Z       |       S   a   t       D   e   c       2   5       2   0   2   1       1   0   :   3   0   :   2   6       G   M   T   +   1   1   0   0       (   A   u   s   t   r   a   l   i   a   n       E   a   s   t   e   r   n       D   a   y   l   i   g   h   t       T   i   m   e   )   
+   
+   c   o   m   m   a   n   d       e   x   e   c   u   t   e   d       -       h   e   l   p   
+   
+   r   e   q   u   e   s   t   e   d       b   y       5   0   3   7   9   4   8   8   7   3   1   8   0   4   4   6   7   5       a   k   a       S   T%  �   b   T%  �   r   S   t   r   i   �   U%  %  e   �  �   �   �  �   W%  �  �   �   �  �   �   �  �   ]%  �  �   c%  �  �   �   �  �   #  �  �   �   �  �   �   �  �   �   #   3   1   8   5   
+   
+   
+   
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ 
+ 2 0 2 1 - 1 2 - 2 4 T 2 3 : 3 2 : 0 7 . 9 6 8 Z   |   S a t   D e c   2 5   2 0 2 1   1 0 : 3 2 : 0 7   G M T + 1 1 0 0   ( A u s t r a l i a n   E a s t e r n   D a y l i g h t   T i m e ) 
+ 
+ k w s m r k s n s m   i s   o n l i n e ! 
+ 
+ A P I   L a t e n c y   i s   - 1 m s 
+ 
+ 
+ 
+ 2 0 2 1 - 1 2 - 2 4 T 2 3 : 3 2 : 0 7 . 9 6 8 Z   |   S a t   D e c   2 5   2 0 2 1   1 0 : 3 2 : 0 7   G M T + 1 1 0 0   ( A u s t r a l i a n   E a s t e r n   D a y l i g h t   T i m e ) 
+ 
+ c o m m a n d   e x e c u t e d   -   h e l p 
+ 
+ r e q u e s t e d   b y   5 0 3 7 9 4 8 8 7 3 1 8 0 4 4 6 7 5   a k a   S%T � b%T � r S t r i �%U% e� � �� �%W� � �� � �� �%]� �%c� � �� �#� � �� � �� � � # 3 1 8 5 
+ 
+ 
+ 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ 
+ 2 0 2 1 - 1 2 - 2 4 T 2 3 : 3 2 : 4 3 . 6 2 0 Z   |   S a t   D e c   2 5   2 0 2 1   1 0 : 3 2 : 4 3   G M T + 1 1 0 0   ( A u s t r a l i a n   E a s t e r n   D a y l i g h t   T i m e ) 
+ 
+ k w s m r k s n s m   i s   o n l i n e ! 
+ 
+ A P I   L a t e n c y   i s   - 1 m s 
+ 
+ 
+ 
+ 2 0 2 1 - 1 2 - 2 4 T 2 3 : 3 2 : 4 3 . 6 2 0 Z   |   S a t   D e c   2 5   2 0 2 1   1 0 : 3 2 : 4 3   G M T + 1 1 0 0   ( A u s t r a l i a n   E a s t e r n   D a y l i g h t   T i m e ) 
+ 
+ c o m m a n d   e x e c u t e d   -   p i n g 
+ 
+ r e q u e s t e d   b y   5 0 3 7 9 4 8 8 7 3 1 8 0 4 4 6 7 5   a k a   S T%� b T%� r S t r i � U%%e �� � �� W%�� � �� � �� ]%�� c%�� � �� #�� � �� � �� � # 3 1 8 5 
+ 
+ L a t e n c y   i s   - 8 4 m s .   A P I   L a t e n c y   i s   4 9 6 m s 
+ 
+ 
+ 
+ --------------------------------------------------------------------------------------
+2021-12-24T23:33:15.409Z | Sat Dec 25 2021 10:33:15 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+2021-12-24T23:33:15.409Z | Sat Dec 25 2021 10:33:15 GMT+1100 (Australian Eastern Daylight Time)
+command executed - ping
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+Latency is -263ms. API Latency is 354ms
+
+--------------------------------------------------------------------------------------
+2021-12-24T23:34:37.399Z | Sat Dec 25 2021 10:34:37 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+--------------------------------------------------------------------------------------
+2021-12-24T23:38:08.324Z | Sat Dec 25 2021 10:38:08 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+2021-12-24T23:38:08.324Z | Sat Dec 25 2021 10:38:08 GMT+1100 (Australian Eastern Daylight Time)
+command executed - ping
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+Latency is -240ms. API Latency is 412ms
+
+2021-12-24T23:38:08.324Z | Sat Dec 25 2021 10:38:08 GMT+1100 (Australian Eastern Daylight Time)
+command executed - force crash
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+
+--------------------------------------------------------------------------------------
+2021-12-24T23:39:24.573Z | Sat Dec 25 2021 10:39:24 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+2021-12-24T23:39:24.573Z | Sat Dec 25 2021 10:39:24 GMT+1100 (Australian Eastern Daylight Time)
+command executed - ping
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+Latency is -41ms. API Latency is -1ms
+
+--------------------------------------------------------------------------------------
+2021-12-24T23:42:25.603Z | Sat Dec 25 2021 10:42:25 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+2021-12-24T23:42:25.603Z | Sat Dec 25 2021 10:42:25 GMT+1100 (Australian Eastern Daylight Time)
+command executed - ping
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+Latency is -224ms. API Latency is 306ms
+
+--------------------------------------------------------------------------------------
+2021-12-24T23:43:12.790Z | Sat Dec 25 2021 10:43:12 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+2021-12-24T23:43:12.790Z | Sat Dec 25 2021 10:43:12 GMT+1100 (Australian Eastern Daylight Time)
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+command executed - default (possible mispelt command)
+attempted command - pin
+
+2021-12-24T23:43:12.790Z | Sat Dec 25 2021 10:43:12 GMT+1100 (Australian Eastern Daylight Time)
+command executed - ping
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+Latency is -135ms. API Latency is 246ms
+
+2021-12-24T23:43:12.790Z | Sat Dec 25 2021 10:43:12 GMT+1100 (Australian Eastern Daylight Time)
+command executed - force crash
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+
+--------------------------------------------------------------------------------------
+2021-12-24T23:44:22.250Z | Sat Dec 25 2021 10:44:22 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+2021-12-24T23:44:22.250Z | Sat Dec 25 2021 10:44:22 GMT+1100 (Australian Eastern Daylight Time)
+command executed - ping
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+Latency is -182ms. API Latency is 370ms
+
+2021-12-24T23:44:22.250Z | Sat Dec 25 2021 10:44:22 GMT+1100 (Australian Eastern Daylight Time)
+command executed - force crash
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+
+--------------------------------------------------------------------------------------
+2021-12-24T23:48:02.756Z | Sat Dec 25 2021 10:48:02 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+2021-12-24T23:48:02.756Z | Sat Dec 25 2021 10:48:02 GMT+1100 (Australian Eastern Daylight Time)
+command executed - WIP
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+
+--------------------------------------------------------------------------------------
+2021-12-24T23:48:39.629Z | Sat Dec 25 2021 10:48:39 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+2021-12-24T23:48:39.629Z | Sat Dec 25 2021 10:48:39 GMT+1100 (Australian Eastern Daylight Time)
+command executed - ping
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+Latency is -123ms. API Latency is 297ms
+
+--------------------------------------------------------------------------------------
+2021-12-24T23:49:27.514Z | Sat Dec 25 2021 10:49:27 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+--------------------------------------------------------------------------------------
+2021-12-24T23:49:58.423Z | Sat Dec 25 2021 10:49:58 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+2021-12-24T23:49:58.423Z | Sat Dec 25 2021 10:49:58 GMT+1100 (Australian Eastern Daylight Time)
+command executed - image
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+
+2021-12-24T23:49:58.423Z | Sat Dec 25 2021 10:49:58 GMT+1100 (Australian Eastern Daylight Time)
+command executed - image
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+
+--------------------------------------------------------------------------------------
+2021-12-24T23:50:30.381Z | Sat Dec 25 2021 10:50:30 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+2021-12-24T23:50:30.381Z | Sat Dec 25 2021 10:50:30 GMT+1100 (Australian Eastern Daylight Time)
+command executed - yt search
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+
+2021-12-24T23:50:30.381Z | Sat Dec 25 2021 10:50:30 GMT+1100 (Australian Eastern Daylight Time)
+command executed - yt search
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+
+--------------------------------------------------------------------------------------
+2021-12-24T23:51:44.860Z | Sat Dec 25 2021 10:51:44 GMT+1100 (Australian Eastern Daylight Time)
+kwsmrksnsm is online!
+API Latency is -1ms
+
+2021-12-24T23:51:44.860Z | Sat Dec 25 2021 10:51:44 GMT+1100 (Australian Eastern Daylight Time)
+command executed - yt search
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
+
+2021-12-24T23:51:44.860Z | Sat Dec 25 2021 10:51:44 GMT+1100 (Australian Eastern Daylight Time)
+command executed - yt search
+requested by 503794887318044675 aka SəbɚrStriḳe『セイバーストライク』#3185
 
