@@ -240,6 +240,9 @@ client.on('message', message =>{
         client.commands.get('danser').execute(message, args, currentDate, currentDateISO)
         break;
 
+    case 'skin':
+        client.commands.get('skin').execute(message, args, currentDate, currentDateISO)
+        break;
     //HENTAI-----------------------------------------------------------------------------------------
 
 
