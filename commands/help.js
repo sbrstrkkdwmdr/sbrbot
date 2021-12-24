@@ -149,6 +149,8 @@ module.exports = {
             case 'serverlist':
                 message.channel.send("Lists all guilds the bot is in including IDs.\nUsage:`sbr-serverlist`")
                 break;
+            case 'skin':
+                message.channel.send("Sends the link to all skins or a specific skin. \nUsage: `sbr-skin`\nUsage 2:`sbr-skin 10`")
             case 'template':
                 message.channel.send("a.\nUsage:``")
                 break;
