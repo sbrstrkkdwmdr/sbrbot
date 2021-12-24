@@ -5,9 +5,13 @@ module.exports = {
     aliases: ['yt'],
     description: "Search on YouTube",
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
-        if (!args.length) return message.reply('No search query given') //Checks if the user gave any search queries
+        try{if (!args.length) return message.reply('No search query given') //Checks if the user gave any search queries
         const searched = await yts.search(args.join(' ')); //Searches for videos
         message.reply(!searched.videos.length ? 'No Results' : searched.videos[0].url); //Sends the result
+    } catch (error){
+        message.reply("error")
+        console.log(error)
+    }
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - yt search")
         let consoleloguserweeee = message.author
