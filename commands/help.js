@@ -8,6 +8,9 @@ module.exports = {
         message.channel.send('commands listed here - https://sbrstrkkdwmdr.github.io/sbr-web/botcmd')}
         else{
         switch(helper){
+            case '1100':
+                message.channel.send("Counts to 100.\nUsage: `sbr-1100`")
+                break;
             case '8ball':
                 message.channel.send("Will reply to a question with an answer between yes and no.\nUsage: `sbr-8ball is among us a good game?`")
                 break;
@@ -182,6 +185,9 @@ module.exports = {
             case 'ytsearch':
                 message.channel.send("YT search.\nUsage:`sbr-ytsearch amogus` \nDoesn't work... yet.")
                 break;
+            default:
+                message.channel.send(`command "${helper}" not found`)
+                message.channel.send('commands listed here - https://sbrstrkkdwmdr.github.io/sbr-web/botcmd')
         }}
 
 
