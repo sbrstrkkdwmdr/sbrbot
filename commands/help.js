@@ -78,6 +78,9 @@ module.exports = {
             case 'image':
                 message.channel.send("Sends an image using google API.\nUsage:`sbr-image [search]` \n")
                 break;
+            case 'image5':
+                message.channel.send("Sends the top 5 images from google's api.\nUsage: `sbr-image [search]`")
+                break;
             case 'info':
                 message.channel.send("info.\nUsage:`sbr-info`")
                 break;
@@ -186,8 +189,12 @@ module.exports = {
                 message.channel.send("Random yande.re image.\nUsage:`sbr-yanderegen` \nNSFW channels only")
                 break;
             case 'ytsearch':
-                message.channel.send("Sends the first result of a search on youtube.\nUsage:`sbr-ytsearch osus` \n")
+                //message.channel.send("Sends the first result of a search on youtube.\nUsage:`sbr-ytsearch osus` \n")
+                message.channel.send("Sends the first five results of a search on youtube. \nUsage: `sbr-ytsearch5 osus`\nEmbeds are disabled so the channel doesn't get filled up.")
                 break;
+            //case 'ytsearch5':
+                //message.channel.send("Sends the first five results of a search on youtube. \nUsage: `sbr-ytsearch5 osus`\nEmbeds are disabled so the channel doesn't get filled up.")
+                //break;    
             default:
                 message.channel.send(`command "${helper}" not found`)
                 message.channel.send('commands listed here - https://sbrstrkkdwmdr.github.io/sbr-web/botcmd')

@@ -147,9 +147,9 @@ client.on('message', message =>{
         //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
-    case 'ytsearch5':
+    /*case 'ytsearch5':
       client.commands.get('ytsearch5').execute(message, args, Discord, client, currentDate, currentDateISO)
-      break;
+      break;*/
     
     case 'active':
       client.commands.get('active').execute(message, args, Discord, currentDate, currentDateISO)

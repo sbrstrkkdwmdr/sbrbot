@@ -10,8 +10,13 @@ module.exports = {
         if(!searched.videos.length){
             message.reply("no results found")
         } else {
-            let creator1 = JSON.stringify(searched.videos[0].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
-        message.reply(`${searched.videos[0].title} by ${creator1} | <${searched.videos[0].url}>`)//sends result
+        let creator1 = JSON.stringify(searched.videos[0].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
+        let creator2 = JSON.stringify(searched.videos[1].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
+        let creator3 = JSON.stringify(searched.videos[2].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
+        let creator4 = JSON.stringify(searched.videos[3].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
+        let creator5 = JSON.stringify(searched.videos[4].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
+    message.reply(`${searched.videos[0].title} by ${creator1} | <${searched.videos[0].url}> \n${searched.videos[1].title} by ${creator2} | <${searched.videos[1].url}> \n${searched.videos[2].title} by ${creator3} | <${searched.videos[2].url}> \n${searched.videos[3].title} by ${creator4} | <${searched.videos[3].url}> \n${searched.videos[4].title} by ${creator5} | <${searched.videos[4].url}>`); //Sends the result
+        //message.reply(`${searched.videos[0].title} by ${creator1} | ${searched.videos[0].url}`)//sends result
     } 
         }
     } catch (error){
