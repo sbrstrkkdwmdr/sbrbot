@@ -8,6 +8,7 @@ module.exports = {
         message.channel.send('commands listed here - https://sbrstrkkdwmdr.github.io/sbr-web/botcmd')}
         else{
         switch(helper){
+            //in alphabetical order, as of the files e.g. stop is referring to musicstop which is why it's not more at the bottom
             case '1100':
                 message.channel.send("Counts to 100.\nUsage: `sbr-1100`")
                 break;
@@ -75,7 +76,7 @@ module.exports = {
                 message.channel.send("???")
                 break;
             case 'image':
-                message.channel.send("Sends an image using google API.\nUsage:`sbr-image [search]` \nKinda broken.")
+                message.channel.send("Sends an image using google API.\nUsage:`sbr-image [search]` \n")
                 break;
             case 'info':
                 message.channel.send("info.\nUsage:`sbr-info`")

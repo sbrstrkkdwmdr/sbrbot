@@ -6,7 +6,7 @@ module.exports = {
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
         try{if(!args.length){message.reply('No search query given') //Checks if the user gave any search queries
     } else{
-        const searched = await yts.search(args.join(' ')); //Searches for videos
+        const searched = await yts.search(args.splice(0,100).join(" ")); //Searches for videos
         message.reply(!searched.videos.length ? 'No Results' : searched.videos[0].url); //Sends the result
         }
     } catch (error){

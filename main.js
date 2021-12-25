@@ -378,10 +378,11 @@ console.log(`${currentDateISO} | ${currentDate}`)
         break;
 
     default:
+      let undefinedargsbcsmiswrotecmd = args.splice(0,100).join(" ");
       console.log(`${currentDateISO} | ${currentDate}`)
       console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("command executed - default (possible mispelt command)")
-        console.log(`attempted command - ${command}`)
+        console.log(`attempted command - ${command} ${undefinedargsbcsmiswrotecmd}`)
         console.log("")
         break;
     }
