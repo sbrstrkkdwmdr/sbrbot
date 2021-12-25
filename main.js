@@ -543,5 +543,9 @@ player.on('queueEnd', queue => {
 //    message.channel.send("yeah, she's 300 feet away from your house with a chonkl")
 //}
 
-
-client.login('NzU1MjIwOTg5NDk0OTUxOTk3.X2AIWw.ebo8K60jWyQ1XL-HophjRma_J9c') //turns on the bot
+try{
+client.login('NzU1MjIwOTg5NDk0OTUxOTk3.X2AIWw.ebo8K60jWyQ1XL-HophjRma_J9c')} //turns on the bot
+catch (error) {
+  console.log("login error")
+  console.log(error)
+}

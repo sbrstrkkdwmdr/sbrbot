@@ -33,7 +33,8 @@ module.exports = {
                 new Discord.MessageEmbed()
                     .setColor('RANDOM')
                     .setImage(res.items[0].link)
-                    .setTitle(`Image result for ${searchthing}`)
+                    .setTitle(`Image result for ${searchthing}.`)
+                    .setDescription(`requested by ${consoleloguserweeee.tag}`)
             ]
         });
     }
