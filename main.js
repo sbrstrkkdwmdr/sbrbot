@@ -128,6 +128,7 @@ client.on('message', message =>{
     case 'unread':
         client.commands.get('unread').execute(message, args, currentDate, currentDateISO)
         break;
+
     case 'idk':
         client.commands.get('idk').execute(message, args, currentDate, currentDateISO)
         break;
@@ -137,10 +138,19 @@ client.on('message', message =>{
         //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
+    case 'image5':
+      client.commands.get('image5').execute(message, args, Discord, get, client, currentDate, currentDateISO)
+      break;
+
     case 'ytsearch':
         client.commands.get('ytsearch').execute(message, args, Discord, client, currentDate, currentDateISO)
         //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
+
+    case 'ytsearch5':
+      client.commands.get('ytsearch5').execute(message, args, Discord, client, currentDate, currentDateISO)
+      break;
+    
     case 'active':
       client.commands.get('active').execute(message, args, Discord, currentDate, currentDateISO)
       break;
