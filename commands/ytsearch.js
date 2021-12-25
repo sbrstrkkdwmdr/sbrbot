@@ -7,7 +7,12 @@ module.exports = {
         try{if(!args.length){message.reply('No search query given') //Checks if the user gave any search queries
     } else{
         const searched = await yts.search(args.splice(0,100).join(" ")); //Searches for videos
-        message.reply(!searched.videos.length ? 'No Results' : searched.videos[0].url); //Sends the result
+        if(!searched.videos.length){
+            message.reply("no results found")
+        } else {
+            let creator1 = JSON.stringify(searched.videos[0].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
+        message.reply(`${searched.videos[0].title} by ${creator1} | <${searched.videos[0].url}>`)//sends result
+    } 
         }
     } catch (error){
         message.reply("error")
