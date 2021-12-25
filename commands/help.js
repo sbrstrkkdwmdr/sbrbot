@@ -10,7 +10,7 @@ module.exports = {
         switch(helper){
             //in alphabetical order, as of the files e.g. stop is referring to musicstop which is why it's not more at the bottom
             case '1100':
-                message.channel.send("Counts to 100.\nUsage: `sbr-1100`")
+                message.channel.send("Counts to 100.\nUsage: `sbr-1100`\nCan get stuck at 50 for a few seconds.")
                 break;
             case '8ball':
                 message.channel.send("Will reply to a question with an answer between yes and no.\nUsage: `sbr-8ball is among us a good game?`")
