@@ -15,7 +15,7 @@ module.exports = {
         let creator3 = JSON.stringify(searched.videos[2].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
         let creator4 = JSON.stringify(searched.videos[3].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
         let creator5 = JSON.stringify(searched.videos[4].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
-    message.reply(`${searched.videos[0].title} by ${creator1} | <${searched.videos[0].url}> \n${searched.videos[1].title} by ${creator2} | <${searched.videos[1].url}> \n${searched.videos[2].title} by ${creator3} | <${searched.videos[2].url}> \n${searched.videos[3].title} by ${creator4} | <${searched.videos[3].url}> \n${searched.videos[4].title} by ${creator5} | <${searched.videos[4].url}>`); //Sends the result
+    message.reply(`[1] ${searched.videos[0].title} by ${creator1} \nurl: <${searched.videos[0].url}> \n \n[2] ${searched.videos[1].title} by ${creator2} \nurl: <${searched.videos[1].url}> \n \n[3] ${searched.videos[2].title} by ${creator3} \nurl: <${searched.videos[2].url}> \n \n[4] ${searched.videos[3].title} by ${creator4} \nurl: <${searched.videos[3].url}> \n \n[5] ${searched.videos[4].title} by ${creator5} \nurl: <${searched.videos[4].url}>`); //Sends the result
         //message.reply(`${searched.videos[0].title} by ${creator1} | ${searched.videos[0].url}`)//sends result
     } 
         }
