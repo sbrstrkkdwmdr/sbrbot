@@ -190,7 +190,7 @@ module.exports = {
                 break;
             case 'ytsearch':
                 //message.channel.send("Sends the first result of a search on youtube.\nUsage:`sbr-ytsearch osus` \n")
-                message.channel.send("Sends the first five results of a search on youtube. \nUsage: `sbr-ytsearch5 osus`\nEmbeds are disabled so the channel doesn't get filled up.")
+                message.channel.send("Sends the first five results of a search on youtube. \nUsage: `sbr-ytsearch osus`\nEmbeds are disabled so the channel doesn't get filled up.")
                 break;
             //case 'ytsearch5':
                 //message.channel.send("Sends the first five results of a search on youtube. \nUsage: `sbr-ytsearch5 osus`\nEmbeds are disabled so the channel doesn't get filled up.")
