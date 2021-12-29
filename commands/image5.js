@@ -1,4 +1,4 @@
-const { cx, key } = require('../config.json');
+const { cx, key } = require('../config.json'); 
 module.exports = {
     name: 'image5',
     description: 'Search images through google images',
