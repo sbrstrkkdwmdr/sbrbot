@@ -460,11 +460,7 @@ client.on('message', message =>{
         serverQueue.textChannel.send(`added **${song.title}** to queue`);
       }
 
-}); //^ all of these run the command files necessary.
-//let MOTHERTRIGGER = ["your mother", "your mum", "your mom", "yo mumma", "yo momma", "ur mum", "ur mom", "u mum", "u mom"]
-//if(!message.content.startsWith(MOTHERTRIGGER)){
-//    message.channel.send("yeah, she's 300 feet away from your house with a chonkl")
-//}
+}); //^ a
 
 
-client.login('NzU1MjIwOTg5NDk0OTUxOTk3.X2AIWw.ebo8K60jWyQ1XL-HophjRma_J9c') //turns on the bot
+client.login(tokengoeshere) //turns on the bot
