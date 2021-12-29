@@ -7,6 +7,7 @@ const wait = require('util').promisify(setTimeout);
 const {Player} = require('discord-player');
 //added in discordjs 13
 const { Client, Intents } = require('discord.js');
+const { token } = require('./config.json');
 
 //MUSIC
 const ytdl = require("ytdl-core");
@@ -554,7 +555,7 @@ player.on('queueEnd', queue => {
 //}
 
 try{
-client.login('NzU1MjIwOTg5NDk0OTUxOTk3.X2AIWw.ebo8K60jWyQ1XL-HophjRma_J9c')
+client.login(token)
 } //turns on the bot
 catch (error) {
   console.log("login error")
