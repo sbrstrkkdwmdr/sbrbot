@@ -11,7 +11,6 @@ const { token } = require('./config.json');
 
 //MUSIC
 const ytdl = require("ytdl-core");
-const queue = new Map();
 
 //const client = new Discord.Client();
 const client = new Client({ intents: [
@@ -81,7 +80,6 @@ client.on('message', message =>{
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase(); //idk what this does i forgot
 
-    const serverQueue = queue.get(message.guild.id);
     const botOwners = ['503794887318044675'];
     const player = new Player(client);
 
@@ -345,7 +343,7 @@ client.on('message', message =>{
         break;
     //MUSIC --------------------
     case 'play':
-        client.commands.get('musicplay').execute(message, args, client, Player, player, Discord, ytdl, currentDate)
+        client.commands.get('musicplay').execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO)
         
         //execute(message, serverQueue);
         /*console.log(`${currentDateISO} | ${currentDate}`)
@@ -355,42 +353,46 @@ client.on('message', message =>{
         client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)*/
         break; 
     case 'skip':
-        //client.commands.get('musicskip').execute(message, args, client, Discord, ytdl, currentDate)
+        client.commands.get('musicskip').execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO)
         //skip(message, serverQueue);
-        console.log(`${currentDateISO} | ${currentDate}`)
+        /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music skip")
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)*/
         break;
         
     case 'stop':
-        //client.commands.get('musicstop').execute(message, args, client, Discord, ytdl, currentDate)
+        client.commands.get('musicstop').execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO)
         //stop(message, serverQueue);
-        console.log(`${currentDateISO} | ${currentDate}`)
+        /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music stop")
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)*/
         break;
 
     case `disconnect`:
-        //client.commands.get('musicstop').execute(message, args, client, Discord, ytdl, currentDate)
+        client.commands.get('musicstop').execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO)
         //stop(message, serverQueue);
-        console.log(`${currentDateISO} | ${currentDate}`)
+        /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music disconnect")
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)*/
         break;
 
     case 'queue':
-//        client.commands.get('musicqueue').execute(message, args, client, Discord, ytdl, currentDate)
-console.log(`${currentDateISO} | ${currentDate}`)
+        client.commands.get('musicqueue').execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO)
+/*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music queue")
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
-        client.commands.get('WIP').execute(message, args, currentDate)
+        client.commands.get('WIP').execute(message, args, currentDate)*/
+        break;
+
+    case 'np':
+        client.commands.get('musicnp').execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO)
         break;
 
     default:
