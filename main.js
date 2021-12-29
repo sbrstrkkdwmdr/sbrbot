@@ -397,24 +397,11 @@ console.log(`${currentDateISO} | ${currentDate}`)
         console.log("")
         break;
     }
-     /* let MOTHERTRIGGER2 = "you know who else"
-    if(m){}*/
     //NON COMMAND STUFF--------------------------
 
 //    client.get("")
 
     //insert loop
-/*
-    for (;;) {
-        Thread.sleep(5 * 1000)
-        let SendingChannelw = 875352853684822056
-        let d1 = new
-        let d2 = dat
-        let THINGYYY = GET (`https://osutrack-api.ameo.dev/hiscores?user={SaberStrike}&mode={mode}&from={from}&to={to}`)
-        message.SendingChannelw.send(`${THINGYYY}`)
-        //875352853684822056
-        //GET https://osutrack-api.ameo.dev/hiscores?user={user}&mode={mode}&from={YESTERDAY}&to={TODAY}
-    }*/
    
    //MUSIC BOT ASYNC FUNCTION
  /*  async function execute(message, serverQueue) {
@@ -548,11 +535,7 @@ player.on('queueEnd', queue => {
 
 });*/
 
-}); //^ all of these run the command files necessary.
-//let MOTHERTRIGGER = ["your mother", "your mum", "your mom", "yo mumma", "yo momma", "ur mum", "ur mom", "u mum", "u mom"]
-//if(!message.content.startsWith(MOTHERTRIGGER)){
-//    message.channel.send("yeah, she's 300 feet away from your house with a chonkl")
-//}
+});
 
 try{
 client.login(token)
