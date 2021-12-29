@@ -1,3 +1,4 @@
+const { cx, key } = require('../config.json');
 module.exports = {
     name: 'image',
     description: 'Search images through google images',
@@ -12,9 +13,6 @@ module.exports = {
         
         // Note that ephemeral messages are only available with Interactions, so we can't make the response here as an ephemeral.
         // Meaning People can search dirty things and the image will be seen by everyone, It's up to you on how you can make this safe.
-
-        const cx = "63d911bec99d0c63c"
-        const key = "AIzaSyADArGVmH3N3uUcJ2AxfFxIY2fgLSbxk9g"
         
         //const cx = process.env.GOOGLE_CX // Watch the video to get your google cx.
         //const key = process.env.GOOGLE_KEY // Watch the video to get your google api key.
