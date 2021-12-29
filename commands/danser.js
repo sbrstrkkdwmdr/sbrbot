@@ -2,8 +2,26 @@ module.exports = {
     name: 'danser',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
+        let variablenamelol = args[0]
+        if(!variablenamelol){
         message.channel.send("https://discord.gg/UTPvbe8")
-        message.channel.send("https://wieku.me/danser")
+        message.channel.send("https://wieku.me/danser")}
+        else {
+            switch (variablenamelol) {
+                case 'ffmpeg':
+                    message.channel.send("https://github.com/Wieku/danser-go/wiki/FFmpeg")
+                    break;
+
+                case 'rainbowcursor':
+                    message.channel.send("https://github.com/Wieku/danser-go/wiki/Cursor")
+                    break;
+
+                default:
+                    message.channel.send("https://discord.gg/UTPvbe8")
+                    message.channel.send("https://wieku.me/danser")
+                    break;
+            }
+        }
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - danser")
         let consoleloguserweeee = message.author
