@@ -1,102 +1,35 @@
 module.exports = {
-    name: 'mplay',
+    name: 'musicplay',
     description: '',
-    execute(message, args, client, serverQueue, Discord, ytdl, currentDate, currentDateISO) {
-        
-    skip(message, serverQueue);
+    async execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO) {
 
-    async function execute(message, serverQueue) {
-    const args = message.content.split(" ");
-  
-    const voiceChannel = message.member.voice.channel;
-    if (!voiceChannel)
-      return message.channel.send(
-        "ur not in vc smh my head"
-      );
-    const permissions = voiceChannel.permissionsFor(message.client.user);
-    if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
-      return message.channel.send(
-        "no perms xd"
-      );
-    }
-  
-    const songInfo = await ytdl.getInfo(args[1]);
-    const song = {
-          title: songInfo.videoDetails.title,
-          url: songInfo.videoDetails.video_url,
-     };
-  
-    if (!serverQueue) {
-      const queueContruct = {
-        textChannel: message.channel,
-        voiceChannel: voiceChannel,
-        connection: null,
-        songs: [],
-        volume: 5,
-        playing: true
-      };
-  
-      queue.set(message.guild.id, queueContruct);
-  
-      queueContruct.songs.push(song);
-  
+
+      if (!message.member.voice.channelId) return await message.reply({ content: "You are not in a voice channel!", ephemeral: true });
+      if (message.guild.me.voice.channelId && message.member.voice.channelId !== message.guild.me.voice.channelId) return await message.reply({ content: "You are not in my voice channel!", ephemeral: true });
+      let queryget = args.splice(0,100).join(" ");
+      const query = queryget;
+      const queue = player.createQueue(message.guild, {
+          metadata: {
+              channel: message.channel
+          }
+      });
+      
+      // verify vc connection
       try {
-        var connection = await voiceChannel.join();
-        queueContruct.connection = connection;
-        play(message.guild, queueContruct.songs[0]);
-      } catch (err) {
-        console.log(err);
-        queue.delete(message.guild.id);
-        return message.channel.send(err);
+          if (!queue.connection) await queue.connect(message.member.voice.channel);
+      } catch {
+          queue.destroy();
+          return await message.reply({ content: "Could not join your voice channel!", ephemeral: true });
       }
-    } else {
-      serverQueue.songs.push(song);
-      return message.channel.send(`${song.title} added to the queue`);
-    }
-  }
-  
-  function skip(message, serverQueue) {
-    if (!message.member.voice.channel)
-      return message.channel.send(
-        "u need to be in vc to skip"
-      );
-    if (!serverQueue)
-      return message.channel.send("no song to skip xd");
-    serverQueue.connection.dispatcher.end();
-  }
-  
-  function stop(message, serverQueue) {
-    if (!message.member.voice.channel)
-      return message.channel.send(
-        "u need to be in vc to stop"
-      );
+
       
-    if (!serverQueue)
-      return message.channel.send("no music to stop");
-      
-    serverQueue.songs = [];
-    serverQueue.connection.dispatcher.end();
-    message.channel.send("disconnected from vc")
-  }
-  
-  function play(guild, song) {
-    const serverQueue = queue.get(guild.id);
-    if (!song) {
-      serverQueue.voiceChannel.leave();
-      queue.delete(guild.id);
-      return;
-    }
-  
-    const dispatcher = serverQueue.connection
-      .play(ytdl(song.url))
-      .on("finish", () => {
-        serverQueue.songs.shift();
-        play(guild, serverQueue.songs[0]);
-      })
-      .on("error", error => console.error(error));
-    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-    serverQueue.textChannel.send(`added **${song.title}** to queue`);
-  }
+      const track = await player.search(query, {
+          requestedBy: message.user
+      }).then(x => x.tracks[0]);
+      if (!track) return await message.followUp({ content: `❌ | Track **${query}** not found!` });
+
+      queue.play(track);
+
   console.log(`${currentDateISO} | ${currentDate}`)
   console.log("command executed - musicplay")
   let consoleloguserweeee = message.author

@@ -83,6 +83,7 @@ client.on('message', message =>{
 
     const serverQueue = queue.get(message.guild.id);
     const botOwners = ['503794887318044675'];
+    const player = new Player(client);
 
     let consoleloguserweeee = message.author
     switch (command)
@@ -195,8 +196,10 @@ client.on('message', message =>{
       client.commands.get('1100').execute(message, args, currentDate, currentDateISO)
       break;
     
-    
-    
+    case 'say':
+    client.commands.get('say').execute(message, args, currentDate, currentDateISO)
+    break;
+
     //SBR ONLY --------------------------------------------------------
     case 'testlog':
         client.commands.get('testlog').execute(message, args, currentDate, currentDateISO)
@@ -342,14 +345,14 @@ client.on('message', message =>{
         break;
     //MUSIC --------------------
     case 'play':
-        //client.commands.get('musicplay').execute(message, args, client, serverQueue, Discord, ytdl, currentDate)
+        client.commands.get('musicplay').execute(message, args, client, Player, player, Discord, ytdl, currentDate)
         
         //execute(message, serverQueue);
-        console.log(`${currentDateISO} | ${currentDate}`)
+        /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music play")
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)*/
         break; 
     case 'skip':
         //client.commands.get('musicskip').execute(message, args, client, Discord, ytdl, currentDate)
