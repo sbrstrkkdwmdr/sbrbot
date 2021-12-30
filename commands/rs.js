@@ -1,38 +1,23 @@
+const fetch = require('node-fetch');
+const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+//const xhr = new XMLHttpRequest();
+const GET = require('node-fetch');
+const fs = require('fs');
 module.exports = {
     name: 'rs',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO) {
+    execute(message, args, Discord, currentDate, currentDateISO, currentDateForSomeApiThing) {
         let pickeduser = args[0]
-        const url = new URL(
-            `https://osu.ppy.sh/api/v2/users/${pickeduser}/recent_activity`
-        );
+        const pickeduserX = args[0];
         
-        let params = {
-            "limit": "1",
-            "offset": "1",
-        };
-        Object.keys(params)
-            .forEach(key => url.searchParams.append(key, params[key]));
-        
-        let headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        };
-        
-        fetch(url, {
-            method: "GET",
-            headers,
-        }).then(response => response.json());
-
-        let embed = new Discord.RichEmbed
-            .setAuthor(``)
-            .setColor("9AAAC0")
-            .addField(`${avatar} ${username}`)
-            .addField(`${maptitle} [${mapdiff}] +${mods} ${mapstar}`)
-            .addField(`${mapacc} | ${hitcount} | ${mappp} | ${mapscore}`)
-            .addField(`${mapgraph}`)
-            .setFooter("");
-        message.channel.send(embed)
+//        `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`
+        let url = `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0&from=${currentDateForSomeApiThing}`;
+    fetch(url)
+    .then(res => res.json())
+    .then(out =>
+        message.reply(JSON.stringify(out))
+    ).catch(error => message.reply("no recent plays found"))
+    message.channel.send(currentDateForSomeApiThing)
 //        message.channel.send("I'm not an osu! bot. go use owobot or something") 
 console.log(`${currentDateISO} | ${currentDate}`)
 console.log("command executed - rs")

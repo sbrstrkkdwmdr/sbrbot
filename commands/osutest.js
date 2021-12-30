@@ -1,40 +1,16 @@
 const fetch = require('node-fetch');
+const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+const xhr = new XMLHttpRequest();
+const POST = require('node-fetch');
 module.exports = {
     name: 'osutest',
     description: '',
     execute(message, args, Discord, fetch, currentDate, currentDateISO) {
-        const pickeduserX = args[0]
-        const pickedpageX = args[1]
-        /*if(pickedpageX == 0){
-            let pickedpage = 1
-        } else {
-            let pickedpage = args[1]
-        }
-        if(pickeduserX == 0){
-            let pickeduser = 2
-        } else {
-            let pickeduser = args[0]
-        }*/
-        const url = new URL(
-            `https://osu.ppy.sh/api/v2/users/2/scores/best/`
-        );
-        
-        let params = {
-            "limit": "5",
-            "offset": `1`,
-        };
-        Object.keys(params)
-            .forEach(key => url.searchParams.append(key, params[key]));
-        
-        let headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        };
-        
-        fetch(url, {
-            method: "GET",
-            headers,
-        }).then(response => response.json());
+        const pickeduserX = args[0];
+        const osutrackthingy = new XMLHttpRequest();
+        osutrackthingy.open(POST, `https://osutrack-api.ameo.dev/update?user=${pickeduserX}&mode={0}`)
+        osutrackthingy.setRequestHeader('Content-type', 'application/json');
+        message.channel.send(JSON.stringify(osutrackthingy))
 
        /* let embed = new Discord.RichEmbed
             .setAuthor(``)

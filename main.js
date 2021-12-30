@@ -62,6 +62,7 @@ for(const file of commandFiles){
   }*/
   const currentDate = new Date();
   const currentDateISO = new Date().toISOString();
+  const currentDateForSomeApiThing = new Date().toISOString().slice(0,10);
 
 client.once('ready', () => {
     console.log(`--------------------------------------------------------------------------------------`)
@@ -231,8 +232,8 @@ client.on('message', message =>{
         break;*/
 
     case 'rs':
-      //  client.commands.get('rs').execute(message, args, Discord)
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('rs').execute(message, args, Discord, currentDate, currentDateISO, currentDateForSomeApiThing)
+      //  client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'osu':
@@ -241,13 +242,13 @@ client.on('message', message =>{
         break;
 
     case 'osutop':
-  //      client.commands.get('osutop').execute(message, args, Discord)
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('osutop').execute(message, args, Discord)
+  //      client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'osutest':
-//        client.commands.get('osutest').execute(message, args, Discord)
-      client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('osutest').execute(message, args, Discord)
+//      client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'danser':
