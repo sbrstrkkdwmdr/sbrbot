@@ -232,8 +232,8 @@ client.on('message', message =>{
         break;*/
 
     case 'rs':
-        client.commands.get('rs').execute(message, args, Discord, currentDate, currentDateISO, currentDateForSomeApiThing)
-      //  client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+      //  client.commands.get('rs').execute(message, args, Discord, currentDate, currentDateISO, currentDateForSomeApiThing)
+        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'osu':
@@ -247,8 +247,8 @@ client.on('message', message =>{
         break;
 
     case 'osutest':
-        client.commands.get('osutest').execute(message, args, Discord)
-//      client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+  //      client.commands.get('osutest').execute(message, args, Discord)
+      client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'danser':
