@@ -250,6 +250,9 @@ client.on('message', message =>{
   //      client.commands.get('osutest').execute(message, args, Discord)
       client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
+    case 'osubest':
+    client.commands.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
+    break;
 
     case 'danser':
         client.commands.get('danser').execute(message, args, currentDate, currentDateISO)
