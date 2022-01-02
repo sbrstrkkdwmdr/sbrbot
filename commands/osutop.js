@@ -1,3 +1,4 @@
+//https://github.com/Ameobea/osutrack-api
 const fetch = require('node-fetch');
 const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 //const xhr = new XMLHttpRequest();
@@ -5,13 +6,20 @@ const GET = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { exec } = require("child_process");
+const { access_token } = require('../osuauth.json');
 module.exports = {
     name: 'osutop',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO) {
+    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
         const pickeduserX = args[0];
         if (isNaN(pickeduserX)) return message.reply("Error: You must use the user id"); 
 //        `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`
+        let updateurl = `https://osutrack-api.ameo.dev/update?user=${pickeduserX}&mode=0`;
+        fetch(updateurl, {
+            method: 'POST',
+            body: JSON.stringify(updateurl),
+    headers: { 'Content-Type': 'application/json' }
+        })
         let url = `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`;
        /* const hiscores = [
             {
@@ -80,7 +88,7 @@ module.exports = {
         let sctime5 = JSON.stringify(topHiscores[4], ['score_time']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('score_time', '').slice(0, 10)//
         let Embeda = new Discord.MessageEmbed()
             .setColor(0xFFC1EC)
-            .setTitle("Top plays for " + pickeduserX)
+            .setTitle("Top plays for https://osu.ppy.sh/u/" + pickeduserX)
             .setImage(`https://a.ppy.sh/${pickeduserX}`);
         let Embedscore1 = new Discord.MessageEmbed()
             .setColor(0x462B71)
@@ -103,7 +111,7 @@ module.exports = {
             .setTitle("#5")
             .setDescription(`https://osu.ppy.sh/b/${bmid5}` + "\nScore set on " + sctime5 + "\n **SCORE**: " + sc5 + " | " + perform5 + "**PP**\n" + "+" + modify5 + " | " + grade5);
             message.reply({ embeds: [Embeda, Embedscore1, Embedscore2, Embedscore3, Embedscore4, Embedscore5] });
-            message.reply(`info may be outdated. go to https://ameobea.me/osutrack/ to update`)
+            message.channel.send("currently using https://github.com/Ameobea/osutrack-api instead of osu-api until i figure things out")
         //message.reply("```json\nTOP SCORES FOR " + pickeduserX + "\n" + JSON.stringify(topHiscores, null, 2).replaceAll('"', '').replaceAll('beatmap_id', 'beatmap id').replaceAll('[', '').replaceAll(']', '').replaceAll(',', '').replaceAll('}', '').replaceAll('{', '------------') + "```");
     }
     )} catch (error) {

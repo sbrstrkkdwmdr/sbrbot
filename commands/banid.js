@@ -1,39 +1,53 @@
 module.exports = {
     name: 'banid',
     description: '',
-    execute(message, args, currentDate, currentDateISO) {
+    async execute(message, args, client, Discord, currentDate, currentDateISO) {
+       
         if(message.member.permissions.has('ADMINISTRATOR')){
             console.log(`${currentDateISO} | ${currentDate}`)
-            console.log("command executed - banid")
+            console.log("command executed - ban")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("")
-            let userID = args[0]
-        let user = userID
-        if(userID){
-        let member = message.guild.member(userID);
-        if(member){
-        let reaswon = args.slice(1).join(' ');
-        member
-            .ban({
-            reason: `${reaswon}`,
-        }
-        )
-        .then(() => {
-            message.reply(`successfully banned ${user.tag} (AKA ${user.id})`);
-            console.log(`banned user - ${user.id} ${user.tag}`)
-            console.log("")
-        })
-        .catch(err => {
-            message.reply(`I am unable to ban ${user.tag}`);
-            console.error(err)
-        })
-    } else { message.channel.send("That user is no longer here.")}
-    } else { message.channel.send("No user has been mentioned")}
-} else {
-    message.channel.send("no. cope harder")
-}
 
+        const user = args[0];
+        const reaswon = args.splice(1, 100).join(' ');
+        if (!reaswon) {
+        message.reply("Reason required")
+        console.log("command failed - no reason")
+        console.log("")}
+        if(reaswon){
+        if(user){
+            const member = message.guild.members.cache.get(user)
+
+            if(member){
+                await member.ban({
+                    reason: reaswon,
+                    
+                })
+                console.log(`banned ${user} AKA <@${user}> for ${reaswon}`)
+                console.log("")
+                message.reply(`banned ${user} AKA <@${user}> for ${reaswon}`)
+            } else {
+                message.reply("User not found")
+                console.log("command failed - no user")
+                console.log("")
+            }
+        } else {
+            message.reply("No user mentioned")
+            console.log("command failed - no user")
+            console.log("")
+        }}
+        
+} if(!message.member.permissions.has('ADMINISTRATOR')){
+    message.channel.send("no. cope harder")
+    console.log(`${currentDateISO} | ${currentDate}`)
+    console.log("command executed - ban")
+    let consoleloguserweeee = message.author
+    console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+    console.log("command failed - insufficient perms")
+    console.log("")
+}
     }
 }
 //client.commands.get('').execute(message, args)

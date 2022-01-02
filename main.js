@@ -8,6 +8,10 @@ const {Player} = require('discord-player');
 //added in discordjs 13
 const { Client, Intents } = require('discord.js');
 const { token } = require('./config.json');
+const { osuauthtoken } = require('./config.json');
+const { osuapikey } = require('./config.json');
+const { osuclientid } = require('./config.json');
+const { osuclientsecret } = require('./config.json');
 
 //MUSIC
 const ytdl = require("ytdl-core");
@@ -75,7 +79,7 @@ client.once('ready', () => {
 client.user.setPresence({ activities: [{ name: "you", type: 'WATCHING', video_url: 'https://youtube.com/saberstrkkdwmdr'}], status: `dnd`,});
 })
 
-client.on('message', message =>{
+client.on('messageCreate', message =>{
     if(!message.content.startsWith(prefix) || message.author.bot) return; //the return is so if its just prefix nothing happens
 
     const args = message.content.slice(prefix.length).split(/ +/);
@@ -232,23 +236,23 @@ client.on('message', message =>{
         break;*/
 
     case 'rs':
-      //  client.commands.get('rs').execute(message, args, Discord, currentDate, currentDateISO, currentDateForSomeApiThing)
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('rs').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
+       // client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'osu':
-    //    client.commands.get('osu').execute(message, args, Discord)
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+     //   client.commands.get('osu').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
+        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
         break;
 
     case 'osutop':
-        client.commands.get('osutop').execute(message, args, Discord)
+        client.commands.get('osutop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
   //      client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'osutest':
-  //      client.commands.get('osutest').execute(message, args, Discord)
-      client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('osutest').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+  //    client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
     case 'osubest':
     client.commands.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
@@ -312,11 +316,11 @@ client.on('message', message =>{
         client.commands.get('crash').execute(message, args, currentDate, currentDateISO)
         break;
     case 'ban':
-        client.commands.get('ban').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('ban').execute(message, args, client, Discord, currentDate, currentDateISO)
         break; 
 
     case 'kick':
-        client.commands.get('kick').execute(message, args, Discord, currentDate, currentDateISO)
+        client.commands.get('kick').execute(message, args, client, Discord, currentDate, currentDateISO)
         break;   
 
     case 'serverlist':
@@ -336,7 +340,7 @@ client.on('message', message =>{
         break;
 
     case 'banid':
-        client.commands.get('banid').execute(message, args, Discord, currentDate, currentDateISO)
+        client.commands.get('banid').execute(message, args, client, Discord, currentDate, currentDateISO)
         break;
 
     case 'botstatus':

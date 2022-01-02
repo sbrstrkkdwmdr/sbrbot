@@ -2,26 +2,35 @@ module.exports = {
     name: 'unban',
     description: 'unban',
     async execute(message, args, currentDate, currentDateISO) {
-        if(message.member.permissions.has('ADMINISTRATOR')){
+       if(message.member.permissions.has('ADMINISTRATOR')){
             console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - unban")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        let userID = args[0]
-        if(!userID){
+        const user = args[0]
+        
+        if(!user){
         message.reply("no user mentioned")
         }
         else {
-        message.guild.members.unban(userID)
-        message.reply(`unbanned ${userID}`)
-        console.log(`unbanned user ${userID}`)}
-        console.log("")
+        const member = message.guild.members.cache.get(user)
+        if(member) {
+        message.guild.members.unban(user)
+        message.reply(`unbanned ${user} aka <@${user}>`)
+        console.log(`unbanned user ${user}`)
+        console.log("")}
+        else {
+            message.reply("User not found")
+            console.log("command failed - no user")
+            console.log("")
+        }
     }
+    } else {
     console.log(`${currentDateISO} | ${currentDate}`)
     console.log("command executed - unban")
     let consoleloguserweeee = message.author
     console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
     console.log("command failed - insufficient permissions")
-    console.log("")
+    console.log("")}
     }
 }

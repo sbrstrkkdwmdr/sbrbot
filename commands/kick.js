@@ -1,7 +1,7 @@
 module.exports = {
     name: 'kick',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO) {
+    execute(message, args, client, Discord, currentDate, currentDateISO) {
         if(message.member.permissions.has('ADMINISTRATOR')){
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - kick")
@@ -9,7 +9,7 @@ module.exports = {
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         let user = message.mentions.users.first();
         if(user){
-        let member = message.guild.member(user);
+        let member = message.guild.members.cache.get(user.id)
         if(member){
         let reason = "idk"
         member
