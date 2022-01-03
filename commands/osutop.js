@@ -51,6 +51,7 @@ module.exports = {
             .then(output2 => 
                 {const osutopdata = output2;
                 fs.writeFileSync("osutop.json", JSON.stringify(osutopdata, null, 2));
+                try{
                 let topplayername = JSON.stringify(osutopdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                 //let mapbg1 = JSON.stringify(osutopdata[0]['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
                 let topplayeravatar = JSON.stringify(osutopdata[0]['user'], ['avatar_url']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('avatar_url', '').replace('https', 'https:');
@@ -133,6 +134,12 @@ module.exports = {
             //https://osu.ppy.sh/b/
             message.reply({ embeds: [Embed]})
             //message.reply(mapbg1)
+        } catch(error){
+            message.reply("Error")
+            console.log("Error")
+            console.log(error)
+            console.log("")
+        }
         });
         } catch(err){
             console.log(err)

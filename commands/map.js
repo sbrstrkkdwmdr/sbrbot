@@ -51,7 +51,7 @@ module.exports = {
 					//let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
 					//const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
                 fs.writeFileSync("map.json", JSON.stringify(mapdata, null, 2))
-            let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
+            try{let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
             let maplink = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
             let mapcs = JSON.stringify(mapdata, ['cs']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('cs', '');
             let mapar = JSON.stringify(mapdata, ['ar']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('ar', '');
@@ -71,7 +71,11 @@ module.exports = {
             .setTitle("Information for " + maptitle)
             .setImage(mapbg)
             .setDescription(`${mapartist} - [` + maptitle + `](https://osu.ppy.sh/b/` + maplink + `) [${mapdiff}]\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \nBPM:" +  mapbpm + " | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner);
-            message.reply({ embeds: [Embed]})
+            message.reply({ embeds: [Embed]})} catch(error){
+				message.reply("error")
+				console.log(error)
+				console.log("")
+			}
 			
 			
 		/*	let { version } = require('../map.json');
