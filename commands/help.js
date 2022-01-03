@@ -102,6 +102,9 @@ module.exports = {
             case 'lolibooru':
                 message.channel.send("Random Lolibooru image.\nUsage:`sbr-lolibooru`\nNSFW channels only.")
                 break;
+            case 'map':
+                message.channel.send("Sends information about the mentioned map.\nUsage:`sbr-map (ID)`")
+                break;
             case 'play':
                 message.channel.send("Plays a song from youtube.\nUsage:`sbr-play https://youtube.com/watch?v=LINK`\n Currently only works using urls.")
                 break;
@@ -118,10 +121,13 @@ module.exports = {
                 message.channel.send("A big folder that lets stuff run in nodejs. \n||Still not as big as your mum :kekw: :troll: :pepelaugh:||")
                 break;
             case 'osu':
-                message.channel.send("Sends information about the mentioned user's osu! profile.\nUsage:`sbr-osu @username`")
+                message.channel.send("Sends information about the user's osu! profile.\nUsage:`sbr-osu (ID)`")
                 break;
             case 'osutop':
-                message.channel.send("Sends information about the mentioned user's osu! top plays.\nUsage:`sbr-osutop @username`")
+                message.channel.send("Sends information about the user's osu! top plays.\nUsage:`sbr-osutop (ID)`")
+                break;
+            case 'osutest':
+                message.channel.send("Just whatever osu! command api thingy I'm testing.\nUsage:`sbr-osutest`")
                 break;
             case 'ping':
                 message.channel.send("Checks the latency/ping of the bot and API and sends back a value in ms.\nUsage:`sbr-ping`")
@@ -145,7 +151,7 @@ module.exports = {
                 message.channel.send("Generates a random number. The limit is controllable by the user.\nUsage:`sbr-roll` or `sbr-roll 727`")
                 break;
             case 'rs':
-                message.channel.send("Sends information about the mentioned user's most recent osu! play.\nUsage:`sbr-rs @username`")
+                message.channel.send("Sends information about the user's most recent osu! play.\nUsage:`sbr-rs (ID)`")
                 break;
             case 'rsplus':
                 message.channel.send("Sends information about the mentioned user's 5 most recent osu! plays.\nUsage:`sbr-rsplus @username`")
