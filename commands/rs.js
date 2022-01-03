@@ -68,14 +68,14 @@ module.exports = {
             .setColor(0x462B71)
             .setTitle("Most recent play for " + rsplayername)
             .setImage(rsmapbg)
-            .setDescription(`Score set on ${rsmaptime} by [${rsplayername}](https://osu.ppy.sh/u/${rsplayerid}) \n[${rsmapname}](https://osu.pp.sh/b/${rsmapid}) [${rsdiffname}] +NM ${rsmapstar}⭐ \n ${(Math.floor((rsacc) * 100).toFixed(2))}%  **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} 0:${rs0s} | ${rspp}**pp**\n`);
+            .setDescription(`Score set on ${rsmaptime} by [${rsplayername}](https://osu.ppy.sh/u/${rsplayerid}) \n[${rsmapname}](https://osu.pp.sh/b/${rsmapid}) [${rsdiffname}] +NM ${rsmapstar}⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}%  **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} 0:${rs0s} | ${rspp}**pp**\n`);
             message.reply({ embeds: [Embed]})}
             if(rsmods){
                 let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle("Most recent play for " + rsplayername)
             .setImage(rsmapbg)
-            .setDescription(`Score set on ${rsmaptime} by [${rsplayername}](https://osu.ppy.sh/u/${rsplayerid}) \n[${rsmapname}](https://osu.pp.sh/b/${rsmapid}) [${rsdiffname}]+${rsmods} ${rsmapstar}⭐\n ${(Math.floor((rsacc) * 100).toFixed(2))}% **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} 0:${rs0s} | ${rspp}pp\n`);
+            .setDescription(`Score set on ${rsmaptime} by [${rsplayername}](https://osu.ppy.sh/u/${rsplayerid}) \n[${rsmapname}](https://osu.pp.sh/b/${rsmapid}) [${rsdiffname}]+${rsmods} ${rsmapstar}⭐\n ${(Math.abs((rsacc) * 100).toFixed(2))}% **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} 0:${rs0s} | ${rspp}pp\n`);
             message.reply({ embeds: [Embed]})
             }});
         } catch(err){
