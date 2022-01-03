@@ -236,7 +236,7 @@ client.on('messageCreate', message =>{
         break;*/
 
     case 'rs':
-        client.commands.get('rs').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
+        client.commands.get('rs').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
        // client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
@@ -246,7 +246,7 @@ client.on('messageCreate', message =>{
         break;
 
     case 'osutop':
-        client.commands.get('osutop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
+        client.commands.get('osutop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
   //      client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
@@ -256,6 +256,10 @@ client.on('messageCreate', message =>{
         break;
     case 'osubest':
     client.commands.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
+    break;
+
+    case 'map':
+    client.commands.get('map').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
     break;
 
     case 'danser':

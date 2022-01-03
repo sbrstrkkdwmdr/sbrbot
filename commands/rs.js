@@ -5,7 +5,7 @@ const { access_token } = require('../osuauth.json');
 module.exports = {
     name: 'rs',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
+    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         const pickeduserX = args[0];
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - rs")
@@ -60,20 +60,22 @@ module.exports = {
             let rsmaptime = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 10);
             let rsmapstar = JSON.stringify(rsdata[0]['beatmap'], ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
             let rsgrade = JSON.stringify(rsdata[0], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rank', '');
+            let rsmapid = JSON.stringify(rsdata[0]['beatmap'], ['beatmapset_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmapset_id', '');
+            
             let trueacc = Math.floor((rsacc) * 100).toFixed(2);
             if(!rsmods){
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle("Most recent play for " + rsplayername)
             .setImage(rsmapbg)
-            .setDescription(`Score set on ${rsmaptime} by ${rsplayername} | https://osu.ppy.sh/u/${rsplayerid}\n${rsmapname} [${rsdiffname}] +NM ${rsmapstar}⭐ \n ${(Math.floor((rsacc) * 100).toFixed(2))}%  **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} 0:${rs0s} | ${rspp}**pp**\n`);
+            .setDescription(`Score set on ${rsmaptime} by [${rsplayername}](https://osu.ppy.sh/u/${rsplayerid}) \n[${rsmapname}](https://osu.pp.sh/b/${rsmapid}) [${rsdiffname}] +NM ${rsmapstar}⭐ \n ${(Math.floor((rsacc) * 100).toFixed(2))}%  **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} 0:${rs0s} | ${rspp}**pp**\n`);
             message.reply({ embeds: [Embed]})}
             if(rsmods){
                 let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle("Most recent play for " + rsplayername)
             .setImage(rsmapbg)
-            .setDescription(`Score set on ${rsmaptime} by ${rsplayername} | https://osu.ppy.sh/u/${rsplayerid}\n${rsmapname} [${rsdiffname}]+${rsmods} ${rsmapstar}⭐\n ${(Math.floor((rsacc) * 100).toFixed(2))}% **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} 0:${rs0s} | ${rspp}pp\n`);
+            .setDescription(`Score set on ${rsmaptime} by [${rsplayername}](https://osu.ppy.sh/u/${rsplayerid}) \n[${rsmapname}](https://osu.pp.sh/b/${rsmapid}) [${rsdiffname}]+${rsmods} ${rsmapstar}⭐\n ${(Math.floor((rsacc) * 100).toFixed(2))}% **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} 0:${rs0s} | ${rspp}pp\n`);
             message.reply({ embeds: [Embed]})
             }});
         } catch(err){

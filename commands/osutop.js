@@ -10,9 +10,9 @@ const { access_token } = require('../osuauth.json');
 module.exports = {
     name: 'osutop',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
+    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         const pickeduserX = args[0];
-        if (isNaN(pickeduserX)) return message.reply("Error: You must use the user id"); 
+        /*if (isNaN(pickeduserX)) return message.reply("Error: You must use the user id"); 
 //        `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`
         let updateurl = `https://osutrack-api.ameo.dev/update?user=${pickeduserX}&mode=0`;
         fetch(updateurl, {
@@ -20,7 +20,7 @@ module.exports = {
             body: JSON.stringify(updateurl),
     headers: { 'Content-Type': 'application/json' }
         })
-        let url = `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`;
+        let url = `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`;*/
        /* const hiscores = [
             {
               "beatmap_id": 49977,
@@ -50,7 +50,7 @@ module.exports = {
               "update_time": "2020-03-13T08:44:01.000Z"
             },
             ];*/
-    try {fetch(url)
+   /* try {fetch(url)
     .then(res => res.json())
     .then(out =>
 {        out.sort((a, b) => b.pp - a.pp);
@@ -123,7 +123,7 @@ module.exports = {
         console.log("command executed - osutop")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        console.log("") */
     }
 }
 //client.commands.get('').execute(message, args)
