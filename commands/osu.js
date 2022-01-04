@@ -82,7 +82,7 @@ module.exports = {
                 message.reply({ embeds: [Embed]})
                 //message.reply(mapbg1)
                 }} catch(error){
-                    message.reply("Error - account not found (names are case sensitive - sometimes)")
+                    message.reply("Error - account not found")
                     console.log("Error account not found")
                     console.log(error)
                     console.log("")

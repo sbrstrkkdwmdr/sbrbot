@@ -21,13 +21,18 @@ module.exports = {
             const member = message.guild.members.cache.get(user.id)
 
             if(member){
-                await member.ban({
+                try{await member.ban({
                     reason: reaswon,
                     
                 })
                 console.log(`banned ${user} AKA ${user.tag} for ${reaswon}`)
                 console.log("")
-                message.reply(`banned ${user} AKA ${user.tag} for ${reaswon}`)
+                message.reply(`banned ${user} AKA ${user.tag} for ${reaswon}`)}
+                catch(error){
+                message.reply("error")
+                console.log(error)
+                console.log("")
+                }
             } else {
                 message.reply("User not found")
                 console.log("command failed - no user")
