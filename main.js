@@ -255,12 +255,16 @@ client.on('messageCreate', message =>{
   //    client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
     case 'osubest':
-    client.commands.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
-    break;
+        client.commands.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
+        break;
 
     case 'map':
-    client.commands.get('map').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-    break;
+        client.commands.get('map').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+
+    case 'osuid':
+        client.commands.get('osuid').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
 
     case 'danser':
         client.commands.get('danser').execute(message, args, currentDate, currentDateISO)
