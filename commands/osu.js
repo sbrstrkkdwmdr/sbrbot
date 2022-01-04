@@ -56,8 +56,8 @@ module.exports = {
                 let playerlevel = JSON.stringify(osudata['statistics']['level'], ['current']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('current', '');
                 let playerlevelprogress = JSON.stringify(osudata['statistics']['level'], ['progress']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('progress', '');
                // let playerplaystyle = JSON.stringify(osudata, ['playstyle']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('playstyle', '');
-                let playerstatus = JSON.stringify(osudata, ['is_online']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('is_online', '');
-                let playeraccuracy = JSON.stringify(osudata['statistics'], ['hit_accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('hit_accuracy', '');
+                let playerstatus = osudata['is_online'];
+                let playeraccuracy = JSON.stringify(osudata['statistics'], ['hit_accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('hit_accuracy', '').slice(0, 5);
                 let playeracount = JSON.stringify(osudata['statistics']['grade_counts'], ['a']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('a', '');
                 let playerscount = JSON.stringify(osudata['statistics']['grade_counts'], ['s']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('s', '');
                 let playershcount = JSON.stringify(osudata['statistics']['grade_counts'], ['sh']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('sh', '');
@@ -66,20 +66,19 @@ module.exports = {
                 let playerjoined = JSON.stringify(osudata, ['join_date']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('join_date', '').slice(0, 10);
                 let playerfollowers = JSON.stringify(osudata, ['follower_count']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('follower_count', '');
                 let playerprevname = JSON.stringify(osudata, ['previous_usernames']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('previous_usernames', '').replaceAll('[', '').replaceAll(']', '');
-
-            if(playerstatus = true){let Embed = new Discord.MessageEmbed()
+            if(playerstatus == true ){let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle(playername + "'s osu! profile")
             .setThumbnail(playeravatar)
-            .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ")\n" + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_online:927800818445455421> Online**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
+            .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ")\n" + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_online:927800818445455421> Online**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
             message.reply({ embeds: [Embed]})
             //message.reply(mapbg1)
             }
-            if(playerstatus = false){let Embed = new Discord.MessageEmbed()
+            if(playerstatus == false ){let Embed = new Discord.MessageEmbed()
                 .setColor(0x462B71)
                 .setTitle(playername + "'s osu! profile")
                 .setThumbnail(playeravatar)
-                .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ")\n" + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_offline:927800829153513472> Offline**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
+                .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ")\n" + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_offline:927800829153513472> Offline**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
                 message.reply({ embeds: [Embed]})
                 //message.reply(mapbg1)
                 }} catch(error){
