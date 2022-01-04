@@ -43,9 +43,10 @@ module.exports = {
                 }
             }).then(res => res.json())
             .then(output2 => 
-                {const rsdata = output2.slice(0, 1);
+                {try{const rsdata = output2.slice(0, 1);
                 fs.writeFileSync("rs.json", JSON.stringify(rsdata, null, 2))
-            try {let rsplayerid = JSON.stringify(rsdata[0], ['user_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('user_id', '');
+            try {
+            let rsplayerid = JSON.stringify(rsdata[0], ['user_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('user_id', '');
             let rsplayername = JSON.stringify(rsdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('username', '');
             let rsmapname = JSON.stringify(rsdata[0]['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title_unicode', '');
             let rsdiffname = JSON.stringify(rsdata[0]['beatmap'], ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('version', '');
@@ -67,7 +68,7 @@ module.exports = {
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle("Most recent play for " + rsplayername)
-            .setImage(rsmapbg)
+            .setThumbnail(rsmapbg)
             .setDescription(`Score set on ${rsmaptime} by [${rsplayername}](https://osu.ppy.sh/u/${rsplayerid}) \n[${rsmapname}](https://osu.pp.sh/b/${rsmapid}) [${rsdiffname}] +NM ${rsmapstar}⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}%  **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} 0:${rs0s} | ${rspp}**pp**\n`);
             message.reply({ embeds: [Embed]})}
             if(rsmods){
@@ -84,7 +85,12 @@ module.exports = {
             console.log(error)
             console.log("")
         }
-        });
+        }catch(error){
+            message.reply("Error - account not found (or some other error)")
+            console.log("error - account not found and/or json sent no data")
+            console.log(error)
+            console.log("")
+        }});
         } catch(err){
             console.log(err)
         } 

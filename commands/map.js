@@ -70,7 +70,7 @@ module.exports = {
             .setColor(0x462B71)
             .setTitle("Information for " + maptitle)
             .setImage(mapbg)
-            .setDescription(`${mapartist} - [` + maptitle + `](https://osu.ppy.sh/b/` + maplink + `) [${mapdiff}]\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \nBPM:" +  mapbpm + " | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner);
+            .setDescription(`${mapartist} - [` + maptitle + `](https://osu.ppy.sh/b/` + maplink + `) [${mapdiff}]\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \nBPM:" +  mapbpm + " | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + "\nSS: | 95:");
             message.reply({ embeds: [Embed]})} catch(error){
 				message.reply("error")
 				console.log(error)

@@ -37,13 +37,13 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
             ;
-            const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/scores/best?mode=osu&limit=58&offset=0`;
+            const osutopurl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/scores/best?mode=osu&limit=58&offset=0`;
             
             let headers = {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
             };
-            fetch(recentactiveurl, {
+            fetch(osutopurl, {
                 headers: {
                     Authorization: `Bearer ${access_token}`
                 }
@@ -129,7 +129,7 @@ module.exports = {
             .setColor(0x462B71)
             .setTitle("Top plays for " + topplayername)
             //.setImage(mapbg1)
-            .setImage(topplayeravatar)
+            .setThumbnail(topplayeravatar)
             .setDescription(`[${maptitle1} [${mapdiff1}]](https://osu.ppy.sh/b/${mapurl1}) +${mapmods1} \nSCORE:${mapscore1} \nScore set on ${maptimeset1} \n${(Math.abs((mapacc1) * 100).toFixed(2))}% | ${map3001}/${map1001}/${map501}/${mapmiss1} | ${maprank1}\n${(Math.abs(mappp1).toFixed(2))}pp` + `\n\n[${maptitle2} [${mapdiff2}]](https://osu.ppy.sh/b/${mapurl2}) +${mapmods2} \nSCORE:${mapscore2} \nScore set on ${maptimeset2} \n${(Math.abs((mapacc2) * 100).toFixed(2))}% | ${map3002}/${map1002}/${map502}/${mapmiss2} | ${maprank2}\n${(Math.abs(mappp2).toFixed(2))}pp` + `\n\n[${maptitle3} [${mapdiff3}]](https://osu.ppy.sh/b/${mapurl3}) +${mapmods3} \nSCORE:${mapscore3} \nScore set on ${maptimeset3} \n${(Math.abs((mapacc3) * 100).toFixed(2))}% | ${map3003}/${map1003}/${map503}/${mapmiss3} | ${maprank3}\n${(Math.abs(mappp3).toFixed(2))}pp` + `\n\n[${maptitle4} [${mapdiff4}]](https://osu.ppy.sh/b/${mapurl4}) +${mapmods4} \nSCORE:${mapscore4} \nScore set on ${maptimeset4} \n${(Math.abs((mapacc4) * 100).toFixed(2))}% | ${map3004}/${map1004}/${map504}/${mapmiss4} | ${maprank4}\n${(Math.abs(mappp4).toFixed(2))}pp` + `\n\n[${maptitle5} [${mapdiff5}]](https://osu.ppy.sh/b/${mapurl5}) +${mapmods5} \nSCORE:${mapscore5} \nScore set on ${maptimeset5} \n${(Math.abs((mapacc5) * 100).toFixed(2))}% | ${map3005}/${map1005}/${map505}/${mapmiss5} | ${maprank5}\n${Math.abs(mappp5).toFixed(2)}pp`);
             //https://osu.ppy.sh/b/
             message.reply({ embeds: [Embed]})
@@ -144,7 +144,8 @@ module.exports = {
         } catch(err){
             console.log(err)
         }
-
+    }
+}
 
         /*if (isNaN(pickeduserX)) return message.reply("Error: You must use the user id"); 
 //        `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`
@@ -258,8 +259,9 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") */
-    }
-}
+
+
+
 //client.commands.get('').execute(message, args)
 /*
 note for mods
