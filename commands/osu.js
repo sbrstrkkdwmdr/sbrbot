@@ -8,7 +8,7 @@ module.exports = {
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
         const pickeduserX = args[0];
         console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - osutop")
+        console.log("command executed - osu profile")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
@@ -82,7 +82,7 @@ module.exports = {
                 message.reply({ embeds: [Embed]})
                 //message.reply(mapbg1)
                 }} catch(error){
-                    message.reply("Error - account not found")
+                    message.reply("Error - account not found (or some other error)")
                     console.log("Error account not found")
                     console.log(error)
                     console.log("")
