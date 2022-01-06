@@ -4,3 +4,8 @@ config.json
 node_modules
 null
 osuauth.json
+map.json
+osutop.json
+osu.json
+rs.json
+w.json
