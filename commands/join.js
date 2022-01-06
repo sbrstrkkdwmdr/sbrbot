@@ -1,5 +1,5 @@
-const { joinrole } = require('../osuauth.json');
-const { guildid } = require('../osuauth.json');
+const { joinrole } = require('../config.json');
+const { guildid } = require('../config.json');
 module.exports = {
     name: 'join',
     description: '',
