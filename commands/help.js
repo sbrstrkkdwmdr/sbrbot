@@ -106,7 +106,7 @@ module.exports = {
                 message.channel.send("Sends information about the mentioned map.\nUsage:`sbr-map (ID)`")
                 break;
             case 'math':
-                message.channel.send("Calculates a math problem.\nUsage:`sbr-math add 5 5`\nMethods: `add`, `subtract`, `multiply`, `divide`, `squareroot`, `square`, `factorial`, `hcf`, `lcm`")
+                message.channel.send("Calculates a math problem.\nUsage:`sbr-math add 5 5`\nArguments: `add`, `subtract`, `multiply`, `divide`, `squareroot`, `square`, `factorial`, `hcf`, `lcm`")
                 break;
             case 'play':
                 message.channel.send("Plays a song from youtube.\nUsage:`sbr-play https://youtube.com/watch?v=LINK`\n Currently only works using urls.")
