@@ -165,9 +165,12 @@ client.on('messageCreate', message =>{
       break;*/
     
     case 'active':
-      client.commands.get('active').execute(message, args, Discord, currentDate, currentDateISO)
-      break;
+        client.commands.get('active').execute(message, args, Discord, currentDate, currentDateISO)
+        break;
 
+    case 'math':
+        client.commands.get('math').execute(message, args, Discord, currentDate, currentDateISO)
+        break;
     //FUN --------------------------------------------------------------------
     case 'ghostping':
         client.commands.get('ghostping').execute(message, args, currentDate, currentDateISO)
