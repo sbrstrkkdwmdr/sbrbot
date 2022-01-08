@@ -62,21 +62,35 @@ module.exports = {
             let rsmapstar = JSON.stringify(rsdata[0]['beatmap'], ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
             let rsgrade = JSON.stringify(rsdata[0], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rank', '');
             let rsmapid = JSON.stringify(rsdata[0]['beatmap'], ['beatmapset_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmapset_id', '');
-            
+            let rscombo = JSON.stringify(rsdata[0], ['max_combo']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max_combo', '');
+                 
+
+            let rsnochokeacc300 = Math.floor(300 * rs300s);
+            let rsnochokeacc100 = Math.floor(100 * rs100s);
+            let rsnochokeacc50 = Math.floor(50 * rs50s);
+            let rsnochoke300num = parseInt(rs300s);
+            let rsnochoke100num = parseInt(rs100s);
+            let rsnochoke50num = parseInt(rs50s);
+            //let rsnochoke0num = parseInt(rs0s);
+            let rsnochokebottom1 = Math.floor(rsnochoke300num + rsnochoke100num + rsnochoke50num);
+            let rsnochokebottom = Math.floor(rsnochokebottom1 * 300)
+            let rsnochokeacctop = Math.floor(rsnochokeacc300 + rsnochokeacc100 + rsnochokeacc50)
+            let rsnochokeacc1 = Math.abs(rsnochokeacctop / rsnochokebottom);
+            let rsnochokeacc = Math.abs(rsnochokeacc1 * 100).toFixed(2);
 
             if(!rsmods){
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle("Most recent play for " + rsplayername)
             .setThumbnail(rsmapbg)
-            .setDescription(`Score set on ${rsmaptime} by [${rsplayername}](https://osu.ppy.sh/u/${rsplayerid}) \n[${rsmapname}](https://osu.pp.sh/b/${rsmapid}) [${rsdiffname}] +NM ${rsmapstar}⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}%  **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} 0:${rs0s} | ${rspp}**pp**\n`);
+            .setDescription(`Score set on ${rsmaptime} by [${rsplayername}](https://osu.ppy.sh/u/${rsplayerid}) \n[${rsmapname}](https://osu.pp.sh/b/${rsmapid}) [${rsdiffname}] +NM ${rsmapstar}⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% (${rsnochokeacc}% if FC) **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} X:${rs0s} \n${rspp}**pp** | Combo:${rscombo}`);
             message.reply({ embeds: [Embed]})}
             if(rsmods){
                 let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle("Most recent play for " + rsplayername)
             .setImage(rsmapbg)
-            .setDescription(`Score set on ${rsmaptime} by [${rsplayername}](https://osu.ppy.sh/u/${rsplayerid}) \n[${rsmapname}](https://osu.pp.sh/b/${rsmapid}) [${rsdiffname}]+${rsmods} ${rsmapstar}⭐\n ${(Math.abs((rsacc) * 100).toFixed(2))}% **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} 0:${rs0s} | ${rspp}pp\n`);
+            .setDescription(`Score set on ${rsmaptime} by [${rsplayername}](https://osu.ppy.sh/u/${rsplayerid}) \n[${rsmapname}](https://osu.pp.sh/b/${rsmapid}) [${rsdiffname}]+${rsmods} ${rsmapstar}⭐\n ${(Math.abs((rsacc) * 100).toFixed(2))}% (${rsnochokeacc}% if FC) **${rsgrade}** | 300:${rs300s} 100:${rs100s} 50:${rs50s} 0:${rs0s} \n${rspp}***pp*** | Combo:${rscombo}`);
             message.reply({ embeds: [Embed]})
             }
         } catch(error){
