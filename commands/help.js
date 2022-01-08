@@ -121,7 +121,13 @@ module.exports = {
                 message.channel.send("A big folder that lets stuff run in nodejs. \n||Still not as big as your mum :kekw: :troll: :pepelaugh:||")
                 break;
             case 'osu':
-                message.channel.send("Sends information about the user's osu! profile.\nUsage:`sbr-osu (ID)`")
+                message.channel.send("Sends information about the user's osu! profile.\nUsage:`sbr-osu (username)`")
+                break;
+            case 'osubest': 
+                message.channel.send("Sends the top 5 plays of all time.\nUsage:`sbr-osubest`")
+                break;
+            case 'osubestrs':
+                message.channel.send("Sends the top 10 plays from the past 24h. \nUsage:`sbr-osubestrs`")
                 break;
             case 'osutop':
                 message.channel.send("Sends information about the user's osu! top plays.\nUsage:`sbr-osutop (ID)`")
@@ -168,7 +174,7 @@ module.exports = {
                 message.channel.send("Tests something?\nUsage:`sbr-test`")
                 break;
             case 'testlog':
-                
+                message.channel.send("")
                 break;
             case 'time':
                 message.channel.send("Sends the current time of whatever is hosting the bot.\nUsage:`sbr-time`")
