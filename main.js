@@ -67,6 +67,14 @@ for(const file of commandFiles){
   const currentDate = new Date();
   const currentDateISO = new Date().toISOString();
   const currentDateForSomeApiThing = new Date().toISOString().slice(0,10);
+  const timeStamp = new Date().getTime();
+  const curdateyesterdaytimestamp = timeStamp - 24*60*60*1000;
+  const curdateyesterday = new Date(curdateyesterdaytimestamp).toISOString().slice(0,10);
+  const curdatetmrtimestamp = timeStamp + 24*60*60*1000;
+  const curdatetmr = new Date(curdatetmrtimestamp).toISOString().slice(0,10);
+  const split = new Date().toString().match(/([A-Z]+[\+-][0-9]+.*)/);
+  const curtimezone = split[split.length - 1]
+//  const curtimezone = new Date().getTimezoneOffset();
 
 client.once('ready', () => {
     console.log(`--------------------------------------------------------------------------------------`)
@@ -265,6 +273,10 @@ client.on('messageCreate', message =>{
     case 'osuid':
         client.commands.get('osuid').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
+
+    case 'osubestrs':
+      client.commands.get('osubestrs').execute(message, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone)
+      break;
 
     case 'danser':
         client.commands.get('danser').execute(message, args, currentDate, currentDateISO)
