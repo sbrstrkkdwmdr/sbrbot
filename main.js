@@ -288,6 +288,10 @@ client.on('messageCreate', message =>{
     case 'skin':
         client.commands.get('skin').execute(message, args, currentDate, currentDateISO)
         break;
+
+    case 'tsfm':
+        client.commands.get('tsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
     //HENTAI-----------------------------------------------------------------------------------------
 
 
