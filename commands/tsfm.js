@@ -93,8 +93,8 @@ module.exports = {
                 let nochokeacc1 = Math.abs(nochokeacctop / nochokebottom);
                 let nochokeacc = Math.abs(nochokeacc1 * 100).toFixed(2);
 
-                const API_KEY = osuapikey; // osu! api v1 key
-                const USER = args[0];
+              //  const API_KEY = osuapikey; // osu! api v1 key
+                //const USER = args[0];
                 
                 /*(async () => {
                   
@@ -117,11 +117,11 @@ module.exports = {
                 .setTitle(`${playername}'s highest score on title_unicode [${diffname}]`)
                 .setThumbnail(`https://a.ppy.sh/${playerid}`)
                 .setImage(`${mapbg}`)
-                .setDescription(`Score set on **${maptime}** by **[${playername}](https://osu.ppy.sh/u/${playerid})** \n**[title_unicode [${diffname}]](https://osu.ppy.sh/s/${mapid})** +**${mods}** **${mapstar}**⭐ \n **${(Math.abs((acc) * 100).toFixed(2))}%** | **${grade}** | \n300: **${mapscore300s}** / 100: **${mapscore100s}** / 50: **${mapscore50s}** / X: **${mapscore0s}** \n**${pp}**pp | **${combo}X**`)
+                .setDescription(`Score set on **${maptime}** by **[${playername}](https://osu.ppy.sh/u/${playerid})** \n**[title_unicode [${diffname}]](https://osu.ppy.sh/s/${mapid})** +**${mods}** **${mapstar}**⭐ \n **${(Math.abs((acc) * 100).toFixed(2))}%** | **${grade}** | \n300: **${mapscore300s}** / 100: **${mapscore100s}** / 50: **${mapscore50s}** / X: **${mapscore0s}** \n**${pp}**pp | **${combo}x**`)
                 message.reply({ embeds: [Embed]})
                 //    })
         } catch(error){
-				message.reply("error")
+				message.reply("Error - no data")
 				console.log(error)
 				console.log("")
 			}
