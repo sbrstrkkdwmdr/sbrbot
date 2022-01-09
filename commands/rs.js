@@ -90,6 +90,13 @@ module.exports = {
               //fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
               const pp = new std_ppv2().setPerformance(score);
             
+           /*   try {
+                let testpp = await pp.compute();
+
+            } catch(error){
+                  message.reply("possible pp calculation error (if an embed is sent anyway it's probably fine)")
+                  console.log(error)
+              } */
               let ppw = await pp.compute();
               let ppiffc1 = await pp.compute(rsnochokeacc);
               let ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
@@ -107,14 +114,14 @@ module.exports = {
                 total: 812.3689077733752
               } */
             
-            if(rspp = "null"){
+           // if(rspp = "null"){
             if(!rsmods){
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle("Most recent play for " + rsplayername)
             .setImage(rsmapbg)
             .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-            .setDescription(`Score set on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.pp.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n${ppww}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **Combo:**${rscombo}`);
+            .setDescription(`Score set on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.pp.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n${ppww}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}X**`);
             message.reply({ embeds: [Embed]})}
             if(rsmods){
                 let Embed = new Discord.MessageEmbed()
@@ -122,9 +129,9 @@ module.exports = {
             .setTitle("Most recent play for " + rsplayername)
             .setImage(rsmapbg)
             .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-            .setDescription(`Score set on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.pp.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n300: **${rs300s}** / 100: **${rs100s}** / 50: **${rs50s}** / X: **${rs0s}** \n**${ppww}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | Combo:**${rscombo}**`);
+            .setDescription(`Score set on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.pp.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n300: **${rs300s}** / 100: **${rs100s}** / 50: **${rs50s}** / X: **${rs0s}** \n**${ppww}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}X**`);
             message.reply({ embeds: [Embed]})
-            }}
+            }//}
 /*            if(rspp != "null"){
                 
                 if(!rsmods){
