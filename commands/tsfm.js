@@ -117,7 +117,7 @@ module.exports = {
                 .setTitle(`[${playername}]'s highest score on [${diffname}]`)
                 .setThumbnail(`https://a.ppy.sh/${playerid}`)
                 .setImage(`${mapbg}`)
-                .setDescription(`Score set on **${maptime}** by **[${playername}](https://osu.ppy.sh/u/${playerid})** \n**[${diffname}](https://osu.ppy.sh/s/${mapid})** +**${mods}** **${mapstar}**⭐ \n **${(Math.abs((acc) * 100).toFixed(2))}%** | **${grade}** | \n300: **${mapscore300s}** / 100: **${mapscore100s}** / 50: **${mapscore50s}** / X: **${mapscore0s}** \n**${pp}**pp | **${combo}X**`)
+                .setDescription(`Score set on **${maptime}** by **[${playername}](https://osu.ppy.sh/u/${playerid})** \n**[mapname [${diffname}]](https://osu.ppy.sh/s/${mapid})** +**${mods}** **${mapstar}**⭐ \n **${(Math.abs((acc) * 100).toFixed(2))}%** | **${grade}** | \n300: **${mapscore300s}** / 100: **${mapscore100s}** / 50: **${mapscore50s}** / X: **${mapscore0s}** \n**${pp}**pp | **${combo}X**`)
                 message.reply({ embeds: [Embed]})
                 //    })
         } catch(error){

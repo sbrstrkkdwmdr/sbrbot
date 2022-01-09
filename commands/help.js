@@ -185,6 +185,8 @@ module.exports = {
             case 'token':
                 message.channel.send("Sends the bot token (maybe???).\nUsage:`sbr-token`")
                 break;
+            case 'tsfm':
+                message.channel.send("Sends the top score for a user for a map. \nUsage:`sbr-tsfm 15222484 1186443`\n`sbr-tsfm (playerid) (beatmap id)`")
             case 'unban':
                 message.channel.send("Unbans the mentioned user ID.\nUsage:`sbr-unban (user.id)`")
                 break;
