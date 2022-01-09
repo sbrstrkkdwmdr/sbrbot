@@ -7,7 +7,7 @@ module.exports = {
         if(message.member.permissions.has('ADMINISTRATOR')){
             let pinged = message.mentions.users.first();
             if(!pinged){
-                message.channel.send("")
+                message.channel.send("⠀")
                 console.log(`${currentDateISO} | ${currentDate}`)
                 console.log("command executed - ghostping")
                 let consoleloguserweeee = message.author
