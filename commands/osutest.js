@@ -15,26 +15,26 @@ module.exports = {
         console.log("") 
 
         try{
-            const API_KEY = osuapikey; // osu! api v1 key
-            const USER = args[0];
             
-            (async () => {
-              const response = await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=${USER}&limit=1`);
-              const json = await response.json();
-              const [score] = json;
-            
-              const pp = new std_ppv2().setPerformance(score);
-            
-              let ppw = await pp.compute();
-              message.reply(JSON.stringify(ppw))
-              /* => {
-                aim: 108.36677305976224,
-                speed: 121.39049498160061,
-                fl: 514.2615576494688,
-                acc: 48.88425340242263,
-                total: 812.3689077733752
-              } */
-            })();
+const API_KEY = osuapikey; // osu! api v1 key
+const USER = '1023489';
+
+(async () => {
+  const response = await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=${USER}&limit=1`);
+  const json = await response.json();
+  const [score] = json;
+
+  const pp = new std_ppv2().setPerformance(score);
+
+  console.log(await pp.compute())
+  /* => {
+    aim: 108.36677305976224,
+    speed: 121.39049498160061,
+    fl: 514.2615576494688,
+    acc: 48.88425340242263,
+    total: 812.3689077733752
+  } */
+})();
         } catch(err){
             console.log(err)
         } }
