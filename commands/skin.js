@@ -9,43 +9,43 @@ module.exports = {
         else{        
             switch(skinname){
             case '1':
-                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/image/01custom/a")
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/01custom")
                 break;
 
             case '2':
-                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/image/02custom/a")
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/02custom")
                 break;
 
             case '3':
-                message.reply(("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/image/03x/a"))
+                message.reply(("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/03x"))
                 break;
 
             case '4':
-                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/image/04y/a")
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/04y")
                 break;
 
             case '5':
-                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/image/05z/a")
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/05z")
                 break;
 
             case '6':
-                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/image/06ss0/a")
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/06ss0")
                 break;
             
             case '7':
-                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/image/07ss1/a")
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/07ss1")
                 break;
         
             case '8':
-                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/image/08sbr/a")
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/08sbr")
                 break;
 
             case '9':
-                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/image/09prjct/a")
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/09prjct")
                 break;
             
             case '10':
-                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/image/10ud/a")
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/10ud")
                 break;
 
             case 'b1':
@@ -75,6 +75,36 @@ module.exports = {
             case 'b7':
                 message.reply("https://drive.google.com/file/d/171NdVkA-tmm43n8iqsRJeNQ0QCffj6ab/view")
                 break;
+            
+            case 'c1':
+                message.reply("")
+                break;
+            
+            case 'bluebudgie':
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/sbrstrk-r/bluebudgie")
+                break;
+            case 'soragaton':
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/sbrstrk-r/soragaton")
+                break;
+            case 'bluegamingftw':
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/sbrstrk-r/bluegamingftw")
+                break;
+            case 'byonick':
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/sbrstrk-r/byonick")
+                break;
+            case 'ikugoi':
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/sbrstrk-r/ikugoi")
+                break;
+            case 'oniisanbaka':
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/sbrstrk-r/oniisanbaka")
+                break;
+            case 'duckyboi':
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/sbrstrk-r/duckyboi")
+                break;
+            case 'radiite':
+                message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/sbrstrk-r/radiite")
+                break;
+            
             case 'mix':
                 message.reply("add link when??? add link when???")
                 break;
