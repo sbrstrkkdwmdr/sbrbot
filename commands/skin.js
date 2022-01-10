@@ -106,6 +106,7 @@ module.exports = {
                 break;
             case 'hanoji': 
             message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/sbrstrk-r/hanoji")
+                break;
             case 'mix':
                 message.reply("add link when??? add link when???")
                 break;
