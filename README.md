@@ -5,7 +5,7 @@ just a bot i'm coding. this is the first thing i've coded
 if you want to set this bot up for your own server for whatever reason
 
 download
-make `config.json` and put in this:
+make `config.json` in the root folder and put in this:
 ```json
 {
 	"token": "put-bot-token-here",
@@ -15,8 +15,8 @@ make `config.json` and put in this:
 	"osuauthtoken": "notneeded(yet)",
 	"osuclientid": "w",
 	"osuclientsecret": "osuclientsecret here",
-	"joinrole": "joinrolehere",
-	"guildid": "guildid (for join role command)"
+	"joinrole": "join role id here",
+	"guildid": "guild id (for join role command)"
 
 }
 ```
