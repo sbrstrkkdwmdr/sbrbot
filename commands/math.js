@@ -100,6 +100,17 @@ module.exports = {
                   let problemlcm = findLCM(part1, part2);
                   message.reply(`${problemlcm}`)
                   break;
+            case 'ardt':
+                let ARDT1 = Math.abs(part1 * 2 + 13);
+                let ARDT2 = Math.abs(ARDT1 / 3);
+                    message.reply(`${ARDT2}`)
+                break;
+           /* case 'arht':
+                let arht1 = Math.abs(part1 * 3)
+                let arht2 = Math.abs(arht1 - 13)
+                let arht3 = Math.abs(arht2 / 2)
+                message.reply(`${arht3}`)
+                break;*/
            // case 'add':
              //   break;
             default:
