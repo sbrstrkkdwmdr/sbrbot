@@ -18,7 +18,8 @@ make `config.json` and put in this:
 	"joinrole": "joinrolehere",
 	"guildid": "guildid (for join role command)"
 
-}```
+}
+```
 then run `npm i` in the root folder
 
 # prerequisites
