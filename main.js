@@ -94,7 +94,7 @@ client.on('messageCreate', message =>{
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase(); //idk what this does i forgot
 
-    const botOwners = ['503794887318044675'];
+    const owner = require('./botowners.json');
     const player = new Player(client);
 
     let consoleloguserweeee = message.author
@@ -290,7 +290,7 @@ client.on('messageCreate', message =>{
         client.commands.get('skin').execute(message, args, currentDate, currentDateISO)
         break;
 
-    case 'tsfm':
+    case 'tsfm':case 'c':
         client.commands.get('tsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
     //HENTAI-----------------------------------------------------------------------------------------
