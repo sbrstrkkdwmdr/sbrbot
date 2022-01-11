@@ -122,7 +122,7 @@ client.on('messageCreate', message =>{
         client.commands.get('info').execute(message, args, currentDate, currentDateISO)
         break;
     //UNCATEGORISED -----GENERAL?-------------------------------------------------
-     case 'avatar':
+     case 'avatar':case 'av':case 'pfp':
          client.commands.get('avatar').execute(message, args, Discord, currentDate, currentDateISO)
          break;
     case 'giveadmin':
@@ -131,7 +131,7 @@ client.on('messageCreate', message =>{
     case 'token':
         client.commands.get('token').execute(message, args, currentDate, currentDateISO)
         break;
-    case 'roll':
+    case 'roll':case 'numgen':
         client.commands.get('roll').execute(message, args, currentDate, currentDateISO)
         break; 
 
@@ -195,7 +195,7 @@ client.on('messageCreate', message =>{
         client.commands.get('emojify').execute(message, args, currentDate, currentDateISO)
         break;
 
-    case 'dadjoke':
+    case 'dadjoke':case 'pun':
         client.commands.get('dadjoke').execute(message, args, currentDate, currentDateISO)
         break;
 
@@ -207,7 +207,7 @@ client.on('messageCreate', message =>{
         client.commands.get('amoggers').execute(message, args, Discord, currentDate, currentDateISO)
         break;
 
-    case '1100':
+    case '1100':case 'count100':
       client.commands.get('1100').execute(message, args, currentDate, currentDateISO)
       break;
     
@@ -247,7 +247,7 @@ client.on('messageCreate', message =>{
         client.commands.get('osuhow').execute(message, args, currentDate, currentDateISO)
         break;*/
 
-    case 'rs':
+    case 'rs':case 'recent':
         client.commands.get('rs').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
        // client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
@@ -296,7 +296,7 @@ client.on('messageCreate', message =>{
     //HENTAI-----------------------------------------------------------------------------------------
 
 
-    case 'hentai':
+    case 'hentai':case 'nhentai':
         client.commands.get('hentai').execute(message, args, currentDate, currentDateISO)
         break;
 
@@ -343,6 +343,7 @@ client.on('messageCreate', message =>{
     case 'crash':
         client.commands.get('crash').execute(message, args, currentDate, currentDateISO)
         break;
+    
     case 'ban':
         client.commands.get('ban').execute(message, args, client, Discord, currentDate, currentDateISO)
         break; 
@@ -351,7 +352,7 @@ client.on('messageCreate', message =>{
         client.commands.get('kick').execute(message, args, client, Discord, currentDate, currentDateISO)
         break;   
 
-    case 'serverlist':
+    case 'serverlist':case 'servers':
         client.commands.get('serverlist').execute(message, args, Discord, client, currentDate, currentDateISO)
         break;
 
@@ -359,7 +360,7 @@ client.on('messageCreate', message =>{
         client.commands.get('guildid').execute(message, args, currentDate, currentDateISO)
         break;
 
-    case 'gleave':
+    case 'gleave':case 'guildleave':
         client.commands.get('gleave').execute(message, args, client, currentDate, currentDateISO)
         break;
     
