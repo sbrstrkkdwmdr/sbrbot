@@ -170,6 +170,7 @@ module.exports = {
                 break;
             case 'skin':
                 message.channel.send("Sends the link to all skins or a specific skin. \nUsage: `sbr-skin`\nUsage 2:`sbr-skin 10`")
+                break;
             case 'template':
                 message.channel.send("a.\nUsage:``")
                 break;
@@ -187,6 +188,7 @@ module.exports = {
                 break;
             case 'tsfm':
                 message.channel.send("Sends the top score for a user for a map. \nUsage:`sbr-tsfm 15222484 1186443`\n`sbr-tsfm (playerid) (beatmap id)`")
+                break;
             case 'unban':
                 message.channel.send("Unbans the mentioned user ID.\nUsage:`sbr-unban (user.id)`")
                 break;

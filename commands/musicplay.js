@@ -34,6 +34,7 @@ module.exports = {
       message.reply("Added " + track + " to the queue | url: " + track.url)
       message.channel.send("current queue: " + queue)
       queue.play();
+      queue
 
   console.log(`${currentDateISO} | ${currentDate}`)
   console.log("command executed - musicplay")

@@ -2,7 +2,11 @@ module.exports = {
     name: 'musicqueue',
     description: '',
     async execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO) {
-      
+        const queue = player.createQueue(message.guild, {
+            metadata: {
+                channel: message.channel
+            }
+        });
     message.reply(queue)
 console.log(`${currentDateISO} | ${currentDate}`)
 console.log("executed command - musicstop")
