@@ -25,6 +25,8 @@ then run `npm i` in the root folder
 
 # prerequisites
 [nodejs v16](https://nodejs.org/en/download/)
+an osu! client (go to your account and maked a new OAuth application)
+[google images programmable search](https://cse.google.com/cse/all) > [follow this tutorial](https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4)
 
 # running the bot
 open a terminal window in the root folder, type `node .` and press enter then it should run
