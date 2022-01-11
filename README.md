@@ -33,3 +33,4 @@ open a terminal window in the root folder, type `node .` and press enter then it
 osutrack API - https://github.com/Ameobea/osutrack-api
 osu! API https://osu.ppy.sh/docs/
 </pre>
+ 
