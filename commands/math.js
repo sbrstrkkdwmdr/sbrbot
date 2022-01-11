@@ -16,27 +16,27 @@ module.exports = {
       //  if(isNaN(part2)) return message.reply("Second number not found");
         let mathtype = args[0];
         switch(mathtype){
-            case 'add':
+            case 'add':case '+':case 'addition':case 'sum':
                 if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
                 let problemadd = Math.abs(part1 + part2);
                 message.reply(`${problemadd}`)
                 break;
-            case 'subtract':
+            case 'subtract':case '-':case 'minus':case 'subtraction':case 'difference':
                 if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
                 let problemsubtract = Math.abs(part1 - part2);
                 message.reply(`${problemsubtract}`)
                 break;
-            case 'multiply':
+            case 'multiply':case '*':case 'multiplication':
                 if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
                 let problemmultiply = Math.abs(part1 * part2);
                 message.reply(`${problemmultiply}`)
                 break;
-            case 'divide':
+            case 'divide':case '/':case 'division':
                 if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
                 let problemdivide = Math.abs(part1 / part2);
                 message.reply(`${problemdivide}`)
                 break;
-            case 'squareroot':
+            case 'squareroot':case 'sqrt':
                 if(isNaN(part1)) return message.reply("Error - NaN");
                 let problemsqrt = Math.sqrt(part1)
                 message.reply(`${problemsqrt}`)
@@ -47,7 +47,7 @@ module.exports = {
                 let problemsquare = Math.abs(part1 * part1)
                 message.reply(`${problemsquare}`)
                 break;
-            case 'factorial':
+            case 'factorial':case '!':
                 if(isNaN(part1)) return message.reply("Error - NaN");
                 function factorial(part1){
                     if(part1 == 0 || part1 == 1){
@@ -59,7 +59,7 @@ module.exports = {
                 problemfactorial = factorial(part1)
                 message.reply(`${problemfactorial}`)
                 break;
-            case 'hcf':
+            case 'hcf':case 'highestcommonfactor':
                 if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
                 if(part1 != Math.round(part1) || part2 != Math.round(part2)) return message.reply("Error - numbers must be integers");
                 if (part1 < 1 || part2 < 1) return message.reply("Error - values are too low");
@@ -78,7 +78,7 @@ module.exports = {
                 let problemhcf = findHCF(part1, part2);
                 message.reply(`${problemhcf}`)
                 break;
-            case 'lcm':
+            case 'lcm':case 'lowestcommonmultiple':
                 if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
                 if(part1 != Math.round(part1) || part2 != Math.round(part2)) return message.reply("Error - numbers must be integers");
                 if (part1 < 1 || part2 < 1) return message.reply("Error - values are too low");
@@ -100,7 +100,7 @@ module.exports = {
                   let problemlcm = findLCM(part1, part2);
                   message.reply(`${problemlcm}`)
                   break;
-            case 'ardt':
+            case 'ardt':case 'approachratedoubletime':case 'arifdt':
                 let ARDT1 = Math.abs(part1 * 2 + 13);
                 let ARDT2 = Math.abs(ARDT1 / 3);
                     message.reply(`${ARDT2}`)
