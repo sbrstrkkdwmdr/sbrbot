@@ -25,7 +25,8 @@ const client = new Client({ intents: [
     Intents.FLAGS.GUILD_VOICE_STATES,
     ] });
 
-const prefix = 'sbr-'; //prefix
+const { prefix } = require('./config.json')
+//const prefix = insertvaluehere; //prefix
 
 const fs = require('fs');
 const { monitorEventLoopDelay } = require('perf_hooks');
@@ -269,7 +270,7 @@ client.on('messageCreate', message =>{
         client.commands.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
         break;
 
-    case 'map':
+    case 'map':case 'mapget':
         client.commands.get('map').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
 

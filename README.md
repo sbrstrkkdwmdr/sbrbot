@@ -8,7 +8,8 @@ download
 make `config.json` in the root folder and put in this:
 ```json
 {
-	"token": "put-bot-token-here",
+	"prefix": "put prefix here",
+	"token": "put bot token here",
 	"cx": "https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4",
 	"key": "https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4",
 	"osuapikey": "osuapikeyhere", 
