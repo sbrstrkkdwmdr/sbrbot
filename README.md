@@ -32,8 +32,8 @@ an osu! client (go to your account and maked a new OAuth application)
 open a terminal window in the root folder, type `node .` and press enter then it should run
 
 # credits
-<pre>
-osutrack API - https://github.com/Ameobea/osutrack-api
-osu! API https://osu.ppy.sh/docs/
-</pre>
+
+[osutrack API](https://github.com/Ameobea/osutrack-api)
+[osu! API](https://osu.ppy.sh/docs/)
+
  
