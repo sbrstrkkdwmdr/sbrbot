@@ -1,7 +1,9 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'kick',
     description: '',
-    execute(message, args, client, Discord, currentDate, currentDateISO) {
+    execute(message, args, client, Discord) {
         if(message.member.permissions.has('ADMINISTRATOR')){
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - kick")

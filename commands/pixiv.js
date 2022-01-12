@@ -1,6 +1,8 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'pixiv',
-    execute(message, args, currentDate, currentDateISO) {
+    execute(message, args) {
         if(message.channel.nsfw) {
         let pp = Math.floor(Math.random () * 100000000 + 1) //90,000,000
         message.channel.send(`https://www.pixiv.net/en/artworks/${pp}`)

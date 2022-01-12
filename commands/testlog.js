@@ -1,7 +1,9 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'testlog',
     description: '',
-    execute(message, args, currentDate, currentDateISO) {
+    execute(message, args) {
         let we = message.guild.id
         if(we != 652388389529714709){
   } else {

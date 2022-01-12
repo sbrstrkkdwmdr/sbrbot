@@ -1,7 +1,9 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'danser',
     description: '',
-    execute(message, args, currentDate, currentDateISO) {
+    execute(message, args) {
         let variablenamelol = args[0]
         if(!variablenamelol){
         message.channel.send("https://discord.gg/UTPvbe8")

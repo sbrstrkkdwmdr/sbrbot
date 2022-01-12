@@ -1,7 +1,9 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'ban',
     description: '',
-    async execute(message, args, client, Discord, currentDate, currentDateISO) {
+    async execute(message, args, client, Discord) {
        
         if(message.member.permissions.has('ADMINISTRATOR')){
             console.log(`${currentDateISO} | ${currentDate}`)

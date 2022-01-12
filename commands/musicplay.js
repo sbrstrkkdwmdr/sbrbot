@@ -1,9 +1,10 @@
 const { Track } = require("discord-player");
-
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'musicplay',
     description: '',
-    async execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO) {
+    async execute(message, args, client, Player, player, Discord, ytdl) {
 
 
       if (!message.member.voice.channelId) return await message.reply({ content: "You aren't in vc smh my head", ephemeral: true });

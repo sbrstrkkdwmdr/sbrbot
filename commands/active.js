@@ -1,9 +1,11 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 const { DiscordAPIError } = require("discord.js");
 
 module.exports = {
     name: 'active',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO) {
+    execute(message, args, Discord, ) {
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - active")
         let consoleloguserweeee = message.author

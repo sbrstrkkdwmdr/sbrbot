@@ -1,7 +1,9 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'pingperson',
     description: '',
-    execute(message, args, currentDate, currentDateISO) {
+    execute(message, args) {
         if(message.member.permissions.has('ADMINISTRATOR')){ //they need admin
             let user = message.mentions.users.first(); //gets the pinged user's ID
             message.channel.send(`${user} `); //user.username is the pinged user

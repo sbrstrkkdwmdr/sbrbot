@@ -1,7 +1,9 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'unchi',
     description: '',
-    execute(message, args, currentDate, currentDateISO) {
+    execute(message, args) {
         message.channel.send("ウンチ美味しい")   
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - unchi")

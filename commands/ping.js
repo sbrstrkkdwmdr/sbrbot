@@ -1,7 +1,9 @@
 module.exports = {
     name: 'ping',
     description: 'ping',
-    execute(message, args, client, Discord, currentDate, currentDateISO) {
+    execute(message, args, client, Discord) {
+      let currentDate = new Date();
+      let currentDateISO = new Date().toISOString();
       message.channel.send('pong!');   
       message.channel.send(`Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
       console.log(`${currentDateISO} | ${currentDate}`)

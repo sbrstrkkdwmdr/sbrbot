@@ -4,10 +4,12 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../osuauth.json');
 const { Player } = require('discord-player');
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'tsfm',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+    execute(message, args, Discord, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         const pickeduserX = args[0];
         const pickedmap = args[1];
         console.log(`${currentDateISO} | ${currentDate}`)

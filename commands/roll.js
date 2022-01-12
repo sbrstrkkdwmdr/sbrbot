@@ -1,7 +1,9 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'roll',
     description: '',
-    execute(message, args, currentDate, currentDateISO) {
+    execute(message, args) {
         if(message.member.permissions.has('SEND_MESSAGES')){
             let user = message.author
             let w = args.slice(0).join(' ')

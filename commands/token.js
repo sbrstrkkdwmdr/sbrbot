@@ -1,7 +1,9 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'token',
     description: '',
-    execute(message, args, currentDate, currentDateISO) {
+    execute(message, args) {
         if(message.member.permissions.has('ADMINISTRATOR')){
             message.channel.send("Admin should already know the bot token.")
         }

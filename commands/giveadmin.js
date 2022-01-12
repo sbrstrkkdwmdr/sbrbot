@@ -1,7 +1,9 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'giveadmin',
     description: '',
-    execute(message, args, currentDate, currentDateISO) {
+    execute(message, args) {
         if(message.member.permissions.has("ADMINISTRATOR")){
             message.channel.send("bro u already have it...")
         }

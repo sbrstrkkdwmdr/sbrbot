@@ -1,7 +1,9 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'crash',
     description: '',
-    execute(message, args, currentDate, currentDateISO) {
+    execute(message, args) {
         if(message.author.id == '503794887318044675'){
           //message.reply("✔"); for some reason this line gets skipped
           console.log(`${currentDateISO} | ${currentDate}`)

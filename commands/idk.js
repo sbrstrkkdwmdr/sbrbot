@@ -1,7 +1,9 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'idk',
     description: '',
-    execute(message, args, currentDate, currentDateISO) {
+    execute(message, args) {
         if(message.member.permissions.has('SEND_MESSAGES')){
             message.channel.send("well I don't know either.")
             console.log(`${currentDateISO} | ${currentDate}`)

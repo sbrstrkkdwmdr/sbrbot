@@ -1,7 +1,9 @@
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: '1100',
     description: '',
-    execute(message, args, currentDate, currentDateISO) {
+    execute(message, args, ) {
         if(message.author.id == '503794887318044675'){
           message.delete();
           message.channel.send("1\n2\n3\n4\n5\n6\n8\n9\n10")

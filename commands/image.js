@@ -1,8 +1,10 @@
 const { cx, key } = require('../config.json'); 
+let currentDate = new Date();
+let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'image',
     description: 'Search images through google images',
-    async execute(message, args, Discord, get, client, currentDate, currentDateISO) {
+    async execute(message, args, Discord, get, client) {
         //message.channel.send("WIP")
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - image")
