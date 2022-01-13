@@ -79,6 +79,15 @@ module.exports = {
             let rsnochokeacctop = Math.floor(rsnochokeacc300 + rsnochokeacc100 + rsnochokeacc50)
             let rsnochokeacc1 = Math.abs(rsnochokeacctop / rsnochokebottom);
             let rsnochokeacc = Math.abs(rsnochokeacc1 * 100).toFixed(2);
+            
+            const fileName = 'storedmap.json';
+            const file = require('../storedmap.json');  
+            file.prevmap = rsmapid;
+            fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
+                if (err) return console.log(err);
+                console.log(JSON.stringify(file));
+                console.log('writing to ' + fileName);
+            });
 
             const API_KEY = osuapikey; // osu! api v1 key
             const USER = args[0];

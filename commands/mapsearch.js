@@ -3,17 +3,17 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../osuauth.json');
 module.exports = {
-    name: 'map',
+    name: 'mapsearch',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        const pickeduserX = args[0];
+        const pickeduserX = args.splice(0, 100).join(' ');
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - map get")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
         if(!pickeduserX) return message.reply("beatmap ID required");
-        if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 3305367 instead of Weekend Whip")
+     //   if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 3305367 instead of Weekend Whip")
       
         try{
             let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
@@ -31,7 +31,7 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
             ;
-            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickeduserX}`;
+            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/lookup?filename=${pickeduserX}`;
             
             let headers = {
                 "Content-Type": "application/json",
@@ -50,8 +50,8 @@ module.exports = {
 					const mapdata = output2;
 					//let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
 					//const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
-                fs.writeFileSync("map.json", JSON.stringify(mapdata, null, 2))
-            try{let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
+                fs.writeFileSync("searchmap.json", JSON.stringify(mapdata, null, 2))
+            /*try{let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
             let maplink = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
             let mapsetlink = JSON.stringify(mapdata, ['beatmapset_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmapset_id', '');
             let mapcs = JSON.stringify(mapdata, ['cs']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('cs', '');
@@ -67,15 +67,7 @@ module.exports = {
             let maptitle = JSON.stringify(mapdata['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title_unicode', '');
             let mapdiff = JSON.stringify(mapdata, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
             let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '')
-            
-            const fileName = 'storedmap.json';
-            const file = require('../storedmap.json');  
-            file.prevmap = maplink;
-            fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-                if (err) return console.log(err);
-                console.log(JSON.stringify(file));
-                console.log('writing to ' + fileName);
-              });//all this stuff is to write it to a temporary save file
+			
 //            const API_KEY = osuapikey; // osu! api v1 key
   //          const USER = args[0];
             
@@ -90,7 +82,7 @@ module.exports = {
               //let pp95 = await pp.compute("95.00");
             */
 
-            let Embed = new Discord.MessageEmbed()
+           /* let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle("Information for " + maptitle)
             .setImage(mapbg)
@@ -102,7 +94,7 @@ module.exports = {
 				message.reply("error")
 				console.log(error)
 				console.log("")
-			}
+			}*/
 			
 			
 		/*	let { version } = require('../map.json');

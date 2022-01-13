@@ -4,12 +4,14 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../osuauth.json');
 const { Player } = require('discord-player');
+let { prevmap } = require('../storedmap.json');
 module.exports = {
     name: 'tsfm',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         const pickeduserX = args[0];
-        const pickedmap = args[1];
+        let pickedmap = JSON.stringify(prevmap).replaceAll('id', '').replaceAll('"', '');//args[1];
+        message.reply(pickedmap)
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - map get")
         let consoleloguserweeee = message.author
