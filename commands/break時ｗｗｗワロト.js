@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'break時ｗｗｗワロト',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         if(message.member.permissions.has('ADMINISTRATOR')){
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - break")

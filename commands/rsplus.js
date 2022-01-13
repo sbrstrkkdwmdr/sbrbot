@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'rsplus',
     description: '',
-    execute(message, args, Discord) {
+    execute(message, args, Discord, currentDate, currentDateISO) {
         let pickeduser = args[0]
         const url = new URL(
             `https://osu.ppy.sh/api/v2/users/${pickeduser}/recent_activity`

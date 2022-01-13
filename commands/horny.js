@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'horny',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         message.delete();
         message.channel.send("go to horny jail")
         message.channel.send("https://cdn.discordapp.com/attachments/544104638904008704/761896640956203018/Screen_Shot_2020-04-28_at_12.png") 

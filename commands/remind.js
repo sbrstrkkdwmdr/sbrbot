@@ -1,6 +1,5 @@
-const ms = require('ms');
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
+const ms = require('ms')
+
 module.exports = {
     name: "remind",
     category: "utility",
@@ -8,7 +7,7 @@ module.exports = {
         usage: "remind <time> <reminder>",
         content:  "Helps remind you something",
     },
-    async execute(message, args, client, Discord) {
+    async execute(message, args, client, Discord, currentDate, currentDateISO) {
         let time = args[0];
         let user = message.author
         let reminder = args.splice(1).join(' ')

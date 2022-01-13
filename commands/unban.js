@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'unban',
     description: 'unban',
-    async execute(message, args) {
+    async execute(message, args, currentDate, currentDateISO) {
        if(message.member.permissions.has('ADMINISTRATOR')){
             console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - unban")

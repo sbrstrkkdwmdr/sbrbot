@@ -1,10 +1,9 @@
 const { User } = require("discord.js")
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
+
 module.exports = {
     name: 'ghostping',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         if(message.member.permissions.has('ADMINISTRATOR')){
             let pinged = message.mentions.users.first();
             if(!pinged){

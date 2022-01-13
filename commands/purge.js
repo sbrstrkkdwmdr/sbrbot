@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'purge',
     description: 'ERADICATE',
-    async execute(message, args, client, Discord) {
+    async execute(message, args, client, Discord, currentDate, currentDateISO) {
         console.log(`${currentDateISO} | ${currentDate}`)
         if(message.member.permissions.has('ADMINISTRATOR')){
                 try {

@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
-module.exports = {
+    module.exports = {
         name: 'hornyjail',
         description: '',
-        execute(message, args) {
+        execute(message, args, currentDate, currentDateISO) {
             if(message.member.permissions.has("ADMINISTRATOR")){ //need admin
                 let user = message.mentions.users.first(); //gets the pinged user's ID
                 message.channel.send(`go to horny jail ${user}`); //user.username is the pinged user

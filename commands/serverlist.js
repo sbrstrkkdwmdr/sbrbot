@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'serverlist',
     description: '',
-    execute(message, args, Discord, client) {
+    execute(message, args, Discord, client, currentDate, currentDateISO) {
         client.guilds.cache.forEach(guild => {
             message.channel.send(`${guild.name} | ${guild.id}`);
           })

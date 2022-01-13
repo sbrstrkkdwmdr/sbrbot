@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'WIP',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         message.channel.send("the current command is unavailable")
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - WIP")

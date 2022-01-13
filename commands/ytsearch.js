@@ -1,10 +1,9 @@
 const yts = require('yt-search');
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
+
 module.exports = {
     name: 'ytsearch',
     description: "Search on YouTube",
-    async execute(message, args, client, Discord) {
+    async execute(message, args, client, Discord, currentDate, currentDateISO) {
         try{if(!args.length){message.reply('No search query given') //Checks if the user gave any search queries
     } else{
         const searched = await yts.search(args.splice(0,100).join(" ")); //Searches for videos

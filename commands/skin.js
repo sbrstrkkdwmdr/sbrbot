@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'skin',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         let skinname = args[0];
         if(!skinname){
             message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skins")

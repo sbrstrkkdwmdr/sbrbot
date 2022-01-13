@@ -3,12 +3,10 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../osuauth.json');
 const { std_ppv2 } = require('booba');
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'rs',
     description: '',
-    execute(message, args, Discord, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         const pickeduserX = args[0];
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - rs")

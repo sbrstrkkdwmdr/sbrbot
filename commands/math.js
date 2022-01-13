@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'math',
     description: '',
-    execute(message, args, Discord) {
+    execute(message, args, Discord, currentDate, currentDateISO, ) {
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - math")
         let consoleloguserweeee = message.author

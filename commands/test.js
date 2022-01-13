@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'test',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         message.channel.send("there's a test?")
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - test")

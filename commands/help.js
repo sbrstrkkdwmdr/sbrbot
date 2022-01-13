@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'help',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
 
         let helper = args[0]
         if(!helper){

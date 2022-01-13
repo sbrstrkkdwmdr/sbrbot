@@ -1,8 +1,6 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'yanderegen',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         if(message.channel.nsfw) {
         let pp = Math.floor(Math.random () * 100000000 + 1)
         message.channel.send(`https://yande.re/post/show/${pp}`)

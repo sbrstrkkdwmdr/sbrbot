@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'links',
     description: 'links',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         message.channel.send('here you go! https://sbrstrkkdwmdr.github.io/sbr-web/');  
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - links")

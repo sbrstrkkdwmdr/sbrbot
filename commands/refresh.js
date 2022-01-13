@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'refresh',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         if(message.author.id == '503794887318044675'){
           message.delete();
           console.log(`${currentDateISO} | ${currentDate}`)

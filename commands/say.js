@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'say',
     description: "say",
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         const saythis = args.splice(0,1000).join(" ");
         message.delete();
         message.channel.send(saythis)

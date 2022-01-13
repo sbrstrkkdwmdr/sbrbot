@@ -5,12 +5,10 @@ const GET = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { exec } = require("child_process");
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'osubest',
     description: '',
-    execute(message, args, Discord) {
+    execute(message, args, Discord, currentDate, currentDateISO) {
 //        `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`
         let url = `https://osutrack-api.ameo.dev/bestplays?mode=0`;
        /* const hiscores = [

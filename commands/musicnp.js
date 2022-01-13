@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'musicnp',
     description: '',
-    async execute(message, args, client, Player, player, Discord, ytdl) {
+    async execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO) {
         message.reply("scroll up")
 
   console.log(`${currentDateISO} | ${currentDate}`)

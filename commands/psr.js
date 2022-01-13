@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'psr',
     description: '',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         let playerguess = args[0]
         let botguesses = ["Paper", "Scissors", "Rock"];
         let botguess = botguesses[Math.floor(Math.random() * botguesses.length)];

@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'insult',
     description: 'insult',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         if(message.member.permissions.has('SEND_MESSAGES')){
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - insult")

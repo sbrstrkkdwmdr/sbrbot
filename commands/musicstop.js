@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'musicstop',
     description: '',
-    execute(message, args, client, Player, player, Discord, ytdl) {
+    execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO) {
   
 console.log(`${currentDateISO} | ${currentDate}`)
 console.log("executed command - musicstop")

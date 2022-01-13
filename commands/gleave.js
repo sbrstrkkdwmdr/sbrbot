@@ -1,9 +1,7 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'gleave',
     description: '',
-    execute(message, args, client) {
+    execute(message, args, client, currentDate, currentDateISO) {
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - guild leave")
         let consoleloguserweeee = message.author

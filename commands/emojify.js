@@ -1,11 +1,9 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name : 'emojify',
     description : 'Make any sentence out of emoji\'s',
 
-    execute : async(message, args) => {
-try{if(message.author.id == '503794887318044675'){        let sentence = '';
+    execute : async(message, args, currentDate, currentDateISO) => {
+if(message.author.id == '503794887318044675'){        let sentence = '';
 
         let chars = {
             char1: ':one:',
@@ -32,10 +30,7 @@ try{if(message.author.id == '503794887318044675'){        let sentence = '';
             else sentence += e
         }
         message.delete();
-        message.channel.send(`${sentence}`)}}catch(error){
-            message.reply("error")
-            console.log(error)
-        }
+        message.channel.send(`${sentence}`)}
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - emojify")
         let consoleloguserweeee = message.author

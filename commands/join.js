@@ -1,11 +1,9 @@
 const { joinrole } = require('../config.json');
 const { guildid } = require('../config.json');
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'join',
     description: '',
-    execute(message, args, user) {
+    execute(message, args, user, currentDate, currentDateISO) {
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - join")
         let consoleloguserweeee = message.author

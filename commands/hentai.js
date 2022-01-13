@@ -1,9 +1,7 @@
 const { API, } = require('nhentai-api');
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'hentai',
-    execute(message, args) {
+    execute(message, args, currentDate, currentDateISO) {
         if(message.channel.nsfw) {
             let searchingfor = args[0];
             if(!searchingfor){

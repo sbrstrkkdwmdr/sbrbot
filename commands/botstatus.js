@@ -1,11 +1,9 @@
-let currentDate = new Date();
-let currentDateISO = new Date().toISOString();
 module.exports = {
     name: 'botstatus',
     description: 'sets the bots status',
     ownerOnly: true,
 
-    execute(message, args, client, Discord) {
+    execute(message, args, client, Discord, currentDate, currentDateISO) {
         if(message.author.id == '503794887318044675')
 {        let w = args.splice(1,100).join(" ");
         const a = ["WATCHING", "PLAYING", "STREAMING", "LISTENING"];
