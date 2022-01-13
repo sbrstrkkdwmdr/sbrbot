@@ -1,7 +1,9 @@
+const {Player} = require('discord-player');
+const player = new Player(client);
 module.exports = {
     name: 'musicskip',
     description: '',
-    execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO) {
+    execute(message, args, client, Discord, ytdl, currentDate, currentDateISO) {
 
 console.log(`${currentDateISO} | ${currentDate}`)
 console.log("command executed - musicskip")

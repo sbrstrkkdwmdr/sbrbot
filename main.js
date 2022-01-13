@@ -4,7 +4,6 @@ const { create } = require('domain');
 const fetch = require('node-fetch');
 const get = require('node-fetch2');
 const wait = require('util').promisify(setTimeout);
-const {Player} = require('discord-player');
 //added in discordjs 13
 const { Client, Intents } = require('discord.js');
 const { token } = require('./config.json');
@@ -96,7 +95,6 @@ client.on('messageCreate', message =>{
     const command = args.shift().toLowerCase(); //grabs command
 
     const owner = require('./botowners.json');
-    const player = new Player(client);
 
     let consoleloguserweeee = message.author
     let currentDate = new Date();
@@ -414,8 +412,7 @@ client.on('messageCreate', message =>{
         break;
     //MUSIC --------------------
     case 'play':
-        client.commands.get('musicplay').execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO)
-        
+        client.commands.get('musicplay').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
         //execute(message, serverQueue);
         /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music play")
@@ -424,7 +421,7 @@ client.on('messageCreate', message =>{
         client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)*/
         break; 
     case 'skip':
-        client.commands.get('musicskip').execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO)
+        client.commands.get('musicskip').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
         //skip(message, serverQueue);
         /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music skip")
@@ -434,7 +431,7 @@ client.on('messageCreate', message =>{
         break;
         
     case 'stop':
-        client.commands.get('musicstop').execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO)
+        client.commands.get('musicstop').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
         //stop(message, serverQueue);
         /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music stop")
@@ -444,7 +441,7 @@ client.on('messageCreate', message =>{
         break;
 
     case `disconnect`:
-        client.commands.get('musicstop').execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO)
+        client.commands.get('musicstop').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
         //stop(message, serverQueue);
         /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music disconnect")
@@ -454,7 +451,7 @@ client.on('messageCreate', message =>{
         break;
 
     case 'queue':
-        client.commands.get('musicqueue').execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO)
+        client.commands.get('musicqueue').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
 /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music queue")
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
@@ -463,7 +460,7 @@ client.on('messageCreate', message =>{
         break;
 
     case 'np':
-        client.commands.get('musicnp').execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO)
+        client.commands.get('musicnp').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
         break;
 
     default:

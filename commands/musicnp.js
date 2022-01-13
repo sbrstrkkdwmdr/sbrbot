@@ -1,7 +1,9 @@
+const {Player} = require('discord-player');
+const player = new Player(client);
 module.exports = {
     name: 'musicnp',
     description: '',
-    async execute(message, args, client, Player, player, Discord, ytdl, currentDate, currentDateISO) {
+    async execute(message, args, client, Discord, ytdl, currentDate, currentDateISO) {
         message.reply("scroll up")
 
   console.log(`${currentDateISO} | ${currentDate}`)
