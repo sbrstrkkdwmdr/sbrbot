@@ -68,6 +68,8 @@ for(const file of commandFiles){
 //  const curtimezone = new Date().getTimezoneOffset();
 
 client.once('ready', () => {
+  let currentDate = new Date();
+  let currentDateISO = new Date().toISOString();
     console.log(`--------------------------------------------------------------------------------------`)
     console.log(`${currentDateISO} | ${currentDate}`)
     console.log('kwsmrksnsm is online!'); //message shown when bot turns on
