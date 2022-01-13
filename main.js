@@ -40,36 +40,36 @@ for(const file of commandFiles){
 
     client.commands.set(command.name, command);
 }
-//const modLogs = require('./modlogs/')
-/*if (!Date.prototype.toISOString) {
+    //const modLogs = require('./modlogs/')
+    /*if (!Date.prototype.toISOString) {
     (function() {
   
-      function pad(number) {
+    function pad(number) {
         var r = String(number);
-        if (r.length === 1) {
-          r = '0' + r;
+            if (r.length === 1) {
+            r = '0' + r;
         }
         return r;
-      }
+        }
   
-      Date.prototype.toISOString = function() {
+    Date.prototype.toISOString = function() {
         return this.getUTCFullYear() +
-          '-' + pad(this.getUTCMonth() + 1) +
-          '-' + pad(this.getUTCDate()) +
-          'T' + pad(this.getUTCHours()) +
-          'h' + pad(this.getUTCMinutes()) +
-          'm' + pad(this.getUTCSeconds()) +
-          's' + String((this.getUTCMilliseconds() / 1000).toFixed(3)).slice(2, 5) +
-          'ms';
-      };
-  
+        '-' + pad(this.getUTCMonth() + 1) +
+        '-' + pad(this.getUTCDate()) +
+        'T' + pad(this.getUTCHours()) +
+        'h' + pad(this.getUTCMinutes()) +
+        'm' + pad(this.getUTCSeconds()) +
+        's' + String((this.getUTCMilliseconds() / 1000).toFixed(3)).slice(2, 5) +
+        'ms';
+    };
+
     }());
-  }*/
-//  const curtimezone = new Date().getTimezoneOffset();
+    }*/
+    //const curtimezone = new Date().getTimezoneOffset();
 
 client.once('ready', () => {
-  let currentDate = new Date();
-  let currentDateISO = new Date().toISOString();
+    let currentDate = new Date();
+    let currentDateISO = new Date().toISOString();
     console.log(`--------------------------------------------------------------------------------------`)
     console.log(`${currentDateISO} | ${currentDate}`)
     console.log('kwsmrksnsm is online!'); //message shown when bot turns on
@@ -164,8 +164,8 @@ client.on('messageCreate', message =>{
         break;
 
     /*case 'ytsearch5':
-      client.commands.get('ytsearch5').execute(message, args, Discord, client, currentDate, currentDateISO)
-      break;*/
+    client.commands.get('ytsearch5').execute(message, args, Discord, client, currentDate, currentDateISO)
+    break;*/
     
     case 'active':
         client.commands.get('active').execute(message, args, Discord, currentDate, currentDateISO)
@@ -214,8 +214,8 @@ client.on('messageCreate', message =>{
       break;
     
     case 'say':
-    client.commands.get('say').execute(message, args, currentDate, currentDateISO)
-    break;
+        client.commands.get('say').execute(message, args, currentDate, currentDateISO)
+        break;
     
     case 'paperscissorsrock':case 'rockpaperscissors': case 'psr':case 'scissorsrockpaper':
         client.commands.get('psr').execute(message, args, currentDate, currentDateISO)
@@ -229,7 +229,7 @@ client.on('messageCreate', message =>{
         break;
 
     //OSU -----------------------------------------------------------
-   /* case '1-2':
+    /*case '1-2':
         client.commands.get('1-2').execute(message, args, currentDate, currentDateISO)
         break;
 
@@ -254,22 +254,22 @@ client.on('messageCreate', message =>{
 
     case 'rs':case 'recent':
         client.commands.get('rs').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-       // client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'osu':
         client.commands.get('osu').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
-     //   client.commands.get('WIP').execute(message, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
+        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
         break;
 
     case 'osutop':
         client.commands.get('osutop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-  //      client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'osutest':
         client.commands.get('osutest').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-  //    client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
     case 'osubest':
         client.commands.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
@@ -298,6 +298,10 @@ client.on('messageCreate', message =>{
     case 'tsfm':case 'c':
         client.commands.get('tsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
+    
+    case 'mapsearch':
+      client.commands.get('mapsearch').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+      break;
     //HENTAI-----------------------------------------------------------------------------------------
 
 
@@ -448,148 +452,12 @@ client.on('messageCreate', message =>{
     }
     //NON COMMAND STUFF--------------------------
 
-//    client.get("")
-
-    //insert loop
-   
-   //MUSIC BOT ASYNC FUNCTION
- /*  async function execute(message, serverQueue) {
-    
-    const str = message.content.slice(prefix.length).split(" ");
-
-    let user = await message.member.fetch();
-        const voiceChannel = await user.voice.channel;;
-        if (!voiceChannel)
-          return message.send(
-            "ur not in vc smh my head"
-          );
-        
-        if (!message.member.permissions.has("CONNECT") || !message.member.permissions.has("SPEAK")) {
-          return message.channel.send(
-            "no perms xd"
-          );
-        }
-      
-        const songInfo = await ytdl.getInfo(str[1]);
-        const song = {
-              title: songInfo.videoDetails.title,
-              url: songInfo.videoDetails.video_url,
-         };
-        
-      
-        if (!serverQueue) {
-          const queueContruct = {
-            textChannel: message.channel,
-            voiceChannel: voiceChannel,
-            connection: null,
-            songs: [],
-            volume: 5,
-            playing: true
-          };
-      
-          queue.set(message.guild.id, queueContruct);
-      
-          queueContruct.songs.push(song);
-      
-          try {
-            var connection = await voiceChannel.join();
-            queueContruct.connection = connection;
-            play(message.guild, queueContruct.songs[0]);
-          } catch (err) {
-            console.log(err);
-            queue.delete(message.guild.id);
-            return message.channel.send(err);
-          }
-        } else {
-          serverQueue.songs.push(song);
-          return message.channel.send(`${song.title} added to the queue`);
-        }
-      }
-      
-      function skip(message, serverQueue) {
-        if (!voiceChannel)
-          return message.channel.send(
-            "u need to be in vc to skip"
-          );
-        if (!serverQueue)
-          return message.channel.send("no song to skip xd");
-        serverQueue.connection.dispatcher.end();
-      }
-      
-      function stop(message, serverQueue) {
-        if (!voiceChannel)
-          return message.channel.send(
-            "u need to be in vc to stop"
-          );
-          
-        if (!serverQueue)
-          return message.channel.send("no music to stop");
-          
-        serverQueue.songs = [];
-        serverQueue.connection.dispatcher.end();
-        message.channel.send("disconnected from vc")
-      }
-      
-      function play(guild, song) {
-        const serverQueue = queue.get(guild.id);
-        if (!song) {
-          serverQueue.voiceChannel.leave();
-          queue.delete(guild.id);
-          return;
-        }
-
-      
-        const dispatcher = serverQueue.connection
-          .play(ytdl(song.url))
-          .on("finish", () => {
-            serverQueue.songs.shift();
-            play(guild, serverQueue.songs[0]);
-          })
-          .on("error", error => console.error(error));
-        dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-        serverQueue.textChannel.send(`added **${song.title}** to queue`);
-      }*/
-      
-      
-      /*const player = new Player(client);
-
-player.on('error', (queue, error) => {
-  console.log(`[${queue.guild.name}] Error emitted from the queue: ${error.message}`);
-});
-
-player.on('connectionError', (queue, error) => {
-  console.log(`[${queue.guild.name}] Error emitted from the connection: ${error.message}`);
-});
-
-player.on('trackStart', (queue, track) => {
-  queue.metadata.send(`▶ | Started playing: **${track.title}** in **${queue.connection.channel.name}**!`);
-});
-
-player.on('trackAdd', (queue, track) => {
-  queue.metadata.send(`🎶 | Track **${track.title}** queued!`);
-});
-
-player.on('botDisconnect', queue => {
-  queue.metadata.send('❌ | I was manually disconnected from the voice channel, clearing queue!');
-});
-
-player.on('channelEmpty', queue => {
-  queue.metadata.send('❌ | Nobody is in the voice channel, leaving...');
-});
-
-player.on('queueEnd', queue => {
-  queue.metadata.send('✅ | Queue finished!');
-
-
-
-});*/
-
 });
 
 try{
 client.login(token)
 } //turns on the bot
 catch (error) {
-  console.log("login error")
-  console.log(error)
+    console.log("login error")
+    console.log(error)
 }
