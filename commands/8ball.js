@@ -3,7 +3,7 @@ module.exports = {
     description: '',
     execute(message, args, currentDate, currentDateISO) {
         let rdm = ["yes", "no clue.", "知らない", "nope", "yeah", "definitely maybe not", "nah", "yeah of course", "絶対!!!", "多分", 
-        "i didn't quite catch that, ask again?", "ehhhhhhh", ""];
+        "i didn't quite catch that, ask again?", "ehhhhhhh", "⠀"];
         let ball = rdm[Math.floor(Math.random() * rdm.length)];
         message.reply(String(`${ball}`))   
         console.log(`${currentDateISO} | ${currentDate}`)
