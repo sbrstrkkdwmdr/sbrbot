@@ -12,6 +12,8 @@ const { osuauthtoken } = require('./config.json');
 const { osuapikey } = require('./config.json');
 const { osuclientid } = require('./config.json');
 const { osuclientsecret } = require('./config.json');
+process.on('warning', e => console.warn(e.stack));
+const oncooldown = new Set();
 
 //MUSIC
 const ytdl = require("ytdl-core");
@@ -115,7 +117,14 @@ client.on('messageCreate', message =>{
         client.linkdetect.get('osulongmaplink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
     }
     if(!message.content.startsWith(prefix) || message.author.bot) return; //the return is so if its just prefix nothing happens
-    
+
+    if(oncooldown.has(message.author.id)) return message.reply("You're on cooldown");
+     if(!oncooldown.has(message.author.id)) {
+        oncooldown.add(message.author.id);
+        setTimeout(() => {
+            oncooldown.delete(message.author.id)
+        }, 3000)
+    }
     switch (command)
     {
 
