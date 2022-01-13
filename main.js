@@ -33,12 +33,19 @@ const { monitorEventLoopDelay } = require('perf_hooks');
 const { setInterval } = require('timers/promises');
 
 client.commands = new Discord.Collection();
+client.linkdetect = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
 for(const file of commandFiles){
     const command = require(`./commands/${file}`);
 
     client.commands.set(command.name, command);
+}
+const linkFiles = fs.readdirSync('./links/').filter(file => file.endsWith('.js'));
+for(const file of linkFiles){
+    const link = require(`./links/${file}`);
+
+    client.linkdetect.set(link.name, link);
 }
     //const modLogs = require('./modlogs/')
     /*if (!Date.prototype.toISOString) {
@@ -81,10 +88,10 @@ client.user.setPresence({ activities: [{ name: "you", type: 'WATCHING', video_ur
 })
 
 client.on('messageCreate', message =>{
-    if(!message.content.startsWith(prefix) || message.author.bot) return; //the return is so if its just prefix nothing happens
 
     const args = message.content.slice(prefix.length).split(/ +/);
-    const command = args.shift().toLowerCase(); //idk what this does i forgot
+    const linkargs = message.content.split(/ +/);
+    const command = args.shift().toLowerCase(); //grabs command
 
     const owner = require('./botowners.json');
     const player = new Player(client);
@@ -100,6 +107,15 @@ client.on('messageCreate', message =>{
     let curdatetmr = new Date(curdatetmrtimestamp).toISOString().slice(0,10);
     let split = new Date().toString().match(/([A-Z]+[\+-][0-9]+.*)/);
     let curtimezone = split[split.length - 1]
+   
+    if (message.content.startsWith('https://osu.ppy.sh/b/')){
+        client.linkdetect.get('osumaplink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
+    } 
+    if (message.content.startsWith('https://osu.ppy.sh/beatmapsets/')){
+        client.linkdetect.get('osulongmaplink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
+    }
+    if(!message.content.startsWith(prefix) || message.author.bot) return; //the return is so if its just prefix nothing happens
+    
     switch (command)
     {
 
@@ -171,7 +187,7 @@ client.on('messageCreate', message =>{
         client.commands.get('active').execute(message, args, Discord, currentDate, currentDateISO)
         break;
 
-    case 'math':
+    case 'math':case 'calculate':
         client.commands.get('math').execute(message, args, Discord, currentDate, currentDateISO)
         break;
     //FUN --------------------------------------------------------------------
@@ -189,7 +205,7 @@ client.on('messageCreate', message =>{
         client.commands.get('unko').execute(message, args, currentDate, currentDateISO)
         break;      
     
-    case '8ball':
+    case '8ball':case 'ask':
         client.commands.get('8ball').execute(message, args, currentDate, currentDateISO)
         break;
 
@@ -275,7 +291,7 @@ client.on('messageCreate', message =>{
         client.commands.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
         break;
 
-    case 'map':case 'mapget':
+    case 'map':case 'mapinfo':
         client.commands.get('map').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
 
@@ -299,9 +315,9 @@ client.on('messageCreate', message =>{
         client.commands.get('tsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
     
-    case 'mapsearch':
+    /*case 'mapsearch':case 'mapget':
       client.commands.get('mapsearch').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-      break;
+      break;*/
     //HENTAI-----------------------------------------------------------------------------------------
 
 
@@ -365,12 +381,12 @@ client.on('messageCreate', message =>{
         client.commands.get('serverlist').execute(message, args, Discord, client, currentDate, currentDateISO)
         break;
 
-    case 'guildid':
-        client.commands.get('guildid').execute(message, args, currentDate, currentDateISO)
+    case 'gleave':case 'guildleave':case 'leaveguild':
+        client.commands.get('gleave').execute(message, args, client, currentDate, currentDateISO)
         break;
 
-    case 'gleave':case 'guildleave':
-        client.commands.get('gleave').execute(message, args, client, currentDate, currentDateISO)
+    case 'guildid':
+        client.commands.get('guildid').execute(message, args, currentDate, currentDateISO)
         break;
     
     case 'remind':

@@ -9,16 +9,16 @@ module.exports = {
         else{
         switch(helper){
             //in alphabetical order, as of the files e.g. stop is referring to musicstop which is why it's not more at the bottom
-            case '1100':
+            case '1100':case 'count100':
                 message.channel.send("Counts to 100.\nUsage: `sbr-1100`\nCan get stuck at 50 for a few seconds.")
                 break;
-            case '8ball':
+            case '8ball':case 'ask':
                 message.channel.send("Will reply to a question with an answer between yes and no.\nUsage: `sbr-8ball is among us a good game?`")
                 break;
             case 'amoggers':
                 message.channel.send("Literally just sends a pictures of amoggers.\nUsage: `sbr-amoggers`")
                 break;
-            case 'avatar':
+            case 'avatar':case 'av':case 'pfp':
                 message.channel.send("Sends an embed of the mentioned user's avatar/profile picture.\nUsage: `sbr-avatar @(username)` ")
                 break;
             case 'ban':
@@ -36,7 +36,7 @@ module.exports = {
             case 'crash':
                 message.channel.send("Force crashes the bot.\nUsage: `sbr-crash` \nOnly certain users can crash the bot.")
                 break;
-            case 'dadjoke':
+            case 'dadjoke':case 'pun':
                 message.channel.send("Replies with a random dad joke.\nUsage: `sbr-dadjoke` \nThe dad jokes are limited. pls send me some so I can add them to the bot.")
                 break;
             case 'danbooru':
@@ -54,7 +54,7 @@ module.exports = {
             case 'giveadmin':
                 message.channel.send(":troll:.\nUsage: `sbr-giveadmin`")
                 break;
-            case 'gleave':
+            case 'gleave':case 'guildleave':case 'leaveguild':
                 message.channel.send("Leaves the mentioned guild.\nUsage: `sbr-gleave [guild.id]`")
                 break;
             case 'guildid':
@@ -63,7 +63,7 @@ module.exports = {
             case 'help':
                 message.channel.send("Sends the list to help commands. Can also be used to find more information on a command.\nUsage 1: `sbr-help` \nUsage 2: `sbr-help amoggers`")
                 break;
-            case 'hentai':
+            case 'hentai':case 'nhentai':
                 message.channel.send("Sends an nhentai link.\nUsage: `sbr-hentai` \nNSFW channels only")
                 break;
             case 'horny':
@@ -102,10 +102,13 @@ module.exports = {
             case 'lolibooru':
                 message.channel.send("Random Lolibooru image.\nUsage:`sbr-lolibooru`\nNSFW channels only.")
                 break;
-            case 'map':
+            case 'map':case 'mapinfo':
                 message.channel.send("Sends information about the mentioned map.\nUsage:`sbr-map (ID)`")
                 break;
-            case 'math':
+            case 'mapsearch':case 'mapget':
+                message.channel.send("Sends information about the requested map.\nUsage:`sbr-mapsearch`")
+                break;
+            case 'math':case 'calculate':
                 message.channel.send("Calculates a math problem.\nUsage:`sbr-math add 5 5`\nArguments: `add`, `subtract`, `multiply`, `divide`, `squareroot`, `square`, `factorial`, `hcf`, `lcm`")
                 break;
             case 'play':
@@ -156,16 +159,16 @@ module.exports = {
             case 'remind':
                 message.channel.send("Sends a reminder in x time.\nUsage:`sbr-remind [t] FC yomi yori 240bpm ver.`\nTime can be in days, hours, minutes and seconds. Using multiple values (hours and minutes together) will just send instantly.")
                 break;                
-            case 'roll':
+            case 'roll':case 'numgen':
                 message.channel.send("Generates a random number. The limit is controllable by the user.\nUsage:`sbr-roll` or `sbr-roll 727`")
                 break;
-            case 'rs':
+            case 'rs':case 'recent':
                 message.channel.send("Sends information about the user's most recent osu! play.\nUsage:`sbr-rs (ID)`")
                 break;
             case 'rsplus':
                 message.channel.send("Sends information about the mentioned user's 5 most recent osu! plays.\nUsage:`sbr-rsplus @username`")
                 break;
-            case 'serverlist':
+            case 'serverlist':case 'servers':
                 message.channel.send("Lists all guilds the bot is in including IDs.\nUsage:`sbr-serverlist`")
                 break;
             case 'skin':
@@ -186,7 +189,7 @@ module.exports = {
             case 'token':
                 message.channel.send("Sends the bot token (maybe???).\nUsage:`sbr-token`")
                 break;
-            case 'tsfm':
+            case 'tsfm':case 'c':
                 message.channel.send("Sends the top score for a user for a map. \nUsage:`sbr-tsfm 15222484 1186443`\n`sbr-tsfm (playerid) (beatmap id)`")
                 break;
             case 'unban':
