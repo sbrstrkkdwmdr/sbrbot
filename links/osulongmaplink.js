@@ -2,6 +2,8 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../osuauth.json');
+const calc = require('ojsama');
+const { std_ppv2 } = require('booba');
 module.exports = {
     name: 'osulongmaplink',
     description: '',
@@ -14,8 +16,7 @@ module.exports = {
         console.log("link detector executed - map get (long)")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
-
+        console.log("") ;
         try{
             let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
             let body1 = {
@@ -68,7 +69,37 @@ module.exports = {
             let maptitle = JSON.stringify(mapdata['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title_unicode', '');
             let mapdiff = JSON.stringify(mapdata, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
             let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '')
+            let mapmaxcombo = JSON.stringify(mapdata, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('max_combo', '')
+            let mapmaxcombotoint = Math.abs(mapmaxcombo);
+            let mapmiss = Math.abs(0)
+            let topacc = Math.abs(100.00)
+            let midacc = Math.abs(95.00)
+            let slidertonum = Math.abs(mapcircle)
+            let circletonum = Math.abs(mapslider)
+            let totalobjcount = Math.abs(mapcircle + mapslider + mapspinner)
+            let aimstars = 1
+            let speedstars = 1
+            //let totalobjcounttonum
             
+            /*let osu = require("ojsama")
+
+            let parser = new osu.parser();
+            let SSpp = osu.ppv2({map: linkargs}).toString()*/
+            /*
+            let score = {
+                stars: mapsr,
+                max_combo: mapmaxcombotoint,
+                nmiss: mapmiss,
+                acc_percent: topacc,
+                nsliders: slidertonum,
+                ncircles: circletonum,
+                nobjects: totalobjcount,
+                aimstar: aimstars,
+                speed: speedstars
+            }
+        
+            let pp = calc.ppv2(score)
+*///HOW DO I CALCULATE PP I AM SO LOST
             const fileName = 'storedmap.json';
             const file = require('../storedmap.json');  
             file.prevmap = maplink;
@@ -95,7 +126,7 @@ module.exports = {
             .setColor(0x462B71)
             .setTitle("Information for " + maptitle)
             .setImage(mapbg)
-            .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: | 95: \n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})`);
+            .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: ${pp} | 95: \n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})`);
             message.reply({ embeds: [Embed]})
             
         //})
