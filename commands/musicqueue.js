@@ -4,6 +4,7 @@ module.exports = {
     name: 'musicqueue',
     description: '',
     async execute(message, args, client, Discord, ytdl, currentDate, currentDateISO) {
+        const player = new Player(client);
         const queue = player.createQueue(message.guild, {
             metadata: {
                 channel: message.channel

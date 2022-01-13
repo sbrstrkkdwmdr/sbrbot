@@ -5,7 +5,7 @@ module.exports = {
     name: 'musicplay',
     description: '',
     async execute(message, args, client, Discord, ytdl, currentDate, currentDateISO) {
-
+        const player = new Player(client);
 
       if (!message.member.voice.channelId) return await message.reply({ content: "You aren't in vc smh my head", ephemeral: true });
       if (message.guild.me.voice.channelId && message.member.voice.channelId !== message.guild.me.voice.channelId) return await message.reply({ content: "You aren't in vc smh my head", ephemeral: true });
