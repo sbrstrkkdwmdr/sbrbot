@@ -1,5 +1,4 @@
 const {Player} = require('discord-player');
-const player = new Player(client);
 module.exports = {
     name: 'musicskip',
     description: '',
