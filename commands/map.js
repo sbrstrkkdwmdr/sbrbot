@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../osuauth.json');
+const { std_ppv2 } = require('booba');
 module.exports = {
     name: 'map',
     description: '',
@@ -67,7 +68,11 @@ module.exports = {
             let maptitle = JSON.stringify(mapdata['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title_unicode', '');
             let mapdiff = JSON.stringify(mapdata, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
             let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '')
-            
+            let mapmaxcombo = JSON.stringify(mapdata, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('max_combo', '')
+            let mapmaxcombotoint = Math.abs(mapmaxcombo);
+            let slidertonum = Math.abs(mapcircle);
+            let circletonum = Math.abs(mapslider);
+            let totalobjcount = Math.abs(mapcircle + mapslider + mapspinner);
             const fileName = 'storedmap.json';
             const file = require('../storedmap.json');  
             file.prevmap = maplink;
@@ -79,25 +84,30 @@ module.exports = {
 //            const API_KEY = osuapikey; // osu! api v1 key
   //          const USER = args[0];
             
-          /*  (async () => {
-              const response = mapdata//await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=15222484&limit=1`);
-              const json = await response.json();
-              const [score] = json;
-            //  fs.writeFileSync("mapppcalc.json", JSON.stringify(score, null, 2));
-              const pp = new std_ppv2().setPerformance(score);
-            
-              let ppSS = await pp.compute("100");
-              //let pp95 = await pp.compute("95.00");
-            */
+  const API_KEY = osuapikey; // osu! api v1 key
+  const thigngig = args[0];
 
+           /* (async () => {
+                console.log("wow")
+                const response = await fetch(mapurl);
+        const json = await response.json();
+        const [score] = json;
+        const pp = new std_ppv2().setDifficulty(score);
+
+        let ppSS1 = await pp.compute(Math.abs(100.00));
+        let ppSS = JSON.stringify(ppSS1);
+        let pp951 = await pp.compute(Math.abs(95.00));
+        let pp95 = JSON.stringify(pp951);
+*/
+let ppSS = "undefined";
+let pp95 = "undefined";
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle("Information for " + maptitle)
             .setImage(mapbg)
-            .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: | 95: \n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})`);
+            .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: ${ppSS} | 95: ${pp95} \n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})`);
             message.reply({ embeds: [Embed]})
-            
-        //})
+            //})
     } catch(error){
 				message.reply("error")
 				console.log(error)
