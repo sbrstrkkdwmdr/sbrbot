@@ -11,9 +11,8 @@ module.exports = {
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         const pickeduserX = args[0];
         let pickedmap = JSON.stringify(prevmap).replaceAll('id', '').replaceAll('"', '');//args[1];
-        message.reply(pickedmap)
         console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - map get")
+        console.log("command executed - top score for map")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
