@@ -3,7 +3,7 @@ module.exports = {
     description: '',
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
        
-        if(message.member.permissions.has('ADMINISTRATOR')){
+        if(message.member.permissions.has('BAN_MEMBERS')){
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - ban")
             let consoleloguserweeee = message.author
@@ -24,6 +24,9 @@ module.exports = {
                 await member.ban({
                     reason: reaswon,
                     
+                })
+                .catch(error => {
+                    message.reply(`I am unable to ban ${user}. cope harder`)
                 })
                 console.log(`banned ${user} AKA <@${user}> for ${reaswon}`)
                 console.log("")

@@ -2,7 +2,7 @@ module.exports = {
     name: 'kick',
     description: '',
     execute(message, args, client, Discord, currentDate, currentDateISO) {
-        if(message.member.permissions.has('ADMINISTRATOR')){
+        if(message.member.permissions.has('KICK_MEMBERS')){
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - kick")
             let consoleloguserweeee = message.author
@@ -15,12 +15,12 @@ module.exports = {
         member
         .kick(`${reason}`)
         .then(() => {
-            message.reply(`successfully kicked ${user.tag}`);
+            message.reply(`successfully kicked ${user.tag} | ${user.tag}`);
             console.log(`kicked user - ${user.id} ${user.tag}`)
             console.log("")
         })
         .catch(err => {
-            message.reply(`I am unable to kick ${user.tag}`);
+            message.reply(`I am unable to kick ${user.tag}. cope harder.`);
             console.error(err)
         })
     } else { message.channel.send("That user is no longer here.")}

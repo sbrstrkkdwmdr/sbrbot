@@ -2,7 +2,7 @@ module.exports = {
     name: 'unban',
     description: 'unban',
     async execute(message, args, currentDate, currentDateISO) {
-       if(message.member.permissions.has('ADMINISTRATOR')){
+       if(message.member.permissions.has('BAN_MEMBERS')){
             console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - unban")
         let consoleloguserweeee = message.author
