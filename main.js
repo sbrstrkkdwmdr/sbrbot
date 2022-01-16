@@ -108,10 +108,10 @@ client.on('messageCreate', message =>{
     let split = new Date().toString().match(/([A-Z]+[\+-][0-9]+.*)/);
     let curtimezone = split[split.length - 1]
    
-    if (message.content.startsWith('https://osu.ppy.sh/b/')){
+    if (message.content.startsWith('https://osu.ppy.sh/b/') || message.content.startsWith('osu.ppy.sh/b/')){
         client.linkdetect.get('osumaplink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
     } 
-    if (message.content.startsWith('https://osu.ppy.sh/beatmapsets/')){
+    if (message.content.startsWith('https://osu.ppy.sh/beatmapsets/') || message.content.startsWith('osu.ppy.sh/beatmapsets')){
         client.linkdetect.get('osulongmaplink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
     }
     if(!message.content.startsWith(prefix) || message.author.bot) return; //the return is so if its just prefix nothing happens
