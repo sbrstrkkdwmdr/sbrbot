@@ -70,9 +70,16 @@ module.exports = {
             let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '')
             let mapmaxcombo = JSON.stringify(mapdata, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('max_combo', '')
             let mapmaxcombotoint = Math.abs(mapmaxcombo);
-            let slidertonum = Math.abs(mapcircle);
-            let circletonum = Math.abs(mapslider);
+            let slidertonum = Math.abs(mapslider);
+            let circletonum = Math.abs(mapcircle);
+            let spinnertonum = Math.abs(mapspinner);
             let totalobjcount = Math.abs(mapcircle + mapslider + mapspinner);
+            //let totalobjcount2 = JSON.stringify(totalobjcount);
+            let mapcstoint = Math.abs(mapcs);
+            let mapartoint = Math.abs(mapar);
+            let maphptoint = Math.abs(maphp);
+            let mapodtoint = Math.abs(mapod);
+            let mapid = Math.abs(maplink)
             const fileName = 'storedmap.json';
             const file = require('../storedmap.json');  
             file.prevmap = maplink;
@@ -87,18 +94,51 @@ module.exports = {
   const API_KEY = osuapikey; // osu! api v1 key
   const thigngig = args[0];
 
-           /* (async () => {
+        //    (async () => {
                 console.log("wow")
-                const response = await fetch(mapurl);
-        const json = await response.json();
-        const [score] = json;
-        const pp = new std_ppv2().setDifficulty(score);
+       //         const response = await fetch(mapurl);
+     //   const json = await response.json();
+       // const [score] = json;
+      /* const setmap = {
+        beatmap_id: maplink
+       };
+       const score = {
+           beatmap_id: mapid,
+           count300: totalobjcount,
+           count100: 0,
+           count50: 0,
+           countmiss: 0,
+           maxcombo: mapmaxcombotoint
+       };
+       let totalfodiff = new std_ppv2().computeTotal
+       let aimfodiff = new std_ppv2()
+       let speedfodiff = new std_ppv2().comp
+       const difficulty = {
+        maxcombo: mapmaxcombotoint,
+        aim:
+        speed:
+        total:
+        ar: mapartoint,
+        od: mapodtoint,
+        count_circles: circletonum,
+        count_sliders: slidertonum,
+        count_spinners: spinnertonum
+    };
+      let speedstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeSpeedValue();
+       let aimstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeAimValue();
+       let accstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeAccValue();
+       let flashlightstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeFlashlightValue();
+       let totalstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeTotal();
 
-        let ppSS1 = await pp.compute(Math.abs(100.00));
+        let pp = new std_ppv2().setDifficulty().setBeatmap(setmap);
+        //let pp
+       new std_ppv2().computeAccValue
+
+        let ppSS1 = pp.compute();
         let ppSS = JSON.stringify(ppSS1);
-        let pp951 = await pp.compute(Math.abs(95.00));
-        let pp95 = JSON.stringify(pp951);
-*/
+      //  let pp951 = await pp.compute(Math.abs(95.00));
+        //let pp95 = JSON.stringify(pp951);*/
+
 let ppSS = "undefined";
 let pp95 = "undefined";
             let Embed = new Discord.MessageEmbed()
@@ -107,7 +147,7 @@ let pp95 = "undefined";
             .setImage(mapbg)
             .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: ${ppSS} | 95: ${pp95} \n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})`);
             message.reply({ embeds: [Embed]})
-            //})
+        //    })
     } catch(error){
 				message.reply("error")
 				console.log(error)
