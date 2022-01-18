@@ -243,7 +243,11 @@ client.on('messageCreate', message =>{
     case 'paperscissorsrock':case 'rockpaperscissors': case 'psr':case 'scissorsrockpaper':
         client.commands.get('psr').execute(message, args, currentDate, currentDateISO)
         break;
-    //SBR ONLY --------------------------------------------------------
+
+    case '4k':
+        client.commands.get('4k').execute(message, args, currentDate, currentDateISO)
+        break;
+        //SBR ONLY --------------------------------------------------------
     case 'testlog':
         client.commands.get('testlog').execute(message, args, currentDate, currentDateISO)
         break;
