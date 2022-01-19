@@ -1,7 +1,6 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { access_token } = require('../osuauth.json');
 module.exports = {
     name: 'osumaplink',
     description: '',
@@ -29,8 +28,8 @@ module.exports = {
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(res => res.json())
-            .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
-            ;
+            .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)));
+            const { access_token } = require('../osuauth.json');
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickeduserX}`;
             
             let headers = {

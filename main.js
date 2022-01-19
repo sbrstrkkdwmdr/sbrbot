@@ -326,6 +326,10 @@ client.on('messageCreate', message =>{
         client.commands.get('tsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
     
+    case 'osuauth':
+        client.commands.get('osuauth').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;  
+    
     /*case 'mapsearch':case 'mapget':
       client.commands.get('mapsearch').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
       break;*/
