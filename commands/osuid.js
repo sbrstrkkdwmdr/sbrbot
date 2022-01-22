@@ -33,10 +33,6 @@ module.exports = {
             ;
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
             
-            let headers = {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            };
             fetch(userinfourl, {
                 headers: {
                     Authorization: `Bearer ${access_token}`

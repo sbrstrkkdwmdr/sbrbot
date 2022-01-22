@@ -12,7 +12,7 @@ module.exports = {
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
  
-        const pickeduserX = args.splice(0,1000).join(" "); //args[0];
+        const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osutop")
         let consoleloguserweeee = message.author
@@ -50,11 +50,7 @@ module.exports = {
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
                 const osutopurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/best?mode=osu&limit=58&offset=0`;
-                
-                let headers = {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                };
+
                 fetch(osutopurl, {
                     headers: {
                         Authorization: `Bearer ${access_token}`
@@ -182,10 +178,6 @@ module.exports = {
             ;
             const osutopurl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/scores/best?mode=osu&limit=58&offset=0`;
             
-            let headers = {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            };
             fetch(osutopurl, {
                 headers: {
                     Authorization: `Bearer ${access_token}`

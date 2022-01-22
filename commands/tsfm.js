@@ -9,7 +9,7 @@ module.exports = {
     name: 'tsfm',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        const pickeduserX = args[0];
+        const pickeduserX = args.splice(0,1000).join(" ");
         let pickedmap = JSON.stringify(prevmap).replaceAll('id', '').replaceAll('"', '');//args[1];
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - top score for map")
@@ -39,10 +39,6 @@ module.exports = {
             ;
             const mapscoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickedmap}/scores/users/${pickeduserX}`;
             
-            let headers = {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            };
             fetch(mapscoreurl, {
                 method: "GET",
                 headers: {

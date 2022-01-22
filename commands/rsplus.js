@@ -2,7 +2,7 @@ module.exports = {
     name: 'rsplus',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO) {
-        let pickeduser = args[0]
+        let pickeduser = args.splice(0,1000).join(" ");
         const url = new URL(
             `https://osu.ppy.sh/api/v2/users/${pickeduser}/recent_activity`
         );

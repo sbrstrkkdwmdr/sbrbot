@@ -6,7 +6,7 @@ module.exports = {
     name: 'osu',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
-        const pickeduserX = args[0];
+        const pickeduserX = args.splice(0,1000).join(" ");
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osu profile")
         let consoleloguserweeee = message.author
@@ -33,10 +33,6 @@ module.exports = {
             ;
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
             
-            let headers = {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            };
             fetch(userinfourl, {
                 headers: {
                     Authorization: `Bearer ${access_token}`

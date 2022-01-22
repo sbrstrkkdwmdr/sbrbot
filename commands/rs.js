@@ -7,7 +7,7 @@ module.exports = {
     name: 'rs',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        const pickeduserX = args.splice(0,1000).join(" "); //args[0];
+        const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - rs")
         let consoleloguserweeee = message.author
@@ -48,10 +48,6 @@ module.exports = {
                 //message.reply(playerid)
                 const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=osu&limit=18&offset=0`;
                 
-                let headers = {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                };
                 fetch(recentactiveurl, {
                     headers: {
                         Authorization: `Bearer ${access_token}`
@@ -199,10 +195,6 @@ module.exports = {
             ;
             const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/scores/recent?include_fails=1&mode=osu&limit=18&offset=0`;
             
-            let headers = {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            };
             fetch(recentactiveurl, {
                 headers: {
                     Authorization: `Bearer ${access_token}`
