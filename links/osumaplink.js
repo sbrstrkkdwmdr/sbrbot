@@ -123,8 +123,9 @@ module.exports = {
             .setDescription(``);
             message.reply({ embeds: [Embed]})*/
             });
-        } catch(err){
-            console.log(err)
+        } catch(error){
+            message.channel.send("Error - LB2")
+            console.log(error)
         } 
     }
 }

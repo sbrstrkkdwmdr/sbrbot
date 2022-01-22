@@ -8,7 +8,7 @@ module.exports = {
     name: 'osulongmaplink',
     description: '',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        const w = JSON.stringify(linkargs).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('beatmapsets').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
+        try{const w = JSON.stringify(linkargs).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('beatmapsets').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const grab = JSON.stringify(w.split('#')[1].split('/'))
         const pickeduserX = JSON.stringify(grab).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('osu', '').replaceAll("\\", '');
         console.log(`${w}\n${pickeduserX}\n${grab}`)
@@ -131,7 +131,7 @@ module.exports = {
             
         //})
     } catch(error){
-				message.reply("error")
+				message.reply("error - map not found")
 				console.log(error)
 				console.log("")
 			}
@@ -151,9 +151,15 @@ module.exports = {
             .setDescription(``);
             message.reply({ embeds: [Embed]})*/
             });
-        } catch(err){
-            console.log(err)
-        } 
+        } catch(error){
+            console.log(error)
+            message.channel.send("Error - ")
+        } } 
+        
+        catch(error){
+            message.channel.send("Error - insufficient link\nmap links should be either `osu.ppy.sh/b/map_id` or `osu.ppy.sh/beatmapsets/mapset_id#osu/map_id`")
+            console.log(error)
+        }
     }
 }
 //client.commands.get('').execute(message, args)
