@@ -12,7 +12,7 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
-        if(!pickeduserX) return message.reply("user ID required");
+        if(!pickeduserX) return message.reply("username required");
         //if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
       
         try{
