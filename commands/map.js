@@ -169,7 +169,7 @@ let pp95 = "undefined";
 
       
         if(pickeduserX){try{
-            if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 3305367 instead of Weekend Whip")
+            if(isNaN(pickeduserX)) return message.reply("You must use the ID e.g. 3305367 instead of Weekend Whip")
             let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
             let body1 = {
                 "client_id": osuclientid,
