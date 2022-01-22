@@ -329,7 +329,7 @@ client.on('messageCreate', message =>{
         client.commands.get('osuauth').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;  
 
-    case 'osusave':
+    case 'osusave':case 'osuset':
         client.commands.get('osusave').execute(message, args, Discord, currentDate, currentDateISO)
         break;
     

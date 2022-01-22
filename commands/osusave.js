@@ -1,4 +1,5 @@
 const fs = require('fs');
+const helper = require('../helper.js');
 //const w 
 
 module.exports = {
@@ -12,6 +13,38 @@ module.exports = {
         console.log("") 
 
         message.reply("WIP (can someone else code this for me pls im dumb)")
+        
+            return new Promise((resolve, reject) => {
+                let user_ign = args[0]
+    
+                let split = helper.splitWithTail(message.content, ' ', 1);
+    
+                if(split.length < 2){
+                    reject(helper.commandHelp('ign-set'));
+                    return false;
+                }
+    
+                let ign = split[1];
+                let user_id = message.author.id;
+    
+                if(ign.length == 0){
+                    reject(helper.commandHelp('ign-set'));
+                    return false;
+                }
+    
+                if(!helper.validUsername(ign)){
+                    reject('Not a valid osu! username!');
+                    return false;
+                }
+    
+                user_ign[user_id] = ign;
+                helper.setItem('user_ign', JSON.stringify(user_ign));
+    
+                let author = message.author.username.endsWith('s') ?
+                    `${message.author.username}'`: `${message.author.username}'s`;
+    
+                message.channel.send(`${author} ingame name set to ${ign}`);
+            });
         /*let user = message.author.id;
         let osuid = args[0];
 
@@ -25,7 +58,6 @@ module.exports = {
         fs.appendFileSync("savedusers.json", JSON.stringify(text, null, 2).replaceAll('\\', '').replace('"', ''))
         fs.appendFileSync("savedusers.json", JSON.stringify('}', null, 2))
         message.reply("saved")*/
-        
 }
 }
 //client.commands.get('').execute(message, args)
