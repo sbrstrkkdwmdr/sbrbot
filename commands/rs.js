@@ -7,7 +7,7 @@ module.exports = {
     name: 'rs',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        const pickeduserX = args[0];
+        const pickeduserX = args.splice(0,1000).join(" "); //args[0];
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - rs")
         let consoleloguserweeee = message.author
