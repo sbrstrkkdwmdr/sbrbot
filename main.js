@@ -78,7 +78,6 @@ for(const file of linkFiles){
 client.once('ready', () => {
     let currentDate = new Date();
     let currentDateISO = new Date().toISOString();
-    console.log(`--------------------------------------------------------------------------------------`)
     console.log(`${currentDateISO} | ${currentDate}`)
     console.log('kwsmrksnsm is online!'); //message shown when bot turns on
     console.log(`API Latency is ${Math.round(client.ws.ping)}ms`);
@@ -490,6 +489,24 @@ client.on('messageCreate', message =>{
 
 try{
 client.login(token)
+console.log(`--------------------------------------------------------------------------------------`)
+    //
+    let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
+    let body1 = {
+        "client_id": osuclientid,
+        "client_secret": osuclientsecret,
+        "grant_type": "client_credentials",
+        "scope": "public"
+    }
+    fetch(oauthurl, {
+        method: "POST",
+        body: JSON.stringify(body1),
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(res => res.json())
+    .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+    console.log("saved osuauth")
+//
 } //turns on the bot
 catch (error) {
     console.log("login error")
