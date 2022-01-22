@@ -31,11 +31,7 @@ module.exports = {
             .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)));
             const { access_token } = require('../osuauth.json');
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickeduserX}`;
-            
-            let headers = {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            };
+        
             fetch(mapurl, {
                 method: "GET",
                 headers: {

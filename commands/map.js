@@ -34,10 +34,6 @@ module.exports = {
             ;
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickeduserX}`;
             
-            let headers = {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            };
             fetch(mapurl, {
                 method: "GET",
                 headers: {
