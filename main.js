@@ -13,6 +13,7 @@ const { osuclientid } = require('./config.json');
 const { osuclientsecret } = require('./config.json');
 process.on('warning', e => console.warn(e.stack));
 const oncooldown = new Set();
+const https = require('http'); // or 'https' for https:// URLs
 
 //MUSIC
 const ytdl = require("ytdl-core");
@@ -122,6 +123,14 @@ client.on('messageCreate', message =>{
             oncooldown.delete(message.author.id)
         }, 3000)
     }
+
+    if (message.attachments == true) {
+        for (var key in message.attachments) {
+            let attachment = message.attachments[key];
+            download(attachment.url);
+        }
+    }
+
     switch (command)
     {
 
@@ -334,7 +343,7 @@ client.on('messageCreate', message =>{
         break;  
 
     case 'osusave':case 'osuset':
-        client.commands.get('osusave').execute(message, args, Discord, currentDate, currentDateISO)
+        client.commands.get('osusave').call(message, args, Discord, currentDate, currentDateISO)
         break;
     
     /*case 'mapsearch':case 'mapget':
@@ -427,7 +436,7 @@ client.on('messageCreate', message =>{
         break;
     //MUSIC --------------------
     case 'play':
-        client.commands.get('musicplay').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
+        client.commands.get('play').execute(message, args, command, client, Discord, currentDate, currentDateISO)
         //execute(message, serverQueue);
         /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music play")
@@ -436,7 +445,7 @@ client.on('messageCreate', message =>{
         client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)*/
         break; 
     case 'skip':
-        client.commands.get('musicskip').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
+        client.commands.get('skip').execute(message, args, client, Discord, currentDate, currentDateISO)
         //skip(message, serverQueue);
         /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music skip")
@@ -446,7 +455,7 @@ client.on('messageCreate', message =>{
         break;
         
     case 'stop':
-        client.commands.get('musicstop').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
+        client.commands.get('stop').execute(message, args, client, Discord, currentDate, currentDateISO)
         //stop(message, serverQueue);
         /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music stop")

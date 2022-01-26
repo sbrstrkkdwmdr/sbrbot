@@ -13,7 +13,20 @@ module.exports = {
         console.log("") 
 
         message.reply("WIP (can someone else code this for me pls im dumb)")
+
+
+        /*let thenewid = args[0];
+        let authorguy = message.author.id
+        let thenewid2 = {
+            authorguy : thenewid
+        };
         
+        let thenewid3 = JSON.stringify(thenewid2).replaceAll("\\", "")
+        let wowajson = JSON.stringify(require('../savedusers.json')).replaceAll('}', '')
+        fs.writeFileSync('savedusers.json', JSON.stringify(wowajson, null, 2))
+        
+        fs.appendFileSync('saveduser.json', JSON.stringify(thenewid2, null, 2))
+        */
             return new Promise((resolve, reject) => {
                 let user_ign = args[0]
     
