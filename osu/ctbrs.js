@@ -9,7 +9,7 @@ module.exports = {
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
         console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - rs")
+        console.log("command executed - ctbrs")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
@@ -102,7 +102,7 @@ module.exports = {
                 const USER = pickeduserX;
                 
                 (async () => {
-                  const response = await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=${USER}&limit=1`);
+                  const response = await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=${USER}&limit=1&mode=3`);
                   const json = await response.json();
                   const [score] = json;
                   fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
