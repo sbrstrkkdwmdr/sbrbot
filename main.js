@@ -358,6 +358,30 @@ client.on('messageCreate', message =>{
     case 'osusave':case 'osuset':
         client.osucmds.get('osusave').call(message, args, Discord, currentDate, currentDateISO)
         break;
+
+    case 'maniars':case 'maniarecent':case 'rsmania':case 'recentmania':
+        client.osucmds.get('maniars').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    case 'maniatop':case 'topmania':
+        client.osucmds.get('maniatop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    /*case 'maniatsfm':case 'maniac':case 'tsfmmania':case 'cmania':
+        client.osucmds.get('maniatsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;*/
+
+    case 'taikors':case 'taikorecent':case 'rstaiko':case 'recenttaiko':
+        client.osucmds.get('taikors').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    case 'taikotop':case 'toptaiko':
+        client.osucmds.get('taikotop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+        
+    case 'ctbrs':case 'ctbrecent':case 'rsctb':case 'recentctb':
+        client.osucmds.get('ctbrs').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    case 'ctbtop':case 'topctb':
+        client.osucmds.get('ctbtop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
     
     /*case 'mapsearch':case 'mapget':
       client.commands.get('mapsearch').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
