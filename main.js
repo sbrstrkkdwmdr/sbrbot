@@ -37,6 +37,7 @@ const { setInterval } = require('timers/promises');
 
 client.commands = new Discord.Collection();
 client.linkdetect = new Discord.Collection();
+client.osucmds = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
 for(const file of commandFiles){
