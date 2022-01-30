@@ -226,6 +226,7 @@ let pp95 = "undefined";
                 if (err) return console.log(err);
                 console.log(JSON.stringify(file));
                 console.log('writing to ' + fileName);
+                console.log("");
               });//all this stuff is to write it to a temporary save file
 //            const API_KEY = osuapikey; // osu! api v1 key
   //          const USER = args[0];

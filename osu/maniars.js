@@ -101,6 +101,7 @@ module.exports = {
                     if (err) return console.log(err);
                     console.log(JSON.stringify(file));
                     console.log('writing to ' + fileName);
+                    console.log("");
                 });
     
                 const API_KEY = osuapikey; // osu! api v1 key

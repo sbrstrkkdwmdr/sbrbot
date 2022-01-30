@@ -86,6 +86,7 @@ module.exports = {
                 if (err) return console.log(err);
                 console.log(JSON.stringify(file));
                 console.log('writing to ' + fileName);
+                console.log("");
               });
               request.get(`https://osu.ppy.sh/osu/${maplink}`).then(osu => {
                 let beatmap = Beatmap.fromOsu(osu)
