@@ -4,6 +4,8 @@ const fs = require('fs');
 const { access_token } = require('../osuauth.json');
 const calc = require('ojsama');
 const { std_ppv2 } = require('booba');
+const {Beatmap, Osu: {DifficultyCalculator, PerformanceCalculator}} = require('osu-bpdpc')
+const request = require('request-promise-native')
 module.exports = {
     name: 'osulongmaplink',
     description: '',
@@ -75,27 +77,25 @@ module.exports = {
             let totalobjcount = Math.abs(mapcircle + mapslider + mapspinner)
             let aimstars = 1
             let speedstars = 1
-            //let totalobjcounttonum
-            
-            /*let osu = require("ojsama")
+            request.get(`https://osu.ppy.sh/osu/${maplink}`).then(osu => {
+  let beatmap = Beatmap.fromOsu(osu)
+  let score = {
+    maxcombo: mapmaxcombotoint,
+    count50: 0,
+    count100: 3,
+    count300: 337,
+    countMiss: 0,
+    countKatu: 2,
+    countGeki: 71,
+    perfect: 1,
+    mods: 0,
+    pp: 725.814
+  }
+  let diffCalc = DifficultyCalculator.use(beatmap).setMods(score.mods).calculate()
+  let perfCalc = PerformanceCalculator.use(diffCalc).calculate(score)
+  let totalpp1 = perfCalc.totalPerformance
+  let totalpp = Math.abs(totalpp1).toFixed(2);
 
-            let parser = new osu.parser();
-            let SSpp = osu.ppv2({map: linkargs}).toString()*/
-            /*
-            let score = {
-                stars: mapsr,
-                max_combo: mapmaxcombotoint,
-                nmiss: mapmiss,
-                acc_percent: topacc,
-                nsliders: slidertonum,
-                ncircles: circletonum,
-                nobjects: totalobjcount,
-                aimstar: aimstars,
-                speed: speedstars
-            }
-        
-            let pp = calc.ppv2(score)
-*///HOW DO I CALCULATE PP I AM SO LOST
             const fileName = 'storedmap.json';
             const file = require('../storedmap.json');  
             file.prevmap = maplink;
@@ -122,8 +122,8 @@ module.exports = {
             .setColor(0x462B71)
             .setTitle("Information for " + maptitle)
             .setImage(mapbg)
-            .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: undefined | 95: undefined \n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
-            message.reply({ embeds: [Embed]})
+            .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: ${totalpp}\n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
+            message.reply({ embeds: [Embed]})})
             
         //})
     } catch(error){
