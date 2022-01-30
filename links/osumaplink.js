@@ -7,7 +7,7 @@ module.exports = {
     name: 'osumaplink',
     description: '',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        const w = JSON.stringify(linkargs).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('b').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
+        const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('b').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const pickeduserX = w;
         console.log(`${w}\n${pickeduserX}`)
         console.log(`${currentDateISO} | ${currentDate}`)
@@ -64,7 +64,16 @@ module.exports = {
             let maptitle = JSON.stringify(mapdata['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title_unicode', '');
             let mapdiff = JSON.stringify(mapdata, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
             let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '')
-            
+            let mapmaxcombo = JSON.stringify(mapdata, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('max_combo', '')
+            let mapmaxcombotoint = Math.abs(mapmaxcombo);
+            let mapmiss = Math.abs(0)
+            let topacc = Math.abs(100.00)
+            let midacc = Math.abs(95.00)
+            let slidertonum = Math.abs(mapcircle)
+            let circletonum = Math.abs(mapslider)
+            let totalobjcount = Math.abs(mapcircle + mapslider + mapspinner)
+            let aimstars = 1
+            let speedstars = 1
             /*let osu = require("ojsama")
 
             let parser = new osu.parser();

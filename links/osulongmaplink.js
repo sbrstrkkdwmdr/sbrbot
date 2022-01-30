@@ -11,7 +11,7 @@ module.exports = {
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         try{const w = JSON.stringify(linkargs).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('beatmapsets').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const grab = JSON.stringify(w.split('#')[1].split('/'))
-        const pickeduserX = JSON.stringify(grab).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('osu', '').replaceAll("\\", '');
+        const pickeduserX = JSON.stringify(grab).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('osu', '').replaceAll("\\", '').replaceAll('taiko', '').replaceAll('fruits', '').replaceAll('mania', '');
         console.log(`${w}\n${pickeduserX}\n${grab}`)
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("link detector executed - map get (long)")
