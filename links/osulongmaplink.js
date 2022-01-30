@@ -1,7 +1,6 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { access_token } = require('../osuauth.json');
 const calc = require('ojsama');
 const { std_ppv2 } = require('booba');
 const {Beatmap, Osu: {DifficultyCalculator, PerformanceCalculator}} = require('osu-bpdpc')
@@ -36,6 +35,7 @@ module.exports = {
             .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
             ;
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickeduserX}`;
+            const { access_token } = require('../osuauth.json');
             
             fetch(mapurl, {
                 method: "GET",

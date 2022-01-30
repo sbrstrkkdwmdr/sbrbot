@@ -1,7 +1,6 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { access_token } = require('../osuauth.json');
 const { std_ppv2 } = require('booba');
 module.exports = {
     name: 'rs',
@@ -33,7 +32,8 @@ module.exports = {
 
 
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
-            
+                const { access_token } = require('../osuauth.json');
+
             fetch(userinfourl, {
                 headers: {
                     Authorization: `Bearer ${access_token}`

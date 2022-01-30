@@ -1,7 +1,6 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { access_token } = require('../osuauth.json');
 const { std_ppv2 } = require('booba');
 module.exports = {
     name: 'ctbrs',
@@ -46,7 +45,7 @@ module.exports = {
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
                 const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=fruits&limit=18&offset=0`;
-                
+                const { access_token } = require('../osuauth.json');
                 fetch(recentactiveurl, {
                     headers: {
                         Authorization: `Bearer ${access_token}`

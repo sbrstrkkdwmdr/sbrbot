@@ -6,7 +6,6 @@ const GET = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { exec } = require("child_process");
-const { access_token } = require('../osuauth.json');
 module.exports = {
     name: 'ctbtop',
     description: '',
@@ -36,6 +35,7 @@ module.exports = {
                 .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
                 ;
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/fruits`;
+                const { access_token } = require('../osuauth.json');
             
             fetch(userinfourl, {
                 headers: {

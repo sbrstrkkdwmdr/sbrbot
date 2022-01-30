@@ -1,9 +1,7 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { access_token } = require('../osuauth.json');
 const { std_ppv2 } = require('booba');
-let { prevmap } = require('../storedmap.json');
 const {Beatmap, Osu: {DifficultyCalculator, PerformanceCalculator}} = require('osu-bpdpc')
 const request = require('request-promise-native')
 module.exports = {
@@ -16,8 +14,9 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
-        if(!pickeduserX){try{
-            let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
+        
+        try {
+        let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
             let body1 = {
                 "client_id": osuclientid,
                 "client_secret": osuclientsecret,
@@ -32,7 +31,12 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
             ;
+        if(!pickeduserX){
+            
+            if(!pickeduserX){
+            let { prevmap } = require('../storedmap.json');
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`;
+            const { access_token } = require('../osuauth.json');
             
             fetch(mapurl, {
                 method: "GET",
@@ -164,30 +168,14 @@ let pp95 = "undefined";
             .setImage(mapbg)
             .setDescription(``);
             message.reply({ embeds: [Embed]})*/
-            });
-        } catch(err){
-            console.log(err)
-        }}
+            });}
+        }
 
       
         if(pickeduserX){try{
             if(isNaN(pickeduserX)) return message.reply("You must use the ID e.g. 3305367 instead of Weekend Whip")
-            let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
-            let body1 = {
-                "client_id": osuclientid,
-                "client_secret": osuclientsecret,
-                "grant_type": "client_credentials",
-                "scope": "public"
-            }
-            fetch(oauthurl, {
-                method: "POST",
-                body: JSON.stringify(body1),
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(res => res.json())
-            .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
-            ;
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickeduserX}`;
+            const { access_token } = require('../osuauth.json');
             
             fetch(mapurl, {
                 method: "GET",
@@ -317,31 +305,17 @@ let pp95 = "undefined";
             .setImage(mapbg)
             .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: ${totalpp} \n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
             message.reply({ embeds: [Embed]})})
-        //    })
     } catch(error){
 				message.reply("error")
 				console.log(error)
 				console.log("")
 			}
-			
-			
-		/*	let { version } = require('../map.json');
-			let { cover } = require('../map.json');
-			let { url }
-			console.log(version)*/
-	
-
-            
-             /*   let Embed = new Discord.MessageEmbed()
-            .setColor(0x462B71)
-            .setTitle("Information for " + maptitle)
-            .setImage(mapbg)
-            .setDescription(``);
-            message.reply({ embeds: [Embed]})*/
             });
         } catch(err){
-            console.log(err)
-        } }
+            console.log(error)
+        } }} catch(error) {
+            console.log(error)
+        }
     }
 }
 //client.commands.get('').execute(message, args)
