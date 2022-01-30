@@ -50,6 +50,12 @@ for(const file of linkFiles){
 
     client.linkdetect.set(link.name, link);
 }
+const osucmdFiles = fs.readdirSync('./osu/').filter(file => file.endsWith('.js'));
+for(const file of osucmdFiles){
+    const osucmd = require(`./osu/${file}`);
+
+    client.osucmds.set(osucmd.name, osucmd);
+}
     //const modLogs = require('./modlogs/')
     /*if (!Date.prototype.toISOString) {
     (function() {
@@ -298,58 +304,58 @@ client.on('messageCreate', message =>{
         break;*/
 
     case 'rs':case 'recent':
-        client.commands.get('rs').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.osucmds.get('rs').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'osu':
-        client.commands.get('osu').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
+        client.osucmds.get('osu').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
         //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
         break;
 
     case 'osutop':
-        client.commands.get('osutop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.osucmds.get('osutop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'osutest':
-        client.commands.get('osutest').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.osucmds.get('osutest').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
     case 'osubest':
-        client.commands.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
+        client.osucmds.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
         break;
 
     case 'map':case 'mapinfo':
-        client.commands.get('map').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.osucmds.get('map').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
 
     case 'osuid':
-        client.commands.get('osuid').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.osucmds.get('osuid').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
 
     case 'osubestrs':
-      client.commands.get('osubestrs').execute(message, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone)
+      client.osucmds.get('osubestrs').execute(message, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone)
       break;
 
     case 'danser':
-        client.commands.get('danser').execute(message, args, currentDate, currentDateISO)
+        client.osucmds.get('danser').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'skin':
-        client.commands.get('skin').execute(message, args, currentDate, currentDateISO)
+        client.osucmds.get('skin').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'tsfm':case 'c':
-        client.commands.get('tsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.osucmds.get('tsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
     
     case 'osuauth':
-        client.commands.get('osuauth').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.osucmds.get('osuauth').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;  
 
     case 'osusave':case 'osuset':
-        client.commands.get('osusave').call(message, args, Discord, currentDate, currentDateISO)
+        client.osucmds.get('osusave').call(message, args, Discord, currentDate, currentDateISO)
         break;
     
     /*case 'mapsearch':case 'mapget':
