@@ -14,6 +14,7 @@ const { osuclientsecret } = require('./config.json');
 process.on('warning', e => console.warn(e.stack));
 const oncooldown = new Set();
 const https = require('http'); // or 'https' for https:// URLs
+const sql = require('sqlite')
 
 //MUSIC
 const ytdl = require("ytdl-core");
@@ -128,6 +129,7 @@ client.on('messageCreate', message =>{
         for (var key in message.attachments) {
             let attachment = message.attachments[key];
             download(attachment.url);
+            client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
         }
     }
 
@@ -138,6 +140,10 @@ client.on('messageCreate', message =>{
         client.commands.get('test').execute(message, args, currentDate, currentDateISO)
         break;
 
+    /*  case 'replay':
+        client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
+        break;
+*/
     //HELPFUL ---------------------------------------
 
     case 'ping':
@@ -434,6 +440,10 @@ client.on('messageCreate', message =>{
     case 'refresh':
         client.commands.get('refresh').execute(message, args, client, Discord, currentDate, currentDateISO)
         break;
+
+    case 'auto':
+    client.commands.get('auto').execute(message, args, currentDate, currentDateISO)
+    break;
     //MUSIC --------------------
     case 'play':
         client.commands.get('play').execute(message, args, command, client, Discord, currentDate, currentDateISO)
