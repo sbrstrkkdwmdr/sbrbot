@@ -26,6 +26,8 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
             .then(message.reply("success"))
+            console.log("writing data to osuauth.json")
+            console.log("")
             ;
         } catch(error){
             console.log(error)

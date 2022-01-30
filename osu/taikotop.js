@@ -34,6 +34,8 @@ module.exports = {
                 .then(res => res.json())
                 .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
                 ;
+                console.log("writing data to osuauth.json")
+                console.log("")
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/taiko`;
                 const { access_token } = require('../osuauth.json');
             
@@ -58,6 +60,8 @@ module.exports = {
                 .then(output2 => 
                     {const osutopdata = output2;
                     fs.writeFileSync("osutop.json", JSON.stringify(osutopdata, null, 2));
+                    console.log("writing data to osutop.json")
+                    console.log("")
                     try{
                     let topplayername = JSON.stringify(osutopdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                     //let mapbg1 = JSON.stringify(osutopdata[0]['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');

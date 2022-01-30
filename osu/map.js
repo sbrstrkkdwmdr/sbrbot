@@ -31,6 +31,9 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
             ;
+            console.log("writing data to osuauth.json")
+            console.log("")
+            
         if(!pickeduserX){
             
             if(!pickeduserX){
@@ -191,6 +194,8 @@ let pp95 = "undefined";
 					//let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
 					//const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
                 fs.writeFileSync("map.json", JSON.stringify(mapdata, null, 2))
+                console.log("writing data to map.json")
+                console.log("")
             try{let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
             let maplink = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
             let mapsetlink = JSON.stringify(mapdata, ['beatmapset_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmapset_id', '');

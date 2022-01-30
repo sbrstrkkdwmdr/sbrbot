@@ -34,6 +34,9 @@ module.exports = {
                 .then(res => res.json())
                 .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
                 ;
+                console.log("writing data to osuauth.json")
+                console.log("")
+                
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
                 const { access_token } = require('../osuauth.json');
             
@@ -46,6 +49,9 @@ module.exports = {
                 {
                 try{const osudata = output1;
                 fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
+                console.log("writing data to osuid.json")
+                console.log("")
+                
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
                 const osutopurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/best?mode=osu&limit=58&offset=0`;
@@ -58,6 +64,8 @@ module.exports = {
                 .then(output2 => 
                     {const osutopdata = output2;
                     fs.writeFileSync("osutop.json", JSON.stringify(osutopdata, null, 2));
+                    console.log("writing data to osutop.json")
+                    console.log("")
                     try{
                     let topplayername = JSON.stringify(osutopdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                     //let mapbg1 = JSON.stringify(osutopdata[0]['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');

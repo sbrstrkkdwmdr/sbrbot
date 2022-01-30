@@ -31,6 +31,9 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
             ;
+            console.log("writing data to osuauth.json")
+            console.log("")
+            
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
             
             fetch(userinfourl, {
@@ -42,6 +45,8 @@ module.exports = {
                 {
                 try{const osudata = output2;
                 fs.writeFileSync("osu.json", JSON.stringify(osudata, null, 2));
+                console.log("writing data to osu.json")
+                console.log("")
                 let playername = JSON.stringify(osudata, ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                 let playeravatar = JSON.stringify(osudata, ['avatar_url']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('avatar_url', '').replaceAll('https', 'https:');
                 let playerrank = JSON.stringify(osudata['statistics'], ['global_rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('global_rank', '');

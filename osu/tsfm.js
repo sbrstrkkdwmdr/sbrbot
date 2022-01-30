@@ -46,6 +46,9 @@ module.exports = {
             }).then(res => res.json())
             .then(output1 => 
                 {
+                    console.log("writing data to osuauth.json")
+                    console.log("")
+                    
                 try{const osudata = output1;
                 fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
@@ -67,6 +70,8 @@ module.exports = {
                         //let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
                         //const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
                     fs.writeFileSync("mapscore.json", JSON.stringify(mapscoredata, null, 2))
+                    console.log("writing data to mapscore.json")
+                    console.log("")
                 try{
                     let playerid = JSON.stringify(mapscoredata['score'], ['user_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('user_id', '');
                     let playername = JSON.stringify(mapscoredata['score']['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('username', '');

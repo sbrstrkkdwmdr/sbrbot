@@ -29,7 +29,8 @@ module.exports = {
                 .then(res => res.json())
                 .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
                 ;
-
+                console.log("writing data to osuauth.json")
+                console.log("")
 
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/taiko`;
                 const { access_token } = require('../osuauth.json');
@@ -55,6 +56,8 @@ module.exports = {
                 .then(output2 => 
                     {try{const rsdata = output2.slice(0, 1);
                     fs.writeFileSync("rs.json", JSON.stringify(rsdata, null, 2))
+                    console.log("writing data to rs.json")
+                    console.log("")
                 try {
                 let rsplayerid = JSON.stringify(rsdata[0], ['user_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('user_id', '');
                 let rsplayername = JSON.stringify(rsdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('username', '');
