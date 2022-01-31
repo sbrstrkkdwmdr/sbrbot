@@ -122,6 +122,9 @@ client.on('messageCreate', message =>{
     if (message.content.startsWith('https://osu.ppy.sh/beatmapsets/') || message.content.startsWith('osu.ppy.sh/beatmapsets')){
         client.linkdetect.get('osulongmaplink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
     }
+    if (message.content.startsWith('https://osu.ppy.sh/u/') || message.content.startsWith('osu.ppy.sh/u/')){
+        client.linkdetect.get('osuprofilelink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
+    } 
     if(!message.content.startsWith(prefix) || message.author.bot) return; //the return is so if its just prefix nothing happens
 
     if(oncooldown.has(message.author.id)) return message.reply("You're on cooldown");
