@@ -10,7 +10,7 @@ module.exports = {
         const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('u').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const pickeduserX = w;
         console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - osu profile")
+        console.log("command executed - osu profile link")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
