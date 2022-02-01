@@ -71,7 +71,18 @@ module.exports = {
                 let playerfollowers = JSON.stringify(osudata, ['follower_count']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('follower_count', '');
                 let playerprevname = JSON.stringify(osudata, ['previous_usernames']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('previous_usernames', '').replaceAll('[', '').replaceAll(']', '');
                 
-                
+                //
+                let playerlast = JSON.stringify(osudata, ['last_visit']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('last_visit', '').replaceAll('[', '').replaceAll(']', '');
+                let playerlastbetterformat = playerlast.substring(0,19)
+                let playerlasttoint = new Date(playerlastbetterformat)
+                //let currentTime = new Date();
+                //console.log(currentDate)
+                let minsincelastvis = (playerlasttoint - currentDate) / (1000 * 60);
+                let minlastvisreform = Math.abs(minsincelastvis).toFixed(0);
+                //let ww = Math.abs()
+                    let lastvishours = Math.trunc(minlastvisreform/60);
+                    let lastvisminutes = minlastvisreform % 60;
+                    let minlastvisredo = (lastvishours +"h, "+ lastvisminutes + "m");
             
             if(playerstatus == true ){let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
@@ -85,7 +96,7 @@ module.exports = {
                 .setColor(0x462B71)
                 .setTitle(playername + "'s osu! profile")
                 .setThumbnail(playeravatar)
-                .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ")\n" + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_offline:927800829153513472> Offline**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
+                .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ")\n" + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + `\n **<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago\n**Player joined on** ` + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
                 message.reply({ embeds: [Embed]})
                 //message.reply(mapbg1)
                 }} catch(error){
