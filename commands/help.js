@@ -183,8 +183,20 @@ module.exports = {
                 //break;    
 
             //OSUCMD
+            case 'ctbrs':
+                message.channel.send("Sends information about the user's most recent osu! ctb play.\nUsage:`sbr-ctbrs (ID)`")
+                break;
+            case 'ctbtop':
+                message.channel.send("Sends information about the user's top 5 osu! ctb plays.\nUsage:`sbr-ctbtop (ID)`\nDoesn't work if there's under 5 plays")
+                break;
             case 'danser':
                 message.channel.send("Sends links to danser.\nUsage: `sbr-danser`")
+                break;
+            case 'maniars':
+                message.channel.send("Sends information about the user's most recent osu! mania play.\nUsage:`sbr-maniars (ID)`")
+                break;
+            case 'maniatop':
+                message.channel.send("Sends information about the user's top 5 osu! mania plays.\nUsage:`sbr-maniatop (ID)`\nDoesn't work if there's under 5 plays")
                 break;
             case 'map':case 'mapinfo':
                 message.channel.send("Sends information about the mentioned map.\nUsage:`sbr-map (ID)`")
@@ -202,7 +214,7 @@ module.exports = {
                 message.channel.send("Sends the top 10 plays from the past 24h. \nUsage:`sbr-osubestrs`")
                 break;
             case 'osutop':
-                message.channel.send("Sends information about the user's osu! top plays.\nUsage:`sbr-osutop (ID)`")
+                message.channel.send("Sends information about the user's top osu! standard 5 plays.\nUsage:`sbr-osutop (ID)`\nDoesn't work if there's under 5 plays")
                 break;
             case 'osutest':
                 message.channel.send("Just whatever osu! command api thingy I'm testing.\nUsage:`sbr-osutest`")
@@ -216,17 +228,25 @@ module.exports = {
             case 'skin':
                 message.channel.send("Sends the link to all skins or a specific skin. \nUsage: `sbr-skin`\nUsage 2:`sbr-skin 10`")
                 break;
+            case 'taikors':
+                message.channel.send("Sends information about the user's most recent osu! taiko play.\nUsage:`sbr-taikors (ID)`")
+                break;
+            case 'taikotop':
+                message.channel.send("Sends information about the user's top 5 osu! taiko plays.\nUsage:`sbr-taikotop (ID)`\nDoesn't work if there's under 5 plays")
+                break;
             case 'tsfm':case 'c':
                 message.channel.send("Sends the top score for a user for a map. \nUsage:`sbr-tsfm 15222484 1186443`\n`sbr-tsfm (playerid) (beatmap id)`")
                 break;
 
             //LINKDETECTOR
             case 'osulongmaplink':
+                message.channel.send("Sends information about a linked map.\nUsage:`https://osu.ppy.sh/beatmapsets/1124121#taiko/2352956`\nthere can be other text in the message but the link must be first")
                 break;
-            case 'osulongmaplink':
+            case 'osumaplink':
+                message.channel.send("Sends information about a linked map.\nUsage:`https://osu.ppy.sh/b/1545686`\nthere can be other text in the message but the link must be first")
                 break;
             case 'osuprofilelink':
-                
+                message.channel.send("Sends information about the a linked osu! profile.\nUsage:`https://osu.ppy.sh/u/15222484`\nthere can be other text in the message but the link must be first")
                 break;
             default:
                 message.channel.send(`command "${helper}" not found`)
