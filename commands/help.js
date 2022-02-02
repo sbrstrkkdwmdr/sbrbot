@@ -42,9 +42,6 @@ module.exports = {
             case 'danbooru':
                 message.channel.send("Random danbooru image .\nUsage: `sbr-danbooru`\nNSFW channels only")
                 break;                
-            case 'danser':
-                message.channel.send("Sends links to danser.\nUsage: `sbr-danser`")
-                break;
             case 'emojify':
                 message.channel.send("Converts message into emojis.\nUsage: `sbr-emojify text` Will change this to emojipasta if I figure out how")
                 break;
@@ -102,12 +99,6 @@ module.exports = {
             case 'lolibooru':
                 message.channel.send("Random Lolibooru image.\nUsage:`sbr-lolibooru`\nNSFW channels only.")
                 break;
-            case 'map':case 'mapinfo':
-                message.channel.send("Sends information about the mentioned map.\nUsage:`sbr-map (ID)`")
-                break;
-            case 'mapsearch':case 'mapget':
-                message.channel.send("Sends information about the requested map.\nUsage:`sbr-mapsearch`")
-                break;
             case 'math':case 'calculate':
                 message.channel.send("Calculates a math problem.\nUsage:`sbr-math add 5 5`\nArguments: `add`, `subtract`, `multiply`, `divide`, `squareroot`, `square`, `factorial`, `hcf`, `lcm`")
                 break;
@@ -125,21 +116,6 @@ module.exports = {
                 break;
             case 'node_modules':
                 message.channel.send("A big folder that lets stuff run in nodejs. \n||Still not as big as your mum :kekw: :troll: :pepelaugh:||")
-                break;
-            case 'osu':
-                message.channel.send("Sends information about the user's osu! profile.\nUsage:`sbr-osu (username)`")
-                break;
-            case 'osubest': 
-                message.channel.send("Sends the top 5 plays of all time.\nUsage:`sbr-osubest`")
-                break;
-            case 'osubestrs':
-                message.channel.send("Sends the top 10 plays from the past 24h. \nUsage:`sbr-osubestrs`")
-                break;
-            case 'osutop':
-                message.channel.send("Sends information about the user's osu! top plays.\nUsage:`sbr-osutop (ID)`")
-                break;
-            case 'osutest':
-                message.channel.send("Just whatever osu! command api thingy I'm testing.\nUsage:`sbr-osutest`")
                 break;
             case 'ping':
                 message.channel.send("Checks the latency/ping of the bot and API and sends back a value in ms.\nUsage:`sbr-ping`")
@@ -162,17 +138,8 @@ module.exports = {
             case 'roll':case 'numgen':
                 message.channel.send("Generates a random number. The limit is controllable by the user.\nUsage:`sbr-roll` or `sbr-roll 727`")
                 break;
-            case 'rs':case 'recent':
-                message.channel.send("Sends information about the user's most recent osu! play.\nUsage:`sbr-rs (ID)`")
-                break;
-            case 'rsplus':
-                message.channel.send("Sends information about the mentioned user's 5 most recent osu! plays.\nUsage:`sbr-rsplus @username`")
-                break;
             case 'serverlist':case 'servers':
                 message.channel.send("Lists all guilds the bot is in including IDs.\nUsage:`sbr-serverlist`")
-                break;
-            case 'skin':
-                message.channel.send("Sends the link to all skins or a specific skin. \nUsage: `sbr-skin`\nUsage 2:`sbr-skin 10`")
                 break;
             case 'template':
                 message.channel.send("a.\nUsage:``")
@@ -188,9 +155,6 @@ module.exports = {
                 break;
             case 'token':
                 message.channel.send("Sends the bot token (maybe???).\nUsage:`sbr-token`")
-                break;
-            case 'tsfm':case 'c':
-                message.channel.send("Sends the top score for a user for a map. \nUsage:`sbr-tsfm 15222484 1186443`\n`sbr-tsfm (playerid) (beatmap id)`")
                 break;
             case 'unban':
                 message.channel.send("Unbans the mentioned user ID.\nUsage:`sbr-unban (user.id)`")
@@ -217,6 +181,53 @@ module.exports = {
             //case 'ytsearch5':
                 //message.channel.send("Sends the first five results of a search on youtube. \nUsage: `sbr-ytsearch5 osus`\nEmbeds are disabled so the channel doesn't get filled up.")
                 //break;    
+
+            //OSUCMD
+            case 'danser':
+                message.channel.send("Sends links to danser.\nUsage: `sbr-danser`")
+                break;
+            case 'map':case 'mapinfo':
+                message.channel.send("Sends information about the mentioned map.\nUsage:`sbr-map (ID)`")
+                break;
+            case 'mapsearch':case 'mapget':
+                message.channel.send("Sends information about the requested map.\nUsage:`sbr-mapsearch`")
+                break;
+            case 'osu':
+                message.channel.send("Sends information about the user's osu! profile.\nUsage:`sbr-osu (username)`")
+                break;
+            case 'osubest': 
+                message.channel.send("Sends the top 5 plays of all time.\nUsage:`sbr-osubest`")
+                break;
+            case 'osubestrs':
+                message.channel.send("Sends the top 10 plays from the past 24h. \nUsage:`sbr-osubestrs`")
+                break;
+            case 'osutop':
+                message.channel.send("Sends information about the user's osu! top plays.\nUsage:`sbr-osutop (ID)`")
+                break;
+            case 'osutest':
+                message.channel.send("Just whatever osu! command api thingy I'm testing.\nUsage:`sbr-osutest`")
+                break;
+            case 'rs':case 'recent':
+                message.channel.send("Sends information about the user's most recent osu! play.\nUsage:`sbr-rs (ID)`")
+                break;
+            case 'rsplus':
+                message.channel.send("Sends information about the mentioned user's 5 most recent osu! plays.\nUsage:`sbr-rsplus @username`")
+                break;
+            case 'skin':
+                message.channel.send("Sends the link to all skins or a specific skin. \nUsage: `sbr-skin`\nUsage 2:`sbr-skin 10`")
+                break;
+            case 'tsfm':case 'c':
+                message.channel.send("Sends the top score for a user for a map. \nUsage:`sbr-tsfm 15222484 1186443`\n`sbr-tsfm (playerid) (beatmap id)`")
+                break;
+
+            //LINKDETECTOR
+            case 'osulongmaplink':
+                break;
+            case 'osulongmaplink':
+                break;
+            case 'osuprofilelink':
+                
+                break;
             default:
                 message.channel.send(`command "${helper}" not found`)
                 message.channel.send('commands listed here - https://sbrstrkkdwmdr.github.io/sbr-web/botcmd')
