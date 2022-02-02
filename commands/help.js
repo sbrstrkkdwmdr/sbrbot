@@ -117,6 +117,9 @@ module.exports = {
             case 'node_modules':
                 message.channel.send("A big folder that lets stuff run in nodejs. \n||Still not as big as your mum :kekw: :troll: :pepelaugh:||")
                 break;
+            case 'paperscissorsrock':
+                message.channel.send("Plays paper scissors rock / rock paper scissors.\nUsage:`sbr-paperscissorsrock paper`")
+                break;
             case 'ping':
                 message.channel.send("Checks the latency/ping of the bot and API and sends back a value in ms.\nUsage:`sbr-ping`")
                 break;

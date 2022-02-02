@@ -264,7 +264,7 @@ client.on('messageCreate', message =>{
         client.commands.get('say').execute(message, args, currentDate, currentDateISO)
         break;
     
-    case 'paperscissorsrock':case 'rockpaperscissors': case 'psr':case 'scissorsrockpaper':
+    case 'paperscissorsrock':case 'rockpaperscissors':case 'psr':case 'scissorsrockpaper':
         client.commands.get('psr').execute(message, args, currentDate, currentDateISO)
         break;
 
