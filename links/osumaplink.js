@@ -10,7 +10,9 @@ module.exports = {
         console.group('--- LINK DETECTED ---')
         const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('b').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const pickeduserX = w;
+        console.group("MAP ID:")
         console.log(`${w}\n${pickeduserX}`)
+        console.groupEnd()
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("link detector executed - map get")
         let consoleloguserweeee = message.author
@@ -142,7 +144,8 @@ module.exports = {
             message.channel.send("Error - LB2")
             console.log(error)
         } 
-        console.groupEnd()
+
     }
 }
+console.groupEnd()
 //client.commands.get('').execute(message, args)

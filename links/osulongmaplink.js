@@ -13,7 +13,10 @@ module.exports = {
         try{const w = JSON.stringify(linkargs).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('beatmapsets').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const grab = JSON.stringify(w.split('#')[1].split('/'))
         const pickeduserX = JSON.stringify(grab).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('osu', '').replaceAll("\\", '').replaceAll('taiko', '').replaceAll('fruits', '').replaceAll('mania', '');
+        console.group("MAP ID:")
         console.log(`${w}\n${pickeduserX}\n${grab}`)
+        
+        console.groupEnd()
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("link detector executed - map get (long)")
         let consoleloguserweeee = message.author
@@ -158,7 +161,8 @@ module.exports = {
             message.channel.send("Error - insufficient link\nmap links should be either `osu.ppy.sh/b/map_id` or `osu.ppy.sh/beatmapsets/mapset_id#osu/map_id`")
             console.log(error)
         }
-        console.groupEnd()
+
     }
 }
+console.groupEnd()
 //client.commands.get('').execute(message, args)
