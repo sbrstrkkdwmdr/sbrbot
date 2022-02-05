@@ -38,6 +38,10 @@ const { setInterval } = require('timers/promises');
 client.commands = new Discord.Collection();
 client.linkdetect = new Discord.Collection();
 client.osucmds = new Discord.Collection();
+client.admincmds = new Discord.Collection();
+client.helpcmds = new Discord.Collection();
+client.musiccmds = new Discord.Collection();
+client.ecchicmds = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
 for(const file of commandFiles){
@@ -59,25 +63,25 @@ for(const file of osucmdFiles){
 }
 const admincmdfiles = fs.readdirSync('./commands-admin/').filter(file => file.endsWith('.js'));
 for(const file of admincmdfiles){
-    const admincmd = require(`./osu/${file}`);
+    const admincmd = require(`./commands-admin/${file}`);
 
     client.admincmds.set(admincmd.name, admincmd);
 }
 const helpcmdfiles = fs.readdirSync('./commands-help/').filter(file => file.endsWith('.js'));
 for(const file of helpcmdfiles){
-    const helpcmd = require(`./osu/${file}`);
+    const helpcmd = require(`./commands-help/${file}`);
 
     client.helpcmds.set(helpcmd.name, helpcmd);
 }
 const musiccmdfiles = fs.readdirSync('./commands-music/').filter(file => file.endsWith('.js'));
 for(const file of musiccmdfiles){
-    const musiccmd = require(`./osu/${file}`);
+    const musiccmd = require(`./commands-music/${file}`);
 
     client.musiccmds.set(musiccmd.name, musiccmd);
 }
 const ecchicmdfiles = fs.readdirSync('./commands-ecchi/').filter(file => file.endsWith('.js'));
 for(const file of ecchicmdfiles){
-    const ecchicmd = require(`./osu/${file}`);
+    const ecchicmd = require(`./commands-ecchi/${file}`);
 
     client.ecchicmds.set(ecchicmd.name, ecchicmd);
 }
