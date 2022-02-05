@@ -108,8 +108,9 @@ module.exports = {
         } catch(err){
             console.log(err)
         } 
-        console.groupEnd()
+        
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
     }
 }
+console.groupEnd()
 //client.commands.get('').execute(message, args)

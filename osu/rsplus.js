@@ -40,8 +40,9 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
-        console.groupEnd()
+        
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
     }
 }
+console.groupEnd()
 //client.commands.get('').execute(message, args)

@@ -323,7 +323,8 @@ let pp95 = "undefined";
         } }} catch(error) {
             console.log(error)
         }
-        console.groupEnd()
+        
     }
 }
+console.groupEnd()
 //client.commands.get('').execute(message, args)
