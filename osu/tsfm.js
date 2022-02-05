@@ -8,6 +8,7 @@ module.exports = {
     name: 'tsfm',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+        console.group('--- COMMAND EXECUTION ---')
         const pickeduserX = args.splice(0,1000).join(" ");
         let pickedmap = JSON.stringify(prevmap).replaceAll('id', '').replaceAll('"', '');//args[1];
         console.log(`${currentDateISO} | ${currentDate}`)
@@ -166,6 +167,7 @@ module.exports = {
         }   catch(err){
                 console.log(err)
             }
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

@@ -1,6 +1,7 @@
 module.exports = {
     name: 'pixiv',
     execute(message, args, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         if(message.channel.nsfw) {
         let pp = Math.floor(Math.random () * 100000000 + 1) //90,000,000
         message.channel.send(`https://www.pixiv.net/en/artworks/${pp}`)
@@ -19,5 +20,6 @@ module.exports = {
             console.log("command failed - not NSFW channel")
             console.log("")
         }
+        console.groupEnd()
     }
 }

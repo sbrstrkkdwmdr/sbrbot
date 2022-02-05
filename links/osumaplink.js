@@ -7,6 +7,7 @@ module.exports = {
     name: 'osumaplink',
     description: '',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+        console.group('--- LINK DETECTED ---')
         const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('b').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const pickeduserX = w;
         console.log(`${w}\n${pickeduserX}`)
@@ -141,6 +142,7 @@ module.exports = {
             message.channel.send("Error - LB2")
             console.log(error)
         } 
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

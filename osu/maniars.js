@@ -7,6 +7,7 @@ module.exports = {
     name: 'maniars',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+        console.group('--- COMMAND EXECUTION ---')
         const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - maniars")
@@ -183,6 +184,7 @@ module.exports = {
             } catch(err){
                 console.log(err)
             }
+            console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

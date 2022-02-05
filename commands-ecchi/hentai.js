@@ -2,6 +2,7 @@ const { API, } = require('nhentai-api');
 module.exports = {
     name: 'hentai',
     execute(message, args, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         if(message.channel.nsfw) {
             let searchingfor = args[0];
             if(!searchingfor){
@@ -33,5 +34,6 @@ module.exports = {
             console.log("command failed - non NSFW channel")
             console.log("")
         }
+        console.groupEnd()
     }
 }

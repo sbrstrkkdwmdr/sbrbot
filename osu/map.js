@@ -8,6 +8,7 @@ module.exports = {
     name: 'map',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+        console.group('--- COMMAND EXECUTION ---')
         const pickeduserX = args[0];
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - map get")
@@ -322,6 +323,7 @@ let pp95 = "undefined";
         } }} catch(error) {
             console.log(error)
         }
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

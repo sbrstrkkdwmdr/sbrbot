@@ -2,7 +2,8 @@ module.exports = {
     name: 'unban',
     description: 'unban',
     async execute(message, args, currentDate, currentDateISO) {
-       if(message.member.permissions.has('BAN_MEMBERS')){
+        console.group('--- COMMAND EXECUTION ---')
+        if(message.member.permissions.has('BAN_MEMBERS')){
             console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - unban")
         let consoleloguserweeee = message.author
@@ -32,5 +33,6 @@ module.exports = {
     console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
     console.log("command failed - insufficient permissions")
     console.log("")}
+    console.groupEnd()
     }
 }

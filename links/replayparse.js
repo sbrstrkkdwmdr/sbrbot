@@ -9,6 +9,7 @@ module.exports = {
     name: 'replayparse',
     description: '',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+        
         try{
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("link detector executed - replayparse")
@@ -99,6 +100,7 @@ module.exports = {
             message.channel.send("Error - 1")
             console.log(error)
         }
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

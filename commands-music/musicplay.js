@@ -10,6 +10,7 @@ module.exports = {
     cooldown: 0,
     description: 'Advanced music bot',
     async execute(message, args, command, client, Discord, currentDate, currentDateISO){
+        console.group('--- COMMAND EXECUTION ---')
 console.log("yes")
 
         //Checking for the voicechannel and permissions (you can add more permissions if you like).
@@ -93,10 +94,11 @@ console.log("yes")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("")};
+            console.groupEnd()
     }
     
 }
-
+/*
 const video_player = async (guild, song) => {
     const song_queue = queue.get(guild.id);
 

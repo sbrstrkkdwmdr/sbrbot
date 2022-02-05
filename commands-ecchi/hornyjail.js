@@ -2,6 +2,7 @@
         name: 'hornyjail',
         description: '',
         execute(message, args, currentDate, currentDateISO) {
+            console.group('--- COMMAND EXECUTION ---')
             if(message.member.permissions.has("ADMINISTRATOR")){ //need admin
                 let user = message.mentions.users.first(); //gets the pinged user's ID
                 message.channel.send(`go to horny jail ${user}`); //user.username is the pinged user
@@ -18,6 +19,7 @@
                 let consoleloguserweeee = message.author
                 console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
                 console.log("")}
+                console.groupEnd()
         }
     }
     //client.commands.get('').execute(message, args)

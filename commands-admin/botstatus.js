@@ -4,6 +4,7 @@ module.exports = {
     ownerOnly: true,
 
     execute(message, args, client, Discord, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         if(message.author.id == '503794887318044675')
 {        let w = args.splice(1,100).join(" ");
         const a = ["WATCHING", "PLAYING", "STREAMING", "LISTENING"];
@@ -23,6 +24,7 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")}
+        console.groupEnd()
         }
 }
 //client.commands.get('').execute(message, args)

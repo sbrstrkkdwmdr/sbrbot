@@ -1,6 +1,7 @@
 module.exports = {
     name: 'yanderegen',
     execute(message, args, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         if(message.channel.nsfw) {
         let pp = Math.floor(Math.random () * 100000000 + 1)
         message.channel.send(`https://yande.re/post/show/${pp}`)
@@ -20,5 +21,6 @@ module.exports = {
             console.log("command failed - non NSFW channel")
             console.log("")
         }
+        console.groupEnd()
     }
 }

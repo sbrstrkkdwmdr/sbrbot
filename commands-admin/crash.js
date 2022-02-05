@@ -3,6 +3,7 @@ module.exports = {
     description: '',
     execute(message, args, currentDate, currentDateISO) {
         if(message.author.id == '503794887318044675'){
+          console.group('--- COMMAND EXECUTION ---')
           //message.reply("✔"); for some reason this line gets skipped
           console.log(`${currentDateISO} | ${currentDate}`)
           console.log("command executed - force crash")
@@ -21,6 +22,7 @@ module.exports = {
             console.log("command failed - insufficient permissions")
             console.log("")
           }  
+          console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

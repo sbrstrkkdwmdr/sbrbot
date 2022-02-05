@@ -2,6 +2,7 @@ module.exports = {
     name: 'purge',
     description: 'ERADICATE',
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         if(message.member.permissions.has('ADMINISTRATOR')){
                 try {
@@ -60,5 +61,6 @@ module.exports = {
             console.log("command failed - insufficient perms")
             console.log("")
         }*/
+        console.groupEnd()
     }
 }

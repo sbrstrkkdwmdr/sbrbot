@@ -2,6 +2,7 @@ module.exports = {
     name: 'rsplus',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         let pickeduser = args.splice(0,1000).join(" ");
         const url = new URL(
             `https://osu.ppy.sh/api/v2/users/${pickeduser}/recent_activity`
@@ -39,6 +40,7 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
+        console.groupEnd()
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
     }
 }

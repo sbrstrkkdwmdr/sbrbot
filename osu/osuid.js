@@ -5,6 +5,7 @@ module.exports = {
     name: 'osuid',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
+        console.group('--- COMMAND EXECUTION ---')
         const pickeduserX = args.splice(0,1000).join(" ");
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - get osu id")
@@ -60,6 +61,7 @@ module.exports = {
             console.log(err)
         } 
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
+console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

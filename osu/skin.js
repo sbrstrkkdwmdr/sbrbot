@@ -2,6 +2,7 @@ module.exports = {
     name: 'skin',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         let skinname = args[0];
         if(!skinname){
             message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skins")
@@ -120,6 +121,7 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")   
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

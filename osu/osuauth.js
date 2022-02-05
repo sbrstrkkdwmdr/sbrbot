@@ -5,6 +5,7 @@ module.exports = {
     name: 'osuauth',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+        console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osuauth")
         let consoleloguserweeee = message.author
@@ -33,6 +34,7 @@ module.exports = {
             console.log(error)
             message.reply("error")
         }
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

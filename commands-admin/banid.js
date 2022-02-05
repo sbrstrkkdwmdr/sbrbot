@@ -2,7 +2,7 @@ module.exports = {
     name: 'banid',
     description: '',
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
-       
+        console.group('--- COMMAND EXECUTION ---')
         if(message.member.permissions.has('BAN_MEMBERS')){
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - ban")
@@ -50,7 +50,7 @@ module.exports = {
     console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
     console.log("command failed - insufficient perms")
     console.log("")
-}
+}   console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

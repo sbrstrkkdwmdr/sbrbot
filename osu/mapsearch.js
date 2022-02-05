@@ -6,6 +6,7 @@ module.exports = {
     name: 'mapsearch',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+        console.group('--- COMMAND EXECUTION ---')
         const pickeduserX = args.splice(0, 100).join(' ');
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - map get")
@@ -114,6 +115,7 @@ module.exports = {
         } catch(err){
             console.log(err)
         } 
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

@@ -2,6 +2,7 @@ module.exports = {
     name: 'refresh',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
+      console.group('--- COMMAND EXECUTION ---')
         if(message.author.id == '503794887318044675'){
           message.delete();
           console.log(`${currentDateISO} | ${currentDate}`)
@@ -22,6 +23,7 @@ module.exports = {
             console.log("command failed - insufficient permissions")
             console.log("")
           }  
+          console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

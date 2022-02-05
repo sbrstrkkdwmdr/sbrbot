@@ -2,20 +2,22 @@ module.exports = {
     name: 'ping',
     description: 'ping',
     execute(message, args, client, Discord, currentDate, currentDateISO) {
-      message.channel.send('pong!');   
-      message.channel.send(`Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
-      console.log(`${currentDateISO} | ${currentDate}`)
-      console.log("command executed - ping")
-      let consoleloguserweeee = message.author
-      console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-      console.log(`Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`)
-      console.log("")
+        console.group('--- COMMAND EXECUTION ---')
+        message.channel.send('pong!');   
+        message.channel.send(`Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
+        console.log(`${currentDateISO} | ${currentDate}`)
+        console.log("command executed - ping")
+        let consoleloguserweeee = message.author
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log(`Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`)
+        console.log("")
+        console.groupEnd()
     }
 }
 // @ts-check // Can be removed, used to check typings and valid actions
 
-const { MessageEmbed } = require('discord.js');
-const quick = require('quick.db');
+//const { MessageEmbed } = require('discord.js');
+//const quick = require('quick.db');
 
 //BELOW IS SOME VERSION I FOUND ON CODELYON DISCORD. IDK WHAT TO CHANGE TO FIX IT
 /*module.exports = {

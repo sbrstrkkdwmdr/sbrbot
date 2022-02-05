@@ -9,6 +9,7 @@ module.exports = {
     name: 'osubestrs',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone) {
+        console.group('--- COMMAND EXECUTION ---')
 //        `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`
         let url = `https://osutrack-api.ameo.dev/bestplays?mode=0&from=${curdateyesterday}&to=${curdatetmr}`;
        /* const hiscores = [
@@ -182,6 +183,7 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

@@ -2,6 +2,7 @@ module.exports = {
     name: 'gleave',
     description: '',
     execute(message, args, client, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - guild leave")
         let consoleloguserweeee = message.author
@@ -13,10 +14,10 @@ module.exports = {
         message.reply("id bro");
         return(false)
         }
-        return guildID.leave();
+        guildID.leave(); 
 
         console.log(`left guild - ${guildID}`)
         console.log("")
-    }
+    }   console.groupEnd()
         }
     }

@@ -1,6 +1,7 @@
 module.exports = {
     name: 'lolibooru',
     execute(message, args, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         if(message.channel.nsfw) {
         let pp = Math.floor(Math.random () * 100000000 + 1)
         message.channel.send(`https://lolibooru.moe/post/show/${pp}`)
@@ -20,5 +21,6 @@ console.log("")}
             console.log(`failed - non NSFW channel`)
     console.log("")
         }
+        console.groupEnd()
     }
 }

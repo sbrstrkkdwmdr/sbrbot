@@ -2,6 +2,7 @@ module.exports = {
     name: 'danser',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         let variablenamelol = args[0]
         if(!variablenamelol){
         message.channel.send("https://discord.gg/UTPvbe8")
@@ -27,6 +28,7 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
+        console.groupEnd()
       /*  if(args[0] == help){
          message.channel.send("ask here")
          message.channel.send

@@ -2,7 +2,7 @@ module.exports = {
     name: 'help',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
-
+        console.group('--- COMMAND EXECUTION ---')
         let helper = args[0]
         if(!helper){
         message.channel.send('commands listed here - https://sbrstrkkdwmdr.github.io/sbr-web/botcmd')}
@@ -262,6 +262,7 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

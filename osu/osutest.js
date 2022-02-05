@@ -7,6 +7,7 @@ module.exports = {
     name: 'osutest',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+        console.group('--- COMMAND EXECUTION ---')
         if(message.author.id == '503794887318044675'){ 
             const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
             console.log(`${currentDateISO} | ${currentDate}`)
@@ -178,6 +179,7 @@ module.exports = {
                     console.log(err)
                 }
         }
+        console.groupEnd()
 }
 }
 //client.commands.get('').execute(message, args)

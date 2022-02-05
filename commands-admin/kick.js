@@ -3,6 +3,7 @@ module.exports = {
     description: '',
     execute(message, args, client, Discord, currentDate, currentDateISO) {
         if(message.member.permissions.has('KICK_MEMBERS')){
+            console.group('--- COMMAND EXECUTION ---')
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - kick")
             let consoleloguserweeee = message.author
@@ -26,7 +27,7 @@ module.exports = {
     } else { message.channel.send("That user is no longer here.")}
     } else { message.channel.send("No user has been mentioned")}
     console.log("")
-}
+}   console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

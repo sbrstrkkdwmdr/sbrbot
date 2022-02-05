@@ -6,6 +6,7 @@ module.exports = {
     name: 'osusave',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) { 
+      console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osusave")
         let consoleloguserweeee = message.author
@@ -28,6 +29,7 @@ sql.get(`SELECT * FROM userData WHERE userId = ${message.author.id}`).then(row =
       sql.run(`UPDATE userData SET money = ${row.money + 100} WHERE guild = ${msg.guild.id}`)
     }
 });
+console.groupEnd()
 }
 }
 //client.commands.get('').execute(message, args)

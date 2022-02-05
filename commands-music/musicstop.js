@@ -4,6 +4,7 @@ module.exports = {
     name: 'musicstop',
     description: '',
     async execute(message, args, client, Discord, ytdl, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         const player = new Player(client);
 
         try {if (!message.member.voice.channelId) return await message.reply({ content: "You aren't in vc smh my head", ephemeral: true });
@@ -43,4 +44,5 @@ console.log("executed command - musicstop")
 let consoleloguserweeee = message.author
 console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
 console.log("")
+console.groupEnd()
 }}
