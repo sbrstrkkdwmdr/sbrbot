@@ -8,7 +8,7 @@ module.exports = {
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
         console.group('--- LINK DETECTED ---')
         //const pickeduserX = args.splice(0,1000).join(" ");
-        const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('users', '').replaceAll('u').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
+        const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replace('users', '').replace('u').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const pickeduserX = w;
         console.log(w)
         console.log(`${currentDateISO} | ${currentDate}`)
@@ -111,7 +111,7 @@ module.exports = {
             console.log(err)
         } 
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
-console.groupEnd()
     }
 }
+console.groupEnd()
 //client.commands.get('').execute(message, args)
