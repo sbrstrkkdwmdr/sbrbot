@@ -75,6 +75,12 @@ for(const file of musiccmdfiles){
 
     client.musiccmds.set(musiccmd.name, musiccmd);
 }
+const ecchicmdfiles = fs.readdirSync('./commands-ecchi/').filter(file => file.endsWith('.js'));
+for(const file of ecchicmdfiles){
+    const ecchicmd = require(`./osu/${file}`);
+
+    client.ecchicmds.set(ecchicmd.name, ecchicmd);
+}
     //const modLogs = require('./modlogs/')
     /*if (!Date.prototype.toISOString) {
     (function() {
@@ -411,34 +417,34 @@ client.on('messageCreate', message =>{
 
 
     case 'hentai':case 'nhentai':
-        client.commands.get('hentai').execute(message, args, currentDate, currentDateISO)
+        client.ecchicmds.get('hentai').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'horny':
-        client.commands.get('horny').execute(message, args, currentDate, currentDateISO)
+        client.ecchicmds.get('horny').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'hornyjail':
-        client.commands.get('hornyjail').execute(message, args, currentDate, currentDateISO)
+        client.ecchicmds.get('hornyjail').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'danbooru':
-        client.commands.get('danbooru').execute(message, args, currentDate, currentDateISO)
+        client.ecchicmds.get('danbooru').execute(message, args, currentDate, currentDateISO)
         break;
     case 'lolibooru':
-        client.commands.get('lolibooru').execute(message, args, currentDate, currentDateISO)
+        client.ecchicmds.get('lolibooru').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'yanderegen':
-        client.commands.get('yanderegen').execute(message, args, currentDate, currentDateISO)
+        client.ecchicmds.get('yanderegen').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'konachangen':
-        client.commands.get('konachangen').execute(message, args, currentDate, currentDateISO)
+        client.ecchicmds.get('konachangen').execute(message, args, currentDate, currentDateISO)
         break;
         
     case 'pixiv':
-        client.commands.get('pixiv').execute(message, args, currentDate, currentDateISO)
+        client.ecchicmds.get('pixiv').execute(message, args, currentDate, currentDateISO)
         break;
 
     //ADMIN-----------------------------------------------------------------------------------------
@@ -550,12 +556,14 @@ client.on('messageCreate', message =>{
         break;
 
     default:
-      let undefinedargsbcsmiswrotecmd = args.splice(0,100).join(" ");
-      console.log(`${currentDateISO} | ${currentDate}`)
-      console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        let undefinedargsbcsmiswrotecmd = args.splice(0,100).join(" ");
+        console.group("debug")
+        console.log(`${currentDateISO} | ${currentDate}`)
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("command executed - default (possible mispelt command)")
         console.log(`attempted command - ${command} ${undefinedargsbcsmiswrotecmd}`)
         console.log("")
+        console.groupEnd()
         break;
     }
     //NON COMMAND STUFF--------------------------
