@@ -57,6 +57,24 @@ for(const file of osucmdFiles){
 
     client.osucmds.set(osucmd.name, osucmd);
 }
+const admincmdfiles = fs.readdirSync('./commands-admin/').filter(file => file.endsWith('.js'));
+for(const file of admincmdfiles){
+    const admincmd = require(`./osu/${file}`);
+
+    client.admincmds.set(admincmd.name, admincmd);
+}
+const helpcmdfiles = fs.readdirSync('./commands-help/').filter(file => file.endsWith('.js'));
+for(const file of helpcmdfiles){
+    const helpcmd = require(`./osu/${file}`);
+
+    client.helpcmds.set(helpcmd.name, helpcmd);
+}
+const musiccmdfiles = fs.readdirSync('./commands-music/').filter(file => file.endsWith('.js'));
+for(const file of musiccmdfiles){
+    const musiccmd = require(`./osu/${file}`);
+
+    client.musiccmds.set(musiccmd.name, musiccmd);
+}
     //const modLogs = require('./modlogs/')
     /*if (!Date.prototype.toISOString) {
     (function() {
@@ -157,18 +175,18 @@ client.on('messageCreate', message =>{
     //HELPFUL ---------------------------------------
 
     case 'ping':
-        client.commands.get('ping').execute(message, args, client, Discord, currentDate, currentDateISO)
+        client.helpcmds.get('ping').execute(message, args, client, Discord, currentDate, currentDateISO)
         break; 
     case  'links':
-        client.commands.get('links').execute(message, args, currentDate, currentDateISO)
+        client.helpcmds.get('links').execute(message, args, currentDate, currentDateISO)
         break;
     
     case 'help':
-        client.commands.get('help').execute(message, args, currentDate, currentDateISO)
+        client.helpcmds.get('help').execute(message, args, currentDate, currentDateISO)
         break;  
         
     case 'info':
-        client.commands.get('info').execute(message, args, currentDate, currentDateISO)
+        client.helpcmds.get('info').execute(message, args, currentDate, currentDateISO)
         break;
     //UNCATEGORISED -----GENERAL?-------------------------------------------------
      case 'avatar':case 'av':case 'pfp':
@@ -425,39 +443,39 @@ client.on('messageCreate', message =>{
 
     //ADMIN-----------------------------------------------------------------------------------------
     case 'purge':
-        client.commands.get('purge').execute(message, args, client, Discord, currentDate, currentDateISO)
+        client.admincmds.get('purge').execute(message, args, client, Discord, currentDate, currentDateISO)
         break;
 
     case 'unban':
-        client.commands.get('unban').execute(message, args, currentDate, currentDateISO)
+        client.admincmds.get('unban').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'break時ｗｗｗワロト':
-        client.commands.get('break').execute(message, args, currentDate, currentDateISO)
+        client.admincmds.get('break').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'crash':
-        client.commands.get('crash').execute(message, args, currentDate, currentDateISO)
+        client.admincmds.get('crash').execute(message, args, currentDate, currentDateISO)
         break;
     
     case 'ban':
-        client.commands.get('ban').execute(message, args, client, Discord, currentDate, currentDateISO)
+        client.admincmds.get('ban').execute(message, args, client, Discord, currentDate, currentDateISO)
         break; 
 
     case 'kick':
-        client.commands.get('kick').execute(message, args, client, Discord, currentDate, currentDateISO)
+        client.admincmds.get('kick').execute(message, args, client, Discord, currentDate, currentDateISO)
         break;   
 
     case 'serverlist':case 'servers':
-        client.commands.get('serverlist').execute(message, args, Discord, client, currentDate, currentDateISO)
+        client.admincmds.get('serverlist').execute(message, args, Discord, client, currentDate, currentDateISO)
         break;
 
     case 'gleave':case 'guildleave':case 'leaveguild':
-        client.commands.get('gleave').execute(message, args, client, currentDate, currentDateISO)
+        client.admincmds.get('gleave').execute(message, args, client, currentDate, currentDateISO)
         break;
 
     case 'guildid':
-        client.commands.get('guildid').execute(message, args, currentDate, currentDateISO)
+        client.admincmds.get('guildid').execute(message, args, currentDate, currentDateISO)
         break;
     
     case 'remind':
@@ -465,22 +483,22 @@ client.on('messageCreate', message =>{
         break;
 
     case 'banid':
-        client.commands.get('banid').execute(message, args, client, Discord, currentDate, currentDateISO)
+        client.admincmds.get('banid').execute(message, args, client, Discord, currentDate, currentDateISO)
         break;
 
     case 'botstatus':
-        client.commands.get('botstatus').execute(message, args, client, Discord, currentDate, currentDateISO)
+        client.admincmds.get('botstatus').execute(message, args, client, Discord, currentDate, currentDateISO)
         break;
     case 'refresh':
-        client.commands.get('refresh').execute(message, args, client, Discord, currentDate, currentDateISO)
+        client.admincmds.get('refresh').execute(message, args, client, Discord, currentDate, currentDateISO)
         break;
 
     case 'auto':
-    client.commands.get('auto').execute(message, args, currentDate, currentDateISO)
+    client.admincmds.get('auto').execute(message, args, currentDate, currentDateISO)
     break;
     //MUSIC --------------------
     case 'play':
-        client.commands.get('play').execute(message, args, command, client, Discord, currentDate, currentDateISO)
+        client.musiccmds.get('play').execute(message, args, command, client, Discord, currentDate, currentDateISO)
         //execute(message, serverQueue);
         /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music play")
@@ -489,7 +507,7 @@ client.on('messageCreate', message =>{
         client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)*/
         break; 
     case 'skip':
-        client.commands.get('skip').execute(message, args, client, Discord, currentDate, currentDateISO)
+        client.musiccmds.get('skip').execute(message, args, client, Discord, currentDate, currentDateISO)
         //skip(message, serverQueue);
         /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music skip")
@@ -499,7 +517,7 @@ client.on('messageCreate', message =>{
         break;
         
     case 'stop':
-        client.commands.get('stop').execute(message, args, client, Discord, currentDate, currentDateISO)
+        client.musiccmds.get('stop').execute(message, args, client, Discord, currentDate, currentDateISO)
         //stop(message, serverQueue);
         /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music stop")
@@ -509,7 +527,7 @@ client.on('messageCreate', message =>{
         break;
 
     case `disconnect`:
-        client.commands.get('musicstop').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
+        client.musiccmds.get('musicstop').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
         //stop(message, serverQueue);
         /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music disconnect")
@@ -519,7 +537,7 @@ client.on('messageCreate', message =>{
         break;
 
     case 'queue':
-        client.commands.get('musicqueue').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
+        client.musiccmds.get('musicqueue').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
 /*console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - music queue")
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
@@ -528,7 +546,7 @@ client.on('messageCreate', message =>{
         break;
 
     case 'np':
-        client.commands.get('musicnp').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
+        client.musiccmds.get('musicnp').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
         break;
 
     default:
@@ -562,10 +580,14 @@ console.log(`-------------------------------------------------------------------
     })
     .then(res => res.json())
     .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+    console.group("information")
     console.log("saved osuauth")
+    console.groupEnd()
 //
 } //turns on the bot
 catch (error) {
+    console.group("debug")
     console.log("login error")
     console.log(error)
+    console.groupEnd()
 }
