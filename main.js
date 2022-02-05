@@ -115,10 +115,12 @@ for(const file of ecchicmdfiles){
 client.once('ready', () => {
     let currentDate = new Date();
     let currentDateISO = new Date().toISOString();
+    console.group('--- BOT IS NOW ONLINE ---')
     console.log(`${currentDateISO} | ${currentDate}`)
-    console.log('kwsmrksnsm is online!'); //message shown when bot turns on
+    //console.log('kwsmrksnsm is online!'); //message shown when bot turns on
     console.log(`API Latency is ${Math.round(client.ws.ping)}ms`);
     console.log("")
+    console.groupEnd()
 
     //modLogs(client)
 client.user.setPresence({ activities: [{ name: "you", type: 'WATCHING', video_url: 'https://youtube.com/saberstrkkdwmdr'}], status: `dnd`,});
@@ -592,13 +594,13 @@ console.log(`-------------------------------------------------------------------
     })
     .then(res => res.json())
     .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
-    console.group("information")
+    console.group("---")
     console.log("saved osuauth")
     console.groupEnd()
 //
 } //turns on the bot
 catch (error) {
-    console.group("debug")
+    console.group("--- DEBUG ---")
     console.log("login error")
     console.log(error)
     console.groupEnd()
