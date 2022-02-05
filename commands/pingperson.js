@@ -2,6 +2,7 @@ module.exports = {
     name: 'pingperson',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         if(message.member.permissions.has('ADMINISTRATOR')){ //they need admin
             let user = message.mentions.users.first(); //gets the pinged user's ID
             message.channel.send(`${user} `); //user.username is the pinged user
@@ -20,6 +21,7 @@ module.exports = {
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("command failed - insufficent perms")
         console.log("")}
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

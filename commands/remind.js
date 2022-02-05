@@ -8,6 +8,7 @@ module.exports = {
         content:  "Helps remind you something",
     },
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         let time = args[0];
         let user = message.author
         let reminder = args.splice(1).join(' ')
@@ -65,6 +66,7 @@ module.exports = {
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log(ms(time))
         console.log("")
+        console.groupEnd()
     }
 }
 /*

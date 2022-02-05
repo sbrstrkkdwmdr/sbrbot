@@ -4,6 +4,7 @@ module.exports = {
     name: 'join',
     description: '',
     execute(message, args, user, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - join")
         let consoleloguserweeee = message.author
@@ -26,6 +27,7 @@ module.exports = {
                 console.log("")
             }
         }
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

@@ -4,6 +4,7 @@ module.exports = {
     name: 'ytsearch',
     description: "Search on YouTube",
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         try{if(!args.length){message.reply('No search query given') //Checks if the user gave any search queries
     } else{
         const searched = await yts.search(args.splice(0,100).join(" ")); //Searches for videos
@@ -28,5 +29,6 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
+        console.groupEnd()
     }
 }

@@ -2,11 +2,13 @@ module.exports = {
     name: 'error',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - error")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
+        console.groupEnd()
         let errorlist = args[0];
         switch(errorlist){
             case 'LB1':

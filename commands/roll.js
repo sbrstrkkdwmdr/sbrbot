@@ -3,6 +3,7 @@ module.exports = {
     description: '',
     execute(message, args, currentDate, currentDateISO) {
         if(message.member.permissions.has('SEND_MESSAGES')){
+            console.group('--- COMMAND EXECUTION ---')
             let user = message.author
             let w = args.slice(0).join(' ')
             if(w > 0){
@@ -22,7 +23,9 @@ module.exports = {
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("")
+            
             }
+            console.groupEnd()
             } 
         }
 }

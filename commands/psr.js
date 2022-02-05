@@ -17,11 +17,13 @@ module.exports = {
         if(playerguess == "rock" && botguess == "scissors") return message.reply("I picked " + String(`${botguess}`) + " | You win");
         if(playerguess == "rock" && botguess == "rock") return message.reply("I picked " + String(`${botguess}`) + " | We tied");
         if(!playerguess) return message.reply("please pick rock, paper, or scissors");
+        console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - paper scissors rock")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

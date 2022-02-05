@@ -4,11 +4,13 @@ module.exports = {
     description: 'Search images through google images',
     async execute(message, args, Discord, get, client, currentDate, currentDateISO) {
         //message.channel.send("WIP")
+        console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - image")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
+        console.groupEnd()
        if (!args.length) return message.channel.send('Please specify the name of the image you want to search.')
         
         // Note that ephemeral messages are only available with Interactions, so we can't make the response here as an ephemeral.

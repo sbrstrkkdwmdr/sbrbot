@@ -4,6 +4,7 @@ module.exports = {
     name: 'ghostping',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
+        console.group('--- COMMAND EXECUTION ---')
         if(message.member.permissions.has('ADMINISTRATOR')){
             let pinged = message.mentions.users.first();
             if(!pinged){
@@ -34,6 +35,7 @@ module.exports = {
             console.log("command failed - insufficient permissions")
             console.log("")
         }  
+        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

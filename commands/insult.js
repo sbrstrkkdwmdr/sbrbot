@@ -3,11 +3,13 @@ module.exports = {
     description: 'insult',
     execute(message, args, currentDate, currentDateISO) {
         if(message.member.permissions.has('SEND_MESSAGES')){
+            console.group('--- COMMAND EXECUTION ---')
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - insult")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("")
+            console.groupEnd()
             let rdm = ["キモイ", "you're a 10... on the pH scale cuz ya basic!", "sharthead", "dumbface", "insert insult here, I'll think of one later"];
             let ins = rdm[Math.floor(Math.random() * rdm.length)];
             let user = message.mentions.users.first();
