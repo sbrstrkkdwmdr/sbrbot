@@ -48,7 +48,7 @@ module.exports = {
                 fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
-                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=mania&limit=18&offset=0`;
+                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=mania&limit=1&offset=0`;
                 
                 fetch(recentactiveurl, {
                     headers: {
@@ -114,7 +114,7 @@ module.exports = {
                 const USER = pickeduserX;
                 
                 (async () => {
-                  const response = await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=${USER}&limit=1`);
+                  const response = await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=${USER}&limit=1&m=3`);
                   const json = await response.json();
                   const [score] = json;
                   fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));

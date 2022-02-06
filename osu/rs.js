@@ -108,7 +108,7 @@ module.exports = {
                 const USER = pickeduserX;
                 
                 (async () => {
-                  const response = await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=${USER}&limit=1`);
+                  const response = await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=${USER}&limit=1&m=0`);
                   const json = await response.json();
                   const [score] = json;
                   fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
