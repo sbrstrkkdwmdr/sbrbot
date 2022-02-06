@@ -93,6 +93,17 @@ module.exports = {
                 let rsnochokeacc1 = Math.abs(rsnochokeacctop / rsnochokebottom);
                 let rsnochokeacc = Math.abs(rsnochokeacc1 * 100).toFixed(2);
                 
+                let playerlasttoint = new Date(rsmaptime)
+                //let currentTime = new Date();
+                //console.log(currentDate)
+                let minsincelastvis = (playerlasttoint - currentDate) / (1000 * 60);
+                let minlastvisreform = Math.abs(minsincelastvis).toFixed(0);
+                //let ww = Math.abs()
+                    
+                    let lastvishours = (Math.trunc(minlastvisreform/60)) % 24;
+                    let lastvisminutes = minlastvisreform % 60;
+                    let minlastvisw = (lastvishours + "h " + lastvisminutes + "m");
+
                 const fileName = 'storedmap.json';
                 const file = require('../storedmap.json');  
                 file.prevmap = rsmapid;
@@ -144,7 +155,7 @@ module.exports = {
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .setDescription(`Score set on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** | **${rscombo}x**`);
+                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})}
                 if(rsmods){
                     let Embed = new Discord.MessageEmbed()
@@ -152,7 +163,7 @@ module.exports = {
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .setDescription(`Score set on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** | **${rscombo}x**`);
+                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})
                 }
             }

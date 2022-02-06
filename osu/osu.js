@@ -86,7 +86,7 @@ module.exports = {
                     let lastvisdays = Math.trunc((minlastvisreform/60)/24) % 30;
                     let lastvismonths = Math.trunc(minlastvisreform/60/24/30) % 12;
                     let lastvisyears = Math.trunc(minlastvisreform/60/24/30/12);
-                    console.log(minlastvisreform)
+                    //console.log(minlastvisreform)
                     let minlastvisredo = (lastvisyears + "y " + lastvismonths + "m " +  lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
                 
             
