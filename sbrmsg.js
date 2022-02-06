@@ -38,7 +38,7 @@ client.on('messageCreate', message =>{
     let currentDate = new Date();
     let currentDateISO = new Date().toISOString();
 
-    if(message.content || message.attachments.size > 0){
+    if(message.content || message.attachments.size > 0 || message.embeds){
         console.group(`MESSAGE SENT IN guild: ${msgguild} channel: ${msgchannelid}`)
         console.log(`GUILD "${msgguild}"| ${msgguildid}`)
         console.log(`CHANNEL "#${msgchannel}" | ${msgchannelid}`)
@@ -50,6 +50,9 @@ client.on('messageCreate', message =>{
         console.log(`${messagedetect}`)
         if(message.attachments.size > 0){
         console.log(messageattachementdetect)}
+        if(message.embeds){
+            console.log(message.embeds)
+        }
         console.log('')
         console.groupEnd()
         console.groupEnd()
