@@ -73,11 +73,19 @@ module.exports = {
               
                 //
                 let playerlast = JSON.stringify(osudata, ['last_visit']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('last_visit', '').replaceAll('[', '').replaceAll(']', '');
-                let playerlastbetterformat = playerlast.substring(0,19)
-                let playerlasttoint = new Date(playerlastbetterformat)
-                //let currentTime = new Date();
-                //console.log(currentDate)
-                let minsincelastvis = (playerlasttoint - currentDate) / (1000 * 60);
+                /*let fulltimeset = JSON.stringify(osudata, ['last_visit']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('last_visit', '').replaceAll('[', '').replaceAll(']', '').slice(0, 18);
+                let fulltimeset2 = JSON.stringify(osudata, ['last_visit']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('last_visit', '').replaceAll('[', '').replaceAll(']', '').slice(0, 12);
+                let fulltimeset3 = JSON.stringify(fulltimeset1).slice(12, 18)
+                console.log(playerlast)
+                let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0,-1)
+                let fulltimeset5 = fulltimeset4.slice(1, 10)
+                let fulltimeset = fulltimeset2 + fulltimeset5 + "Z"*/
+
+                let playerlasttoint = new Date(playerlast)
+
+                let currenttime = new Date()
+
+                let minsincelastvis = (playerlasttoint - currenttime) / (1000 * 60);
                 let minlastvisreform = Math.abs(minsincelastvis).toFixed(0);
                 //let ww = Math.abs()
                     

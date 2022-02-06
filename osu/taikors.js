@@ -78,11 +78,20 @@ module.exports = {
                 let rsgrade = JSON.stringify(rsdata[0], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rank', '');
                 let rsmapid = JSON.stringify(rsdata[0]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 let rscombo = JSON.stringify(rsdata[0], ['max_combo']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max_combo', '');
-    
-                let playerlasttoint = new Date(rsmaptime)
-                //let currentTime = new Date();
-                //console.log(currentDate)
-                let minsincelastvis = (playerlasttoint - currentDate) / (1000 * 60);
+               
+                let fulltimeset1 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 18);
+                let fulltimeset2 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 12);
+                let fulltimeset3 = JSON.stringify(fulltimeset1).slice(12, 18)
+                console.log(fulltimeset3)
+                let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0,-1)
+                let fulltimeset5 = fulltimeset4.slice(1, 10)
+                let fulltimeset = fulltimeset2 + fulltimeset5 + "Z"
+
+                let playerlasttoint = new Date(fulltimeset)
+
+                let currenttime = new Date()
+
+                let minsincelastvis = (playerlasttoint - currenttime) / (1000 * 60);
                 let minlastvisreform = Math.abs(minsincelastvis).toFixed(0);
                 //let ww = Math.abs()
                     
