@@ -80,9 +80,14 @@ module.exports = {
                 let minsincelastvis = (playerlasttoint - currentDate) / (1000 * 60);
                 let minlastvisreform = Math.abs(minsincelastvis).toFixed(0);
                 //let ww = Math.abs()
-                    let lastvishours = Math.trunc(minlastvisreform/60);
+                    
+                    let lastvishours = (Math.trunc(minlastvisreform/60)) % 24;
                     let lastvisminutes = minlastvisreform % 60;
-                    let minlastvisredo = (lastvishours +"h, "+ lastvisminutes + "m");
+                    let lastvisdays = Math.trunc((minlastvisreform/60)/24) % 30;
+                    let lastvismonths = Math.trunc(minlastvisreform/60/24/30) % 12;
+                    let lastvisyears = Math.trunc(minlastvisreform/60/24/30/12);
+                    console.log(minlastvisreform)
+                    let minlastvisredo = (lastvisyears + "y " + lastvismonths + "m " +  lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
                 
             
             if(playerstatus == true ){let Embed = new Discord.MessageEmbed()
