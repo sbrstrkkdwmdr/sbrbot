@@ -6,7 +6,7 @@ const get = require('node-fetch2');
 const wait = require('util').promisify(setTimeout);
 //added in discordjs 13
 const { Client, Intents } = require('discord.js');
-const { token } = require('./config.json');
+const { token } = require('./config.json'); //get the value "token" from config.json
 const { osuauthtoken } = require('./config.json');
 const { osuapikey } = require('./config.json');
 const { osuclientid } = require('./config.json');
@@ -43,7 +43,7 @@ client.helpcmds = new Discord.Collection();
 client.musiccmds = new Discord.Collection();
 client.ecchicmds = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));        
 for(const file of commandFiles){
     const command = require(`./commands/${file}`);
 
@@ -128,8 +128,8 @@ client.user.setPresence({ activities: [{ name: "you", type: 'WATCHING', video_ur
 
 client.on('messageCreate', message =>{
 
-    const args = message.content.slice(prefix.length).split(/ +/);
-    const linkargs = message.content.split(/ +/);
+    const args = message.content.slice(prefix.length).split(/ +/); //args are the message content but without the prefix
+    const linkargs = message.content.split(/ +/); //linkargs are the message content
     const command = args.shift().toLowerCase(); //grabs command
 
     const owner = require('./botowners.json');
@@ -181,18 +181,10 @@ client.on('messageCreate', message =>{
         }, 3000)
     }
 
-    if (message.attachments == true) {
-        for (var key in message.attachments) {
-            let attachment = message.attachments[key];
-            download(attachment.url);
-            client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
-        }
-    }
-
-    switch (command)
+    switch (command) //variable to check for
     {
 
-    case 'test':
+    case 'test': //if command = 'test' blahblablah
         client.commands.get('test').execute(message, args, currentDate, currentDateISO)
         break;
 
