@@ -155,6 +155,21 @@ client.on('messageCreate', message =>{
     if (message.content.startsWith('https://osu.ppy.sh/u/') || message.content.startsWith('osu.ppy.sh/u/') || message.content.startsWith('https://osu.ppy.sh/users/') || message.content.startsWith('osu.ppy.sh/users/')){
         client.linkdetect.get('osuprofilelink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
     } 
+
+    //
+    if (message.attachments.size > 0) {
+        if (message.attachments.every(attachIsOsr)){
+            client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
+        }
+    }
+            
+    function attachIsOsr(msgAttach) {
+        var url = msgAttach.url;
+        //True if this url is a png image.
+        return url.indexOf("osr", url.length - "osr".length /*or 3*/) !== -1;
+    }
+
+    //
     if(!message.content.startsWith(prefix) || message.author.bot) return; //the return is so if its just prefix nothing happens
 
     if(oncooldown.has(message.author.id)) return message.reply("You're on cooldown");
