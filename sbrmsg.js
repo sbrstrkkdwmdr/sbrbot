@@ -43,6 +43,9 @@ client.on('messageCreate', message =>{
         console.log(`GUILD "${msgguild}"| ${msgguildid}`)
         console.log(`CHANNEL "#${msgchannel}" | ${msgchannelid}`)
         console.log(`${currentDate} | ${currentDateISO}`)
+        if(message.author.bot){
+            console.log("[BOT]")
+        }
         console.group(`${consoleloguserweeee.tag} | ${consoleloguserweeee}`)
         console.log(`${messagedetect}`)
         if(message.attachments.size > 0){
