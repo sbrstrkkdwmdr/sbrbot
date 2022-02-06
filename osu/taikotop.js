@@ -62,6 +62,7 @@ module.exports = {
                     fs.writeFileSync("osutop.json", JSON.stringify(osutopdata, null, 2));
                     console.log("writing data to osutop.json")
                     console.log("")
+                    console.groupEnd()
                     try{
                     let topplayername = JSON.stringify(osutopdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                     //let mapbg1 = JSON.stringify(osutopdata[0]['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
@@ -164,4 +165,3 @@ module.exports = {
 
     }
 }
-console.groupEnd()

@@ -174,7 +174,8 @@ module.exports = {
             //message.reply("```json\nTOP SCORES FOR " + pickeduserX + "\n" + JSON.stringify(topHiscores, null, 2).replaceAll('"', '').replaceAll('beatmap_id', 'beatmap id').replaceAll('[', '').replaceAll(']', '').replaceAll(',', '').replaceAll('}', '').replaceAll('{', '------------') + "```");
     }
     )} catch (error) {
-        message.reply(error)
+        console.log(error)
+        console.groupEnd()
     }
     
 
@@ -183,10 +184,10 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
+        console.groupEnd()
         
     }
 }
-console.groupEnd()
 //client.commands.get('').execute(message, args)
 /*
 note for mods

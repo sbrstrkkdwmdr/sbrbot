@@ -48,6 +48,7 @@ module.exports = {
                 fs.writeFileSync("osu.json", JSON.stringify(osudata, null, 2));
                 console.log("writing data to osu.json")
                 console.log("")
+                console.groupEnd()
                 let playername = JSON.stringify(osudata, ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 let playeravatar = JSON.stringify(osudata, ['avatar_url']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('avatar_url', '').replaceAll('https', 'https:');
@@ -101,11 +102,14 @@ module.exports = {
                 .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ")\n" + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + `\n **<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago\n**Player joined on** ` + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
                 message.reply({ embeds: [Embed]})
                 //message.reply(mapbg1)
-                }} catch(error){
+                }
+                
+            } catch(error){
                     message.reply("Error - account not found (or some other error)")
                     console.log("Error account not found")
                     console.log(error)
                     console.log("")
+                    
                 }
         });
         } catch(err){
@@ -115,5 +119,5 @@ module.exports = {
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
     }
 }
-console.groupEnd()
+
 //client.commands.get('').execute(message, args)

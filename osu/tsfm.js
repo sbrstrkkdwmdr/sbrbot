@@ -73,6 +73,7 @@ module.exports = {
                     fs.writeFileSync("mapscore.json", JSON.stringify(mapscoredata, null, 2))
                     console.log("writing data to mapscore.json")
                     console.log("")
+                    console.groupEnd()
                 try{
                     let playerid = JSON.stringify(mapscoredata['score'], ['user_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('user_id', '');
                     let playername = JSON.stringify(mapscoredata['score']['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('username', '');
@@ -170,5 +171,5 @@ module.exports = {
         
     }
 }
-console.groupEnd()
+
 //client.commands.get('').execute(message, args)

@@ -29,13 +29,14 @@ module.exports = {
             .then(message.reply("success"))
             console.log("writing data to osuauth.json")
             console.log("")
+            console.groupEnd()
             ;
         } catch(error){
             console.log(error)
             message.reply("error")
+            console.groupEnd()
         }
         
     }
 }
-console.groupEnd()
 //client.commands.get('').execute(message, args)

@@ -122,10 +122,10 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
+        console.groupEnd()
         
     }
 }
-console.groupEnd()
 //client.commands.get('').execute(message, args)
 /*
 note for mods

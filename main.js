@@ -594,9 +594,9 @@ console.log(`-------------------------------------------------------------------
     })
     .then(res => res.json())
     .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
-    console.group("---")
+    //console.group("--- ")
     console.log("saved osuauth")
-    console.groupEnd()
+    //console.groupEnd()
 //
 } //turns on the bot
 catch (error) {

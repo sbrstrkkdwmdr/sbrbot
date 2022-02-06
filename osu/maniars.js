@@ -107,6 +107,7 @@ module.exports = {
                     console.log(JSON.stringify(file));
                     console.log('writing to ' + fileName);
                     console.log("");
+                    console.groupEnd()
                 });
     
                 const API_KEY = osuapikey; // osu! api v1 key
@@ -181,11 +182,13 @@ module.exports = {
                     console.log(error)
                     console.log("")
                 }})
+                
             } catch(err){
                 console.log(err)
+                
             }
             
     }
 }
-console.groupEnd()
+
 //client.commands.get('').execute(message, args)
