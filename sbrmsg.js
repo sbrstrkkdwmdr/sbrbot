@@ -38,18 +38,20 @@ client.on('messageCreate', message =>{
     let currentDate = new Date();
     let currentDateISO = new Date().toISOString();
 
-    if(message.content){
+    if(message.content || message.attachments.size > 0){
         console.group(`MESSAGE SENT IN guild: ${msgguild} channel: ${msgchannelid}`)
         console.log(`GUILD "${msgguild}"| ${msgguildid}`)
         console.log(`CHANNEL "#${msgchannel}" | ${msgchannelid}`)
         console.log(`${currentDate} | ${currentDateISO}`)
         console.group(`${consoleloguserweeee.tag} | ${consoleloguserweeee}`)
         console.log(`${messagedetect}`)
+        if(message.attachments.size > 0){
+        console.log(messageattachementdetect)}
         console.log('')
         console.groupEnd()
         console.groupEnd()
     }
-    if (message.attachments.size > 0) {
+    /*if (message.attachments.size > 0) {
         console.group(`MESSAGE SENT IN guild: ${msgguild} channel: ${msgchannelid}`)
         console.log(`GUILD "${msgguild}"| ${msgguildid}`)
         console.log(`CHANNEL "#${msgchannel}" | ${msgchannelid}`)
@@ -59,7 +61,7 @@ client.on('messageCreate', message =>{
         console.log('')
         console.groupEnd()
         console.groupEnd()
-    }
+    }*/
 
 
 });
