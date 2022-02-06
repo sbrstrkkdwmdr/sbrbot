@@ -170,7 +170,8 @@ client.on('messageCreate', message =>{
     }
 
     //
-    if(!message.content.startsWith(prefix) || message.author.bot) return; //the return is so if its just prefix nothing happens
+    if(!message.content.startsWith(prefix)) return; //the return is so if its just prefix nothing happens
+    //if(message.author.bot) return; //if bot, do nothing
 
     if(oncooldown.has(message.author.id)) return message.reply("You're on cooldown");
      if(!oncooldown.has(message.author.id)) {
