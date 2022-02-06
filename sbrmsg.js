@@ -54,14 +54,14 @@ client.on('messageCreate', message =>{
         console.log(`${messagedetect}`)
         if(message.attachments.size > 0){
         console.log(messageattachementdetect)}
-        if(message.embeds.size > 0){
+        if(message.embeds){
             console.log(message.embeds)
         }
         console.log('')
         console.groupEnd()
         console.groupEnd()
 
-        logchannel.send('---')
+        /*logchannel.send('---')
         logchannel.send(`MESSAGE SENT IN\nGUILD "${msgguild}"| ${msgguildid}\nCHANNEL "#${msgchannel}" | ${msgchannelid}\n${currentDate} | ${currentDateISO}`)
         logchannel.send(`[BOT]`, 2)
         logchannel.send(`${consoleloguserweeee.tag} | ${consoleloguserweeee}`)
@@ -69,9 +69,9 @@ client.on('messageCreate', message =>{
         if(message.attachments.size > 0){
         logchannel.send(`attachments - ${messageattachementdetect}`)
 }
-        if(message.embeds.size > 0){
+        if(message.embeds > 0){
         logchannel.send(`embeds - ${message.embeds}`)}
-        logchannel.send('---')
+        logchannel.send('---')*/
 
 
         /*let owoembed = new Discord.MessageEmbed()
