@@ -17,3 +17,6 @@ osuid.json
 savedusers.json
 config2.json
 replay.json
+sbrmsg.log
+start-discord-sbrbot.bat
+start-discord-sbrmsglogger.bat
