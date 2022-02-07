@@ -60,18 +60,14 @@ module.exports = {
                 let playerranks = osudata['rankHistory']['data'];
                 let playerrankschronological = playerranks.reverse();
 
+                let playerworstrank = Math.abs((playerrankschronological[0]) + 10);
+                let playerbestrank = Math.abs((playerranks[0]) - 10);
+
                 console.log(playerrankschronological)
+                console.log
 
 
-                const graphdata = {
-                    labels: ['90 days ago', '60 days ago', '30 days ago', 'Today'],
-                    datasets: [{
-                      label: 'Rank',
-                      data: playerrankschronological,
-                      fill: false,
-                      borderColor: 'rgb(75, 192, 192)',
-                    }]
-                  };
+               
                   /*const graphconfig = {
                     type: 'line',
                     data: graphdata,
@@ -80,9 +76,27 @@ module.exports = {
                 const chart = new ChartJsImage();
                 chart.setConfig({
                     type: 'line',
-                    data: graphdata,
+                    data: {
+                        labels: ['90 days ago', '60 days ago', '30 days ago', 'Today'],
+                    datasets: [{
+                      label: 'Rank',
+                      data: playerrankschronological,
+                      fill: false,
+                      borderColor: 'rgb(75, 192, 192)',
+                    }],
+                    options: {
+                        scales: {
+                            y: {
+                                min: playerworstrank,
+                                max: playerbestrank
+                            } 
+                    }
+                }
+                    },
                   });
-                chart.toFile('./chart/mychart.png');
+
+                //for some reason min and max values are ignored  
+                chart.toFile('./chart/mychart.png').then(w => {
                 //console.log(graphasimg)
 
                 let Embed = new Discord.MessageEmbed()
@@ -92,7 +106,7 @@ module.exports = {
                 .setThumbnail(playeravatar)
                 //.attachFiles(['./chart/mychart.png'])
 
-                message.reply({ embeds: [Embed], files: ['./chart/mychart.png']})
+                message.reply({ embeds: [Embed], files: ['./chart/mychart.png']})})
                 
             } catch(error){
                     message.reply("Error - account not found (or some other error)")
