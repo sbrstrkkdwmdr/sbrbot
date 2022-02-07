@@ -322,28 +322,6 @@ client.on('messageCreate', message =>{
         break;
 
     //OSU -----------------------------------------------------------
-    /*case '1-2':
-        client.commands.get('1-2').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case '727':
-       client.commands.get('727').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'rate-osu-play-else':
-        client.commands.get('rate-osu-play-else').execute(message, args, currentDate, currentDateISO)
-        break;
-    case 'enjoygame':
-        client.commands.get('enjoygame').execute(message, args, currentDate, currentDateISO)
-        break;
-    
-    case 'rate-osu-play':
-        client.commands.get('rate-osu-play').execute(message, args, currentDate, currentDateISO)
-        break;
-    
-    case 'osuhow':
-        client.commands.get('osuhow').execute(message, args, currentDate, currentDateISO)
-        break;*/
 
     case 'rs':case 'recent':
         client.osucmds.get('rs').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
@@ -351,8 +329,12 @@ client.on('messageCreate', message =>{
         break;
 
     case 'osu':
-        client.osucmds.get('osu').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
+        client.osucmds.get('osu').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
+        break;
+
+    case 'osugraph':
+        client.osucmds.get('osugraph').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
 
     case 'osutop':
