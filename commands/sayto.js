@@ -3,7 +3,7 @@ module.exports = {
     description: "say",
     execute(client, message, args, currentDate, currentDateISO) {
         if(message.author == 503794887318044675){
-        const sendtochannelget = args[0];
+        try{const sendtochannelget = args[0];
         const sendtochannel = client.channels.cache.get(sendtochannelget)
         const saythis = args.splice(1,1000).join(" ");
         //message.delete();
@@ -15,6 +15,10 @@ module.exports = {
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
         console.groupEnd() }
+        catch(error){
+            console.log(error)
+        }
+    }
         else return ;
     }
 }
