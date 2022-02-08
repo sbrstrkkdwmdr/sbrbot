@@ -21,3 +21,6 @@ sbrmsg.log
 start-discord-sbrbot.bat
 start-discord-sbrmsglogger.bat
 mychart.png
+ffmpeg.exe
+ffprobe.exe
+ffplay.exe
