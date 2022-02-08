@@ -354,6 +354,10 @@ client.on('messageCreate', message =>{
         client.osucmds.get('map').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
 
+    case 'pastmap'://case 'mapinfo':
+        client.osucmds.get('pastmap').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+
     case 'osuid':
         client.osucmds.get('osuid').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
