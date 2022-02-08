@@ -92,65 +92,43 @@ module.exports = {
                 console.log(JSON.stringify(file));
                 console.log('writing to ' + fileName);
               });//all this stuff is to write it to a temporary save file
-//            const API_KEY = osuapikey; // osu! api v1 key
-  //          const USER = args[0];
-            
-  const API_KEY = osuapikey; // osu! api v1 key
-  const thigngig = args[0];
+              (async () => {
+  const scorew = {
+    beatmap_id: prevmap,
+    score: '6795149',
+    maxcombo: '630',
+    count50: '0',
+    count100: '4',
+    count300: '374',
+    countmiss: '0',
+    countkatu: '3',
+    countgeki: '71',
+    perfect: '1',
+    enabled_mods: '64',
+    user_id: '13780464',
+    date: '2022-02-08 05:24:54',
+    rank: 'S',
+    score_id: '4057765057'
+  }
+const score = scorew
 
-        //    (async () => {
+const pp = new std_ppv2().setPerformance(score);
+let ppSSjson = await pp.compute(100);
+let pp95json = await pp.compute(95.00);
 
-       //         const response = await fetch(mapurl);
-     //   const json = await response.json();
-       // const [score] = json;
-      /* const setmap = {
-        beatmap_id: maplink
-       };
-       const score = {
-           beatmap_id: mapid,
-           count300: totalobjcount,
-           count100: 0,
-           count50: 0,
-           countmiss: 0,
-           maxcombo: mapmaxcombotoint
-       };
-       let totalfodiff = new std_ppv2().computeTotal
-       let aimfodiff = new std_ppv2()
-       let speedfodiff = new std_ppv2().comp
-       const difficulty = {
-        maxcombo: mapmaxcombotoint,
-        aim:
-        speed:
-        total:
-        ar: mapartoint,
-        od: mapodtoint,
-        count_circles: circletonum,
-        count_sliders: slidertonum,
-        count_spinners: spinnertonum
-    };
-      let speedstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeSpeedValue();
-       let aimstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeAimValue();
-       let accstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeAccValue();
-       let flashlightstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeFlashlightValue();
-       let totalstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeTotal();
+let ppSSstr = JSON.stringify(ppSSjson['total']);
+let pp95str = JSON.stringify(pp95json['total']);
 
-        let pp = new std_ppv2().setDifficulty().setBeatmap(setmap);
-        //let pp
-       new std_ppv2().computeAccValue
+let ppSS = Math.abs(ppSSstr).toFixed(2)
+let pp95 = Math.abs(pp95str).toFixed(2)
 
-        let ppSS1 = pp.compute();
-        let ppSS = JSON.stringify(ppSS1);
-      //  let pp951 = await pp.compute(Math.abs(95.00));
-        //let pp95 = JSON.stringify(pp951);*/
-
-let ppSS = "undefined";
-let pp95 = "undefined";
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle("Information for " + maptitle)
             .setImage(mapbg)
             .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: ${ppSS} | 95: ${pp95} \n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
             message.reply({ embeds: [Embed]})
+        })();
         //    })
     } catch(error){
 				message.reply("error")
@@ -235,84 +213,43 @@ let pp95 = "undefined";
                 console.log("");
                 console.groupEnd()
               });//all this stuff is to write it to a temporary save file
-//            const API_KEY = osuapikey; // osu! api v1 key
-  //          const USER = args[0];
-            
-  const API_KEY = osuapikey; // osu! api v1 key
-  const thigngig = args[0];
 
-        //    (async () => {
-
-       //         const response = await fetch(mapurl);
-     //   const json = await response.json();
-       // const [score] = json;
-      /* const setmap = {
-        beatmap_id: maplink
-       };
-       const score = {
-           beatmap_id: mapid,
-           count300: totalobjcount,
-           count100: 0,
-           count50: 0,
-           countmiss: 0,
-           maxcombo: mapmaxcombotoint
-       };
-       let totalfodiff = new std_ppv2().computeTotal
-       let aimfodiff = new std_ppv2()
-       let speedfodiff = new std_ppv2().comp
-       const difficulty = {
-        maxcombo: mapmaxcombotoint,
-        aim:
-        speed:
-        total:
-        ar: mapartoint,
-        od: mapodtoint,
-        count_circles: circletonum,
-        count_sliders: slidertonum,
-        count_spinners: spinnertonum
-    };
-      let speedstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeSpeedValue();
-       let aimstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeAimValue();
-       let accstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeAccValue();
-       let flashlightstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeFlashlightValue();
-       let totalstars = new std_ppv2().setBeatmap(setmap).setDifficulty(difficulty).computeTotal();
-
-        let pp = new std_ppv2().setDifficulty().setBeatmap(setmap);
-        //let pp
-       new std_ppv2().computeAccValue
-
-        let ppSS1 = pp.compute();
-        let ppSS = JSON.stringify(ppSS1);
-      //  let pp951 = await pp.compute(Math.abs(95.00));
-        //let pp95 = JSON.stringify(pp951);*/
-        request.get(`https://osu.ppy.sh/osu/${maplink}`).then(osu => {
-            let beatmap = Beatmap.fromOsu(osu)
-            let score = {
-              maxcombo: mapmaxcombotoint,
-              count50: 0,
-              count100: 3,
-              count300: 337,
-              countMiss: 0,
-              countKatu: 2,
-              countGeki: 71,
-              perfect: 1,
-              mods: 0,
-              pp: 725.814
-            }
-            let diffCalc = DifficultyCalculator.use(beatmap).setMods(score.mods).calculate()
-            let perfCalc = PerformanceCalculator.use(diffCalc).calculate(score)
-            let totalpp1 = perfCalc.totalPerformance
-            let totalpp = Math.abs(totalpp1).toFixed(2);
-
+              (async () => {
+              const score = {
+                beatmap_id: maplink,
+                score: '6795149',
+                maxcombo: '630',
+                count50: '0',
+                count100: '4',
+                count300: '374',
+                countmiss: '0',
+                countkatu: '3',
+                countgeki: '71',
+                perfect: '1',
+                enabled_mods: '64',
+                user_id: '13780464',
+                date: '2022-02-08 05:24:54',
+                rank: 'S',
+                score_id: '4057765057'
+              }
+           // const score = scorew
           
-let ppSS = "undefined";
-let pp95 = "undefined";
+            const pp = new std_ppv2().setPerformance(score);
+            let ppSSjson = await pp.compute(100);
+            let pp95json = await pp.compute(95.00);
+
+            let ppSSstr = JSON.stringify(ppSSjson['total']);
+            let pp95str = JSON.stringify(pp95json['total']);
+
+            let ppSS = Math.abs(ppSSstr).toFixed(2)
+            let pp95 = Math.abs(pp95str).toFixed(2)
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle("Information for " + maptitle)
             .setImage(mapbg)
-            .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: ${totalpp} \n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
-            message.reply({ embeds: [Embed]})})
+            .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: ${ppSS} | 95: ${pp95} \n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
+            message.reply({ embeds: [Embed]})
+              })();
     } catch(error){
 				message.reply("error")
 				console.log(error)
