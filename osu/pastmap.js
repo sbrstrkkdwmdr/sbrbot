@@ -9,8 +9,8 @@ module.exports = {
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
-        let pickedmods1 = args[0];
-        let pickedmods = JSON.stringify(pickedmods1).replaceAll('"', '');
+        let pickedmods = args[0];
+        //let pickedmods = JSON.stringify(pickedmods1).replaceAll('"', '');
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - map get (past)")
         let consoleloguserweeee = message.author
@@ -18,7 +18,11 @@ module.exports = {
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
 
-        if(!pickedmods) return message.channel.send("no mods have been picked!\nuse `sbr-map` if you want NM")
+        //if(!pickedmods) return message.channel.send("no mods have been picked!\nuse `sbr-map` if you want NM")
+
+        if(!pickedmods) {
+            pickedmods = 'NM'
+        }
 
         let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
             let body1 = {
@@ -212,6 +216,16 @@ module.exports = {
                     maphp = Math.abs(maphpNM * 1.5) + "^";
                     mapod = Math.abs(mapodNM * 1.5) + "^";
                     mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
+
+                    if(maphp > 10) {
+                        maphp = 10
+                        maphphr = 10
+                    }
+                    if(mapod > 10) {
+                        mapod = 10
+                        mapodhr = 10
+                    }
+
                 }
                 if(pickedmods.includes('HR') && pickedmods.includes('DT')) {
                     mapcs = Math.abs(mapcsNM * 1.5);
@@ -219,6 +233,15 @@ module.exports = {
                     maphp = Math.abs(maphpNM * 1.5) + "^";
                     mapod = Math.abs(mapodNM * 1.5) + "^";
                     mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
+                    if(maphp > 10) {
+                        maphp = 10
+                        maphphr = 10
+                    }
+                    if(mapod > 10) {
+                        mapod = 10
+                        mapodhr = 10
+                    }
+
                 }
 
                 /*else{
