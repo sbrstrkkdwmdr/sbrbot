@@ -187,8 +187,8 @@ module.exports = {
                     mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
                 }
                 if(pickedmods.includes('EZ') && pickedmods.includes('DT')) {
-                    mapcs = Math.abs(((mapcsNM / 2)+13)/3).toFixed(2);;
-                    mapar = Math.abs(maparNM / 2);
+                    mapcs = Math.abs(mapcsNM / 2);
+                    mapar = Math.abs(((maparNM / 2)+13)/3).toFixed(2);
                     maphp = Math.abs(maphpNM / 2) + "⌄";
                     mapod = Math.abs(mapodNM / 2) + "⌄";
                     mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
@@ -201,8 +201,8 @@ module.exports = {
                     mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
                 }
                 if(pickedmods.includes('HR') && pickedmods.includes('DT')) {
-                    mapcs = Math.abs(((mapcsNM * 1.5)+13)/3).toFixed(2);;
-                    mapar = Math.abs(maparNM * 1.5);
+                    mapcs = Math.abs(mapcsNM * 1.5);
+                    mapar = Math.abs(((maparNM * 1.5)+13)/3).toFixed(2);
                     maphp = Math.abs(maphpNM * 1.5) + "^";
                     mapod = Math.abs(mapodNM * 1.5) + "^";
                     mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
