@@ -30,7 +30,7 @@ let pickedmods = 'NM';
         score: '6795149',
         maxcombo: '630',
         count50: '0',
-        count100: '30',
+        count100: '64',
         count300: '374',
         countmiss: '0',
         countkatu: '3',
@@ -46,9 +46,9 @@ let pickedmods = 'NM';
   
     const pp = new std_ppv2().setPerformance(score).setMods(pickedmods);
     const ppcalc95 = new std_ppv2().setPerformance(score95).setMods(pickedmods);
-    let ppSSjson = await pp.compute();
+    let ppSSjson = await pp.compute(100);
 
-    let pp95json = await ppcalc95.compute();
+    let pp95json = await ppcalc95.compute(95.00);
 
     console.log(ppSSjson)
     //let ppSSstr = JSON.stringify(ppSSjson['total']);
