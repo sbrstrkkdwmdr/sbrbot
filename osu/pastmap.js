@@ -9,10 +9,12 @@ module.exports = {
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
-        const pickedmods = args[0];
+        let pickedmods1 = args[0];
+        let pickedmods = JSON.stringify(pickedmods1).replaceAll('"', '');
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - map get (past)")
         let consoleloguserweeee = message.author
+        console.log(pickedmods)
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
 
@@ -66,6 +68,14 @@ module.exports = {
             let maphp = JSON.stringify(mapdata, ['drain']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('drain', '');
             let mapsr = JSON.stringify(mapdata, ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
             let mapbpm = JSON.stringify(mapdata, ['bpm']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('bpm', '');
+            
+            let mapcsNM = JSON.stringify(mapdata, ['cs']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('cs', '');
+            let maparNM = JSON.stringify(mapdata, ['ar']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('ar', '');
+            let mapodNM = JSON.stringify(mapdata, ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('accuracy', '');
+            let maphpNM = JSON.stringify(mapdata, ['drain']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('drain', '');
+            let mapsrNM = JSON.stringify(mapdata, ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
+            let mapbpmNM = JSON.stringify(mapdata, ['bpm']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('bpm', '');
+           
             let mapcircle = JSON.stringify(mapdata, ['count_circles']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_circles', '');
             let mapslider = JSON.stringify(mapdata, ['count_sliders']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_sliders', '');
             let mapspinner = JSON.stringify(mapdata, ['count_spinners']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_spinners', '');
@@ -138,6 +148,41 @@ module.exports = {
                     score_id: '4057765057'
                 }
                 //let acc95 = Math.abs('91.02').toFixed(2);
+
+                
+
+                if(pickedmods.includes('DT')) {
+                    mapar = Math.abs(((maparNM*2)+13)/3).toFixed(2);
+                    mapod = mapodNM + "^";
+                    maphp = maphpNM + "^";
+                    mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
+                }
+                if(pickedmods.includes('HT')) {
+                    mapar = Math.abs(((maparNM*1.33)-4.3)).toFixed(2);
+                    mapod = mapodNM + "⌄";
+                    maphp = maphpNM + "⌄";
+                    mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
+                }
+                if(pickedmods.includes('HR')) {
+                    mapcs = Math.abs(mapcsNM * 1.5)
+                    mapar = Math.abs(maparNM * 1.5)
+                    maphp = Math.abs(maphpNM * 1.5)
+                    mapod = Math.abs(mapodNM * 1.5)
+                }
+                if(pickedmods.includes('EZ')) {
+                    mapcs = Math.abs(mapcsNM / 2)
+                    mapar = Math.abs(maparNM / 2)
+                    maphp = Math.abs(maphpNM / 2)
+                    mapod = Math.abs(mapodNM / 2)
+                }
+                /*else{
+                    mapcs = mapcsNM
+                    mapar = maparNM
+                    mapod = mapodNM
+                    maphp = maphpNM
+                    mapbpm = mapbpmNM
+                }*/
+                console.log(mapcs + mapar + mapod + mapod + mapbpm)
               
                 const pp = new std_ppv2().setPerformance(score).setMods(pickedmods);
                 const ppcalc95 = new std_ppv2().setPerformance(score95).setMods(pickedmods);
@@ -166,9 +211,9 @@ module.exports = {
 //let pp95 = "undefined";
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
-            .setTitle("Information for " + maptitle)
+            .setTitle("Information for " + maptitle + " with " + pickedmods)
             .setImage(mapbg)
-            .setDescription(`note - non pp values are NM\n[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: ${ppSS} | 95: ${pp95} \n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
+            .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐(NM) \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: ${ppSS} | 95: ${pp95} \n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
             message.reply({ embeds: [Embed]})
         })();
         //    })
