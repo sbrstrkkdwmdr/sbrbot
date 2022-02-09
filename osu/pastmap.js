@@ -170,7 +170,17 @@ module.exports = {
                     mapod = Math.abs(mapodNM * 1.5)
                     if(mapar > 10) {
                         mapar = 10
+                        maparhr = 10
                     }
+                    if(maphp > 10) {
+                        maphp = 10
+                        maphphr = 10
+                    }
+                    if(mapod > 10) {
+                        mapod = 10
+                        mapodhr = 10
+                    }
+
                 }
                 if(pickedmods.includes('EZ')) {
                     mapcs = Math.abs(mapcsNM / 2)
