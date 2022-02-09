@@ -30,7 +30,7 @@ let pickedmods = 'NM';
         score: '6795149',
         maxcombo: '630',
         count50: '0',
-        count100: '64',
+        count100: '72',
         count300: '374',
         countmiss: '0',
         countkatu: '3',

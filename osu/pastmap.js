@@ -102,28 +102,48 @@ module.exports = {
                 //const json = await response.json();
                 //const [score] = json;
 
-                const scorew = {
+                const score = {
                     beatmap_id: prevmap,
                     score: '6795149',
                     maxcombo: '630',
                     count50: '0',
-                    count100: '4',
+                    count100: '0',
                     count300: '374',
                     countmiss: '0',
-                    countkatu: '3',
+                    countkatu: '0',
                     countgeki: '71',
-                    perfect: '1',
+                    perfect: '0',
                     enabled_mods: '64',
                     user_id: '13780464',
                     date: '2022-02-08 05:24:54',
                     rank: 'S',
                     score_id: '4057765057'
                   }
-                const score = scorew
+                //const score = scorew
+                const score95 = {
+                    beatmap_id: prevmap,
+                    score: '6795149',
+                    maxcombo: '630',
+                    count50: '0',
+                    count100: '72',
+                    count300: '374',
+                    countmiss: '0',
+                    countkatu: '0',
+                    countgeki: '71',
+                    perfect: '0',
+                    enabled_mods: '64',
+                    user_id: '13780464',
+                    date: '2022-02-08 05:24:54',
+                    rank: 'S',
+                    score_id: '4057765057'
+                }
+                //let acc95 = Math.abs('91.02').toFixed(2);
               
                 const pp = new std_ppv2().setPerformance(score).setMods(pickedmods);
-                let ppSSjson = await pp.compute(100)
-                let pp95json = await pp.compute(95.00)
+                const ppcalc95 = new std_ppv2().setPerformance(score95).setMods(pickedmods);
+
+                let ppSSjson = await pp.compute(100); 
+                let pp95json = await ppcalc95.compute(95.00);
 
                 let ppSSstr = JSON.stringify(ppSSjson['total']);
                 let pp95str = JSON.stringify(pp95json['total']);
