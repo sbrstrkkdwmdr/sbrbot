@@ -175,6 +175,39 @@ module.exports = {
                     maphp = Math.abs(maphpNM / 2)
                     mapod = Math.abs(mapodNM / 2)
                 }
+
+                if(pickedmods.includes('EZ') && pickedmods.includes('HR')) return message.reply('invalid mods!');
+                if(pickedmods.includes('DT') && pickedmods.includes('HT')) return message.reply('invalid mods!');
+
+                if(pickedmods.includes('EZ') && pickedmods.includes('HT')) {
+                    mapcs = Math.abs(mapcsNM / 2);
+                    mapar = Math.abs(((maparNM / 2)*1.33)-4.3).toFixed(2);
+                    maphp = Math.abs(maphpNM / 2) + "⌄";
+                    mapod = Math.abs(mapodNM / 2) + "⌄";
+                    mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
+                }
+                if(pickedmods.includes('EZ') && pickedmods.includes('DT')) {
+                    mapcs = Math.abs(((mapcsNM / 2)+13)/3).toFixed(2);;
+                    mapar = Math.abs(maparNM / 2);
+                    maphp = Math.abs(maphpNM / 2) + "⌄";
+                    mapod = Math.abs(mapodNM / 2) + "⌄";
+                    mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
+                }
+                if(pickedmods.includes('HR') && pickedmods.includes('HT')) {
+                    mapcs = Math.abs(mapcsNM * 1.5);
+                    mapar = Math.abs(((maparNM * 1.5)*1.33)-4.3).toFixed(2);
+                    maphp = Math.abs(maphpNM * 1.5) + "^";
+                    mapod = Math.abs(mapodNM * 1.5) + "^";
+                    mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
+                }
+                if(pickedmods.includes('HR') && pickedmods.includes('DT')) {
+                    mapcs = Math.abs(((mapcsNM * 1.5)+13)/3).toFixed(2);;
+                    mapar = Math.abs(maparNM * 1.5);
+                    maphp = Math.abs(maphpNM * 1.5) + "^";
+                    mapod = Math.abs(mapodNM * 1.5) + "^";
+                    mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
+                }
+
                 /*else{
                     mapcs = mapcsNM
                     mapar = maparNM
