@@ -222,6 +222,9 @@ module.exports = {
             case 'osutest':
                 message.channel.send("Just whatever osu! command api thingy I'm testing.\nUsage:`sbr-osutest`")
                 break;
+            case 'pastmap':
+                message.channel.send("Sends information about the mentioned map with modded values.\nUsage:`sbr-map (MODS)`")
+                break;
             case 'rs':case 'recent':
                 message.channel.send("Sends information about the user's most recent osu! play.\nUsage:`sbr-rs (ID)`")
                 break;
