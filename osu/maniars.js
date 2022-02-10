@@ -148,7 +148,8 @@ module.exports = {
                         score_id: '4057765057'
                       }
                   fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
-                  let pp = new mania_ppv2().setPerformance(score);
+                  let ppfc = new mania_ppv2().setPerformance(score);
+                  let pp =  new mania_ppv2().setPerformance(rsdata);
                   if(rsmods){
                     pp = new mania_ppv2().setPerformance(score).setMods(`${rsmods}`)
                 }

@@ -147,24 +147,19 @@ module.exports = {
                         score_id: '4057765057'
                       }
                     fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
-                    let pp = new std_ppv2().setPerformance(score)
+                    let ppfc = new std_ppv2().setPerformance(score);
+                    let pp =  new std_ppv2().setPerformance(rsdata);
                     if(rsmods){
-                        pp = new std_ppv2().setPerformance(score).setMods(`{rsmods}`)
+                        pp =  new std_ppv2().setPerformance(rsdata).setMods(`${rsmods}`)
+                        ppfc = new std_ppv2().setPerformance(score).setMods(`${rsmods}`)
                     }
                     if(!rsmods){
-                        pp = new std_ppv2().setPerformance(score).setMods('NM')
+                        pp =  new std_ppv2().setPerformance(rsdata).setMods('NM')
+                        ppfc = new std_ppv2().setPerformance(score).setMods('NM')
                     }
                     ;
-                
-               /*   try {
-                    let testpp = await pp.compute();
-    
-                } catch(error){
-                      message.reply("possible pp calculation error (if an embed is sent anyway it's probably fine)")
-                      console.log(error)
-                  } */
                   let ppw = await pp.compute();
-                  let ppiffc1 = await pp.compute(rsnochokeacc);
+                  let ppiffc1 = await ppfc.compute(rsnochokeacc);
                   let ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
                   let ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
                   let ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
