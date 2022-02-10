@@ -2,7 +2,7 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { std_ppv2 } = require('booba');
+const { mania_ppv2 } = require('booba');
 module.exports = {
     name: 'maniars',
     description: '',
@@ -134,16 +134,34 @@ module.exports = {
                     console.log("");
                     console.groupEnd()
                 });
-    
-                const API_KEY = osuapikey; // osu! api v1 key
-                const USER = pickeduserX;
                 
                 (async () => {
-                  const response = await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=${USER}&limit=1&m=3`);
-                  const json = await response.json();
-                  const [score] = json;
+                    const score = {
+                        beatmap_id: rsmapid,
+                        score: '6795149',
+                        maxcombo: '630',
+                        count50: rs50s,
+                        count100: rs100s,
+                        count300: rs300s,
+                        countmiss: '0',
+                        countkatu: rs200s,
+                        countgeki: rs300max,
+                        perfect: '0',
+                        enabled_mods: '64',
+                        user_id: rsplayerid,
+                        date: '2022-02-08 05:24:54',
+                        rank: 'S',
+                        score_id: '4057765057'
+                      }
                   fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
-                  const pp = new std_ppv2().setPerformance(score);
+                  let ppfc = new mania_ppv2().setPerformance(score);
+                  let pp =  new mania_ppv2().setPerformance(rsdata);
+                  if(rsmods){
+                    pp = new mania_ppv2().setPerformance(score).setMods(`${rsmods}`)
+                }
+                if(!rsmods){
+                    pp = new mania_ppv2().setPerformance(score).setMods('NM')
+                }
                 
                /*   try {
                     let testpp = await pp.compute();
@@ -169,7 +187,9 @@ module.exports = {
                     total: 812.3689077733752
                   } */
                 
-               // if(rspp = "null"){
+                  if(rspp == 'null'){
+                    rspp = ppww
+                }
                 if(!rsmods){
                 let Embed = new Discord.MessageEmbed()
                 .setColor(0x462B71)
