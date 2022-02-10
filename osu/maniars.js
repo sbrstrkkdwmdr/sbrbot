@@ -2,7 +2,7 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { std_ppv2 } = require('booba');
+const { mania_ppv2 } = require('booba');
 module.exports = {
     name: 'maniars',
     description: '',
@@ -137,7 +137,7 @@ module.exports = {
                   const json = await response.json();
                   const [score] = json;
                   fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
-                  const pp = new std_ppv2().setPerformance(score);
+                  const pp = new mania_ppv2().setPerformance(score);
                 
                /*   try {
                     let testpp = await pp.compute();
