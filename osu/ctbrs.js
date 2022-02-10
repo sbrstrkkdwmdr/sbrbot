@@ -70,6 +70,9 @@ module.exports = {
                 let rs50s = JSON.stringify(rsdata[0]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_50', '');
                 let rs100s = JSON.stringify(rsdata[0]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_100', '');
                 let rs300s = JSON.stringify(rsdata[0]['statistics'], ['count_300']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_300', '');
+                let rsgeki = JSON.stringify(rsdata[0]['statistics'], ['count_geki']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_geki', '');
+                let rskatu = JSON.stringify(rsdata[0]['statistics'], ['count_katu']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_katu', '');
+                
                 let rsmapbg = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
                 let rspp = JSON.stringify(rsdata[0], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pp', '');
                 //let rsppw = rsdata[0]['pp'];
@@ -122,16 +125,33 @@ module.exports = {
                     console.log('writing to ' + fileName);
                     console.log("");
                 });
-    
-                const API_KEY = osuapikey; // osu! api v1 key
-                const USER = pickeduserX;
                 
                 (async () => {
-                  const response = await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=${USER}&limit=1&m=2`);
-                  const json = await response.json();
-                  const [score] = json;
-                  fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
-                  const pp = new catch_ppv2().setPerformance(score);
+                        const score = {
+                            beatmap_id: rsmapid,
+                            score: '6795149',
+                            maxcombo: '630',
+                            count50: rs50s,
+                            count100: rs100s,
+                            count300: rs300s,
+                            countmiss: '0',
+                            countkatu: rskatu,
+                            countgeki: rsgeki,
+                            perfect: '0',
+                            enabled_mods: '64',
+                            user_id: rsplayerid,
+                            date: '2022-02-08 05:24:54',
+                            rank: 'S',
+                            score_id: '4057765057'
+                        }
+                    fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
+                    const pp = new catch_ppv2().setPerformance(score);
+                    if(rsmods){
+                        pp = new catch_ppv2().setPerformance(score).setMods(`${rsmods}`)
+                    }
+                    if(!rsmods){
+                        pp = new catch_ppv2().setPerformance(score).setMods('NM')
+                    }
                 
                /*   try {
                     let testpp = await pp.compute();
@@ -157,14 +177,16 @@ module.exports = {
                     total: 812.3689077733752
                   } */
                 
-               // if(rspp = "null"){
+                  if(rspp == 'null'){
+                    rspp = ppww
+                }
                 if(!rsmods){
                 let Embed = new Discord.MessageEmbed()
                 .setColor(0x462B71)
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** | **${rscombo}x**`);
+                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})}
                 if(rsmods){
                     let Embed = new Discord.MessageEmbed()
@@ -172,7 +194,7 @@ module.exports = {
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** | **${rscombo}x**`);
+                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})
                 }
             }
