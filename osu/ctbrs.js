@@ -35,7 +35,8 @@ module.exports = {
 
 
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/fruits`;
-            
+                const { access_token } = require('../osuauth.json');
+
             fetch(userinfourl, {
                 headers: {
                     Authorization: `Bearer ${access_token}`
@@ -48,7 +49,6 @@ module.exports = {
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
                 const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=fruits&limit=18&offset=0`;
-                const { access_token } = require('../osuauth.json');
                 fetch(recentactiveurl, {
                     headers: {
                         Authorization: `Bearer ${access_token}`
@@ -144,16 +144,33 @@ module.exports = {
                             rank: 'S',
                             score_id: '4057765057'
                         }
+                        const scorenofc = {
+                            beatmap_id: rsmapid,
+                            score: '6795149',
+                            maxcombo: '630',
+                            count50: rs50s,
+                            count100: rs100s,
+                            count300: rs300s,
+                            countmiss: rs0s,
+                            countkatu: rskatu,
+                            countgeki: rsgeki,
+                            perfect: '0',
+                            enabled_mods: '64',
+                            user_id: rsplayerid,
+                            date: '2022-02-08 05:24:54',
+                            rank: 'S',
+                            score_id: '4057765057'
+                          }
                     fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
-                    let ppfc = new std_ppv2().setPerformance(score);
-                    let pp =  new std_ppv2().setPerformance(rsdata);
+                    let ppfc = new catch_ppv2().setPerformance(score);
+                    let pp =  new catch_ppv2().setPerformance(scorenofc);
                     if(rsmods){
-                        pp =  new std_ppv2().setPerformance(rsdata).setMods(`${rsmods}`)
-                        ppfc = new std_ppv2().setPerformance(score).setMods(`${rsmods}`)
+                        pp =  new catch_ppv2().setPerformance(scorenofc).setMods(`${rsmods}`)
+                        ppfc = new catch_ppv2().setPerformance(score).setMods(`${rsmods}`)
                     }
                     if(!rsmods){
-                        pp =  new std_ppv2().setPerformance(rsdata).setMods('NM')
-                        ppfc = new std_ppv2().setPerformance(score).setMods('NM')
+                        pp =  new catch_ppv2().setPerformance(scorenofc).setMods('NM')
+                        ppfc = new catch_ppv2().setPerformance(score).setMods('NM')
                     }
                     ;
                   let ppw = await pp.compute();
@@ -182,7 +199,7 @@ module.exports = {
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
+                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})}
                 if(rsmods){
                     let Embed = new Discord.MessageEmbed()
@@ -190,7 +207,7 @@ module.exports = {
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
+                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})
                 }
             }

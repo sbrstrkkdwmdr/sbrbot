@@ -146,15 +146,32 @@ module.exports = {
                         rank: 'S',
                         score_id: '4057765057'
                       }
+                      const scorenofc = {
+                        beatmap_id: rsmapid,
+                        score: '6795149',
+                        maxcombo: '630',
+                        count50: rs50s,
+                        count100: rs100s,
+                        count300: rs300s,
+                        countmiss: rs0s,
+                        countkatu: rskatu,
+                        countgeki: rsgeki,
+                        perfect: '0',
+                        enabled_mods: '64',
+                        user_id: rsplayerid,
+                        date: '2022-02-08 05:24:54',
+                        rank: 'S',
+                        score_id: '4057765057'
+                      }
                     fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
                     let ppfc = new std_ppv2().setPerformance(score);
-                    let pp =  new std_ppv2().setPerformance(rsdata);
+                    let pp =  new std_ppv2().setPerformance(scorenofc);
                     if(rsmods){
-                        pp =  new std_ppv2().setPerformance(rsdata).setMods(`${rsmods}`)
+                        pp =  new std_ppv2().setPerformance(scorenofc).setMods(`${rsmods}`)
                         ppfc = new std_ppv2().setPerformance(score).setMods(`${rsmods}`)
                     }
                     if(!rsmods){
-                        pp =  new std_ppv2().setPerformance(rsdata).setMods('NM')
+                        pp =  new std_ppv2().setPerformance(scorenofc).setMods('NM')
                         ppfc = new std_ppv2().setPerformance(score).setMods('NM')
                     }
                     ;

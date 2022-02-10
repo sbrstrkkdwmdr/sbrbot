@@ -38,7 +38,7 @@ module.exports = {
             
             fetch(userinfourl, {
                 headers: {
-                    Authorization: `Bearer ${access_token}`
+                    Authorization: `Bearer ${osuauthtoken}`
                 }
             }).then(res => res.json())
             .then(output1 => 
@@ -144,20 +144,37 @@ module.exports = {
                         rank: 'S',
                         score_id: '4057765057'
                       }
+                      const scorenofc = {
+                        beatmap_id: rsmapid,
+                        score: '6795149',
+                        maxcombo: '630',
+                        count50: rs50s,
+                        count100: rs100s,
+                        count300: rs300s,
+                        countmiss: rs0s,
+                        countkatu: rskatu,
+                        countgeki: rsgeki,
+                        perfect: '0',
+                        enabled_mods: '64',
+                        user_id: rsplayerid,
+                        date: '2022-02-08 05:24:54',
+                        rank: 'S',
+                        score_id: '4057765057'
+                      }
                   fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
-                    let ppfc = new std_ppv2().setPerformance(score);
-                    let pp =  new std_ppv2().setPerformance(rsdata);
+                    let ppfc = new taiko_ppv2().setPerformance(score);
+                    let pp =  new taiko_ppv2().setPerformance(scorenofc);
                     if(rsmods){
-                        pp =  new std_ppv2().setPerformance(rsdata).setMods(`${rsmods}`)
-                        ppfc = new std_ppv2().setPerformance(score).setMods(`${rsmods}`)
+                        pp =  new taiko_ppv2().setPerformance(scorenofc).setMods(`${rsmods}`)
+                        ppfc = new taiko_ppv2().setPerformance(score).setMods(`${rsmods}`)
                     }
                     if(!rsmods){
-                        pp =  new std_ppv2().setPerformance(rsdata).setMods('NM')
-                        ppfc = new std_ppv2().setPerformance(score).setMods('NM')
+                        pp =  new taiko_ppv2().setPerformance(scorenofc).setMods('NM')
+                        ppfc = new taiko_ppv2().setPerformance(score).setMods('NM')
                     }
                     ;
                   let ppw = await pp.compute();
-                  let ppiffc1 = await ppfc.compute(rsnochokeacc);
+                  let ppiffc1 = await ppfc.compute();
                   let ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
                   let ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
                   let ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
@@ -182,7 +199,7 @@ module.exports = {
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**GREAT:**${rs300s} **GOOD:**${rs100s} **X:**${rs0s} \n${rspp}**pp** (${ppw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
+                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**GREAT:**${rs300s} **GOOD:**${rs100s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})}
                 if(rsmods){
                     let Embed = new Discord.MessageEmbed()
