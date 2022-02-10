@@ -145,7 +145,7 @@ module.exports = {
                         score_id: '4057765057'
                       }
                   fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
-                  const pp = new taiko_ppv2().setPerformance(score);
+                  let pp = new taiko_ppv2().setPerformance(score);
                   if(rsmods){
                     pp = new taiko_ppv2().setPerformance(score).setMods(`${rsmods}`)
                 }
