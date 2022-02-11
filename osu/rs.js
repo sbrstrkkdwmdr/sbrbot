@@ -86,6 +86,8 @@ module.exports = {
                 let rslengthseconds = Math.abs(rstime) % 60;
                 let rslengthminutes = Math.abs(rstime / 60);
 
+                let rspasstime = JSON.stringify(rsdata[0]['hit_length'])
+
                 let rsfulltime = `${rslengthminutes}:${rslengthseconds}`
     
                 let rsnochokeacc300 = Math.floor(300 * rs300s);
