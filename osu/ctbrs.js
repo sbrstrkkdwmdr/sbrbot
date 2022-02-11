@@ -203,7 +203,7 @@ module.exports = {
                 }
                 if(!rsmods){
                 let Embed = new Discord.MessageEmbed()
-                .setColor(0x462B71)
+                .setColor(0x9AAAC0)
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
@@ -211,7 +211,7 @@ module.exports = {
                 message.reply({ embeds: [Embed]})}
                 if(rsmods){
                     let Embed = new Discord.MessageEmbed()
-                .setColor(0x462B71)
+                .setColor(0x9AAAC0)
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)

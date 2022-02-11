@@ -90,7 +90,7 @@ module.exports = {
 
                 let rsfulltime = `${rslengthminutes}:${rslengthseconds}`;
                 let rspasspercentage = Math.abs(rspasstime / rstime).toFixed(2);
-                
+
                 let fulltimeset1 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 18);
                 let fulltimeset2 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 12);
                 let fulltimeset3 = JSON.stringify(fulltimeset1).slice(12, 18)
@@ -204,7 +204,7 @@ module.exports = {
                 }
                 if(!rsmods){
                 let Embed = new Discord.MessageEmbed()
-                .setColor(0x462B71)
+                .setColor(0x9AAAC0)
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
@@ -212,7 +212,7 @@ module.exports = {
                 message.reply({ embeds: [Embed]})}
                 if(rsmods){
                     let Embed = new Discord.MessageEmbed()
-                .setColor(0x462B71)
+                .setColor(0x9AAAC0)
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
