@@ -108,7 +108,7 @@ module.exports = {
             //message.reply(mapbg1)
             }
             if(playerstatus == false ){let Embed = new Discord.MessageEmbed()
-                .setColor(0x462B71)
+                .setColor(0x6DDAFF)
                 .setTitle(`${playername}'s osu! profile`)
                 .setURL(`https://osu.ppy.sh/u/${playerid}`)
                 .setThumbnail(playeravatar)
