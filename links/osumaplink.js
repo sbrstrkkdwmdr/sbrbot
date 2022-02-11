@@ -1,8 +1,7 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const {Beatmap, Osu: {DifficultyCalculator, PerformanceCalculator}} = require('osu-bpdpc')
-const request = require('request-promise-native')
+const { std_ppv2 } = require('booba');
 module.exports = {
     name: 'osumaplink',
     description: '',
@@ -91,32 +90,66 @@ module.exports = {
                 console.log('writing to ' + fileName);
                 console.log("");
               });
-              request.get(`https://osu.ppy.sh/osu/${maplink}`).then(osu => {
-                let beatmap = Beatmap.fromOsu(osu)
-                let score = {
-                  maxcombo: mapmaxcombotoint,
-                  count50: 0,
-                  count100: 3,
-                  count300: 337,
-                  countMiss: 0,
-                  countKatu: 2,
-                  countGeki: 71,
-                  perfect: 1,
-                  mods: 0,
-                  pp: 725.814
+              (async () => {
+
+                const score = {
+                    beatmap_id: '1962676',
+                    score: '6795149',
+                    maxcombo: '630',
+                    count50: '0',
+                    count100: '0',
+                    count300: '374',
+                    countmiss: '0',
+                    countkatu: '0',
+                    countgeki: '71',
+                    perfect: '0',
+                    enabled_mods: '0',
+                    user_id: '13780464',
+                    date: '2022-02-08 05:24:54',
+                    rank: 'S',
+                    score_id: '4057765057'
+                  }
+                //const score = scorew
+                const score95 = {
+                    beatmap_id: '1962676',
+                    score: '6795149',
+                    maxcombo: '630',
+                    count50: '0',
+                    count100: '30',
+                    count300: '374',
+                    countmiss: '0',
+                    countkatu: '3',
+                    countgeki: '71',
+                    perfect: '0',
+                    enabled_mods: '0',
+                    user_id: '13780464',
+                    date: '2022-02-08 05:24:54',
+                    rank: 'S',
+                    score_id: '4057765057'
                 }
-                let diffCalc = DifficultyCalculator.use(beatmap).setMods(score.mods).calculate()
-                let perfCalc = PerformanceCalculator.use(diffCalc).calculate(score)
-                let totalpp1 = perfCalc.totalPerformance
-                let totalpp = Math.abs(totalpp1).toFixed(2);
+              
+                const pp = new std_ppv2().setPerformance(score)
+                const ppcalc95 = new std_ppv2().setPerformance(score95)
+                let ppSSjson = await pp.compute(100);
+                let pp95json = await ppcalc95.compute(95.00);
+
+                let ppSSstr = JSON.stringify(ppSSjson['total']);
+                let pp95str = JSON.stringify(pp95json['total']);
+
+                let ppSS = Math.abs(ppSSstr).toFixed(2)
+                let pp95 = Math.abs(pp95str).toFixed(2)
               
 
             let Embed = new Discord.MessageEmbed()
-            .setColor(0x462B71)
-            .setTitle("Information for " + maptitle)
+            .setColor(0x91FF9A)
+            .setTitle(`${maptitle}`)
+            .setURL(`https://osu.ppy.sh/b/` + maplink)
             .setImage(mapbg)
-            .setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\nSS: ${totalpp}\n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
-            message.reply({embeds: [Embed]})})
+            .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner, true)
+            .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
+            .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
+            message.reply({embeds: [Embed]})
+        })();
             
         //})
     } catch(error){
