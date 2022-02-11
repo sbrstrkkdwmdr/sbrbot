@@ -81,14 +81,17 @@ module.exports = {
                 let rsgrade = JSON.stringify(rsdata[0], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rank', '');
                 let rsmapid = JSON.stringify(rsdata[0]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 let rscombo = JSON.stringify(rsdata[0], ['max_combo']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max_combo', '');
-                let rstime = JSON.stringify(rsdata[0]['total_length']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total_length', '');
+                let rstime = JSON.stringify(rsdata[0]['beatmap'], ['total_length']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total_length', '');
                 
                 let rslengthseconds = Math.abs(rstime) % 60;
-                let rslengthminutes = Math.abs(rstime / 60);
+                let rslengthminutes = Math.trunc(rstime / 60);
 
-                let rspasstime = JSON.stringify(rsdata[0]['hit_length'])
+                let rspasstime = JSON.stringify(rsdata[0]['beatmap'], ['hit_length']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('hit_length', '');
 
-                let rsfulltime = `${rslengthminutes}:${rslengthseconds}`
+                let rsfulltime = `${rslengthminutes}:${rslengthseconds}`;
+                let rspasspercentage = Math.abs(rspasstime / rstime).toFixed(2);
+                //console.log(`total ${rstime} hit ${rspasstime}`)
+
     
                 let rsnochokeacc300 = Math.floor(300 * rs300s);
                 let rsnochokeacc100 = Math.floor(100 * rs100s);
@@ -204,6 +207,7 @@ module.exports = {
                   } */
                 
                // if(rspp = "null"){
+                //if(rsgrade != 'F'){
                 if(!rsmods){
                 let Embed = new Discord.MessageEmbed()
                 .setColor(0x462B71)
@@ -221,6 +225,25 @@ module.exports = {
                 .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})
                 }
+                //}
+                /*if(rsgrade = 'F'){
+                if(!rsmods){
+                    let Embed = new Discord.MessageEmbed()
+                    .setColor(0x462B71)
+                    .setTitle("Most recent play for " + rsplayername)
+                    .setImage(rsmapbg)
+                    .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
+                    .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | **${rspasspercentage}** \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
+                    message.reply({ embeds: [Embed]})}
+                    if(rsmods){
+                        let Embed = new Discord.MessageEmbed()
+                    .setColor(0x462B71)
+                    .setTitle("Most recent play for " + rsplayername)
+                    .setImage(rsmapbg)
+                    .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
+                    .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | **${rspasspercentage}** \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
+                    message.reply({ embeds: [Embed]})
+                    }}*/
             }
             )()
             } catch(error){

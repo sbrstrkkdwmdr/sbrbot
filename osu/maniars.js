@@ -81,12 +81,15 @@ module.exports = {
                 let rsgrade = JSON.stringify(rsdata[0], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rank', '');
                 let rsmapid = JSON.stringify(rsdata[0]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 let rscombo = JSON.stringify(rsdata[0], ['max_combo']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max_combo', '');
-                let rstime = JSON.stringify(rsdata[0]['total_length']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total_length', '');
+                let rstime = JSON.stringify(rsdata[0]['beatmap'], ['total_length']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total_length', '');
                 
                 let rslengthseconds = Math.abs(rstime) % 60;
-                let rslengthminutes = Math.abs(rstime / 60);
+                let rslengthminutes = Math.trunc(rstime / 60);
 
-                let rsfulltime = `${rslengthminutes}:${rslengthseconds}`     
+                let rspasstime = JSON.stringify(rsdata[0]['beatmap'], ['hit_length']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('hit_length', '');
+
+                let rsfulltime = `${rslengthminutes}:${rslengthseconds}`;
+                let rspasspercentage = Math.abs(rspasstime / rstime).toFixed(2);    
 
                 let rsnochokeacc300p = Math.floor(rs300s + rs300max);
                 let rsnochokeacc300 = Math.floor(300 * rsnochokeacc300p);
