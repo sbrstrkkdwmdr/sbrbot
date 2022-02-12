@@ -169,7 +169,9 @@ client.on('messageCreate', message =>{
         //console.log('success')
       });
         console.log('')
-        client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
+        setTimeout(() =>{            
+            client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        }, 1500);
         }
             
     function attachIsOsr(msgAttach) {
