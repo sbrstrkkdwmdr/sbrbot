@@ -158,22 +158,19 @@ client.on('messageCreate', message =>{
     } 
 
     //REPLAY GRABBER
-    if (message.attachments.size > 0 && message.attachments.every(attachIsOsr)){
-        
+    if (message.attachments.size > 0 && message.attachments.every(attachIsOsr)){       
         attachosr = message.attachments.first().url //grab url of first attachement
         //console.log(attachosr)
-    }
+    
     let osrdlfile = fs.createWriteStream('./replays/replay.osr') //creates a directory to write to 
     let requestw = https.get(`${attachosr}`, function(response) {
-        response.pipe(osrdlfile);
-        //console.log('success')
-      }); //THIS FUNCTION DOWNLOADS THE ATTACHEMENT THEN SAVES IT TO THE DIRECTORY LISTED IN osrdlfile
+        response.pipe(osrdlfile); //THIS FUNCTION DOWNLOADS THE ATTACHEMENT THEN SAVES IT TO THE DIRECTORY LISTED IN osrdlfile 
 
-    if (message.attachments.size > 0) { //check if theres an attachement
-        if (message.attachments.every(attachIsOsr)){   
-            client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
+        //console.log('success')
+      });
+        console.log('')
+        client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
         }
-    }
             
     function attachIsOsr(msgAttach) {
         var url = msgAttach.url;
