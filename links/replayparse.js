@@ -75,12 +75,8 @@ module.exports = {
             .then(res => res.json())
             .then(output3 => {
                 const mapdata = output3;
-                console.log(mapdata)
+                //console.log(mapdata)
             try{let beatmapid = JSON.stringify(mapdata[0], ['beatmap_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmap_id', '');
-            } catch (error) {
-                console.log(error)
-                return message.reply('error - map does not exist or is a different version to the osu website')
-            }
             const mapurl2 = `https://osu.ppy.sh/api/v2/beatmaps/${beatmapid}`
             fetch(mapurl2, {
                 headers: {
@@ -186,12 +182,16 @@ module.exports = {
         .setImage(mapbg)
         .addField('**SCORE INFO**', `[**${playername}**](https://osu.ppy.sh/u/${playername})\nScore set on ${bettertimeset}\n${hit300s}/${hit100s}/${hit50s}/${misses}\nCombo:**${maxcombo}** | ${trueacc}%`, true)
         .addField('**PP**', `${ppww}**pp**\n${ppiffcw}**pp** if ${nochokeacc}% FC`, true)
-        .addField('**MAP**', `[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${beatmapid}) mapped by [${mapper}](https://osu.ppy.sh/u/${mapper})`, false)
+        .addField('**MAP**', `[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${beatmapid}) mapped by ${mapper}`, false)
         .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner, true)
         .setThumbnail(`https://a.ppy.sh/${playerid}`);
         message.reply({embeds: [Embed]})
 })();
     })
+} catch (error) {
+    console.log(error)
+    return message.reply('error - map does not exist or is a different version to the osu website')
+}
     })
 }       catch(error){
             message.channel.send("Error - 1")
@@ -199,11 +199,11 @@ module.exports = {
         }
             })
         }        catch(error){
-            message.channel.send("Error - 1")
+            message.channel.send("Error - 2")
             console.log(error)
         }
         }   catch(error){
-            message.channel.send("Error - 1")
+            message.channel.send("Error - 3")
             console.log(error)
         }
         console.groupEnd()
