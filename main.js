@@ -159,12 +159,12 @@ client.on('messageCreate', message =>{
 
     //REPLAY GRABBER
     if (message.attachments.size > 0 && message.attachments.every(attachIsOsr)){       
-        attachosr = message.attachments.first().url //grab url of first attachement
+        attachosr = message.attachments.first().url 
         //console.log(attachosr)
     
-    let osrdlfile = fs.createWriteStream('./replays/replay.osr') //creates a directory to write to 
+    let osrdlfile = fs.createWriteStream('./replays/replay.osr') 
     let requestw = https.get(`${attachosr}`, function(response) {
-        response.pipe(osrdlfile); //THIS FUNCTION DOWNLOADS THE ATTACHEMENT THEN SAVES IT TO THE DIRECTORY LISTED IN osrdlfile 
+        response.pipe(osrdlfile); 
 
         //console.log('success')
       });

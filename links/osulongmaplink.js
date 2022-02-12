@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const calc = require('ojsama');
-const { std_ppv2 } = require('booba');
+const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 module.exports = {
     name: 'osulongmaplink',
     description: '',
@@ -68,7 +68,8 @@ module.exports = {
             let mapper = JSON.stringify(mapdata['beatmapset'], ['creator']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('creator', '');
             let maptitle = JSON.stringify(mapdata['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title_unicode', '');
             let mapdiff = JSON.stringify(mapdata, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
-            let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '')
+            let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '');
+            let mapmode = JSON.stringify(mapdata, ['mode']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('mode', '');
             let mapmaxcombo = JSON.stringify(mapdata, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('max_combo', '')
             let mapmaxcombotoint = Math.abs(mapmaxcombo);
             let mapmiss = Math.abs(0)
@@ -104,7 +105,7 @@ module.exports = {
         count300: '374',
         countmiss: '0',
         countkatu: '0',
-        countgeki: '71',
+        countgeki: '0',
         perfect: '0',
         enabled_mods: '0',
         user_id: '13780464',
@@ -121,8 +122,8 @@ module.exports = {
         count100: '30',
         count300: '374',
         countmiss: '0',
-        countkatu: '3',
-        countgeki: '71',
+        countkatu: '0',
+        countgeki: '0',
         perfect: '0',
         enabled_mods: '0',
         user_id: '13780464',
@@ -130,9 +131,25 @@ module.exports = {
         rank: 'S',
         score_id: '4057765057'
     }
-  
-    const pp = new std_ppv2().setPerformance(score)
-    const ppcalc95 = new std_ppv2().setPerformance(score95)
+    let pp = new std_ppv2().setPerformance(score)
+    let ppcalc95 = new std_ppv2().setPerformance(score95)
+
+    if(mapmode = 'osu'){
+    pp = new std_ppv2().setPerformance(score)
+    ppcalc95 = new std_ppv2().setPerformance(score95)
+    }
+    if(mapmode = 'taiko'){
+        pp = new taiko_ppv2().setPerformance(score)
+        ppcalc95 = new taiko_ppv2().setPerformance(score95)
+    }
+    if(mapmode = 'fruits'){
+        pp = new catch_ppv2().setPerformance(score)
+        ppcalc95 = new catch_ppv2().setPerformance(score95)
+        }
+    if(mapmode = 'mania'){
+    pp = new mania_ppv2().setPerformance(score)
+    ppcalc95 = new mania_ppv2().setPerformance(score95)
+    }
     let ppSSjson = await pp.compute(100);
     let pp95json = await ppcalc95.compute(95.00);
 
@@ -144,7 +161,7 @@ module.exports = {
 
             let Embed = new Discord.MessageEmbed()
             .setColor(0x91FF9A)
-            .setTitle(`${maptitle}`)
+            .setTitle(`${maptitle} [${mapdiff}] mapped by ${mapper}`)
             .setURL(`https://osu.ppy.sh/b/` + maplink)
             .setImage(mapbg)
             .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner, true)
