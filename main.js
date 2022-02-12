@@ -13,8 +13,9 @@ const { osuclientid } = require('./config.json');
 const { osuclientsecret } = require('./config.json');
 process.on('warning', e => console.warn(e.stack));
 const oncooldown = new Set();
-const https = require('http'); // or 'https' for https:// URLs
+const https = require('https'); // or 'https' for https:// URLs
 const sql = require('sqlite')
+const request = require(`request`);
 
 //MUSIC
 const ytdl = require("ytdl-core");
@@ -156,18 +157,28 @@ client.on('messageCreate', message =>{
         client.linkdetect.get('osuprofilelink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
     } 
 
-    //
-    if (message.attachments.size > 0) {
-        if (message.attachments.every(attachIsOsr)){
+    //REPLAY GRABBER
+    if (message.attachments.size > 0 && message.attachments.every(attachIsOsr)){
+        
+        attachosr = message.attachments.first().url //grab url of first attachement
+        console.log(attachosr)
+    }
+    let osrdlfile = fs.createWriteStream('./replays/replay.osr') //creates a directory to write to 
+    let requestw = https.get(`${attachosr}`, function(response) {
+        response.pipe(osrdlfile);
+        //console.log('success')
+      }); //THIS FUNCTION DOWNLOADS THE ATTACHEMENT THEN SAVES IT TO THE DIRECTORY LISTED IN osrdlfile
+
+    if (message.attachments.size > 0) { //check if theres an attachement
+        if (message.attachments.every(attachIsOsr)){   
             client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
         }
     }
             
     function attachIsOsr(msgAttach) {
         var url = msgAttach.url;
-        //True if this url is a png image.
         return url.indexOf("osr", url.length - "osr".length /*or 3*/) !== -1;
-    }
+    } //check if attachments are osr. can be changed to other file types
 
     //
     if(!message.content.startsWith(prefix)) return; //the return is so if its just prefix nothing happens
