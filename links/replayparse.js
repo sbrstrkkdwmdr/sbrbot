@@ -76,8 +76,11 @@ module.exports = {
             .then(output3 => {
                 const mapdata = output3;
                 console.log(mapdata)
-            let beatmapid = JSON.stringify(mapdata[0], ['beatmap_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmap_id', '');
-            
+            try{let beatmapid = JSON.stringify(mapdata[0], ['beatmap_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmap_id', '');
+            } catch (error) {
+                console.log(error)
+                return message.reply('error - map does not exist or is a different version to the osu website')
+            }
             const mapurl2 = `https://osu.ppy.sh/api/v2/beatmaps/${beatmapid}`
             fetch(mapurl2, {
                 headers: {

@@ -161,7 +161,7 @@ client.on('messageCreate', message =>{
     if (message.attachments.size > 0 && message.attachments.every(attachIsOsr)){
         
         attachosr = message.attachments.first().url //grab url of first attachement
-        console.log(attachosr)
+        //console.log(attachosr)
     }
     let osrdlfile = fs.createWriteStream('./replays/replay.osr') //creates a directory to write to 
     let requestw = https.get(`${attachosr}`, function(response) {
