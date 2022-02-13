@@ -18,6 +18,9 @@ const sql = require('sqlite')
 const request = require(`request`);
 const triggerwords = require('./triggerwords.js')
 
+const msglogs = require('./sbrmsg.js')
+const modlogs = require('./sbrmodlogs.js')
+
 //MUSIC
 const ytdl = require("ytdl-core");
 
@@ -125,7 +128,9 @@ client.once('ready', () => {
     console.log("")
     console.groupEnd()
 
-    //modLogs(client)
+    //msglogs(client)
+    modlogs(client)
+
 client.user.setPresence({ activities: [{ name: "you", type: 'WATCHING', video_url: 'https://youtube.com/saberstrkkdwmdr'}], status: `dnd`,});
 })
 
