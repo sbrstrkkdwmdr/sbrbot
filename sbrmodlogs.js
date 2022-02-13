@@ -3,7 +3,7 @@ const { loggingchannel } = require('./config.json');
 const Discord = require('discord.js'); //uses discord.js to run
 
 module.exports = (client) => {
-    client.on('messageCreate', message => {
+    /*client.on('messageCreate', message => {
         let logchannel = client.channels.cache.get(loggingchannel)
         let messagedetect = message.content
         let messageattachementdetect = message.attachments
@@ -41,7 +41,7 @@ module.exports = (client) => {
 
         logchannel.send({ embeds: [Embed]})
     }
-    })
+    })*/
     client.on('messageDelete', async message => {
         //if (!message.guild) return;
         let logchannel = client.channels.cache.get(loggingchannel)

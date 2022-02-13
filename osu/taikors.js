@@ -55,7 +55,7 @@ module.exports = {
                     }
                 }).then(res => res.json())
                 .then(output2 => 
-                    {try{const rsdata = output2.slice(0, 1);
+                    {try{const rsdata = output2//.slice(0, 1);
                     fs.writeFileSync("rs.json", JSON.stringify(rsdata, null, 2))
                     console.log("writing data to rs.json")
                     console.log("")
@@ -114,9 +114,9 @@ module.exports = {
                 let rsnochokeacc300 = Math.floor(rs300s);
                 let rsnochokeacc100 = Math.floor(0.5 * rs100s);
                 let rsnochokeacc50 = Math.floor(50 * rs50s);
-                let rsnochoke300num = parseInt(rs300s);
-                let rsnochoke100num = parseInt(rs100s);
-                let rsnochoke50num = parseInt(rs50s);
+                let rsnochoke300num = Math.floor(rs300s);
+                let rsnochoke100num = Math.floor(rs100s);
+                let rsnochoke50num = Math.floor(rs50s);
                 //let rsnochoke0num = parseInt(rs0s);
                 let rsnochokebottom1 = Math.floor(rsnochoke300num + rsnochoke100num + rs0s);
                 let rsnochokebottom = Math.floor(rsnochokebottom1 * 300)

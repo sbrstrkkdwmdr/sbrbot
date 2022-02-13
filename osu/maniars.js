@@ -91,22 +91,28 @@ module.exports = {
                 let rsfulltime = `${rslengthminutes}:${rslengthseconds}`;
                 let rspasspercentage = Math.abs(rspasstime / rstime).toFixed(2);    
 
-                let rsnochokeacc300p = Math.floor(rs300s + rs300max);
+                console.log(`${rs300max} | ${rs300s} | ${rs200s} | ${rs100s}| ${rs50s}`)
+
+                let rsnochoke300max = Math.floor(rs300max);
+                let rsnochoke300num = Math.floor(rs300s);
+                let rsnochoke200num = Math.floor(rs200s);
+                let rsnochoke100num = Math.floor(rs100s);
+                let rsnochoke50num = Math.floor(rs50s);
+                let rsnochokeacc300p = Math.floor(rsnochoke300num + rsnochoke300max);
                 let rsnochokeacc300 = Math.floor(300 * rsnochokeacc300p);
                 let rsnochokeacc200 = Math.floor(200 * rs200s);
                 let rsnochokeacc100 = Math.floor(100 * rs100s);
                 let rsnochokeacc50 = Math.floor(50 * rs50s);
-                let rsnochoke300max = parseInt(rs300max);
-                let rsnochoke300num = parseInt(rs300s);
-                let rsnochoke200num = parseInt(rs200s);
-                let rsnochoke100num = parseInt(rs100s);
-                let rsnochoke50num = parseInt(rs50s);
                 //let rsnochoke0num = parseInt(rs0s);
                 let rsnochokebottom1 = Math.floor(rsnochoke300max + rsnochoke300num + rsnochoke200num + rsnochoke100num + rsnochoke50num);
                 let rsnochokebottom = Math.floor(rsnochokebottom1 * 300)
                 let rsnochokeacctop = Math.floor(rsnochokeacc300 + rsnochokeacc200 + rsnochokeacc100 + rsnochokeacc50)
+
+                
                 let rsnochokeacc1 = Math.abs(rsnochokeacctop / rsnochokebottom);
                 let rsnochokeacc = Math.abs(rsnochokeacc1 * 100).toFixed(2);
+                console.log(rsnochokeacc + '|' + rsnochokeacctop + '/' + rsnochokebottom)
+                console.log(rsnochokeacc300p + ' | ' + rsnochokeacc300 + ' | ' + rsnochokeacc200 + ' | ' + rsnochokeacc100 + ' | ' + rsnochokeacc50)
 
                 let fulltimeset1 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 18);
                 let fulltimeset2 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 12);
