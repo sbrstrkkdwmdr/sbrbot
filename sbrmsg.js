@@ -1,3 +1,73 @@
+const roles = ['moderator']
+const { token } = require('./config.json');
+const { loggingchannel } = require('./config.json');
+
+module.exports = (client) => {
+    client.on('messageCreate', message => {
+
+        const messagedetect = message.content
+        const messageattachementdetect = message.attachments
+        const msgguild = message.channel.guild
+        const msgguildid = message.channel.guildId
+        const msgchannelid = message.channelId
+        const msgchannel = message.channel.name
+        let logchannel = client.channels.cache.get(loggingchannel)
+
+        const { content } = message
+
+        console.log(content)
+
+        let consoleloguserweeee = message.author
+    let currentDate = new Date();
+    let currentDateISO = new Date().toISOString();
+
+    if(message.channel != loggingchannel){
+    if(message.content || message.attachments.size > 0 || message.embeds){
+        
+        console.group(`MESSAGE SENT IN`)
+        console.log(`GUILD "${msgguild}"| ${msgguildid}`)
+        console.log(`CHANNEL "#${msgchannel}" | ${msgchannelid}`)
+        console.log(`${currentDate} | ${currentDateISO}`)
+        if(message.author.bot){
+            console.log("[BOT]")
+        }
+        console.group(`${consoleloguserweeee.tag} | ${consoleloguserweeee}`)
+        console.log(`${messagedetect}`)
+        if(message.attachments.size > 0){
+        console.log(messageattachementdetect)}
+        if(message.embeds){
+            console.log(message.embeds)
+        }
+        console.log('')
+        console.groupEnd()
+        console.groupEnd()
+
+        /*logchannel.send('---')
+        logchannel.send(`MESSAGE SENT IN\nGUILD "${msgguild}"| ${msgguildid}\nCHANNEL "#${msgchannel}" | ${msgchannelid}\n${currentDate} | ${currentDateISO}`)
+        logchannel.send(`[BOT]`, 2)
+        logchannel.send(`${consoleloguserweeee.tag} | ${consoleloguserweeee}`)
+        logchannel.send(`SENT THIS MESSAGE - ${messagedetect}`)
+        if(message.attachments.size > 0){
+        logchannel.send(`attachments - ${messageattachementdetect}`)
+}
+        if(message.embeds > 0){
+        logchannel.send(`embeds - ${message.embeds}`)}
+        logchannel.send('---')*/
+
+
+        /*let owoembed = new Discord.MessageEmbed()
+            .setTitle(`MESSAGE SENT IN\nGUILD "${msgguild}"| ${msgguildid}\nCHANNEL "#${msgchannel}" | ${msgchannelid}\n${currentDate} | ${currentDateISO}`)
+            .setAuthor(`${consoleloguserweeee.tag} | ${consoleloguserweeee}`)
+            .addField(`${messagedetect}`)
+            .addField(`${message.attachments}`)
+            .addField(`${message.embeds}`)
+        client.channels.cache.get(loggingchannel)(`MESSAGE SENT IN\nGUILD "${msgguild}"| ${msgguildid}\nCHANNEL "#${msgchannel}" | ${msgchannelid}\n${currentDate} | ${currentDateISO}\n${consoleloguserweeee.tag} | ${consoleloguserweeee}\n${messagedetect}`)
+    */
+    }}
+
+    })
+}
+/*
 const Discord = require('discord.js'); 
 
 const { Client, Intents } = require('discord.js');
@@ -81,37 +151,9 @@ client.on('messageCreate', message =>{
             .addField(`${message.attachments}`)
             .addField(`${message.embeds}`)
         client.channels.cache.get(loggingchannel)(`MESSAGE SENT IN\nGUILD "${msgguild}"| ${msgguildid}\nCHANNEL "#${msgchannel}" | ${msgchannelid}\n${currentDate} | ${currentDateISO}\n${consoleloguserweeee.tag} | ${consoleloguserweeee}\n${messagedetect}`)
-    */
+    *//*
     }}
-    /*if(message.content || message.attachments.size > 0){      
-    let owoembed = new Discord.MessageEmbed()
-    .setTitle(`MESSAGE SENT IN\nGUILD "${msgguild}"| ${msgguildid}\nCHANNEL "#${msgchannel}" | ${msgchannelid}\n${currentDate} | ${currentDateISO}`)
-    .setAuthor(`${consoleloguserweeee.tag} | ${consoleloguserweeee}`)
-    .addField(`message: ${messagedetect}`)
-    .addField(`attachements: ${message.attachments}`)
-    //.addField(`${message.embeds}`)
-    client.channels.cache.get(939698876615639051).send({ embeds: [owoembed] })
-    }
-    if(message.embeds){
-    let owoembed = new Discord.MessageEmbed()
-            .setTitle(`MESSAGE SENT IN\nGUILD "${msgguild}"| ${msgguildid}\nCHANNEL "#${msgchannel}" | ${msgchannelid}\n${currentDate} | ${currentDateISO}`)
-            .setAuthor(`${consoleloguserweeee.tag} | ${consoleloguserweeee}`)
-            //.addField(`message: ${messagedetect}`)
-            //.addField(`${message.attachments}`)
-            .addField(`embed: ${message.embeds}`)
-            client.channels.cache.get(939698876615639051).send({ embeds: [owoembed] })}
-*/
-    /*if (message.attachments.size > 0) {
-        console.group(`MESSAGE SENT IN guild: ${msgguild} channel: ${msgchannelid}`)
-        console.log(`GUILD "${msgguild}"| ${msgguildid}`)
-        console.log(`CHANNEL "#${msgchannel}" | ${msgchannelid}`)
-        console.log(`${currentDate} | ${currentDateISO}`)
-        console.group(`${consoleloguserweeee.tag} | ${consoleloguserweeee}`)
-        console.log(messageattachementdetect)
-        console.log('')
-        console.groupEnd()
-        console.groupEnd()
-    }*/
+
 
 
 });
@@ -124,4 +166,4 @@ catch (error) {
     console.log("login error")
     console.log(error)
     console.groupEnd()
-}
+}*/
