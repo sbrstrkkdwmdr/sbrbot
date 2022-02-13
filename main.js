@@ -16,6 +16,7 @@ const oncooldown = new Set();
 const https = require('https'); // or 'https' for https:// URLs
 const sql = require('sqlite')
 const request = require(`request`);
+const triggerwords = require('./triggerwords.js')
 
 //MUSIC
 const ytdl = require("ytdl-core");
@@ -117,6 +118,7 @@ client.once('ready', () => {
     let currentDate = new Date();
     let currentDateISO = new Date().toISOString();
     console.group('--- BOT IS NOW ONLINE ---')
+    //console.log(triggerwords)
     console.log(`${currentDateISO} | ${currentDate}`)
     //console.log('kwsmrksnsm is online!'); //message shown when bot turns on
     console.log(`API Latency is ${Math.round(client.ws.ping)}ms`);
@@ -156,6 +158,9 @@ client.on('messageCreate', message =>{
     if (message.content.startsWith('https://osu.ppy.sh/u/') || message.content.startsWith('osu.ppy.sh/u/') || message.content.startsWith('https://osu.ppy.sh/users/') || message.content.startsWith('osu.ppy.sh/users/')){
         client.linkdetect.get('osuprofilelink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
     } 
+    if (message.content.includes(triggerwords)){
+        client.admincmds.get('triggers').execute(message, args, linkargs, Discord, client, currentDate, currentDateISO)
+    }
 
     //REPLAY GRABBER
     if (message.attachments.size > 0 && message.attachments.every(attachIsOsr)){       
