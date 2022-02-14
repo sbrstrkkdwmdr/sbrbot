@@ -75,7 +75,7 @@ module.exports = {
                 
                 let rsmapbg = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
                 let rspp1 = JSON.stringify(rsdata[0], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pp', '');
-                let rspp = Math.abs(rspp1).toFixed(2)
+                let rspp = Math.abs(rspp1).toFixed(2);
               //  let rsppw = rsdata[0]['pp'];
                 let rsmaptime = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 10);
                 let rsmapstar = JSON.stringify(rsdata[0]['beatmap'], ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
@@ -114,7 +114,7 @@ module.exports = {
     
                 let rsnochokeacc300 = Math.floor(rs300s);
                 let rsnochokeacc100 = Math.floor(0.5 * rs100s);
-                let rsnochokeacc50 = Math.floor(50 * rs50s);
+                //let rsnochokeacc50 = Math.floor(50 * rs50s);
                 let rsnochoke300num = Math.floor(rs300s);
                 let rsnochoke100num = Math.floor(rs100s);
                 let rsnochoke50num = Math.floor(rs50s);
@@ -188,15 +188,15 @@ module.exports = {
                         ppfc = new taiko_ppv2().setPerformance(score).setMods('NM')
                     }
                     ;
-                  let ppw = await pp.compute();
-                  let ppiffc1 = await ppfc.compute();
-                  let ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                  let ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
-                  let ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
-                  let ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                  let ppwrawtotal = ppw['total'];
-                  let ppww = Math.abs(ppwrawtotal).toFixed(2);
-                  let ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
+                let ppw = await pp.compute();
+                let ppiffc1 = await ppfc.compute();
+                let ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                let ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
+                let ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
+                let ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                let ppwrawtotal = ppw['total'];
+                let ppww = Math.abs(ppwrawtotal).toFixed(2);
+                let ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
                   /* => {
                     aim: 108.36677305976224,
                     speed: 121.39049498160061,
@@ -204,9 +204,41 @@ module.exports = {
                     acc: 48.88425340242263,
                     total: 812.3689077733752
                   } */
+                let ppcalcacc = ppw['computed_accuracy']
+                let ppfccalcacc = ppiffc1['computed_accuracy']
+
+                let ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
+                let ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
                 
-                  if(rspp == 'null'){
+                if(rspp == 'null' || rspp == 'NaN'){
                     rspp = ppww
+                }
+                if(rsgrade == 'xh' || rsgrade == 'XH'){
+                    rsgrade = '<:rankingxh:927797179597357076>'
+                }
+                if(rsgrade == 'x' || rsgrade == 'X'){
+                    rsgrade = '<:rankingX:927797179832229948>'
+                }
+                if(rsgrade == 'sh' || rsgrade == 'SH'){
+                    rsgrade = '<:rankingSH:927797179710570568>'
+                }
+                if(rsgrade == 's' || rsgrade == 'S'){
+                    rsgrade = '<:rankingS:927797179618295838>'
+                }
+                if(rsgrade == 'a' || rsgrade == 'A'){
+                    rsgrade = '<:rankingA:927797179739930634>'
+                }
+                if(rsgrade == 'b' || rsgrade == 'B'){
+                    rsgrade = '<:rankingB:927797179697991700>'
+                }
+                if(rsgrade == 'c' || rsgrade == 'C'){
+                    rsgrade = '<:rankingC:927797179584757842>'
+                }
+                if(rsgrade == 'd' || rsgrade == 'D'){
+                    rsgrade = '<:rankingD:927797179534438421>'
+                }
+                if(rsgrade == 'f' || rsgrade == 'F' ){
+                    rsgrade = '🇫'
                 }
                 if(!rsmods){
                 let Embed = new Discord.MessageEmbed()
@@ -214,7 +246,11 @@ module.exports = {
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**GREAT:**${rs300s} **GOOD:**${rs100s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
+                .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**`, true)
+                .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** **${rsmapstar}**⭐`, false)
+                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300(GREAT):**${rs300s} **100(GOOD):**${rs100s} **X:**${rs0s} \n**${rscombo}x**`, true)
+                .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
+                //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**GREAT:**${rs300s} **GOOD:**${rs100s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})}
                 if(rsmods){
                     let Embed = new Discord.MessageEmbed()
@@ -222,7 +258,11 @@ module.exports = {
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**GREAT:**${rs300s} **GOOD:**${rs100s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
+                .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**`, true)
+                .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐`, false)
+                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300(GREAT):**${rs300s} **100(GOOD):**${rs100s} **X:**${rs0s} \n**${rscombo}x**`, true)
+                .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
+                //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**GREAT:**${rs300s} **GOOD:**${rs100s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})
                 }
             }

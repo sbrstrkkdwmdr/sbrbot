@@ -110,7 +110,7 @@ module.exports = {
                 let fulltimeset1 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 18);
                 let fulltimeset2 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 12);
                 let fulltimeset3 = JSON.stringify(fulltimeset1).slice(12, 18)
-                console.log(fulltimeset3)
+                //console.log(fulltimeset3)
                 let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0,-1)
                 let fulltimeset5 = fulltimeset4.slice(1, 10)
                 let fulltimeset = fulltimeset2 + fulltimeset5 + "Z"
@@ -200,19 +200,56 @@ module.exports = {
                     acc: 48.88425340242263,
                     total: 812.3689077733752
                   } */
+
+                let ppcalcacc = ppw['computed_accuracy']
+                let ppfccalcacc = ppiffc1['computed_accuracy']
+
+                let ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
+                let ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
                 
                 if(rspp == 'null' || rspp == 'NaN'){
                     rspp = ppww
                 }
-                console.log(rspp) 
-                console.log(ppww)
+                //console.log(rspp) 
+                //console.log(ppww)
+                if(rsgrade == 'xh' || rsgrade == 'XH'){
+                    rsgrade = '<:rankingxh:927797179597357076>'
+                }
+                if(rsgrade == 'x' || rsgrade == 'X'){
+                    rsgrade = '<:rankingX:927797179832229948>'
+                }
+                if(rsgrade == 'sh' || rsgrade == 'SH'){
+                    rsgrade = '<:rankingSH:927797179710570568>'
+                }
+                if(rsgrade == 's' || rsgrade == 'S'){
+                    rsgrade = '<:rankingS:927797179618295838>'
+                }
+                if(rsgrade == 'a' || rsgrade == 'A'){
+                    rsgrade = '<:rankingA:927797179739930634>'
+                }
+                if(rsgrade == 'b' || rsgrade == 'B'){
+                    rsgrade = '<:rankingB:927797179697991700>'
+                }
+                if(rsgrade == 'c' || rsgrade == 'C'){
+                    rsgrade = '<:rankingC:927797179584757842>'
+                }
+                if(rsgrade == 'd' || rsgrade == 'D'){
+                    rsgrade = '<:rankingD:927797179534438421>'
+                }
+                if(rsgrade == 'f' || rsgrade == 'F' ){
+                    rsgrade = '🇫'
+                }
                 if(!rsmods){
                 let Embed = new Discord.MessageEmbed()
                 .setColor(0x9AAAC0)
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
+                .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**`, true)
+                .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** **${rsmapstar}**⭐`, false)
+                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:**${rs300s} **100(drops):**${rs100s} **50(droplets):**${rs50s} **X:**${rs0s} \n**${rscombo}x**`, true)
+                .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
+                //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})}
                 if(rsmods){
                     let Embed = new Discord.MessageEmbed()
@@ -220,7 +257,11 @@ module.exports = {
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
+                .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**`, true)
+                .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐`, false)
+                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:**${rs300s} **100(drops):**${rs100s} **50(droplets):**${rs50s} **X:**${rs0s} \n**${rscombo}x**`, true)
+                .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
+                //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **drops:**${rs100s} **droplets:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})
                 }
             }
