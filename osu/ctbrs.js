@@ -74,8 +74,9 @@ module.exports = {
                 let rskatu = JSON.stringify(rsdata[0]['statistics'], ['count_katu']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_katu', '');
                 
                 let rsmapbg = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
-                let rspp = JSON.stringify(rsdata[0], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pp', '');
-                //let rsppw = rsdata[0]['pp'];
+                
+                let rspp1 = JSON.stringify(rsdata[0], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pp', '');
+                let rspp = Math.abs(rspp1).toFixed(2);
                 let rsmaptime = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 10);
                 let rsmapstar = JSON.stringify(rsdata[0]['beatmap'], ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
                 let rsgrade = JSON.stringify(rsdata[0], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rank', '');
@@ -91,16 +92,18 @@ module.exports = {
                 let rsfulltime = `${rslengthminutes}:${rslengthseconds}`;
                 let rspasspercentage = Math.abs(rspasstime / rstime).toFixed(2);
 
-                let rsnochokeacc300 = Math.floor(300 * rs300s);
-                let rsnochokeacc100 = Math.floor(100 * rs100s);
-                let rsnochokeacc50 = Math.floor(50 * rs50s);
+                //let rsnochokeacc300 = Math.floor(300 * rs300s);
+                //let rsnochokeacc100 = Math.floor(100 * rs100s);
+                //let rsnochokeacc50 = Math.floor(50 * rs50s);
                 let rsnochoke300num = parseInt(rs300s);
                 let rsnochoke100num = parseInt(rs100s);
                 let rsnochoke50num = parseInt(rs50s);
-                //let rsnochoke0num = parseInt(rs0s);
-                let rsnochokebottom1 = Math.floor(rsnochoke300num + rsnochoke100num + rsnochoke50num);
-                let rsnochokebottom = Math.floor(rsnochokebottom1 * 300)
-                let rsnochokeacctop = Math.floor(rsnochokeacc300 + rsnochokeacc100 + rsnochokeacc50)
+                let rsnochoke0num = parseInt(rs0s);
+                let rsnochokedropletnum = parseInt(rskatu);
+                let rsnochokebottom = Math.floor(rsnochoke300num + rsnochoke100num + rsnochoke50num + rsnochokedropletnum);
+                let rschokebottom = Math.floor(rsnochoke300num + rsnochoke100num + rsnochoke50num + rsnochoke0num + rsnochokedropletnum);
+                //let rsnochokebottom = Math.floor(rsnochokebottom1 * 300)
+                let rsnochokeacctop = Math.floor(rsnochoke300num + rsnochoke100num + rsnochoke50num)
                 let rsnochokeacc1 = Math.abs(rsnochokeacctop / rsnochokebottom);
                 let rsnochokeacc = Math.abs(rsnochokeacc1 * 100).toFixed(2);
 
@@ -181,15 +184,15 @@ module.exports = {
                         ppfc = new catch_ppv2().setPerformance(score).setMods('NM')
                     }
                     ;
-                  let ppw = await pp.compute();
-                  let ppiffc1 = await ppfc.compute();
-                  let ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                  let ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
-                  let ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
-                  let ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                  let ppwrawtotal = ppw['total'];
-                  let ppww = Math.abs(ppwrawtotal).toFixed(2);
-                  let ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
+                let ppw = await pp.compute();
+                let ppiffc1 = await ppfc.compute();
+                let ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                let ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
+                let ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
+                let ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                let ppwrawtotal = ppw['total'];
+                let ppww = Math.abs(ppwrawtotal).toFixed(2);
+                let ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
                   /* => {
                     aim: 108.36677305976224,
                     speed: 121.39049498160061,
@@ -198,9 +201,11 @@ module.exports = {
                     total: 812.3689077733752
                   } */
                 
-                  if(rspp == 'null'){
+                if(rspp == 'null' || rspp == 'NaN'){
                     rspp = ppww
                 }
+                console.log(rspp) 
+                console.log(ppww)
                 if(!rsmods){
                 let Embed = new Discord.MessageEmbed()
                 .setColor(0x9AAAC0)
