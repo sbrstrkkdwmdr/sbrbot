@@ -172,7 +172,7 @@ client.on('messageCreate', message =>{
         attachosr = message.attachments.first().url 
         //console.log(attachosr)
     
-    let osrdlfile = fs.createWriteStream('./replays/replay.osr') 
+    let osrdlfile = fs.createWriteStream('./files/replay.osr') 
     let requestw = https.get(`${attachosr}`, function(response) {
         response.pipe(osrdlfile); 
 

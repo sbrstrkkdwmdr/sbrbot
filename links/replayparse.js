@@ -15,7 +15,7 @@ module.exports = {
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("");
-        const replayPath = "./replays/replay.osr";
+        const replayPath = "./files/replay.osr";
         const replay = osuReplayParser.parseReplay(replayPath);
         fs.writeFileSync("replay.json", JSON.stringify(replay, null, 2))
 

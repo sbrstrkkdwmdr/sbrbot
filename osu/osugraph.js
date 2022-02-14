@@ -96,7 +96,7 @@ module.exports = {
                   });
 
                 //for some reason min and max values are ignored  
-                chart.toFile('./chart/mychart.png').then(w => {
+                chart.toFile('./files/mychart.png').then(w => {
                 //console.log(graphasimg)
 
                 let Embed = new Discord.MessageEmbed()
@@ -106,7 +106,8 @@ module.exports = {
                 .setThumbnail(playeravatar)
                 //.attachFiles(['./chart/mychart.png'])
 
-                message.reply({ embeds: [Embed], files: ['./chart/mychart.png']})})
+                message.reply({ embeds: [Embed], files: ['./files/mychart.png']})
+            })
                 
             } catch(error){
                     message.reply("Error - account not found (or some other error)")

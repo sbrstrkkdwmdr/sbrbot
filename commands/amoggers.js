@@ -11,12 +11,7 @@ module.exports = {
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
         console.groupEnd()
-
-            let Embed = new Discord.MessageEmbed()
-            .setColor(0xFFC1EC)
-            .setTitle("amoggers")
-            .setImage(`https://media.discordapp.net/attachments/724514625005158403/921733161229107210/amoggers.png`);
-            message.reply({ embeds: [Embed] });
+            message.reply({ files: ['./files/amoggers.png'] });
     }
 }
 //client.commands.get('').execute(message, args)
