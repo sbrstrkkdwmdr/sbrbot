@@ -35,10 +35,10 @@ module.exports = {
 
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/taiko`;
                 const { access_token } = require('../osuauth.json');
-            
+
             fetch(userinfourl, {
                 headers: {
-                    Authorization: `Bearer ${osuauthtoken}`
+                    Authorization: `Bearer ${access_token}`
                 }
             }).then(res => res.json())
             .then(output1 => 
@@ -47,7 +47,7 @@ module.exports = {
                 fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
-                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=taiko&limit=18&offset=0`;
+                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=taiko&limit=1&offset=0`;
                 
                 fetch(recentactiveurl, {
                     headers: {
@@ -55,7 +55,7 @@ module.exports = {
                     }
                 }).then(res => res.json())
                 .then(output2 => 
-                    {try{const rsdata = output2//.slice(0, 1);
+                    {try{const rsdata = output2.slice(0, 1);
                     fs.writeFileSync("rs.json", JSON.stringify(rsdata, null, 2))
                     console.log("writing data to rs.json")
                     console.log("")
@@ -74,7 +74,8 @@ module.exports = {
                 let rskatu = JSON.stringify(rsdata[0]['statistics'], ['count_katu']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_katu', '');
                 
                 let rsmapbg = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
-                let rspp = JSON.stringify(rsdata[0], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pp', '');
+                let rspp1 = JSON.stringify(rsdata[0], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pp', '');
+                let rspp = Math.abs(rspp1).toFixed(2)
               //  let rsppw = rsdata[0]['pp'];
                 let rsmaptime = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 10);
                 let rsmapstar = JSON.stringify(rsdata[0]['beatmap'], ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
@@ -94,7 +95,7 @@ module.exports = {
                 let fulltimeset1 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 18);
                 let fulltimeset2 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 12);
                 let fulltimeset3 = JSON.stringify(fulltimeset1).slice(12, 18)
-                console.log(fulltimeset3)
+                //console.log(fulltimeset3)
                 let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0,-1)
                 let fulltimeset5 = fulltimeset4.slice(1, 10)
                 let fulltimeset = fulltimeset2 + fulltimeset5 + "Z"
@@ -117,12 +118,17 @@ module.exports = {
                 let rsnochoke300num = Math.floor(rs300s);
                 let rsnochoke100num = Math.floor(rs100s);
                 let rsnochoke50num = Math.floor(rs50s);
-                //let rsnochoke0num = parseInt(rs0s);
-                let rsnochokebottom1 = Math.floor(rsnochoke300num + rsnochoke100num + rs0s);
-                let rsnochokebottom = Math.floor(rsnochokebottom1 * 300)
-                let rsnochokeacctop = Math.floor(rsnochoke300num + rsnochoke100num)
+                let rsnochoke0num = parseInt(rs0s);
+                let rsnochokebottom = Math.floor(rsnochoke300num + rsnochoke100num);
+                let rsbottomacc = Math.floor(rsnochoke300num + rsnochoke100num + rsnochoke0num);
+                //let rsnochokebottom = Math.floor(rsnochokebottom1)
+                let rsnochokeacctop = Math.floor(rsnochoke300num + rsnochokeacc100)
                 let rsnochokeacc1 = Math.abs(rsnochokeacctop / rsnochokebottom);
                 let rsnochokeacc = Math.abs(rsnochokeacc1 * 100).toFixed(2);
+
+                let rschokeacc = Math.abs(rsnochokeacctop / rsbottomacc)
+
+                //console.log(`${rsnochoke300num} | ${}`)
                 
                 const fileName = 'storedmap.json';
                 const file = require('../storedmap.json');  
