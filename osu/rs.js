@@ -210,8 +210,8 @@ module.exports = {
                 let ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
                 let ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
 
-                console.log(`${pprawaim} | ${pprawspeed} | ${pprawacc} | ${pprawfl} | ${ppcalcacc}`)
-                console.log(`${ppfcrawaim} | ${ppfcrawspeed} | ${ppfcrawacc} | ${ppfcrawfl} | ${ppfccalcacc}`)
+                //console.log(`${pprawaim} | ${pprawspeed} | ${pprawacc} | ${pprawfl} | ${ppcalcacc}`)
+                //console.log(`${ppfcrawaim} | ${ppfcrawspeed} | ${ppfcrawacc} | ${ppfcrawfl} | ${ppfccalcacc}`)
 
                 if(rspp == 'null' || rspp == 'NaN'){
                       rspp = ppww
