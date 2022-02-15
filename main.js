@@ -279,6 +279,10 @@ client.on('messageCreate', message =>{
     case 'math':case 'calculate':
         client.commands.get('math').execute(message, args, Discord, currentDate, currentDateISO)
         break;
+
+    case 'measureconvert':case 'convert':
+        client.commands.get('measureconvert').execute(message, args, Discord, currentDate, currentDateISO)
+        break;
     //FUN --------------------------------------------------------------------
     case 'ghostping':
         client.commands.get('ghostping').execute(message, args, currentDate, currentDateISO)
