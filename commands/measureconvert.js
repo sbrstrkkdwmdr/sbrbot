@@ -14,6 +14,18 @@ module.exports = {
         let converttype = args[0];
         switch(converttype){
             //temp
+            case 'help':
+                let Embedhelp = new Discord.MessageEmbed()
+                .setTitle('w')
+                .addField('**Formula**', 'c>f = convert celcius to fahrenheit', false);
+                let EmbedList = new Discord.MessageEmbed()
+                .setTitle('List of measurements')
+                .addField('Temperature', `c(celsius), f(fahnrenheit), k(kelvin)`, true)
+                .addField('Distance', 'in(inch), fe(feet), m(metres), mi(miles), au(astronomical units), ly(light years)', true)
+                .addField('Time', 'ms(milliseconds), s(seconds), min(minutes), h(hours), d(days), y(years), d(decades), cent (centuries), mil(millenia) ', true)
+                message.channel.send({ embeds: [Embedhelp]})
+                break;
+            //temperature
             case 'ctok':case 'c>k':
                 let answerck = Math.abs(num1 + 273.15);
                 let Embedck = new Discord.MessageEmbed()
