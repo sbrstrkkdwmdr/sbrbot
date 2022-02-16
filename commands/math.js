@@ -28,7 +28,7 @@ module.exports = {
                 let problemsubtract = Math.abs(part1 - part2);
                 message.reply(`${problemsubtract}`)
                 break;
-            case 'multiply':case '*':case 'multiplication':
+            case 'multiply':case '*':case 'multiplication':case 'product':
                 if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
                 let problemmultiply = Math.abs(part1 * part2);
                 message.reply(`${problemmultiply}`)
@@ -119,8 +119,16 @@ module.exports = {
                 let powerof = Math.abs(part1 ** part2)
                 message.reply(`${powerof}`)
                 break;
+            case 'help':
+                let helpembed = new Discord.MessageEmbed()
+                .setTitle('math command')
+                .addField('Tutorial', '`sbr-math (method) (num1) (num2)`\neg. `sbr-math divide 6 2`\nresult=3', false)
+                .addField('Methods', '`+, add, addition, sum\n-, subtract, substraction, difference\n*, multiply, multiplication, product\n/, divide, division\nsqrt, squareroot\nsquare\n!, factorial\nhcf, highestcommonfactor\nlcm, lowestcommonmultiple\nardt, approachratedoubletime, arifdt\n^, power`', false);
+                message.reply({ embeds: [helpembed] })
+                break;
             default:
                 message.reply("method not found")
+                break;
         }
     }
 }
