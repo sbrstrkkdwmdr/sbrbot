@@ -74,7 +74,32 @@ module.exports = {
                 .addField('**Formula**', '`((x)-32)*5/9`', false)
                 message.channel.send({ embeds: [Embedfc]})
                 break;
-            //measure
+            //distance
+            case 'inchtometre':case 'in>m':
+                let answerinchmetre = Math.abs((num1)/39.97);
+                let Embedinchmetre = new Discord.MessageEmbed()
+                .setTitle('Distance conversion')
+                .addField('**inch to metre**', `${answerinchmetre}f`, false)
+                .addField('**Formula**', '`x/39.37`', false)
+                message.channel.send({ embeds: [Embedinchmetre]})
+                break;
+            case 'inchtofeet':case 'in>fe':
+                let answerinchfeet = Math.abs((num1)/6);
+                let Embedinchfeet = new Discord.MessageEmbed()
+                .setTitle('Distance conversion')
+                .addField('**inch to metre**', `${answerinchfeet}f`, false)
+                .addField('**Formula**', '`x/6`', false)
+                message.channel.send({ embeds: [Embedinchfeet]})
+                break;
+            case 'metretoinch':case 'm>in':
+                let answermetreinch = Math.abs((num1)*39.97);
+                let Embedmetreinch = new Discord.MessageEmbed()
+                .setTitle('Distance conversion')
+                .addField('**metre to inch**', `${answermetreinch}f`, false)
+                .addField('**Formula**', '`x*39.37`', false)
+                message.channel.send({ embeds: [Embedmetreinch]})
+                break;
+            //time
             default:
                 message.reply("method not found")
         }
