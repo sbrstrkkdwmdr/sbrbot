@@ -115,6 +115,10 @@ module.exports = {
                 break;*/
            // case 'add':
              //   break;
+            case 'power':case '^':
+                let powerof = Math.abs(part1 ** part2)
+                message.reply(`${powerof}`)
+                break;
             default:
                 message.reply("method not found")
         }
