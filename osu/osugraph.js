@@ -63,8 +63,8 @@ module.exports = {
                 let playerworstrank = Math.abs((playerrankschronological[0]) + 10);
                 let playerbestrank = Math.abs((playerranks[0]) - 10);
 
-                console.log(playerrankschronological)
-                console.log
+                //console.log(playerrankschronological)
+                //console.log
 
 
                
@@ -86,10 +86,26 @@ module.exports = {
                     }],
                     options: {
                         scales: {
-                            y: {
-                                min: playerworstrank,
-                                max: playerbestrank
-                            } 
+                            type: 'linear',
+                            alignToPixels: false,
+                            backgroundColor: '#000',
+                            display: true,
+                            //min: playerworstrank,
+                            //max: playerbestrank
+                            grace: 5,
+                            beginAtZero: false,
+                            weight: 1,
+                            /* y: {
+                                type: 'linear',
+                                alignToPixels: false,
+                                backgroundColor: '#000',
+                                display: true,
+                                //min: playerworstrank,
+                                //max: playerbestrank
+                                grace: 5,
+                                beginAtZero: false,
+                                weight: 1
+                            } */
                     }
                 }
                     },

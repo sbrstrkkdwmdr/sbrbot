@@ -15,6 +15,7 @@
     "axios": "^0.25.0",
     "booba": "^0.0.15",
     "chart.js": "^3.7.0",
+    "chartjs-node-canvas": "^4.1.6",
     "chartjs-to-image": "^1.0.5",
     "discord-player": "^5.2.0",
     "discord.js": "^13.3.1",
