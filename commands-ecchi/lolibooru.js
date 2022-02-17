@@ -3,7 +3,7 @@ module.exports = {
     execute(message, args, currentDate, currentDateISO) {
         console.group('--- COMMAND EXECUTION ---')
         if(message.channel.nsfw) {
-        let pp = Math.floor(Math.random () * 100000000 + 1)
+        let pp = Math.floor(Math.random () * 1000000 + 1)
         message.channel.send(`https://lolibooru.moe/post/show/${pp}`)
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - konachangen")
