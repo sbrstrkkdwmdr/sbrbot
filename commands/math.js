@@ -119,6 +119,14 @@ module.exports = {
                 let powerof = Math.abs(part1 ** part2)
                 message.reply(`${powerof}`)
                 break;
+            case 'circumference':
+                let circumference1 = Math.abs(2* Math.PI * part1 ); 
+                message.reply(`${circumference1}`)
+                break;
+            case 'circlearea':
+                let area = Math.abs(Math.PI*(part1**2))
+                message.reply(`${area}`)
+                break;
             case 'help':
                 let helpembed = new Discord.MessageEmbed()
                 .setTitle('math command')
