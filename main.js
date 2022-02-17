@@ -129,7 +129,7 @@ client.once('ready', () => {
     console.groupEnd()
 
     //msglogs(client)
-    modlogs(client)
+    //modlogs(client)
 
 client.user.setPresence({ activities: [{ name: "you", type: 'WATCHING', video_url: 'https://youtube.com/saberstrkkdwmdr'}], status: `dnd`,});
 })
