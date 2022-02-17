@@ -24,9 +24,9 @@ module.exports = {
                 .setTitle('List of measurements')
                 .addField('Temperature', `c (celsius), f (fahnrenheit), k (kelvin)`, false)
                 .addField('Distance', 'in (inch), fe (feet), m (metres), km (kilometres), mi (miles)', false)
-                .addField('Time', '(WIP) ms (milliseconds), s (seconds), min (minutes), h (hours), d (days), y (years), d (decades), cent (centuries), mil (millenia) ', false)
-                .addField('Volume', '(WIP)', false)
-                .addField('Mass', '(WIP)', false)
+                .addField('Time', '(WIP) ms (milliseconds), s (seconds), min (minutes), h (hours), d (days), y (years) ', false)
+                .addField('Volume', '(WIP) l (litres)', false)
+                .addField('Mass', '(WIP) kg (kilograms)', false)
                 .addField('Non-measurements', 'help, metricprefixes', false)
                 message.channel.send({ embeds: [Embedhelp, EmbedList]})
                 break;
