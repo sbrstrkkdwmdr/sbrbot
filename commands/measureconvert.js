@@ -93,7 +93,7 @@ module.exports = {
                 let answerinchmetre = Math.abs((num1)/39.37);
                 let Embedinchmetre = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**inch to metre**', `${answerinchmetre} metres`, false)
+                .addField('**inches to metres**', `${answerinchmetre} metres`, false)
                 .addField('**Formula**', '`x/39.37 (approx)`', false)
                 message.channel.send({ embeds: [Embedinchmetre]})
                 break;
@@ -101,7 +101,7 @@ module.exports = {
                 let answerinchfeet = Math.abs((num1)/12);
                 let Embedinchfeet = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**inch to feet**', `${answerinchfeet} feet`, false)
+                .addField('**inches to feet**', `${answerinchfeet} feet`, false)
                 .addField('**Formula**', '`x/12`', false)
                 message.channel.send({ embeds: [Embedinchfeet]})
                 break;
@@ -109,7 +109,7 @@ module.exports = {
                 let answerinchmile = Math.abs((num1)/63360);
                 let Embedinchmile = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**inch to feet**', `${answerinchmile} miles`, false)
+                .addField('**inches to miles**', `${answerinchmile} miles`, false)
                 .addField('**Formula**', '`x/63360`', false)
                 message.channel.send({ embeds: [Embedinchmile]})
                 break;
@@ -118,7 +118,7 @@ module.exports = {
                 let answermetreinch = Math.abs((num1)*39.37);
                 let Embedmetreinch = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**metre to inch**', `${answermetreinch} inches`, false)
+                .addField('**metres to inches**', `${answermetreinch} inches`, false)
                 .addField('**Formula**', '`x*39.37 (approx)`', false)
                 message.channel.send({ embeds: [Embedmetreinch]})
                 break;
@@ -126,7 +126,7 @@ module.exports = {
                 let answermetrefeet= Math.abs((num1)*3.28084);
                 let Embedmetrefeet = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**metre to feet**', `${answermetrefeet} feet`, false)
+                .addField('**metres to feet**', `${answermetrefeet} feet`, false)
                 .addField('**Formula**', '`x*3.28084 (approx)`', false)
                 message.channel.send({ embeds: [Embedmetrefeet]})
                 break;
@@ -134,7 +134,7 @@ module.exports = {
                 let answermetremile= Math.abs((num1)/1609.344);
                 let Embedmetremile = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**metre to mile**', `${answermetremile} miles`, false)
+                .addField('**metres to miles**', `${answermetremile} miles`, false)
                 .addField('**Formula**', '`x/1609.344 (approx)`', false)
                 message.channel.send({ embeds: [Embedmetremile]})
                 break;
@@ -144,7 +144,7 @@ module.exports = {
                 let answerfeetinch = Math.abs((num1)*12);
                 let Embedfeetinch = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**feet to inch**', `${answerfeetinch} feet`, false)
+                .addField('**feet to inches**', `${answerfeetinch} feet`, false)
                 .addField('**Formula**', '`x*12`', false)
                 message.channel.send({ embeds: [Embedfeetinch]})
                 break;
@@ -152,7 +152,7 @@ module.exports = {
                 let answerfeetmetre= Math.abs((num1)/3.28084);
                 let Embedmfeetmetre = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**feet to metre**', `${answerfeetmetre} metres`, false)
+                .addField('**feet to metres**', `${answerfeetmetre} metres`, false)
                 .addField('**Formula**', '`x/3.28084 (approx)`', false)
                 message.channel.send({ embeds: [Embedmfeetmetre]})
                 break;
@@ -160,7 +160,7 @@ module.exports = {
                 let answerfeetmile= Math.abs((num1)/5280);
                 let Embedmfeetmile = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**feet to metre**', `${answerfeetmile} miles`, false)
+                .addField('**feet to miles**', `${answerfeetmile} miles`, false)
                 .addField('**Formula**', '`x/5280`', false)
                 message.channel.send({ embeds: [Embedmfeetmile]})
                 break;
@@ -169,7 +169,7 @@ module.exports = {
                 let answermileinch = Math.abs((num1)*63360);
                 let Embedmileinch = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**inch to feet**', `${answermileinch} inches`, false)
+                .addField('**miles to inches**', `${answermileinch} inches`, false)
                 .addField('**Formula**', '`x*63360`', false)
                 message.channel.send({ embeds: [Embedmileinch]})
                 break;
@@ -177,7 +177,7 @@ module.exports = {
                 let answermilefeet = Math.abs((num1)*5280);
                 let Embedmilefeet = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**feet to metre**', `${answermilefeet} feet`, false)
+                .addField('**miles to feet**', `${answermilefeet} feet`, false)
                 .addField('**Formula**', '`x*5280`', false)
                 message.channel.send({ embeds: [Embedmilefeet]})
                 break;
@@ -185,7 +185,7 @@ module.exports = {
                 let answermilemetre= Math.abs((num1)*1609.344);
                 let Embedmilemetre = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**metre to mile**', `${answermilemetre} metres`, false)
+                .addField('**miles to metres**', `${answermilemetre} metres`, false)
                 .addField('**Formula**', '`x*1609.344 (approx)`', false)
                 message.channel.send({ embeds: [Embedmilemetre]})
                 break;
