@@ -6,7 +6,7 @@ module.exports = {
         let pp = Math.floor(Math.random () * 100000000 + 1)
         message.channel.send(`https://danbooru.donmai.us/posts/${pp}`)
         console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - ")
+        console.log("command executed - danbooru")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log(`img id - ${pp}`)
