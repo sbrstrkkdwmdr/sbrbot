@@ -11,21 +11,33 @@ module.exports = {
         console.groupEnd()
 
         let num1 = Math.abs(args[1]);
-        let converttype = args[0];
+        let converttype = args[0].toLowerCase();
         switch(converttype){
-            //temp
+            
             case 'help':
                 let Embedhelp = new Discord.MessageEmbed()
                 .setTitle('w')
-                .addField('**Formula**', 'c>f = convert celcius to fahrenheit', false);
+                .addField('**Formula**', 'c>f = convert celcius to fahrenheit', false)
+                .addField('**math stuff idk**', '* = multiply\n/ = divide\n- = subtract\n+ = add\n^ = power', false)
+                ;
                 let EmbedList = new Discord.MessageEmbed()
                 .setTitle('List of measurements')
-                .addField('Temperature', `c(celsius), f(fahnrenheit), k(kelvin)`, true)
-                .addField('Distance', 'in(inch), fe(feet), m(metres), mi(miles), au(astronomical units), ly(light years)', true)
-                .addField('Time', 'ms(milliseconds), s(seconds), min(minutes), h(hours), d(days), y(years), d(decades), cent (centuries), mil(millenia) ', true)
-                message.channel.send({ embeds: [Embedhelp]})
+                .addField('Temperature', `c (celsius), f (fahnrenheit), k (kelvin)`, false)
+                .addField('Distance', 'in (inch), fe (feet), m (metres), km (kilometres), mi (miles)', false)
+                .addField('Time', '(WIP) ms (milliseconds), s (seconds), min (minutes), h (hours), d (days), y (years), d (decades), cent (centuries), mil (millenia) ', false)
+                .addField('Volume', '(WIP)', false)
+                .addField('Mass', '(WIP)', false)
+                .addField('Non-measurements', 'help, metricprefixes', false)
+                message.channel.send({ embeds: [Embedhelp, EmbedList]})
                 break;
-            //temperature
+            case 'metricprefixes':
+                let metricEmbed = new Discord.MessageEmbed()
+                .setTitle('prefixes')
+                .addField('increasing', 'yotta(Y) - 10^24\nzetta(Z) - 10^21\nexa(E) - 10^18\npeta(P) - 10^15\ntera(T) - 10^12\ngiga(G) - 10^9\nmega(M) - 10^6\nkilo(k) - 10^3\nhecto(h) - 10^2\ndeka(da) - 10', false)
+                .addField('decreasing', 'deci(d) - 10^-1\ncenti(c) - 10^-2\nmilli(m) - 10^-3\nmicro(μ) - 10^-6\nnano(n) - 10^-9\npico(p) - 10^-12\nfemto(f) - 10^-15\natto(a) - 10^-18\nzepto(z) - 10^-21\nyocto(y) - 10^-24', false)
+                message.channel.send({ embeds: [metricEmbed]});
+                break;
+            //temperature-------------------
             case 'ctok':case 'c>k':
                 let answerck = Math.abs(num1 + 273.15);
                 let Embedck = new Discord.MessageEmbed()
@@ -74,32 +86,114 @@ module.exports = {
                 .addField('**Formula**', '`((x)-32)*5/9`', false)
                 message.channel.send({ embeds: [Embedfc]})
                 break;
-            //distance
+            //distance----------------------
+
+            //inch > 
             case 'inchtometre':case 'in>m':
-                let answerinchmetre = Math.abs((num1)/39.97);
+                let answerinchmetre = Math.abs((num1)/39.37);
                 let Embedinchmetre = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**inch to metre**', `${answerinchmetre}f`, false)
-                .addField('**Formula**', '`x/39.37`', false)
+                .addField('**inch to metre**', `${answerinchmetre} metres`, false)
+                .addField('**Formula**', '`x/39.37 (approx)`', false)
                 message.channel.send({ embeds: [Embedinchmetre]})
                 break;
             case 'inchtofeet':case 'in>fe':
-                let answerinchfeet = Math.abs((num1)/6);
+                let answerinchfeet = Math.abs((num1)/12);
                 let Embedinchfeet = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**inch to metre**', `${answerinchfeet}f`, false)
-                .addField('**Formula**', '`x/6`', false)
+                .addField('**inch to feet**', `${answerinchfeet} feet`, false)
+                .addField('**Formula**', '`x/12`', false)
                 message.channel.send({ embeds: [Embedinchfeet]})
                 break;
+            case 'inchtomile':case 'in>mi':
+                let answerinchmile = Math.abs((num1)/63360);
+                let Embedinchmile = new Discord.MessageEmbed()
+                .setTitle('Distance conversion')
+                .addField('**inch to feet**', `${answerinchmile} miles`, false)
+                .addField('**Formula**', '`x/63360`', false)
+                message.channel.send({ embeds: [Embedinchmile]})
+                break;
+            //metre >
             case 'metretoinch':case 'm>in':
-                let answermetreinch = Math.abs((num1)*39.97);
+                let answermetreinch = Math.abs((num1)*39.37);
                 let Embedmetreinch = new Discord.MessageEmbed()
                 .setTitle('Distance conversion')
-                .addField('**metre to inch**', `${answermetreinch}f`, false)
-                .addField('**Formula**', '`x*39.37`', false)
+                .addField('**metre to inch**', `${answermetreinch} inches`, false)
+                .addField('**Formula**', '`x*39.37 (approx)`', false)
                 message.channel.send({ embeds: [Embedmetreinch]})
                 break;
-            //time
+            case 'metretofeet':case 'm>fe':
+                let answermetrefeet= Math.abs((num1)*3.28084);
+                let Embedmetrefeet = new Discord.MessageEmbed()
+                .setTitle('Distance conversion')
+                .addField('**metre to feet**', `${answermetrefeet} feet`, false)
+                .addField('**Formula**', '`x*3.28084 (approx)`', false)
+                message.channel.send({ embeds: [Embedmetrefeet]})
+                break;
+            case 'metretomile':case 'm>mi':
+                let answermetremile= Math.abs((num1)/1609.344);
+                let Embedmetremile = new Discord.MessageEmbed()
+                .setTitle('Distance conversion')
+                .addField('**metre to mile**', `${answermetremile} miles`, false)
+                .addField('**Formula**', '`x/1609.344 (approx)`', false)
+                message.channel.send({ embeds: [Embedmetremile]})
+                break;
+
+            // feet >
+            case 'feettoinch':case 'fe>in':
+                let answerfeetinch = Math.abs((num1)*12);
+                let Embedfeetinch = new Discord.MessageEmbed()
+                .setTitle('Distance conversion')
+                .addField('**feet to inch**', `${answerfeetinch} feet`, false)
+                .addField('**Formula**', '`x*12`', false)
+                message.channel.send({ embeds: [Embedfeetinch]})
+                break;
+            case 'feettometre':case 'fe>m':
+                let answerfeetmetre= Math.abs((num1)/3.28084);
+                let Embedmfeetmetre = new Discord.MessageEmbed()
+                .setTitle('Distance conversion')
+                .addField('**feet to metre**', `${answerfeetmetre} metres`, false)
+                .addField('**Formula**', '`x/3.28084 (approx)`', false)
+                message.channel.send({ embeds: [Embedmfeetmetre]})
+                break;
+            case 'feettomile':case 'fe>mi':
+                let answerfeetmile= Math.abs((num1)/5280);
+                let Embedmfeetmile = new Discord.MessageEmbed()
+                .setTitle('Distance conversion')
+                .addField('**feet to metre**', `${answerfeetmile} miles`, false)
+                .addField('**Formula**', '`x/5280`', false)
+                message.channel.send({ embeds: [Embedmfeetmile]})
+                break;
+            // miles >
+            case 'miletoinch':case 'mi>in':
+                let answermileinch = Math.abs((num1)*63360);
+                let Embedmileinch = new Discord.MessageEmbed()
+                .setTitle('Distance conversion')
+                .addField('**inch to feet**', `${answermileinch} inches`, false)
+                .addField('**Formula**', '`x*63360`', false)
+                message.channel.send({ embeds: [Embedmileinch]})
+                break;
+            case 'miletofeet':case 'mi>fe':
+                let answermilefeet = Math.abs((num1)*5280);
+                let Embedmilefeet = new Discord.MessageEmbed()
+                .setTitle('Distance conversion')
+                .addField('**feet to metre**', `${answermilefeet} feet`, false)
+                .addField('**Formula**', '`x*5280`', false)
+                message.channel.send({ embeds: [Embedmilefeet]})
+                break;
+            case 'miletometre':case 'mi>m':
+                let answermilemetre= Math.abs((num1)*1609.344);
+                let Embedmilemetre = new Discord.MessageEmbed()
+                .setTitle('Distance conversion')
+                .addField('**metre to mile**', `${answermilemetre} metres`, false)
+                .addField('**Formula**', '`x*1609.344 (approx)`', false)
+                message.channel.send({ embeds: [Embedmilemetre]})
+                break;
+
+
+            //time--------------------------
+            //volume------------------------
+            //mass--------------------------
             default:
                 message.reply("method not found")
         }
