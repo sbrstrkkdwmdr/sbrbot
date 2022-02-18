@@ -98,7 +98,17 @@ module.exports = {
             let mapartoint = Math.abs(mapar);
             let maphptoint = Math.abs(maphp);
             let mapodtoint = Math.abs(mapod);
-            let mapid = Math.abs(maplink)
+            let mapid = Math.abs(maplink);
+
+            let maplength = JSON.stringify(mapdata, ['total_length']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('total_length', '');
+            let maphitonly = parseInt(JSON.stringify(mapdata, ['hit_length']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('hit_length', ''));
+
+            let maphit1 = Math.floor(maphitonly / 60);
+            let maphit2 = Math.floor(maphitonly % 60);
+            let mapplaylength = maphit1 + ':' + maphit2;
+
+            let recordedmaplength = mapplaylength;
+
             const fileName = 'storedmap.json';
             const file = require('../storedmap.json');  
             file.prevmap = maplink;
@@ -160,12 +170,18 @@ module.exports = {
                     mapod = mapodNM + "^";
                     maphp = maphpNM + "^";
                     mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
+                    maphit1 = Math.floor((maphitonly / 1.5) /60);
+                    maphit2 = Math.floor((maphitonly / 1.5) % 60);
+                    recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                 }
                 if(pickedmods.includes('HT')) {
                     mapar = Math.abs(((maparNM*1.33)-4.3)).toFixed(2);
                     mapod = mapodNM + "⌄";
                     maphp = maphpNM + "⌄";
                     mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
+                    maphit1 = Math.floor((maphitonly / 0.75) /60);
+                    maphit2 = Math.floor((maphitonly / 0.75) % 60);
+                    recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                 }
                 if(pickedmods.includes('HR')) {
                     mapcs = Math.abs(mapcsNM * 1.5)
@@ -202,6 +218,9 @@ module.exports = {
                     maphp = Math.abs(maphpNM / 2) + "⌄";
                     mapod = Math.abs(mapodNM / 2) + "⌄";
                     mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
+                    maphit1 = Math.floor((maphitonly / 0.75) /60);
+                    maphit2 = Math.floor((maphitonly / 0.75) % 60);
+                    recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                 }
                 if(pickedmods.includes('EZ') && pickedmods.includes('DT')) {
                     mapcs = Math.abs(mapcsNM / 2);
@@ -209,6 +228,9 @@ module.exports = {
                     maphp = Math.abs(maphpNM / 2) + "⌄";
                     mapod = Math.abs(mapodNM / 2) + "⌄";
                     mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
+                    maphit1 = Math.floor((maphitonly / 1.5) /60);
+                    maphit2 = Math.floor((maphitonly / 1.5) % 60);
+                    recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                 }
                 if(pickedmods.includes('HR') && pickedmods.includes('HT')) {
                     mapcs = Math.abs(mapcsNM * 1.5);
@@ -216,6 +238,9 @@ module.exports = {
                     maphp = Math.abs(maphpNM * 1.5) + "^";
                     mapod = Math.abs(mapodNM * 1.5) + "^";
                     mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
+                    maphit1 = Math.floor((maphitonly / 0.75) /60);
+                    maphit2 = Math.floor((maphitonly / 0.75) % 60);
+                    recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
 
                     if(maphp > 10) {
                         maphp = 10
@@ -233,6 +258,9 @@ module.exports = {
                     maphp = Math.abs(maphpNM * 1.5) + "^";
                     mapod = Math.abs(mapodNM * 1.5) + "^";
                     mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
+                    maphit1 = Math.floor((maphitonly / 1.5) /60);
+                    maphit2 = Math.floor((maphitonly / 1.5) % 60);
+                    recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                     if(maphp > 10) {
                         maphp = 10
                         maphphr = 10
@@ -283,7 +311,7 @@ module.exports = {
             .setTitle("Information for " + maptitle + " with " + pickedmods)
             .setURL(`https://osu.ppy.sh/b/` + maplink)
             .setImage(mapbg)
-            .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner, true)
+            .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
             .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})
