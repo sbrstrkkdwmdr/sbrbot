@@ -26,3 +26,5 @@ ffprobe.exe
 ffplay.exe
 replay.osr
 info.db
+splitgateprofile.json
+splitgateprofileexample.json

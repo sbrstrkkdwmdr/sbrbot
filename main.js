@@ -11,6 +11,7 @@ const { osuauthtoken } = require('./config.json');
 const { osuapikey } = require('./config.json');
 const { osuclientid } = require('./config.json');
 const { osuclientsecret } = require('./config.json');
+const { trnkey } = require('./config.json')
 process.on('warning', e => console.warn(e.stack));
 const oncooldown = new Set();
 const https = require('https'); // or 'https' for https:// URLs
@@ -47,6 +48,7 @@ client.admincmds = new Discord.Collection();
 client.helpcmds = new Discord.Collection();
 client.musiccmds = new Discord.Collection();
 client.ecchicmds = new Discord.Collection();
+client.gamingcmds = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));        
 for(const file of commandFiles){
@@ -89,6 +91,12 @@ for(const file of ecchicmdfiles){
     const ecchicmd = require(`./commands-ecchi/${file}`);
 
     client.ecchicmds.set(ecchicmd.name, ecchicmd);
+}
+const gamingcmdfiles = fs.readdirSync('./commands-gaming/').filter(file => file.endsWith('.js'));
+for(const file of gamingcmdfiles){
+    const gamingcmd = require(`./commands-gaming/${file}`);
+
+    client.gamingcmds.set(gamingcmd.name, gamingcmd);
 }
     //const modLogs = require('./modlogs/')
     /*if (!Date.prototype.toISOString) {
@@ -584,6 +592,11 @@ client.on('messageCreate', message =>{
 
     case 'np':
         client.musiccmds.get('musicnp').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
+        break;
+
+    //gaming----
+    case 'profilesplitgate':case 'splitgateprofile':
+        client.gamingcmds.get('splitgateprofile').execute(message, args, client, Discord)
         break;
 
     default:
