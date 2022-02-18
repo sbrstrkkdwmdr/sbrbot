@@ -1,7 +1,6 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { Message } = require('discord.js');
 module.exports = {
     name: 'splitgateprofile',
     description: '',
@@ -25,8 +24,8 @@ module.exports = {
         let platformUserIdentifier = args[0];
         if(isNaN(platformUserIdentifier)) return message.reply("you must use your SteamID64");
 
-        console.log(platformUserIdentifier)
-        console.log(platform)
+        //console.log(platformUserIdentifier)
+        //console.log(platform)
         //let segmentType = 'overview'
 
         const profileurl =  `https://public-api.tracker.gg/v2/splitgate/standard/profile/${platform}/${platformUserIdentifier} `
@@ -35,8 +34,8 @@ module.exports = {
             method: 'GET',
             headers: {
                 'TRN-Api-Key': `${trnkey}`,
-                'Accept': application/json,
-                'Accept-Encoding': gzip
+                //'Accept': application/json,
+                //'Accept-Encoding': gzip
             }
         })
         .then(profileoutput => {
@@ -44,11 +43,8 @@ module.exports = {
             let username = JSON.stringify(profileoutput['data']['platformInfo'], ['platformUserHandle']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('platformUserHandle', '');
             let avatar = JSON.stringify(profileoutput['data']['platformInfo'], ['avatarUrl']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('avatarUrl', '');
             let country = JSON.stringify(profileoutput['data']['userInfo'], ['countryCode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('avatarUrl', '');
-            //let kills = JSON.stringify(profileoutput['data']['segments'][0]['stats']['rank'], ['value']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rank', '');
             let kills = JSON.stringify(profileoutput['data']['segments'][0]['stats']['kills'], ['value']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('value', '');
-            let deaths = JSON.stringify(profileoutput['data']['segments'][0]['stats']['deaths'], ['value']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('value', '');
-            let assists = JSON.stringify(profileoutput['data']['segments'][0]['stats']['assists'], ['value']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('value', '');
-            let totaldmg = JSON.stringify(profileoutput['data']['segments'][0]['stats']['damageDealt'], ['value']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('value', '');
+            let totaldmg = JSON.stringify(profileoutput['data']['segments'][0]['stats']['damage'], ['value']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('value', '');
             let totalmatches = JSON.stringify(profileoutput['data']['segments'][0]['stats']['matchesPlayed'], ['value']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('value', '');
             let wins = JSON.stringify(profileoutput['data']['segments'][0]['stats']['wins'], ['value']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('value', '');
             let losses = JSON.stringify(profileoutput['data']['segments'][0]['stats']['losses'], ['value']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('value', '');
@@ -62,7 +58,7 @@ module.exports = {
 
             let ProfileEmbed = new Discord.MessageEmbed()
             .setImage(avatar)
-            .setTitle(`INFORMATION FOR ${username}`)
+            .setTitle(`${username}'s Splitgate Profile`)
             .addField('PROFILE INFO', `Country: ${country} ${country.toLowerCase()}\n`, false)
             .addField('PROFILE STATS', `**Kills**:${kills} | **Deaths**:${deaths} | **Assists**:${assists}\n**KDA** ${KDA}\n **Damage dealt**:${totaldmg} | **Matches played**: ${totalmatches}\n**Wins**:${wins} | **Losses**: ${losses} | ${winloss1}% winrate`, false)
             message.reply({ embeds: {ProfileEmbed}});

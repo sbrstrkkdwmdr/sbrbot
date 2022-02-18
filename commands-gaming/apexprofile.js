@@ -1,7 +1,6 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { Message } = require('discord.js');
 module.exports = {
     name: 'splitgateprofile',
     description: '',
