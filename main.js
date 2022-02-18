@@ -530,6 +530,9 @@ client.on('messageCreate', message =>{
     case 'auto':
     client.admincmds.get('auto').execute(message, args, currentDate, currentDateISO)
     break;
+    case 'infodb':
+        client.commands.get('infodb').execute(message, args, Discord, currentDate, currentDateISO)
+        break;
     //MUSIC --------------------
     case 'play':
         client.musiccmds.get('play').execute(message, args, command, client, Discord, currentDate, currentDateISO)
