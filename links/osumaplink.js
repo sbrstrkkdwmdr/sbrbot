@@ -66,6 +66,8 @@ module.exports = {
             let maptitle = JSON.stringify(mapdata['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title_unicode', '');
             let mapdiff = JSON.stringify(mapdata, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
             let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '');
+            let mapmode = JSON.stringify(mapdata, ['mode']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('mode', '');
+
             let mapmaxcombo = JSON.stringify(mapdata, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('max_combo', '');
             let maplength = JSON.stringify(mapdata, ['total_length']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('total_length', '');
             let maphitonly = JSON.stringify(mapdata, ['hit_length']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('hit_length', '');
@@ -137,19 +139,19 @@ module.exports = {
     let pp = new std_ppv2().setPerformance(score)
     let ppcalc95 = new std_ppv2().setPerformance(score95)
 
-    if(mapmode = 'osu'){
+    if(mapmode == 'osu'){
     pp = new std_ppv2().setPerformance(score)
     ppcalc95 = new std_ppv2().setPerformance(score95)
     }
-    if(mapmode = 'taiko'){
+    if(mapmode == 'taiko'){
         pp = new taiko_ppv2().setPerformance(score)
         ppcalc95 = new taiko_ppv2().setPerformance(score95)
     }
-    if(mapmode = 'fruits'){
+    if(mapmode == 'fruits'){
         pp = new catch_ppv2().setPerformance(score)
         ppcalc95 = new catch_ppv2().setPerformance(score95)
         }
-    if(mapmode = 'mania'){
+    if(mapmode == 'mania'){
     pp = new mania_ppv2().setPerformance(score)
     ppcalc95 = new mania_ppv2().setPerformance(score95)
     }

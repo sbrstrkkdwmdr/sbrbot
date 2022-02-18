@@ -140,19 +140,19 @@ module.exports = {
     let pp = new std_ppv2().setPerformance(score)
     let ppcalc95 = new std_ppv2().setPerformance(score95)
 
-    if(mapmode = 'osu'){
+    if(mapmode == 'osu'){
     pp = new std_ppv2().setPerformance(score)
     ppcalc95 = new std_ppv2().setPerformance(score95)
     }
-    if(mapmode = 'taiko'){
+    if(mapmode == 'taiko'){
         pp = new taiko_ppv2().setPerformance(score)
         ppcalc95 = new taiko_ppv2().setPerformance(score95)
     }
-    if(mapmode = 'fruits'){
+    if(mapmode == 'fruits'){
         pp = new catch_ppv2().setPerformance(score)
         ppcalc95 = new catch_ppv2().setPerformance(score95)
         }
-    if(mapmode = 'mania'){
+    if(mapmode == 'mania'){
     pp = new mania_ppv2().setPerformance(score)
     ppcalc95 = new mania_ppv2().setPerformance(score95)
     }
