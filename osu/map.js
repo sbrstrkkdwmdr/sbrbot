@@ -285,22 +285,22 @@ module.exports = {
     let pp = new std_ppv2().setPerformance(score)
     let ppcalc95 = new std_ppv2().setPerformance(score95)
 
-    if(mapmode = 'osu'){
-    pp = new std_ppv2().setPerformance(score)
-    ppcalc95 = new std_ppv2().setPerformance(score95)
-    }
-    if(mapmode = 'taiko'){
-        pp = new taiko_ppv2().setPerformance(score)
-        ppcalc95 = new taiko_ppv2().setPerformance(score95)
-    }
-    if(mapmode = 'fruits'){
-        pp = new catch_ppv2().setPerformance(score)
-        ppcalc95 = new catch_ppv2().setPerformance(score95)
+    if(mapmode == 'osu'){
+        pp = new std_ppv2().setPerformance(score)
+        ppcalc95 = new std_ppv2().setPerformance(score95)
         }
-    if(mapmode = 'mania'){
-    pp = new mania_ppv2().setPerformance(score)
-    ppcalc95 = new mania_ppv2().setPerformance(score95)
-    }
+        if(mapmode == 'taiko'){
+            pp = new taiko_ppv2().setPerformance(score)
+            ppcalc95 = new taiko_ppv2().setPerformance(score95)
+        }
+        if(mapmode == 'fruits'){
+            pp = new catch_ppv2().setPerformance(score)
+            ppcalc95 = new catch_ppv2().setPerformance(score95)
+            }
+        if(mapmode == 'mania'){
+        pp = new mania_ppv2().setPerformance(score)
+        ppcalc95 = new mania_ppv2().setPerformance(score95)
+        }
                 let ppSSjson = await pp.compute(100);
                 let pp95json = await ppcalc95.compute(95.00);
 
@@ -317,7 +317,7 @@ module.exports = {
             .setImage(mapbg)
             //.setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\n\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n\n--**PP VALUES**--\nSS: ${ppSS} | 95: ${pp95} \n\n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
             //.addField('', `[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper)
-            .addField('**MAP DETAILS**', `gamemode: ${mapmode}` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n${mapplaylength}`, true)
+            .addField('**MAP DETAILS**', `gamemode: ${mapmode}\n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n${mapplaylength}`, true)
             .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})
