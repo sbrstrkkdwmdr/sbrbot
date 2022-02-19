@@ -283,8 +283,8 @@ module.exports = {
                 }*/
                 console.log(mapcs + mapar + mapod + mapod + mapbpm)
               
-                const pp = new std_ppv2().setPerformance(score).setMods(pickedmods);
-                const ppcalc95 = new std_ppv2().setPerformance(score95).setMods(pickedmods);
+                let pp = new std_ppv2().setPerformance(score).setMods(pickedmods);
+                let ppcalc95 = new std_ppv2().setPerformance(score95).setMods(pickedmods);
     let mapimg = '<:modeosu:944181096868884481>'
     if(mapmode == 'osu'){
         pp = new std_ppv2().setPerformance(score)
