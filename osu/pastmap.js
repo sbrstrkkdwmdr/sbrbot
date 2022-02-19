@@ -21,7 +21,7 @@ module.exports = {
         //if(!pickedmods) return message.channel.send("no mods have been picked!\nuse `sbr-map` if you want NM")
 
         if(!pickedmods) {
-            pickedmods = 'SD'
+            pickedmods = 'NM'
         }
 
         let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
