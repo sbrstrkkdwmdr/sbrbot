@@ -89,7 +89,7 @@ module.exports = {
             let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '')
             let mapmaxcombo = JSON.stringify(mapdata, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('max_combo', '')
             let mapmode = JSON.stringify(mapdata, ['mode']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('mode', '');
-
+            let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20')
             let mapmaxcombotoint = Math.abs(mapmaxcombo);
             let slidertonum = Math.abs(mapslider);
             let circletonum = Math.abs(mapcircle);
@@ -334,7 +334,7 @@ module.exports = {
             .setTitle("Information for " + maptitle + " with " + pickedmods)
             .setURL(`https://osu.ppy.sh/b/` + maplink)
             .setImage(mapbg)
-            .addField('**MAP DETAILS**', `${mapimg}\n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
+            .addField('**MAP DETAILS**', `${mapimg} | mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})\n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
             .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})
