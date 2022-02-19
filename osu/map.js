@@ -270,16 +270,16 @@ module.exports = {
               (async () => {
 
                 const score = {
-                    beatmap_id: '1962676',
+                    beatmap_id: maplink,
                     score: '6795149',
-                    maxcombo: '630',
+                    maxcombo: mapmaxcombo,
                     count50: '0',
                     count100: '0',
                     count300: '374',
                     countmiss: '0',
                     countkatu: '0',
                     countgeki: '0',
-                    perfect: '0',
+                    perfect: '1',
                     enabled_mods: '0',
                     user_id: '13780464',
                     date: '2022-02-08 05:24:54',
@@ -288,9 +288,9 @@ module.exports = {
                   }
                 //const score = scorew
                 const score95 = {
-                    beatmap_id: '1962676',
+                    beatmap_id: maplink,
                     score: '6795149',
-                    maxcombo: '630',
+                    maxcombo: mapmaxcombo,
                     count50: '0',
                     count100: '30',
                     count300: '374',

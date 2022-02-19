@@ -120,9 +120,9 @@ module.exports = {
               (async () => {
 
                 const score = {
-                    beatmap_id: '1962676',
+                    beatmap_id: maplink,
                     score: '6795149',
-                    maxcombo: '630',
+                    maxcombo: mapmaxcombo,
                     count50: '0',
                     count100: '0',
                     count300: '374',
@@ -138,9 +138,9 @@ module.exports = {
                   }
                 //const score = scorew
                 const score95 = {
-                    beatmap_id: '1962676',
+                    beatmap_id: maplink,
                     score: '6795149',
-                    maxcombo: '630',
+                    maxcombo: mapmaxcombo,
                     count50: '0',
                     count100: '30',
                     count300: '374',
