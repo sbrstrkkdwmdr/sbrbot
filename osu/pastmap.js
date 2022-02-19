@@ -21,7 +21,7 @@ module.exports = {
         //if(!pickedmods) return message.channel.send("no mods have been picked!\nuse `sbr-map` if you want NM")
 
         if(!pickedmods) {
-            pickedmods = 'NM'
+            pickedmods = 'SD'
         }
 
         let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
@@ -139,7 +139,7 @@ module.exports = {
                     countkatu: '0',
                     countgeki: '71',
                     perfect: '0',
-                    enabled_mods: '64',
+                    enabled_mods: '0',
                     user_id: '13780464',
                     date: '2022-02-08 05:24:54',
                     rank: 'S',
@@ -157,7 +157,7 @@ module.exports = {
                     countkatu: '0',
                     countgeki: '71',
                     perfect: '0',
-                    enabled_mods: '64',
+                    enabled_mods: '0',
                     user_id: '13780464',
                     date: '2022-02-08 05:24:54',
                     rank: 'S',
@@ -287,23 +287,23 @@ module.exports = {
                 let ppcalc95 = new std_ppv2().setPerformance(score95).setMods(pickedmods);
     let mapimg = '<:modeosu:944181096868884481>'
     if(mapmode == 'osu'){
-        pp = new std_ppv2().setPerformance(score)
-        ppcalc95 = new std_ppv2().setPerformance(score95)
+        pp = new std_ppv2().setPerformance(score).setMods(pickedmods);
+        ppcalc95 = new std_ppv2().setPerformance(score95).setMods(pickedmods);
         mapimg = '<:modeosu:944181096868884481>'
         }
         if(mapmode == 'taiko'){
-            pp = new taiko_ppv2().setPerformance(score)
-            ppcalc95 = new taiko_ppv2().setPerformance(score95)
+            pp = new taiko_ppv2().setPerformance(score).setMods(pickedmods);
+            ppcalc95 = new taiko_ppv2().setPerformance(score95).setMods(pickedmods);
             mapimg = '<:modetaiko:944181097053442068>'
         }
         if(mapmode == 'fruits'){
-            pp = new catch_ppv2().setPerformance(score)
-            ppcalc95 = new catch_ppv2().setPerformance(score95)
+            pp = new catch_ppv2().setPerformance(score).setMods(pickedmods);
+            ppcalc95 = new catch_ppv2().setPerformance(score95).setMods(pickedmods);
             mapimg = '<:modefruits:944181096206176326>'
         }
         if(mapmode == 'mania'){
-        pp = new mania_ppv2().setPerformance(score)
-        ppcalc95 = new mania_ppv2().setPerformance(score95)
+        pp = new mania_ppv2().setPerformance(score).setMods(pickedmods);
+        ppcalc95 = new mania_ppv2().setPerformance(score95).setMods(pickedmods);
         mapimg = '<:modemania:944181095874834453>'
         }
 
@@ -315,6 +315,8 @@ module.exports = {
 
                 let ppSS = Math.abs(ppSSstr).toFixed(2)
                 let pp95 = Math.abs(pp95str).toFixed(2)
+
+                //console.log(ppSSjson)
 
 
                 //console.log(await pp.compute(100))
@@ -328,10 +330,10 @@ module.exports = {
               
 
 //let ppSS = "undefined";
-//let pp95 = "undefined";
+//let pp95 = "undefined";   
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
-            .setTitle("Information for " + maptitle + " with " + pickedmods)
+            .setTitle("Information for " + maptitle + `[${mapdiff}] with ` + pickedmods)
             .setURL(`https://osu.ppy.sh/b/` + maplink)
             .setImage(mapbg)
             .addField('**MAP DETAILS**', `${mapimg} | mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})\n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
