@@ -73,6 +73,8 @@ module.exports = {
                 let playerfollowers = JSON.stringify(osudata, ['follower_count']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('follower_count', '');
                 let playerprevname = JSON.stringify(osudata, ['previous_usernames']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('previous_usernames', '').replaceAll('[', '').replaceAll(']', '');
                 
+                let playerrank = JSON.stringify(osudata['statistics'], ['global_rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('global_rank', '');
+
                 if(playerrank1 < 1000000000 && playerrank1 > 999999){
                     playerrankp1 = Math.floor(playerrank1 / 1000000);
                     playerrankp2 = Math.floor(playerrank1 / 1000) % 1000;
@@ -88,11 +90,12 @@ module.exports = {
                 if(playerrank1 < 1000){
                     playerrank = playerrank1
                 }
-                if(playerrank1 = 'null'){
-                    playerrank = '---'
+                
+                if(playerrank1 == 'null'){
+                    playerrank == '---'
                 }
-                if(playercountryrank = 'null'){
-                    playercountryrank = '---'
+                if(playercountryrank == 'null'){
+                    playercountryrank == '---'
                 }
 
 
