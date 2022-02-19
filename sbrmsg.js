@@ -1,6 +1,15 @@
-const roles = ['moderator']
+//const roles = ['moderator']
+/*
 const { token } = require('./config.json');
 const { loggingchannel } = require('./config.json');
+const { Client, Intents } = require('discord.js');
+const client = new Client({ intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MEMBERS,
+    Intents.FLAGS.GUILD_PRESENCES,
+    Intents.FLAGS.GUILD_VOICE_STATES,
+    ] });
 
 module.exports = (client) => {
     client.on('messageCreate', message => {
@@ -11,7 +20,7 @@ module.exports = (client) => {
         const msgguildid = message.channel.guildId
         const msgchannelid = message.channelId
         const msgchannel = message.channel.name
-        let logchannel = client.channels.cache.get(loggingchannel)
+        //let logchannel = client.channels.cache.get(loggingchannel)
 
         const { content } = message
 
@@ -62,12 +71,12 @@ module.exports = (client) => {
             .addField(`${message.attachments}`)
             .addField(`${message.embeds}`)
         client.channels.cache.get(loggingchannel)(`MESSAGE SENT IN\nGUILD "${msgguild}"| ${msgguildid}\nCHANNEL "#${msgchannel}" | ${msgchannelid}\n${currentDate} | ${currentDateISO}\n${consoleloguserweeee.tag} | ${consoleloguserweeee}\n${messagedetect}`)
-    */
+    //
     }}
 
     })
-}
-/*
+}*/
+
 const Discord = require('discord.js'); 
 
 const { Client, Intents } = require('discord.js');
@@ -151,7 +160,7 @@ client.on('messageCreate', message =>{
             .addField(`${message.attachments}`)
             .addField(`${message.embeds}`)
         client.channels.cache.get(loggingchannel)(`MESSAGE SENT IN\nGUILD "${msgguild}"| ${msgguildid}\nCHANNEL "#${msgchannel}" | ${msgchannelid}\n${currentDate} | ${currentDateISO}\n${consoleloguserweeee.tag} | ${consoleloguserweeee}\n${messagedetect}`)
-    *//*
+    */
     }}
 
 
@@ -166,4 +175,4 @@ catch (error) {
     console.log("login error")
     console.log(error)
     console.groupEnd()
-}*/
+}

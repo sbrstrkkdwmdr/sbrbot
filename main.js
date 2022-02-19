@@ -19,8 +19,8 @@ const sql = require('sqlite')
 const request = require(`request`);
 const triggerwords = require('./triggerwords.js')
 
-const msglogs = require('./sbrmsg.js')
-const modlogs = require('./sbrmodlogs.js')
+//const msglogs = require('./sbrmsg.js')
+//const modlogs = require('./sbrmodlogs.js')
 
 //MUSIC
 const ytdl = require("ytdl-core");
