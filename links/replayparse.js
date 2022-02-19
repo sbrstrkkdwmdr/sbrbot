@@ -88,6 +88,7 @@ module.exports = {
             const mapdata2 = output4;
             let mapbg = JSON.stringify(mapdata2['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
             let mapper = JSON.stringify(mapdata2['beatmapset'], ['creator']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('creator', '');
+            let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20')
             let maptitle = JSON.stringify(mapdata2['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title_unicode', '');
             let mapdiff = JSON.stringify(mapdata2, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
             let mapcs = JSON.stringify(mapdata2, ['cs']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('cs', '');
@@ -180,9 +181,9 @@ module.exports = {
         .setTitle(`replay data`)
         //.setURL(`https://osu.ppy.sh/b/` + beatmapid)
         .setImage(mapbg)
-        .addField('**SCORE INFO**', `[**${playername}**](https://osu.ppy.sh/u/${playername})\nScore set on ${bettertimeset}\n${hit300s}/${hit100s}/${hit50s}/${misses}\nCombo:**${maxcombo}** | ${trueacc}%`, true)
+        .addField('**SCORE INFO**', `[**${playername}**](https://osu.ppy.sh/u/${playerid})\nScore set on ${bettertimeset}\n${hit300s}/${hit100s}/${hit50s}/${misses}\nCombo:**${maxcombo}** | ${trueacc}%`, true)
         .addField('**PP**', `${ppww}**pp**\n${ppiffcw}**pp** if ${nochokeacc}% FC`, true)
-        .addField('**MAP**', `[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${beatmapid}) mapped by ${mapper}`, false)
+        .addField('**MAP**', `[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${beatmapid}) mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})`, false)
         .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner, true)
         .setThumbnail(`https://a.ppy.sh/${playerid}`);
         message.reply({embeds: [Embed]})
