@@ -234,6 +234,21 @@ module.exports = {
             let mapartoint = Math.abs(mapar);
             let maphptoint = Math.abs(maphp);
             let mapodtoint = Math.abs(mapod);
+
+            let mapstatus = JSON.stringify(mapdata, ['status']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('status', '');
+            if(mapstatus == 'ranked'){
+                statusimg = '<:statusranked:944512775579926609>';
+            }
+            if(mapstatus == 'approved' || mapstatus == 'qualified'){
+                statusimg = '<:statusapproved:944512764913811467>'
+            }
+            if(mapstatus == 'loved'){
+                statusimg = '<:statusloved:944512775810588733>'
+            }
+            if(mapstatus == 'graveyard' || mapstatus == 'pending'){
+                statusimg = '<:statusgraveyard:944512765282897940>'
+            }
+
             let mapid = Math.abs(maplink)
             const fileName = 'storedmap.json';
             const file = require('../storedmap.json');  
@@ -323,7 +338,7 @@ module.exports = {
             .setImage(mapbg)
             //.setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\n\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n\n--**PP VALUES**--\nSS: ${ppSS} | 95: ${pp95} \n\n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
             //.addField('', `[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper)
-            .addField('**MAP DETAILS**', `${mapimg} | mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})\n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n${mapplaylength}`, true)
+            .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \nmapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})\n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n${mapplaylength}`, true)
             .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})

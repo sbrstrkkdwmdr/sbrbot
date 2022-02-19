@@ -111,6 +111,21 @@ module.exports = {
 
             let recordedmaplength = mapplaylength;
 
+            let mapstatus = JSON.stringify(mapdata, ['status']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('status', '');
+            if(mapstatus == 'ranked'){
+                statusimg = '<:statusranked:944512775579926609>';
+            }
+            if(mapstatus == 'approved' || mapstatus == 'qualified'){
+                statusimg = '<:statusapproved:944512764913811467>'
+            }
+            if(mapstatus == 'loved'){
+                statusimg = '<:statusloved:944512775810588733>'
+            }
+            if(mapstatus == 'graveyard' || mapstatus == 'pending'){
+                statusimg = '<:statusgraveyard:944512765282897940>'
+            }
+
+
             const fileName = 'storedmap.json';
             const file = require('../storedmap.json');  
             file.prevmap = maplink;
@@ -336,7 +351,7 @@ module.exports = {
             .setTitle("Information for " + maptitle + `[${mapdiff}] with ` + pickedmods)
             .setURL(`https://osu.ppy.sh/b/` + maplink)
             .setImage(mapbg)
-            .addField('**MAP DETAILS**', `${mapimg} | mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})\n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
+            .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \nmapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})\n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
             .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})
