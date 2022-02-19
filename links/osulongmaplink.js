@@ -179,8 +179,8 @@ module.exports = {
         ppcalc95 = new mania_ppv2().setPerformance(score95)
         mapimg = '<:modemania:944181095874834453>'
         }
-    let ppSSjson = await pp.compute(100);
-    let pp95json = await ppcalc95.compute(95.00);
+    let ppSSjson = await pp.compute();
+    let pp95json = await ppcalc95.compute();
 
     let ppSSstr = JSON.stringify(ppSSjson['total']);
     let pp95str = JSON.stringify(pp95json['total']);
