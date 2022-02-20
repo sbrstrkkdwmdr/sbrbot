@@ -204,12 +204,18 @@ module.exports = {
             .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})
+            console.groupEnd()
+            console.groupEnd()
+            console.groupEnd()
         })();
         //    })
     } catch(error){
 				message.reply("error")
 				console.log(error)
 				console.log("")
+                console.groupEnd()
+                console.groupEnd()
+                console.groupEnd()
 			}
 			
 			
@@ -406,13 +412,21 @@ module.exports = {
 				message.reply("error")
 				console.log(error)
 				console.log("")
+                console.groupEnd()
+                console.groupEnd()
+                console.groupEnd()
 			}
             });
         } catch(err){
             console.log(error)
+            console.groupEnd()
+            console.groupEnd()
+            console.groupEnd()
         } }} catch(error) {
             console.log(error)
-            
+            console.groupEnd()
+            console.groupEnd()
+            console.groupEnd()
         }
         
     }
