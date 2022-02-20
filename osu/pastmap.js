@@ -93,7 +93,7 @@ module.exports = {
             let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '')
             let mapmaxcombo = JSON.stringify(mapdata, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('max_combo', '')
             let mapmode = JSON.stringify(mapdata, ['mode']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('mode', '');
-            let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20')
+            let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20').replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '');
             let mapmaxcombotoint = Math.abs(mapmaxcombo);
             let slidertonum = Math.abs(mapslider);
             let circletonum = Math.abs(mapcircle);
@@ -352,10 +352,11 @@ module.exports = {
 //let pp95 = "undefined";   
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
-            .setTitle("Information for " + maptitle + `\n[${mapdiff}] +` + pickedmods)
-            .setURL(`https://osu.ppy.sh/b/` + maplink)
+            .setTitle(`mapped by ${mapper}`)
+            .setAuthor(`${mapartist} - ${maptitle} [${mapdiff}] +${pickedmods}`, 'https://media.discordapp.net/attachments/724514625005158403/944862165658132480/a.png',`https://osu.ppy.sh/beatmapsets?q=${mapartist}`)
+            .setURL(`https://osu.ppy.sh/u/${mapperlink}`)
             .setImage(mapbg)
-            .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \nmapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})\n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
+            .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
             .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})
