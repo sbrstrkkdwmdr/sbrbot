@@ -352,7 +352,7 @@ module.exports = {
 //let pp95 = "undefined";   
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
-            .setTitle(`mapped by ${mapper}`)
+            .setTitle(`//${mapper}`)
             .setAuthor(`${mapartist} - ${maptitle} [${mapdiff}] +${pickedmods}`, 'https://media.discordapp.net/attachments/724514625005158403/944862165658132480/a.png',`https://osu.ppy.sh/beatmapsets?q=${mapartist}`)
             .setURL(`https://osu.ppy.sh/u/${mapperlink}`)
             .setImage(mapbg)

@@ -194,7 +194,7 @@ module.exports = {
 
             let Embed = new Discord.MessageEmbed()
             .setColor(0x91FF9A)
-            .setTitle(`mapped by ${mapper}`)
+            .setTitle(`//${mapper}`)
             .setAuthor(`${mapartist} - ${maptitle} [${mapdiff}]`, 'https://media.discordapp.net/attachments/724514625005158403/944862165658132480/a.png',`https://osu.ppy.sh/b/${maplink}`)
             .setURL(`https://osu.ppy.sh/u/${mapperlink}`)
             .setImage(mapbg)
@@ -397,7 +397,7 @@ module.exports = {
 
             let Embed = new Discord.MessageEmbed()
             .setColor(0x91FF9A)
-            .setTitle(`mapped by ${mapper}`)
+            .setTitle(`//${mapper}`)
             .setAuthor(`${mapartist} - ${maptitle} [${mapdiff}]`, 'https://media.discordapp.net/attachments/724514625005158403/944862165658132480/a.png',`https://osu.ppy.sh/b/${maplink}`)
             .setURL(`https://osu.ppy.sh/u/${mapperlink}`)
             .setImage(mapbg)
