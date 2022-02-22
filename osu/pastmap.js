@@ -186,7 +186,7 @@ module.exports = {
 
                 
 
-                if(pickedmods.includes('DT')) {
+                if(pickedmods.includes('DT') && !pickedmods.includes('HR') && !pickedmods.includes('EZ')) {
                     mapar = Math.abs(((maparNM*2)+13)/3).toFixed(2);
                     mapod = mapodNM + "^";
                     maphp = maphpNM + "^";
@@ -195,7 +195,7 @@ module.exports = {
                     maphit2 = Math.floor((maphitonly / 1.5) % 60);
                     recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                 }
-                if(pickedmods.includes('HT')) {
+                if(pickedmods.includes('HT') && !pickedmods.includes('HR') && !pickedmods.includes('EZ')) {
                     mapar = Math.abs(((maparNM*1.33)-4.3)).toFixed(2);
                     mapod = mapodNM + "⌄";
                     maphp = maphpNM + "⌄";
@@ -204,7 +204,7 @@ module.exports = {
                     maphit2 = Math.floor((maphitonly / 0.75) % 60);
                     recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                 }
-                if(pickedmods.includes('HR')) {
+                if(pickedmods.includes('HR') && !pickedmods.includes('HT') && !pickedmods.includes('DT')) {
                     mapcs = Math.abs(mapcsNM * 1.5)
                     mapar = Math.abs(maparNM * 1.5)
                     maphp = Math.abs(maphpNM * 1.5)
@@ -223,7 +223,7 @@ module.exports = {
                     }
 
                 }
-                if(pickedmods.includes('EZ')) {
+                if(pickedmods.includes('EZ') && !pickedmods.includes('HT') && !pickedmods.includes('DT')) {
                     mapcs = Math.abs(mapcsNM / 2)
                     mapar = Math.abs(maparNM / 2)
                     maphp = Math.abs(maphpNM / 2)
@@ -246,8 +246,8 @@ module.exports = {
                 if(pickedmods.includes('EZ') && pickedmods.includes('DT')) {
                     mapcs = Math.abs(mapcsNM / 2);
                     mapar = Math.abs(((maparNM / 2)+13)/3).toFixed(2);
-                    maphp = Math.abs(maphpNM / 2) + "⌄";
-                    mapod = Math.abs(mapodNM / 2) + "⌄";
+                    maphp = Math.abs(maphpNM / 2) + "^";
+                    mapod = Math.abs(mapodNM / 2) + "^";
                     mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
                     maphit1 = Math.floor((maphitonly / 1.5) /60);
                     maphit2 = Math.floor((maphitonly / 1.5) % 60);
@@ -256,26 +256,26 @@ module.exports = {
                 if(pickedmods.includes('HR') && pickedmods.includes('HT')) {
                     mapcs = Math.abs(mapcsNM * 1.5);
                     mapar = Math.abs(((maparNM * 1.5)*1.33)-4.3).toFixed(2);
-                    maphp = Math.abs(maphpNM * 1.5) + "^";
-                    mapod = Math.abs(mapodNM * 1.5) + "^";
+                    maphp = Math.abs(maphpNM * 1.5) + "⌄";
+                    mapod = Math.abs(mapodNM * 1.5) + "⌄";
                     mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
                     maphit1 = Math.floor((maphitonly / 0.75) /60);
                     maphit2 = Math.floor((maphitonly / 0.75) % 60);
                     recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
 
                     if(maphp > 10) {
-                        maphp = 10
-                        maphphr = 10
+                        maphp = 10 + "^"
+                        maphphr = 10 + "^"
                     }
                     if(mapod > 10) {
-                        mapod = 10
-                        mapodhr = 10
+                        mapod = 10 + "^"
+                        mapodhr = 10 + "^"
                     }
 
                 }
                 if(pickedmods.includes('HR') && pickedmods.includes('DT')) {
                     mapcs = Math.abs(mapcsNM * 1.5);
-                    mapar = Math.abs(((maparNM * 1.5)+13)/3).toFixed(2);
+                    mapar = Math.abs((((maparNM * 1.5)*2)+13)/3).toFixed(2);
                     maphp = Math.abs(maphpNM * 1.5) + "^";
                     mapod = Math.abs(mapodNM * 1.5) + "^";
                     mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
@@ -289,6 +289,9 @@ module.exports = {
                     if(mapod > 10) {
                         mapod = 10
                         mapodhr = 10
+                    }
+                    if(mapar > 11){
+                        mapar = 11
                     }
 
                 }
@@ -353,7 +356,7 @@ module.exports = {
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
             .setTitle(`//${mapper}`)
-            .setAuthor(`${mapartist} - ${maptitle} [${mapdiff}] +${pickedmods}`, 'https://media.discordapp.net/attachments/724514625005158403/944862165658132480/a.png',`https://osu.ppy.sh/beatmapsets?q=${mapartist}`)
+            .setAuthor(`${mapartist} - ${maptitle} [${mapdiff}] +${pickedmods}`, 'https://media.discordapp.net/attachments/724514625005158403/944862165658132480/a.png',`https://osu.ppy.sh/b/${maplink}`)
             .setURL(`https://osu.ppy.sh/u/${mapperlink}`)
             .setImage(mapbg)
             .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
