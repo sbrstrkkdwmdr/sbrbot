@@ -190,7 +190,21 @@ client.on('messageCreate', message =>{
         setTimeout(() =>{            
             client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         }, 1500);
+        if(message.channelId == '945600391343656970'){
+        //replayrecord
+        function exec(cmd, handler = function(error, stdout, stderr){console.log(stdout);if(error !== null){console.log(stderr)}})
+{
+    const childfork = require('child_process');
+    return childfork.exec(cmd, handler);
+}
+        setTimeout(() =>{    
+        client.linkdetect.get('replayrecord').execute(exec, linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            }, 1500);
+            }
+            
         }
+
+    
             
     function attachIsOsr(msgAttach) {
         var url = msgAttach.url;
@@ -236,6 +250,9 @@ client.on('messageCreate', message =>{
     case 'info':
         client.helpcmds.get('info').execute(message, args, currentDate, currentDateISO)
         break;
+
+    case 'recordhelp':
+        client.linkdetect.get('replayrecordhelp').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
     //UNCATEGORISED -----GENERAL?-------------------------------------------------
      case 'avatar':case 'av':case 'pfp':
          client.commands.get('avatar').execute(message, args, Discord, currentDate, currentDateISO)
