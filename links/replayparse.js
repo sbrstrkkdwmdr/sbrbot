@@ -120,6 +120,14 @@ module.exports = {
     let nochokeacc = Math.abs(nochokeacc1 * 100).toFixed(2);
     let trueacc = Math.abs((nochokeacctop / truaccbottom) * 100).toFixed(2);
 
+    const re = {
+        playername: playername,
+        trueacc: trueacc,
+        maptitle: maptitle,
+        mapdiff: mapdiff
+    }
+    fs.writeFileSync('replaydata.json', JSON.stringify(re, null, 2))
+
         const score = {
             beatmap_id: beatmapid,
             score: '6795149',
