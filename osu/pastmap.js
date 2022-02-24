@@ -353,11 +353,19 @@ module.exports = {
 
 //let ppSS = "undefined";
 //let pp95 = "undefined";   
+let userinfourl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`
+            fetch(userinfourl, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`
+                }
+            }).then(res => res.json())
+            .then(output3 => {
+            let mapperid = JSON.stringify(output3, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
             let Embed = new Discord.MessageEmbed()
             .setColor(0x462B71)
-            .setTitle(`//${mapper}`)
-            .setAuthor(`${mapartist} - ${maptitle} [${mapdiff}] +${pickedmods}`, 'https://media.discordapp.net/attachments/724514625005158403/944862165658132480/a.png',`https://osu.ppy.sh/b/${maplink}`)
-            .setURL(`https://osu.ppy.sh/u/${mapperlink}`)
+            .setTitle(`${mapartist} - ${maptitle} [${mapdiff}] +${pickedmods}`)
+            .setAuthor(`${mapper}`, `https://a.ppy.sh/${mapperid}`,`https://osu.ppy.sh/u/${mapperlink}`)
+            .setURL(`https://osu.ppy.sh/b/${maplink}`)
             .setImage(mapbg)
             .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
             .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
@@ -366,6 +374,7 @@ module.exports = {
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()
+            })
         })();
         //    })
     } catch(error){

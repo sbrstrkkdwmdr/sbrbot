@@ -191,12 +191,23 @@ module.exports = {
 
                 let ppSS = Math.abs(ppSSstr).toFixed(2)
                 let pp95 = Math.abs(pp95str).toFixed(2)
+                let userinfourl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`
+            fetch(userinfourl, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`
+                }
+            }).then(res => res.json())
+            .then(output3 => {
+            let mapperid = JSON.stringify(output3, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
 
             let Embed = new Discord.MessageEmbed()
             .setColor(0x91FF9A)
-            .setTitle(`//${mapper}`)
+            /*.setTitle(`//${mapper}`)
             .setAuthor(`${mapartist} - ${maptitle} [${mapdiff}]`, 'https://media.discordapp.net/attachments/724514625005158403/944862165658132480/a.png',`https://osu.ppy.sh/b/${maplink}`)
-            .setURL(`https://osu.ppy.sh/u/${mapperlink}`)
+            .setURL(`https://osu.ppy.sh/u/${mapperlink}`)*/
+            .setTitle(`${mapartist} - ${maptitle} [${mapdiff}]`)
+            .setAuthor(`${mapper}`, `https://a.ppy.sh/${mapperid}`,`https://osu.ppy.sh/u/${mapperlink}`)
+            .setURL(`https://osu.ppy.sh/b/${maplink}`)
             .setImage(mapbg)
             //.setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\n\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n\n--**PP VALUES**--\nSS: ${ppSS} | 95: ${pp95} \n\n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
             //.addField('', `[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper)
@@ -207,6 +218,7 @@ module.exports = {
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()
+    })
         })();
         //    })
     } catch(error){
@@ -395,11 +407,19 @@ module.exports = {
                 let ppSS = Math.abs(ppSSstr).toFixed(2)
                 let pp95 = Math.abs(pp95str).toFixed(2)
 
+                let userinfourl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`
+            fetch(userinfourl, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`
+                }
+            }).then(res => res.json())
+            .then(output3 => {
+            let mapperid = JSON.stringify(output3, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
             let Embed = new Discord.MessageEmbed()
             .setColor(0x91FF9A)
-            .setTitle(`//${mapper}`)
-            .setAuthor(`${mapartist} - ${maptitle} [${mapdiff}]`, 'https://media.discordapp.net/attachments/724514625005158403/944862165658132480/a.png',`https://osu.ppy.sh/b/${maplink}`)
-            .setURL(`https://osu.ppy.sh/u/${mapperlink}`)
+            .setTitle(`${mapartist} - ${maptitle} [${mapdiff}]`)
+            .setAuthor(`${mapper}`, `https://a.ppy.sh/${mapperid}`,`https://osu.ppy.sh/u/${mapperlink}`)
+            .setURL(`https://osu.ppy.sh/b/${maplink}`)
             .setImage(mapbg)
             //.setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\n\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n\n--**PP VALUES**--\nSS: ${ppSS} | 95: ${pp95} \n\n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
             //.addField('', `[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper)
@@ -407,6 +427,7 @@ module.exports = {
             .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})
+            })
               })();
     } catch(error){
 				message.reply("error")
