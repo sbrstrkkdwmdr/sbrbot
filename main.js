@@ -250,9 +250,19 @@ client.on('messageCreate', message =>{
     case 'info':
         client.helpcmds.get('info').execute(message, args, currentDate, currentDateISO)
         break;
+        
+    case 'math':case 'calculate':
+        client.helpcmds.get('math').execute(message, args, Discord, currentDate, currentDateISO)
+        break;
+
+    case 'measureconvert':case 'convert':
+        client.helpcmds.get('measureconvert').execute(message, args, Discord, currentDate, currentDateISO)
+        break;
+
 
     case 'recordhelp':
         client.linkdetect.get('replayrecordhelp').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
     //UNCATEGORISED -----GENERAL?-------------------------------------------------
      case 'avatar':case 'av':case 'pfp':
          client.commands.get('avatar').execute(message, args, Discord, currentDate, currentDateISO)
@@ -299,14 +309,6 @@ client.on('messageCreate', message =>{
     
     case 'active':
         client.commands.get('active').execute(message, args, Discord, currentDate, currentDateISO)
-        break;
-
-    case 'math':case 'calculate':
-        client.commands.get('math').execute(message, args, Discord, currentDate, currentDateISO)
-        break;
-
-    case 'measureconvert':case 'convert':
-        client.commands.get('measureconvert').execute(message, args, Discord, currentDate, currentDateISO)
         break;
     //FUN --------------------------------------------------------------------
     case 'ghostping':
