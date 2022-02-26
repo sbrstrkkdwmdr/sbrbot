@@ -102,6 +102,9 @@ module.exports = {
             case 'math':case 'calculate':
                 message.channel.send("Calculates a math problem.\nUsage:`sbr-math add 5 5`\nArguments: `add`, `subtract`, `multiply`, `divide`, `squareroot`, `square`, `factorial`, `hcf`, `lcm`")
                 break;
+            case 'measureconvert':case 'convert':
+                message.channels.send("Converts one measurement to another\nUsage: `sbr-convert k>c 273.15`\nUse `sbr-convert help` for more information")
+                break;    
             case 'play':
                 message.channel.send("Plays a song from youtube.\nUsage:`sbr-play https://youtube.com/watch?v=LINK`\n Currently only works using urls.")
                 break;
@@ -190,7 +193,7 @@ module.exports = {
                 message.channel.send("Sends information about the user's most recent osu! ctb play.\nUsage:`sbr-ctbrs (ID)`")
                 break;
             case 'ctbtop':
-                message.channel.send("Sends information about the user's top 5 osu! ctb plays.\nUsage:`sbr-ctbtop (ID)`\nDoesn't work if there's under 5 plays")
+                message.channel.send("Sends information about the user's top 5 osu! ctb plays.\nUsage:`sbr-ctbtop (ID)`\nDoesn't work if there's under 5 plays\nArguments: -p (page offset)")
                 break;
             case 'danser':
                 message.channel.send("Sends links to danser.\nUsage: `sbr-danser`")
@@ -199,7 +202,7 @@ module.exports = {
                 message.channel.send("Sends information about the user's most recent osu! mania play.\nUsage:`sbr-maniars (ID)`")
                 break;
             case 'maniatop':
-                message.channel.send("Sends information about the user's top 5 osu! mania plays.\nUsage:`sbr-maniatop (ID)`\nDoesn't work if there's under 5 plays")
+                message.channel.send("Sends information about the user's top 5 osu! mania plays.\nUsage:`sbr-maniatop (ID)`\nDoesn't work if there's under 5 plays\nArguments: -p (page offset)")
                 break;
             case 'map':case 'mapinfo':
                 message.channel.send("Sends information about the mentioned map.\nUsage:`sbr-map (ID)`")
@@ -217,7 +220,7 @@ module.exports = {
                 message.channel.send("Sends the top 10 plays from the past 24h. \nUsage:`sbr-osubestrs`")
                 break;
             case 'osutop':
-                message.channel.send("Sends information about the user's top osu! standard 5 plays.\nUsage:`sbr-osutop (ID)`\nDoesn't work if there's under 5 plays")
+                message.channel.send("Sends information about the user's top osu! standard 5 plays.\nUsage:`sbr-osutop (ID)`\nDoesn't work if there's under 5 plays\nArguments: -p (page offset)")
                 break;
             case 'osutest':
                 message.channel.send("Just whatever osu! command api thingy I'm testing.\nUsage:`sbr-osutest`")
@@ -226,7 +229,7 @@ module.exports = {
                 message.channel.send("Sends information about the mentioned map with modded values.\nUsage:`sbr-map (MODS)`")
                 break;
             case 'rs':case 'recent':
-                message.channel.send("Sends information about the user's most recent osu! play.\nUsage:`sbr-rs (ID)`")
+                message.channel.send("Sends information about the user's most recent osu! play.\nUsage:`sbr-rs (ID)`\nArguments: -p (page offset)")
                 break;
             case 'rsplus':
                 message.channel.send("Sends information about the mentioned user's 5 most recent osu! plays.\nUsage:`sbr-rsplus @username`")
@@ -241,7 +244,7 @@ module.exports = {
                 message.channel.send("Sends information about the user's top 5 osu! taiko plays.\nUsage:`sbr-taikotop (ID)`\nDoesn't work if there's under 5 plays")
                 break;
             case 'tsfm':case 'c':
-                message.channel.send("Sends the top score for a user for a map. \nUsage:`sbr-tsfm 15222484 1186443`\n`sbr-tsfm (playerid) (beatmap id)`")
+                message.channel.send("Sends the top score for a user for a map. \nUsage:`sbr-tsfm 15222484`\n`sbr-tsfm (playerid)`")
                 break;
 
             //LINKDETECTOR
