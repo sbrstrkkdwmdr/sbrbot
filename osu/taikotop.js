@@ -11,12 +11,32 @@ module.exports = {
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
-        const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
+        //const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - taikotop")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
+        let strtest = args.splice(0,1000).join(" ");
+        let str = strtest.toString();
+        console.log(str)
+        if(str.includes('"')){
+            pickeduserX = str.substring(
+                str.indexOf('"') + 1, 
+                str.lastIndexOf('"')
+            )}
+        if(!str.includes('"')){
+            pickeduserX = str
+        };
+
+        console.log(pickeduserX)
+        if(!str.includes('-p')){offsetflag = '0'};
+        if(str.includes('-p')){
+            if(!str.includes('"')) return message.reply(`please put "s around the username if you're using args`)
+            offsetflag1 = str.indexOf('-p') + 2
+            offsetflag2 = str.lastIndexOf('')
+            offsetflag = offsetflag = parseInt(str.substring(offsetflag1, offsetflag2))
+        }
         if(!pickeduserX) return message.reply("Error - no user");
             try{
                 let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
@@ -50,7 +70,7 @@ module.exports = {
                 fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
-                const osutopurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/best?mode=taiko&limit=58&offset=0`;
+                const osutopurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/best?mode=taiko&limit=58&offset=${offsetflag * 5}`;
 
                 fetch(osutopurl, {
                     headers: {
