@@ -8,7 +8,7 @@ module.exports = {
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
         //let pickeduserX = args.splice(0,1000).join(" ");
-        //let rsflag = '0'
+        //let offsetflag = '0'
         //let pickeduserX = 'SaberStrike'
         let strtest = args.splice(0,1000).join(" ");
         let str = strtest.toString();
@@ -29,15 +29,15 @@ module.exports = {
             //console.log(args.indexOf('"') - 1)
             //console.log(args.lastIndexOf('"') - 1)
         
-        //let rsflag = '0'
-        if(!str.includes('-p')){rsflag = '0'};
+        //let offsetflag = '0'
+        if(!str.includes('-p')){offsetflag = '0'};
         if(str.includes('-p')){
             if(!str.includes('"')) return message.reply(`please put "s around the username if you're using args`)
-            rsflag1 = str.indexOf('-p') + 2
-            rsflag2 = str.lastIndexOf('')
-            rsflag = str.substring(rsflag1, rsflag2)
+            offsetflag1 = str.indexOf('-p') + 2
+            offsetflag2 = str.lastIndexOf('')
+            offsetflag = str.substring(offsetflag1, offsetflag2)
         }
-        console.log(rsflag)
+        console.log(offsetflag)
 
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - rs")
@@ -78,7 +78,7 @@ module.exports = {
                 fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
-                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=osu&limit=18&offset=${rsflag}`;
+                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=osu&limit=18&offset=${offsetflag}`;
                 
                 fetch(recentactiveurl, {
                     headers: {
