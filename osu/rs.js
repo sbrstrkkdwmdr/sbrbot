@@ -22,7 +22,7 @@ module.exports = {
                 str.lastIndexOf('"')
             )}
         if(!str.includes('"')){
-            pickeduserX = args.splice(0,1000).join(" ")
+            pickeduserX = str
         };
 
         console.log(pickeduserX)
