@@ -615,12 +615,12 @@ client.on('messageCreate', message =>{
 
     //gaming----
     case 'profilesplitgate':case 'splitgateprofile':
-        //client.gamingcmds.get('splitgateprofile').execute(message, args, client, Discord, currentDate, currentDateISO, trnkey)
+        //client.gamingcmds.get('splitgateprofile').execute(message, args, client, Discord, currentDate, currentDateISO)
         client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     case 'apexprofile':
-        //client.gamingcmds.get('apexprofile').execute(message, args, client, Discord, currentDate, currentDateISO, trnkey)
+        //client.gamingcmds.get('apexprofile').execute(message, args, client, Discord, currentDate, currentDateISO)
         client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
     case 'haloinfprofile':case 'haloprofile':
