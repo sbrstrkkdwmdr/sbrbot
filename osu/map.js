@@ -8,6 +8,11 @@ module.exports = {
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
         const pickeduserX = args[0];
+        if(args[1]){
+        modsmaybe = args[1];
+        }
+        //console.log(args[1])
+
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - map get")
         let consoleloguserweeee = message.author
@@ -32,14 +37,31 @@ module.exports = {
             ;
             console.log("writing data to osuauth.json")
             console.log("")
-            
+        const modsarray = ["EZ", "NF", "HT", "HR", "SD", "PF", "DT", "NC", "HD", "FL", "RX", "AP", "SO"];
+        //console.log(modsarray)
+        //console.log(modsarray.length)
+        let { prevmap } = require('../storedmap.json');
         if(!pickeduserX){
-            let { prevmap } = require('../storedmap.json');
             mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`
         }
-        if(pickeduserX){
-            if(isNaN(pickeduserX)) return message.reply("You must use the ID e.g. 3305367 instead of Weekend Whip")
+        if(pickeduserX && !isNaN(pickeduserX)){
+            //if(isNaN(pickeduserX)) return message.reply("You must use the ID e.g. 3305367 instead of Weekend Whip")
             mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickeduserX}`;
+        }
+        if(pickeduserX && isNaN(pickeduserX) && !modsarray.some(v => pickeduserX.includes(v))) return message.reply("error");
+        if(args[1] && modsarray.some(v => args[1].includes(v))){
+            moddetect = args[1]
+        }
+        if(args[1] && !modsarray.some(v => args[1].includes(v))){
+            moddetect = 'NM'
+        }
+        if(!args[1]){
+            moddetect = 'NM'
+        }
+        if(pickeduserX && isNaN(pickeduserX) && modsarray.some(v => pickeduserX.includes(v))){
+            moddetect = pickeduserX;
+            mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`
+            //console.log("1")
         }
             try{
             const { access_token } = require('../osuauth.json');
@@ -166,27 +188,27 @@ module.exports = {
                     score_id: '4057765057'
                 }
               
-    let pp = new std_ppv2().setPerformance(score)
-    let ppcalc95 = new std_ppv2().setPerformance(score95)
+    let pp = new std_ppv2().setPerformance(score).setMods(moddetect);
+    let ppcalc95 = new std_ppv2().setPerformance(score95).setMods(moddetect);
     let mapimg = '<:modeosu:944181096868884481>'
     if(mapmode == 'osu'){
-        pp = new std_ppv2().setPerformance(score)
-        ppcalc95 = new std_ppv2().setPerformance(score95)
+        pp = new std_ppv2().setPerformance(score).setMods(moddetect);
+        ppcalc95 = new std_ppv2().setPerformance(score95).setMods(moddetect);
         mapimg = '<:modeosu:944181096868884481>'
         }
         if(mapmode == 'taiko'){
-            pp = new taiko_ppv2().setPerformance(score)
-            ppcalc95 = new taiko_ppv2().setPerformance(score95)
+            pp = new taiko_ppv2().setPerformance(score).setMods(moddetect);
+            ppcalc95 = new taiko_ppv2().setPerformance(score95).setMods(moddetect);
             mapimg = '<:modetaiko:944181097053442068>'
         }
         if(mapmode == 'fruits'){
-            pp = new catch_ppv2().setPerformance(score)
-            ppcalc95 = new catch_ppv2().setPerformance(score95)
+            pp = new catch_ppv2().setPerformance(score).setMods(moddetect);
+            ppcalc95 = new catch_ppv2().setPerformance(score95).setMods(moddetect);
             mapimg = '<:modefruits:944181096206176326>'
         }
         if(mapmode == 'mania'){
-        pp = new mania_ppv2().setPerformance(score)
-        ppcalc95 = new mania_ppv2().setPerformance(score95)
+        pp = new mania_ppv2().setPerformance(score).setMods(moddetect);
+        ppcalc95 = new mania_ppv2().setPerformance(score95).setMods(moddetect);
         mapimg = '<:modemania:944181095874834453>'
         }
         let ppSSjson = await pp.compute();
@@ -198,6 +220,13 @@ module.exports = {
                 let ppSS = Math.abs(ppSSstr).toFixed(2)
                 let pp95 = Math.abs(pp95str).toFixed(2)
 
+                if(moddetect == 'NM'){
+                    maptitle = `${mapartist} - ${maptitle} [${mapdiff}]`
+                }
+                if(moddetect != 'NM'){
+                    maptitle = `${mapartist} - ${maptitle} [${mapdiff}] +${moddetect}`
+                }
+
                 let userinfourl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`
             fetch(userinfourl, {
                 headers: {
@@ -208,7 +237,7 @@ module.exports = {
             let mapperid = JSON.stringify(output3, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
             let Embed = new Discord.MessageEmbed()
             .setColor(0x91FF9A)
-            .setTitle(`${mapartist} - ${maptitle} [${mapdiff}]`)
+            .setTitle(`${maptitle}`)
             .setAuthor(`${mapper}`, `https://a.ppy.sh/${mapperid}`,`https://osu.ppy.sh/u/${mapperlink}`)
             .setURL(`https://osu.ppy.sh/b/${maplink}`)
             .setImage(mapbg)
@@ -229,7 +258,7 @@ module.exports = {
                 console.groupEnd()
 			}
             });
-        } catch(err){
+        } catch(error){
             console.log(error)
             console.groupEnd()
             console.groupEnd()
