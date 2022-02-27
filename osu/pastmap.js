@@ -146,42 +146,6 @@ module.exports = {
                 //const response = await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=${USER}&limit=1`);
                 //const json = await response.json();
                 //const [score] = json;
-
-                const score = {
-                    beatmap_id: maplink,
-                    score: '6795149',
-                    maxcombo: mapmaxcombo,
-                    count50: '0',
-                    count100: '0',
-                    count300: '374',
-                    countmiss: '0',
-                    countkatu: '0',
-                    countgeki: '71',
-                    perfect: '0',
-                    enabled_mods: '0',
-                    user_id: '13780464',
-                    date: '2022-02-08 05:24:54',
-                    rank: 'S',
-                    score_id: '4057765057'
-                  }
-                //const score = scorew
-                const score95 = {
-                    beatmap_id: maplink,
-                    score: '6795149',
-                    maxcombo: mapmaxcombo,
-                    count50: '0',
-                    count100: '72',
-                    count300: '374',
-                    countmiss: '0',
-                    countkatu: '0',
-                    countgeki: '71',
-                    perfect: '0',
-                    enabled_mods: '0',
-                    user_id: '13780464',
-                    date: '2022-02-08 05:24:54',
-                    rank: 'S',
-                    score_id: '4057765057'
-                }
                 //let acc95 = Math.abs('91.02').toFixed(2);
 
                 
@@ -303,32 +267,67 @@ module.exports = {
                     maphp = maphpNM
                     mapbpm = mapbpmNM
                 }*/
-                console.log(mapcs + mapar + mapod + mapod + mapbpm)
+                //console.log(mapcs + mapar + mapod + mapod + mapbpm)
               
-                let pp = new std_ppv2().setPerformance(score).setMods(pickedmods);
-                let ppcalc95 = new std_ppv2().setPerformance(score95).setMods(pickedmods);
+                const score = {
+                    beatmap_id: maplink,
+                    score: '6795149',
+                    maxcombo: mapmaxcombo,
+                    count50: '0',
+                    count100: '0',
+                    count300: '374',
+                    countmiss: '0',
+                    countkatu: '0',
+                    countgeki: '0',
+                    perfect: '1',
+                    enabled_mods: '0',
+                    user_id: '13780464',
+                    date: '2022-02-08 05:24:54',
+                    rank: 'S',
+                    score_id: '4057765057'
+                  }
+                //const score = scorew
+                const score95 = {
+                    beatmap_id: maplink,
+                    score: '6795149',
+                    maxcombo: mapmaxcombo,
+                    count50: '0',
+                    count100: '30',
+                    count300: '374',
+                    countmiss: '0',
+                    countkatu: '0',
+                    countgeki: '0',
+                    perfect: '0',
+                    enabled_mods: '0',
+                    user_id: '13780464',
+                    date: '2022-02-08 05:24:54',
+                    rank: 'S',
+                    score_id: '4057765057'
+                }
+              
+    let pp = new std_ppv2().setPerformance(score)
+    let ppcalc95 = new std_ppv2().setPerformance(score95)
     let mapimg = '<:modeosu:944181096868884481>'
     if(mapmode == 'osu'){
-        pp = new std_ppv2().setPerformance(score).setMods(pickedmods);
-        ppcalc95 = new std_ppv2().setPerformance(score95).setMods(pickedmods);
+        pp = new std_ppv2().setPerformance(score)
+        ppcalc95 = new std_ppv2().setPerformance(score95)
         mapimg = '<:modeosu:944181096868884481>'
         }
         if(mapmode == 'taiko'){
-            pp = new taiko_ppv2().setPerformance(score).setMods(pickedmods);
-            ppcalc95 = new taiko_ppv2().setPerformance(score95).setMods(pickedmods);
+            pp = new taiko_ppv2().setPerformance(score)
+            ppcalc95 = new taiko_ppv2().setPerformance(score95)
             mapimg = '<:modetaiko:944181097053442068>'
         }
         if(mapmode == 'fruits'){
-            pp = new catch_ppv2().setPerformance(score).setMods(pickedmods);
-            ppcalc95 = new catch_ppv2().setPerformance(score95).setMods(pickedmods);
+            pp = new catch_ppv2().setPerformance(score)
+            ppcalc95 = new catch_ppv2().setPerformance(score95)
             mapimg = '<:modefruits:944181096206176326>'
         }
         if(mapmode == 'mania'){
-        pp = new mania_ppv2().setPerformance(score).setMods(pickedmods);
-        ppcalc95 = new mania_ppv2().setPerformance(score95).setMods(pickedmods);
+        pp = new mania_ppv2().setPerformance(score)
+        ppcalc95 = new mania_ppv2().setPerformance(score95)
         mapimg = '<:modemania:944181095874834453>'
         }
-
         let ppSSjson = await pp.compute();
         let pp95json = await ppcalc95.compute();
 
