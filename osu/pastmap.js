@@ -267,8 +267,6 @@ module.exports = {
                     maphp = maphpNM
                     mapbpm = mapbpmNM
                 }*/
-                //console.log(mapcs + mapar + mapod + mapod + mapbpm)
-              
                 const score = {
                     beatmap_id: maplink,
                     score: '6795149',
@@ -305,27 +303,27 @@ module.exports = {
                     score_id: '4057765057'
                 }
               
-    let pp = new std_ppv2().setPerformance(score)
-    let ppcalc95 = new std_ppv2().setPerformance(score95)
+                let pp = new std_ppv2().setPerformance(score).setMods(pickedmods);
+                let ppcalc95 = new std_ppv2().setPerformance(score95).setMods(pickedmods);
     let mapimg = '<:modeosu:944181096868884481>'
     if(mapmode == 'osu'){
-        pp = new std_ppv2().setPerformance(score)
-        ppcalc95 = new std_ppv2().setPerformance(score95)
+        pp = new std_ppv2().setPerformance(score).setMods(pickedmods);
+        ppcalc95 = new std_ppv2().setPerformance(score95).setMods(pickedmods);
         mapimg = '<:modeosu:944181096868884481>'
         }
         if(mapmode == 'taiko'){
-            pp = new taiko_ppv2().setPerformance(score)
-            ppcalc95 = new taiko_ppv2().setPerformance(score95)
+            pp = new taiko_ppv2().setPerformance(score).setMods(pickedmods);
+            ppcalc95 = new taiko_ppv2().setPerformance(score95).setMods(pickedmods);
             mapimg = '<:modetaiko:944181097053442068>'
         }
         if(mapmode == 'fruits'){
-            pp = new catch_ppv2().setPerformance(score)
-            ppcalc95 = new catch_ppv2().setPerformance(score95)
+            pp = new catch_ppv2().setPerformance(score).setMods(pickedmods);
+            ppcalc95 = new catch_ppv2().setPerformance(score95).setMods(pickedmods);
             mapimg = '<:modefruits:944181096206176326>'
         }
         if(mapmode == 'mania'){
-        pp = new mania_ppv2().setPerformance(score)
-        ppcalc95 = new mania_ppv2().setPerformance(score95)
+        pp = new mania_ppv2().setPerformance(score).setMods(pickedmods);
+        ppcalc95 = new mania_ppv2().setPerformance(score95).setMods(pickedmods);
         mapimg = '<:modemania:944181095874834453>'
         }
         let ppSSjson = await pp.compute();
