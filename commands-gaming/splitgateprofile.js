@@ -1,10 +1,11 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
+const { trnkey } = require('../config.json')
 module.exports = {
     name: 'splitgateprofile',
     description: '',
-    execute(message, args, client, Discord, currentDate, currentDateISO, trnkey) {
+    execute(message, args, client, Discord, currentDate, currentDateISO) {
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - get splitgate profile")
         let consoleloguserweeee = message.author
