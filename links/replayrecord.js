@@ -10,9 +10,13 @@ module.exports = {
     settings = 'saberstrikedefault'
     }*/
     //^this if statement thingy breaks exec for some reason
-    currentDatefileformat = JSON.stringify(currentDate).replaceAll(':', ' ').replaceAll('|', ' ')
+    currentDatefileformat = JSON.stringify(currentDate).replaceAll(':', ';').replaceAll('|', '').replaceAll('{', '').replaceAll('"', '').replaceAll('}', '')
+    //console.log(currentDatefileformat)
+    
 
-    let output = `${message.author.id}s play at ${currentDatefileformat}`
+    let output1 = `${message.author.id}s play at ${currentDatefileformat}`;
+    let output = JSON.stringify(output1).replaceAll(' ', '_').replaceAll('|', '').replaceAll('{', '').replaceAll('"', '').replaceAll('}', '');
+    //console.log(output)
     exec('C:/Users/saber/Desktop/danser-go-dev/danser-go-dev-OTHERS/danser.exe -skip -settings=' + linkargs + ' -r="C:/Users/saber/Desktop/kusa/bot/sbrbot/files/replay.osr" -out=' + output)
     console.group('--- COMMAND EXECUTION ---')
     console.log(`${currentDateISO} | ${currentDate}`)
@@ -22,5 +26,6 @@ module.exports = {
     console.log("")
     console.groupEnd()
     message.channel.send('retrieving osr')
+
     }
 }
