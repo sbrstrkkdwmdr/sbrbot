@@ -78,7 +78,7 @@ module.exports = {
                 fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
-                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=osu&limit=18&offset=${offsetflag}`;
+                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=osu&offset=${offsetflag}`;
                 
                 fetch(recentactiveurl, {
                     headers: {
@@ -86,7 +86,7 @@ module.exports = {
                     }
                 }).then(res => res.json())
                 .then(output2 => 
-                    {try{const rsdata = output2.slice(0, 1);
+                    {try{const rsdata = output2;//.slice(0, 1);
                     fs.writeFileSync("rs.json", JSON.stringify(rsdata, null, 2))
                     console.log("writing data to rs.json")
                     console.log("")
@@ -168,6 +168,20 @@ module.exports = {
                     console.log("");
                     console.groupEnd()
                 });
+                
+                let rsmapidtonum = parseInt(rsmapid);
+
+                var trycount = 0;
+                for (var i = 0; i < rsdata.length; i++) {
+                    if (rsdata[i].beatmap.id === rsmapidtonum) {
+                        trycount++;
+                    }
+                    }
+                var trycountstr = '\n'
+                if(trycount > 1)
+                    {
+                        trycountstr = `\ntry #${trycount}`
+                    }
                 
                 (async () => {
                     const score = {
@@ -291,7 +305,7 @@ module.exports = {
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**`, true)
+                .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
                 .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** **${rsmapstar}**⭐`, false)
                 .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:**${rs300s} \n**100:**${rs100s} \n**50:**${rs50s} \n**X:**${rs0s} \n**${rscombo}x**`, true)
                 .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
@@ -303,7 +317,7 @@ module.exports = {
                 .setTitle("Most recent play for " + rsplayername)
                 .setImage(rsmapbg)
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**`, true)
+                .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
                 .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐`, false)
                 .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rscombo}x**`, true)
                 .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
