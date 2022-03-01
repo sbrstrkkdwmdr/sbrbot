@@ -1,6 +1,7 @@
 let args = ['your', 'mum', '"among', 'us"']
 let strtest = args.splice(0,1000).join(" ");
 let str = strtest.toString()
+let other = 'among us'
 
 if(str.includes('"')){
             let str1 = str.indexOf('"') + 1
@@ -15,3 +16,8 @@ if(str.includes('"')){
         console.log(pickeduserX)
         //console.log(strtest)
         //console.log(str)
+
+const arrayOfStrings = ['abc', 'def', 'xyz'];
+const str1 = 'abc';
+const found = arrayOfStrings.find(v => (str1 === v));
+console.log(found)
