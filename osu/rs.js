@@ -25,7 +25,7 @@ module.exports = {
             pickeduserX = str
         };
 
-        console.log(pickeduserX)
+        //console.log(pickeduserX)
             //console.log(args.indexOf('"') - 1)
             //console.log(args.lastIndexOf('"') - 1)
         
@@ -37,7 +37,7 @@ module.exports = {
             offsetflag2 = str.lastIndexOf('')
             offsetflag = str.substring(offsetflag1, offsetflag2)
         }
-        console.log(offsetflag)
+        //console.log(offsetflag)
 
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - rs")

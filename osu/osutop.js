@@ -20,7 +20,7 @@ module.exports = {
 
         let strtest = args.splice(0,1000).join(" ");
         let str = strtest.toString();
-        console.log(str)
+        //console.log(str)
         if(str.includes('"')){
             pickeduserX = str.substring(
                 str.indexOf('"') + 1, 
@@ -30,7 +30,7 @@ module.exports = {
             pickeduserX = str
         };
 
-        console.log(pickeduserX)
+        //console.log(pickeduserX)
         if(!str.includes('-p')){offsetflag = '0'};
         if(str.includes('-p')){
             if(!str.includes('"')) return message.reply(`please put "s around the username if you're using args`)
