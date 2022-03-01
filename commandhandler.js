@@ -3,7 +3,8 @@ module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclie
 const { prefix } = require('./config.json')
 
 const fs = require('fs');
-const triggerwords = require('./triggerwords.js')
+
+
 const oncooldown = new Set();
 const https = require('https'); // or 'https' for https:// URLs
 const sql = require('sqlite')
@@ -86,6 +87,25 @@ client.on('messageCreate', message =>{
     let curdatetmr = new Date(curdatetmrtimestamp).toISOString().slice(0,10);
     let split = new Date().toString().match(/([A-Z]+[\+-][0-9]+.*)/);
     let curtimezone = split[split.length - 1]
+
+    
+    const triggerwords = require('./triggerwords.json');
+    const triggerstring = message.content.toString();
+    const foundtriggers = triggerwords.find(v => (triggerstring.includes(v)));
+
+    /*const inventory = [
+        {name: 'apples', quantity: 2},
+        {name: 'cherries', quantity: 8},
+        {name: 'bananas', quantity: 0},
+        {name: 'cherries', quantity: 5},
+        {name: 'cherries', quantity: 15},
+        
+      ];
+      
+      const result = inventory.find( ({ name }) => name === 'cherries' );
+      
+      console.log(result) // { name: 'cherries', quantity: 5 }*/
+
    
     if (message.content.startsWith('https://osu.ppy.sh/b/') || message.content.startsWith('osu.ppy.sh/b/') || message.content.startsWith('https://osu.ppy.sh/beatmaps/') || message.content.startsWith('osu.ppy.sh/beatmaps/')){
         client.linkdetect.get('osumaplink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
@@ -96,9 +116,13 @@ client.on('messageCreate', message =>{
     if (message.content.startsWith('https://osu.ppy.sh/u/') || message.content.startsWith('osu.ppy.sh/u/') || message.content.startsWith('https://osu.ppy.sh/users/') || message.content.startsWith('osu.ppy.sh/users/')){
         client.linkdetect.get('osuprofilelink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
     } 
-    if (message.content.includes(triggerwords)){
+    
+    if (foundtriggers){
         client.admincmds.get('triggers').execute(message, args, linkargs, Discord, client, currentDate, currentDateISO)
     }
+
+
+    
 
     //REPLAY GRABBER
     if (message.attachments.size > 0 && message.attachments.every(attachIsOsr)){       
