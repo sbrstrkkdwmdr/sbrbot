@@ -7,8 +7,37 @@ module.exports = {
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
-        const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
-        console.log(`${currentDateISO} | ${currentDate}`)
+        //let pickeduserX = args.splice(0,1000).join(" ");
+        //let offsetflag = '0'
+        //let pickeduserX = 'SaberStrike'
+        let strtest = args.splice(0,1000).join(" ");
+        let str = strtest.toString();
+        console.log(str)
+        //console.log(args)
+        if(str.includes('"')){
+            //str1 = str.indexOf('"') + 1
+            //str2 = str.lastIndexOf('"')
+            pickeduserX = str.substring(
+                str.indexOf('"') + 1, 
+                str.lastIndexOf('"')
+            )}
+        if(!str.includes('"')){
+            pickeduserX = str
+        };
+
+        //console.log(pickeduserX)
+            //console.log(args.indexOf('"') - 1)
+            //console.log(args.lastIndexOf('"') - 1)
+        
+        //let offsetflag = '0'
+        if(!str.includes('-p')){offsetflag = '0'};
+        if(str.includes('-p')){
+            if(!str.includes('"')) return message.reply(`please put "s around the username if you're using args`)
+            offsetflag1 = str.indexOf('-p') + 2
+            offsetflag2 = str.lastIndexOf('')
+            offsetflag = str.substring(offsetflag1, offsetflag2)
+        }
+        //console.log(offsetflag)        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - ctbrs")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
@@ -48,7 +77,7 @@ module.exports = {
                 fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
-                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=fruits&limit=18&offset=0`;
+                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=fruits&limit=18&offset=${offsetflag}`;
                 fetch(recentactiveurl, {
                     headers: {
                         Authorization: `Bearer ${access_token}`
