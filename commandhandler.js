@@ -513,6 +513,9 @@ client.on('messageCreate', message =>{
     case 'infodb':
         client.commands.get('infodb').execute(message, args, Discord, currentDate, currentDateISO)
         break;
+    case 'debug':
+        client.admincmds.get('debugget').execute(message, args, Discord, currentDate, currentDateISO)
+        break;
     //MUSIC --------------------
     case 'play':
         client.musiccmds.get('play').execute(message, args, command, client, Discord, currentDate, currentDateISO)
