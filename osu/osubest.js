@@ -46,7 +46,7 @@ module.exports = {
     .then(out =>
 {        out.sort((a, b) => b.pp - a.pp);
     const topHiscores = out.slice(0, 5);
-        fs.writeFileSync("w.json", JSON.stringify(topHiscores, null, 2));
+        fs.writeFileSync("debug/osubest.json", JSON.stringify(topHiscores, null, 2));
         console.log("writing data to w.json")
         console.log("")
         let bmid1 = JSON.stringify(topHiscores[0], ['beatmap_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmap_id', '')

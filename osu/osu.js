@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { access_token } = require('../osuauth.json');
+const { access_token } = require('../debug/osuauth.json');
 module.exports = {
     name: 'osu',
     description: '',
@@ -30,7 +30,7 @@ module.exports = {
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(res => res.json())
-            .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
             console.log("writing data to osuauth.json")
             console.log("")
@@ -45,7 +45,7 @@ module.exports = {
             .then(output2 => 
                 {
                 try{const osudata = output2;
-                fs.writeFileSync("osu.json", JSON.stringify(osudata, null, 2));
+                fs.writeFileSync("debug/osu.json", JSON.stringify(osudata, null, 2));
                 console.log("writing data to osu.json")
                 console.log("")
                 console.groupEnd()

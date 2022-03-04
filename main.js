@@ -160,7 +160,7 @@ console.log(`-------------------------------------------------------------------
         headers: { 'Content-Type': 'application/json' }
     })
     .then(res => res.json())
-    .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+    .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
     //console.group("--- ")
     console.log("saved osuauth")
     //console.groupEnd()

@@ -29,13 +29,13 @@ module.exports = {
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(res => res.json())
-            .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
             console.log("writing data to osuauth.json")
             console.log("")
             
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
-            const { access_token } = require('../osuauth.json');
+            const { access_token } = require('../debug/osuauth.json');
 
             fetch(userinfourl, {
                 headers: {
@@ -45,7 +45,7 @@ module.exports = {
             .then(output2 => 
                 {
                 try{const osudata = output2;
-                fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
+                fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
                 console.log("writing data to osuid.json")
                 console.log("")
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');

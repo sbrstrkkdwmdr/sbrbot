@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { access_token } = require('../osuauth.json');
+const { access_token } = require('../debug/osuauth.json');
 module.exports = {
     name: 'mapsearch',
     description: '',
@@ -30,7 +30,7 @@ module.exports = {
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(res => res.json())
-            .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/lookup?filename=${pickeduserX}`;
             
@@ -51,7 +51,7 @@ module.exports = {
 					const mapdata = output2;
 					//let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
 					//const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
-                fs.writeFileSync("searchmap.json", JSON.stringify(mapdata, null, 2))
+                fs.writeFileSync("debug/searchmap.json", JSON.stringify(mapdata, null, 2))
             /*try{let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
             let maplink = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
             let mapsetlink = JSON.stringify(mapdata, ['beatmapset_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmapset_id', '');
@@ -76,7 +76,7 @@ module.exports = {
               const response = mapdata//await fetch(`https://osu.ppy.sh/api/get_user_recent?k=${API_KEY}&u=15222484&limit=1`);
               const json = await response.json();
               const [score] = json;
-            //  fs.writeFileSync("mapppcalc.json", JSON.stringify(score, null, 2));
+            //  fs.writeFileSync("debug/mapppcalc.json", JSON.stringify(score, null, 2));
               const pp = new std_ppv2().setPerformance(score);
             
               let ppSS = await pp.compute("100");

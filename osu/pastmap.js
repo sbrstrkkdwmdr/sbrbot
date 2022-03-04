@@ -37,7 +37,7 @@ module.exports = {
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(res => res.json())
-            .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
             console.log("writing data to osuauth.json")
             console.log("")
@@ -47,7 +47,7 @@ module.exports = {
             
             let { prevmap } = require('../storedmap.json');
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`;
-            const { access_token } = require('../osuauth.json');
+            const { access_token } = require('../debug/osuauth.json');
             
             fetch(mapurl, {
                 method: "GET",
@@ -62,7 +62,7 @@ module.exports = {
 					const mapdata = output2;
 					//let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
 					//const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
-                fs.writeFileSync("map.json", JSON.stringify(mapdata, null, 2))
+                fs.writeFileSync("debug/map.json", JSON.stringify(mapdata, null, 2))
             try{let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
             let maplink = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
             let mapsetlink = JSON.stringify(mapdata, ['beatmapset_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmapset_id', '');
@@ -130,8 +130,8 @@ module.exports = {
             }
 
 
-            const fileName = 'storedmap.json';
-            const file = require('../storedmap.json');  
+            const fileName = 'debug/storedmap.json';
+            const file = require('../debug/storedmap.json');  
             file.prevmap = maplink;
             fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
                 if (err) return console.log(err);

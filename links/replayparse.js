@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { access_token } = require('../osuauth.json');
+const { access_token } = require('../debug/osuauth.json');
 const calc = require('ojsama');
 const { std_ppv2 } = require('booba');
 const osuReplayParser = require('osureplayparser');
@@ -17,7 +17,7 @@ module.exports = {
         console.log("");
         const replayPath = "./files/replay.osr";
         const replay = osuReplayParser.parseReplay(replayPath);
-        fs.writeFileSync("replay.json", JSON.stringify(replay, null, 2))
+        fs.writeFileSync("debug/replay.json", JSON.stringify(replay, null, 2))
 
         let maphash = JSON.stringify(replay, ['beatmapMD5']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmapMD5', '');
         let playername = JSON.stringify(replay, ['playerName']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('playerName', '');
@@ -47,7 +47,7 @@ module.exports = {
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(res => res.json())
-            .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
             console.log("writing data to osuauth.json")
             console.log("")
@@ -62,7 +62,7 @@ module.exports = {
             .then(output2 => 
                 {
                 try{const osudata = output2;
-                fs.writeFileSync("osu.json", JSON.stringify(osudata, null, 2));
+                fs.writeFileSync("debug/osu.json", JSON.stringify(osudata, null, 2));
                 console.log("writing data to osu.json")
                 console.log("")
                 console.groupEnd() 
@@ -162,7 +162,7 @@ module.exports = {
             rank: 'S',
             score_id: '4057765057'
           }
-          fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
+          fs.writeFileSync("debug/rsppcalc.json", JSON.stringify(score, null, 2));
                   let ppfc = new std_ppv2().setPerformance(score);
                   let pp =  new std_ppv2().setPerformance(scorenofc);
                   if(mods){

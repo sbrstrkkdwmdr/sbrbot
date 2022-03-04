@@ -13,7 +13,7 @@ module.exports = {
         //let pickeduserX = 'SaberStrike'
         let strtest = args.splice(0,1000).join(" ");
         let str = strtest.toString();
-        console.log(str)
+        //console.log(str)
         //console.log(args)
         if(str.includes('"')){
             //str1 = str.indexOf('"') + 1
@@ -58,13 +58,13 @@ module.exports = {
                     headers: { 'Content-Type': 'application/json' }
                 })
                 .then(res => res.json())
-                .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+                .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
                 ;
                 console.log("writing data to osuauth.json")
                 console.log("")
 
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/mania`;
-                const { access_token } = require('../osuauth.json');
+                const { access_token } = require('../debug/osuauth.json');
 
             fetch(userinfourl, {
                 headers: {
@@ -74,7 +74,7 @@ module.exports = {
             .then(output1 => 
                 {
                 try{const osudata = output1;
-                fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
+                fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
                 const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=mania&offset=${offsetflag}`;
@@ -86,7 +86,7 @@ module.exports = {
                 }).then(res => res.json())
                 .then(output2 => 
                     {try{const rsdata = output2;//.slice(0, 1);
-                    fs.writeFileSync("rs.json", JSON.stringify(rsdata, null, 2))
+                    fs.writeFileSync("debug/rs.json", JSON.stringify(rsdata, null, 2))
                     console.log("writing data to rs.json")
                     console.log("")
                 try {
@@ -162,8 +162,8 @@ module.exports = {
                     let lastvisminutes = minlastvisreform % 60;
                     let minlastvisw = (lastvishours + "h " + lastvisminutes + "m");
 
-                const fileName = 'storedmap.json';
-                const file = require('../storedmap.json');  
+                const fileName = 'debug/storedmap.json';
+                const file = require('../debug/storedmap.json');  
                 file.prevmap = rsmapid;
                 fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
                     if (err) return console.log(err);
@@ -222,7 +222,7 @@ module.exports = {
                         rank: 'S',
                         score_id: '4057765057'
                       }
-                  fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
+                  fs.writeFileSync("debug/rsppcalc.json", JSON.stringify(score, null, 2));
                   let ppfc = new mania_ppv2().setPerformance(score);
                   let pp =  new mania_ppv2().setPerformance(scorenofc);
                   if(rsmods){
@@ -292,6 +292,115 @@ module.exports = {
                 if(rsgrade == 'f' || rsgrade == 'F' ){
                     rsgrade = '🇫'
                 }
+                modenum = 0
+                let cpolmods = rsmods.toLowerCase();
+                if(cpolmods.includes('nf') || cpolmods.includes('NF')){
+                    modenum += 1
+                }
+                if(cpolmods.includes('ez') || cpolmods.includes('EZ') ){
+                    modenum += 2
+                }
+                if(cpolmods.includes('td') || cpolmods.includes('TD')){
+                    modenum += 4
+                }
+                if(cpolmods.includes('hd') || cpolmods.includes('HD')){
+                    modenum += 8
+                }
+                if(cpolmods.includes('hr') || cpolmods.includes('HR')){
+                    modenum += 16
+                }
+                if(cpolmods.includes('sd') || cpolmods.includes('SD')){
+                    modenum += 32
+                }
+                if(cpolmods.includes('dt') || cpolmods.includes('DT')){
+                    modenum += 64
+                }
+                if(cpolmods.includes('rx') || cpolmods.includes('rl') || cpolmods.includes('rlx') || cpolmods.includes('RX') || cpolmods.includes('RL') || cpolmods.includes('RLX')){
+                    modenum += 128
+                }
+                if(cpolmods.includes('ht') || cpolmods.includes('HT')){
+                    modenum += 256
+                }
+                if(cpolmods.includes('nc') || cpolmods.includes('NC')){
+                    modenum += 64//512
+                }
+                if(cpolmods.includes('fl') || cpolmods.includes('FL')){
+                    modenum += 1024
+                }
+                if(cpolmods.includes('at') || cpolmods.includes('AT')){
+                    modenum += 2048
+                }
+                if(cpolmods.includes('so') || cpolmods.includes('SO')){
+                    modenum += 4096
+                }
+                if(cpolmods.includes('ap') || cpolmods.includes('AP')){
+                    modenum += 8192
+                }
+                if(cpolmods.includes('pf') || cpolmods.includes('PF')){
+                    modenum += 16384
+                }
+                if(cpolmods.includes('1k') || cpolmods.includes('1K')){
+                    modenum += 67108864
+                }
+                if(cpolmods.includes('2k') || cpolmods.includes('2K')){
+                    modenum += 268435456
+                }
+                if(cpolmods.includes('3k') || cpolmods.includes('3K')){
+                    modenum += 134217728
+                }
+                if(cpolmods.includes('4k') || cpolmods.includes('4K')){
+                    modenum += 32768
+                }
+                if(cpolmods.includes('5k') || cpolmods.includes('5K')){
+                    modenum += 65536
+                }
+                if(cpolmods.includes('6k') || cpolmods.includes('6K')){
+                    modenum += 131072
+                }
+                if(cpolmods.includes('7k') || cpolmods.includes('7K')){
+                    modenum += 262144
+                }
+                if(cpolmods.includes('8k') || cpolmods.includes('8K')){
+                    modenum += 524288
+                }
+                if(cpolmods.includes('9k') || cpolmods.includes('9K')){
+                    modenum += 16777216
+                }
+                if(cpolmods.includes('fi') || cpolmods.includes('FI')){
+                    modenum += 1048576
+                }
+                if(cpolmods.includes('rdm') || cpolmods.includes('RDM')){
+                    modenum += 2097152
+                }
+                if(cpolmods.includes('cn') || cpolmods.includes('CN')){
+                    modenum += 4194304
+                }
+                if(cpolmods.includes('tp') || cpolmods.includes('TP')){
+                    modenum += 8388608
+                }
+                if(cpolmods.includes('kc') || cpolmods.includes('KC')){
+                    modenum += 33554432
+                }
+                if(cpolmods.includes('sv2') || cpolmods.includes('s2') || cpolmods.includes('SV2') || cpolmods.includes('S2')){
+                    modenum += 536870912
+                }
+                if(cpolmods.includes('mr') || cpolmods.includes('MR')){
+                    modenum += 1073741824
+                }
+                let calcacc = (Math.abs((rsacc) * 100).toFixed(2))
+                let cpolpp = `https://pp.osuck.net/pp?id=${rsmapid}&mods=${modenum}&combo=${rscombo}&miss=${rs0s}&acc=${calcacc}`
+                //console.log(cpolpp)
+    
+                /*
+                fetch(cpolpp, {
+                }).then(res => res.json())
+                .then(output4 => {
+                    fs.writeFileSync('cpolppcalc.json', JSON.stringify(output4, null, 2))
+                    let cppSS = JSON.stringify(output4['pp'], ['fc']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('fc', '');
+                    let cppcurrent = JSON.stringify(output4['pp'], ['current']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('current', '');
+                    */
+
+
                 if(!rsmods){
                 let Embed = new Discord.MessageEmbed()
                 .setColor(0x9AAAC0)
@@ -300,7 +409,7 @@ module.exports = {
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
                 .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
                 .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** **${rsmapstar}**⭐`, false)
-                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300+**:${rs300max} \n**300:**${rs300s} \n**200:**${rs200s} \n**100:**${rs100s} \n**50:**${rs50s} \n**X:**${rs0s}\n**${rscombo}x**`, true)
+                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300+**:${rs300max} \n**⠀300:** ${rs300s} \n**⠀200:** ${rs200s} \n**⠀100:** ${rs100s} \n**⠀⠀50:** ${rs50s} \n**⠀⠀⠀⠀X:** ${rs0s}\n**${rscombo}x**`, true)
                 .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
                 //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300+**:${rs300max} **300:**${rs300s} **200:**${rs200s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})}
@@ -312,11 +421,12 @@ module.exports = {
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
                 .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
                 .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐`, false)
-                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300+**:${rs300max} **300:**${rs300s} **200:**${rs200s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s}\n**${rscombo}x**`, true)
+                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**⠀300:** ${rs300s} \n**⠀200:** ${rs200s} \n**⠀100:** ${rs100s} \n**⠀⠀50:** ${rs50s} \n**⠀⠀⠀⠀X:** ${rs0s}\n**${rscombo}x**`, true)
                 .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
                 //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300+**:${rs300max} **300:**${rs300s} **200:**${rs200s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})
                 }
+            //})//cpol pp test
             }
             )()
             } catch(error){

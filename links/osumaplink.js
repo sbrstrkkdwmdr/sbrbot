@@ -32,8 +32,8 @@ module.exports = {
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(res => res.json())
-            .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)));
-            const { access_token } = require('../osuauth.json');
+            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)));
+            const { access_token } = require('../debug/osuauth.json');
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickeduserX}`;
         
             fetch(mapurl, {
@@ -49,7 +49,7 @@ module.exports = {
 					const mapdata = output2;
 					//let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
 					//const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
-                fs.writeFileSync("map.json", JSON.stringify(mapdata, null, 2))
+                fs.writeFileSync("debug/map.json", JSON.stringify(mapdata, null, 2))
             try{
             let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
             let maplink = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');

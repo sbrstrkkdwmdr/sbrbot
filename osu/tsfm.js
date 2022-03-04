@@ -2,8 +2,7 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { Player } = require('discord-player');
-let { prevmap } = require('../storedmap.json');
+let { prevmap } = require('../debug/storedmap.json');
 module.exports = {
     name: 'tsfm',
     description: '',
@@ -35,10 +34,10 @@ module.exports = {
                     headers: { 'Content-Type': 'application/json' }
                 })
                 .then(res => res.json())
-                .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+                .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
                 ;
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
-                const { access_token } = require('../osuauth.json');
+                const { access_token } = require('../debug/osuauth.json');
             
             fetch(userinfourl, {
                 headers: {
@@ -51,11 +50,11 @@ module.exports = {
                     console.log("")
                     
                 try{const osudata = output1;
-                fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
+                fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
                 const mapscoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickedmap}/scores/users/${playerid}`;
-                const { access_token } = require('../osuauth.json');
+                const { access_token } = require('../debug/osuauth.json');
                 
                 fetch(mapscoreurl, {
                     method: "GET",
@@ -70,7 +69,7 @@ module.exports = {
                         const mapscoredata = output2;
                         //let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
                         //const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
-                    fs.writeFileSync("mapscore.json", JSON.stringify(mapscoredata, null, 2))
+                    fs.writeFileSync("debug/mapscore.json", JSON.stringify(mapscoredata, null, 2))
                     console.log("writing data to mapscore.json")
                     console.log("")
                     console.groupEnd()
@@ -118,7 +117,7 @@ module.exports = {
                       
                       const json = await output2.json();
                       const [score] = json;
-                      //fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
+                      //fs.writeFileSync("debug/rsppcalc.json", JSON.stringify(score, null, 2));
                       const pp = new std_ppv2().setPerformance(score);
     
                     let ppw = await pp.compute();

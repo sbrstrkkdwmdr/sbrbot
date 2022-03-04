@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { access_token } = require('../osuauth.json');
+const { access_token } = require('../debug/osuauth.json');
 const { std_ppv2 } = require('booba');
 module.exports = {
     name: 'osutest',
@@ -24,7 +24,7 @@ module.exports = {
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(res => res.json())
-            .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
             console.log("writing data to osuauth.json")
             console.log("")
@@ -58,7 +58,7 @@ module.exports = {
             //console.log("1")
         }
             try{
-            const { access_token } = require('../osuauth.json');
+            const { access_token } = require('../debug/osuauth.json');
             
             fetch(mapurl, {
                 method: "GET",
@@ -73,7 +73,7 @@ module.exports = {
 					const mapdata = output2;
 					//let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
 					//const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
-                fs.writeFileSync("map.json", JSON.stringify(mapdata, null, 2))
+                fs.writeFileSync("debug/map.json", JSON.stringify(mapdata, null, 2))
                 console.log("writing data to map.json")
                 console.log("")
             try{

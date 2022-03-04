@@ -19,7 +19,7 @@ module.exports = {
         console.log("") 
         let strtest = args.splice(0,1000).join(" ");
         let str = strtest.toString();
-        console.log(str)
+        //console.log(str)
         if(str.includes('"')){
             pickeduserX = str.substring(
                 str.indexOf('"') + 1, 
@@ -52,13 +52,13 @@ module.exports = {
                     headers: { 'Content-Type': 'application/json' }
                 })
                 .then(res => res.json())
-                .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+                .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
                 ;
                 console.log("writing data to osuauth.json")
                 console.log("")
                 
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/mania`;
-                const { access_token } = require('../osuauth.json');
+                const { access_token } = require('../debug/osuauth.json');
             
             fetch(userinfourl, {
                 headers: {
@@ -68,7 +68,7 @@ module.exports = {
             .then(output1 => 
                 {
                 try{const osudata = output1;
-                fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
+                fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
                 const osutopurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/best?mode=mania&limit=58&offset=${offsetflag * 5}`;
@@ -80,7 +80,7 @@ module.exports = {
                 }).then(res => res.json())
                 .then(output2 => 
                     {const osutopdata = output2;
-                    fs.writeFileSync("osutop.json", JSON.stringify(osutopdata, null, 2));
+                    fs.writeFileSync("debug/osutop.json", JSON.stringify(osutopdata, null, 2));
                     console.log("writing data to osutop.json")
                     console.log("")
                     console.groupEnd()

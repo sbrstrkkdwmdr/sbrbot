@@ -12,7 +12,7 @@ module.exports = {
         //let pickeduserX = 'SaberStrike'
         let strtest = args.splice(0,1000).join(" ");
         let str = strtest.toString();
-        console.log(str)
+        //console.log(str)
         //console.log(args)
         if(str.includes('"')){
             //str1 = str.indexOf('"') + 1
@@ -59,13 +59,13 @@ module.exports = {
                     headers: { 'Content-Type': 'application/json' }
                 })
                 .then(res => res.json())
-                .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+                .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
                 ;
                 console.log("writing data to osuauth.json")
                 console.log("")    
 
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
-                const { access_token } = require('../osuauth.json');
+                const { access_token } = require('../debug/osuauth.json');
 
             fetch(userinfourl, {
                 headers: {
@@ -75,7 +75,7 @@ module.exports = {
             .then(output1 => 
                 {
                 try{const osudata = output1;
-                fs.writeFileSync("osuid.json", JSON.stringify(osudata, null, 2));
+                fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
                 const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=osu&offset=${offsetflag}`;
@@ -87,7 +87,7 @@ module.exports = {
                 }).then(res => res.json())
                 .then(output2 => 
                     {try{const rsdata = output2;//.slice(0, 1);
-                    fs.writeFileSync("rs.json", JSON.stringify(rsdata, null, 2))
+                    fs.writeFileSync("debug/rs.json", JSON.stringify(rsdata, null, 2))
                     console.log("writing data to rs.json")
                     console.log("")
                 try {
@@ -158,8 +158,8 @@ module.exports = {
                     let lastvisminutes = minlastvisreform % 60;
                     let minlastvisw = (lastvishours + "h " + lastvisminutes + "m");
                 
-                const fileName = 'storedmap.json';
-                const file = require('../storedmap.json');  
+                const fileName = 'debug/storedmap.json';
+                const file = require('../debug/storedmap.json');  
                 file.prevmap = rsmapid;
                 fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
                     if (err) return console.log(err);
@@ -218,7 +218,7 @@ module.exports = {
                         rank: 'S',
                         score_id: '4057765057'
                       }
-                    fs.writeFileSync("rsppcalc.json", JSON.stringify(score, null, 2));
+                    fs.writeFileSync("debug/rsppcalc.json", JSON.stringify(score, null, 2));
                     let ppfc = new std_ppv2().setPerformance(score);
                     let pp =  new std_ppv2().setPerformance(scorenofc);
                     if(rsmods){
@@ -307,7 +307,7 @@ module.exports = {
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
                 .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
                 .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** **${rsmapstar}**⭐`, false)
-                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:**${rs300s} \n**100:**${rs100s} \n**50:**${rs50s} \n**X:**${rs0s} \n**${rscombo}x**`, true)
+                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:** ${rs300s} \n**100:** ${rs100s} \n**⠀50:** ${rs50s} \n**⠀⠀X:** ${rs0s} \n**${rscombo}x**`, true)
                 .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
                 //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})}
@@ -319,7 +319,7 @@ module.exports = {
                 .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
                 .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
                 .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐`, false)
-                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rscombo}x**`, true)
+                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:** ${rs300s} \n**100:** ${rs100s} \n**⠀50:** ${rs50s} \n**⠀⠀X:** ${rs0s} \n**${rscombo}x**`, true)
                 .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
                 //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})

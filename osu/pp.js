@@ -33,14 +33,14 @@ module.exports = {
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(res => res.json())
-            .then(output => fs.writeFileSync("osuauth.json", JSON.stringify(output, null, 2)))
+            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
             console.log("writing data to osuauth.json")
             console.log("")
         const modsarray = ["EZ", "NF", "HT", "HR", "SD", "PF", "DT", "NC", "HD", "FL", "RX", "AP", "SO"];
         //console.log(modsarray)
         //console.log(modsarray.length)
-        let { prevmap } = require('../storedmap.json');
+        let { prevmap } = require('../debug/storedmap.json');
         if(!pickeduserX){
             mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`
         }
@@ -64,7 +64,7 @@ module.exports = {
             //console.log("1")
         }
             try{
-            const { access_token } = require('../osuauth.json');
+            const { access_token } = require('../debug/osuauth.json');
             
             fetch(mapurl, {
                 method: "GET",
@@ -79,7 +79,7 @@ module.exports = {
 					const mapdata = output2;
 					//let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
 					//const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
-                fs.writeFileSync("map.json", JSON.stringify(mapdata, null, 2))
+                fs.writeFileSync("debug/map.json", JSON.stringify(mapdata, null, 2))
                 console.log("writing data to map.json")
                 console.log("")
             try{
@@ -115,8 +115,8 @@ module.exports = {
             }
 
             let mapid = Math.abs(maplink)
-            const fileName = 'storedmap.json';
-            const file = require('../storedmap.json');  
+            const fileName = 'debug/storedmap.json';
+            const file = require('../debug/storedmap.json');  
             file.prevmap = maplink;
             fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
                 if (err) return console.log(err);
@@ -309,7 +309,7 @@ module.exports = {
             }
 
             let cpolpp = `https://pp.osuck.net/pp?id=${mapid}&mods=${modenum}&combo=${mapmaxcombo}&miss=0&acc=100`
-            console.log(cpolpp)
+            //console.log(cpolpp)
 
             fetch(cpolpp, {
             }).then(res => res.json())
