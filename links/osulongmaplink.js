@@ -11,10 +11,10 @@ module.exports = {
         try{const w = JSON.stringify(linkargs).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('beatmapsets').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const grab = JSON.stringify(w.split('#')[1].split('/'))
         const pickeduserX = JSON.stringify(grab).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('osu', '').replaceAll("\\", '').replaceAll('taiko', '').replaceAll('fruits', '').replaceAll('mania', '');
-        console.group("MAP ID:")
-        console.log(`${w}\n${pickeduserX}\n${grab}`)
+        //console.group("MAP ID:")
+        //console.log(`${w}\n${pickeduserX}\n${grab}`)
         
-        console.groupEnd()
+        //console.groupEnd()
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("link detector executed - map get (long)")
         let consoleloguserweeee = message.author
@@ -108,8 +108,8 @@ module.exports = {
             }
             
 
-            const fileName = 'storedmap.json';
-            const file = require('../storedmap.json');  
+            const fileName = 'debug/storedmap.json';
+            const file = require('../debug/storedmap.json');  
             file.prevmap = maplink;
             fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
                 if (err) return console.log(err);
@@ -203,7 +203,7 @@ module.exports = {
             .setAuthor(`${mapper}`, `https://a.ppy.sh/${mapperid}`,`https://osu.ppy.sh/u/${mapperlink}`)
             .setURL(`https://osu.ppy.sh/b/${maplink}`)
             .setImage(mapbg)
-            .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n${mapplaylength}`, true)
+            .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${mapplaylength}`, true)
             .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})
