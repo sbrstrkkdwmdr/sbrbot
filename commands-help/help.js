@@ -205,7 +205,7 @@ module.exports = {
                 message.channel.send("Sends information about the user's top 5 osu! mania plays.\nUsage:`sbr-maniatop (ID)`\nDoesn't work if there's under 5 plays\nArguments: -p (page offset)")
                 break;
             case 'map':case 'mapinfo':
-                message.channel.send("Sends information about the mentioned map.\nUsage:`sbr-map (ID)` || `sbr-map (ID) (Mods)` `sbr-map (Mods)`")
+                message.channel.send("Sends information about the mentioned map.\nUsage:`sbr-map (ID)` | `sbr-map (ID) (Mods)` `sbr-map (Mods)`")
                 break;
             case 'mapsearch':case 'mapget':
                 message.channel.send("Sends information about the requested map.\nUsage:`sbr-mapsearch`")
@@ -227,6 +227,9 @@ module.exports = {
                 break;
             case 'pastmap':
                 message.channel.send("Sends information about the mentioned map with modded values.\nUsage:`sbr-map (MODS)`\nKinda useless as of 2022-02-27.")
+                break;
+            case 'pp':
+                message.channel.send("Sends the pp values for a map.\nUsage: `sbr-pp (MODS)` | `sbr-pp (MAPID)` | `sbr-pp (MAPID) (MODS)`")
                 break;
             case 'rs':case 'recent':
                 message.channel.send("Sends information about the user's most recent osu! play.\nUsage:`sbr-rs (ID)`\nArguments: -p (page offset)")
