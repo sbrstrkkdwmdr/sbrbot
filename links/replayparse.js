@@ -3,7 +3,7 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../debug/osuauth.json');
 const calc = require('ojsama');
-const { std_ppv2 } = require('booba');
+const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const osuReplayParser = require('osureplayparser');
 module.exports = {
     name: 'replayparse',
@@ -23,7 +23,7 @@ module.exports = {
         let playername = JSON.stringify(replay, ['playerName']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('playerName', '');
         let timeset = JSON.stringify(replay, ['timestamp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('timestamp', '');
         let maxcombo = JSON.stringify(replay, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max_combo', '');
-        let hit300s = JSON.stringify(replay, ['number_300s']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('number_300s', '');
+        let hit300s = JSON.stringify(replay, ['number_300s']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('number_300s', '').replaceAll('-', '');
         let hit100s = JSON.stringify(replay, ['number_100s']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('number_100s', '');
         let hit50s = JSON.stringify(replay, ['number_50s']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('number_50s', '');
         let misses = JSON.stringify(replay, ['misses']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('misses', '');
@@ -31,7 +31,7 @@ module.exports = {
         let hitgeki = JSON.stringify(replay, ['gekis']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('gekis', '');
         let mods = JSON.stringify(replay, ['mods']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('mods', '');
         let bettertimeset = JSON.stringify(replay, ['timestamp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('timestamp', '').slice(0, 10);
-
+        let gamemode = JSON.stringify(replay, ['gameMode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('gameMode', '')
 
         try{
             let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
@@ -87,7 +87,7 @@ module.exports = {
                 console.log("writing data to map.json")
                 console.log("")
             try{
-            let beatmapid = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmap_id', '');
+            let beatmapid = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
             let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
             let mapper = JSON.stringify(mapdata['beatmapset'], ['creator']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('creator', '');
             let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20').replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '')
@@ -161,12 +161,12 @@ module.exports = {
             count100: hit100s,
             count300: hit300s,
             countmiss: '0',
-            countkatu: hitkatu,
-            countgeki: hitgeki,
+            countkatu: '0',
+            countgeki: '0',
             perfect: '0',
-            enabled_mods: '64',
-            user_id: playerid,
-            date: timeset,
+            enabled_mods: '0',
+            user_id: '15222484',
+            date: '2022-02-08 05:24:54',
             rank: 'S',
             score_id: '4057765057'
           }
@@ -178,25 +178,33 @@ module.exports = {
             count100: hit100s,
             count300: hit300s,
             countmiss: misses,
-            countkatu: hitkatu,
-            countgeki: hitgeki,
+            countkatu: '0',
+            countgeki: '0',
             perfect: '0',
-            enabled_mods: '64',
-            user_id: playerid,
-            date: timeset,
-            rank: 'S',
+            enabled_mods: '0',
+            user_id: '15222484',
+            date: '2022-02-08 05:24:54',
+            rank: 'A',
             score_id: '4057765057'
           }
           fs.writeFileSync("debug/rsppcalc.json", JSON.stringify(score, null, 2));
-                  let ppfc = new std_ppv2().setPerformance(score);
-                  let pp =  new std_ppv2().setPerformance(scorenofc);
-                  if(mods){
-                    pp = new std_ppv2().setPerformance(scorenofc).setMods(`${mods}`)
-                    ppfc = new std_ppv2().setPerformance(score).setMods(`${mods}`);
+                  //let ppfc = new std_ppv2().setPerformance(score);
+                  //let pp =  new std_ppv2().setPerformance(scorenofc);
+                  if(gamemode == '0'){
+                    pp = new std_ppv2().setPerformance(scorenofc)
+                    ppfc = new std_ppv2().setPerformance(score)
                 }
-                if(!mods){
-                    pp = new std_ppv2().setPerformance(scorenofc).setMods('NM')
-                    ppfc = new std_ppv2().setPerformance(score).setMods('NM');
+                if(gamemode == '1'){
+                    pp = new taiko_ppv2().setPerformance(scorenofc)
+                    ppfc = new taiko_ppv2().setPerformance(score)
+                }
+                if(gamemode == '2'){
+                    pp = new catch_ppv2().setPerformance(scorenofc)
+                    ppfc = new catch_ppv2().setPerformance(score)
+                }
+                if(gamemode == '3'){
+                    pp = new mania_ppv2().setPerformance(scorenofc)
+                    ppfc = new mania_ppv2().setPerformance(score)
                 }
                 let ppw = await pp.compute();
                 let ppiffc1 = await ppfc.compute(nochokeacc);
@@ -207,7 +215,8 @@ module.exports = {
                 let ppwrawtotal = ppw['total'];
                 let ppww = Math.abs(ppwrawtotal).toFixed(2);
                 let ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
-                
+                //console.log(ppw)
+                //console.log(ppfc)
 
         let Embed = new Discord.MessageEmbed()
         .setColor(0x462B71)
