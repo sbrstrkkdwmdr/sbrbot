@@ -218,42 +218,110 @@ module.exports = {
                         rank: 'S',
                         score_id: '4057765057'
                       }
+                      const scoretd = {
+                        beatmap_id: rsmapid,
+                        score: '6795149',
+                        maxcombo: '630',
+                        count50: rs50s,
+                        count100: rs100s,
+                        count300: rs300s,
+                        countmiss: '0',
+                        countkatu: rskatu,
+                        countgeki: rsgeki,
+                        perfect: '0',
+                        enabled_mods: '64',
+                        user_id: rsplayerid,
+                        date: '2022-02-08 05:24:54',
+                        rank: 'S',
+                        score_id: '4057765057'
+                      }
+                      const scorefctd = {
+                        beatmap_id: rsmapid,
+                        score: '6795149',
+                        maxcombo: '630',
+                        count50: rs50s,
+                        count100: rs100s,
+                        count300: rs300s,
+                        countmiss: rs0s,
+                        countkatu: rskatu,
+                        countgeki: rsgeki,
+                        perfect: '0',
+                        enabled_mods: '64',
+                        user_id: rsplayerid,
+                        date: '2022-02-08 05:24:54',
+                        rank: 'S',
+                        score_id: '4057765057'
+                      }
+                    let tdmods = JSON.stringify(rsmods).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rsmods', '').replaceAll('TD');
                     fs.writeFileSync("debug/rsppcalc.json", JSON.stringify(score, null, 2));
                     let ppfc = new std_ppv2().setPerformance(score);
                     let pp =  new std_ppv2().setPerformance(scorenofc);
                     if(rsmods){
                         pp =  new std_ppv2().setPerformance(scorenofc).setMods(`${rsmods}`)
                         ppfc = new std_ppv2().setPerformance(score).setMods(`${rsmods}`)
+                        pptd = new std_ppv2().setPerformance(scoretd).setMods(`${tdmods}`)
+                        ppfctd = new std_ppv2().setPerformance(scorefctd).setMods(`${tdmods}`)
                     }
                     if(!rsmods){
                         pp =  new std_ppv2().setPerformance(scorenofc).setMods('NM')
                         ppfc = new std_ppv2().setPerformance(score).setMods('NM')
                     }
                     ;
-                let ppw = await pp.compute();
-                let ppiffc1 = await ppfc.compute(rsnochokeacc);
-                let ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                let ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
-                let ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
-                let ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                let ppwrawtotal = ppw['total'];
-                let ppww = Math.abs(ppwrawtotal).toFixed(2);
-                let ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
 
-                let pprawaim = ppw['aim']
-                let pprawspeed = ppw['speed']
-                let pprawacc = ppw['acc']
-                let pprawfl = ppw['fl']
-                let ppcalcacc = ppw['computed_accuracy']
+                if(!rsmods.includes('TD')){
+                    ppw = await pp.compute();
+                    ppiffc1 = await ppfc.compute(rsnochokeacc);
+                    ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                    ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
+                    ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
+                    ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                    ppwrawtotal = ppw['total'];
+                    ppww = Math.abs(ppwrawtotal).toFixed(2);
+                    ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
 
-                let ppfcrawaim = ppiffc1['aim']
-                let ppfcrawspeed = ppiffc1['speed']
-                let ppfcrawacc = ppiffc1['acc']
-                let ppfcrawfl = ppiffc1['fl']
-                let ppfccalcacc = ppiffc1['computed_accuracy']
+                    pprawaim = ppw['aim']
+                    pprawspeed = ppw['speed']
+                    pprawacc = ppw['acc']
+                    pprawfl = ppw['fl']
+                    ppcalcacc = ppw['computed_accuracy']
+    
+                    ppfcrawaim = ppiffc1['aim']
+                    ppfcrawspeed = ppiffc1['speed']
+                    ppfcrawacc = ppiffc1['acc']
+                    ppfcrawfl = ppiffc1['fl']
+                    ppfccalcacc = ppiffc1['computed_accuracy']
+    
+                    ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
+                    ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
+                    ppissue = ''
+                    }
+                    if(rsmods.includes('TD')){
+                    ppw = await pptd.compute();
+                    ppiffc1 = await ppfctd.compute(rsnochokeacc);
+                    ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                    ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
+                    ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
+                    ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                    ppwrawtotal = ppw['total'];
+                    ppww = Math.abs(ppwrawtotal).toFixed(2);
+                    ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters   
 
-                let ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
-                let ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
+                    pprawaim = ppw['aim']
+                    pprawspeed = ppw['speed']
+                    pprawacc = ppw['acc']
+                    pprawfl = ppw['fl']
+                    ppcalcacc = ppw['computed_accuracy']
+    
+                    ppfcrawaim = ppiffc1['aim']
+                    ppfcrawspeed = ppiffc1['speed']
+                    ppfcrawacc = ppiffc1['acc']
+                    ppfcrawfl = ppiffc1['fl']
+                    ppfccalcacc = ppiffc1['computed_accuracy']
+    
+                    ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
+                    ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
+                    ppissue = `\n(calculations don't include TD)`
+                    }
 
                 //console.log(`${pprawaim} | ${pprawspeed} | ${pprawacc} | ${pprawfl} | ${ppcalcacc}`)
                 //console.log(`${ppfcrawaim} | ${ppfcrawspeed} | ${ppfcrawacc} | ${ppfcrawfl} | ${ppfccalcacc}`)
@@ -308,7 +376,7 @@ module.exports = {
                 .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
                 .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** **${rsmapstar}**⭐`, false)
                 .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:** ${rs300s} \n**100:** ${rs100s} \n**⠀50:** ${rs50s} \n**⠀⠀X:** ${rs0s} \n**${rscombo}x**`, true)
-                .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
+                .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`, true)
                 //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})}
                 if(rsmods){
@@ -320,7 +388,7 @@ module.exports = {
                 .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
                 .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐`, false)
                 .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:** ${rs300s} \n**100:** ${rs100s} \n**⠀50:** ${rs50s} \n**⠀⠀X:** ${rs0s} \n**${rscombo}x**`, true)
-                .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
+                .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`, true)
                 //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
                 message.reply({ embeds: [Embed]})
                 }

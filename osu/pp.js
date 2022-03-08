@@ -37,7 +37,7 @@ module.exports = {
             ;
             console.log("writing data to osuauth.json")
             console.log("")
-        const modsarray = ["EZ", "NF", "HT", "HR", "SD", "PF", "DT", "NC", "HD", "FL", "RX", "AP", "SO"];
+        const modsarray = ["EZ", "NF", "HT", "HR", "SD", "PF", "DT", "NC", "HD", "FL", "RX", "AP", "SO", "TD", "NM"];
         //console.log(modsarray)
         //console.log(modsarray.length)
         let { prevmap } = require('../debug/storedmap.json');
@@ -126,8 +126,6 @@ module.exports = {
                 console.groupEnd()
               });//all this stuff is to write it to a temporary save file
 
-              (async () => {
-
                 const score = {
                     beatmap_id: maplink,
                     score: '6795149',
@@ -162,45 +160,6 @@ module.exports = {
                     date: '2022-02-08 05:24:54',
                     rank: 'S',
                     score_id: '4057765057'
-                }
-              
-    let pp = new std_ppv2().setPerformance(score).setMods(moddetect);
-    let ppcalc95 = new std_ppv2().setPerformance(score95).setMods(moddetect);
-    let mapimg = '<:modeosu:944181096868884481>'
-    if(mapmode == 'osu'){
-        pp = new std_ppv2().setPerformance(score).setMods(moddetect);
-        ppcalc95 = new std_ppv2().setPerformance(score95).setMods(moddetect);
-        mapimg = '<:modeosu:944181096868884481>'
-        }
-        if(mapmode == 'taiko'){
-            pp = new taiko_ppv2().setPerformance(score).setMods(moddetect);
-            ppcalc95 = new taiko_ppv2().setPerformance(score95).setMods(moddetect);
-            mapimg = '<:modetaiko:944181097053442068>'
-        }
-        if(mapmode == 'fruits'){
-            pp = new catch_ppv2().setPerformance(score).setMods(moddetect);
-            ppcalc95 = new catch_ppv2().setPerformance(score95).setMods(moddetect);
-            mapimg = '<:modefruits:944181096206176326>'
-        }
-        if(mapmode == 'mania'){
-        pp = new mania_ppv2().setPerformance(score).setMods(moddetect);
-        ppcalc95 = new mania_ppv2().setPerformance(score95).setMods(moddetect);
-        mapimg = '<:modemania:944181095874834453>'
-        }
-        let ppSSjson = await pp.compute();
-        let pp95json = await ppcalc95.compute();
-
-                let ppSSstr = JSON.stringify(ppSSjson['total']);
-                let pp95str = JSON.stringify(pp95json['total']);
-
-                let ppSS = Math.abs(ppSSstr).toFixed(2)
-                let pp95 = Math.abs(pp95str).toFixed(2)
-
-                if(moddetect == 'NM'){
-                    maptitle = `${mapartist} - ${maptitle} [${mapdiff}]`
-                }
-                if(moddetect != 'NM'){
-                    maptitle = `${mapartist} - ${maptitle} [${mapdiff}] +${moddetect}`
                 }
 
                 let userinfourl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`
@@ -317,19 +276,66 @@ module.exports = {
                 fs.writeFileSync('cpolppcalc.json', JSON.stringify(output4, null, 2))
                 let cppSS = JSON.stringify(output4['pp'], ['fc']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('fc', '');
                 let cpp95 = JSON.stringify(output4['pp']['acc'], ['95']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('95', '');
+(async () => {
+        modissue = ''
+                    if(moddetect.includes('TD')){
+        moddetectnotd = JSON.stringify(moddetect).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('moddetect', '').replaceAll('TD').replaceAll('undefined');
+        modissue = `\n^^^^\n(these calculations don't include TD)`
+    }
+    if(moddetect ='TD'){
+        moddetectnotd = 'NM'
+    }
+    let pp = new std_ppv2().setPerformance(score).setMods(moddetectnotd);
+    let ppcalc95 = new std_ppv2().setPerformance(score95).setMods(moddetectnotd);
+    let mapimg = '<:modeosu:944181096868884481>'
+    if(mapmode == 'osu'){
+        pp = new std_ppv2().setPerformance(score).setMods(moddetectnotd);
+        ppcalc95 = new std_ppv2().setPerformance(score95).setMods(moddetectnotd);
+        mapimg = '<:modeosu:944181096868884481>'
+        }
+        if(mapmode == 'taiko'){
+            pp = new taiko_ppv2().setPerformance(score).setMods(moddetectnotd);
+            ppcalc95 = new taiko_ppv2().setPerformance(score95).setMods(moddetectnotd);
+            mapimg = '<:modetaiko:944181097053442068>'
+        }
+        if(mapmode == 'fruits'){
+            pp = new catch_ppv2().setPerformance(score).setMods(moddetectnotd);
+            ppcalc95 = new catch_ppv2().setPerformance(score95).setMods(moddetectnotd);
+            mapimg = '<:modefruits:944181096206176326>'
+        }
+        if(mapmode == 'mania'){
+        pp = new mania_ppv2().setPerformance(score).setMods(moddetectnotd);
+        ppcalc95 = new mania_ppv2().setPerformance(score95).setMods(moddetectnotd);
+        mapimg = '<:modemania:944181095874834453>'
+        }
+        let ppSSjson = await pp.compute();
+        let pp95json = await ppcalc95.compute();
+
+                let ppSSstr = JSON.stringify(ppSSjson['total']);
+                let pp95str = JSON.stringify(pp95json['total']);
+
+                let ppSS = Math.abs(ppSSstr).toFixed(2)
+                let pp95 = Math.abs(pp95str).toFixed(2)
+
+                if(moddetect == 'NM'){
+                    maptitle = `${mapartist} - ${maptitle} [${mapdiff}]`
+                }
+                if(moddetect != 'NM'){
+                    maptitle = `${mapartist} - ${maptitle} [${mapdiff}] +${moddetect}`
+                }
             let Embed = new Discord.MessageEmbed()
             .setColor(0x91FF9A)
             .setTitle(`pp values for ${maptitle}`)
             .setAuthor(`${mapper}`, `https://a.ppy.sh/${mapperid}`,`https://osu.ppy.sh/u/${mapperlink}`)
             .setURL(`https://osu.ppy.sh/b/${maplink}`)
             .setImage(mapbg)
-            .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
+            .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95} ${modissue}`, true)
             .addField('**PP VALUES (CPOL)**', `\nSS: ${cppSS} \n95: ${cpp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})
+        })();
             })//output4
         })
-              })();
     } catch(error){
 				message.reply("error")
 				console.log(error)
