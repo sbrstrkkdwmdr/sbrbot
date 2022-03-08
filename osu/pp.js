@@ -278,11 +278,12 @@ module.exports = {
                 let cpp95 = JSON.stringify(output4['pp']['acc'], ['95']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('95', '');
 (async () => {
         modissue = ''
+        let moddetectnotd = moddetect
                     if(moddetect.includes('TD')){
         moddetectnotd = JSON.stringify(moddetect).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('moddetect', '').replaceAll('TD').replaceAll('undefined');
         modissue = `\n^^^^\n(these calculations don't include TD)`
     }
-    if(moddetect ='TD'){
+    if(moddetect == 'TD'){
         moddetectnotd = 'NM'
     }
     let pp = new std_ppv2().setPerformance(score).setMods(moddetectnotd);

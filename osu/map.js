@@ -194,7 +194,7 @@ module.exports = {
         moddetectnotd = JSON.stringify(moddetect).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('moddetect', '').replaceAll('TD').replaceAll('undefined');
         modissue = `\n(calculations don't include TD)`
     }
-    if(moddetect ='TD'){
+    if(moddetect == 'TD'){
         moddetectnotd = 'NM'
     }
     let pp = new std_ppv2().setPerformance(score).setMods(moddetectnotd);
