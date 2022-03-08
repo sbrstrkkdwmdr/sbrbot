@@ -320,7 +320,7 @@ module.exports = {
     
                     ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
                     ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
-                    ppissue = `\n(calculations don't include TD)`
+                    ppissue = `\n(calculations **don't** include TD)`
                     }
 
                 //console.log(`${pprawaim} | ${pprawspeed} | ${pprawacc} | ${pprawfl} | ${ppcalcacc}`)
