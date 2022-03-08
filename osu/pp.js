@@ -281,7 +281,7 @@ module.exports = {
         let moddetectnotd = moddetect
                     if(moddetect.includes('TD')){
         moddetectnotd = JSON.stringify(moddetect).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('moddetect', '').replaceAll('TD').replaceAll('undefined');
-        modissue = `\n^^^^\n(these calculations don't include TD)`
+        modissue = `\n^^^^\n(these calculations **don't** include TD)`
     }
     if(moddetect == 'TD'){
         moddetectnotd = 'NM'
@@ -330,8 +330,8 @@ module.exports = {
             .setAuthor(`${mapper}`, `https://a.ppy.sh/${mapperid}`,`https://osu.ppy.sh/u/${mapperlink}`)
             .setURL(`https://osu.ppy.sh/b/${maplink}`)
             .setImage(mapbg)
-            .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95} ${modissue}`, true)
-            .addField('**PP VALUES (CPOL)**', `\nSS: ${cppSS} \n95: ${cpp95}`, true)
+            .addField('**PP VALUES**', `\n**SS:** ${ppSS} \n**95:** ${pp95} ${modissue}`, true)
+            .addField('**PP VALUES (CPOL)**', `\n**SS:** ${cppSS} \n**95:** ${cpp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})
         })();
