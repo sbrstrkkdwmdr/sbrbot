@@ -92,6 +92,14 @@ module.exports = {
             let maphp = JSON.stringify(mapdata, ['drain']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('drain', '');
             let mapsr = JSON.stringify(mapdata, ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
             let mapbpm = JSON.stringify(mapdata, ['bpm']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('bpm', '');
+            
+            let mapcsNM = JSON.stringify(mapdata, ['cs']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('cs', '');
+            let maparNM = JSON.stringify(mapdata, ['ar']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('ar', '');
+            let mapodNM = JSON.stringify(mapdata, ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('accuracy', '');
+            let maphpNM = JSON.stringify(mapdata, ['drain']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('drain', '');
+            let mapsrNM = JSON.stringify(mapdata, ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
+            let mapbpmNM = JSON.stringify(mapdata, ['bpm']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('bpm', '');
+            
             let mapcircle = JSON.stringify(mapdata, ['count_circles']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_circles', '');
             let mapslider = JSON.stringify(mapdata, ['count_sliders']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_sliders', '');
             let mapspinner = JSON.stringify(mapdata, ['count_spinners']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_spinners', '');
@@ -116,7 +124,11 @@ module.exports = {
             if(maphit2<10){
                 maphit2 = '0' + maphit2
             }
+            if(maphit2==0){
+                maphit2 = '00'
+            }
             let mapplaylength = maphit1 + ':' + maphit2;
+            let recordedmaplength = mapplaylength;
             let mapmaxcombotoint = Math.abs(mapmaxcombo);
             let slidertonum = Math.abs(mapslider);
             let circletonum = Math.abs(mapcircle);
@@ -155,6 +167,151 @@ module.exports = {
               });//all this stuff is to write it to a temporary save file
 
               (async () => {
+
+                    if(moddetect.includes('DT') && !moddetect.includes('HR') && !moddetect.includes('EZ')) {
+                    mapar = Math.abs(((maparNM*2)+13)/3).toFixed(2);
+                    mapod = mapodNM + "^";
+                    maphp = maphpNM + "^";
+                    mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
+                    maphit1 = Math.floor((maphitonly / 1.5) /60);
+                    maphit2 = Math.floor((maphitonly / 1.5) % 60);
+                    if(maphit2<10){
+                        maphit2 = '0' + maphit2
+                    }
+                    if(maphit2==0){
+                        maphit2 = '00'
+                    }
+                    recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
+                }
+                if(moddetect.includes('HT') && !moddetect.includes('HR') && !moddetect.includes('EZ')) {
+                    mapar = Math.abs(((maparNM*1.33)-4.3)).toFixed(2);
+                    mapod = mapodNM + "⌄";
+                    maphp = maphpNM + "⌄";
+                    mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
+                    maphit1 = Math.floor((maphitonly / 0.75) /60);
+                    maphit2 = Math.floor((maphitonly / 0.75) % 60);
+                    if(maphit2<10){
+                        maphit2 = '0' + maphit2
+                    }
+                    if(maphit2==0){
+                        maphit2 = '00'
+                    }
+                    recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
+                }
+                if(moddetect.includes('HR') && !moddetect.includes('HT') && !moddetect.includes('DT')) {
+                    mapcs = Math.abs(mapcsNM * 1.5).toFixed(2)
+                    mapar = Math.abs(maparNM * 1.5).toFixed(2)
+                    maphp = Math.abs(maphpNM * 1.5).toFixed(2)
+                    mapod = Math.abs(mapodNM * 1.5).toFixed(2)
+                    if(mapar > 10) {
+                        mapar = 10
+                    }
+                    if(maphp > 10) {
+                        maphp = 10
+                    }
+                    if(mapod > 10) {
+                        mapod = 10
+                    }
+
+                }
+                if(moddetect.includes('EZ') && !moddetect.includes('HT') && !moddetect.includes('DT')) {
+                    mapcs = Math.abs(mapcsNM / 2)
+                    mapar = Math.abs(maparNM / 2)
+                    maphp = Math.abs(maphpNM / 2)
+                    mapod = Math.abs(mapodNM / 2)
+                }
+
+                if(moddetect.includes('EZ') && moddetect.includes('HR')) return message.reply('invalid mods!');
+                if(moddetect.includes('DT') && moddetect.includes('HT')) return message.reply('invalid mods!');
+
+                if(moddetect.includes('EZ') && moddetect.includes('HT')) {
+                    mapcs = Math.abs(mapcsNM / 2);
+                    mapar = Math.abs(((maparNM / 2)*1.33)-4.3).toFixed(2);
+                    maphp = Math.abs(maphpNM / 2) + "⌄";
+                    mapod = Math.abs(mapodNM / 2) + "⌄";
+                    mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
+                    maphit1 = Math.floor((maphitonly / 0.75) /60);
+                    maphit2 = Math.floor((maphitonly / 0.75) % 60);
+                    recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
+                }
+                if(moddetect.includes('EZ') && moddetect.includes('DT')) {
+                    mapcs = Math.abs(mapcsNM / 2);
+                    mapar = Math.abs(((maparNM / 2)+13)/3).toFixed(2);
+                    maphp = Math.abs(maphpNM / 2) + "^";
+                    mapod = Math.abs(mapodNM / 2) + "^";
+                    mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
+                    maphit1 = Math.floor((maphitonly / 1.5) /60);
+                    maphit2 = Math.floor((maphitonly / 1.5) % 60);
+                    if(maphit2<10){
+                        maphit2 = '0' + maphit2
+                    }
+                    if(maphit2==0){
+                        maphit2 = '00'
+                    }
+                    recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
+                }
+                if(moddetect.includes('HR') && moddetect.includes('HT')) {
+                    mapcs = Math.abs(mapcsNM * 1.5).toFixed(2);
+                    mapar = Math.abs(((maparNM * 1.5)/1.33)-4.3).toFixed(2);
+                    maphp = Math.abs(maphpNM * 1.5)//.toFixed(2) //+ "⌄";
+                    mapod = Math.abs(mapodNM * 1.5)//.toFixed(2) //+ "⌄";
+                    if(maphp >= 10) {
+                        maphp = 10 + "⌄"
+                    }
+                    if(mapod >= 10) {
+                        mapod = 10 + "⌄"
+                    }
+                    if(maphp < 10) {
+                        maphp = maphp + "⌄"
+                    }
+                    if(mapod < 10) {
+                        mapod = mapod + "⌄"
+                    }
+                    mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
+                    maphit1 = Math.floor((maphitonly / 0.75) /60);
+                    maphit2 = Math.floor((maphitonly / 0.75) % 60);
+                    if(maphit2<10){
+                        maphit2 = '0' + maphit2
+                    }
+                    if(maphit2==0){
+                        maphit2 = '00'
+                    }
+                    recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
+
+                }
+                if(moddetect.includes('HR') && moddetect.includes('DT')) {
+                    mapcs = Math.abs(mapcsNM * 1.5);
+                    mapar = Math.abs((((maparNM * 1.5)*2)+13)/3).toFixed(2);
+                    maphp = Math.abs(maphpNM * 1.5)// + "^";
+                    mapod = Math.abs(mapodNM * 1.5)// + "^";
+                    mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
+                    maphit1 = Math.floor((maphitonly / 1.5) /60);
+                    maphit2 = Math.floor((maphitonly / 1.5) % 60);
+                    if(maphit2<10){
+                        maphit2 = '0' + maphit2
+                    }
+                    if(maphit2==0){
+                        maphit2 = '00'
+                    }
+                    recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
+                    if(maphp >= 10) {
+                        maphp = 10 + "^"
+                    }
+                    if(mapod >= 10) {
+                        mapod = 10 + "^"
+                    }
+                    if(maphp < 10) {
+                        maphp = maphp + "^"
+                    }
+                    if(mapod < 10) {
+                        mapod = mapod + "^"
+                    }
+                    if(mapar > 11){
+                        mapar = 11
+                    }
+
+                }
+
 
                 const score = {
                     beatmap_id: maplink,
@@ -255,7 +412,7 @@ module.exports = {
             .setImage(mapbg)
             //.setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\n\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n\n--**PP VALUES**--\nSS: ${ppSS} | 95: ${pp95} \n\n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
             //.addField('', `[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper)
-            .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${mapplaylength}`, true)
+            .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
             .addField('**PP VALUES**', `\n**SS:** ${ppSS} \n**95:** ${pp95} ${modissue}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})
