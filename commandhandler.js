@@ -147,8 +147,9 @@ client.on('messageCreate', message =>{
     return childfork.exec(cmd, handler);
 }
         setTimeout(() =>{    
-        client.linkdetect.get('replayrecord').execute(exec, linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-            }, 1500);
+        //client.linkdetect.get('replayrecord').execute(exec, linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.linkdetect.get('replayrecordv2').execute(exec, linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        }, 1500);
             }
             
         }
