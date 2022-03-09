@@ -80,6 +80,9 @@ module.exports = {
 
             let maphit1 = Math.floor(maphitonly / 60);
             let maphit2 = Math.abs(maphitonly % 60);
+            if(maphit2<10){
+                maphit2 = '0' + maphit2
+            }
             let mapplaylength = maphit1 + ':' + maphit2;
             let mapmaxcombotoint = Math.abs(mapmaxcombo);
             let mapmiss = Math.abs(0)
