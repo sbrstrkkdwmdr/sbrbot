@@ -105,7 +105,7 @@ client.on('messageCreate', message =>{
       const result = inventory.find( ({ name }) => name === 'cherries' );
       
       console.log(result) // { name: 'cherries', quantity: 5 }*/
-
+    //client.linkdetect.get('messagesaver').execute(linkargs, message, args, currentDate, currentDateISO);
    
     if (message.content.startsWith('https://osu.ppy.sh/b/') || message.content.startsWith('osu.ppy.sh/b/') || message.content.startsWith('https://osu.ppy.sh/beatmaps/') || message.content.startsWith('osu.ppy.sh/beatmaps/')){
         client.linkdetect.get('osumaplink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
@@ -120,7 +120,6 @@ client.on('messageCreate', message =>{
     if (foundtriggers){
         client.admincmds.get('triggers').execute(message, args, linkargs, Discord, client, currentDate, currentDateISO)
     }
-
 
     
 
@@ -317,6 +316,13 @@ client.on('messageCreate', message =>{
 
     case 'owoify':
         client.commands.get('owoify').execute(message, args, currentDate, currentDateISO)
+        break;
+
+    case 'randommsg':
+        client.commands.get('randommsg').execute(message, args, currentDate, currentDateISO)
+        break;
+    case 'addmsg':
+        client.commands.get('addmsg').execute(message, args, currentDate, currentDateISO)
         break;
         //SBR ONLY --------------------------------------------------------
     case 'testlog':
