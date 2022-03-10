@@ -77,7 +77,12 @@ module.exports = {
                 try{const osudata = output1;
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
-                //message.reply(playerid)
+                if(!playerid) {
+                    message.reply("Error osu04 - account not found")
+                    console.log("error - account not found and/or json sent no data")
+                    return;
+                }
+
                 const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=osu&offset=${offsetflag}`;
                 
                 fetch(recentactiveurl, {
@@ -414,20 +419,26 @@ module.exports = {
             }
             )()
             } catch(error){
-                message.reply("Error - no recent plays for this user")
-                console.log("error - no recent plays found and/or json sent no data")
+                if(error.toString().includes('replaceAll')){
+                    message.reply("Error osu03 - account not found (or some other error)")
+                    console.log("error osu03 - account not found and/or json sent no data")}
+                    else{message.reply('unknown error')}
                 console.log(error)
                 console.log("")
             }
             }catch(error){
-                message.reply("Error - account not found (or some other error)")
-                console.log("error - account not found and/or json sent no data")
+                if(error.toString().includes('replaceAll')){
+                    message.reply("Error osu03 - account not found (or some other error)")
+                    console.log("error osu03 - account not found and/or json sent no data")}
+                    else{message.reply('unknown error')}
                 console.log(error)
                 console.log("")
             }});
                 } catch(error){
-                    message.reply("Error - account not found")
-                    console.log("Error account not found")
+                    if(error.toString().includes('replaceAll')){
+                        message.reply("Error osu04 - account not found")
+                        console.log("error - account not found and/or json sent no data")}
+                        else{message.reply('unknown error')}
                     console.log(error)
                     console.log("")
                 }})

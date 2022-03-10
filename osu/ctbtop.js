@@ -70,6 +70,11 @@ module.exports = {
                 try{const osudata = output1;
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
+                if(!playerid) {
+                    message.reply("Error osu04 - account not found")
+                    console.log("error - account not found and/or json sent no data")
+                    return;
+                }
                 //message.reply(playerid)
                 const osutopurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/best?mode=fruits&limit=58&offset=${offsetflag * 5}`;
 
@@ -84,6 +89,13 @@ module.exports = {
                     console.log("writing data to osutop.json")
                     console.log("")
                     try{
+                        try{let topplayername = JSON.stringify(osutopdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
+                    }
+                    catch(error) {
+                            message.reply("Error 03 - not enough plays")
+                            console.log("error osu03 - not enough plays")
+                            return;
+                        }
                     let topplayername = JSON.stringify(osutopdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                     //let mapbg1 = JSON.stringify(osutopdata[0]['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
                     let topplayeravatar = JSON.stringify(osutopdata[0]['user'], ['avatar_url']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('avatar_url', '').replace('https', 'https:');

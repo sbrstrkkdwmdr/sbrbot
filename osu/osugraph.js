@@ -59,8 +59,19 @@ module.exports = {
 
                 let playerranks = osudata['rankHistory']['data'];
                 let playerrankschronological = playerranks.reverse();
+                let playerranksredo = playerrankschronological.map(function(x) {
+                    return parseInt(x, 10)
+                })
 
-                let playerworstrank = Math.abs((playerrankschronological[0]) + 10);
+                let playerrankminval = Math.min(playerranksredo);
+
+                console.log(playerrankminval)
+
+                playerranksredo.map(function(element){
+                    return element - playerrankminval;
+                 });
+
+                let playerworstrank = Math.abs((playerranksredo[0]) + 10);
                 let playerbestrank = Math.abs((playerranks[0]) - 10);
 
                 //console.log(playerrankschronological)
@@ -80,7 +91,7 @@ module.exports = {
                         labels: ['90 days ago', '60 days ago', '30 days ago', 'Today'],
                     datasets: [{
                       label: 'Rank',
-                      data: playerrankschronological,
+                      data: playerranksredo,
                       fill: false,
                       borderColor: 'rgb(75, 192, 192)',
                     }],
@@ -90,8 +101,8 @@ module.exports = {
                             alignToPixels: false,
                             backgroundColor: '#000',
                             display: true,
-                            //min: playerworstrank,
-                            //max: playerbestrank
+                            min: playerworstrank,
+                            max: playerbestrank,
                             grace: 5,
                             beginAtZero: false,
                             weight: 1,
