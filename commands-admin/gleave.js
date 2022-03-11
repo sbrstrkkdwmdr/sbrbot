@@ -1,15 +1,16 @@
 module.exports = {
     name: 'gleave',
     description: '',
-    execute(message, args, client, currentDate, currentDateISO) {
+    execute(interaction, options, client, Discord, currentDate, currentDateISO) {
+        let idofguild = options.getNumber('guildid')
         console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - guild leave")
-        let consoleloguserweeee = message.author
+        let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
-        if(message.author.id = 503794887318044675){
-        let guildID = client.guilds.cache.get(args[0]);
+        if(interaction.member.user.id = 503794887318044675){
+        let guildID = client.guilds.cache.get(idofguild);
         if(!guildID){
         message.reply("id bro");
         return(false)

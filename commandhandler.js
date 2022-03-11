@@ -157,6 +157,22 @@ commands?.create({
         },
     ]
 })
+commands?.create({
+    name: 'guildleave',
+    description: 'get the bot to leave a guild',
+    options: [
+        {
+            name: 'guildid',
+            description: 'the id of the guild to leave',
+            required: true,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        }
+    ]
+})
+commands?.create({
+    name: 'guildlist',
+    description: 'list all guilds the bot is in',
+})
 
 client.on('interactionCreate', async (interaction) =>{
     if (!interaction.isCommand()) return
@@ -252,6 +268,13 @@ client.on('interactionCreate', async (interaction) =>{
 
     case 'botstatus':
         client.admincmds.get('botstatus').execute(interaction, options, client, Discord, currentDate, currentDateISO)
+        break;
+
+    case 'guildleave':
+        client.admincmds.get('gleave').execute(interaction, options, client, Discord, currentDate, currentDateISO)
+        break;
+    case 'guildlist':
+        client.admincmds.get('serverlist').execute(interaction, options, client, Discord, currentDate, currentDateISO)
         break;
 
     /*
