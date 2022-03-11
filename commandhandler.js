@@ -69,8 +69,20 @@ commands?.create({
     ]
 })
 commands?.create({
-    name: 'rs',
-    description: 'most recent play for user',
+    name: 'help',
+    description: 'lists all commands',
+    options: [
+        {
+            name: 'command',
+            description: 'provide info on this command',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ]
+})
+commands?.create({
+    name: 'osutop',
+    description: 'top 5 plays for a user',
     options: [
         {
             name: 'user',
@@ -87,18 +99,6 @@ commands?.create({
         {
             name: 'mode',
             description: 'what mode?', 
-            required: false,
-            type: Constants.ApplicationCommandOptionTypes.NUMBER
-        }
-    ]
-})
-commands?.create({
-    name: 'help',
-    description: 'lists all commands',
-    options: [
-        {
-            name: 'command',
-            description: 'provide info on this command',
             required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING
         }
@@ -141,15 +141,43 @@ client.on('interactionCreate', async (interaction) =>{
     case 'math':
         client.helpcmds.get('math').execute(interaction, client, Discord, options, currentDate, currentDateISO)
 
-    case 'rs':case 'recent':
-        if(!options.getString('mode') || options.getString('mode') == 'osu' || options.getString('mode') == 'o' || options.getString('mode') == 'standard' || options.getString('mode') == 'std'){
-        client.osucmds.get('rs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)}
-        //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
-        break;
-
     case 'help':
         client.helpcmds.get('help').execute(interaction, options, guild, commands, currentDate, currentDateISO)
         break;  
+
+    //------osu
+    case 'rs':case 'recent':
+        if(!options.getString('mode') || options.getString('mode') == 'osu' || options.getString('mode') == 'o' || options.getString('mode') == 'standard' || options.getString('mode') == 'std'){
+        client.osucmds.get('rs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        }
+        if(options.getString('mode') == 'catch the beat' || options.getString('mode') == 'ctb' || options.getString('mode') == 'c' || options.getString('mode') == 'catch') {
+            client.osucmds.get('ctbrs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        }
+        if(options.getString('mode') == 'mania' || options.getString('mode') == 'm') {
+            client.osucmds.get('maniars').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        }
+        if(options.getString('mode') == 'taiko' || options.getString('mode') == 't') {
+            client.osucmds.get('taikors').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        }
+        else client.osucmds.get('rs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
+        break;
+    case 'osutop':case 'recent':
+        if(!options.getString('mode') || options.getString('mode') == 'osu' || options.getString('mode') == 'o' || options.getString('mode') == 'standard' || options.getString('mode') == 'std'){
+            client.osucmds.get('osutop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            }
+        if(options.getString('mode') == 'catch the beat' || options.getString('mode') == 'ctb' || options.getString('mode') == 'c' || options.getString('mode') == 'catch') {
+            client.osucmds.get('ctbtop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        }
+        if(options.getString('mode') == 'mania' || options.getString('mode') == 'm') {
+            client.osucmds.get('maniatop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        }
+        if(options.getString('mode') == 'taiko' || options.getString('mode') == 't') {
+            client.osucmds.get('taikotop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        }
+        else client.osucmds.get('osutop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
+        break;
     /*
     case  'links':
         client.helpcmds.get('links').execute(interaction, args, currentDate, currentDateISO)
