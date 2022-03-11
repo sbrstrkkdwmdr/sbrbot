@@ -5,17 +5,31 @@ const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 module.exports = {
     name: 'map',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+    execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
-        const pickeduserX = args[0];
-        if(args[1]){
-        modsmaybe = args[1];
+        let mapid = options.getNumber('id')
+        let mods = options.getString('mods')
+        if(!mods){
+            mods = 'NM'
         }
-        //console.log(args[1])
-
+        let { prevmap } = require('../debug/storedmap.json');
+        if(!mapid){
+            mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`
+        }
+        if(mapid){
+            mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}`
+        }
+        const modsarray = ["EZ", "NF", "HT", "HR", "SD", "PF", "DT", "NC", "HD", "FL", "RX", "AP", "SO", "TD", "NM"];
+        if(modsarray.some(v => mods.includes(v))){
+            moddetect = mods
+        }
+        if(!mods || !modsarray.some(v => mods.includes(v))){
+            moddetect = 'NM'
+        }
+        interaction.reply('getting data...')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - map get")
-        let consoleloguserweeee = message.author
+        let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
         
@@ -37,32 +51,6 @@ module.exports = {
             ;
             console.log("writing data to osuauth.json")
             console.log("")
-        const modsarray = ["EZ", "NF", "HT", "HR", "SD", "PF", "DT", "NC", "HD", "FL", "RX", "AP", "SO", "TD", "NM"];
-        //console.log(modsarray)
-        //console.log(modsarray.length)
-        let { prevmap } = require('../debug/storedmap.json');
-        if(!pickeduserX){
-            mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`
-        }
-        if(pickeduserX && !isNaN(pickeduserX)){
-            //if(isNaN(pickeduserX)) return message.reply("You must use the ID e.g. 3305367 instead of Weekend Whip")
-            mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickeduserX}`;
-        }
-        if(pickeduserX && isNaN(pickeduserX) && !modsarray.some(v => pickeduserX.includes(v))) return message.reply("error");
-        if(args[1] && modsarray.some(v => args[1].includes(v))){
-            moddetect = args[1]
-        }
-        if(args[1] && !modsarray.some(v => args[1].includes(v))){
-            moddetect = 'NM'
-        }
-        if(!args[1]){
-            moddetect = 'NM'
-        }
-        if(pickeduserX && isNaN(pickeduserX) && modsarray.some(v => pickeduserX.includes(v))){
-            moddetect = pickeduserX;
-            mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`
-            //console.log("1")
-        }
             try{
             const { access_token } = require('../debug/osuauth.json');
             
@@ -221,8 +209,8 @@ module.exports = {
                     mapod = Math.abs(mapodNM / 2)
                 }
 
-                if(moddetect.includes('EZ') && moddetect.includes('HR')) return message.reply('invalid mods!');
-                if(moddetect.includes('DT') && moddetect.includes('HT')) return message.reply('invalid mods!');
+                if(moddetect.includes('EZ') && moddetect.includes('HR')) return interaction.channel.send('invalid mods!');
+                if(moddetect.includes('DT') && moddetect.includes('HT')) return interaction.channel.send('invalid mods!');
 
                 if(moddetect.includes('EZ') && moddetect.includes('HT')) {
                     mapcs = Math.abs(mapcsNM / 2);
@@ -415,11 +403,11 @@ module.exports = {
             .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
             .addField('**PP VALUES**', `\n**SS:** ${ppSS} \n**95:** ${pp95} ${modissue}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
-            message.reply({ embeds: [Embed]})
+            interaction.channel.send({ embeds: [Embed]})
             })
               })();
     } catch(error){
-				message.reply("error")
+				interaction.channel.send("error")
 				console.log(error)
 				console.log("")
                 console.groupEnd()

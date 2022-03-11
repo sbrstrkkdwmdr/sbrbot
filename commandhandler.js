@@ -2,8 +2,6 @@ const { Constants } = require('discord.js');
 
 module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
 
-const { prefix } = require('./config.json')
-
 const fs = require('fs');
 //ADDED FOR SLASH CMDS
 const { REST } = require('@discordjs/rest');
@@ -104,6 +102,61 @@ commands?.create({
         }
     ]
 })
+commands?.create({
+    name: 'skin',
+    description: 'skins!!!',
+    options: [
+        {
+            name: 'skin',
+            description: 'the skin',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ]
+})
+//admin??
+commands?.create({
+    name: 'botstatus',
+    description: 'edit the bots status! (requires permissions)',
+    options: [
+        {
+            name: 'type',
+            description: 'status type (playing, watching etc.)',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'text',
+            description: 'text for the status',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'status',
+            description: 'availability (do not disturb, online etc.)',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ]
+})
+commands?.create({
+    name: 'map',
+    description: 'search for a map',
+    options: [
+        {
+            name: 'id',
+            description: 'the map id. Uses the last stored map if not used.',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: 'mods',
+            description: 'mods/game modifiers.',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+    ]
+})
 
 client.on('interactionCreate', async (interaction) =>{
     if (!interaction.isCommand()) return
@@ -127,7 +180,7 @@ client.on('interactionCreate', async (interaction) =>{
     {
 
     case 'test': //if command = 'test' blahblablah
-        interaction.reply('penis')
+        interaction.reply('yeah this works')
         break;
 
     case 'ping':
@@ -146,38 +199,61 @@ client.on('interactionCreate', async (interaction) =>{
         break;  
 
     //------osu
-    case 'rs':case 'recent':
+    case 'rs':
         if(!options.getString('mode') || options.getString('mode') == 'osu' || options.getString('mode') == 'o' || options.getString('mode') == 'standard' || options.getString('mode') == 'std'){
         client.osucmds.get('rs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        return;
         }
         if(options.getString('mode') == 'catch the beat' || options.getString('mode') == 'ctb' || options.getString('mode') == 'c' || options.getString('mode') == 'catch') {
             client.osucmds.get('ctbrs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            return;
         }
         if(options.getString('mode') == 'mania' || options.getString('mode') == 'm') {
             client.osucmds.get('maniars').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            return;
         }
         if(options.getString('mode') == 'taiko' || options.getString('mode') == 't') {
             client.osucmds.get('taikors').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            return;
         }
-        else client.osucmds.get('rs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        else interaction.reply(`error: mode doesn't exist. list of modes: osu, taiko, ctb, mania`)
+        //else client.osucmds.get('rs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
         break;
-    case 'osutop':case 'recent':
+    case 'osutop':
         if(!options.getString('mode') || options.getString('mode') == 'osu' || options.getString('mode') == 'o' || options.getString('mode') == 'standard' || options.getString('mode') == 'std'){
             client.osucmds.get('osutop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            return;
             }
         if(options.getString('mode') == 'catch the beat' || options.getString('mode') == 'ctb' || options.getString('mode') == 'c' || options.getString('mode') == 'catch') {
             client.osucmds.get('ctbtop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            return;
         }
         if(options.getString('mode') == 'mania' || options.getString('mode') == 'm') {
             client.osucmds.get('maniatop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            return;
         }
         if(options.getString('mode') == 'taiko' || options.getString('mode') == 't') {
             client.osucmds.get('taikotop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            return;
         }
-        else client.osucmds.get('osutop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        else interaction.reply(`error: mode doesn't exist. list of modes: osu, taiko, ctb, mania`)
+        //else client.osucmds.get('osutop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
         break;
+    case 'skin':
+        client.osucmds.get('skin').execute(interaction, options, currentDate, currentDateISO)
+        break;
+    case 'map':
+        client.osucmds.get('map').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break
+
+        //admins---------------
+
+    case 'botstatus':
+        client.admincmds.get('botstatus').execute(interaction, options, client, Discord, currentDate, currentDateISO)
+        break;
+
     /*
     case  'links':
         client.helpcmds.get('links').execute(interaction, args, currentDate, currentDateISO)
@@ -280,86 +356,5 @@ client.on('interactionCreate', async (interaction) =>{
     }
 
 });
-
-client.linkdetect = new Discord.Collection();
-
-const linkFiles = fs.readdirSync('./links/').filter(file => file.endsWith('.js'));
-for(const file of linkFiles){
-    const link = require(`./links/${file}`);
-
-    client.linkdetect.set(link.name, link);
-}
-client.on('messageCreate', message => {
-    const args = message.content.slice(prefix.length).split(/ +/); //args are the message content but without the prefix
-    const linkargs = message.content.split(/ +/); //linkargs are the message content
-    const triggerwords = require('./triggerwords.json');
-    const triggerstring = message.content.toString();
-    const foundtriggers = triggerwords.find(v => (triggerstring.includes(v)));
-
-    let consoleloguserweeee = message.author
-    let currentDate = new Date();
-    let currentDateISO = new Date().toISOString();
-    let currentDateForSomeApiThing = new Date().toISOString().slice(0,10);
-    let timeStamp = new Date().getTime();
-    let curdateyesterdaytimestamp = timeStamp - 24*60*60*1000;
-    let curdateyesterday = new Date(curdateyesterdaytimestamp).toISOString().slice(0,10);
-    let curdatetmrtimestamp = timeStamp + 24*60*60*1000;
-    let curdatetmr = new Date(curdatetmrtimestamp).toISOString().slice(0,10);
-    let split = new Date().toString().match(/([A-Z]+[\+-][0-9]+.*)/);
-    let curtimezone = split[split.length - 1]
-   
-    if (message.content.startsWith('https://osu.ppy.sh/b/') || message.content.startsWith('osu.ppy.sh/b/') || message.content.startsWith('https://osu.ppy.sh/beatmaps/') || message.content.startsWith('osu.ppy.sh/beatmaps/')){
-        client.linkdetect.get('osumaplink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
-    } 
-    if (message.content.startsWith('https://osu.ppy.sh/beatmapsets/') || message.content.startsWith('osu.ppy.sh/beatmapsets')){
-        client.linkdetect.get('osulongmaplink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
-    }
-    if (message.content.startsWith('https://osu.ppy.sh/u/') || message.content.startsWith('osu.ppy.sh/u/') || message.content.startsWith('https://osu.ppy.sh/users/') || message.content.startsWith('osu.ppy.sh/users/')){
-        client.linkdetect.get('osuprofilelink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
-    } 
-    
-    if (foundtriggers){
-        client.admincmds.get('triggers').execute(message, args, linkargs, Discord, client, currentDate, currentDateISO)
-    }
-
-    
-
-    //REPLAY GRABBER
-    if (message.attachments.size > 0 && message.attachments.every(attachIsOsr)){       
-        attachosr = message.attachments.first().url 
-        //console.log(attachosr)
-    
-    let osrdlfile = fs.createWriteStream('./files/replay.osr') 
-    let requestw = https.get(`${attachosr}`, function(response) {
-        response.pipe(osrdlfile); 
-
-        //console.log('success')
-      });
-        console.log('')
-        setTimeout(() =>{            
-            client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        }, 1500);
-        if(message.channelId == '945600391343656970'){
-        //replayrecord
-        function exec(cmd, handler = function(error, stdout, stderr){console.log(stdout);if(error !== null){console.log(stderr)}})
-{
-    const childfork = require('child_process');
-    return childfork.exec(cmd, handler);
-}
-        setTimeout(() =>{    
-        //client.linkdetect.get('replayrecord').execute(exec, linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        client.linkdetect.get('replayrecordv2').execute(exec, linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        }, 1500);
-            }
-            
-        }
-
-    
-            
-    function attachIsOsr(msgAttach) {
-        var url = msgAttach.url;
-        return url.indexOf("osr", url.length - "osr".length /*or 3*/) !== -1;
-    } //check if attachments are osr. can be changed to other file types
-})
 
 }// end
