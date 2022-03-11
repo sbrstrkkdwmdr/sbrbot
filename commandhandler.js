@@ -1,80 +1,259 @@
-module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval) => {
+const { Constants } = require('discord.js');
+
+module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
 
 const { prefix } = require('./config.json')
 
 const fs = require('fs');
+//ADDED FOR SLASH CMDS
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9');
 
+const guildid = '724514625005158400'
+const guild = client.guilds.cache.get(guildid)
+let commands 
 
-const oncooldown = new Set();
-const https = require('https'); // or 'https' for https:// URLs
-const sql = require('sqlite')
-const request = require(`request`);
-
-client.commands = new Discord.Collection();
-client.linkdetect = new Discord.Collection();
-client.osucmds = new Discord.Collection();
-client.admincmds = new Discord.Collection();
-client.helpcmds = new Discord.Collection();
-client.musiccmds = new Discord.Collection();
-client.ecchicmds = new Discord.Collection();
-client.gamingcmds = new Discord.Collection();
-
-const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));        
-for(const file of commandFiles){
-    const command = require(`./commands/${file}`);
-
-    client.commands.set(command.name, command);
+if (guild) {
+    commands = guild.commands
+} else {
+    commands = client.application?.commands
 }
+commands?.create({
+    name: 'ping',
+    description: 'replies with pong.',
+})
+commands?.create({
+    name: 'test',
+    description: 'test if / works',
+})
+commands?.create({
+    name: 'convert',
+    description: 'convert values (eg fahrenheit to kelvin)',
+    options: [
+        {
+            name: 'type',
+            description: 'what you are converting.',
+            required: true,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'number',
+            description: 'the number to convert', 
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        }
+    ]
+})
+commands?.create({
+    name: 'math',
+    description: 'simple math calculator',
+    options: [
+        {
+            name: 'type',
+            description: 'method',
+            required: true,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'num1',
+            description: 'first number', 
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: 'num2',
+            description: 'second number', 
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        }
+    ]
+})
+commands?.create({
+    name: 'rs',
+    description: 'most recent play for user',
+    options: [
+        {
+            name: 'user',
+            description: 'the user. can be in ID or username',
+            required: true,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'offset',
+            description: 'if you want page offset', 
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: 'mode',
+            description: 'what mode?', 
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        }
+    ]
+})
+
+client.on('interactionCreate', async (interaction) =>{
+    if (!interaction.isCommand()) return
+    //console.log(interaction)
+
+    let consoleloguserweeee = interaction.author
+    let currentDate = new Date();
+    let currentDateISO = new Date().toISOString();
+    let currentDateForSomeApiThing = new Date().toISOString().slice(0,10);
+    let timeStamp = new Date().getTime();
+    let curdateyesterdaytimestamp = timeStamp - 24*60*60*1000;
+    let curdateyesterday = new Date(curdateyesterdaytimestamp).toISOString().slice(0,10);
+    let curdatetmrtimestamp = timeStamp + 24*60*60*1000;
+    let curdatetmr = new Date(curdatetmrtimestamp).toISOString().slice(0,10);
+    let split = new Date().toString().match(/([A-Z]+[\+-][0-9]+.*)/);
+    let curtimezone = split[split.length - 1]
+
+    const { commandName, options} = interaction
+
+    switch (commandName) //variable to check for
+    {
+
+    case 'test': //if command = 'test' blahblablah
+        interaction.reply('penis')
+        break;
+
+    case 'ping':
+        client.helpcmds.get('ping').execute(interaction, client, Discord, currentDate, currentDateISO)
+        break; 
+
+    case 'convert':
+        client.helpcmds.get('measureconvert').execute(interaction, client, Discord, options, currentDate, currentDateISO)
+        break; 
+
+    case 'math':
+        client.helpcmds.get('math').execute(interaction, client, Discord, options, currentDate, currentDateISO)
+
+    case 'rs':case 'recent':
+        if(!options.getString('mode') || options.getString('mode') == 'osu' || options.getString('mode') == 'o' || options.getString('mode') == 'standard' || options.getString('mode') == 'std'){
+        client.osucmds.get('rs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)}
+        //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
+        break;
+    /*
+    case  'links':
+        client.helpcmds.get('links').execute(interaction, args, currentDate, currentDateISO)
+        break;
+    
+    case 'help':
+        client.helpcmds.get('help').execute(interaction, args, currentDate, currentDateISO)
+        break;  
+
+    case 'roll':case 'numgen':
+        client.commands.get('roll').execute(interaction, args, currentDate, currentDateISO)
+        break; 
+
+    case 'osu':
+        client.osucmds.get('osu').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
+        break;
+
+    case 'osugraph':
+        client.osucmds.get('osugraph').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+
+    case 'osutop':
+        client.osucmds.get('osutop').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
+        break;
+
+    case 'osutest':
+        client.osucmds.get('osutest').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
+        break;
+    case 'osubest':
+        client.osucmds.get('osubest').execute(interaction, args, Discord, currentDate, currentDateISO)
+        break;
+
+    case 'map':case 'mapinfo':
+        client.osucmds.get('map').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+
+    case 'pastmap'://case 'mapinfo':
+        client.osucmds.get('pastmap').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+
+    case 'osuid':
+        client.osucmds.get('osuid').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+
+    case 'osubestrs':
+      client.osucmds.get('osubestrs').execute(interaction, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone)
+      break;
+
+    case 'danser':
+        client.osucmds.get('danser').execute(interaction, args, currentDate, currentDateISO)
+        break;
+
+    case 'skin':
+        client.osucmds.get('skin').execute(interaction, args, currentDate, currentDateISO)
+        break;
+
+    case 'tsfm':case 'c':
+        client.osucmds.get('tsfm').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    
+    case 'osuauth':
+        client.osucmds.get('osuauth').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;  
+
+    case 'osusave':case 'osuset':
+        client.osucmds.get('osusave').call(interaction, args, Discord, currentDate, currentDateISO)
+        break;
+
+    case 'maniars':case 'maniarecent':case 'rsmania':case 'recentmania':
+        client.osucmds.get('maniars').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    case 'maniatop':case 'topmania':
+        client.osucmds.get('maniatop').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    /*case 'maniatsfm':case 'maniac':case 'tsfmmania':case 'cmania':
+        client.osucmds.get('maniatsfm').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;*/
+        /*
+
+    case 'taikors':case 'taikorecent':case 'rstaiko':case 'recenttaiko':
+        client.osucmds.get('taikors').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    case 'taikotop':case 'toptaiko':
+        client.osucmds.get('taikotop').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+        
+    case 'ctbrs':case 'ctbrecent':case 'rsctb':case 'recentctb':
+        client.osucmds.get('ctbrs').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    case 'ctbtop':case 'topctb':
+        client.osucmds.get('ctbtop').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    
+    case 'pp':
+        client.osucmds.get('pp').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;*/
+
+    default:
+        return;
+        break;
+    }
+
+});
+
+client.linkdetect = new Discord.Collection();
+
 const linkFiles = fs.readdirSync('./links/').filter(file => file.endsWith('.js'));
 for(const file of linkFiles){
     const link = require(`./links/${file}`);
 
     client.linkdetect.set(link.name, link);
 }
-const osucmdFiles = fs.readdirSync('./osu/').filter(file => file.endsWith('.js'));
-for(const file of osucmdFiles){
-    const osucmd = require(`./osu/${file}`);
-
-    client.osucmds.set(osucmd.name, osucmd);
-}
-const admincmdfiles = fs.readdirSync('./commands-admin/').filter(file => file.endsWith('.js'));
-for(const file of admincmdfiles){
-    const admincmd = require(`./commands-admin/${file}`);
-
-    client.admincmds.set(admincmd.name, admincmd);
-}
-const helpcmdfiles = fs.readdirSync('./commands-help/').filter(file => file.endsWith('.js'));
-for(const file of helpcmdfiles){
-    const helpcmd = require(`./commands-help/${file}`);
-
-    client.helpcmds.set(helpcmd.name, helpcmd);
-}
-const musiccmdfiles = fs.readdirSync('./commands-music/').filter(file => file.endsWith('.js'));
-for(const file of musiccmdfiles){
-    const musiccmd = require(`./commands-music/${file}`);
-
-    client.musiccmds.set(musiccmd.name, musiccmd);
-}
-const ecchicmdfiles = fs.readdirSync('./commands-ecchi/').filter(file => file.endsWith('.js'));
-for(const file of ecchicmdfiles){
-    const ecchicmd = require(`./commands-ecchi/${file}`);
-
-    client.ecchicmds.set(ecchicmd.name, ecchicmd);
-}
-const gamingcmdfiles = fs.readdirSync('./commands-gaming/').filter(file => file.endsWith('.js'));
-for(const file of gamingcmdfiles){
-    const gamingcmd = require(`./commands-gaming/${file}`);
-
-    client.gamingcmds.set(gamingcmd.name, gamingcmd);
-}
-
-client.on('messageCreate', message =>{
-
-    const args = message.content.slice(prefix.length).split(/ +/); //args are the message content but without the prefix
+client.on('messageCreate', message => {
     const linkargs = message.content.split(/ +/); //linkargs are the message content
-    const command = args.shift().toLowerCase(); //grabs command
-
-    const owner = require('./botowners.json');
+    const triggerwords = require('./triggerwords.json');
+    const triggerstring = message.content.toString();
+    const foundtriggers = triggerwords.find(v => (triggerstring.includes(v)));
 
     let consoleloguserweeee = message.author
     let currentDate = new Date();
@@ -87,25 +266,6 @@ client.on('messageCreate', message =>{
     let curdatetmr = new Date(curdatetmrtimestamp).toISOString().slice(0,10);
     let split = new Date().toString().match(/([A-Z]+[\+-][0-9]+.*)/);
     let curtimezone = split[split.length - 1]
-
-    
-    const triggerwords = require('./triggerwords.json');
-    const triggerstring = message.content.toString();
-    const foundtriggers = triggerwords.find(v => (triggerstring.includes(v)));
-
-    /*const inventory = [
-        {name: 'apples', quantity: 2},
-        {name: 'cherries', quantity: 8},
-        {name: 'bananas', quantity: 0},
-        {name: 'cherries', quantity: 5},
-        {name: 'cherries', quantity: 15},
-        
-      ];
-      
-      const result = inventory.find( ({ name }) => name === 'cherries' );
-      
-      console.log(result) // { name: 'cherries', quantity: 5 }*/
-    //client.linkdetect.get('messagesaver').execute(linkargs, message, args, currentDate, currentDateISO);
    
     if (message.content.startsWith('https://osu.ppy.sh/b/') || message.content.startsWith('osu.ppy.sh/b/') || message.content.startsWith('https://osu.ppy.sh/beatmaps/') || message.content.startsWith('osu.ppy.sh/beatmaps/')){
         client.linkdetect.get('osumaplink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
@@ -159,426 +319,6 @@ client.on('messageCreate', message =>{
         var url = msgAttach.url;
         return url.indexOf("osr", url.length - "osr".length /*or 3*/) !== -1;
     } //check if attachments are osr. can be changed to other file types
+})
 
-    //
-    if(!message.content.startsWith(prefix)) return; //the return is so if its just prefix nothing happens
-    //if(message.author.bot) return; //if bot, do nothing
-
-    if(oncooldown.has(message.author.id)) return message.reply("You're on cooldown");
-     if(!oncooldown.has(message.author.id)) {
-        oncooldown.add(message.author.id);
-        setTimeout(() => {
-            oncooldown.delete(message.author.id)
-        }, 3000)
-    }
-
-    switch (command) //variable to check for
-    {
-
-    case 'test': //if command = 'test' blahblablah
-        client.commands.get('test').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    /*  case 'replay':
-        client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
-        break;
-*/
-    //HELPFUL ---------------------------------------
-
-    case 'ping':
-        client.helpcmds.get('ping').execute(message, args, client, Discord, currentDate, currentDateISO)
-        break; 
-    case  'links':
-        client.helpcmds.get('links').execute(message, args, currentDate, currentDateISO)
-        break;
-    
-    case 'help':
-        client.helpcmds.get('help').execute(message, args, currentDate, currentDateISO)
-        break;  
-        
-    case 'info':
-        client.helpcmds.get('info').execute(message, args, currentDate, currentDateISO)
-        break;
-        
-    case 'math':case 'calculate':
-        client.helpcmds.get('math').execute(message, args, Discord, currentDate, currentDateISO)
-        break;
-
-    case 'measureconvert':case 'convert':
-        client.helpcmds.get('measureconvert').execute(message, args, Discord, currentDate, currentDateISO)
-        break;
-
-
-    case 'recordhelp':
-        client.linkdetect.get('replayrecordhelp').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-    //UNCATEGORISED -----GENERAL?-------------------------------------------------
-     case 'avatar':case 'av':case 'pfp':
-         client.commands.get('avatar').execute(message, args, Discord, currentDate, currentDateISO)
-         break;
-    case 'giveadmin':
-        client.commands.get('giveadmin').execute(message, args, currentDate, currentDateISO)
-        break;
-    case 'token':
-        client.commands.get('token').execute(message, args, currentDate, currentDateISO)
-        break;
-    case 'roll':case 'numgen':
-        client.commands.get('roll').execute(message, args, currentDate, currentDateISO)
-        break; 
-
-    case 'pingperson':
-        client.commands.get('pingperson').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'unread':
-        client.commands.get('unread').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'idk':
-        client.commands.get('idk').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'image':
-        client.commands.get('image').execute(message, args, Discord, get, client, currentDate, currentDateISO)
-        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'image5':
-      client.commands.get('image5').execute(message, args, Discord, get, client, currentDate, currentDateISO)
-      break;
-
-    case 'ytsearch':
-        client.commands.get('ytsearch').execute(message, args, Discord, client, currentDate, currentDateISO)
-        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    /*case 'ytsearch5':
-    client.commands.get('ytsearch5').execute(message, args, Discord, client, currentDate, currentDateISO)
-    break;*/
-    
-    case 'active':
-        client.commands.get('active').execute(message, args, Discord, currentDate, currentDateISO)
-        break;
-    //FUN --------------------------------------------------------------------
-    case 'ghostping':
-        client.commands.get('ghostping').execute(message, args, currentDate, currentDateISO)
-        break;
-    case 'insult':
-        client.commands.get('insult').execute(message, args, currentDate, currentDateISO)
-        break;
-    case 'unchi':
-        client.commands.get('unchi').execute(message, args, currentDate, currentDateISO)
-        break;       
- 
-    case 'unko':
-        client.commands.get('unko').execute(message, args, currentDate, currentDateISO)
-        break;      
-    
-    case '8ball':case 'ask':
-        client.commands.get('8ball').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'emojify':
-        client.commands.get('emojify').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'dadjoke':case 'pun':
-        client.commands.get('dadjoke').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'time':
-        client.commands.get('time').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'amoggers':
-        client.commands.get('amoggers').execute(message, args, Discord, currentDate, currentDateISO)
-        break;
-
-    case '1100':case 'count100':
-      client.commands.get('1100').execute(message, args, currentDate, currentDateISO)
-      break;
-    
-    case 'say':
-        client.commands.get('say').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'sayto':
-        client.commands.get('sayto').execute(client, message, args, currentDate, currentDateISO)
-        break;
-    
-    case 'paperscissorsrock':case 'rockpaperscissors':case 'psr':case 'scissorsrockpaper':
-        client.commands.get('psr').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case '4k':
-        client.commands.get('4k').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'owoify':
-        client.commands.get('owoify').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'randommsg':
-        client.commands.get('randommsg').execute(message, args, currentDate, currentDateISO)
-        break;
-    case 'addmsg':
-        client.commands.get('addmsg').execute(message, args, currentDate, currentDateISO)
-        break;
-        //SBR ONLY --------------------------------------------------------
-    case 'testlog':
-        client.commands.get('testlog').execute(message, args, currentDate, currentDateISO)
-        break;
-    case 'join':
-        client.commands.get('join').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    //OSU -----------------------------------------------------------
-
-    case 'rs':case 'recent':
-        client.osucmds.get('rs').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'osu':
-        client.osucmds.get('osu').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
-        break;
-
-    case 'osugraph':
-        client.osucmds.get('osugraph').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-
-    case 'osutop':
-        client.osucmds.get('osutop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'osutest':
-        client.osucmds.get('osutest').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
-        break;
-    case 'osubest':
-        client.osucmds.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
-        break;
-
-    case 'map':case 'mapinfo':
-        client.osucmds.get('map').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-
-    case 'pastmap'://case 'mapinfo':
-        client.osucmds.get('pastmap').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-
-    case 'osuid':
-        client.osucmds.get('osuid').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-
-    case 'osubestrs':
-      client.osucmds.get('osubestrs').execute(message, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone)
-      break;
-
-    case 'danser':
-        client.osucmds.get('danser').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'skin':
-        client.osucmds.get('skin').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'tsfm':case 'c':
-        client.osucmds.get('tsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-    
-    case 'osuauth':
-        client.osucmds.get('osuauth').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;  
-
-    case 'osusave':case 'osuset':
-        client.osucmds.get('osusave').call(message, args, Discord, currentDate, currentDateISO)
-        break;
-
-    case 'maniars':case 'maniarecent':case 'rsmania':case 'recentmania':
-        client.osucmds.get('maniars').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-    case 'maniatop':case 'topmania':
-        client.osucmds.get('maniatop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-    /*case 'maniatsfm':case 'maniac':case 'tsfmmania':case 'cmania':
-        client.osucmds.get('maniatsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;*/
-
-    case 'taikors':case 'taikorecent':case 'rstaiko':case 'recenttaiko':
-        client.osucmds.get('taikors').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-    case 'taikotop':case 'toptaiko':
-        client.osucmds.get('taikotop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-        
-    case 'ctbrs':case 'ctbrecent':case 'rsctb':case 'recentctb':
-        client.osucmds.get('ctbrs').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-    case 'ctbtop':case 'topctb':
-        client.osucmds.get('ctbtop').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-    
-    case 'pp':
-        client.osucmds.get('pp').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
-
-    /*case 'mapsearch':case 'mapget':
-      client.commands.get('mapsearch').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-      break;*/
-    //HENTAI-----------------------------------------------------------------------------------------
-
-
-    case 'hentai':case 'nhentai':
-        client.ecchicmds.get('hentai').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'horny':
-        client.ecchicmds.get('horny').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'hornyjail':
-        client.ecchicmds.get('hornyjail').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'danbooru':
-        client.ecchicmds.get('danbooru').execute(message, args, currentDate, currentDateISO)
-        break;
-    case 'lolibooru':
-        client.ecchicmds.get('lolibooru').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'yanderegen':
-        client.ecchicmds.get('yanderegen').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'konachangen':
-        client.ecchicmds.get('konachangen').execute(message, args, currentDate, currentDateISO)
-        break;
-        
-    case 'pixiv':
-        client.ecchicmds.get('pixiv').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    //ADMIN-----------------------------------------------------------------------------------------
-    case 'purge':
-        client.admincmds.get('purge').execute(message, args, client, Discord, currentDate, currentDateISO)
-        break;
-
-    case 'unban':
-        client.admincmds.get('unban').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'break時ｗｗｗワロト':
-        client.admincmds.get('break').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'crash':
-        client.admincmds.get('crash').execute(message, args, currentDate, currentDateISO)
-        break;
-    
-    case 'ban':
-        client.admincmds.get('ban').execute(message, args, client, Discord, currentDate, currentDateISO)
-        break; 
-
-    case 'kick':
-        client.admincmds.get('kick').execute(message, args, client, Discord, currentDate, currentDateISO)
-        break;   
-
-    case 'serverlist':case 'servers':
-        client.admincmds.get('serverlist').execute(message, args, Discord, client, currentDate, currentDateISO)
-        break;
-
-    case 'gleave':case 'guildleave':case 'leaveguild':
-        client.admincmds.get('gleave').execute(message, args, client, currentDate, currentDateISO)
-        break;
-
-    case 'guildid':
-        client.admincmds.get('guildid').execute(message, args, currentDate, currentDateISO)
-        break;
-    
-    case 'remind':
-        client.commands.get('remind').execute(message, args, client, Discord, currentDate, currentDateISO)
-        break;
-
-    case 'banid':
-        client.admincmds.get('banid').execute(message, args, client, Discord, currentDate, currentDateISO)
-        break;
-
-    case 'botstatus':
-        client.admincmds.get('botstatus').execute(message, args, client, Discord, currentDate, currentDateISO)
-        break;
-    case 'refresh':
-        client.admincmds.get('refresh').execute(message, args, client, Discord, currentDate, currentDateISO)
-        break;
-
-    case 'auto':
-    client.admincmds.get('auto').execute(message, args, currentDate, currentDateISO)
-    break;
-    case 'infodb':
-        client.commands.get('infodb').execute(message, args, Discord, currentDate, currentDateISO)
-        break;
-    case 'debug':
-        client.admincmds.get('debugget').execute(message, args, Discord, currentDate, currentDateISO)
-        break;
-    //MUSIC --------------------
-    case 'play':
-        //client.musiccmds.get('play').execute(message, args, command, client, Discord, currentDate, currentDateISO)
-        client.commands.get('WIP').execute(message, args, currentDate)
-        break; 
-    case 'skip':
-        //client.musiccmds.get('skip').execute(message, args, client, Discord, currentDate, currentDateISO)
-        client.commands.get('WIP').execute(message, args, currentDate)
-        break;
-        
-    case 'stop':
-        //client.musiccmds.get('stop').execute(message, args, client, Discord, currentDate, currentDateISO)
-        client.commands.get('WIP').execute(message, args, currentDate)
-        break;
-
-    case `disconnect`:
-        //client.musiccmds.get('musicstop').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
-        client.commands.get('WIP').execute(message, args, currentDate)
-        break;
-
-    case 'queue':
-        //client.musiccmds.get('musicqueue').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
-        client.commands.get('WIP').execute(message, args, currentDate)
-        break;
-
-    case 'np':
-        //client.musiccmds.get('musicnp').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
-        client.commands.get('WIP').execute(message, args, currentDate)
-        break;
-
-    //gaming----
-    case 'profilesplitgate':case 'splitgateprofile':
-        //client.gamingcmds.get('splitgateprofile').execute(message, args, client, Discord, currentDate, currentDateISO)
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    case 'apexprofile':
-        //client.gamingcmds.get('apexprofile').execute(message, args, client, Discord, currentDate, currentDateISO)
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
-        break;
-    case 'haloinfprofile':case 'haloprofile':
-        //client.gamingcmds.get('haloinfprofile').execute(message, args, client, Discord, currentDate, currentDateISO, trnkey)
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
-        break;
-
-    default:
-        let undefinedargsbcsmiswrotecmd = args.splice(0,100).join(" ");
-        console.group("debug")
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("command executed - default (possible mispelt command)")
-        console.log(`attempted command - ${command} ${undefinedargsbcsmiswrotecmd}`)
-        console.log("")
-        console.groupEnd()
-        break;
-    }
-
-});
-}
+}// end

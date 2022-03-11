@@ -136,7 +136,7 @@ client.once('ready', () => {
 
     //msglogs(client)
     //modlogs(client)
-    commandhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
+    commandhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
 
     //Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, prefix, monitorEventLoopDelay, setInterval
 
