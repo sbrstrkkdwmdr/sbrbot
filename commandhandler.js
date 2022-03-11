@@ -92,6 +92,18 @@ commands?.create({
         }
     ]
 })
+commands?.create({
+    name: 'help',
+    description: 'lists all commands',
+    options: [
+        {
+            name: 'command',
+            description: 'provide info on this command',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ]
+})
 
 client.on('interactionCreate', async (interaction) =>{
     if (!interaction.isCommand()) return
@@ -134,14 +146,14 @@ client.on('interactionCreate', async (interaction) =>{
         client.osucmds.get('rs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)}
         //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
         break;
+
+    case 'help':
+        client.helpcmds.get('help').execute(interaction, options, guild, commands, currentDate, currentDateISO)
+        break;  
     /*
     case  'links':
         client.helpcmds.get('links').execute(interaction, args, currentDate, currentDateISO)
         break;
-    
-    case 'help':
-        client.helpcmds.get('help').execute(interaction, args, currentDate, currentDateISO)
-        break;  
 
     case 'roll':case 'numgen':
         client.commands.get('roll').execute(interaction, args, currentDate, currentDateISO)
@@ -250,6 +262,7 @@ for(const file of linkFiles){
     client.linkdetect.set(link.name, link);
 }
 client.on('messageCreate', message => {
+    const args = message.content.slice(prefix.length).split(/ +/); //args are the message content but without the prefix
     const linkargs = message.content.split(/ +/); //linkargs are the message content
     const triggerwords = require('./triggerwords.json');
     const triggerstring = message.content.toString();
