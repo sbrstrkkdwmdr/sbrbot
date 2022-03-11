@@ -78,9 +78,36 @@ commands?.create({
         }
     ]
 })
+
+//osu----------------
+
 commands?.create({
     name: 'osutop',
     description: 'top 5 plays for a user',
+    options: [
+        {
+            name: 'user',
+            description: 'the user. can be in ID or username',
+            required: true,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'offset',
+            description: 'if you want page offset', 
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: 'mode',
+            description: 'what mode?', 
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ]
+})
+commands?.create({
+    name: 'rs',
+    description: 'most recent play for user',
     options: [
         {
             name: 'user',
@@ -114,6 +141,24 @@ commands?.create({
         }
     ]
 })
+commands?.create({
+    name: 'map',
+    description: 'search for a map',
+    options: [
+        {
+            name: 'id',
+            description: 'the map id. Uses the last stored map if not used.',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: 'mods',
+            description: 'mods/game modifiers.',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+    ]
+})
 //admin??
 commands?.create({
     name: 'botstatus',
@@ -137,24 +182,6 @@ commands?.create({
             required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING
         }
-    ]
-})
-commands?.create({
-    name: 'map',
-    description: 'search for a map',
-    options: [
-        {
-            name: 'id',
-            description: 'the map id. Uses the last stored map if not used.',
-            required: false,
-            type: Constants.ApplicationCommandOptionTypes.NUMBER
-        },
-        {
-            name: 'mods',
-            description: 'mods/game modifiers.',
-            required: false,
-            type: Constants.ApplicationCommandOptionTypes.STRING
-        },
     ]
 })
 commands?.create({

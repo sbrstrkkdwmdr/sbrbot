@@ -6,7 +6,7 @@ module.exports = {
         interaction.reply('getting data...')
         client.guilds.cache.forEach(guild => {
             let guildembed = new Discord.MessageEmbed()
-            .setTitle('Guild Info of "' + guild.name + ' | ' + guild.id + '"')
+            .setTitle('Guild Info of ' + guild.name + ' | ' + guild.id)
             .setDescription(`Owned by <@${guild.ownerId}> | ${guild.ownerId} \n${guild.memberCount} members. created ${guild.createdAt}`)
             interaction.channel.send({ embeds: [guildembed]});
         })/*
