@@ -38,6 +38,7 @@ const { prefix } = require('./config.json')
 const fs = require('fs');
 const { monitorEventLoopDelay } = require('perf_hooks');
 const { setInterval } = require('timers/promises');
+const linkhandler = require('./linkhandler.js');
 
 client.commands = new Discord.Collection();
 client.linkdetect = new Discord.Collection();
@@ -137,6 +138,7 @@ client.once('ready', () => {
     //msglogs(client)
     //modlogs(client)
     commandhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
+    linkhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
 
     //Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, prefix, monitorEventLoopDelay, setInterval
 
