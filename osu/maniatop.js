@@ -9,35 +9,20 @@ const { exec } = require("child_process");
 module.exports = {
     name: 'maniatop',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+    execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
-        //const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - maniatop")
-        let consoleloguserweeee = message.author
+        let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
-        let strtest = args.splice(0,1000).join(" ");
-        let str = strtest.toString();
-        //console.log(str)
-        if(str.includes('"')){
-            pickeduserX = str.substring(
-                str.indexOf('"') + 1, 
-                str.lastIndexOf('"')
-            )}
-        if(!str.includes('"')){
-            pickeduserX = str
-        };
-
-        console.log(pickeduserX)
-        if(!str.includes('-p')){offsetflag = '0'};
-        if(str.includes('-p')){
-            if(!str.includes('"')) return message.reply(`please put "s around the username if you're using args`)
-            offsetflag1 = str.indexOf('-p') + 2
-            offsetflag2 = str.lastIndexOf('')
-            offsetflag = parseInt(str.substring(offsetflag1, offsetflag2))
+        let pickeduserX = options.getString('user')
+        let offsetflag = options.getNumber('offset')
+        if(!offsetflag) {
+            offsetflag = '0'
         }
-        if(!pickeduserX) return message.reply("Error - no user");
+        interaction.reply('getting data...')
+        if(!pickeduserX) return interaction.reply("Error - no user");
             try{
                 let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
                 let body1 = {
@@ -71,11 +56,11 @@ module.exports = {
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 if(!playerid) {
-                    message.reply("Error osu04 - account not found")
+                    interaction.reply("Error osu04 - account not found")
                     console.log("error - account not found and/or json sent no data")
                     return;
                 }
-                //message.reply(playerid)
+                //interaction.reply(playerid)
                 const osutopurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/best?mode=mania&limit=58&offset=${offsetflag * 5}`;
 
                 fetch(osutopurl, {
@@ -93,7 +78,7 @@ module.exports = {
                         try{let topplayername = JSON.stringify(osutopdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                     }
                     catch(error) {
-                            message.reply("Error 03 - not enough plays")
+                            interaction.reply("Error 03 - not enough plays")
                             console.log("error osu03 - not enough plays")
                             return;
                         }
@@ -192,19 +177,19 @@ module.exports = {
                 .addField(`[${maptitle4} [${mapdiff4}]](https://osu.ppy.sh/b/${mapurl4}) +${mapmods4}`, `SCORE:${mapscore4} \nScore set on ${maptimeset4} \n${(Math.abs((mapacc4) * 100).toFixed(2))}% | ${map3004}/${map1004}/${map504}/${mapmiss4} | ${maprank4}\n${(Math.abs(mappp4).toFixed(2))}pp`, false)
                 .addField(`[${maptitle5} [${mapdiff5}]](https://osu.ppy.sh/b/${mapurl5}) +${mapmods5}`, `SCORE:${mapscore5} \nScore set on ${maptimeset5} \n${(Math.abs((mapacc5) * 100).toFixed(2))}% | ${map3005}/${map1005}/${map505}/${mapmiss5} | ${maprank5}\n${Math.abs(mappp5).toFixed(2)}pp`, false)*/
                 //https://osu.ppy.sh/b/
-                message.reply({ embeds: [Embed]})
-                //message.reply(mapbg1)
+                interaction.channel.send({ embeds: [Embed]})
+                //interaction.reply(mapbg1)
             } catch(error){
                 if(error.toString().includes('replaceAll')){
-                    message.reply("Error osu03 - account not found (or some other error)")
+                    interaction.reply("Error osu03 - account not found (or some other error)")
                     console.log("error osu03 - account not found and/or json sent no data")}
-                    else{message.reply('unknown error')}
+                    else{interaction.reply('unknown error')}
                 console.log(error)
                 console.log("")
             }
             } ) 
         } catch(error){
-                message.reply("Error - account not found")
+                interaction.reply("Error - account not found")
                 console.log("Error account not found")
                 console.log(error)
                 console.log("")

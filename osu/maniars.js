@@ -6,44 +6,19 @@ const { mania_ppv2 } = require('booba');
 module.exports = {
     name: 'maniars',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+    execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
-        //let pickeduserX = args.splice(0,1000).join(" ");
-        //let offsetflag = '0'
-        //let pickeduserX = 'SaberStrike'
-        let strtest = args.splice(0,1000).join(" ");
-        let str = strtest.toString();
-        //console.log(str)
-        //console.log(args)
-        if(str.includes('"')){
-            //str1 = str.indexOf('"') + 1
-            //str2 = str.lastIndexOf('"')
-            pickeduserX = str.substring(
-                str.indexOf('"') + 1, 
-                str.lastIndexOf('"')
-            )}
-        if(!str.includes('"')){
-            pickeduserX = str
-        };
-
-        //console.log(pickeduserX)
-            //console.log(args.indexOf('"') - 1)
-            //console.log(args.lastIndexOf('"') - 1)
-        
-        //let offsetflag = '0'
-        if(!str.includes('-p')){offsetflag = '0'};
-        if(str.includes('-p')){
-            if(!str.includes('"')) return message.reply(`please put "s around the username if you're using args`)
-            offsetflag1 = str.indexOf('-p') + 2
-            offsetflag2 = str.lastIndexOf('')
-            offsetflag = str.substring(offsetflag1, offsetflag2)
+        let pickeduserX = options.getString('user')
+        let offsetflag = options.getNumber('offset')
+        if(!offsetflag) {
+            offsetflag = '0'
         }
-        //console.log(offsetflag)        console.log(`${currentDateISO} | ${currentDate}`)
+        interaction.reply('getting data...')
         console.log("command executed - maniars")
-        let consoleloguserweeee = message.author
+        let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
-        if(!pickeduserX) return message.reply("user ID required");
+        if(!pickeduserX) return interaction.channel.send("user ID required");
             try{
                 let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
                 let body1 = {
@@ -77,11 +52,11 @@ module.exports = {
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 if(!playerid) {
-                    message.reply("Error osu04 - account not found")
+                    interaction.channel.send("Error osu04 - account not found")
                     console.log("error - account not found and/or json sent no data")
                     return;
                 }
-                //message.reply(playerid)
+                //interaction.channel.send(playerid)
                 const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=mania&offset=${offsetflag}`;
                 
                 fetch(recentactiveurl, {
@@ -243,7 +218,7 @@ module.exports = {
                     let testpp = await pp.compute();
     
                 } catch(error){
-                      message.reply("possible pp calculation error (if an embed is sent anyway it's probably fine)")
+                      interaction.channel.send("possible pp calculation error (if an embed is sent anyway it's probably fine)")
                       console.log(error)
                   } */
                 let ppw = await pp.compute();
@@ -417,7 +392,7 @@ module.exports = {
                 .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300+**:${rs300max} \n**⠀300:** ${rs300s} \n**⠀200:** ${rs200s} \n**⠀100:** ${rs100s} \n**⠀⠀50:** ${rs50s} \n**⠀⠀⠀⠀X:** ${rs0s}\n**${rscombo}x**`, true)
                 .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
                 //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300+**:${rs300max} **300:**${rs300s} **200:**${rs200s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
-                message.reply({ embeds: [Embed]})}
+                interaction.channel.send({ embeds: [Embed]})}
                 if(rsmods){
                     let Embed = new Discord.MessageEmbed()
                 .setColor(0x9AAAC0)
@@ -429,29 +404,29 @@ module.exports = {
                 .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**⠀300:** ${rs300s} \n**⠀200:** ${rs200s} \n**⠀100:** ${rs100s} \n**⠀⠀50:** ${rs50s} \n**⠀⠀⠀⠀X:** ${rs0s}\n**${rscombo}x**`, true)
                 .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
                 //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300+**:${rs300max} **300:**${rs300s} **200:**${rs200s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
-                message.reply({ embeds: [Embed]})
+                interaction.channel.send({ embeds: [Embed]})
                 }
             //})//cpol pp test
             }
             )()
             } catch(error){
                 if(error.toString().includes('replaceAll')){
-                    message.reply("Error osu03 - account not found (or some other error)")
+                    interaction.channel.send("Error osu03 - account not found (or some other error)")
                     console.log("error osu03 - account not found and/or json sent no data")}
-                    else{message.reply('unknown error')}
+                    else{interaction.channel.send('unknown error')}
                 console.log(error)
                 console.log("")
             }
             }catch(error){
                 if(error.toString().includes('replaceAll')){
-                    message.reply("Error osu03 - account not found (or some other error)")
+                    interaction.channel.send("Error osu03 - account not found (or some other error)")
                     console.log("error osu03 - account not found and/or json sent no data")}
-                    else{message.reply('unknown error')}
+                    else{interaction.channel.send('unknown error')}
                 console.log(error)
                 console.log("")
             }});
                 } catch(error){
-                    message.reply("Error - account not found")
+                    interaction.channel.send("Error - account not found")
                     console.log("Error account not found")
                     console.log(error)
                     console.log("")
