@@ -19,6 +19,8 @@ const request = require(`request`);
 //const msglogs = require('./sbrmsg.js')
 //const modlogs = require('./sbrmodlogs.js')
 const commandhandler = require('./commandhandler.js')
+const slashcommandhandler = require('./slashcommandhandler.js')
+const linkhandler = require('./linkhandler.js')
 
 //MUSIC
 const ytdl = require("ytdl-core");
@@ -137,7 +139,8 @@ client.once('ready', () => {
     //msglogs(client)
     //modlogs(client)
     commandhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
-
+    slashcommandhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
+    linkhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
     //Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, prefix, monitorEventLoopDelay, setInterval
 
 client.user.setPresence({ activities: [{ name: "you", type: 'WATCHING', video_url: 'https://youtube.com/saberstrkkdwmdr'}], status: `dnd`,});
