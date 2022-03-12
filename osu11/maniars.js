@@ -1,0 +1,468 @@
+
+const fetch = require('node-fetch');
+const POST = require('node-fetch');
+const fs = require('fs');
+const { mania_ppv2 } = require('booba');
+module.exports = {
+    name: 'maniars',
+    description: '',
+    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+        console.group('--- COMMAND EXECUTION ---')
+        //let pickeduserX = args.splice(0,1000).join(" ");
+        //let offsetflag = '0'
+        //let pickeduserX = 'SaberStrike'
+        let strtest = args.splice(0,1000).join(" ");
+        let str = strtest.toString();
+        //console.log(str)
+        //console.log(args)
+        if(str.includes('"')){
+            //str1 = str.indexOf('"') + 1
+            //str2 = str.lastIndexOf('"')
+            pickeduserX = str.substring(
+                str.indexOf('"') + 1, 
+                str.lastIndexOf('"')
+            )}
+        if(!str.includes('"')){
+            pickeduserX = str
+        };
+
+        //console.log(pickeduserX)
+            //console.log(args.indexOf('"') - 1)
+            //console.log(args.lastIndexOf('"') - 1)
+        
+        //let offsetflag = '0'
+        if(!str.includes('-p')){offsetflag = '0'};
+        if(str.includes('-p')){
+            if(!str.includes('"')) return message.reply(`please put "s around the username if you're using args`)
+            offsetflag1 = str.indexOf('-p') + 2
+            offsetflag2 = str.lastIndexOf('')
+            offsetflag = str.substring(offsetflag1, offsetflag2)
+        }
+        //console.log(offsetflag)        console.log(`${currentDateISO} | ${currentDate}`)
+        console.log("command executed - maniars")
+        let consoleloguserweeee = message.author
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("") 
+        if(!pickeduserX) return message.reply("user ID required");
+            try{
+                let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
+                let body1 = {
+                    "client_id": osuclientid,
+                    "client_secret": osuclientsecret,
+                    "grant_type": "client_credentials",
+                    "scope": "public"
+                }
+                fetch(oauthurl, {
+                    method: "POST",
+                    body: JSON.stringify(body1),
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(res => res.json())
+                .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
+                ;
+                console.log("writing data to osuauth.json")
+                console.log("")
+
+                const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/mania`;
+                const { access_token } = require('../debug/osuauth.json');
+
+            fetch(userinfourl, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`
+                }
+            }).then(res => res.json())
+            .then(output1 => 
+                {
+                try{const osudata = output1;
+                fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
+                let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
+                if(!playerid) {
+                    message.reply("Error osu04 - account not found")
+                    console.log("error - account not found and/or json sent no data")
+                    return;
+                }
+                //message.reply(playerid)
+                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=mania&offset=${offsetflag}`;
+                
+                fetch(recentactiveurl, {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`
+                    }
+                }).then(res => res.json())
+                .then(output2 => 
+                    {try{const rsdata = output2;//.slice(0, 1);
+                    fs.writeFileSync("debug/rs.json", JSON.stringify(rsdata, null, 2))
+                    console.log("writing data to rs.json")
+                    console.log("")
+                try {
+                let rsplayerid = JSON.stringify(rsdata[0], ['user_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('user_id', '');
+                let rsplayername = JSON.stringify(rsdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('username', '');
+                let rsmapname = JSON.stringify(rsdata[0]['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title_unicode', '');
+                let rsdiffname = JSON.stringify(rsdata[0]['beatmap'], ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('version', '');
+                let rsmods = JSON.stringify(rsdata[0], ['mods']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('mods', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
+                let rsacc = JSON.stringify(rsdata[0], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('accuracy', '');
+                let rs0s = JSON.stringify(rsdata[0]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_miss', '');
+                let rs50s = JSON.stringify(rsdata[0]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_50', '');
+                let rs100s = JSON.stringify(rsdata[0]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_100', '');
+                let rs300s = JSON.stringify(rsdata[0]['statistics'], ['count_300']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_300', '');
+                let rs300max = JSON.stringify(rsdata[0]['statistics'], ['count_geki']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_geki', '');
+                let rs200s = JSON.stringify(rsdata[0]['statistics'], ['count_katu']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_katu', '');
+                let rsmapbg = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
+                let rspp1 = JSON.stringify(rsdata[0], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pp', '');
+                let rspp = Math.abs(rspp1).toFixed(2);
+                let rsmaptime = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 10);
+                let rsmapstar = JSON.stringify(rsdata[0]['beatmap'], ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
+                let rsgrade = JSON.stringify(rsdata[0], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rank', '');
+                let rsmapid = JSON.stringify(rsdata[0]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
+                let rscombo = JSON.stringify(rsdata[0], ['max_combo']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max_combo', '');
+                let rstime = JSON.stringify(rsdata[0]['beatmap'], ['total_length']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total_length', '');
+                
+                let rslengthseconds = Math.abs(rstime) % 60;
+                let rslengthminutes = Math.trunc(rstime / 60);
+
+                let rspasstime = JSON.stringify(rsdata[0]['beatmap'], ['hit_length']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('hit_length', '');
+
+                let rsfulltime = `${rslengthminutes}:${rslengthseconds}`;
+                let rspasspercentage = Math.abs(rspasstime / rstime).toFixed(2);    
+
+                //console.log(`${rs300max} | ${rs300s} | ${rs200s} | ${rs100s}| ${rs50s}`)
+
+                let rsnochoke300max = Math.floor(rs300max);
+                let rsnochoke300num = Math.floor(rs300s);
+                let rsnochoke200num = Math.floor(rs200s);
+                let rsnochoke100num = Math.floor(rs100s);
+                let rsnochoke50num = Math.floor(rs50s);
+                let rsnochokeacc300p = Math.floor(rsnochoke300num + rsnochoke300max);
+                let rsnochokeacc300 = Math.floor(300 * rsnochokeacc300p);
+                let rsnochokeacc200 = Math.floor(200 * rs200s);
+                let rsnochokeacc100 = Math.floor(100 * rs100s);
+                let rsnochokeacc50 = Math.floor(50 * rs50s);
+                //let rsnochoke0num = parseInt(rs0s);
+                let rsnochokebottom1 = Math.floor(rsnochoke300max + rsnochoke300num + rsnochoke200num + rsnochoke100num + rsnochoke50num);
+                let rsnochokebottom = Math.floor(rsnochokebottom1 * 300)
+                let rsnochokeacctop = Math.floor(rsnochokeacc300 + rsnochokeacc200 + rsnochokeacc100 + rsnochokeacc50)
+
+                
+                let rsnochokeacc1 = Math.abs(rsnochokeacctop / rsnochokebottom);
+                let rsnochokeacc = Math.abs(rsnochokeacc1 * 100).toFixed(2);
+                //console.log(rsnochokeacc + '|' + rsnochokeacctop + '/' + rsnochokebottom)
+                //console.log(rsnochokeacc300p + ' | ' + rsnochokeacc300 + ' | ' + rsnochokeacc200 + ' | ' + rsnochokeacc100 + ' | ' + rsnochokeacc50)
+
+                let fulltimeset1 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 18);
+                let fulltimeset2 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 12);
+                let fulltimeset3 = JSON.stringify(fulltimeset1).slice(12, 18)
+                //console.log(fulltimeset3)
+                let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0,-1)
+                let fulltimeset5 = fulltimeset4.slice(1, 10)
+                let fulltimeset = fulltimeset2 + fulltimeset5 + "Z"
+
+                let playerlasttoint = new Date(fulltimeset)
+
+                let currenttime = new Date()
+
+                let minsincelastvis = (playerlasttoint - currenttime) / (1000 * 60);
+                let minlastvisreform = Math.abs(minsincelastvis).toFixed(0);
+                    
+                    let lastvishours = (Math.trunc(minlastvisreform/60)) % 24;
+                    let lastvisminutes = minlastvisreform % 60;
+                    let minlastvisw = (lastvishours + "h " + lastvisminutes + "m");
+
+                const fileName = 'debug/storedmap.json';
+                const file = require('../debug/storedmap.json');  
+                file.prevmap = rsmapid;
+                fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
+                    if (err) return console.log(err);
+                    console.log(JSON.stringify(file));
+                    console.log('writing to ' + fileName);
+                    console.log("");
+                    console.groupEnd()
+                });
+                
+                let rsmapidtonum = parseInt(rsmapid);
+
+                var trycount = 0;
+                for (var i = 0; i < rsdata.length; i++) {
+                    if (rsdata[i].beatmap.id === rsmapidtonum) {
+                        trycount++;
+                    }
+                    }
+                var trycountstr = '\n'
+                if(trycount > 1)
+                    {
+                        trycountstr = `\ntry #${trycount}`
+                    }
+
+                (async () => {
+                    const score = {
+                        beatmap_id: rsmapid,
+                        score: '6795149',
+                        maxcombo: '630',
+                        count50: rs50s,
+                        count100: rs100s,
+                        count300: rs300s,
+                        countmiss: '0',
+                        countkatu: rs200s,
+                        countgeki: rs300max,
+                        perfect: '0',
+                        enabled_mods: '0',
+                        user_id: rsplayerid,
+                        date: '2022-02-08 05:24:54',
+                        rank: 'S',
+                        score_id: '4057765057'
+                      }
+                      const scorenofc = {
+                        beatmap_id: rsmapid,
+                        score: '6795149',
+                        maxcombo: '630',
+                        count50: rs50s,
+                        count100: rs100s,
+                        count300: rs300s,
+                        countmiss: rs0s,
+                        countkatu: rs200s,
+                        countgeki: rs300max,
+                        perfect: '0',
+                        enabled_mods: '0',
+                        user_id: rsplayerid,
+                        date: '2022-02-08 05:24:54',
+                        rank: 'S',
+                        score_id: '4057765057'
+                      }
+                  fs.writeFileSync("debug/rsppcalc.json", JSON.stringify(score, null, 2));
+                  let ppfc = new mania_ppv2().setPerformance(score);
+                  let pp =  new mania_ppv2().setPerformance(scorenofc);
+                  if(rsmods){
+                    pp = new mania_ppv2().setPerformance(scorenofc).setMods(`${rsmods}`)
+                    ppfc = new mania_ppv2().setPerformance(score).setMods(`${rsmods}`);
+                }
+                if(!rsmods){
+                    pp = new mania_ppv2().setPerformance(scorenofc).setMods('NM')
+                    ppfc = new mania_ppv2().setPerformance(score).setMods('NM');
+                }
+                
+               /*   try {
+                    let testpp = await pp.compute();
+    
+                } catch(error){
+                      message.reply("possible pp calculation error (if an embed is sent anyway it's probably fine)")
+                      console.log(error)
+                  } */
+                let ppw = await pp.compute();
+                let ppiffc1 = await ppfc.compute(rsnochokeacc);
+                let ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                let ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
+                let ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
+                let ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                let ppwrawtotal = ppw['total'];
+                let ppww = Math.abs(ppwrawtotal).toFixed(2);
+                let ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
+                  /* => {
+                    aim: 108.36677305976224,
+                    speed: 121.39049498160061,
+                    fl: 514.2615576494688,
+                    acc: 48.88425340242263,
+                    total: 812.3689077733752
+                  } */
+                let ppcalcacc = ppw['computed_accuracy']
+                let ppfccalcacc = ppiffc1['computed_accuracy']
+
+                let ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
+                let ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
+                if(rspp == 'null' || rspp == 'NaN'){
+                    rspp = ppww
+                }
+                if(rsgrade == 'xh' || rsgrade == 'XH'){
+                    rsgrade = '<:rankingxh:927797179597357076>'
+                }
+                if(rsgrade == 'x' || rsgrade == 'X'){
+                    rsgrade = '<:rankingX:927797179832229948>'
+                }
+                if(rsgrade == 'sh' || rsgrade == 'SH'){
+                    rsgrade = '<:rankingSH:927797179710570568>'
+                }
+                if(rsgrade == 's' || rsgrade == 'S'){
+                    rsgrade = '<:rankingS:927797179618295838>'
+                }
+                if(rsgrade == 'a' || rsgrade == 'A'){
+                    rsgrade = '<:rankingA:927797179739930634>'
+                }
+                if(rsgrade == 'b' || rsgrade == 'B'){
+                    rsgrade = '<:rankingB:927797179697991700>'
+                }
+                if(rsgrade == 'c' || rsgrade == 'C'){
+                    rsgrade = '<:rankingC:927797179584757842>'
+                }
+                if(rsgrade == 'd' || rsgrade == 'D'){
+                    rsgrade = '<:rankingD:927797179534438421>'
+                }
+                if(rsgrade == 'f' || rsgrade == 'F' ){
+                    rsgrade = '🇫'
+                }
+                modenum = 0
+                let cpolmods = rsmods.toLowerCase();
+                if(cpolmods.includes('nf') || cpolmods.includes('NF')){
+                    modenum += 1
+                }
+                if(cpolmods.includes('ez') || cpolmods.includes('EZ') ){
+                    modenum += 2
+                }
+                if(cpolmods.includes('td') || cpolmods.includes('TD')){
+                    modenum += 4
+                }
+                if(cpolmods.includes('hd') || cpolmods.includes('HD')){
+                    modenum += 8
+                }
+                if(cpolmods.includes('hr') || cpolmods.includes('HR')){
+                    modenum += 16
+                }
+                if(cpolmods.includes('sd') || cpolmods.includes('SD')){
+                    modenum += 32
+                }
+                if(cpolmods.includes('dt') || cpolmods.includes('DT')){
+                    modenum += 64
+                }
+                if(cpolmods.includes('rx') || cpolmods.includes('rl') || cpolmods.includes('rlx') || cpolmods.includes('RX') || cpolmods.includes('RL') || cpolmods.includes('RLX')){
+                    modenum += 128
+                }
+                if(cpolmods.includes('ht') || cpolmods.includes('HT')){
+                    modenum += 256
+                }
+                if(cpolmods.includes('nc') || cpolmods.includes('NC')){
+                    modenum += 64//512
+                }
+                if(cpolmods.includes('fl') || cpolmods.includes('FL')){
+                    modenum += 1024
+                }
+                if(cpolmods.includes('at') || cpolmods.includes('AT')){
+                    modenum += 2048
+                }
+                if(cpolmods.includes('so') || cpolmods.includes('SO')){
+                    modenum += 4096
+                }
+                if(cpolmods.includes('ap') || cpolmods.includes('AP')){
+                    modenum += 8192
+                }
+                if(cpolmods.includes('pf') || cpolmods.includes('PF')){
+                    modenum += 16384
+                }
+                if(cpolmods.includes('1k') || cpolmods.includes('1K')){
+                    modenum += 67108864
+                }
+                if(cpolmods.includes('2k') || cpolmods.includes('2K')){
+                    modenum += 268435456
+                }
+                if(cpolmods.includes('3k') || cpolmods.includes('3K')){
+                    modenum += 134217728
+                }
+                if(cpolmods.includes('4k') || cpolmods.includes('4K')){
+                    modenum += 32768
+                }
+                if(cpolmods.includes('5k') || cpolmods.includes('5K')){
+                    modenum += 65536
+                }
+                if(cpolmods.includes('6k') || cpolmods.includes('6K')){
+                    modenum += 131072
+                }
+                if(cpolmods.includes('7k') || cpolmods.includes('7K')){
+                    modenum += 262144
+                }
+                if(cpolmods.includes('8k') || cpolmods.includes('8K')){
+                    modenum += 524288
+                }
+                if(cpolmods.includes('9k') || cpolmods.includes('9K')){
+                    modenum += 16777216
+                }
+                if(cpolmods.includes('fi') || cpolmods.includes('FI')){
+                    modenum += 1048576
+                }
+                if(cpolmods.includes('rdm') || cpolmods.includes('RDM')){
+                    modenum += 2097152
+                }
+                if(cpolmods.includes('cn') || cpolmods.includes('CN')){
+                    modenum += 4194304
+                }
+                if(cpolmods.includes('tp') || cpolmods.includes('TP')){
+                    modenum += 8388608
+                }
+                if(cpolmods.includes('kc') || cpolmods.includes('KC')){
+                    modenum += 33554432
+                }
+                if(cpolmods.includes('sv2') || cpolmods.includes('s2') || cpolmods.includes('SV2') || cpolmods.includes('S2')){
+                    modenum += 536870912
+                }
+                if(cpolmods.includes('mr') || cpolmods.includes('MR')){
+                    modenum += 1073741824
+                }
+                let calcacc = (Math.abs((rsacc) * 100).toFixed(2))
+                let cpolpp = `https://pp.osuck.net/pp?id=${rsmapid}&mods=${modenum}&combo=${rscombo}&miss=${rs0s}&acc=${calcacc}`
+                //console.log(cpolpp)
+    
+                /*
+                fetch(cpolpp, {
+                }).then(res => res.json())
+                .then(output4 => {
+                    fs.writeFileSync('cpolppcalc.json', JSON.stringify(output4, null, 2))
+                    let cppSS = JSON.stringify(output4['pp'], ['fc']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('fc', '');
+                    let cppcurrent = JSON.stringify(output4['pp'], ['current']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('current', '');
+                    */
+
+
+                if(!rsmods){
+                let Embed = new Discord.MessageEmbed()
+                .setColor(0x9AAAC0)
+                .setTitle("Most recent play for " + rsplayername)
+                .setImage(rsmapbg)
+                .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
+                .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
+                .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** **${rsmapstar}**⭐`, false)
+                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300+**:${rs300max} \n**⠀300:** ${rs300s} \n**⠀200:** ${rs200s} \n**⠀100:** ${rs100s} \n**⠀⠀50:** ${rs50s} \n**⠀⠀⠀⠀X:** ${rs0s}\n**${rscombo}x**`, true)
+                .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
+                //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300+**:${rs300max} **300:**${rs300s} **200:**${rs200s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
+                message.reply({ embeds: [Embed]})}
+                if(rsmods){
+                    let Embed = new Discord.MessageEmbed()
+                .setColor(0x9AAAC0)
+                .setTitle("Most recent play for " + rsplayername)
+                .setImage(rsmapbg)
+                .setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
+                .addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
+                .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐`, false)
+                .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**⠀300:** ${rs300s} \n**⠀200:** ${rs200s} \n**⠀100:** ${rs100s} \n**⠀⠀50:** ${rs50s} \n**⠀⠀⠀⠀X:** ${rs0s}\n**${rscombo}x**`, true)
+                .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC`, true)
+                //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300+**:${rs300max} **300:**${rs300s} **200:**${rs200s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
+                message.reply({ embeds: [Embed]})
+                }
+            //})//cpol pp test
+            }
+            )()
+            } catch(error){
+                if(error.toString().includes('replaceAll')){
+                    message.reply("Error osu03 - account not found (or some other error)")
+                    console.log("error osu03 - account not found and/or json sent no data")}
+                    else{message.reply('unknown error')}
+                console.log(error)
+                console.log("")
+            }
+            }catch(error){
+                if(error.toString().includes('replaceAll')){
+                    message.reply("Error osu03 - account not found (or some other error)")
+                    console.log("error osu03 - account not found and/or json sent no data")}
+                    else{message.reply('unknown error')}
+                console.log(error)
+                console.log("")
+            }});
+                } catch(error){
+                    message.reply("Error - account not found")
+                    console.log("Error account not found")
+                    console.log(error)
+                    console.log("")
+                }})
+                
+            } catch(err){
+                console.log(err)
+                
+            }
+            
+    }
+}
+
+//client.commands.get('').execute(message, args)
