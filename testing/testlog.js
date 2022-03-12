@@ -1,7 +1,9 @@
+const { LoggerAdaptToConsole } = require('console-log-json')
 module.exports = {
     name: 'testlog',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
+        LoggerAdaptToConsole();
         let we = message.guild.id
         if(we != 652388389529714709){
   } else {
@@ -19,6 +21,7 @@ module.exports = {
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
         console.groupEnd()
+        console.warn('your')
     }
 }
 //client.commands.get('').execute(message, args)

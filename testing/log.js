@@ -1,15 +1,12 @@
-console.log('w')
-console.error('ee')
-console.time()
-console.timeLog()
-console.timeStamp()
-console.timeEnd()
-console.warn('hey')
+const { LoggerAdaptToConsole } = require('console-log-json')
+LoggerAdaptToConsole();
+CONSOLE_LOG_JSON_NO_FILE_NAME="true" 
+CONSOLE_LOG_JSON_NO_PACKAGE_NAME="true" 
+var pp = 2
+console.log('w', pp)
+console.error('ee', "hello", pp)
+
+//console.warn('hey')
 for (var i=0; i<5; i++) {
     console.log("Hello, %s. You've called me %d times.", "Bob", i+1);
   }
-  
-console.group("1")
-console.log("x1")
-console.group("3")
-console.log("x3")
