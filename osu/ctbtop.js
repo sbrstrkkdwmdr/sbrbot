@@ -167,7 +167,7 @@ module.exports = {
                 .addField(`[${maptitle4} [${mapdiff4}]](https://osu.ppy.sh/b/${mapurl4}) +${mapmods4}`, `SCORE:${mapscore4} \nScore set on ${maptimeset4} \n${(Math.abs((mapacc4) * 100).toFixed(2))}% | ${map3004}/${map1004}/${map504}/${mapmiss4} | ${maprank4}\n${(Math.abs(mappp4).toFixed(2))}pp`, false)
                 .addField(`[${maptitle5} [${mapdiff5}]](https://osu.ppy.sh/b/${mapurl5}) +${mapmods5}`, `SCORE:${mapscore5} \nScore set on ${maptimeset5} \n${(Math.abs((mapacc5) * 100).toFixed(2))}% | ${map3005}/${map1005}/${map505}/${mapmiss5} | ${maprank5}\n${Math.abs(mappp5).toFixed(2)}pp`, false)*/
                 //https://osu.ppy.sh/b/
-                interaction.channel.send({ embeds: [Embed]})
+                interaction.editReply({ content: '⠀', embeds: [Embed]})
                 //interaction.reply(mapbg1)
             } catch(error){
                 interaction.reply("Error - no data")

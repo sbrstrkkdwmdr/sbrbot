@@ -357,7 +357,8 @@ module.exports = {
                 .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:** ${rs300s} \n**100:** ${rs100s} \n**⠀50:** ${rs50s} \n**⠀⠀X:** ${rs0s} \n**${rscombo}x**`, true)
                 .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`, true)
                 //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
-                interaction.channel.send({ embeds: [Embed]})}
+                interaction.editReply({ content: '⠀', embeds: [Embed]})
+                }
                 if(rsmods){
                     let Embed = new Discord.MessageEmbed()
                 .setColor(0x9AAAC0)
@@ -369,31 +370,31 @@ module.exports = {
                 .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:** ${rs300s} \n**100:** ${rs100s} \n**⠀50:** ${rs50s} \n**⠀⠀X:** ${rs0s} \n**${rscombo}x**`, true)
                 .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`, true)
                 //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
-                interaction.channel.send({ embeds: [Embed]})
+                interaction.editReply({ content: '⠀', embeds: [Embed]})
                 }
             }
             )()
             } catch(error){
                 if(error.toString().includes('replaceAll')){
-                    interaction.channel.send("Error osu03 - account not found (or some other error)")
+                    interaction.editReply("Error osu03 - account not found (or some other error)")
                     console.log("error osu03 - account not found and/or json sent no data")}
-                    else{interaction.channel.send('unknown error')}
+                    else{interaction.editReply('unknown error')}
                 console.log(error)
                 console.log("")
             }
             }catch(error){
                 if(error.toString().includes('replaceAll')){
-                    interaction.channel.send("Error osu03 - account not found (or some other error)")
+                    interaction.editReply("Error osu03 - account not found (or some other error)")
                     console.log("error osu03 - account not found and/or json sent no data")}
-                    else{interaction.channel.send('unknown error')}
+                    else{interaction.editReply('unknown error')}
                 console.log(error)
                 console.log("")
             }});
                 } catch(error){
                     if(error.toString().includes('replaceAll')){
-                        interaction.channel.send("Error osu04 - account not found")
+                        interaction.editReply("Error osu04 - account not found")
                         console.log("error - account not found and/or json sent no data")}
-                        else{interaction.channel.send('unknown error')}
+                        else{interaction.editReply('unknown error')}
                     console.log(error)
                     console.log("")
                 }})
