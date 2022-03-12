@@ -209,8 +209,8 @@ module.exports = {
                     mapod = Math.abs(mapodNM / 2)
                 }
 
-                if(moddetect.includes('EZ') && moddetect.includes('HR')) return interaction.channel.send('invalid mods!');
-                if(moddetect.includes('DT') && moddetect.includes('HT')) return interaction.channel.send('invalid mods!');
+                if(moddetect.includes('EZ') && moddetect.includes('HR')) return interaction.editReply('invalid mods!');
+                if(moddetect.includes('DT') && moddetect.includes('HT')) return interaction.editReply('invalid mods!');
 
                 if(moddetect.includes('EZ') && moddetect.includes('HT')) {
                     mapcs = Math.abs(mapcsNM / 2);
@@ -403,11 +403,11 @@ module.exports = {
             .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
             .addField('**PP VALUES**', `\n**SS:** ${ppSS} \n**95:** ${pp95} ${modissue}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
-            interaction.channel.send({ embeds: [Embed]})
+            interaction.editReply({ embeds: [Embed]})
             })
               })();
     } catch(error){
-				interaction.channel.send("error")
+				interaction.editReply("error")
 				console.log(error)
 				console.log("")
                 console.groupEnd()
