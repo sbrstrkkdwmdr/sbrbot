@@ -391,14 +391,14 @@ client.on('messageCreate', message =>{
     case 'kick':
         client.admincmds.get('kick').execute(message, args, client, Discord, currentDate, currentDateISO)
         break;   
-
+    /*
     case 'serverlist':case 'servers':
         client.admincmds.get('serverlist').execute(message, args, Discord, client, currentDate, currentDateISO)
         break;
 
     case 'gleave':case 'guildleave':case 'leaveguild':
         client.admincmds.get('gleave').execute(message, args, client, currentDate, currentDateISO)
-        break;
+        break;*/
 
     case 'guildid':
         client.admincmds.get('guildid').execute(message, args, currentDate, currentDateISO)
@@ -427,6 +427,10 @@ client.on('messageCreate', message =>{
         break;
     case 'debug':
         client.admincmds.get('debugget').execute(message, args, Discord, currentDate, currentDateISO)
+        break;
+
+    case 'delcommand':
+        client.admincmds.get('delcmd').execute(message, args, client, Discord, currentDate, currentDateISO)
         break;
     //MUSIC --------------------
     case 'play':
