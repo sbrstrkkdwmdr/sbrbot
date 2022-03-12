@@ -4,8 +4,8 @@ module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclie
 
 const fs = require('fs');
 //ADDED FOR SLASH CMDS
-/*
-const guildid = '724514625005158400'
+
+const guildid = null
 const guild = client.guilds.cache.get(guildid)
 let commands 
 
@@ -13,8 +13,7 @@ if (guild) {
     commands = guild.commands
 } else {
     commands = client.application?.commands
-}*/
-commands = client.application?.commands
+}
 commands?.create({
     name: 'ping',
     description: 'replies with pong.',
@@ -200,6 +199,11 @@ commands?.create({
     name: 'guildlist',
     description: 'list all guilds the bot is in',
 })
+commands?.create({
+    name: 'menutest',
+    description: 'some menu test',
+    
+})
 
 client.on('interactionCreate', async (interaction) =>{
     if (!interaction.isCommand()) return
@@ -243,6 +247,7 @@ client.on('interactionCreate', async (interaction) =>{
 
     //------osu
     case 'rs':
+        console.log(interaction.commandId)
         if(!options.getString('mode') || options.getString('mode') == 'osu' || options.getString('mode') == 'o' || options.getString('mode') == 'standard' || options.getString('mode') == 'std'){
         client.osucmds.get('rs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         return;
@@ -294,7 +299,7 @@ client.on('interactionCreate', async (interaction) =>{
         //admins---------------
 
     case 'botstatus':
-        client.admincmds.get('botstatus').execute(interaction, options, client, Discord, currentDate, currentDateISO)
+        client.admincmds.get('botstatus2').execute(interaction, options, client, Discord, currentDate, currentDateISO)
         break;
 
     case 'guildleave':
