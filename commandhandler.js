@@ -297,10 +297,6 @@ client.on('messageCreate', message =>{
       client.osucmds.get('osubestrs').execute(message, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone)
       break;
 
-    case 'danser':
-        client.osucmds.get('danser').execute(message, args, currentDate, currentDateISO)
-        break;
-
     case 'tsfm':case 'c':
         client.osucmds.get('tsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
