@@ -234,7 +234,7 @@ client.on('interactionCreate', async (interaction) =>{
         break;
 
     case 'help':
-        client.helpcmds.get('help2').execute(interaction, options, commands, currentDate, currentDateISO)
+        client.helpcmds.get('help2').execute(interaction, options, Discord, commands, currentDate, currentDateISO)
         break;  
 
     //------osu
