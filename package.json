@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.7.0",
+    "@discordjs/rest": "^0.3.0",
     "@discordjs/voice": "^0.7.5",
     "awesome-typescript-loader": "^5.2.1",
     "axios": "^0.25.0",
