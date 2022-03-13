@@ -2,8 +2,6 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { std_ppv2 } = require('booba');
-const {Beatmap, Osu: {DifficultyCalculator, PerformanceCalculator}} = require('osu-bpdpc')
-const request = require('request-promise-native')
 module.exports = {
     name: 'pastmap',
     description: '',

@@ -1,4 +1,4 @@
-const { API, } = require('nhentai-api');
+
 module.exports = {
     name: 'hentai',
     execute(message, args, currentDate, currentDateISO) {
