@@ -52,7 +52,7 @@ module.exports = {
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 if(!playerid) {
-                    interaction.reply("Error osu04 - account not found")
+                    interaction.channel.send("Error osu04 - account not found")
                     console.log("error - account not found and/or json sent no data")
                     return;
                 }
