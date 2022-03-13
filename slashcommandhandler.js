@@ -150,6 +150,18 @@ commands?.create({
         },
     ]
 })
+commands?.create({
+    name: 'osu',
+    description: 'osu! profile info',
+    options: [
+        {
+            name: 'user',
+            description: 'username or ID',
+            required: true,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ]
+})
 //admin??
 commands?.create({
     name: 'botstatus',
@@ -287,7 +299,10 @@ client.on('interactionCreate', async (interaction) =>{
     case 'map':
         client.osucmds.get('map').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break
-
+    case 'osu':
+        client.osucmds.get('osu').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
+        break;
         //admins---------------
 
     case 'botstatus':

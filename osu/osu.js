@@ -5,16 +5,17 @@ const { access_token } = require('../debug/osuauth.json');
 module.exports = {
     name: 'osu',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
+    execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
         console.group('--- COMMAND EXECUTION ---')
-        const pickeduserX = args.splice(0,1000).join(" ");
+        const pickeduserX = options.getString('user')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osu profile")
-        let consoleloguserweeee = message.author
+        let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
-        if(!pickeduserX) return message.reply("user ID required");
-        //if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
+        if(!pickeduserX) return interaction.reply("user ID required");
+        interaction.reply('getting data...')
+        //if(isNaN(pickeduserX)) return interaction.editReply("You must use ID e.g. 15222484 instead of SaberStrike")
       
         try{
             let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
@@ -138,8 +139,8 @@ module.exports = {
             .setURL(`https://osu.ppy.sh/u/${playerid}`)
             .setThumbnail(playeravatar)
             .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n` + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_online:927800818445455421> Online**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
-            message.reply({ embeds: [Embed]})
-            //message.reply(mapbg1)
+            interaction.editReply({ embeds: [Embed]})
+            //interaction.editReply(mapbg1)
             }
             if(playerstatus == false ){let Embed = new Discord.MessageEmbed()
                 .setColor(0x6DDAFF)
@@ -147,12 +148,12 @@ module.exports = {
                 .setURL(`https://osu.ppy.sh/u/${playerid}`)
                 .setThumbnail(playeravatar)
                 .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n`+ playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + `\n **<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago\n**Player joined on** ` + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
-                message.reply({ embeds: [Embed]})
-                //message.reply(mapbg1)
+                interaction.editReply({ embeds: [Embed]})
+                //interaction.editReply(mapbg1)
                 }
                 
             } catch(error){
-                    message.reply("Error - account not found (or some other error)")
+                    interaction.editReply("Error - account not found (or some other error)")
                     console.log("Error account not found")
                     console.log(error)
                     console.log("")
