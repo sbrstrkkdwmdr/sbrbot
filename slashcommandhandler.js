@@ -5,15 +5,7 @@ module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclie
 const fs = require('fs');
 //ADDED FOR SLASH CMDS
 
-const guildid = null
-const guild = client.guilds.cache.get(guildid)
-let commands 
-
-if (guild) {
-    commands = guild.commands
-} else {
-    commands = client.application?.commands
-}
+let commands = client.application?.commands
 commands?.create({
     name: 'ping',
     description: 'replies with pong.',
@@ -202,7 +194,6 @@ commands?.create({
 commands?.create({
     name: 'menutest',
     description: 'some menu test',
-    
 })
 
 client.on('interactionCreate', async (interaction) =>{
@@ -240,9 +231,10 @@ client.on('interactionCreate', async (interaction) =>{
 
     case 'math':
         client.helpcmds.get('math2').execute(interaction, client, Discord, options, currentDate, currentDateISO)
+        break;
 
     case 'help':
-        client.helpcmds.get('help2').execute(interaction, options, guild, commands, currentDate, currentDateISO)
+        client.helpcmds.get('help2').execute(interaction, options, commands, currentDate, currentDateISO)
         break;  
 
     //------osu
