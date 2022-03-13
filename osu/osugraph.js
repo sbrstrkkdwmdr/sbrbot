@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../debug/osuauth.json');
 const ChartJsImage = require('chartjs-to-image');

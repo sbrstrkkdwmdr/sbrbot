@@ -6,9 +6,6 @@ const fs = require('fs');
 
 
 const oncooldown = new Set();
-const https = require('https'); // or 'https' for https:// URLs
-const sql = require('sqlite')
-const request = require(`request`);
 
 client.commands = new Discord.Collection();
 client.linkdetect = new Discord.Collection();

@@ -1,19 +1,11 @@
 const Discord = require('discord.js'); //uses discord.js to run
-const { ALL } = require('dns');
-const { create } = require('domain');
 const fetch = require('node-fetch');
-const get = require('node-fetch2');
-const wait = require('util').promisify(setTimeout);
 //added in discordjs 13
 const { Client, Intents } = require('discord.js');
 const { token } = require('./config.json'); //get the value "token" from config.json
 const { osuauthtoken, osuapikey, osuclientid, osuclientsecret } = require('./config.json');
 const { trnkey } = require('./config.json')
 process.on('warning', e => console.warn(e.stack));
-const oncooldown = new Set();
-const https = require('https'); // or 'https' for https:// URLs
-const sql = require('sqlite')
-const request = require(`request`);
 //const triggerwords = require('./triggerwords.js')
 
 //const msglogs = require('./sbrmsg.js')

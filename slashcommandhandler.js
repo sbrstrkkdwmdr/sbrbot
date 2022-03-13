@@ -2,8 +2,7 @@ const { Constants } = require('discord.js');
 const { testguild } = require('./config.json')
 
 module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
-
-const fs = require('fs');
+    
 //ADDED FOR SLASH CMDS
 /*const guildid = testguild
 const guild = client.guilds.cache.get(guildid)
