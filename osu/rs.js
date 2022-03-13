@@ -378,23 +378,23 @@ module.exports = {
                 if(error.toString().includes('replaceAll')){
                     interaction.editReply("Error osu03 - account not found (or some other error)")
                     console.log("error osu03 - account not found and/or json sent no data")}
-                    else{interaction.editReply('unknown error')}
+                    else{interaction.channel.send('unknown error')}
                 console.log(error)
                 console.log("")
             }
             }catch(error){
                 if(error.toString().includes('replaceAll')){
-                    interaction.editReply("Error osu03 - account not found (or some other error)")
+                    interaction.channel.send("Error osu03 - account not found (or some other error)")
                     console.log("error osu03 - account not found and/or json sent no data")}
-                    else{interaction.editReply('unknown error')}
+                    else{interaction.channel.send('unknown error')}
                 console.log(error)
                 console.log("")
             }});
                 } catch(error){
                     if(error.toString().includes('replaceAll')){
-                        interaction.editReply("Error osu04 - account not found")
+                        interaction.channel.send("Error osu04 - account not found")
                         console.log("error - account not found and/or json sent no data")}
-                        else{interaction.editReply('unknown error')}
+                        else{interaction.channel.send('unknown error')}
                     console.log(error)
                     console.log("")
                 }})

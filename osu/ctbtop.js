@@ -170,14 +170,14 @@ module.exports = {
                 interaction.editReply({ content: '⠀', embeds: [Embed]})
                 //interaction.reply(mapbg1)
             } catch(error){
-                interaction.reply("Error - no data")
+                interaction.channel.send("Error - no data")
                 console.log("Error")
                 console.log(error)
                 console.log("")
             }
             } ) 
         } catch(error){
-                interaction.reply("Error - account not found")
+                interaction.channel.send("Error - account not found")
                 console.log("Error account not found")
                 console.log(error)
                 console.log("")

@@ -1,10 +1,19 @@
 const { Constants } = require('discord.js');
+const { testguild } = require('./config.json')
 
 module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
 
 const fs = require('fs');
 //ADDED FOR SLASH CMDS
+/*const guildid = testguild
+const guild = client.guilds.cache.get(guildid)
+let commands 
 
+if (guild) {
+    commands = guild.commands
+} else {
+    commands = client.application?.commands
+}*/
 let commands = client.application?.commands
 commands?.create({
     name: 'ping',
@@ -159,7 +168,7 @@ commands?.create({
             description: 'username or ID',
             required: true,
             type: Constants.ApplicationCommandOptionTypes.STRING
-        }
+        },
     ]
 })
 //admin??

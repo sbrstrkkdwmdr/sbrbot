@@ -13,7 +13,7 @@ module.exports = {
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
-        if(!pickeduserX) return interaction.reply("user ID required");
+        //if(!pickeduserX) return interaction.reply("user ID required");
         interaction.reply('getting data...')
         //if(isNaN(pickeduserX)) return interaction.editReply("You must use ID e.g. 15222484 instead of SaberStrike")
       
@@ -139,7 +139,7 @@ module.exports = {
             .setURL(`https://osu.ppy.sh/u/${playerid}`)
             .setThumbnail(playeravatar)
             .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n` + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_online:927800818445455421> Online**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
-            interaction.editReply({ embeds: [Embed]})
+            interaction.editReply({ content: '⠀', embeds: [Embed]})
             //interaction.editReply(mapbg1)
             }
             if(playerstatus == false ){let Embed = new Discord.MessageEmbed()
@@ -148,12 +148,12 @@ module.exports = {
                 .setURL(`https://osu.ppy.sh/u/${playerid}`)
                 .setThumbnail(playeravatar)
                 .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n`+ playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + `\n **<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago\n**Player joined on** ` + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
-                interaction.editReply({ embeds: [Embed]})
+                interaction.editReply({ content: '⠀', embeds: [Embed]})
                 //interaction.editReply(mapbg1)
                 }
                 
             } catch(error){
-                    interaction.editReply("Error - account not found (or some other error)")
+                    interaction.channel.send("Error - account not found (or some other error)")
                     console.log("Error account not found")
                     console.log(error)
                     console.log("")
