@@ -170,6 +170,24 @@ commands?.create({
         },
     ]
 })
+commands?.create({
+    name: 'pp',
+    description: 'pp values for a map',
+    options: [
+        {
+            name: 'id',
+            description: 'the map id. Uses the last stored map if not used.',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: 'mods',
+            description: 'mods/game modifiers.',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+    ]
+})
 //admin??
 commands?.create({
     name: 'botstatus',
@@ -310,6 +328,9 @@ client.on('interactionCreate', async (interaction) =>{
     case 'osu':
         client.osucmds.get('osu').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
+        break;
+    case 'pp':
+        client.osucmds.get('pp').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
         //admins---------------
 
