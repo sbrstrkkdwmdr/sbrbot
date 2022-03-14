@@ -7,7 +7,7 @@ module.exports = {
           message.channel.send("1\n2\n3\n4\n5\n6\n8\n9\n10")
           message.channel.send("11\n12\n13\n14\n15\n16\n17\n18\n19\n20")
           message.channel.send("21\n22\n23\n24\n25\n26\n27\n28\n29\n30")
-          message.channel.send("31\n32\n33\n34\n35\n36\n27\n38\n39\n40")
+          message.channel.send("31\n32\n33\n34\n35\n36\n37\n38\n39\n40")
           message.channel.send("41\n42\n43\n44\n45\n46\n47\n48\n49\n50")
           message.channel.send("51\n52\n53\n54\n55\n56\n57\n58\n59\n60")
           message.channel.send("61\n62\n63\n64\n65\n66\n67\n68\n69\n70")
