@@ -246,7 +246,7 @@ module.exports = {
             console.log(error)
         }
         }   catch(error){
-            message.channel.send("Error - 3")
+            message.channel.send("Error - 3\nmap doesn't exist or isn't available")
             console.log(error)
         }
         console.groupEnd()
