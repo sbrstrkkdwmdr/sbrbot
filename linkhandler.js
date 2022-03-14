@@ -1,4 +1,5 @@
 const fs = require('fs');
+const https = require('https')
 module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
 const { prefix } = require('./config.json')
 client.linkdetect = new Discord.Collection();
