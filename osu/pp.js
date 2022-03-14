@@ -7,6 +7,7 @@ module.exports = {
     description: '',
     execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
+        interaction.reply('getting data...')
         let mapid = options.getNumber('id')
         let mods = options.getString('mods')
         if(!mods){
@@ -29,7 +30,7 @@ module.exports = {
 
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - map pp")
-        let consoleloguserweeee = message.author
+        let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
         
