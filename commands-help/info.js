@@ -3,7 +3,7 @@ module.exports = {
     description: '',
     execute(message, args, currentDate, currentDateISO) {
         console.group('--- COMMAND EXECUTION ---')
-        message.channel.send('bot coded by SaberStrike in node js\nsource code - https://github.com/sbrstrkkdwmdr/sbrbot')
+        message.channel.send('bot coded by SaberStrike in node js\nsource code - https://github.com/sbrstrkkdwmdr/sbrbot\nhttps://discord.js.org/#/docs/discord.js/stable/general/welcome')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - info")
         let consoleloguserweeee = message.author
