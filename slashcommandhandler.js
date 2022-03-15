@@ -21,6 +21,14 @@ commands?.create({
 commands?.create({
     name: 'test',
     description: 'test if / works',
+    options: [
+        {
+            name: 'type',
+            description: 'which command to test?',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ]
 })
 commands?.create({
     name: 'convert',
@@ -71,6 +79,24 @@ commands?.create({
         {
             name: 'command',
             description: 'provide info on this command',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ]
+})
+commands?.create({
+    name: 'remind',
+    description: 'sets a reminder',
+    options: [
+        {
+            name: 'time',
+            description: 'how long to set it for',
+            required: true,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'reminder',
+            description: 'what to remind',
             required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING
         }
@@ -256,7 +282,7 @@ client.on('interactionCreate', async (interaction) =>{
     {
 
     case 'test': //if command = 'test' blahblablah
-        interaction.reply('yeah this works')
+        client.commands.get('slashtest').execute(interaction, options, client, Discord, currentDate, currentDateISO)
         break;
 
     case 'ping':
@@ -274,6 +300,10 @@ client.on('interactionCreate', async (interaction) =>{
     case 'help':
         client.helpcmds.get('help2').execute(interaction, options, Discord, commands, currentDate, currentDateISO)
         break;  
+
+    case 'remind':
+        client.commands.get('remindslash').execute(interaction, options, client, Discord, currentDate, currentDateISO)
+        break;
 
     //------osu
     case 'rs':
