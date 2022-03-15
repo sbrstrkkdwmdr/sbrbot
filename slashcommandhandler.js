@@ -4,7 +4,7 @@ const { testguild } = require('./config.json')
 module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
     
 //ADDED FOR SLASH CMDS
-/*const guildid = testguild
+const guildid = testguild
 const guild = client.guilds.cache.get(guildid)
 let commands 
 
@@ -12,8 +12,8 @@ if (guild) {
     commands = guild.commands
 } else {
     commands = client.application?.commands
-}*/
-let commands = client.application?.commands
+}
+//let commands = client.application?.commands
 commands?.create({
     name: 'ping',
     description: 'replies with pong.',
@@ -214,6 +214,60 @@ commands?.create({
         },
     ]
 })
+commands?.create({
+    name: 'accuracycalculator',
+    description: "calculate a play's accuracy",
+    options: [
+        {
+            name: '300s',
+            description: 'hit 300s',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: '100s',
+            description: 'hit 100s',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: '50s',
+            description: 'hit 50s',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: '0s',
+            description: 'misses',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: '200s',
+            description: 'hit 200s (mania only)',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: '300maxes',
+            description: 'hit 300+ (mania only)',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: 'mode',
+            description: 'what gamemode? (default osu! standard)',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'id',
+            description: 'map id (CTB only)',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+    ]
+})
 //admin??
 commands?.create({
     name: 'botstatus',
@@ -361,6 +415,9 @@ client.on('interactionCreate', async (interaction) =>{
         break;
     case 'pp':
         client.osucmds.get('pp').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    case 'accuracycalculator':
+        client.osucmds.get('acccalc').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
         //admins---------------
 
