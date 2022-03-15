@@ -35,7 +35,7 @@ for(const file of osucmdFiles){
 
     client.osucmds.set(osucmd.name, osucmd);
 }
-const altosucmdFiles = fs.readdirSync('./osu/').filter(file => file.endsWith('.js'));
+const altosucmdFiles = fs.readdirSync('./osu11/').filter(file => file.endsWith('.js'));
 for(const file of altosucmdFiles){
     const altosucmd = require(`./osu11/${file}`);
 
