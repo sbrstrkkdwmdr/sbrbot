@@ -160,8 +160,8 @@ module.exports = {
                 }
                 
             } catch(error){
-                    interaction.channel.send("Error - account not found (or some other error)")
-                    console.log("Error account not found")
+                    interaction.channel.send("Error osu04 - account not found (or some other error)")
+                    console.log("Error osu04 account not found")
                     console.log(error)
                     console.log("")
                     console.groupEnd()
