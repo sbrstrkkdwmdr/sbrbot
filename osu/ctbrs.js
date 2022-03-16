@@ -311,16 +311,16 @@ module.exports = {
             }
             }catch(error){
                 if(error.toString().includes('replaceAll')){
-                    interaction.channel.send("Error osu04 - account not found (or some other error)")
-                    console.log("error osu04 - account not found and/or json sent no data")}
+                    interaction.channel.send("Error - account not found (or some other error)")
+                    console.log("error - account not found and/or json sent no data")}
                     else{interaction.channel.send('unknown error')}
                     console.log(error)
                     console.log("")
                     console.groupEnd()
             }});
                 } catch(error){
-                    interaction.channel.send("Error osu04 - account not found")
-                    console.log("Error osu04 account not found")
+                    interaction.channel.send("Error - account not found")
+                    console.log("Error account not found")
                     console.log(error)
                     console.log("")
                     console.groupEnd()

@@ -281,11 +281,7 @@ client.on('messageCreate', message =>{
     case 'osugraph':
         client.altosucmds.get('osugraph').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
-
-    case 'osutest':
-        client.altosucmds.get('osutest').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
-        break;
+        
     case 'osubest':
         client.altosucmds.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
         break;
@@ -305,16 +301,13 @@ client.on('messageCreate', message =>{
     case 'osusave':case 'osuset':
         client.altosucmds.get('osuset').execute(userdatatags, message, args, Discord, currentDate, currentDateISO)
         break;
-
+/*
     case 'maniars':case 'maniarecent':case 'rsmania':case 'recentmania':
         client.altosucmds.get('maniars').execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
     case 'maniatop':case 'topmania':
         client.altosucmds.get('maniatop').execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
-    /*case 'maniatsfm':case 'maniac':case 'tsfmmania':case 'cmania':
-        client.osucmds.get('maniatsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;*/
 
     case 'taikors':case 'taikorecent':case 'rstaiko':case 'recenttaiko':
         client.altosucmds.get('taikors').execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
@@ -328,7 +321,7 @@ client.on('messageCreate', message =>{
         break;
     case 'ctbtop':case 'topctb':
         client.altosucmds.get('ctbtop').execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-        break;
+        break;*/
     
     case 'pp':
         client.osucmds.get('pp').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)

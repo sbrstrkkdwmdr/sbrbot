@@ -398,23 +398,23 @@ module.exports = {
             )()
             } catch(error){
                 if(error.toString().includes('replaceAll')){
-                    message.reply("Error osu03 - play data not found and/or json sent no data")
-                    console.log("Error osu03 - play data not found and/or json sent no data")}
+                    message.reply("Error - play data not found and/or json sent no data")
+                    console.log("Error - play data not found and/or json sent no data")}
                     else{message.reply('unknown error')}
                 console.log(error)
                 console.log("")
             }
             }catch(error){
                 if(error.toString().includes('replaceAll')){
-                    message.reply("Error osu03 - play data not found and/or json sent no data")
-                    console.log("Error osu03 - play data not found and/or json sent no data")}
+                    message.reply("Error - play data not found and/or json sent no data")
+                    console.log("Error - play data not found and/or json sent no data")}
                     else{message.reply('unknown error')}
                 console.log(error)
                 console.log("")
             }});
                 } catch(error){
                     if(error.toString().includes('replaceAll')){
-                        message.reply("Error osu04 - account not found")
+                        message.reply("Error - account not found")
                         console.log("error - account not found and/or json sent no data")}
                         else{message.reply('unknown error')}
                     console.log(error)

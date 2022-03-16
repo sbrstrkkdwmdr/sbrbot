@@ -212,8 +212,8 @@ module.exports = {
                 //interaction.reply(mapbg1)
             } catch(error){
                 if(error.toString().includes('replaceAll')){
-                    interaction.channel.send("Error osu04 - account not found (or some other error)")
-                    console.log("error osu04 - account not found and/or json sent no data")}
+                    interaction.channel.send("Error - account not found (or some other error)")
+                    console.log("error - account not found and/or json sent no data")}
                     else{interaction.channel.send('unknown error')}
                     console.log(error)
                     console.log("")
