@@ -19,8 +19,11 @@ module.exports = {
         console.log("") 
         let pickeduserX = options.getString('user')
         if(!pickeduserX){
-            findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
-            pickeduserX = findname.get('description')
+            try{
+                findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
+                pickeduserX = findname.get('description')}
+                catch (error) {
+                }
         }
         let offsetflag = options.getNumber('offset')
         if(!offsetflag) {
