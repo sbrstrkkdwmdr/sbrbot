@@ -1,5 +1,3 @@
-//const helper = require('../helper.js');
-
 module.exports = {
     name: 'osuset',
     description: "Sets your osu! username so you can use osu! commands without specifying a username.",
