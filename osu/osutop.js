@@ -9,7 +9,7 @@ const { exec } = require("child_process");
 module.exports = {
     name: 'osutop',
     description: '',
-    execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+    async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
         //const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
         console.log(`${currentDateISO} | ${currentDate}`)
@@ -19,6 +19,10 @@ module.exports = {
         console.log("") 
 
         let pickeduserX = options.getString('user')
+        if(!pickeduserX){
+            findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
+            pickeduserX = findname.get('description')
+        }
         let offsetflag = options.getNumber('offset')
         if(!offsetflag) {
             offsetflag = '0'

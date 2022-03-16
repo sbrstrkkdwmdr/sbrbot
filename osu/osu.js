@@ -5,9 +5,13 @@ const { access_token } = require('../debug/osuauth.json');
 module.exports = {
     name: 'osu',
     description: '',
-    execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
+    async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
         console.group('--- COMMAND EXECUTION ---')
-        const pickeduserX = options.getString('user')
+        let pickeduserX = options.getString('user')
+        if(!pickeduserX){
+            findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
+            pickeduserX = findname.get('description')
+        }
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osu profile")
         let consoleloguserweeee = interaction.member.user
@@ -139,8 +143,8 @@ module.exports = {
             .setURL(`https://osu.ppy.sh/u/${playerid}`)
             .setThumbnail(playeravatar)
             .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n` + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_online:927800818445455421> Online**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
-            interaction.editReply({ content: '⠀', embeds: [Embed]})
-            //interaction.editReply(mapbg1)
+            interaction.channel.send({ content: '⠀', embeds: [Embed]})
+            //interaction.channel.send(mapbg1)
             }
             if(playerstatus == false ){let Embed = new Discord.MessageEmbed()
                 .setColor(0x6DDAFF)
@@ -148,7 +152,7 @@ module.exports = {
                 .setURL(`https://osu.ppy.sh/u/${playerid}`)
                 .setThumbnail(playeravatar)
                 .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n`+ playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + `\n **<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago\n**Player joined on** ` + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
-                interaction.editReply({ content: '⠀', embeds: [Embed]})
+                interaction.channel.send({ content: '⠀', embeds: [Embed]})
                 //interaction.editReply(mapbg1)
                 }
                 

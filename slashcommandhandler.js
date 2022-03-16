@@ -1,19 +1,19 @@
 const { Constants } = require('discord.js');
 const { testguild } = require('./config.json')
 
-module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
+module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
     
 //ADDED FOR SLASH CMDS
 const guildid = testguild
 const guild = client.guilds.cache.get(guildid)
-let commands 
+/*let commands 
 
 if (guild) {
     commands = guild.commands
 } else {
     commands = client.application?.commands
-}
-//let commands = client.application?.commands
+}*/
+let commands = client.application?.commands
 commands?.create({
     name: 'ping',
     description: 'replies with pong.',
@@ -112,7 +112,7 @@ commands?.create({
         {
             name: 'user',
             description: 'the user. can be in ID or username',
-            required: true,
+            required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING
         },
         {
@@ -137,7 +137,7 @@ commands?.create({
         {
             name: 'user',
             description: 'the user. can be in ID or username',
-            required: true,
+            required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING
         },
         {
@@ -191,7 +191,7 @@ commands?.create({
         {
             name: 'user',
             description: 'username or ID',
-            required: true,
+            required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING
         },
     ]
@@ -265,6 +265,19 @@ commands?.create({
             description: 'map id (CTB only)',
             required: false,
             type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+    ]
+})
+
+commands?.create({
+    name: 'setuser',
+    description: 'set your username',
+    options: [
+        {
+            name: 'username',
+            description: 'username or ID works',
+            required: true,
+            type: Constants.ApplicationCommandOptionTypes.STRING
         },
     ]
 })
@@ -363,19 +376,19 @@ client.on('interactionCreate', async (interaction) =>{
     case 'rs':
         console.log(interaction.commandId)
         if(!options.getString('mode') || options.getString('mode') == 'osu' || options.getString('mode') == 'o' || options.getString('mode') == 'standard' || options.getString('mode') == 'std'){
-        client.osucmds.get('rs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.osucmds.get('rs').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         return;
         }
         if(options.getString('mode') == 'catch the beat' || options.getString('mode') == 'ctb' || options.getString('mode') == 'c' || options.getString('mode') == 'catch') {
-            client.osucmds.get('ctbrs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            client.osucmds.get('ctbrs').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
             return;
         }
         if(options.getString('mode') == 'mania' || options.getString('mode') == 'm') {
-            client.osucmds.get('maniars').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            client.osucmds.get('maniars').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
             return;
         }
         if(options.getString('mode') == 'taiko' || options.getString('mode') == 't') {
-            client.osucmds.get('taikors').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            client.osucmds.get('taikors').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
             return;
         }
         else interaction.reply(`error: mode doesn't exist. list of modes: osu, taiko, ctb, mania`)
@@ -384,19 +397,19 @@ client.on('interactionCreate', async (interaction) =>{
         break;
     case 'osutop':
         if(!options.getString('mode') || options.getString('mode') == 'osu' || options.getString('mode') == 'o' || options.getString('mode') == 'standard' || options.getString('mode') == 'std'){
-            client.osucmds.get('osutop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            client.osucmds.get('osutop').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
             return;
             }
         if(options.getString('mode') == 'catch the beat' || options.getString('mode') == 'ctb' || options.getString('mode') == 'c' || options.getString('mode') == 'catch') {
-            client.osucmds.get('ctbtop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            client.osucmds.get('ctbtop').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
             return;
         }
         if(options.getString('mode') == 'mania' || options.getString('mode') == 'm') {
-            client.osucmds.get('maniatop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            client.osucmds.get('maniatop').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
             return;
         }
         if(options.getString('mode') == 'taiko' || options.getString('mode') == 't') {
-            client.osucmds.get('taikotop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            client.osucmds.get('taikotop').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
             return;
         }
         else interaction.reply(`error: mode doesn't exist. list of modes: osu, taiko, ctb, mania`)
@@ -410,7 +423,7 @@ client.on('interactionCreate', async (interaction) =>{
         client.osucmds.get('map').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break
     case 'osu':
-        client.osucmds.get('osu').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.osucmds.get('osu').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
         break;
     case 'pp':
@@ -418,6 +431,9 @@ client.on('interactionCreate', async (interaction) =>{
         break;
     case 'accuracycalculator':
         client.osucmds.get('acccalc').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    case 'setuser':
+        client.osucmds.get('osuset').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO)
         break;
         //admins---------------
 

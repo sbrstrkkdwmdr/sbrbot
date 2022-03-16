@@ -5,9 +5,13 @@ const { taiko_ppv2 } = require('booba');
 module.exports = {
     name: 'taikors',
     description: '',
-    execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+    async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
         let pickeduserX = options.getString('user')
+        if(!pickeduserX){
+            findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
+            pickeduserX = findname.get('description')
+        }
         let offsetflag = options.getNumber('offset')
         if(!offsetflag) {
             offsetflag = '0'

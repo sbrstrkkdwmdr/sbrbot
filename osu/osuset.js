@@ -1,44 +1,38 @@
-const helper = require('../helper.js');
+//const helper = require('../helper.js');
 
 module.exports = {
     name: 'osuset',
     description: "Sets your osu! username so you can use osu! commands without specifying a username.",
-    /*usage: '<osu! username>',
-    example: {
-        run: "ign-set nathan on osu",
-        result: "Sets your osu! username to nathan on osu."
-    },*/
-    call: obj => {
-        return new Promise((resolve, reject) => {
-            let { message, user_ign } = obj;
+    async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO){
+        const pickeduserX = options.getString('username')
+        console.log(`${currentDateISO} | ${currentDate}`)
+        console.log("command executed - osu set")
+        let consoleloguserweeee = interaction.member.user
+        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("") 
+        //interaction.reply('...')
 
-            let split = helper.splitWithTail(message.content, ' ', 1);
+		try {
+			// equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
+			await userdatatags.create({
+				name: interaction.member.user.id,
+				description: pickeduserX,
+				username: interaction.member.user.id,
+			});
 
-            if(split.length < 2){
-                reject(helper.commandHelp('ign-set'));
-                return false;
+			return interaction.reply(`${pickeduserX} added.`);
+		}
+		catch (error) {
+			if (error.name === 'SequelizeUniqueConstraintError') {
+                affectedRows = await userdatatags.update({ description: pickeduserX }, { where: { name: interaction.member.user.id } });
+        
+            if (affectedRows > 0) {
+                return interaction.reply(`username updated.`);
             }
+				//return interaction.reply('That username is already taken.');
+			}
 
-            let ign = split[1];
-            let user_id = message.author.id;
-
-            if(ign.length == 0){
-                reject(helper.commandHelp('ign-set'));
-                return false;
-            }
-
-            if(!helper.validUsername(ign)){
-                reject('Not a valid osu! username!');
-                return false;
-            }
-
-            user_ign[user_id] = ign;
-            helper.setItem('user_ign', JSON.stringify(user_ign));
-
-            let author = message.author.username.endsWith('s') ?
-                `${message.author.username}'`: `${message.author.username}'s`;
-
-            message.channel.send(`${author} ingame name set to ${ign}`);
-        });
+			return interaction.reply('Something went wrong with adding a username.');
+		}
     }
-};
+}
