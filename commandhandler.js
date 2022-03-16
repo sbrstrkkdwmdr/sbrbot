@@ -274,36 +274,36 @@ client.on('messageCreate', message =>{
         break;
 
     case 'osu':
-        client.osucmds.get('osu').execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.altosucmds.get('osu').execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
         break;
 
     case 'osugraph':
-        client.osucmds.get('osugraph').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.altosucmds.get('osugraph').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
 
     case 'osutest':
-        client.osucmds.get('osutest').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.altosucmds.get('osutest').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
     case 'osubest':
-        client.osucmds.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
+        client.altosucmds.get('osubest').execute(message, args, Discord, currentDate, currentDateISO)
         break;
 
     case 'osubestrs':
-      client.osucmds.get('osubestrs').execute(message, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone)
+      client.altosucmds.get('osubestrs').execute(message, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone)
       break;
 
     case 'tsfm':case 'c':
-        client.osucmds.get('tsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.altosucmds.get('tsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
     
     case 'osuauth':
-        client.osucmds.get('osuauth').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.altosucmds.get('osuauth').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;  
 
     case 'osusave':case 'osuset':
-        client.osucmds.get('osusave').call(message, args, Discord, currentDate, currentDateISO)
+        client.altosucmds.get('osuset').execute(userdatatags, message, args, Discord, currentDate, currentDateISO)
         break;
 
     case 'maniars':case 'maniarecent':case 'rsmania':case 'recentmania':
