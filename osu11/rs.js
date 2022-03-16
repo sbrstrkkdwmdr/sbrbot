@@ -8,11 +8,13 @@ module.exports = {
     async execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
         let pickeduserX = args.splice(0,1000).join(" ");
-        if(!pickeduserX){
+        if(!pickeduserX || pickeduserX == '' || pickeduserX == []){
             try{
-            findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
-            pickeduserX = findname.get('description')}
+            findname = await userdatatags.findOne({ where: { name: message.author.id } });
+            pickeduserX = findname.get('description')
+            }
             catch (error) {
+                console.log(error)
             }
         }
 
@@ -396,16 +398,16 @@ module.exports = {
             )()
             } catch(error){
                 if(error.toString().includes('replaceAll')){
-                    message.reply("Error osu03 - account not found (or some other error)")
-                    console.log("error osu03 - account not found and/or json sent no data")}
+                    message.reply("Error osu03 - play data not found and/or json sent no data")
+                    console.log("Error osu03 - play data not found and/or json sent no data")}
                     else{message.reply('unknown error')}
                 console.log(error)
                 console.log("")
             }
             }catch(error){
                 if(error.toString().includes('replaceAll')){
-                    message.reply("Error osu03 - account not found (or some other error)")
-                    console.log("error osu03 - account not found and/or json sent no data")}
+                    message.reply("Error osu03 - play data not found and/or json sent no data")
+                    console.log("Error osu03 - play data not found and/or json sent no data")}
                     else{message.reply('unknown error')}
                 console.log(error)
                 console.log("")

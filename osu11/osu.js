@@ -5,15 +5,21 @@ const { access_token } = require('../debug/osuauth.json');
 module.exports = {
     name: 'osu',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
+    async execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
         console.group('--- COMMAND EXECUTION ---')
-        const pickeduserX = args.splice(0,1000).join(" ");
+        let pickeduserX = args.splice(0,1000).join(" ");
+        if(!pickeduserX){
+            try{
+            findname = await userdatatags.findOne({ where: { name: message.author.id } });
+            pickeduserX = findname.get('description')}
+            catch (error) {
+            }
+        }
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osu profile")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
-        if(!pickeduserX) return message.reply("user ID required");
         //if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
       
         try{
