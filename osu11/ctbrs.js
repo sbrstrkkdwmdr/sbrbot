@@ -5,44 +5,20 @@ const { catch_ppv2 } = require('booba');
 module.exports = {
     name: 'ctbrs',
     description: '',
-    execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+    async execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
-        //let pickeduserX = args.splice(0,1000).join(" ");
-        //let offsetflag = '0'
-        //let pickeduserX = 'SaberStrike'
-        let strtest = args.splice(0,1000).join(" ");
-        let str = strtest.toString();
-        //console.log(str)
-        //console.log(args)
-        if(str.includes('"')){
-            //str1 = str.indexOf('"') + 1
-            //str2 = str.lastIndexOf('"')
-            pickeduserX = str.substring(
-                str.indexOf('"') + 1, 
-                str.lastIndexOf('"')
-            )}
-        if(!str.includes('"')){
-            pickeduserX = str
-        };
-
-        //console.log(pickeduserX)
-            //console.log(args.indexOf('"') - 1)
-            //console.log(args.lastIndexOf('"') - 1)
-        
-        //let offsetflag = '0'
-        if(!str.includes('-p')){offsetflag = '0'};
-        if(str.includes('-p')){
-            if(!str.includes('"')) return message.reply(`please put "s around the username if you're using args`)
-            offsetflag1 = str.indexOf('-p') + 2
-            offsetflag2 = str.lastIndexOf('')
-            offsetflag = str.substring(offsetflag1, offsetflag2)
+        let pickeduserX = args.splice(0,1000).join(" ");
+        if(!pickeduserX){
+            try{
+            findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
+            pickeduserX = findname.get('description')}
+            catch (error) {
+            }
         }
-        //console.log(offsetflag)        console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - ctbrs")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
-        if(!pickeduserX) return message.reply("user ID required");
+        console.log("")
             try{
                 let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
                 let body1 = {
