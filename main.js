@@ -13,6 +13,8 @@ process.on('warning', e => console.warn(e.stack));
 const commandhandler = require('./commandhandler.js')
 const slashcommandhandler = require('./slashcommandhandler.js')
 const linkhandler = require('./linkhandler.js')
+const looptimerthingyidkwhattocallit = require(`./loop.js`)
+const testhandler = require('./testhandler.js')
 
 //MUSIC
 const ytdl = require("ytdl-core");
@@ -116,8 +118,43 @@ for(const file of gamingcmdfiles){
     }());
     }*/
     //const curtimezone = new Date().getTimezoneOffset();
-
+    const Sequelize = require('sequelize');
+    const sequelize = new Sequelize('database', 'user', 'password', {
+        host: 'localhost',
+        dialect: 'sqlite',
+        logging: false,
+        // SQLite only
+        storage: 'database.sqlite',
+    });
+    const Tags = sequelize.define('tags', {
+        name: {
+            type: Sequelize.STRING,
+            unique: true,
+        },
+        description: Sequelize.TEXT,
+        username: Sequelize.STRING,
+        usage_count: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+            allowNull: false,
+        },
+    });
+    const userdatatags = sequelize.define('tags', {
+        name: {
+            type: Sequelize.STRING,
+            unique: true,
+        },
+        description: Sequelize.TEXT,
+        username: Sequelize.STRING,
+        usage_count: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+            allowNull: false,
+        },
+    });
 client.once('ready', () => {
+    Tags.sync();
+    userdatatags.sync();
     let currentDate = new Date();
     let currentDateISO = new Date().toISOString();
     console.group('--- BOT IS NOW ONLINE ---')
@@ -131,8 +168,9 @@ client.once('ready', () => {
     //msglogs(client)
     //modlogs(client)
     commandhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
-    slashcommandhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
+    slashcommandhandler(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
     linkhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
+    testhandler(Tags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
     //Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, prefix, monitorEventLoopDelay, setInterval
 
 client.user.setPresence({ activities: [{ name: "you", type: 'WATCHING', video_url: 'https://youtube.com/saberstrkkdwmdr'}], status: `dnd`,});
