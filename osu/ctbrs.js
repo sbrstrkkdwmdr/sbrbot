@@ -24,7 +24,7 @@ module.exports = {
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
-        if(!pickeduserX) return interaction.editReply("user ID required");
+        if(!pickeduserX) return interaction.channel.send("user ID required");
             try{
                 let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
                 let body1 = {
@@ -300,8 +300,11 @@ module.exports = {
             )()
             } catch(error){
                 if(error.toString().includes('replaceAll')){
-                    interaction.channel.send("Error osu03 - account not found (or some other error)")
-                    console.log("error osu03 - account not found and/or json sent no data")}
+                    interaction.channel.send("Error osu03 - replay data not found (or some other error)")
+                    console.log("Error osu03 - replay data not found and/or json sent no data")
+                    console.log(error)
+                    console.log("")
+                }
                     else{interaction.channel.send('unknown error')}
                 console.log(error)
                 console.log("")
@@ -311,17 +314,21 @@ module.exports = {
                     interaction.channel.send("Error osu03 - account not found (or some other error)")
                     console.log("error osu03 - account not found and/or json sent no data")}
                     else{interaction.channel.send('unknown error')}
-                console.log(error)
-                console.log("")
+                    console.log(error)
+                    console.log("")
+                    console.groupEnd()
             }});
                 } catch(error){
                     interaction.channel.send("Error - account not found")
                     console.log("Error account not found")
                     console.log(error)
                     console.log("")
+                    console.groupEnd()
                 }})
             } catch(err){
                 console.log(err)
+                console.log("")
+                console.groupEnd()
             }
             
     }

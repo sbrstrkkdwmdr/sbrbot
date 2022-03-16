@@ -29,7 +29,7 @@ module.exports = {
             offsetflag = '0'
         }
         interaction.reply('getting data...')
-        if(!pickeduserX) return interaction.reply("Error - no user");
+        if(!pickeduserX) return interaction.channel.send("Error - no user");
             try{
                 let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
                 let body1 = {
@@ -191,8 +191,9 @@ module.exports = {
                     interaction.channel.send("Error osu03 - account not found (or some other error)")
                     console.log("error osu03 - account not found and/or json sent no data")}
                     else{interaction.channel.send('unknown error')}
-                console.log(error)
-                console.log("")
+                    console.log(error)
+                    console.log("")
+                    console.groupEnd()
             }
             } ) 
         } catch(error){
@@ -200,10 +201,13 @@ module.exports = {
                 console.log("Error account not found")
                 console.log(error)
                 console.log("")
+                console.groupEnd()
             }})
             
             } catch(err){
                 console.log(err)
+                console.log("")
+                console.groupEnd()
                 
             } 
             

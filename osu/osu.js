@@ -20,9 +20,9 @@ module.exports = {
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
-        //if(!pickeduserX) return interaction.reply("user ID required");
+
         interaction.reply('getting data...')
-        //if(isNaN(pickeduserX)) return interaction.editReply("You must use ID e.g. 15222484 instead of SaberStrike")
+        if(!pickeduserX) return interaction.channel.send("user ID required");
       
         try{
             let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
@@ -164,11 +164,13 @@ module.exports = {
                     console.log("Error account not found")
                     console.log(error)
                     console.log("")
-                    
+                    console.groupEnd()
                 }
         });
         } catch(err){
             console.log(err)
+            console.log("")
+            console.groupEnd()
         } 
         
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
