@@ -59,7 +59,7 @@ module.exports = {
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 let playeravatar = JSON.stringify(osudata, ['avatar_url']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('avatar_url', '').replaceAll('https', 'https:');
                 let playerrank1 = JSON.stringify(osudata['statistics'], ['global_rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('global_rank', '');
-                let playercountryrank = JSON.stringify(osudata['statistics'], ['country_rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('country_rank', '');
+                let playercountryrank1 = JSON.stringify(osudata['statistics'], ['country_rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('country_rank', '');
                 let playercountry = JSON.stringify(osudata, ['country_code']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('country_code', '');
                 let playerpp = JSON.stringify(osudata['statistics'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pp', '');
                 let playerplays = JSON.stringify(osudata['statistics'], ['play_count']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('play_count', '');
@@ -77,37 +77,21 @@ module.exports = {
                 let playerfollowers = JSON.stringify(osudata, ['follower_count']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('follower_count', '');
                 let playerprevname = JSON.stringify(osudata, ['previous_usernames']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('previous_usernames', '').replaceAll('[', '').replaceAll(']', '');
 
-                let playerrank = JSON.stringify(osudata['statistics'], ['global_rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('global_rank', '');
-
                 if(isNaN(playerrank1)){
                     playerrank = '---'
                 }
-                if(isNaN(playercountryrank)){
+                if(isNaN(playercountryrank1)){
                     playercountryrank = '---'
                 }
-                if(playerrank1 < 1000000000 && playerrank1 > 999999){
-                    playerrankp1 = Math.floor(playerrank1 / 1000000);
-                    playerrankp2 = Math.floor(playerrank1 / 1000) % 1000;
-                    playerrankp3 = playerrank1 % 1000;
-                    playerrank = `${playerrankp1},${playerrankp2},${playerrankp3}`
-                }
-
-                if(playerrank1 < 1000000 && playerrank1 > 999){
-                    playerrankp1 = Math.floor(playerrank1 / 1000);
-                    playerrankp2 = playerrank1 % 1000;
-                    playerrank = `${playerrankp1},${playerrankp2}`
-                }
-                if(playerrank1 < 1000){
-                    playerrank = playerrank1
-                }
-
-
-                if(playercountryrank == 'null'){
+                if(playercountryrank1 == 'null'){
                     playercountryrank == '---'
                 }
                 if(playerrank1 == 'null'){
                     playerrank == '---'
                 }
+                let playerrank = playerrank1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                let playercountryrank = playercountryrank1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            
                 let playerflag = playercountry.toLowerCase();
 
 
