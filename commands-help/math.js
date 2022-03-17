@@ -18,26 +18,6 @@ module.exports = {
       //  if(isNaN(part2)) return message.reply("Second number not found");
         let mathtype = args[0];
         switch(mathtype){
-            case 'add':case '+':case 'addition':case 'sum':
-                if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
-                let problemadd = Math.abs(part1 + part2);
-                message.reply(`${problemadd}`)
-                break;
-            case 'subtract':case '-':case 'minus':case 'subtraction':case 'difference':
-                if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
-                let problemsubtract = Math.abs(part1 - part2);
-                message.reply(`${problemsubtract}`)
-                break;
-            case 'multiply':case '*':case 'multiplication':case 'product':
-                if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
-                let problemmultiply = Math.abs(part1 * part2);
-                message.reply(`${problemmultiply}`)
-                break;
-            case 'divide':case '/':case 'division':
-                if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
-                let problemdivide = Math.abs(part1 / part2);
-                message.reply(`${problemdivide}`)
-                break;
             case 'squareroot':case 'sqrt':
                 if(isNaN(part1)) return message.reply("Error - NaN");
                 let problemsqrt = Math.sqrt(part1)
@@ -107,18 +87,6 @@ module.exports = {
                 let ARDT2 = Math.abs(ARDT1 / 3);
                     message.reply(`${ARDT2}`)
                 break;
-           /* case 'arht':
-                let arht1 = Math.abs(part1 * 3)
-                let arht2 = Math.abs(arht1 - 13)
-                let arht3 = Math.abs(arht2 / 2)
-                message.reply(`${arht3}`)
-                break;*/
-           // case 'add':
-             //   break;
-            case 'power':case '^':
-                let powerof = Math.abs(part1 ** part2)
-                message.reply(`${powerof}`)
-                break;
             case 'circumference':
                 let circumference1 = Math.abs(2* Math.PI * part1 ); 
                 message.reply(`${circumference1}`)
@@ -135,7 +103,13 @@ module.exports = {
                 message.reply({ embeds: [helpembed] })
                 break;
             default:
-                message.reply("method not found")
+                string = args.splice(/ +/).join(" ");
+                try{evalstring = (eval(string.replaceAll("^", "**").replaceAll("pi", "Math.PI"))).toString()
+                message.reply(evalstring)}
+                catch(error){
+                    message.reply("error")
+                    console.log(error)
+                }
                 break;
         }
     }
