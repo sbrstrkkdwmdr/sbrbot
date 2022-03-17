@@ -478,8 +478,8 @@ client.on('messageCreate', message =>{
         client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
     case 'haloinfprofile':case 'haloprofile':
-        //client.gamingcmds.get('haloinfprofile').execute(message, args, client, Discord, currentDate, currentDateISO, trnkey)
-        client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
+        client.gamingcmds.get('haloinfprofile').execute(message, args, client, Discord, currentDate, currentDateISO, trnkey)
+        //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
         break;
 
     default:
