@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
+const { calculateStarRating } = require('osu-sr-calculator')
 module.exports = {
     name: 'map',
     description: '',
@@ -395,7 +396,19 @@ module.exports = {
                 if(moddetect != 'NM'){
                     maptitle = `${mapartist} - ${maptitle} [${mapdiff}] +${moddetect}`
                 }
-
+                if(moddetectnotd.includes('NM')){
+                    moddetectforsr = ''
+                    SRclean = mapsr
+                }
+                if(!moddetectnotd.includes('NM')){
+                    modtoarray1 = moddetectnotd.replace(/(.{2})/g, "$1 ");
+                    modtoarray2 = modtoarray1.slice(0, -1)
+                    moddetectforsr = modtoarray2.split(/ +/)
+                    starRating = await calculateStarRating(maplink, moddetectforsr);
+                    //console.log(starRating)
+                    SR = JSON.stringify(starRating).replace('{', '').replace(':', '').replace('}', '').replace(moddetectnotd, '').replace('nomod', '').replaceAll('"', '')    
+                    SRclean = Math.abs(SR).toFixed(2)
+                }
                 let userinfourl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`
             fetch(userinfourl, {
                 headers: {
@@ -412,7 +425,7 @@ module.exports = {
             .setImage(mapbg)
             //.setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\n\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n\n--**PP VALUES**--\nSS: ${ppSS} | 95: ${pp95} \n\n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);
             //.addField('', `[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper)
-            .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
+            .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + SRclean + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${recordedmaplength}`, true)
             .addField('**PP VALUES**', `\n**SS:** ${ppSS} \n**95:** ${pp95} ${modissue}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             message.reply({ embeds: [Embed]})
