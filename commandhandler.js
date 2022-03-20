@@ -324,7 +324,7 @@ client.on('messageCreate', message =>{
         break;*/
     
     case 'pp':
-        client.osucmds.get('pp').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.altosucmds.get('pp').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
  
     case 'map':
