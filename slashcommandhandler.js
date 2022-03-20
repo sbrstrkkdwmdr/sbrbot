@@ -398,23 +398,7 @@ client.on('interactionCreate', async (interaction) =>{
         //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
         break;
     case 'osutop':
-        if(!options.getString('mode') || options.getString('mode') == 'osu' || options.getString('mode') == 'o' || options.getString('mode') == 'standard' || options.getString('mode') == 'std'){
             client.osucmds.get('osutop').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-            return;
-            }
-        if(options.getString('mode') == 'catch the beat' || options.getString('mode') == 'ctb' || options.getString('mode') == 'c' || options.getString('mode') == 'catch') {
-            client.osucmds.get('ctbtop').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-            return;
-        }
-        if(options.getString('mode') == 'mania' || options.getString('mode') == 'm') {
-            client.osucmds.get('maniatop').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-            return;
-        }
-        if(options.getString('mode') == 'taiko' || options.getString('mode') == 't') {
-            client.osucmds.get('taikotop').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-            return;
-        }
-        else interaction.reply(`error: mode doesn't exist. list of modes: osu, taiko, ctb, mania`)
         //else client.osucmds.get('osutop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
         break;

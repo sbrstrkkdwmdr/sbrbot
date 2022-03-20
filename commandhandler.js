@@ -336,7 +336,7 @@ client.on('messageCreate', message =>{
         break;
 
     case 'ctbrs':case 'ctbtop':case 'maniars':case 'maniatop':case 'map':case 'osutop':case 'rs':case 'skin':case 'taikors': case 'taikotop':
-        message.reply('switched to / commands (:flushed:)')
+        message.reply('use the / command (/rs mode:mode /osutop mode:mode)')
         break;
     //HENTAI-----------------------------------------------------------------------------------------
 
