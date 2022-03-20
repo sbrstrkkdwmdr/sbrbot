@@ -374,7 +374,9 @@ client.on('interactionCreate', async (interaction) =>{
 
     //------osu
     case 'rs':
-        console.log(interaction.commandId)
+        client.osucmds.get('rsallmodes').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        //console.log(interaction.commandId)
+        /*
         if(!options.getString('mode') || options.getString('mode') == 'osu' || options.getString('mode') == 'o' || options.getString('mode') == 'standard' || options.getString('mode') == 'std'){
         client.osucmds.get('rs').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         return;
@@ -391,7 +393,7 @@ client.on('interactionCreate', async (interaction) =>{
             client.osucmds.get('taikors').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
             return;
         }
-        else interaction.reply(`error: mode doesn't exist. list of modes: osu, taiko, ctb, mania`)
+        else interaction.reply(`error: mode doesn't exist. list of modes: osu, taiko, ctb, mania`)*/
         //else client.osucmds.get('rs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
         break;
