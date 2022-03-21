@@ -10,6 +10,7 @@ module.exports = {
         const pickeduserX = args.splice(0,1000).join(" ");
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osu graph")
+        console.log("category - osu")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
@@ -133,6 +134,7 @@ module.exports = {
                 //.attachFiles(['./chart/mychart.png'])
 
                 message.reply({ embeds: [Embed], files: ['./files/mychart.png']})
+                console.log("sent")
             })
                 
             } catch(error){

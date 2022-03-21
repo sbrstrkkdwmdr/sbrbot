@@ -14,6 +14,7 @@ module.exports = {
         //const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osutop")
+        console.log("category - osu")
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 

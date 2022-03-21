@@ -14,6 +14,7 @@ module.exports = {
         //const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osutop")
+        console.log("category - osu")
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
@@ -209,6 +210,7 @@ module.exports = {
                 .addField(`[${maptitle5} [${mapdiff5}]](https://osu.ppy.sh/b/${mapurl5}) +${mapmods5}`, `SCORE:${mapscore5} \nScore set on ${maptimeset5} \n${(Math.abs((mapacc5) * 100).toFixed(2))}% | ${map3005}/${map1005}/${map505}/${mapmiss5} | ${maprank5}\n${Math.abs(mappp5).toFixed(2)}pp`, false)*/
                 //https://osu.ppy.sh/b/
                 interaction.editReply({ content: '⠀', embeds: [Embed]})
+                console.log("sent")
                 //interaction.reply(mapbg1)
             } catch(error){
                 if(error.toString().includes('replaceAll')){

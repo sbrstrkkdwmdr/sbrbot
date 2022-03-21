@@ -6,6 +6,7 @@ module.exports = {
         message.channel.send('here you go! https://sbrstrkkdwmdr.github.io/sbr-web/');  
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - links")
+        console.log("category - help")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")

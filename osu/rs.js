@@ -22,6 +22,7 @@ module.exports = {
         interaction.reply('getting data...')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - rs")
+        console.log("category - osu")
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
@@ -384,6 +385,7 @@ module.exports = {
                         .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`, true)
                         //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
                         interaction.editReply({ content: '⠀', embeds: [Embed]})
+                        console.log("sent")
                 }
             }
             )()

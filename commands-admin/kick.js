@@ -6,6 +6,7 @@ module.exports = {
             console.group('--- COMMAND EXECUTION ---')
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - kick")
+            console.log("category - admin")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         let user = message.mentions.users.first();

@@ -6,6 +6,7 @@ module.exports = {
         if(message.member.permissions.has('BAN_MEMBERS')){
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - ban")
+            console.log("category - admin")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("")

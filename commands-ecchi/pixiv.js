@@ -7,6 +7,7 @@ module.exports = {
         message.channel.send(`https://www.pixiv.net/en/artworks/${pp}`)
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - pixiv")
+        console.log("category - ecchi")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log(`img id - ${pp}`)
@@ -15,6 +16,7 @@ module.exports = {
             message.channel.send("this channel is not NSFW")
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - pixiv")
+            console.log("category - ecchi")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("command failed - not NSFW channel")

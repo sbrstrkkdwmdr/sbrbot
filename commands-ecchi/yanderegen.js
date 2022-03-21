@@ -7,6 +7,7 @@ module.exports = {
         message.channel.send(`https://yande.re/post/show/${pp}`)
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - yanderegen")
+        console.log("category - ecchi")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log(`img id - ${pp }`)
@@ -16,6 +17,7 @@ module.exports = {
             message.channel.send("this channel is not NSFW")
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - yanderegen")
+            console.log("category - ecchi")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("command failed - non NSFW channel")

@@ -17,6 +17,7 @@ module.exports = {
         }
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osu profile")
+        console.log("category - osu")
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
@@ -133,6 +134,7 @@ module.exports = {
             .setThumbnail(playeravatar)
             .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n` + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_online:927800818445455421> Online**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
             interaction.channel.send({ content: '⠀', embeds: [Embed]})
+            console.log("sent")
             //interaction.channel.send(mapbg1)
             }
             if(playerstatus == false ){let Embed = new Discord.MessageEmbed()
@@ -142,6 +144,7 @@ module.exports = {
                 .setThumbnail(playeravatar)
                 .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n`+ playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + `\n **<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago\n**Player joined on** ` + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
                 interaction.channel.send({ content: '⠀', embeds: [Embed]})
+                console.log("sent")
                 //interaction.editReply(mapbg1)
                 }
                 

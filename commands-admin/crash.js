@@ -7,6 +7,7 @@ module.exports = {
           //message.reply("✔"); for some reason this line gets skipped
           console.log(`${currentDateISO} | ${currentDate}`)
           console.log("command executed - force crash")
+          console.log("category - admin")
           let consoleloguserweeee = message.author
           console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
           console.log("");
@@ -17,6 +18,7 @@ module.exports = {
             message.channel.send("sorry you cannot use this command")
             console.log(`${currentDate}`)
             console.log("command executed - force crash")
+            console.log("category - admin")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("command failed - insufficient permissions")

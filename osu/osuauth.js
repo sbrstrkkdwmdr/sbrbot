@@ -8,6 +8,7 @@ module.exports = {
         console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osuauth")
+        console.log("category - osu")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
@@ -29,6 +30,7 @@ module.exports = {
             .then(message.reply("success"))
             console.log("writing data to osuauth.json")
             console.log("")
+            console.log("sent")
             console.groupEnd()
             ;
         } catch(error){

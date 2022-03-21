@@ -9,6 +9,7 @@ module.exports = {
         const pickeduserX = args.splice(0,1000).join(" ");
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - get osu id")
+        console.log("category - osu")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
@@ -50,6 +51,7 @@ module.exports = {
                 console.log("")
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 message.reply(playerid)
+                console.log("sent")
                 } catch(error){
                     message.reply("Error - account not found")
                     console.log("Error account not found")

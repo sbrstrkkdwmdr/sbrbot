@@ -172,6 +172,7 @@ module.exports = {
             message.reply({ embeds: [Embedscore1, Embedscore2, Embedscore3, Embedscore4, Embedscore5, Embedscore6, Embedscore7, Embedscore8, Embedscore9, Embedscore10 /*EmbedScores*/] });
             message.channel.send("The top 10 highest pp scores over the past 24h: from " + curdateyesterday + " to " + curdatetmr + ` | ${curtimezone}`)
             //message.reply("```json\nTOP SCORES FOR " + pickeduserX + "\n" + JSON.stringify(topHiscores, null, 2).replaceAll('"', '').replaceAll('beatmap_id', 'beatmap id').replaceAll('[', '').replaceAll(']', '').replaceAll(',', '').replaceAll('}', '').replaceAll('{', '------------') + "```");
+            console.log("sent")    
     }
     )} catch (error) {
         console.log(error)
@@ -181,6 +182,7 @@ module.exports = {
 
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osubest past 24h")
+        console.log("category - osu")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 

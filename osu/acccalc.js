@@ -6,6 +6,7 @@ module.exports = {
     async execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
         console.log("command executed - accuracy calculator")
+        console.log("category - osu")
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         interaction.reply('calculating...')
@@ -51,6 +52,7 @@ module.exports = {
             shortequation = ((Math.abs((topequation / bottomequation)*100)).toFixed(2)).toString() + '%'
             interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}`})//can't use edit reply bcs INTERACTION_NOT_REPLIED error, and cant use reply bcs DiscordAPIError: Interaction has already been acknowledged
             console.log("") 
+            console.log("sent")
             console.groupEnd()
         }
         if(mode == 'taiko' || mode == 't' || mode == '2'){
@@ -61,6 +63,7 @@ module.exports = {
             shortequation = ((Math.abs((topequation / bottomequation)*100)).toFixed(2)).toString() + '%'
             interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}`})
             console.log("") 
+            console.log("sent")
             console.groupEnd()
         }
         if(mode == 'catch' || mode == 'c' || mode == '3' || mode == 'ctb' || mode == 'catch the beat'){
@@ -91,6 +94,7 @@ module.exports = {
             console.groupEnd()
             })}
             console.log("") 
+            console.log("sent")
             console.groupEnd()
         }
         if(mode == 'mania' || mode == 'm' || mode == '4'){
@@ -101,6 +105,7 @@ module.exports = {
             shortequation = ((Math.abs((topequation / bottomequation)*100)).toFixed(2)).toString() + '%'
             interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}`})
             console.log("") 
+            console.log("sent")
             console.groupEnd()
         }
     })();

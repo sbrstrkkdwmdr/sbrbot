@@ -7,6 +7,7 @@ module.exports = {
         console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - avatar")
+        console.log("category - general")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log(`mentions - ${message.mentions.users.size}`)

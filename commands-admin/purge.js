@@ -8,6 +8,7 @@ module.exports = {
                 try {
             let delcount = args[0];
             console.log("command executed - purge")
+            console.log("category - admin")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log(`deleted message count - ${delcount}`)

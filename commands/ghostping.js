@@ -11,6 +11,7 @@ module.exports = {
                 message.channel.send("⠀")
                 console.log(`${currentDateISO} | ${currentDate}`)
                 console.log("command executed - ghostping")
+                console.log("category - general")
                 let consoleloguserweeee = message.author
                 console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
                 console.log("command failed - no user ID")
@@ -20,6 +21,7 @@ module.exports = {
             message.delete();
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - ghostping")
+            console.log("category - general")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("")
@@ -30,6 +32,7 @@ module.exports = {
             message.channel.send(`${dum} that won't work`)
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - ghostping")
+            console.log("category - general")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("command failed - insufficient permissions")

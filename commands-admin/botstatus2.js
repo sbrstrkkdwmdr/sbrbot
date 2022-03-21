@@ -29,6 +29,7 @@ module.exports = {
         interaction.reply("status set!")
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - status")
+        console.log("category - admin")
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")}

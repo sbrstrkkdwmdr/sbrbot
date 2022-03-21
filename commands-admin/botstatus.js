@@ -21,6 +21,7 @@ module.exports = {
         message.reply("status set!")
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - status")
+        console.log("category - admin")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")}

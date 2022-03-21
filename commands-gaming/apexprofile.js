@@ -7,6 +7,7 @@ module.exports = {
     execute(message, args, client, Discord, currentDate, currentDateISO, trnkey) {
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - get splitgate profile")
+        console.log("category - gaming")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 

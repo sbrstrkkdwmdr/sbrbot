@@ -12,6 +12,7 @@ module.exports = {
         try{
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("link detector executed - replayparse")
+        console.log("category - osu")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("");

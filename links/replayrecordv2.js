@@ -227,6 +227,7 @@ module.exports = {
                 console.group('--- COMMAND EXECUTION ---')
                 console.log(`${currentDateISO} | ${currentDate}`)
                 console.log("command executed - replayrecord")
+                console.log("category - osu")
                 let consoleloguserweeee = message.author
                 console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
                 console.log("")

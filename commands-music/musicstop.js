@@ -41,6 +41,7 @@ module.exports = {
         }
 console.log(`${currentDateISO} | ${currentDate}`)
 console.log("executed command - musicstop")
+console.log("category - music")
 let consoleloguserweeee = message.author
 console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
 console.log("")

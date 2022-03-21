@@ -13,6 +13,7 @@ module.exports = {
         console.log(w)
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osu profile link")
+        console.log("category - osu")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 

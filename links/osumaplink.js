@@ -14,6 +14,7 @@ module.exports = {
         console.groupEnd()
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("link detector executed - map get")
+        console.log("category - osu")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 

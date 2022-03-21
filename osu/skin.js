@@ -117,8 +117,10 @@ module.exports = {
         }}
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - skin")
+        console.log("category - osu (no api usage)")
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        console.log("sent")
         console.log("")   
         console.groupEnd()
     }

@@ -5,6 +5,7 @@ module.exports = {
         const pickeduserX = options.getString('username')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - osu set")
+        console.log("category - osu (no api usage)")
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
@@ -18,7 +19,8 @@ module.exports = {
 				username: interaction.member.user.id,
 			});
 
-			return interaction.reply(`${pickeduserX} added.`);
+			interaction.reply(`${pickeduserX} added.`)
+            console.log("sent")
 		}
 		catch (error) {
 			if (error.name === 'SequelizeUniqueConstraintError') {

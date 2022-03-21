@@ -62,6 +62,7 @@ module.exports = {
 
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - remind")
+        console.log("category - general")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log(ms(time))

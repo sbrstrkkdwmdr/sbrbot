@@ -52,6 +52,7 @@ module.exports = {
 
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - remind")
+        console.log("category - general")
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log(totaltime)

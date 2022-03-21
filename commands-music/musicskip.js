@@ -7,6 +7,7 @@ module.exports = {
         const player = new Player(client);
 console.log(`${currentDateISO} | ${currentDate}`)
 console.log("command executed - musicskip")
+console.log("category - music")
 let consoleloguserweeee = message.author
 console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
 console.log("")

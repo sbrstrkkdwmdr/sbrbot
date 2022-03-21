@@ -13,6 +13,7 @@ module.exports = {
         console.group('--- TRIGGERED WORD ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log(`MESSAGE - ${message}`)
+        console.log("category - admin")
         let consoleloguserweeee = message.author
         console.log(`${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")

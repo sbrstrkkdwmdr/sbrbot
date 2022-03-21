@@ -85,12 +85,14 @@ console.log("yes")
         else if(command === 'skip') {skip_song(message, server_queue)
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - music skip")
+            console.log("category - music")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("")} 
         else if(command === 'stop') {stop_song(message, server_queue)
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - music stop")
+            console.log("category - music")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("")};

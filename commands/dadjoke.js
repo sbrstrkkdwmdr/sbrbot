@@ -20,7 +20,7 @@ module.exports = {
     "Some aquatic mammals at the zoo escaped. It was otter chaos!",
     "I made a pun about the wind but it blows.",
     "My mate has a fear of over-engineered buildings. He has a complex complex complex\nHe went to the psychiatrist and he discovered it was more than just a fear. He has a complex complex complex complex\n \nThe Doctor sent him to a specialised centre.. It was the complex complex complex complex complex.\n \nUnfortunately, it was an over-engineered building. Yes, it was a complex complex complex complex complex complex.",
-    ""
+    "I used to hate facial hair, but then it grew on me!",
 ];
 
         let dadjoke = rdm[Math.floor(Math.random() * rdm.length)];
@@ -28,6 +28,7 @@ module.exports = {
         console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - dadjoke")
+        console.log("category - general")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")

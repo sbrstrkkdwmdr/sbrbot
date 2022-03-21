@@ -30,6 +30,7 @@ module.exports = {
 
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - map pp")
+        console.log("category - osu")
         let consoleloguserweeee = interaction.member.user
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("") 
@@ -323,6 +324,7 @@ module.exports = {
             .addField('**PP VALUES (CPOL)**', `\n**SS:** ${cppSS} \n**95:** ${cpp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             interaction.editReply({ content: '⠀', embeds: [Embed]})
+            console.log("sent")
         })();
             })//output4
         })

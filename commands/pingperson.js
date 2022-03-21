@@ -9,6 +9,7 @@ module.exports = {
             message.delete();
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - pingperson")
+            console.log("category - general")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log(`pinged - ${user}`)
@@ -17,6 +18,7 @@ module.exports = {
             else {message.channel.send("Error 401: Unauthorised") 
             console.log(`${currentDateISO} | ${currentDate}`) 
                     console.log("command executed - pingperson")
+                    console.log("category - general")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("command failed - insufficent perms")

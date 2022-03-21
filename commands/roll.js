@@ -11,6 +11,7 @@ module.exports = {
                 message.channel.send(` ${user} has rolled a(n) ${score} `)
                 console.log(`${currentDateISO} | ${currentDate}`)
                 console.log("command executed - roll")
+                console.log("category - general")
                 let consoleloguserweeee = message.author
                 console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
                 console.log("")
@@ -20,6 +21,7 @@ module.exports = {
             message.channel.send(` ${user} has rolled a(n) ${score} `)
             console.log(`${currentDateISO} | ${currentDate}`)
             console.log("command executed - roll")
+            console.log("category - general")
             let consoleloguserweeee = message.author
             console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
             console.log("")

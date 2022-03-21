@@ -8,7 +8,8 @@ module.exports = {
         command.delete()
         console.log(`Deleted command ${command.name}`)
         console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - ping")
+        console.log("command executed - deleted command")
+        console.log("category - admin")
         let consoleloguserweeee = message.author
         console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
