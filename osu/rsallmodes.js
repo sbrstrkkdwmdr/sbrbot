@@ -6,34 +6,53 @@ module.exports = {
     name: 'rsallmodes',
     description: '',
     async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        console.group('--- COMMAND EXECUTION ---')
         let pickeduserX = options.getString('user')
         let pickedmode = options.getString('mode')
-        if(!pickedmode || pickedmode == 'osu' || pickedmode == 'o' || pickedmode == 'standard' || options.getString('mode') == 'std'){
-            pickedmodex = 'osu'
-        }
-        else if(pickedmode == 'catch the beat' || pickedmode == 'ctb' || pickedmode == 'c' || pickedmode == 'catch') {
-            pickedmodex = 'fruits'
-        }
-        else if(pickedmode == 'mania' || pickedmode == 'm') {
-            pickedmodex = 'mania'
-        }
-        else if(pickedmode == 'taiko' || pickedmode == 't') {
-            pickedmodex = 'taiko'
-        }
-        else{ return interaction.reply("mode doesn't exist")}
         if(!pickeduserX){
             try{
                 findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
                 pickeduserX = findname.get('description')}
                 catch (error) {
                 }
-        }
+                try{
+                    findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
+                    pickedmode = findname.get('mode')}
+                    catch (error) {
+                    pickedmode = 'osu'
+                    }
+            }
+            if(pickeduserX){
+                try{
+                    findname = await userdatatags.findOne({ where: { description: pickeduserX}})
+                    pickedmode = findname.get('mode')
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+            if(!pickedmode){
+                pickedmodex = 'osu'
+            }
+            else if(pickedmode == 'osu' || pickedmode == 'o' || pickedmode == 'standard' || options.getString('mode') == 'std'){
+                pickedmodex = 'osu'
+            }
+            else if(pickedmode == 'catch the beat' || pickedmode == 'ctb' || pickedmode == 'c' || pickedmode == 'catch') {
+                pickedmodex = 'fruits'
+            }
+            else if(pickedmode == 'mania' || pickedmode == 'm') {
+                pickedmodex = 'mania'
+            }
+            else if(pickedmode == 'taiko' || pickedmode == 't') {
+                pickedmodex = 'taiko'
+            }
+            else{
+                pickedmodex = 'osu'
+            }
         let offsetflag = options.getNumber('offset')
         if(!offsetflag) {
             offsetflag = '0'
         }
         interaction.reply('getting data...')
+        console.group('--- COMMAND EXECUTION ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log("command executed - rs")
         console.log("category - osu")

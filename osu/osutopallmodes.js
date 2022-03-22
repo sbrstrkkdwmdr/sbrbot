@@ -26,25 +26,43 @@ module.exports = {
                 pickeduserX = findname.get('description')}
                 catch (error) {
                 }
-        }
-        let offsetflag = options.getNumber('offset')
+                try{
+                    findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
+                    pickedmode = findname.get('mode')}
+                    catch (error) {
+                    pickedmode = 'osu'
+                    }
+            }
+            if(pickeduserX){
+                try{
+                    findname = await userdatatags.findOne({ where: { description: pickeduserX}})
+                    pickedmode = findname.get('mode')
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+            if(!pickedmode){
+                pickedmodex = 'osu'
+            }
+            else if(pickedmode == 'osu' || pickedmode == 'o' || pickedmode == 'standard' || options.getString('mode') == 'std'){
+                pickedmodex = 'osu'
+            }
+            else if(pickedmode == 'catch the beat' || pickedmode == 'ctb' || pickedmode == 'c' || pickedmode == 'catch') {
+                pickedmodex = 'fruits'
+            }
+            else if(pickedmode == 'mania' || pickedmode == 'm') {
+                pickedmodex = 'mania'
+            }
+            else if(pickedmode == 'taiko' || pickedmode == 't') {
+                pickedmodex = 'taiko'
+            }
+            else{
+                pickedmodex = 'osu'
+            }
+            let offsetflag = options.getNumber('offset')
         if(!offsetflag) {
             offsetflag = '0'
         }
-        let pickedmode = options.getString('mode')
-        if(!pickedmode || pickedmode == 'osu' || pickedmode == 'o' || pickedmode == 'standard' || options.getString('mode') == 'std'){
-            pickedmodex = 'osu'
-        }
-        else if(pickedmode == 'catch the beat' || pickedmode == 'ctb' || pickedmode == 'c' || pickedmode == 'catch') {
-            pickedmodex = 'fruits'
-        }
-        else if(pickedmode == 'mania' || pickedmode == 'm') {
-            pickedmodex = 'mania'
-        }
-        else if(pickedmode == 'taiko' || pickedmode == 't') {
-            pickedmodex = 'taiko'
-        }
-        else{ return interaction.reply("mode doesn't exist")}
         interaction.reply('getting data...')
         console.log(pickedmodex + ' from ' + pickedmode)
         if(!pickeduserX) return interaction.channel.send("Error - no user");

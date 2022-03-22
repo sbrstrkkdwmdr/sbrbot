@@ -16,6 +16,38 @@ module.exports = {
             catch (error) {
                 console.log(error)
             }
+            try{
+                findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
+                pickedmode = findname.get('mode')}
+                catch (error) {
+                pickedmode = 'osu'
+                }
+        }
+        if(pickeduserX){
+            try{
+                findname = await userdatatags.findOne({ where: { description: pickeduserX}})
+                pickedmode = findname.get('mode')
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        if(!pickedmode){
+            pickedmodex = 'osu'
+        }
+        else if(pickedmode == 'osu' || pickedmode == 'o' || pickedmode == 'standard' || options.getString('mode') == 'std'){
+            pickedmodex = 'osu'
+        }
+        else if(pickedmode == 'catch the beat' || pickedmode == 'ctb' || pickedmode == 'c' || pickedmode == 'catch') {
+            pickedmodex = 'fruits'
+        }
+        else if(pickedmode == 'mania' || pickedmode == 'm') {
+            pickedmodex = 'mania'
+        }
+        else if(pickedmode == 'taiko' || pickedmode == 't') {
+            pickedmodex = 'taiko'
+        }
+        else{
+            pickedmodex = 'osu'
         }
 
         console.log(`${currentDateISO} | ${currentDate}`)
