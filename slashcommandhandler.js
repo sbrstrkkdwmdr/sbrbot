@@ -271,14 +271,20 @@ commands?.create({
 
 commands?.create({
     name: 'setuser',
-    description: 'set your username',
+    description: 'set your username / mode',
     options: [
         {
             name: 'username',
-            description: 'username or ID works',
+            description: 'username or ID works (mode name if set to mode)',
             required: true,
             type: Constants.ApplicationCommandOptionTypes.STRING
         },
+        {
+            name: 'type',
+            description: 'whether to set mode or username',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        }
     ]
 })
 //admin??

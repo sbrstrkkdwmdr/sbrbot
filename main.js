@@ -145,7 +145,12 @@ for(const file of gamingcmdfiles){
             unique: true,
         },
         description: Sequelize.TEXT,
-        username: Sequelize.STRING,
+        username: {
+            type: Sequelize.STRING,
+            unique: true, },
+        mode: {
+            type: Sequelize.STRING,
+            unique: true, },
         usage_count: {
             type: Sequelize.INTEGER,
             defaultValue: 0,
