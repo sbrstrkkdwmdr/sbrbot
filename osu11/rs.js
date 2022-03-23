@@ -16,38 +16,6 @@ module.exports = {
             catch (error) {
                 console.log(error)
             }
-            try{
-                findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
-                pickedmode = findname.get('mode')}
-                catch (error) {
-                pickedmode = 'osu'
-                }
-        }
-        if(pickeduserX){
-            try{
-                findname = await userdatatags.findOne({ where: { description: pickeduserX}})
-                pickedmode = findname.get('mode')
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        if(!pickedmode){
-            pickedmodex = 'osu'
-        }
-        else if(pickedmode == 'osu' || pickedmode == 'o' || pickedmode == 'standard' || options.getString('mode') == 'std'){
-            pickedmodex = 'osu'
-        }
-        else if(pickedmode == 'catch the beat' || pickedmode == 'ctb' || pickedmode == 'c' || pickedmode == 'catch') {
-            pickedmodex = 'fruits'
-        }
-        else if(pickedmode == 'mania' || pickedmode == 'm') {
-            pickedmodex = 'mania'
-        }
-        else if(pickedmode == 'taiko' || pickedmode == 't') {
-            pickedmodex = 'taiko'
-        }
-        else{
-            pickedmodex = 'osu'
         }
 
         console.log(`${currentDateISO} | ${currentDate}`)
@@ -129,13 +97,34 @@ module.exports = {
                 let rscombo = JSON.stringify(rsdata[0], ['max_combo']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max_combo', '');
                 let rstime = JSON.stringify(rsdata[0]['beatmap'], ['total_length']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total_length', '');
                 
-                let rslengthseconds = Math.abs(rstime) % 60;
+                let rslengthseconds1 = Math.abs(rstime) % 60;
                 let rslengthminutes = Math.trunc(rstime / 60);
-
+                if(rslengthseconds1 < 10){
+                    rslengthseconds = "0" + rslengthseconds1
+                }
+                else {
+                    rslengthseconds = rslengthseconds1
+                }
                 let rspasstime = JSON.stringify(rsdata[0]['beatmap'], ['hit_length']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('hit_length', '');
 
                 let rsfulltime = `${rslengthminutes}:${rslengthseconds}`;
-                let rspasspercentage = Math.abs(rspasstime / rstime).toFixed(2);
+                let rspasspercentage = Math.abs((rspasstime / rstime) * 100).toFixed(2) + '%';
+                let rspassseconds1 = Math.abs(rspasstime) % 60
+                let rspassminutes = Math.trunc(rspasstime / 60)
+                if(rspassseconds1 < 10){
+                    rspassseconds = "0" + rspassseconds1
+                }
+                else {
+                    rspassseconds = rspassseconds1
+                }
+                let rspasstimeconverted = `${rspassminutes}:${rspassseconds}`
+                //console.log(rstime + ` | ${rspasstime}`)
+                if(rsgrade == 'f' || rsgrade == 'F' ){
+                    rspassinfo = `\n${rspasstimeconverted} / ${rsfulltime} (${rspasspercentage})`
+                }
+                else{
+                    rspassinfo = ''
+                }
                 //console.log(`total ${rstime} hit ${rspasstime}`)
 
     
@@ -383,23 +372,11 @@ module.exports = {
                     rsgrade = '🇫'
                 }
                 if(!rsmods){
-                    rscoverlist = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['list']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('list', '').replace('https', 'https:');
-                    let Embed = new Discord.MessageEmbed()
-                        .setColor(0x9AAAC0)
-                        .setTitle("Most recent play for " + rsplayername)
-                        .setAuthor(`${minlastvisw} ago on ${rsmaptime} by ${rsplayername}${trycountstr}`, `https://a.ppy.sh/${rsplayerid}`, `https://osu.ppy.sh/u/${rsplayerid}`)
-                        //.setImage(rsmapbg)
-                        .setThumbnail(rscoverlist)
-                        //.setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
-                        //.addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
-                        .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** **${rsmapstar}**⭐`, false)
-                        .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:** ${rs300s} \n**100:** ${rs100s} \n**⠀50:** ${rs50s} \n**⠀⠀X:** ${rs0s} \n**${rscombo}x**`, true)
-                        //.addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**<:hit300:953593686590119986>**${rs300s} \n <:hit100:953593686699163668>${rs100s} \n<:hit50:953593686653034496>${rs50s} \n<:hitmiss:953593686741094460>${rs0s} \n**${rscombo}x**`, true)
-                        .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`, true)
-                        //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**NM** **${rsmapstar}**⭐ \n ${(Math.abs((rsacc) * 100).toFixed(2))}% | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n${rspp}**pp** (${ppiffcw}**pp IF ${rsnochokeacc}% FC**) | **${rscombo}x**`);
-                        message.reply({embeds: [Embed]})
+                    rsmodsembed = ''
                 }
                 if(rsmods){
+                    rsmodsembed = '+**' + rsmods + '**'
+                }
                     rscoverlist = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['list']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('list', '').replace('https', 'https:');
                     let Embed = new Discord.MessageEmbed()
                         .setColor(0x9AAAC0)
@@ -409,12 +386,12 @@ module.exports = {
                         .setThumbnail(rscoverlist)
                         //.setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
                         //.addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
-                        .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐`, false)
-                        .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** \n**300:** ${rs300s} \n**100:** ${rs100s} \n**⠀50:** ${rs50s} \n**⠀⠀X:** ${rs0s} \n**${rscombo}x**`, true)
+                        .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** ${rsmodsembed} **${rsmapstar}**⭐`, false)
+                        .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** ${rspassinfo}\n**300:** ${rs300s} \n**100:** ${rs100s} \n**⠀50:** ${rs50s} \n**⠀⠀X:** ${rs0s} \n**${rscombo}x**`, true)
                         .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`, true)
                         //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
                         message.reply({embeds: [Embed]})
-                }
+                
                 //}
                 /*if(rsgrade = 'F'){
                 if(!rsmods){
