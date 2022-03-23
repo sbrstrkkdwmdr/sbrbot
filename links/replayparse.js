@@ -150,7 +150,8 @@ module.exports = {
         playername: playername,
         trueacc: trueacc,
         maptitle: maptitle,
-        mapdiff: mapdiff
+        mapdiff: mapdiff,
+        mapid: beatmapid
     }
     fs.writeFileSync('replaydata.json', JSON.stringify(re, null, 2))
 
