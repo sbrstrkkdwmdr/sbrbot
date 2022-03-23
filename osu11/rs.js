@@ -96,7 +96,8 @@ module.exports = {
                 let rsmapid = JSON.stringify(rsdata[0]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 let rscombo = JSON.stringify(rsdata[0], ['max_combo']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max_combo', '');
                 let rstime = JSON.stringify(rsdata[0]['beatmap'], ['total_length']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total_length', '');
-                
+                let fc = JSON.stringify(rsdata[0], ['perfect']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('perfect', '');
+
                 let rslengthseconds1 = Math.abs(rstime) % 60;
                 let rslengthminutes = Math.trunc(rstime / 60);
                 if(rslengthseconds1 < 10){
@@ -343,6 +344,12 @@ module.exports = {
                 
                // if(rspp = "null"){
                 //if(rsgrade != 'F'){
+                    if(fc == 'false'){
+                        fcflag = `| **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`
+                    }
+                    if(fc == 'true'){
+                        fcflag = '**FC**'
+                    }
 
                 if(rsgrade == 'xh' || rsgrade == 'XH'){
                     rsgrade = '<:rankingxh:927797179597357076>'
@@ -388,7 +395,7 @@ module.exports = {
                         //.addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
                         .addField('MAP DETAILS', `**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** ${rsmodsembed} **${rsmapstar}**⭐`, false)
                         .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** ${rspassinfo}\n**300:** ${rs300s} \n**100:** ${rs100s} \n**⠀50:** ${rs50s} \n**⠀⠀X:** ${rs0s} \n**${rscombo}x**`, true)
-                        .addField('PP', `**${rspp}**pp | **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`, true)
+                        .addField('PP', `**${rspp}**pp ${fcflag}`, true)
                         //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
                         message.reply({embeds: [Embed]})
                 
