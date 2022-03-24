@@ -39,3 +39,5 @@ database.sqlite
 haloinfdata.json
 clientoauthtoken.json
 client_secret.json
+osubest.json
+osubestrs.json
