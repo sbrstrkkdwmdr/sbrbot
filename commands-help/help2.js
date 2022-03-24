@@ -31,8 +31,8 @@ module.exports = {
             case 'osutop':
                 Embed = new Discord.MessageEmbed()
                     .setTitle('osutop')
-                    .setDescription('Returns the top 5 osu! plays for the user\nUsage: `/osutop saberstrike`')
-                    .addField('options', 'user: required. username or ID of player\noffset: page offset. default 0\nmode: what gamemode. default osu! standard', false)
+                    .setDescription('Returns the top 5 osu! plays for the user\nUsage: `/osutop user:saberstrike mode:osu sort:acc`')
+                    .addField('options', 'user: required. username or ID of player\noffset: page offset (num). default 0\nmode: what gamemode. default osu! standard\nsort: what to sort score by (acc, score, pp, date)', false)
                 interaction.reply({ embeds: [Embed]})
                 break;
             case 'skin':
