@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
+const { calculateStarRating } = require('osu-sr-calculator')
 module.exports = {
     name: 'rsallmodes',
     description: '',
@@ -469,6 +470,17 @@ module.exports = {
                 if(pickedmodex == 'mania'){
                     hitlist = `**300+**:${rsgeki} \n**300:** ${rs300s} \n**200:** ${rskatu} \n**100:** ${rs100s} \n**50:** ${rs50s} \n**X:** ${rs0s}`
                 }
+                if(rsmods){
+                    calcmods = rsmods.replace('TD', '')
+                    modtoarray1 = calcmods.replace(/(.{2})/g, "$1 ");
+                    modtoarray2 = modtoarray1.slice(0, -1)
+                    modsforsr = modtoarray2.split(/ +/)
+                    starRating = await calculateStarRating(rsmapid, modsforsr);
+                    SR = JSON.stringify(starRating).replace('{', '').replace(':', '').replace('}', '').replace(calcmods, '').replace('nomod', '').replaceAll('"', '')    
+                    SRclean = Math.abs(SR).toFixed(2)}
+                    if(!rsmods || rsmods == 'TD'){
+                        SRclean = rsmapstar
+                    }
                     rscoverlist = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['list']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('list', '').replace('https', 'https:');
                     let Embed = new Discord.MessageEmbed()
                         .setColor(0x9AAAC0)
@@ -478,7 +490,7 @@ module.exports = {
                         .setThumbnail(rscoverlist)
                         //.setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
                         //.addField('SCORE TIME', `**${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})**${trycountstr}`, true)
-                        .addField('MAP DETAILS', `**[${rsmapname} \n[${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** \n${rsmods2} \n**${rsmapstar}**⭐`, false)
+                        .addField('MAP DETAILS', `**[${rsmapname} \n[${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** \n${rsmods2} **${SRclean}**⭐`, false)
                         .addField('SCORE DETAILS', `**${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** ${rspassinfo}\n${hitlist} \n**${rscombo}x**`, true)
                         .addField('PP', `**${rspp}**pp ${fcflag}`, true)
                         //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
