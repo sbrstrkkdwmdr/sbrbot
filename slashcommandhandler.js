@@ -126,6 +126,12 @@ commands?.create({
             description: 'what mode?', 
             required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'sort',
+            description: 'what to sort plays by. defaults to pp',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
         }
     ]
 })

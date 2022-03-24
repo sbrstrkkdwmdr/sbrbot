@@ -107,7 +107,7 @@ module.exports = {
                     return;
                 }
                 //interaction.reply(playerid)
-                const osutopurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/best?mode=${pickedmodex}&limit=58&offset=${offsetflag * 5}`;
+                const osutopurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/best?mode=${pickedmodex}&limit=100&offset=${offsetflag * 5}`;
 
                 fetch(osutopurl, {
                     headers: {
@@ -115,7 +115,29 @@ module.exports = {
                     }
                 }).then(res => res.json())
                 .then(output2 => 
-                    {const osutopdata = output2;
+                    {
+                    let sort = options.getString('sort')
+                    if(sort == 'acc' || sort == 'accuracy'){
+                        osutopdata = output2.sort((a, b) => b.accuracy - a.accuracy);
+                        sortedby = 'Sorted by: Accuracy'
+                    }
+                    else if(sort == 'time' || sort == 'date'){
+                        osutopdata = output2.sort((a, b) => b.created_at.toLowerCase().slice(0, 10).replaceAll('-', '') - a.created_at.toLowerCase().slice(0, 10).replaceAll('-', ''));
+                        sortedby = 'Sorted by: Most Recent'
+                    }
+                    else if(sort == 'score'){
+                        osutopdata = output2.sort((a, b) => b.score - a.score);
+                        sortedby = 'Sorted by: Score'
+                    }
+                    /*if(sort == 'score'){
+                        osutopdata = output2.sort((a, b) => a.pp - b.pp);
+                    }*/
+                    else{
+                        osutopdata = output2.sort((a, b) => b.pp - a.pp);
+                        sortedby = '⠀'
+                    }
+                    //osutopdata = output2;
+
                     fs.writeFileSync("debug/osutop.json", JSON.stringify(osutopdata, null, 2));
                     console.log("writing data to osutop.json")
                     console.log("")
@@ -137,7 +159,10 @@ module.exports = {
                     let mapurl1 = JSON.stringify(osutopdata[0]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('id', '');
                     let maptimeset1 = JSON.stringify(osutopdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('created_at', '').slice(0, 10);
                     let mapacc1 = JSON.stringify(osutopdata[0], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('accuracy', '');
-                    let mappp1 = JSON.stringify(osutopdata[0]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
+                    let weightedmappp1 = JSON.stringify(osutopdata[0]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
+                    let weightedpppercent1 = JSON.stringify(osutopdata[0]['weight'], ['percentage']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('percentage', '');
+                    let mappp1 = JSON.stringify(osutopdata[0], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
+                    
                     let mapmiss1 = JSON.stringify(osutopdata[0]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_miss', '');
                     let map501 = JSON.stringify(osutopdata[0]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_50', '');
                     let map1001 = JSON.stringify(osutopdata[0]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_100', '');
@@ -159,7 +184,9 @@ module.exports = {
                     let mapurl2 = JSON.stringify(osutopdata[1]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('id', '');
                     let maptimeset2 = JSON.stringify(osutopdata[1], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('created_at', '').slice(0, 10);
                     let mapacc2 = JSON.stringify(osutopdata[1], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('accuracy', '');
-                    let mappp2 = JSON.stringify(osutopdata[1]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
+                    let weightedmappp2 = JSON.stringify(osutopdata[1]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
+                    let weightedpppercent2 = JSON.stringify(osutopdata[1]['weight'], ['percentage']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('percentage', '');
+                    let mappp2 = JSON.stringify(osutopdata[1], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
                     let mapmiss2 = JSON.stringify(osutopdata[1]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_miss', '');
                     let map502 = JSON.stringify(osutopdata[1]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_50', '');
                     let map1002 = JSON.stringify(osutopdata[1]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_100', '');
@@ -182,7 +209,9 @@ module.exports = {
                     let mapurl3 = JSON.stringify(osutopdata[2]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('id', '');
                     let maptimeset3 = JSON.stringify(osutopdata[2], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('created_at', '').slice(0, 10);
                     let mapacc3 = JSON.stringify(osutopdata[2], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('accuracy', '');
-                    let mappp3 = JSON.stringify(osutopdata[2]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
+                    let weightedmappp3 = JSON.stringify(osutopdata[2]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
+                    let weightedpppercent3 = JSON.stringify(osutopdata[2]['weight'], ['percentage']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('percentage', '');
+                    let mappp3 = JSON.stringify(osutopdata[2], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
                     let mapmiss3 = JSON.stringify(osutopdata[2]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_miss', '');
                     let map503 = JSON.stringify(osutopdata[2]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_50', '');
                     let map1003 = JSON.stringify(osutopdata[2]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_100', '');
@@ -204,7 +233,9 @@ module.exports = {
                     let mapurl4 = JSON.stringify(osutopdata[3]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('id', '');
                     let maptimeset4 = JSON.stringify(osutopdata[3], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('created_at', '').slice(0, 10);
                     let mapacc4 = JSON.stringify(osutopdata[3], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('accuracy', '');
-                    let mappp4 = JSON.stringify(osutopdata[3]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
+                    let weightedmappp4 = JSON.stringify(osutopdata[3]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
+                    let weightedpppercent4 = JSON.stringify(osutopdata[3]['weight'], ['percentage']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('percentage', '');
+                    let mappp4 = JSON.stringify(osutopdata[3], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
                     let mapmiss4 = JSON.stringify(osutopdata[3]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_miss', '');
                     let map504 = JSON.stringify(osutopdata[3]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_50', '');
                     let map1004 = JSON.stringify(osutopdata[3]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_100', '');
@@ -225,7 +256,9 @@ module.exports = {
                     let mapurl5 = JSON.stringify(osutopdata[4]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('id', '');
                     let maptimeset5 = JSON.stringify(osutopdata[4], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('created_at', '').slice(0, 10);
                     let mapacc5 = JSON.stringify(osutopdata[4], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('accuracy', '');
-                    let mappp5 = JSON.stringify(osutopdata[4]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
+                    let weightedmappp5 = JSON.stringify(osutopdata[4]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
+                    let weightedpppercent5 = JSON.stringify(osutopdata[4]['weight'], ['percentage']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('percentage', '');
+                    let mappp5 = JSON.stringify(osutopdata[4], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
                     let mapmiss5 = JSON.stringify(osutopdata[4]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_miss', '');
                     let map505 = JSON.stringify(osutopdata[4]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_50', '');
                     let map1005 = JSON.stringify(osutopdata[4]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_100', '');
@@ -280,11 +313,12 @@ module.exports = {
                 .setTitle("Top plays for " + topplayername)
                 .setURL(`https://osu.ppy.sh/u/${playerid}`)
                 .setThumbnail(topplayeravatar)
-                .addField(`---`, `**[${maptitle1} [${mapdiff1}]](https://osu.ppy.sh/b/${mapurl1}) ${mapmods1}**\nSCORE: ${mapscore1} \nScore set on ${maptimeset1} \n${(Math.abs((mapacc1) * 100).toFixed(2))}% | ${maprank1}\n${hitlist1} | ${(Math.abs(mappp1).toFixed(2))}pp`, false)
-                .addField(`---`, `**[${maptitle2} [${mapdiff2}]](https://osu.ppy.sh/b/${mapurl2}) ${mapmods2}**\nSCORE: ${mapscore2} \nScore set on ${maptimeset2} \n${(Math.abs((mapacc2) * 100).toFixed(2))}% | ${maprank2}\n${hitlist2} | ${(Math.abs(mappp2).toFixed(2))}pp`, false)
-                .addField(`---`, `**[${maptitle3} [${mapdiff3}]](https://osu.ppy.sh/b/${mapurl3}) ${mapmods3}**\nSCORE: ${mapscore3} \nScore set on ${maptimeset3} \n${(Math.abs((mapacc3) * 100).toFixed(2))}% | ${maprank3}\n${hitlist3} | ${(Math.abs(mappp3).toFixed(2))}pp`, false)
-                .addField(`---`, `**[${maptitle4} [${mapdiff4}]](https://osu.ppy.sh/b/${mapurl4}) ${mapmods4}**\nSCORE: ${mapscore4} \nScore set on ${maptimeset4} \n${(Math.abs((mapacc4) * 100).toFixed(2))}% | ${maprank4}\n${hitlist4} | ${(Math.abs(mappp4).toFixed(2))}pp`, false)
-                .addField(`---`, `**[${maptitle5} [${mapdiff5}]](https://osu.ppy.sh/b/${mapurl5}) ${mapmods5}**\nSCORE: ${mapscore5} \nScore set on ${maptimeset5} \n${(Math.abs((mapacc5) * 100).toFixed(2))}% | ${maprank5}\n${hitlist5} | ${(Math.abs(mappp5).toFixed(2))}pp`, false)                
+                .setDescription(`${sortedby}`)
+                .addField(`---`, `**[${maptitle1} [${mapdiff1}]](https://osu.ppy.sh/b/${mapurl1}) ${mapmods1}**\nSCORE: ${mapscore1} \nScore set on ${maptimeset1} \n${(Math.abs((mapacc1) * 100).toFixed(2))}% | ${maprank1}\n${hitlist1} \n**${(Math.abs(mappp1).toFixed(2))}**pp | **${(Math.abs(weightedmappp1).toFixed(2))}**pp weighted **${Math.abs(weightedpppercent1).toFixed(2)}**%`, false)
+                .addField(`---`, `**[${maptitle2} [${mapdiff2}]](https://osu.ppy.sh/b/${mapurl2}) ${mapmods2}**\nSCORE: ${mapscore2} \nScore set on ${maptimeset2} \n${(Math.abs((mapacc2) * 100).toFixed(2))}% | ${maprank2}\n${hitlist2} \n**${(Math.abs(mappp2).toFixed(2))}**pp | **${(Math.abs(weightedmappp2).toFixed(2))}**pp weighted **${Math.abs(weightedpppercent2).toFixed(2)}**%`, false)
+                .addField(`---`, `**[${maptitle3} [${mapdiff3}]](https://osu.ppy.sh/b/${mapurl3}) ${mapmods3}**\nSCORE: ${mapscore3} \nScore set on ${maptimeset3} \n${(Math.abs((mapacc3) * 100).toFixed(2))}% | ${maprank3}\n${hitlist3} \n**${(Math.abs(mappp3).toFixed(2))}**pp | **${(Math.abs(weightedmappp3).toFixed(2))}**pp weighted **${Math.abs(weightedpppercent3).toFixed(2)}**%`, false)
+                .addField(`---`, `**[${maptitle4} [${mapdiff4}]](https://osu.ppy.sh/b/${mapurl4}) ${mapmods4}**\nSCORE: ${mapscore4} \nScore set on ${maptimeset4} \n${(Math.abs((mapacc4) * 100).toFixed(2))}% | ${maprank4}\n${hitlist4} \n**${(Math.abs(mappp4).toFixed(2))}**pp | **${(Math.abs(weightedmappp4).toFixed(2))}**pp weighted **${Math.abs(weightedpppercent4).toFixed(2)}**%`, false)
+                .addField(`---`, `**[${maptitle5} [${mapdiff5}]](https://osu.ppy.sh/b/${mapurl5}) ${mapmods5}**\nSCORE: ${mapscore5} \nScore set on ${maptimeset5} \n${(Math.abs((mapacc5) * 100).toFixed(2))}% | ${maprank5}\n${hitlist5} \n**${(Math.abs(mappp5).toFixed(2))}**pp | **${(Math.abs(weightedmappp5).toFixed(2))}**pp weighted **${Math.abs(weightedpppercent5).toFixed(2)}**%`, false)                
                 interaction.editReply({ content: '⠀', embeds: [Embed]})
                 console.log("sent")
             } catch(error){
