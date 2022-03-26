@@ -42,3 +42,5 @@ client_secret.json
 osubest.json
 osubestrs.json
 triggerwords.json
+bannedwords.json
+antitriggerwords.json
