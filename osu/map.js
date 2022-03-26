@@ -216,20 +216,32 @@ module.exports = {
 
                 if(moddetect.includes('EZ') && moddetect.includes('HT')) {
                     mapcs = Math.abs(mapcsNM / 2);
-                    mapar = Math.abs(((maparNM / 2)*1.33)-4.3).toFixed(2);
+                    mapar = Math.abs(((maparNM / 2)*1.33)-4.3)
+                    if(Number.isInteger(mapar * 100) == false ){
+                        mapar = mapar.toFixed(2)
+                    }
                     maphp = Math.abs(maphpNM / 2) + "⌄";
                     mapod = Math.abs(mapodNM / 2) + "⌄";
-                    mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
+                    mapbpm = Math.abs(mapbpmNM * 0.75)
+                    if(Number.isInteger(mapbpm * 100) == false ){
+                        mapbpm = mapbpm.toFixed(2)
+                    }
                     maphit1 = Math.floor((maphitonly / 0.75) /60);
                     maphit2 = Math.floor((maphitonly / 0.75) % 60);
                     recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                 }
                 if(moddetect.includes('EZ') && moddetect.includes('DT')) {
                     mapcs = Math.abs(mapcsNM / 2);
-                    mapar = Math.abs(((maparNM / 2)+13)/3).toFixed(2);
+                    mapar = Math.abs(((maparNM / 2)+13)/3)
+                    if(Number.isInteger(mapar * 100) == false ){
+                        mapar = mapar.toFixed(2)
+                    }
                     maphp = Math.abs(maphpNM / 2) + "^";
                     mapod = Math.abs(mapodNM / 2) + "^";
-                    mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
+                    mapbpm = Math.abs(mapbpmNM * 1.5)
+                    if(Number.isInteger(mapbpm * 100) == false ){
+                        mapbpm = mapbpm.toFixed(2)
+                    }
                     maphit1 = Math.floor((maphitonly / 1.5) /60);
                     maphit2 = Math.floor((maphitonly / 1.5) % 60);
                     if(maphit2<10){
@@ -241,10 +253,13 @@ module.exports = {
                     recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                 }
                 if(moddetect.includes('HR') && moddetect.includes('HT')) {
-                    mapcs = Math.abs(mapcsNM * 1.5).toFixed(2);
-                    mapar = Math.abs(((maparNM * 1.5)/1.33)-4.3).toFixed(2);
+                    mapcs = Math.abs(mapcsNM * 1.5)
+                    mapar = Math.abs(((maparNM * 1.5)/1.33)-4.3)
                     maphp = Math.abs(maphpNM * 1.5)//.toFixed(2) //+ "⌄";
                     mapod = Math.abs(mapodNM * 1.5)//.toFixed(2) //+ "⌄";
+                    if(Number.isInteger(mapar * 100) == false ){
+                        mapar = mapar.toFixed(2)
+                    }
                     if(maphp >= 10) {
                         maphp = 10 + "⌄"
                     }
@@ -257,7 +272,10 @@ module.exports = {
                     if(mapod < 10) {
                         mapod = mapod + "⌄"
                     }
-                    mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
+                    mapbpm = Math.abs(mapbpmNM * 0.75)
+                    if(Number.isInteger(mapbpm * 100) == false ){
+                        mapbpm = mapbpm.toFixed(2)
+                    }
                     maphit1 = Math.floor((maphitonly / 0.75) /60);
                     maphit2 = Math.floor((maphitonly / 0.75) % 60);
                     if(maphit2<10){
@@ -271,10 +289,17 @@ module.exports = {
                 }
                 if(moddetect.includes('HR') && moddetect.includes('DT')) {
                     mapcs = Math.abs(mapcsNM * 1.5);
-                    mapar = Math.abs((((maparNM * 1.5)*2)+13)/3).toFixed(2);
+                    mapar = Math.abs((((maparNM * 1.5)*2)+13)/3)//.toFixed(2);
+                    if(Number.isInteger(mapar * 100) == false ){
+                        mapar = mapar.toFixed(2)
+                    }
+                    //console.log(Number.isInteger(mapar * 100))
                     maphp = Math.abs(maphpNM * 1.5)// + "^";
                     mapod = Math.abs(mapodNM * 1.5)// + "^";
-                    mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
+                    mapbpm = Math.abs(mapbpmNM * 1.5)
+                    if(Number.isInteger(mapbpm * 100) == false ){
+                        mapbpm = mapbpm.toFixed(2)
+                    }
                     maphit1 = Math.floor((maphitonly / 1.5) /60);
                     maphit2 = Math.floor((maphitonly / 1.5) % 60);
                     if(maphit2<10){
