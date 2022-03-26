@@ -10,6 +10,7 @@ process.on('warning', e => console.warn(e.stack));
 
 //const msglogs = require('./sbrmsg.js')
 //const modlogs = require('./sbrmodlogs.js')
+const modlogs = require('./modlogs.js')
 const commandhandler = require('./commandhandler.js')
 const slashcommandhandler = require('./slashcommandhandler.js')
 const linkhandler = require('./linkhandler.js')
@@ -179,7 +180,7 @@ client.once('ready', () => {
     console.groupEnd()
 
     //msglogs(client)
-    //modlogs(client)
+    modlogs(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
     commandhandler(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
     slashcommandhandler(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
     linkhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
