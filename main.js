@@ -15,6 +15,7 @@ const slashcommandhandler = require('./slashcommandhandler.js')
 const linkhandler = require('./linkhandler.js')
 const looptimerthingyidkwhattocallit = require(`./loop.js`)
 const testhandler = require('./testhandler.js')
+const checker = require('./checker.js')
 
 //MUSIC
 const ytdl = require("ytdl-core");
@@ -22,10 +23,17 @@ const ytdl = require("ytdl-core");
 //const client = new Discord.Client();
 const client = new Client({ intents: [
     Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_BANS,
+    Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+    Intents.FLAGS.GUILD_INTEGRATIONS,
+    Intents.FLAGS.GUILD_INVITES,
     Intents.FLAGS.GUILD_MEMBERS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+    Intents.FLAGS.GUILD_MESSAGE_TYPING,
     Intents.FLAGS.GUILD_PRESENCES,
     Intents.FLAGS.GUILD_VOICE_STATES,
+    Intents.FLAGS.GUILD_WEBHOOKS,
     ] });
 
 const { prefix } = require('./config.json')
@@ -176,6 +184,7 @@ client.once('ready', () => {
     slashcommandhandler(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
     linkhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
     testhandler(Tags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
+    checker(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
     //Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, prefix, monitorEventLoopDelay, setInterval
 
 client.user.setPresence({ activities: [{ name: "you", type: 'WATCHING', video_url: 'https://youtube.com/saberstrkkdwmdr'}], status: `dnd`,});
