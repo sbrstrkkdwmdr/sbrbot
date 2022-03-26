@@ -2,14 +2,7 @@ module.exports = {
     name: 'triggers',
     description: '',
     execute(message, args, linkargs, Discord, client, currentDate, currentDateISO) {
-        
-        message.reply("you can't say that!")
-        if(message.content.includes('n word')) return message.reply('😱')
-        setTimeout(() => {
-            message.delete()
-            message.channel.send('-')
-        },3000
-        )
+        message.delete()
         console.group('--- TRIGGERED WORD ---')
         console.log(`${currentDateISO} | ${currentDate}`)
         console.log(`MESSAGE - ${message}`)
