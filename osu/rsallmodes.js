@@ -229,7 +229,7 @@ module.exports = {
                 var trycountstr = ' '
                 if(trycount > 1)
                     {
-                        trycountstr = ` try #${trycount}`
+                        trycountstr = `\ntry #${trycount}`
                     }
                 
                 (async () => {
@@ -485,7 +485,7 @@ module.exports = {
                     let Embed = new Discord.MessageEmbed()
                         .setColor(0x9AAAC0)
                         .setTitle("Most recent play for " + rsplayername)
-                        .setAuthor(`${minlastvisw} ago on ${rsmaptime} by ${rsplayername}${trycountstr}`, `https://a.ppy.sh/${rsplayerid}`, `https://osu.ppy.sh/u/${rsplayerid}`)
+                        .setAuthor(`${minlastvisw} ago on ${rsmaptime}${trycountstr}`, `https://a.ppy.sh/${rsplayerid}`, `https://osu.ppy.sh/u/${rsplayerid}`)
                         //.setImage(rsmapbg)
                         .setThumbnail(rscoverlist)
                         //.setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
