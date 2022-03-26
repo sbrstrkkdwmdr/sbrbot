@@ -14,7 +14,7 @@ client.on('messageCreate', message => {
     const args = message.content.slice(prefix.length).split(/ +/); //args are the message content but without the prefix
     const linkargs = message.content.split(/ +/); //linkargs are the message content
     const triggerwords = require('./triggerwords.json');
-    const triggerstring = message.content.toString();
+    const triggerstring = message.content.toString().toLowerCase();
     const foundtriggers = triggerwords.find(v => (triggerstring.includes(v)));
 
     let consoleloguserweeee = message.author
