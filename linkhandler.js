@@ -13,9 +13,6 @@ for(const file of linkFiles){
 client.on('messageCreate', message => {
     const args = message.content.slice(prefix.length).split(/ +/); //args are the message content but without the prefix
     const linkargs = message.content.split(/ +/); //linkargs are the message content
-    const triggerwords = require('./triggerwords.json');
-    const triggerstring = message.content.toString().toLowerCase();
-    const foundtriggers = triggerwords.find(v => (triggerstring.includes(v)));
 
     let consoleloguserweeee = message.author
     let currentDate = new Date();
@@ -51,10 +48,6 @@ client.on('messageCreate', message => {
     }
     if (message.content.startsWith('https://osu.ppy.sh/u/') || message.content.startsWith('osu.ppy.sh/u/') || message.content.startsWith('https://osu.ppy.sh/users/') || message.content.startsWith('osu.ppy.sh/users/')){
         client.linkdetect.get('osuprofilelink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
-    } 
-    
-    if (foundtriggers){
-        client.admincmds.get('triggers').execute(message, args, linkargs, Discord, client, currentDate, currentDateISO)
     }
 
     

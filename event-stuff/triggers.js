@@ -1,7 +1,7 @@
 module.exports = {
     name: 'triggers',
     description: '',
-    execute(message, args, linkargs, Discord, client, currentDate, currentDateISO) {
+    execute(message, logchannel, linkargs, Discord, client, currentDate, currentDateISO) {
         message.delete()
         console.group('--- TRIGGERED WORD ---')
         console.log(`${currentDateISO} | ${currentDate}`)
@@ -11,6 +11,8 @@ module.exports = {
         console.log(`${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         console.log("")
         console.groupEnd()
+        logchannel.send(`TRIGGER ACTIVATED - ${message} by ${consoleloguserweeee.id} | <@${consoleloguserweeee.id}>`)
+        
     }
 }
 
