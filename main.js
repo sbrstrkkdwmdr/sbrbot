@@ -156,14 +156,24 @@ for(const file of gamingcmdfiles){
         description: Sequelize.TEXT,
         username: {
             type: Sequelize.STRING,
-            unique: true, },
+            unique: true, 
+        },
         mode: {
             type: Sequelize.STRING,
-            unique: true, },
+            unique: true, 
+        },
         usage_count: {
             type: Sequelize.INTEGER,
             defaultValue: 0,
             allowNull: false,
+        },
+        xboxlive: {
+            type: Sequelize.STRING,
+            unique: true, 
+        },
+        steamusername: {
+            type: Sequelize.STRING,
+            unique: true, 
         },
     });
 client.once('ready', () => {

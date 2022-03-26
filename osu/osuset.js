@@ -35,7 +35,8 @@ module.exports = {
 				//return interaction.reply('That username is already taken.');
 			}
 
-			return interaction.reply('Something went wrong with adding a username.');
+			interaction.reply('Something went wrong with adding a username.');
+            return console.log(error);
 		}}
         else if(type == 'mode'){
             try {
@@ -60,7 +61,60 @@ module.exports = {
                     //return interaction.reply('That username is already taken.');
                 }
                 
-                return interaction.reply('Something went wrong with editing mode.');
+                interaction.reply('Something went wrong with editing mode.');
+                return console.log(error);
+            }}
+        else if(type == 'haloinfiniteprofile' || type == 'xbox' || type == 'xboxlive' || type == 'xbx'){
+            try {
+                // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
+                await userdatatags.create({
+                    name: interaction.member.user.id,
+                    username: interaction.member.user.id,
+                    xboxlive: pickeduserX
+                });
+    
+                interaction.reply(`${pickeduserX} added to xbox live username.`)
+                console.log("sent")
+            }
+            catch (error) {
+                //console.log(error)
+                if (error.name === 'SequelizeUniqueConstraintError') {
+                    affectedRows = await userdatatags.update({ xboxlive: pickeduserX }, { where: { name: interaction.member.user.id } });
+            
+                if (affectedRows > 0) {
+                    return interaction.reply(`xbox live username updated.`);
+                }
+                    //return interaction.reply('That username is already taken.');
+                }
+                
+                interaction.reply('Something went wrong with editing xbox live username.');
+                return console.log(error);
+            }}
+else if(type == 'steam'){
+            try {
+                // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
+                await userdatatags.create({
+                    name: interaction.member.user.id,
+                    username: interaction.member.user.id,
+                    steamusername: pickeduserX
+                });
+    
+                interaction.reply(`${pickeduserX} added to steam username.`)
+                console.log("sent")
+            }
+            catch (error) {
+                //console.log(error)
+                if (error.name === 'SequelizeUniqueConstraintError') {
+                    affectedRows = await userdatatags.update({ steamusername: pickeduserX }, { where: { name: interaction.member.user.id } });
+            
+                if (affectedRows > 0) {
+                    return interaction.reply(`steam username updated.`);
+                }
+                    //return interaction.reply('That username is already taken.');
+                }
+                
+                interaction.reply('Something went wrong with editing steam username.');
+                return console.log(error);
             }}
         else{
             //return interaction.channel.send("error - can only update mode or username")
