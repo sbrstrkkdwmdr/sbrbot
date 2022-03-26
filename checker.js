@@ -69,16 +69,7 @@ client.on('presenceUpdate', (oldPresence, newPresence) => {
         if(foundtriggers){
             logchannel.send(`${newpresencetxt} - ${newPresence.userId} | <@${newPresence.userId}> presence warning\n guild - ${newPresence.guild.id} | ${newPresence.guild.name}`)
         }
-        //console.log(i)
-    }
-/*
-    bannedwords = require('./bannedwords.json');
-    triggerstring = newpresencename.toLowerCase();
-
-    foundtriggers = bannedwords.find(v => (triggerstring.includes(v)));*/
-       if(foundtriggers){
-           logchannel.send(`${newMember.id} | <@${newMember.id}> presence warning`)
-       } }
+    }}
     
 })
 
