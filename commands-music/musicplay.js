@@ -1,5 +1,6 @@
 const ytdl = require('ytdl-core');
 const ytSearch = require('yt-search');
+const fs = require('fs')
 
 //Global queue for your bot. Every server will have a key and value pair in this map. { guild.id, queue_constructor{} }
 const queue = new Map();
@@ -10,8 +11,8 @@ module.exports = {
     cooldown: 0,
     description: 'Advanced music bot',
     async execute(message, args, command, client, Discord, currentDate, currentDateISO){
-        console.group('--- COMMAND EXECUTION ---')
-console.log("yes")
+        fs.appendFileSync('checker.log', "\n" + '--- COMMAND EXECUTION ---')
+fs.appendFileSync('checker.log', "\n" + "yes")
 
         //Checking for the voicechannel and permissions (you can add more permissions if you like).
         const voice_channel = message.member.voice.channelId;
@@ -25,11 +26,11 @@ console.log("yes")
 
         //If the user has used the play command
         if (command === 'play'){
-            console.log(`${currentDateISO} | ${currentDate}`)
-            console.log("command executed - music play")
+            fs.appendFileSync('checker.log', "\n" + `${currentDateISO} | ${currentDate}`)
+            fs.appendFileSync('checker.log', "\n" + "command executed - music play")
             let consoleloguserweeee = message.author
-            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            console.log("")
+            fs.appendFileSync('checker.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync('checker.log', "\n" + "")
             if (!args.length) return message.channel.send('You need to send the second argument!');
             let song = {};
 
@@ -83,19 +84,19 @@ console.log("yes")
         }
 
         else if(command === 'skip') {skip_song(message, server_queue)
-            console.log(`${currentDateISO} | ${currentDate}`)
-            console.log("command executed - music skip")
-            console.log("category - music")
+            fs.appendFileSync('checker.log', "\n" + `${currentDateISO} | ${currentDate}`)
+            fs.appendFileSync('checker.log', "\n" + "command executed - music skip")
+            fs.appendFileSync('checker.log', "\n" + "category - music")
             let consoleloguserweeee = message.author
-            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            console.log("")} 
+            fs.appendFileSync('checker.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync('checker.log', "\n" + "")} 
         else if(command === 'stop') {stop_song(message, server_queue)
-            console.log(`${currentDateISO} | ${currentDate}`)
-            console.log("command executed - music stop")
-            console.log("category - music")
+            fs.appendFileSync('checker.log', "\n" + `${currentDateISO} | ${currentDate}`)
+            fs.appendFileSync('checker.log', "\n" + "command executed - music stop")
+            fs.appendFileSync('checker.log', "\n" + "category - music")
             let consoleloguserweeee = message.author
-            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            console.log("")};
+            fs.appendFileSync('checker.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync('checker.log', "\n" + "")};
             console.groupEnd()
     }
     
@@ -170,9 +171,9 @@ module.exports = {
       queue.play();
       queue
 
-  console.log(`${currentDateISO} | ${currentDate}`)
-  console.log("command executed - musicplay")
+  fs.appendFileSync('checker.log', "\n" + `${currentDateISO} | ${currentDate}`)
+  fs.appendFileSync('checker.log', "\n" + "command executed - musicplay")
   let consoleloguserweeee = message.author
-  console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-  console.log("")
+  fs.appendFileSync('checker.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+  fs.appendFileSync('checker.log', "\n" + "")
 }}*/

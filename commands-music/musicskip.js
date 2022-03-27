@@ -1,15 +1,16 @@
 const {Player} = require('discord-player');
+const fs = require('fs')
 module.exports = {
     name: 'musicskip',
     description: '',
     execute(message, args, client, Discord, ytdl, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('checker.log', "\n" + '--- COMMAND EXECUTION ---')
         const player = new Player(client);
-console.log(`${currentDateISO} | ${currentDate}`)
-console.log("command executed - musicskip")
-console.log("category - music")
+fs.appendFileSync('checker.log', "\n" + `${currentDateISO} | ${currentDate}`)
+fs.appendFileSync('checker.log', "\n" + "command executed - musicskip")
+fs.appendFileSync('checker.log', "\n" + "category - music")
 let consoleloguserweeee = message.author
-console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-console.log("")
+fs.appendFileSync('checker.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+fs.appendFileSync('checker.log', "\n" + "")
 console.groupEnd()
 }}

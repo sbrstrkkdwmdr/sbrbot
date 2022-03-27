@@ -1,10 +1,11 @@
 const { Track } = require("discord-player");
 const {Player} = require('discord-player');
+const fs = require('fs')
 module.exports = {
     name: 'musicstop',
     description: '',
     async execute(message, args, client, Discord, ytdl, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('checker.log', "\n" + '--- COMMAND EXECUTION ---')
         const player = new Player(client);
 
         try {if (!message.member.voice.channelId) return await message.reply({ content: "You aren't in vc smh my head", ephemeral: true });
@@ -37,13 +38,13 @@ module.exports = {
         queue.play();
         queue} catch(error){
             message.reply("error")
-            console.log(error)
+            fs.appendFileSync('checker.log', "\n" + error)
         }
-console.log(`${currentDateISO} | ${currentDate}`)
-console.log("executed command - musicstop")
-console.log("category - music")
+fs.appendFileSync('checker.log', "\n" + `${currentDateISO} | ${currentDate}`)
+fs.appendFileSync('checker.log', "\n" + "executed command - musicstop")
+fs.appendFileSync('checker.log', "\n" + "category - music")
 let consoleloguserweeee = message.author
-console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-console.log("")
+fs.appendFileSync('checker.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+fs.appendFileSync('checker.log', "\n" + "")
 console.groupEnd()
 }}

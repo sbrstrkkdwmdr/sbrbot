@@ -1,9 +1,10 @@
 const {Player} = require('discord-player');
+const fs = require('fs')
 module.exports = {
     name: 'musicqueue',
     description: '',
     async execute(message, args, client, Discord, ytdl, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('checker.log', "\n" + '--- COMMAND EXECUTION ---')
         const player = new Player(client);
         const queue = player.createQueue(message.guild, {
             metadata: {
@@ -11,11 +12,11 @@ module.exports = {
             }
         });
     message.reply(queue)
-console.log(`${currentDateISO} | ${currentDate}`)
-console.log("executed command - musicstop")
-console.log("category - music")
+fs.appendFileSync('checker.log', "\n" + `${currentDateISO} | ${currentDate}`)
+fs.appendFileSync('checker.log', "\n" + "executed command - musicstop")
+fs.appendFileSync('checker.log', "\n" + "category - music")
 let consoleloguserweeee = message.author
-console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-console.log("")
+fs.appendFileSync('checker.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+fs.appendFileSync('checker.log', "\n" + "")
 console.groupEnd()
 }}
