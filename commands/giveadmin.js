@@ -1,3 +1,4 @@
+const fs = require('fs')
 module.exports = {
     name: 'giveadmin',
     description: '',
@@ -12,13 +13,13 @@ module.exports = {
         //let rName =("admin")
         //message.channel.send(`${rNew.ID}`)
         //} 
-        console.group('--- COMMAND EXECUTION ---')
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log(`command executed - giveadmin`)
-        console.log("category - general")
+        fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('cmd.log', "\n" + `command executed - giveadmin`)
+        fs.appendFileSync('cmd.log', "\n" + "category - general")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")
+        fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('cmd.log', "\n" + "")
         console.groupEnd()
     }
 }

@@ -1,14 +1,15 @@
+const fs = require('fs')
 module.exports = {
     name: 'amoggers',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - amoggers")
-        console.log("category - general")
+        fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('cmd.log', "\n" + "command executed - amoggers")
+        fs.appendFileSync('cmd.log', "\n" + "category - general")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")
+        fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('cmd.log', "\n" + "")
         console.groupEnd()
             message.reply({ files: ['./files/amoggers.png'] });
     }

@@ -1,14 +1,15 @@
+const fs = require('fs')
 module.exports = {
     name: 'slashtest',
     description: '',
     execute(interaction, options, client, Discord, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - test")
-        console.log("category - general")
+        fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('cmd.log', "\n" + "command executed - test")
+        fs.appendFileSync('cmd.log', "\n" + "category - general")
         let consoleloguserweeee = interaction.member.user
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")
+        fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('cmd.log', "\n" + "")
         console.groupEnd()
         let testcmd = options.getString('type');
         if(!testcmd) return interaction.reply('⠀');

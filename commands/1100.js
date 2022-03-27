@@ -1,3 +1,4 @@
+const fs = require('fs')
 module.exports = {
     name: '1100',
     description: '',
@@ -14,26 +15,26 @@ module.exports = {
           message.channel.send("71\n72\n73\n74\n75\n76\n77\n78\n79\n80")
           message.channel.send("81\n82\n83\n84\n85\n86\n87\n88\n89\n90")
           message.channel.send("91\n92\n93\n94\n95\n96\n97\n98\n99\n100")
-          console.group('--- COMMAND EXECUTION ---')
-          console.log(`${currentDateISO} | ${currentDate}`)
-          console.log("command executed - 1100")
-          console.log("category - general")
+          fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
+          fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+          fs.appendFileSync('cmd.log', "\n" + "command executed - 1100")
+          fs.appendFileSync('cmd.log', "\n" + "category - general")
           let consoleloguserweeee = message.author
-          console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-          console.log("")
+          fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+          fs.appendFileSync('cmd.log', "\n" + "")
           console.groupEnd()
           }
   
           else {
             message.channel.send("no")
             console.group('--- COMMAND EXECUTION ---')
-            console.log(`${currentDate}`)
-            console.log("command executed - 1100")
-            console.log("category - general")
+            fs.appendFileSync('cmd.log', "\n" + `${currentDate}`)
+            fs.appendFileSync('cmd.log', "\n" + "command executed - 1100")
+            fs.appendFileSync('cmd.log', "\n" + "category - general")
             let consoleloguserweeee = message.author
-            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            console.log("command failed - insufficient permissions")
-            console.log("")
+            fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync('cmd.log', "\n" + "command failed - insufficient permissions")
+            fs.appendFileSync('cmd.log', "\n" + "")
             console.groupEnd()
           }  
     }

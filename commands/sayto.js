@@ -1,3 +1,4 @@
+const fs = require('fs')
 module.exports = {
     name: 'sayto',
     description: "say",
@@ -8,16 +9,16 @@ module.exports = {
         const saythis = args.splice(1,1000).join(" ");
         //message.delete();
         sendtochannel.send(saythis)
-        console.group('--- COMMAND EXECUTION ---')
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - sayto")
-        console.log("category - general")
+        fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('cmd.log', "\n" + "command executed - sayto")
+        fs.appendFileSync('cmd.log', "\n" + "category - general")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")
+        fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('cmd.log', "\n" + "")
         console.groupEnd() }
         catch(error){
-            console.log(error)
+            fs.appendFileSync('cmd.log', "\n" + error)
         }
     }
         else return ;

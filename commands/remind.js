@@ -1,5 +1,5 @@
 const ms = require('ms')
-
+const fs = require('fs')
 module.exports = {
     name: "remind",
     category: "utility",
@@ -8,7 +8,7 @@ module.exports = {
         content:  "Helps remind you something",
     },
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
         let time = args[0];
         let user = message.author
         let reminder = args.splice(1).join(' ')
@@ -54,19 +54,19 @@ module.exports = {
                 user.send({ embeds: [reminderdm] })
             }, ms(`${time}`));
            }catch(err){
-            console.log("reminder error")
+            fs.appendFileSync('cmd.log', "\n" + "reminder error")
            } 
            
         }
         reminderlmao();
 
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - remind")
-        console.log("category - general")
+        fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('cmd.log', "\n" + "command executed - remind")
+        fs.appendFileSync('cmd.log', "\n" + "category - general")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log(ms(time))
-        console.log("")
+        fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('cmd.log', "\n" + ms(time))
+        fs.appendFileSync('cmd.log', "\n" + "")
         console.groupEnd()
     }
 }

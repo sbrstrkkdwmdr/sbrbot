@@ -1,16 +1,17 @@
+const fs = require('fs')
 const { cx, key } = require('../config.json'); 
 module.exports = {
     name: 'image',
     description: 'Search images through google images',
     async execute(message, args, Discord, get, client, currentDate, currentDateISO) {
         //message.channel.send("WIP")
-        console.group('--- COMMAND EXECUTION ---')
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - image")
-        console.log("category - general")
+        fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('cmd.log', "\n" + "command executed - image")
+        fs.appendFileSync('cmd.log', "\n" + "category - general")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")
+        fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('cmd.log', "\n" + "")
         console.groupEnd()
        if (!args.length) return message.channel.send('Please specify the name of the image you want to search.')
         
@@ -21,7 +22,7 @@ module.exports = {
         //const key = process.env.GOOGLE_KEY // Watch the video to get your google api key.
         let searchthing = args.splice(0,100).join(" ")
 
-        let res = await get(`https://customsearch.googleapis.com/customsearch/v1?q=${searchthing}&cx=${cx}&key=${key}&searchType=image`).catch(error => console.log(e));
+        let res = await get(`https://customsearch.googleapis.com/customsearch/v1?q=${searchthing}&cx=${cx}&key=${key}&searchType=image`).catch(error => fs.appendFileSync('cmd.log', "\n" + e));
         
         if (!res) return message.channel.send('Unable to fetch the requested image.');
         if (res.status >= 400) return message.channel.send(`Error ${res.status}: ${res.statusText}`);

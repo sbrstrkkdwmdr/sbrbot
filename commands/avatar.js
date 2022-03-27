@@ -1,17 +1,17 @@
 const { DiscordAPIError } = require("discord.js");
-
+const fs = require('fs')
 module.exports = {
     name: 'avatar',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - avatar")
-        console.log("category - general")
+        fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('cmd.log', "\n" + "command executed - avatar")
+        fs.appendFileSync('cmd.log', "\n" + "category - general")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log(`mentions - ${message.mentions.users.size}`)
-        console.log("")
+        fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('cmd.log', "\n" + `mentions - ${message.mentions.users.size}`)
+        fs.appendFileSync('cmd.log', "\n" + "")
         console.groupEnd()
         if (!message.mentions.users.size) {
             message.channel.send('This command requires someone to be mentioned.');

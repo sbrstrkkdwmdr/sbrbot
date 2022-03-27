@@ -1,10 +1,11 @@
+const fs = require('fs')
 const yts = require('yt-search');
 
 module.exports = {
     name: 'ytsearch',
     description: "Search on YouTube",
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
         try{if(!args.length){message.reply('No search query given') //Checks if the user gave any search queries
     } else{
         const searched = await yts.search(args.splice(0,100).join(" ")); //Searches for videos
@@ -22,14 +23,14 @@ module.exports = {
         }
     } catch (error){
         message.reply("error")
-        console.log(error)
+        fs.appendFileSync('cmd.log', "\n" + error)
     }
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - yt search")
-        console.log("category - general")
+        fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('cmd.log', "\n" + "command executed - yt search")
+        fs.appendFileSync('cmd.log', "\n" + "category - general")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")
+        fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('cmd.log', "\n" + "")
         console.groupEnd()
     }
 }

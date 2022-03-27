@@ -1,5 +1,5 @@
 const ms = require('ms')
-
+const fs = require('fs')
 module.exports = {
     name: "remindslash",
     category: "utility",
@@ -8,7 +8,7 @@ module.exports = {
         content:  "Helps remind you something",
     },
     async execute(interaction, options, client, Discord, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
         let time = options.getString('time').split(/ +/);
         let user = interaction.member.user
         let reminder = options.getString('reminder')
@@ -20,7 +20,7 @@ module.exports = {
             }
         } catch(error){
             interaction.reply('timing error. Make sure times are written as 4h and not 4 h')
-            console.log(error)
+            fs.appendFileSync('cmd.log', "\n" + error)
         }
 
         if (!reminder) {
@@ -44,19 +44,19 @@ module.exports = {
                 user.send({ embeds: [reminderdm] })
             }, totaltime);
            }catch(error){
-            console.log("reminder error")
+            fs.appendFileSync('cmd.log', "\n" + "reminder error")
            } 
            
         }
         reminderlmao();
 
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - remind")
-        console.log("category - general")
+        fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('cmd.log', "\n" + "command executed - remind")
+        fs.appendFileSync('cmd.log', "\n" + "category - general")
         let consoleloguserweeee = interaction.member.user
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log(totaltime)
-        console.log("")
+        fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('cmd.log', "\n" + totaltime)
+        fs.appendFileSync('cmd.log', "\n" + "")
         console.groupEnd()
     }
 }

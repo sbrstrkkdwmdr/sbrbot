@@ -1,3 +1,4 @@
+const fs = require('fs')
 module.exports = {
     name: 'psr',
     description: '',
@@ -17,13 +18,13 @@ module.exports = {
         if(playerguess == "rock" && botguess == "scissors") return message.reply("I picked " + String(`${botguess}`) + " | You win");
         if(playerguess == "rock" && botguess == "rock") return message.reply("I picked " + String(`${botguess}`) + " | We tied");
         if(!playerguess) return message.reply("please pick rock, paper, or scissors");
-        console.group('--- COMMAND EXECUTION ---')
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - paper scissors rock")
-        console.log("category - general")
+        fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('cmd.log', "\n" + "command executed - paper scissors rock")
+        fs.appendFileSync('cmd.log', "\n" + "category - general")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")
+        fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('cmd.log', "\n" + "")
         console.groupEnd()
     }
 }
