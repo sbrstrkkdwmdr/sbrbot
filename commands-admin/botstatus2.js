@@ -1,9 +1,10 @@
+const fs = require('fs')
 module.exports = {
     name: 'botstatus2',
     description: 'sets the bots status',
 
     execute(interaction, options, client, Discord, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('admincmd.log', "\n" + '--- COMMAND EXECUTION ---')
         if(interaction.member.user.id == '503794887318044675')
 {       
         const a = ["WATCHING", "PLAYING", "STREAMING", "LISTENING"];
@@ -27,12 +28,12 @@ module.exports = {
         client.user.setPresence({ activities: [{ name: text, type: type}], status: status,});
 
         interaction.reply("status set!")
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - status")
-        console.log("category - admin")
+        fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('admincmd.log', "\n" + "command executed - status")
+        fs.appendFileSync('admincmd.log', "\n" + "category - admin")
         let consoleloguserweeee = interaction.member.user
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")}
+        fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('admincmd.log', "\n" + "")}
         console.groupEnd()
         }
 }

@@ -1,22 +1,23 @@
+const fs = require('fs')
 module.exports = {
     name: 'ban',
     description: '',
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('admincmd.log', "\n" + '--- COMMAND EXECUTION ---')
         if(message.member.permissions.has('BAN_MEMBERS')){
-            console.log(`${currentDateISO} | ${currentDate}`)
-            console.log("command executed - ban")
-            console.log("category - admin")
+            fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+            fs.appendFileSync('admincmd.log', "\n" + "command executed - ban")
+            fs.appendFileSync('admincmd.log', "\n" + "category - admin")
             let consoleloguserweeee = message.author
-            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            console.log("")
+            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync('admincmd.log', "\n" + "")
 
         const user = message.mentions.members.first();
         const reaswon = args.splice(1, 100).join(' ');
         if (!reaswon){
         message.reply("Reason required")
-        console.log("command failed - no reason")
-        console.log("")};
+        fs.appendFileSync('admincmd.log', "\n" + "command failed - no reason")
+        fs.appendFileSync('admincmd.log', "\n" + "")};
         if(reaswon){
         if(user){
             const member = message.guild.members.cache.get(user.id)
@@ -29,33 +30,33 @@ module.exports = {
                 .catch(err => {
                     message.reply(`I am unable to ban ${user}. cope harder`)
                 })
-                console.log(`banned ${user} AKA ${user.id} for ${reaswon}`)
-                console.log("")
+                fs.appendFileSync('admincmd.log', "\n" + `banned ${user} AKA ${user.id} for ${reaswon}`)
+                fs.appendFileSync('admincmd.log', "\n" + "")
                 message.reply(`banned ${user} AKA ${user.id} for ${reaswon}`)}
                 catch(error){
                 message.reply("error")
-                console.log(error)
-                console.log("")
+                fs.appendFileSync('admincmd.log', "\n" + error)
+                fs.appendFileSync('admincmd.log', "\n" + "")
                 }
             } else {
                 message.reply("User not found")
-                console.log("command failed - no user")
-                console.log("")
+                fs.appendFileSync('admincmd.log', "\n" + "command failed - no user")
+                fs.appendFileSync('admincmd.log', "\n" + "")
             }
         } else {
             message.reply("No user mentioned")
-            console.log("command failed - no user")
-            console.log("")
+            fs.appendFileSync('admincmd.log', "\n" + "command failed - no user")
+            fs.appendFileSync('admincmd.log', "\n" + "")
         }}
         
 } else {
     message.channel.send("no. cope harder")
-    console.log(`${currentDateISO} | ${currentDate}`)
-    console.log("command executed - ban")
+    fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+    fs.appendFileSync('admincmd.log', "\n" + "command executed - ban")
     let consoleloguserweeee = message.author
-    console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-    console.log("command failed - insufficient perms")
-    console.log("")
+    fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+    fs.appendFileSync('admincmd.log', "\n" + "command failed - insufficient perms")
+    fs.appendFileSync('admincmd.log', "\n" + "")
 }   console.groupEnd()
     }
 }

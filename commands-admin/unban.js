@@ -1,14 +1,15 @@
+const fs = require('fs')
 module.exports = {
     name: 'unban',
     description: 'unban',
     async execute(message, args, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('admincmd.log', "\n" + '--- COMMAND EXECUTION ---')
         if(message.member.permissions.has('BAN_MEMBERS')){
-            console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - unban")
-        console.log("category - admin")
+            fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('admincmd.log', "\n" + "command executed - unban")
+        fs.appendFileSync('admincmd.log', "\n" + "category - admin")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         const user = args[0]
         
         if(!user){
@@ -19,21 +20,21 @@ module.exports = {
         if(member) {
         message.guild.members.unban(user)
         message.reply(`unbanned ${user} aka <@${user}>`)
-        console.log(`unbanned user ${user}`)
-        console.log("")}
+        fs.appendFileSync('admincmd.log', "\n" + `unbanned user ${user}`)
+        fs.appendFileSync('admincmd.log', "\n" + "")}
         else {
             message.reply("User not found")
-            console.log("command failed - no user")
-            console.log("")
+            fs.appendFileSync('admincmd.log', "\n" + "command failed - no user")
+            fs.appendFileSync('admincmd.log', "\n" + "")
         }
     }
     } else {
-    console.log(`${currentDateISO} | ${currentDate}`)
-    console.log("command executed - unban")
+    fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+    fs.appendFileSync('admincmd.log', "\n" + "command executed - unban")
     let consoleloguserweeee = message.author
-    console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-    console.log("command failed - insufficient permissions")
-    console.log("")}
+    fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+    fs.appendFileSync('admincmd.log', "\n" + "command failed - insufficient permissions")
+    fs.appendFileSync('admincmd.log', "\n" + "")}
     console.groupEnd()
     }
 }

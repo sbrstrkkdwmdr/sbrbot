@@ -1,12 +1,14 @@
+const fs = require('fs')
 module.exports = {
     name: 'botstatus',
     description: 'sets the bots status',
     ownerOnly: true,
 
     execute(message, args, client, Discord, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('admincmd.log', "\n" + '--- COMMAND EXECUTION ---')
         if(message.author.id == '503794887318044675')
-{        let w = args.splice(1,100).join(" ");
+        {       
+        let w = args.splice(1,100).join(" ");
         const a = ["WATCHING", "PLAYING", "STREAMING", "LISTENING"];
         a[0] = "WATCHING";
         a[1] = "PLAYING";
@@ -19,12 +21,12 @@ module.exports = {
         client.user.setPresence({ activities: [{ name: w, type: c}], status: `dnd`,});
 
         message.reply("status set!")
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - status")
-        console.log("category - admin")
+        fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('admincmd.log', "\n" + "command executed - status")
+        fs.appendFileSync('admincmd.log', "\n" + "category - admin")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")}
+        fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('admincmd.log', "\n" + "")}
         console.groupEnd()
         }
 }

@@ -1,18 +1,19 @@
+const fs = require('fs')
 module.exports = {
     name: 'purge',
     description: 'ERADICATE',
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
-        console.log(`${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('admincmd.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
         if(message.member.permissions.has('ADMINISTRATOR')){
                 try {
             let delcount = args[0];
-            console.log("command executed - purge")
-            console.log("category - admin")
+            fs.appendFileSync('admincmd.log', "\n" + "command executed - purge")
+            fs.appendFileSync('admincmd.log', "\n" + "category - admin")
             let consoleloguserweeee = message.author
-            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            console.log(`deleted message count - ${delcount}`)
-            console.log("")
+            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync('admincmd.log', "\n" + `deleted message count - ${delcount}`)
+            fs.appendFileSync('admincmd.log', "\n" + "")
 
             if(isNaN(delcount) || parseInt(delcount <= 0)){
                 message.reply("Error: NaN or too low")
@@ -23,14 +24,14 @@ module.exports = {
             await message.channel.bulkDelete(parseInt(delcount) + 1, true);
         } catch(error) {
             message.reply("error")
-            console.log(error)
+            fs.appendFileSync('admincmd.log', "\n" + error)
         }} else {
             message.reply("insufficient permissions")
-            console.log("command executed - purge")
+            fs.appendFileSync('admincmd.log', "\n" + "command executed - purge")
             let consoleloguserweeee = message.author
-            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            console.log("command failed - insufficient permissions")
-            console.log("")
+            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync('admincmd.log', "\n" + "command failed - insufficient permissions")
+            fs.appendFileSync('admincmd.log', "\n" + "")
         }
     
         /* OLD VER
@@ -47,20 +48,20 @@ module.exports = {
             message.channel.bulkDelete(messages);});} catch(err){
                 message.reply("error")
             }
-            console.log(`${currentDateISO} | ${currentDate}`)
-            console.log("command executed - purge")
+            fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+            fs.appendFileSync('admincmd.log', "\n" + "command executed - purge")
             let consoleloguserweeee = message.author
-            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            console.log(`deleted message count - ${args[0]}`)
-            console.log("")
+            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync('admincmd.log', "\n" + `deleted message count - ${args[0]}`)
+            fs.appendFileSync('admincmd.log', "\n" + "")
         }
         else{
-            console.log(`${currentDateISO} | ${currentDate}`)
-            console.log("command executed - purge")
+            fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+            fs.appendFileSync('admincmd.log', "\n" + "command executed - purge")
             let consoleloguserweeee = message.author
-            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            console.log("command failed - insufficient perms")
-            console.log("")
+            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync('admincmd.log', "\n" + "command failed - insufficient perms")
+            fs.appendFileSync('admincmd.log', "\n" + "")
         }*/
         console.groupEnd()
     }

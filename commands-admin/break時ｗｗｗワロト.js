@@ -1,15 +1,16 @@
+const fs = require('fs')
 module.exports = {
     name: 'break時ｗｗｗワロト',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
         if(message.member.permissions.has('ADMINISTRATOR')){
-            console.group('--- COMMAND EXECUTION ---')
-            console.log(`${currentDateISO} | ${currentDate}`)
-            console.log("command executed - break")
-            console.log("category - admin")
+            fs.appendFileSync('admincmd.log', "\n" + '--- COMMAND EXECUTION ---')
+            fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+            fs.appendFileSync('admincmd.log', "\n" + "command executed - break")
+            fs.appendFileSync('admincmd.log', "\n" + "category - admin")
             let consoleloguserweeee = message.author
-            console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            console.log("")
+            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync('admincmd.log', "\n" + "")
             console.groupEnd()
         message.channel.send('');   
         message.jkdfhskjfhsdkfhsdkf
