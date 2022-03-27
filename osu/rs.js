@@ -65,7 +65,7 @@ module.exports = {
                     return;
                 }
 
-                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=osu&offset=0&limit=25`;
+                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=osu&offset=0&limit=100`;
                 
                 fetch(recentactiveurl, {
                     headers: {
