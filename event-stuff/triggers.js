@@ -1,15 +1,16 @@
+const fs = require('fs')
 module.exports = {
     name: 'triggers',
     description: '',
     execute(message, logchannel, linkargs, Discord, client, currentDate, currentDateISO) {
         message.delete()
-        console.group('--- TRIGGERED WORD ---')
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log(`MESSAGE - ${message}`)
-        console.log("category - admin")
+        fs.appendFileSync('checker.log', "\n" + '--- TRIGGERED WORD ---')
+        fs.appendFileSync('checker.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('checker.log', "\n" + `MESSAGE - ${message}`)
+        fs.appendFileSync('checker.log', "\n" + "category - admin")
         let consoleloguserweeee = message.author
-        console.log(`${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")
+        fs.appendFileSync('checker.log', "\n" + `${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('checker.log', "\n" + "")
         console.groupEnd()
         logchannel.send(`TRIGGER ACTIVATED - ${message} by ${consoleloguserweeee.id} | <@${consoleloguserweeee.id}>`)
         

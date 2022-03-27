@@ -51,17 +51,17 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     client.eventstuff.get('name').execute(oldMember, newMember, logchannel, Discord, client, currentDate, currentDateISO)
 })
 client.on('presenceUpdate', (oldPresence, newPresence) => {
-    //console.log(newPresence)
+    //fs.appendFileSync('checker.log', "\n" + newPresence)
     let currentDate = new Date();
     let currentDateISO = new Date().toISOString();
     if(newPresence.status != 'offline'){
     //oldpresencename = oldPresence?.activities.name//toString();
     //newpresencename = newPresence.activities[0].name
     //newpresencetxt = newPresence.activities[0].state
-    //console.log(newPresence.activities.length)
+    //fs.appendFileSync('checker.log', "\n" + newPresence.activities.length)
     for(i = 0; i < newPresence.activities.length ; i++){
         newpresencetxt = newPresence.activities[i].state
-        //console.log(newpresencetxt)
+        //fs.appendFileSync('checker.log', "\n" + newpresencetxt)
         bannedwords = require('./bannedwords.json');
         if(!newpresencetxt || newpresencetxt == null || newpresencetxt == 'null') return
         triggerstring = newpresencetxt.toLowerCase();
