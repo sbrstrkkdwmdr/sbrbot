@@ -4,12 +4,14 @@ module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclie
     
 client.on('messageDelete', async message => {
     if(message.channel == logchannel) return ;
+    if(message.author.bot) return;
     //console.log('your mum>??')
     console.log("message by " + message.author.id + " was deleted!")
     console.log(message.content)
     let embed = new Discord.MessageEmbed()
     .setTitle("Deleted Message")
     .setAuthor(`${message.author.id} @${message.author.tag}`)
+    .addField(`Info`, `${message.channel.name} | ${message.channelId}\nGuild - ${message.channel.guild} | ${message.channel.guildId}`, false)
     .addField('Deleted Message', `${message.content.toString()}`, false)
     logchannel.send({ embeds: [embed]})
 })

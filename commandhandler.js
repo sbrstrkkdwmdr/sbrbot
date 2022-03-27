@@ -291,7 +291,7 @@ client.on('messageCreate', message =>{
       break;
 
     case 'tsfm':case 'c':
-        client.altosucmds.get('tsfm').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        client.altosucmds.get('tsfm').execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
     
     case 'osuauth':
