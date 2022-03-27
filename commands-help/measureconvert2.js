@@ -1,3 +1,4 @@
+const fs = require('fs')
 module.exports = {
     name: 'measureconvert2',
     description: '',
