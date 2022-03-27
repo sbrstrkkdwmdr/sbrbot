@@ -6,27 +6,25 @@ let { prevmap } = require('../debug/storedmap.json');
 module.exports = {
     name: 'tsfm',
     description: '',
-    async execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+    async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
+        interaction.reply('getting data...')
         fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
-        let pickeduserX = args.splice(0,1000).join(" ");
+        let pickeduserX = options.getString('username')
+        let map = options.getString('id')
         fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
         fs.appendFileSync('osu.log', "\n" + "command executed - top score for map")
-        let consoleloguserweeee = message.author
+        let consoleloguserweeee = interaction.member.user
         fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         fs.appendFileSync('osu.log', "\n" + "") 
-        if(!pickeduserX || pickeduserX == '' || pickeduserX == ' '){
-            //console.log('pp')
+        if(!pickeduserX){
             try{
-                findname = await userdatatags.findOne({ where: { name: message.author.id } });
+                findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
                 pickeduserX = findname.get('description')}
                 catch (error) {
                 }
         }
-
-        if(!prevmap) return message.reply("no maps saved");
-        if(isNaN(prevmap)) return message.reply("map error")
-        //if(!pickeduserX) return message.reply("user ID or username required");
-        //if(isNaN(pickeduserX)){ //return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
+        if(!pickeduserX) return interaction.reply("user ID or username required");
+        //if(isNaN(pickeduserX)){ //return interaction.reply("You must use ID e.g. 15222484 instead of SaberStrike")
             try{
                 let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
                 let body1 = {
@@ -59,8 +57,14 @@ module.exports = {
                 try{const osudata = output1;
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
-                //message.reply(playerid)
-                const mapscoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}/scores/users/${playerid}/all`;
+                //interaction.reply(playerid)
+                
+                if(!map){
+                    mapscoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}/scores/users/${playerid}/all`
+                }
+                if(map){
+                    mapscoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${map}/scores/users/${playerid}/all`
+                }
                 const { access_token } = require('../debug/osuauth.json');
                 
                 fetch(mapscoreurl, {
@@ -157,10 +161,10 @@ module.exports = {
                     .setDescription(`${text}`)
                     .addField('map info', `${mapsr}⭐\nCS${mapcs} AR${mapar} OD${mapod} HP${maphp} ${mapbpm}BPM`, false)
                     //.setFooter(`${text}`)
-                    message.reply({ embeds: [Embed]})
+                    interaction.editReply({ content: '⠀', embeds: [Embed]})
                        })
             } catch(error){
-                    message.reply("Error - no data")
+                    interaction.channel.send("Error - no data")
                     fs.appendFileSync('osu.log', "\n1" + error)
                     fs.appendFileSync('osu.log', "\n" + error.columnNumber)
                     //error.columnNumber 
@@ -169,7 +173,7 @@ module.exports = {
                 }
                 });
             } catch(error){
-                message.reply("Error - account not found")
+                interaction.channel.send("Error - account not found")
                 fs.appendFileSync('osu.log', "\n" + "Error account not found")
                 fs.appendFileSync('osu.log', "\n" + error)
                 fs.appendFileSync('osu.log', "\n" + "")

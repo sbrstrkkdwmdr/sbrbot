@@ -293,6 +293,24 @@ commands?.create({
         }
     ]
 })
+commands?.create({
+    name: 'tsfm',
+    description: 'returns scores for a map',
+    options: [
+        {
+            name: 'username',
+            description: 'username or ID works (mode name if set to mode)',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'id',
+            description: 'map id',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        }
+    ]
+})
 //admin??
 commands?.create({
     name: 'botstatus',
@@ -432,6 +450,9 @@ client.on('interactionCreate', async (interaction) =>{
         break;
     case 'setuser':
         client.osucmds.get('osuset').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO)
+        break;
+    case 'tsfm':
+        client.osucmds.get('tsfm').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
         //admins---------------
 
