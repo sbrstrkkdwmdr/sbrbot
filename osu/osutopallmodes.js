@@ -121,7 +121,7 @@ module.exports = {
                         osutopdata = output2.sort((a, b) => b.accuracy - a.accuracy);
                         sortedby = 'Sorted by: Accuracy'
                     }
-                    else if(sort == 'time' || sort == 'date'){
+                    else if(sort == 'time' || sort == 'date' || sort == 'recent' || sort == 'r'){
                         //osutopdata = output2.sort((a, b) => b.created_at.toLowerCase().slice(0, 10).replaceAll('-', '') - a.created_at.toLowerCase().slice(0, 10).replaceAll('-', ''));
                         osutopdata = output2.sort((a, b) => Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')));
                         //fs.appendFileSync('osu.log', "\n" + osutopdata[0]['created_at'].slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', ''))
