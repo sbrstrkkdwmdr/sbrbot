@@ -2,14 +2,14 @@ module.exports = {
     name: 'links',
     description: 'links',
     execute(message, args, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('help.log', "\n" + '--- COMMAND EXECUTION ---')
         message.channel.send('here you go! https://sbrstrkkdwmdr.github.io/sbr-web/');  
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - links")
-        console.log("category - help")
+        fs.appendFileSync('help.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('help.log', "\n" + "command executed - links")
+        fs.appendFileSync('help.log', "\n" + "category - help")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")
+        fs.appendFileSync('help.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('help.log', "\n" + "")
         console.groupEnd()
     }
 }

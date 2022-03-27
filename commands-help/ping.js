@@ -2,16 +2,16 @@ module.exports = {
     name: 'ping',
     description: 'ping',
     execute(message, args, client, Discord, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('help.log', "\n" + '--- COMMAND EXECUTION ---')
         message.channel.send('pong!');   
         message.channel.send(`Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - ping")
-        console.log("category - help")
+        fs.appendFileSync('help.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('help.log', "\n" + "command executed - ping")
+        fs.appendFileSync('help.log', "\n" + "category - help")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log(`Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`)
-        console.log("")
+        fs.appendFileSync('help.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('help.log', "\n" + `Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`)
+        fs.appendFileSync('help.log', "\n" + "")
         console.groupEnd()
     }
 }

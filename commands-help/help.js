@@ -2,7 +2,7 @@ module.exports = {
     name: 'help',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('help.log', "\n" + '--- COMMAND EXECUTION ---')
         let helper = args[0]
         if(!helper){
         message.channel.send('commands listed here - https://sbrstrkkdwmdr.github.io/sbr-web/botcmd')}
@@ -266,12 +266,12 @@ module.exports = {
         }}
 
 
-        console.log(`${currentDateISO} | ${currentDate}`)  
-        console.log("command executed - help")
-        console.log("category - help")
+        fs.appendFileSync('help.log', "\n" + `${currentDateISO} | ${currentDate}`)  
+        fs.appendFileSync('help.log', "\n" + "command executed - help")
+        fs.appendFileSync('help.log', "\n" + "category - help")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")
+        fs.appendFileSync('help.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('help.log', "\n" + "")
         console.groupEnd()
     }
 }

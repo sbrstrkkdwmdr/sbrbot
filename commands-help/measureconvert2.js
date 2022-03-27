@@ -2,13 +2,13 @@ module.exports = {
     name: 'measureconvert2',
     description: '',
     execute(interaction, args, Discord, options, currentDate, currentDateISO, ) {
-        console.group('--- COMMAND EXECUTION ---')
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - measure convert")
-        console.log("category - help")
+        fs.appendFileSync('help.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync('help.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('help.log', "\n" + "command executed - measure convert")
+        fs.appendFileSync('help.log', "\n" + "category - help")
         let consoleloguserweeee = interaction.member.user
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('help.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('help.log', "\n" + "") 
         console.groupEnd()
 
         let converttype = options.getString('type')
