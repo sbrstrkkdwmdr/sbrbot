@@ -2,7 +2,6 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-let { prevmap } = require('../debug/storedmap.json');
 module.exports = {
     name: 'tsfm',
     description: '',
@@ -22,9 +21,6 @@ module.exports = {
                 catch (error) {
                 }
         }
-
-        if(!prevmap) return message.reply("no maps saved");
-        if(isNaN(prevmap)) return message.reply("map error")
         //if(!pickeduserX) return message.reply("user ID or username required");
         //if(isNaN(pickeduserX)){ //return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
             try{
@@ -60,6 +56,8 @@ module.exports = {
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 //message.reply(playerid)
+                let { prevmap } = require('../debug/storedmap.json');
+
                 const mapscoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}/scores/users/${playerid}/all`;
                 const { access_token } = require('../debug/osuauth.json');
                 

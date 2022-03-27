@@ -2,7 +2,6 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-let { prevmap } = require('../debug/storedmap.json');
 module.exports = {
     name: 'tsfm',
     description: '',
@@ -10,7 +9,7 @@ module.exports = {
         interaction.reply('getting data...')
         fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
         let pickeduserX = options.getString('username')
-        let map = options.getString('id')
+        let map = options.getNumber('id')
         fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
         fs.appendFileSync('osu.log', "\n" + "command executed - top score for map")
         let consoleloguserweeee = interaction.member.user
@@ -51,6 +50,8 @@ module.exports = {
             }).then(res => res.json())
             .then(output1 => 
                 {
+                    let { prevmap } = require('../debug/storedmap.json');
+
                     fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
                     fs.appendFileSync('osu.log', "\n" + "")
                     
