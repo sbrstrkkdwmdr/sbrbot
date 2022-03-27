@@ -12,11 +12,11 @@ module.exports = {
     async execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
         //const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - osutop")
+        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', "\n" + "command executed - osutop")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', "\n" + "") 
         let pickeduserX = args.splice(0,1000).join(" ");
         if(!pickeduserX){
             try{
@@ -41,8 +41,8 @@ module.exports = {
                 .then(res => res.json())
                 .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
                 ;
-                console.log("writing data to osuauth.json")
-                console.log("")
+                fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
+                fs.appendFileSync('osu.log', "\n" + "")
                 
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
                 const { access_token } = require('../debug/osuauth.json');
@@ -56,13 +56,13 @@ module.exports = {
                 {
                 try{const osudata = output1;
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
-                console.log("writing data to osuid.json")
-                console.log("")
+                fs.appendFileSync('osu.log', "\n" + "writing data to osuid.json")
+                fs.appendFileSync('osu.log', "\n" + "")
                 
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 if(!playerid) {
                     message.reply("Error osu04 - account not found")
-                    console.log("error - account not found and/or json sent no data")
+                    fs.appendFileSync('osu.log', "\n" + "error - account not found and/or json sent no data")
                     return;
                 }
                 //message.reply(playerid)
@@ -76,15 +76,15 @@ module.exports = {
                 .then(output2 => 
                     {const osutopdata = output2;
                     fs.writeFileSync("debug/osutop.json", JSON.stringify(osutopdata, null, 2));
-                    console.log("writing data to osutop.json")
-                    console.log("")
+                    fs.appendFileSync('osu.log', "\n" + "writing data to osutop.json")
+                    fs.appendFileSync('osu.log', "\n" + "")
                     console.groupEnd()
                     try{
                         try{let topplayername = JSON.stringify(osutopdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                     }
                     catch(error) {
                             message.reply("Error 03 - not enough plays")
-                            console.log("error osu03 - not enough plays")
+                            fs.appendFileSync('osu.log', "\n" + "error osu03 - not enough plays")
                             return;
                         }
                     let topplayername = JSON.stringify(osutopdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
@@ -178,20 +178,20 @@ module.exports = {
             } catch(error){
                 if(error.toString().includes('replaceAll')){
                     message.reply("Error - play data not found and/or json sent no data")
-                    console.log("Error - play data not found and/or json sent no data")}
+                    fs.appendFileSync('osu.log', "\n" + "Error - play data not found and/or json sent no data")}
                     else{message.reply('unknown error')}
-                console.log(error)
-                console.log("")
+                fs.appendFileSync('osu.log', "\n" + error)
+                fs.appendFileSync('osu.log', "\n" + "")
             }
             } ) 
         } catch(error){
                 message.reply("Error - account not found")
-                console.log("Error account not found")
-                console.log(error)
-                console.log("")
+                fs.appendFileSync('osu.log', "\n" + "Error account not found")
+                fs.appendFileSync('osu.log', "\n" + error)
+                fs.appendFileSync('osu.log', "\n" + "")
             }})
             } catch(err){
-                console.log(err)
+                fs.appendFileSync('osu.log', "\n" + err)
             } 
             
     }

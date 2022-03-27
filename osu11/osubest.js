@@ -9,7 +9,7 @@ module.exports = {
     name: 'osubest',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
 //        `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`
         let url = `https://osutrack-api.ameo.dev/bestplays?mode=0`;
        /* const hiscores = [
@@ -47,8 +47,8 @@ module.exports = {
 {        out.sort((a, b) => b.pp - a.pp);
     const topHiscores = out.slice(0, 5);
         fs.writeFileSync("debug/osubest.json", JSON.stringify(topHiscores, null, 2));
-        console.log("writing data to w.json")
-        console.log("")
+        fs.appendFileSync('osu.log', "\n" + "writing data to w.json")
+        fs.appendFileSync('osu.log', "\n" + "")
         let bmid1 = JSON.stringify(topHiscores[0], ['beatmap_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmap_id', '')
         let bmid2 = JSON.stringify(topHiscores[1], ['beatmap_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmap_id', '')
         let bmid3 = JSON.stringify(topHiscores[2], ['beatmap_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmap_id', '')
@@ -117,11 +117,11 @@ module.exports = {
     }
     
 
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - osubest")
+        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', "\n" + "command executed - osubest")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', "\n" + "") 
         console.groupEnd()
         
     }

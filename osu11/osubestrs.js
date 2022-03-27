@@ -9,7 +9,7 @@ module.exports = {
     name: 'osubestrs',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
 //        `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`
         let url = `https://osutrack-api.ameo.dev/bestplays?mode=0&from=${curdateyesterday}&to=${curdatetmr}`;
        /* const hiscores = [
@@ -174,16 +174,16 @@ module.exports = {
             //message.reply("```json\nTOP SCORES FOR " + pickeduserX + "\n" + JSON.stringify(topHiscores, null, 2).replaceAll('"', '').replaceAll('beatmap_id', 'beatmap id').replaceAll('[', '').replaceAll(']', '').replaceAll(',', '').replaceAll('}', '').replaceAll('{', '------------') + "```");
     }
     )} catch (error) {
-        console.log(error)
+        fs.appendFileSync('osu.log', "\n" + error)
         console.groupEnd()
     }
     
 
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - osubest past 24h")
+        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', "\n" + "command executed - osubest past 24h")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', "\n" + "") 
         console.groupEnd()
         
     }

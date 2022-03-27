@@ -5,13 +5,13 @@ module.exports = {
     name: 'osuauth',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        console.group('--- COMMAND EXECUTION ---')
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - osuauth")
-        console.log("category - osu")
+        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', "\n" + "command executed - osuauth")
+        fs.appendFileSync('osu.log', "\n" + "category - osu")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', "\n" + "") 
         try{
             let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
             let body1 = {
@@ -28,13 +28,13 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             .then(message.reply("success"))
-            console.log("writing data to osuauth.json")
-            console.log("")
-            console.log("sent")
+            fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
+            fs.appendFileSync('osu.log', "\n" + "")
+            fs.appendFileSync('osu.log', "\n" + "sent")
             console.groupEnd()
             ;
         } catch(error){
-            console.log(error)
+            fs.appendFileSync('osu.log', "\n" + error)
             message.reply("error")
             console.groupEnd()
         }

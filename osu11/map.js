@@ -7,18 +7,18 @@ module.exports = {
     name: 'map',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
         const pickeduserX = args[0];
         if(args[1]){
         modsmaybe = args[1];
         }
-        //console.log(args[1])
+        //fs.appendFileSync('osu.log', "\n" + args[1])
 
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - map get")
+        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', "\n" + "command executed - map get")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', "\n" + "") 
         
         try {
         let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
@@ -36,11 +36,11 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
-            console.log("writing data to osuauth.json")
-            console.log("")
+            fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
+            fs.appendFileSync('osu.log', "\n" + "")
         const modsarray = ["EZ", "NF", "HT", "HR", "SD", "PF", "DT", "NC", "HD", "FL", "RX", "AP", "SO", "TD", "NM"];
-        //console.log(modsarray)
-        //console.log(modsarray.length)
+        //fs.appendFileSync('osu.log', "\n" + modsarray)
+        //fs.appendFileSync('osu.log', "\n" + modsarray.length)
         let { prevmap } = require('../debug/storedmap.json');
         if(!pickeduserX){
             mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`
@@ -62,7 +62,7 @@ module.exports = {
         if(pickeduserX && isNaN(pickeduserX) && modsarray.some(v => pickeduserX.includes(v))){
             moddetect = pickeduserX;
             mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`
-            //console.log("1")
+            //fs.appendFileSync('osu.log', "\n" + "1")
         }
             try{
             const { access_token } = require('../debug/osuauth.json');
@@ -81,8 +81,8 @@ module.exports = {
 					//let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
 					//const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
                 fs.writeFileSync("debug/map.json", JSON.stringify(mapdata, null, 2))
-                console.log("writing data to map.json")
-                console.log("")
+                fs.appendFileSync('osu.log', "\n" + "writing data to map.json")
+                fs.appendFileSync('osu.log', "\n" + "")
             try{
             let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
             let maplink = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
@@ -160,10 +160,10 @@ module.exports = {
             const file = require('../debug/storedmap.json');  
             file.prevmap = maplink;
             fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-                if (err) return console.log(err);
-                console.log(JSON.stringify(file));
-                console.log('writing to ' + fileName);
-                console.log("");
+                if (err) return fs.appendFileSync('osu.log', "\n" + err);
+                fs.appendFileSync('osu.log', "\n" + JSON.stringify(file));
+                fs.appendFileSync('osu.log', "\n" + 'writing to ' + fileName);
+                fs.appendFileSync('osu.log', "\n" + "");
                 console.groupEnd()
               });//all this stuff is to write it to a temporary save file
 
@@ -304,7 +304,7 @@ module.exports = {
                     if(Number.isInteger(mapar * 100) == false ){
                         mapar = mapar.toFixed(2)
                     }
-                    //console.log(Number.isInteger(mapar * 100))
+                    //fs.appendFileSync('osu.log', "\n" + Number.isInteger(mapar * 100))
                     maphp = Math.abs(maphpNM * 1.5)// + "^";
                     mapod = Math.abs(mapodNM * 1.5)// + "^";
                     mapbpm = Math.abs(mapbpmNM * 1.5)
@@ -430,7 +430,7 @@ module.exports = {
                     modtoarray2 = modtoarray1.slice(0, -1)
                     moddetectforsr = modtoarray2.split(/ +/)
                     starRating = await calculateStarRating(maplink, moddetectforsr);
-                    //console.log(starRating)
+                    //fs.appendFileSync('osu.log', "\n" + starRating)
                     SR = JSON.stringify(starRating).replace('{', '').replace(':', '').replace('}', '').replace(moddetectnotd, '').replace('nomod', '').replaceAll('"', '')    
                     SRclean = Math.abs(SR).toFixed(2)
                 }
@@ -458,20 +458,20 @@ module.exports = {
               })();
     } catch(error){
 				message.reply("error")
-				console.log(error)
-				console.log("")
+				fs.appendFileSync('osu.log', "\n" + error)
+				fs.appendFileSync('osu.log', "\n" + "")
                 console.groupEnd()
                 console.groupEnd()
                 console.groupEnd()
 			}
             });
         } catch(error){
-            console.log(error)
+            fs.appendFileSync('osu.log', "\n" + error)
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()
         } } catch(error) {
-            console.log(error)
+            fs.appendFileSync('osu.log', "\n" + error)
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()

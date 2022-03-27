@@ -8,12 +8,12 @@ module.exports = {
         console.group('--- COMMAND EXECUTION ---')
         let pickedmods = args[0];
         //let pickedmods = JSON.stringify(pickedmods1).replaceAll('"', '');
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - map get (past)")
+        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', "\n" + "command executed - map get (past)")
         let consoleloguserweeee = message.author
-        console.log(pickedmods)
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('osu.log', "\n" + pickedmods)
+        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', "\n" + "") 
 
         //if(!pickedmods) return message.channel.send("no mods have been picked!\nuse `sbr-map` if you want NM")
 
@@ -36,8 +36,8 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
-            console.log("writing data to osuauth.json")
-            console.log("")
+            fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
+            fs.appendFileSync('osu.log', "\n" + "")
             
         
             
@@ -131,9 +131,9 @@ module.exports = {
             const file = require('../debug/storedmap.json');  
             file.prevmap = maplink;
             fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-                if (err) return console.log(err);
-                console.log(JSON.stringify(file));
-                console.log('writing to ' + fileName);
+                if (err) return fs.appendFileSync('osu.log', "\n" + err);
+                fs.appendFileSync('osu.log', "\n" + JSON.stringify(file));
+                fs.appendFileSync('osu.log', "\n" + 'writing to ' + fileName);
               });
             
               //const API_KEY = 'put api key here'; // osu! api v1 key
@@ -332,10 +332,10 @@ module.exports = {
                 let ppSS = Math.abs(ppSSstr).toFixed(2)
                 let pp95 = Math.abs(pp95str).toFixed(2)
 
-                //console.log(ppSSjson)
+                //fs.appendFileSync('osu.log', "\n" + ppSSjson)
 
 
-                //console.log(await pp.compute(100))
+                //fs.appendFileSync('osu.log', "\n" + await pp.compute(100))
                 /* => {
                   aim: 108.36677305976224,
                   speed: 121.39049498160061,
@@ -373,8 +373,8 @@ let userinfourl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`
         //    })
     } catch(error){
 				message.reply("error")
-				console.log(error)
-				console.log("")
+				fs.appendFileSync('osu.log', "\n" + error)
+				fs.appendFileSync('osu.log', "\n" + "")
                 console.groupEnd()
                 console.groupEnd()
                 console.groupEnd()
@@ -384,7 +384,7 @@ let userinfourl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`
 		/*	let { version } = require('../map.json');
 			let { cover } = require('../map.json');
 			let { url }
-			console.log(version)*/
+			fs.appendFileSync('osu.log', "\n" + version)*/
 	
 
             

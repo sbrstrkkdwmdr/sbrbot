@@ -7,7 +7,8 @@ module.exports = {
     name: 'rs',
     description: '',
     async execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('osu.log', '--- COMMAND EXECUTION ---')
+        fs.appendFileSync('osu.log', '\n')
         let pickeduserX = args.splice(0,1000).join(" ");
         if(!pickeduserX || pickeduserX == '' || pickeduserX == []){
             try{
@@ -15,15 +16,20 @@ module.exports = {
             pickeduserX = findname.get('description')
             }
             catch (error) {
-                console.log(error)
+                fs.appendFileSync('osu.log', error)
+                fs.appendFileSync('osu.log', '\n')
             }
         }
 
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - rs")
+        fs.appendFileSync('osu.log', `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', '\n')
+        fs.appendFileSync('osu.log', "command executed - rs")
+        fs.appendFileSync('osu.log', '\n')
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('osu.log', `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', '\n')
+        fs.appendFileSync('osu.log', "") 
+        fs.appendFileSync('osu.log', '\n')
             try{
                 let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
                 let body1 = {
@@ -40,8 +46,8 @@ module.exports = {
                 .then(res => res.json())
                 .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
                 ;
-                console.log("writing data to osuauth.json")
-                console.log("")    
+                fs.appendFileSync('osu.log', "writing data to osuauth.json")
+                fs.appendFileSync('osu.log', '\n')
 
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
                 const { access_token } = require('../debug/osuauth.json');
@@ -58,7 +64,8 @@ module.exports = {
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 if(!playerid) {
                     message.reply("Error osu04 - account not found")
-                    console.log("error - account not found and/or json sent no data")
+                    fs.appendFileSync('osu.log', "error - account not found and/or json sent no data")
+                    fs.appendFileSync('osu.log', '\n')
                     return;
                 }
 
@@ -72,8 +79,10 @@ module.exports = {
                 .then(output2 => 
                     {try{const rsdata = output2;//.slice(0, 1);
                     fs.writeFileSync("debug/rs.json", JSON.stringify(rsdata, null, 2))
-                    console.log("writing data to rs.json")
-                    console.log("")
+                    fs.appendFileSync('osu.log', "writing data to rs.json")
+                    fs.appendFileSync('osu.log', '\n')
+                    fs.appendFileSync('osu.log', "")
+                    fs.appendFileSync('osu.log', '\n')
                 try {
                 let rsplayerid = JSON.stringify(rsdata[0], ['user_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('user_id', '');
                 let rsplayername = JSON.stringify(rsdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('username', '');
@@ -127,14 +136,14 @@ module.exports = {
                     rspassseconds = rspassseconds1
                 }
                 let rspasstimeconverted = `${rspassminutes}:${rspassseconds}`
-                //console.log(rstime + ` | ${rspasstime}`)
+                //fs.appendFileSync('osu.log', rstime + ` | ${rspasstime}`)
                 if(rsgrade == 'f' || rsgrade == 'F' ){
                     rspassinfo = `\n${rspasstimeconverted} / ${rsfulltime} (${rspasspercentage})`
                 }
                 else{
                     rspassinfo = ''
                 }
-                //console.log(`total ${rstime} hit ${rspasstime}`)
+                //fs.appendFileSync('osu.log', `total ${rstime} hit ${rspasstime}`)
 
     
                 let rsnochokeacc300 = Math.floor(300 * rs300s);
@@ -154,7 +163,7 @@ module.exports = {
                 let fulltimeset1 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 18);
                 let fulltimeset2 = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 12);
                 let fulltimeset3 = JSON.stringify(fulltimeset1).slice(12, 18)
-                //console.log(fulltimeset3)
+                //fs.appendFileSync('osu.log', fulltimeset3)
                 let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0,-1)
                 let fulltimeset5 = fulltimeset4.slice(1, 10)
                 let fulltimeset = fulltimeset2 + fulltimeset5 + "Z"
@@ -175,10 +184,12 @@ module.exports = {
                 const file = require('../debug/storedmap.json');  
                 file.prevmap = rsmapid;
                 fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-                    if (err) return console.log(err);
-                    console.log(JSON.stringify(file));
-                    console.log('writing to ' + fileName);
-                    console.log("");
+                    if (err) return fs.appendFileSync('osu.log', err);
+                    fs.appendFileSync('osu.log', JSON.stringify(file));
+                    fs.appendFileSync('osu.log', '\n')
+                    fs.appendFileSync('osu.log', 'writing to ' + fileName);
+                    fs.appendFileSync('osu.log', '\n')
+                    fs.appendFileSync('osu.log', "");
                     console.groupEnd()
                 });
                 
@@ -336,8 +347,8 @@ module.exports = {
                     ppissue = `\n(calculations **don't** include TD)`
                     }
 
-                //console.log(`${pprawaim} | ${pprawspeed} | ${pprawacc} | ${pprawfl} | ${ppcalcacc}`)
-                //console.log(`${ppfcrawaim} | ${ppfcrawspeed} | ${ppfcrawacc} | ${ppfcrawfl} | ${ppfccalcacc}`)
+                //fs.appendFileSync('osu.log', `${pprawaim} | ${pprawspeed} | ${pprawacc} | ${pprawfl} | ${ppcalcacc}`)
+                //fs.appendFileSync('osu.log', `${ppfcrawaim} | ${ppfcrawspeed} | ${ppfcrawacc} | ${ppfcrawfl} | ${ppfccalcacc}`)
 
                 if(rspp == 'null' || rspp == 'NaN'){
                       rspp = ppww
@@ -418,6 +429,8 @@ module.exports = {
                         .addField('PP', `**${rspp}**pp ${fcflag}`, true)
                         //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
                         message.reply({embeds: [Embed]})
+                        fs.appendFileSync('osu.log', "sent")
+                        fs.appendFileSync('osu.log', '\n')
                 
                 //}
                 /*if(rsgrade = 'F'){
@@ -443,29 +456,30 @@ module.exports = {
             } catch(error){
                 if(error.toString().includes('replaceAll')){
                     message.reply("Error - play data not found and/or json sent no data")
-                    console.log("Error - play data not found and/or json sent no data")}
+                    fs.appendFileSync('osu.log', "Error - play data not found and/or json sent no data")}
                     else{message.reply('unknown error')}
-                console.log(error)
-                console.log("")
+                fs.appendFileSync('osu.log', error)
+                fs.appendFileSync('osu.log', '\n')
             }
             }catch(error){
                 if(error.toString().includes('replaceAll')){
                     message.reply("Error - play data not found and/or json sent no data")
-                    console.log("Error - play data not found and/or json sent no data")}
+                    fs.appendFileSync('osu.log', "Error - play data not found and/or json sent no data")}
                     else{message.reply('unknown error')}
-                console.log(error)
-                console.log("")
+                fs.appendFileSync('osu.log', error)
+                fs.appendFileSync('osu.log', '\n')
             }});
                 } catch(error){
                     if(error.toString().includes('replaceAll')){
                         message.reply("Error - account not found")
-                        console.log("error - account not found and/or json sent no data")}
+                        fs.appendFileSync('osu.log', "error - account not found and/or json sent no data")}
                         else{message.reply('unknown error')}
-                    console.log(error)
-                    console.log("")
+                    fs.appendFileSync('osu.log', error)
+                    fs.appendFileSync('osu.log', '\n')
                 }})
             } catch(err){
-                console.log(err)
+                fs.appendFileSync('osu.log', err)
+                fs.appendFileSync('osu.log', '\n')
             }
             
     }

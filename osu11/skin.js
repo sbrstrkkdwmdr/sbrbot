@@ -1,8 +1,9 @@
+const fs = require('fs')
 module.exports = {
     name: 'skin',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
         let skinname = args[0];
         if(!skinname){
             message.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skins")
@@ -116,11 +117,11 @@ module.exports = {
             message.channel.send("***SKINS*** \n```json\n1 - SaberStrikeCustom\n2 - SaberStrikeCustomv2\n3 - Type X\n4 - Type Y \n5 - Type Z\n6 - SaberStrike『0』\n7 - SaberStrike『1』(most unique cursor dance one)\n8 - sbr\n9 - prjct sbr\n10 - SBR UnDefined\nb1 - Cark\nb2 - Koifish\nb3 - Kanojo Mizuhara\nb4 - Saber's AMOGUS\nb5 - SaberStrike『0』_-Levi-_ edit\nb6 - SaberStrike『Soragaton』\nb7 - sbr 『-hANOJI』```")
 
         }}
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - skin")
+        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', "\n" + "command executed - skin")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")   
+        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', "\n" + "")   
         console.groupEnd()
     }
 }

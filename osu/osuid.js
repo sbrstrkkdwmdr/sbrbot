@@ -5,14 +5,14 @@ module.exports = {
     name: 'osuid',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
         const pickeduserX = args.splice(0,1000).join(" ");
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - get osu id")
-        console.log("category - osu")
+        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', "\n" + "command executed - get osu id")
+        fs.appendFileSync('osu.log', "\n" + "category - osu")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', "\n" + "") 
         if(!pickeduserX) return message.reply("username required");
         //if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
       
@@ -32,8 +32,8 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
-            console.log("writing data to osuauth.json")
-            console.log("")
+            fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
+            fs.appendFileSync('osu.log', "\n" + "")
             
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
             const { access_token } = require('../debug/osuauth.json');
@@ -47,21 +47,21 @@ module.exports = {
                 {
                 try{const osudata = output2;
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
-                console.log("writing data to osuid.json")
-                console.log("")
+                fs.appendFileSync('osu.log', "\n" + "writing data to osuid.json")
+                fs.appendFileSync('osu.log', "\n" + "")
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 message.reply(playerid)
-                console.log("sent")
+                fs.appendFileSync('osu.log', "\n" + "sent")
                 } catch(error){
                     message.reply("Error - account not found")
-                    console.log("Error account not found")
-                    console.log(error)
-                    console.log("")
+                    fs.appendFileSync('osu.log', "\n" + "Error account not found")
+                    fs.appendFileSync('osu.log', "\n" + error)
+                    fs.appendFileSync('osu.log', "\n" + "")
                     console.groupEnd()
                 }
         });
         } catch(err){
-            console.log(err)
+            fs.appendFileSync('osu.log', "\n" + err)
             console.groupEnd()
         } 
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  

@@ -6,7 +6,7 @@ module.exports = {
     name: 'osu',
     description: '',
     async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
         let pickeduserX = options.getString('user')
         if(!pickeduserX){
             try{
@@ -15,12 +15,12 @@ module.exports = {
                 catch (error) {
                 }
         }
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - osu profile")
-        console.log("category - osu")
+        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', "\n" + "command executed - osu profile")
+        fs.appendFileSync('osu.log', "\n" + "category - osu")
         let consoleloguserweeee = interaction.member.user
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', "\n" + "") 
 
         interaction.reply('getting data...')
         if(!pickeduserX) return interaction.channel.send("user ID required");
@@ -41,8 +41,8 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
-            console.log("writing data to osuauth.json")
-            console.log("")
+            fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
+            fs.appendFileSync('osu.log', "\n" + "")
             
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
             
@@ -55,8 +55,8 @@ module.exports = {
                 {
                 try{const osudata = output2;
                 fs.writeFileSync("debug/osu.json", JSON.stringify(osudata, null, 2));
-                console.log("writing data to osu.json")
-                console.log("")
+                fs.appendFileSync('osu.log', "\n" + "writing data to osu.json")
+                fs.appendFileSync('osu.log', "\n" + "")
                 console.groupEnd()
                 let playername = JSON.stringify(osudata, ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
@@ -105,7 +105,7 @@ module.exports = {
                 /*let fulltimeset = JSON.stringify(osudata, ['last_visit']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('last_visit', '').replaceAll('[', '').replaceAll(']', '').slice(0, 18);
                 let fulltimeset2 = JSON.stringify(osudata, ['last_visit']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('last_visit', '').replaceAll('[', '').replaceAll(']', '').slice(0, 12);
                 let fulltimeset3 = JSON.stringify(fulltimeset1).slice(12, 18)
-                console.log(playerlast)
+                fs.appendFileSync('osu.log', "\n" + playerlast)
                 let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0,-1)
                 let fulltimeset5 = fulltimeset4.slice(1, 10)
                 let fulltimeset = fulltimeset2 + fulltimeset5 + "Z"*/
@@ -123,7 +123,7 @@ module.exports = {
                     let lastvisdays = Math.trunc((minlastvisreform/60)/24) % 30;
                     let lastvismonths = Math.trunc(minlastvisreform/60/24/30) % 12;
                     let lastvisyears = Math.trunc(minlastvisreform/60/24/30/12);
-                    //console.log(minlastvisreform)
+                    //fs.appendFileSync('osu.log', "\n" + minlastvisreform)
                     let minlastvisredo = (lastvisyears + "y " + lastvismonths + "m " +  lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
                 
             
@@ -134,7 +134,7 @@ module.exports = {
             .setThumbnail(playeravatar)
             .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n` + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_online:927800818445455421> Online**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
             interaction.channel.send({ content: '⠀', embeds: [Embed]})
-            console.log("sent")
+            fs.appendFileSync('osu.log', "\n" + "sent")
             //interaction.channel.send(mapbg1)
             }
             if(playerstatus == false ){let Embed = new Discord.MessageEmbed()
@@ -144,21 +144,21 @@ module.exports = {
                 .setThumbnail(playeravatar)
                 .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n`+ playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + `\n **<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago\n**Player joined on** ` + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
                 interaction.channel.send({ content: '⠀', embeds: [Embed]})
-                console.log("sent")
+                fs.appendFileSync('osu.log', "\n" + "sent")
                 //interaction.editReply(mapbg1)
                 }
                 
             } catch(error){
                     interaction.channel.send("Error - account not found (or some other error)")
-                    console.log("Error account not found")
-                    console.log(error)
-                    console.log("")
+                    fs.appendFileSync('osu.log', "\n" + "Error account not found")
+                    fs.appendFileSync('osu.log', "\n" + error)
+                    fs.appendFileSync('osu.log', "\n" + "")
                     console.groupEnd()
                 }
         });
         } catch(err){
-            console.log(err)
-            console.log("")
+            fs.appendFileSync('osu.log', "\n" + err)
+            fs.appendFileSync('osu.log', "\n" + "")
             console.groupEnd()
         } 
         

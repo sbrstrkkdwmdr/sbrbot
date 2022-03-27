@@ -7,14 +7,14 @@ module.exports = {
     name: 'tsfm',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
         const pickeduserX = args.splice(0,1000).join(" ");
         let pickedmap = JSON.stringify(prevmap).replaceAll('id', '').replaceAll('"', '');//args[1];
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - top score for map")
+        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', "\n" + "command executed - top score for map")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', "\n" + "") 
 
         if(!pickedmap) return message.reply("no maps saved");
         if(isNaN(pickedmap)) return message.reply("map error")
@@ -46,8 +46,8 @@ module.exports = {
             }).then(res => res.json())
             .then(output1 => 
                 {
-                    console.log("writing data to osuauth.json")
-                    console.log("")
+                    fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
+                    fs.appendFileSync('osu.log', "\n" + "")
                     
                 try{const osudata = output1;
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
@@ -70,8 +70,8 @@ module.exports = {
                         //let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
                         //const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
                     fs.writeFileSync("debug/mapscore.json", JSON.stringify(mapscoredata, null, 2))
-                    console.log("writing data to mapscore.json")
-                    console.log("")
+                    fs.appendFileSync('osu.log', "\n" + "writing data to mapscore.json")
+                    fs.appendFileSync('osu.log', "\n" + "")
                     console.groupEnd()
                 try{
                     let playerid = JSON.stringify(mapscoredata['score'], ['user_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('user_id', '');
@@ -139,15 +139,15 @@ module.exports = {
                     //    })
             } catch(error){
                     message.reply("Error - no data")
-                    console.log(error)
-                    console.log("")
+                    fs.appendFileSync('osu.log', "\n" + error)
+                    fs.appendFileSync('osu.log', "\n" + "")
                 }
                 
                 
             /*	let { version } = require('../map.json');
                 let { cover } = require('../map.json');
                 let { url }
-                console.log(version)*/
+                fs.appendFileSync('osu.log', "\n" + version)*/
         
     
                 
@@ -160,12 +160,12 @@ module.exports = {
                 });
             } catch(error){
                 message.reply("Error - account not found")
-                console.log("Error account not found")
-                console.log(error)
-                console.log("")
+                fs.appendFileSync('osu.log', "\n" + "Error account not found")
+                fs.appendFileSync('osu.log', "\n" + error)
+                fs.appendFileSync('osu.log', "\n" + "")
             }})
         }   catch(err){
-                console.log(err)
+                fs.appendFileSync('osu.log', "\n" + err)
             }
         
     }

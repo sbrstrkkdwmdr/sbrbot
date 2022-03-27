@@ -7,7 +7,7 @@ module.exports = {
     name: 'map',
     description: '',
     execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
         let mapid = options.getNumber('id')
         let mods = options.getString('mods')
         if(!mods){
@@ -28,12 +28,12 @@ module.exports = {
             moddetect = 'NM'
         }
         interaction.reply('getting data...')
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - map get")
-        console.log("category - osu")
+        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', "\n" + "command executed - map get")
+        fs.appendFileSync('osu.log', "\n" + "category - osu")
         let consoleloguserweeee = interaction.member.user
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', "\n" + "") 
         
         try {
         let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
@@ -51,8 +51,8 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
-            console.log("writing data to osuauth.json")
-            console.log("")
+            fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
+            fs.appendFileSync('osu.log', "\n" + "")
             try{
             const { access_token } = require('../debug/osuauth.json');
             
@@ -70,8 +70,8 @@ module.exports = {
 					//let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
 					//const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
                 fs.writeFileSync("debug/map.json", JSON.stringify(mapdata, null, 2))
-                console.log("writing data to map.json")
-                console.log("")
+                fs.appendFileSync('osu.log', "\n" + "writing data to map.json")
+                fs.appendFileSync('osu.log', "\n" + "")
             try{
             let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
             let maplink = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
@@ -149,10 +149,10 @@ module.exports = {
             const file = require('../debug/storedmap.json');  
             file.prevmap = maplink;
             fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-                if (err) return console.log(err);
-                console.log(JSON.stringify(file));
-                console.log('writing to ' + fileName);
-                console.log("");
+                if (err) return fs.appendFileSync('osu.log', "\n" + err);
+                fs.appendFileSync('osu.log', "\n" + JSON.stringify(file));
+                fs.appendFileSync('osu.log', "\n" + 'writing to ' + fileName);
+                fs.appendFileSync('osu.log', "\n" + "");
                 console.groupEnd()
               });//all this stuff is to write it to a temporary save file
 
@@ -293,7 +293,7 @@ module.exports = {
                     if(Number.isInteger(mapar * 100) == false ){
                         mapar = mapar.toFixed(2)
                     }
-                    //console.log(Number.isInteger(mapar * 100))
+                    //fs.appendFileSync('osu.log', "\n" + Number.isInteger(mapar * 100))
                     maphp = Math.abs(maphpNM * 1.5)// + "^";
                     mapod = Math.abs(mapodNM * 1.5)// + "^";
                     mapbpm = Math.abs(mapbpmNM * 1.5)
@@ -419,7 +419,7 @@ module.exports = {
                     modtoarray2 = modtoarray1.slice(0, -1)
                     moddetectforsr = modtoarray2.split(/ +/)
                     starRating = await calculateStarRating(maplink, moddetectforsr);
-                    //console.log(starRating)
+                    //fs.appendFileSync('osu.log', "\n" + starRating)
                     SR = JSON.stringify(starRating).replace('{', '').replace(':', '').replace('}', '').replace(moddetectnotd, '').replace('nomod', '').replaceAll('"', '')    
                     SRclean = Math.abs(SR).toFixed(2)
                 }
@@ -444,25 +444,25 @@ module.exports = {
             .addField('**PP VALUES**', `\n**SS:** ${ppSS} \n**95:** ${pp95} ${modissue}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             interaction.editReply({ content: '⠀', embeds: [Embed]})
-            console.log("sent")
+            fs.appendFileSync('osu.log', "\n" + "sent")
             })
               })();
     } catch(error){
 				interaction.editReply("error")
-				console.log(error)
-				console.log("")
+				fs.appendFileSync('osu.log', "\n" + error)
+				fs.appendFileSync('osu.log', "\n" + "")
                 console.groupEnd()
                 console.groupEnd()
                 console.groupEnd()
 			}
             });
         } catch(error){
-            console.log(error)
+            fs.appendFileSync('osu.log', "\n" + error)
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()
         } } catch(error) {
-            console.log(error)
+            fs.appendFileSync('osu.log', "\n" + error)
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()

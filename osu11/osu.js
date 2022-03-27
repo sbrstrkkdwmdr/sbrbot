@@ -6,7 +6,7 @@ module.exports = {
     name: 'osu',
     description: '',
     async execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
-        console.group('--- COMMAND EXECUTION ---')
+        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
         let pickeduserX = args.splice(0,1000).join(" ");
         if(!pickeduserX){
             try{
@@ -15,11 +15,11 @@ module.exports = {
             catch (error) {
             }
         }
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - osu profile")
+        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync('osu.log', "\n" + "command executed - osu profile")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync('osu.log', "\n" + "") 
         //if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
       
         try{
@@ -38,8 +38,8 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
-            console.log("writing data to osuauth.json")
-            console.log("")
+            fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
+            fs.appendFileSync('osu.log', "\n" + "")
             
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
             
@@ -52,8 +52,8 @@ module.exports = {
                 {
                 try{const osudata = output2;
                 fs.writeFileSync("debug/osu.json", JSON.stringify(osudata, null, 2));
-                console.log("writing data to osu.json")
-                console.log("")
+                fs.appendFileSync('osu.log', "\n" + "writing data to osu.json")
+                fs.appendFileSync('osu.log', "\n" + "")
                 console.groupEnd()
                 let playername = JSON.stringify(osudata, ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
@@ -100,7 +100,7 @@ module.exports = {
                 /*let fulltimeset = JSON.stringify(osudata, ['last_visit']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('last_visit', '').replaceAll('[', '').replaceAll(']', '').slice(0, 18);
                 let fulltimeset2 = JSON.stringify(osudata, ['last_visit']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('last_visit', '').replaceAll('[', '').replaceAll(']', '').slice(0, 12);
                 let fulltimeset3 = JSON.stringify(fulltimeset1).slice(12, 18)
-                console.log(playerlast)
+                fs.appendFileSync('osu.log', "\n" + playerlast)
                 let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0,-1)
                 let fulltimeset5 = fulltimeset4.slice(1, 10)
                 let fulltimeset = fulltimeset2 + fulltimeset5 + "Z"*/
@@ -118,7 +118,7 @@ module.exports = {
                     let lastvisdays = Math.trunc((minlastvisreform/60)/24) % 30;
                     let lastvismonths = Math.trunc(minlastvisreform/60/24/30) % 12;
                     let lastvisyears = Math.trunc(minlastvisreform/60/24/30/12);
-                    //console.log(minlastvisreform)
+                    //fs.appendFileSync('osu.log', "\n" + minlastvisreform)
                     let minlastvisredo = (lastvisyears + "y " + lastvismonths + "m " +  lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
                 
             
@@ -143,14 +143,14 @@ module.exports = {
                 
             } catch(error){
                     message.reply("Error - account not found (or some other error)")
-                    console.log("Error account not found")
-                    console.log(error)
-                    console.log("")
+                    fs.appendFileSync('osu.log', "\n" + "Error account not found")
+                    fs.appendFileSync('osu.log', "\n" + error)
+                    fs.appendFileSync('osu.log', "\n" + "")
                     
                 }
         });
         } catch(err){
-            console.log(err)
+            fs.appendFileSync('osu.log', "\n" + err)
         } 
         
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
