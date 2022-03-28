@@ -308,6 +308,36 @@ commands?.create({
             description: 'map id',
             required: false,
             type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: 'sort',
+            description: 'what to sort plays by. defaults to score',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ]
+})
+commands?.create({
+    name: 'scores',//prev - tsfm
+    description: 'returns scores for a map',
+    options: [
+        {
+            name: 'username',
+            description: 'username or ID works (mode name if set to mode)',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'id',
+            description: 'map id',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: 'sort',
+            description: 'what to sort plays by. defaults to score',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
         }
     ]
 })
@@ -451,7 +481,7 @@ client.on('interactionCreate', async (interaction) =>{
     case 'setuser':
         client.osucmds.get('osuset').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO)
         break;
-    case 'tsfm':
+    case 'tsfm':case 'scores':
         client.osucmds.get('tsfm').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
         //admins---------------
