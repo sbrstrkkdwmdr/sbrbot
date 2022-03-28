@@ -10,6 +10,7 @@ module.exports = {
         fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
         let pickeduserX = options.getString('username')
         let map = options.getNumber('id')
+        let sort = options.getString('sort').toLowerCase();
         fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
         fs.appendFileSync('osu.log', "\n" + "command executed - top score for map")
         let consoleloguserweeee = interaction.member.user
@@ -24,6 +25,7 @@ module.exports = {
         }
         if(!pickeduserX) return interaction.reply("user ID or username required");
         //if(isNaN(pickeduserX)){ //return interaction.reply("You must use ID e.g. 15222484 instead of SaberStrike")
+        //let mapid = Math.abs(maplink)
             try{
                 let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
                 let body1 = {
@@ -62,9 +64,13 @@ module.exports = {
                 
                 if(!map){
                     mapscoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}/scores/users/${playerid}/all`
+                    mapdataurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`
+                    mapid = prevmap
                 }
                 if(map){
                     mapscoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${map}/scores/users/${playerid}/all`
+                    mapdataurl = `https://osu.ppy.sh/api/v2/beatmaps/${map}`
+                    mapid = map
                 }
                 const { access_token } = require('../debug/osuauth.json');
                 
@@ -78,6 +84,28 @@ module.exports = {
                 }).then(res => res.json())
                 .then(output2 => 
                     {
+                        if(sort == 'acc' || sort == 'accuracy'){
+                            osutopdata = output2.scores.sort((a, b) => b.accuracy - a.accuracy);
+                            sortedby = 'Sorted by: Accuracy'
+                        }
+                        else if(sort == 'time' || sort == 'date' || sort == 'recent' || sort == 'r'){
+                            //osutopdata = output2.sort((a, b) => b.created_at.toLowerCase().slice(0, 10).replaceAll('-', '') - a.created_at.toLowerCase().slice(0, 10).replaceAll('-', ''));
+                            osutopdata = output2.scores.sort((a, b) => Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')));
+                            //fs.appendFileSync('osu.log', "\n" + osutopdata[0]['created_at'].slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', ''))
+                            
+                            sortedby = 'Sorted by: Most Recent'
+                        }
+                        else if(sort == 'pp' || sort == 'performance'){
+                            osutopdata = output2.scores.sort((a, b) => b.pp - a.pp);
+                            sortedby = 'Sorted by: pp (performance points)'
+                        }
+                        /*if(sort == 'score'){
+                            osutopdata = output2.sort((a, b) => a.pp - b.pp);
+                        }*/
+                        else{
+                            osutopdata = output2.scores.sort((a, b) => b.score - a.score);
+                            sortedby = '⠀'
+                        }
                         const mapscoredata = output2;
                         //let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
                         //const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
@@ -90,7 +118,7 @@ module.exports = {
                     //let playerid = JSON.stringify(mapscoredata['scores'][0]['score'], ['user_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('user_id', '');
                     let playername = JSON.stringify(osudata, ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('username', '');
 
-                    let mapdataurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`
+                    //let mapdataurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`
                     fetch(mapdataurl, {
                         method: "GET",
                         headers: {
@@ -153,13 +181,26 @@ module.exports = {
                 }
                 text = text + `**${i+1}**\n ${mods2} | ${maptime}\n**${(acc*100).toFixed(2)}%** | **${pp}**pp | **${grade}**\n${combo}x/**${mapmaxcombo}**x | ${mapscore300s}/${mapscore100s}/${mapscore50s}/${mapscore0s}\n\n`
             }
+            if(text == '' || text == ' '){
+                text = '**no scores found**'
+            }
+            const fileName = 'debug/storedmap.json';
+            const file = require('../debug/storedmap.json');  
+            file.prevmap = mapid;
+            fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
+                if (err) return fs.appendFileSync('osu.log', "\n" + err);
+                fs.appendFileSync('osu.log', "\n" + JSON.stringify(file));
+                fs.appendFileSync('osu.log', "\n" + 'writing to ' + fileName);
+                fs.appendFileSync('osu.log', "\n" + "");
+                console.groupEnd()
+            });
                     let Embed = new Discord.MessageEmbed()
                     .setTitle(`${mapartist} - ${maptitle}\n[${mapdiff}]`)
                     //.setThumbnail(`https://a.ppy.sh/${playerid}`)
                     .setURL('https://osu.ppy.sh/b/' + prevmap)
                     .setImage(`${mapbg}`)
                     .setAuthor(`${playername}'s scores on`, `https://a.ppy.sh/${playerid}`,`https://osu.ppy.sh/u/${playerid}`)
-                    .setDescription(`${text}`)
+                    .setDescription(`${sortedby}\n${text}`)
                     .addField('map info', `${mapsr}⭐\nCS${mapcs} AR${mapar} OD${mapod} HP${maphp} ${mapbpm}BPM`, false)
                     //.setFooter(`${text}`)
                     interaction.editReply({ content: '⠀', embeds: [Embed]})
