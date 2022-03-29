@@ -177,9 +177,9 @@ module.exports = {
                     mods2 = ''
                 }
                 if(mods){
-                    mods2 = '+' + mods
+                    mods2 = '+' + mods + ' |'
                 }
-                text = text + `**${i+1}**\n ${mods2} | ${maptime}\n**${(acc*100).toFixed(2)}%** | **${pp}**pp | **${grade}**\n${combo}x/**${mapmaxcombo}**x | ${mapscore300s}/${mapscore100s}/${mapscore50s}/${mapscore0s}\n\n`
+                text = text + `**${i+1}**\n ${mods2} ${maptime}\n**${(acc*100).toFixed(2)}%** | **${pp}**pp | **${grade}**\n${combo}x/**${mapmaxcombo}**x | ${mapscore300s}/${mapscore100s}/${mapscore50s}/${mapscore0s}\n\n`
             }
             if(text == '' || text == ' '){
                 text = '**no scores found**'
