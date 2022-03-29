@@ -10,7 +10,7 @@ module.exports = {
         fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
         let pickeduserX = options.getString('username')
         let map = options.getNumber('id')
-        let sort = options.getString('sort').toLowerCase();
+        let sort = options.getString('sort') + ''.toLowerCase();
         fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
         fs.appendFileSync('osu.log', "\n" + "command executed - top score for map")
         let consoleloguserweeee = interaction.member.user
@@ -103,7 +103,7 @@ module.exports = {
                             osutopdata = output2.sort((a, b) => a.pp - b.pp);
                         }*/
                         else{
-                            osutopdata = output2.scores.sort((a, b) => b.score - a.score);
+                            osutopdata = output2.scores.sort((a, b) => Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')));
                             sortedby = '⠀'
                         }
                         const mapscoredata = output2;
@@ -178,6 +178,33 @@ module.exports = {
                 }
                 if(mods){
                     mods2 = '+' + mods + ' |'
+                }
+                if(grade == 'xh' || grade == 'XH'){
+                    grade = '<:rankingxh:927797179597357076>'
+                }
+                if(grade == 'x' || grade == 'X'){
+                    grade = '<:rankingX:927797179832229948>'
+                }
+                if(grade == 'sh' || grade == 'SH'){
+                    grade = '<:rankingSH:927797179710570568>'
+                }
+                if(grade == 's' || grade == 'S'){
+                    grade = '<:rankingS:927797179618295838>'
+                }
+                if(grade == 'a' || grade == 'A'){
+                    grade = '<:rankingA:927797179739930634>'
+                }
+                if(grade == 'b' || grade == 'B'){
+                    grade = '<:rankingB:927797179697991700>'
+                }
+                if(grade == 'c' || grade == 'C'){
+                    grade = '<:rankingC:927797179584757842>'
+                }
+                if(grade == 'd' || grade == 'D'){
+                    grade = '<:rankingD:927797179534438421>'
+                }
+                if(grade == 'f' || grade == 'F' ){
+                    grade = '🇫'
                 }
                 text = text + `**${i+1}**\n ${mods2} ${maptime}\n**${(acc*100).toFixed(2)}%** | **${pp}**pp | **${grade}**\n${combo}x/**${mapmaxcombo}**x | ${mapscore300s}/${mapscore100s}/${mapscore50s}/${mapscore0s}\n\n`
             }
