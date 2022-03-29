@@ -256,6 +256,9 @@ client.on('messageCreate', message =>{
     case 'addmsg':
         client.commands.get('addmsg').execute(message, args, currentDate, currentDateISO)
         break;
+    case 'getuser':
+        client.commands.get('getuser').execute(message, client, Discord, args, currentDate, currentDateISO)
+        break;
         //SBR ONLY --------------------------------------------------------
     case 'testlog':
         client.commands.get('testlog').execute(message, args, currentDate, currentDateISO)
