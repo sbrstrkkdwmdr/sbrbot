@@ -49,8 +49,14 @@ module.exports = {
                 pickedmodex = 'osu'
             }
         let offsetflag = options.getNumber('offset')
+        if(offsetflag) {
+            //playnumber = (offsetflag + 1).toString();
+            recenttitlestring = "#" + (offsetflag + 1) + " most recent play for "
+        }
         if(!offsetflag) {
             offsetflag = '0'
+            //playnumber = ''
+            recenttitlestring = 'Most recent play for '
         }
         interaction.reply('getting data...')
         fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
@@ -484,7 +490,7 @@ module.exports = {
                     rscoverlist = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['list']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('list', '').replace('https', 'https:');
                     let Embed = new Discord.MessageEmbed()
                         .setColor(0x9AAAC0)
-                        .setTitle("Most recent play for " + rsplayername)
+                        .setTitle(recenttitlestring + rsplayername)
                         .setAuthor(`${minlastvisw} ago on ${rsmaptime}${trycountstr}`, `https://a.ppy.sh/${rsplayerid}`, `https://osu.ppy.sh/u/${rsplayerid}`)
                         //.setImage(rsmapbg)
                         .setThumbnail(rscoverlist)
