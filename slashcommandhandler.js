@@ -341,6 +341,31 @@ commands?.create({
         }
     ]
 })
+commands?.create({
+    name: 'rsplus',
+    description: 'most recent play for user',
+    fetchReply: true,
+    options: [
+        {
+            name: 'user',
+            description: 'the user. can be in ID or username',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'offset',
+            description: 'if you want page offset', 
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: 'mode',
+            description: 'what mode?', 
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ]
+})
 //admin??
 commands?.create({
     name: 'botstatus',
@@ -483,6 +508,9 @@ client.on('interactionCreate', async (interaction) =>{
         break;
     case 'tsfm':case 'scores':
         client.osucmds.get('tsfm').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+     case 'rsplus':
+        client.osucmds.get('rsplus').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
         //admins---------------
 
