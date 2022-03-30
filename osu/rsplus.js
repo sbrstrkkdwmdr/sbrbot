@@ -55,7 +55,7 @@ module.exports = {
             //recenttitlestring = "#" + (offsetflag + 1) + " most recent play for "
         }
         if(!offsetflag) {
-            offsetflag = '0'
+            offsetflag = 0
             //playnumber = ''
             //recenttitlestring = 'Most recent play for '
         }
@@ -122,7 +122,7 @@ module.exports = {
                 try {
                 let rsplayerid = JSON.stringify(rsdata[0], ['user_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('user_id', '');
                 let rsplayername = JSON.stringify(rsdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('username', '');
-
+/*
                 const fileName = 'debug/storedmap.json';
                 const file = require('../debug/storedmap.json');  
                 file.prevmap = rsmapid;
@@ -132,242 +132,38 @@ module.exports = {
                     fs.appendFileSync('osu.log', "\n" + 'writing to ' + fileName);
                     fs.appendFileSync('osu.log', "\n" + "");
                     console.groupEnd()
-                });
-                
-                let rsmapidtonum = parseInt(rsmapid);
-
-                var trycount = 0;
-                for (var i = 0; i < rsdata.length; i++) {
-                    if (rsdata[i].beatmap.id === rsmapidtonum) {
-                        trycount++;
-                    }
-                    }
-                var trycountstr = ' '
-                if(trycount > 1)
-                    {
-                        trycountstr = `\ntry #${trycount}`
-                    }
-                
-                (async () => {
-                    const score = {
-                        beatmap_id: rsmapid,
-                        score: '6795149',
-                        maxcombo: '630',
-                        count50: rs50s,
-                        count100: rs100s,
-                        count300: rs300s,
-                        countmiss: '0',
-                        countkatu: rskatu,
-                        countgeki: rsgeki,
-                        perfect: '0',
-                        enabled_mods: '64',
-                        user_id: rsplayerid,
-                        date: '2022-02-08 05:24:54',
-                        rank: 'S',
-                        score_id: '4057765057'
-                      }
-                      const scorenofc = {
-                        beatmap_id: rsmapid,
-                        score: '6795149',
-                        maxcombo: '630',
-                        count50: rs50s,
-                        count100: rs100s,
-                        count300: rs300s,
-                        countmiss: rs0s,
-                        countkatu: rskatu,
-                        countgeki: rsgeki,
-                        perfect: '0',
-                        enabled_mods: '64',
-                        user_id: rsplayerid,
-                        date: '2022-02-08 05:24:54',
-                        rank: 'S',
-                        score_id: '4057765057'
-                      }
-                      const scoretd = {
-                        beatmap_id: rsmapid,
-                        score: '6795149',
-                        maxcombo: '630',
-                        count50: rs50s,
-                        count100: rs100s,
-                        count300: rs300s,
-                        countmiss: '0',
-                        countkatu: rskatu,
-                        countgeki: rsgeki,
-                        perfect: '0',
-                        enabled_mods: '64',
-                        user_id: rsplayerid,
-                        date: '2022-02-08 05:24:54',
-                        rank: 'S',
-                        score_id: '4057765057'
-                      }
-                      const scorefctd = {
-                        beatmap_id: rsmapid,
-                        score: '6795149',
-                        maxcombo: '630',
-                        count50: rs50s,
-                        count100: rs100s,
-                        count300: rs300s,
-                        countmiss: rs0s,
-                        countkatu: rskatu,
-                        countgeki: rsgeki,
-                        perfect: '0',
-                        enabled_mods: '64',
-                        user_id: rsplayerid,
-                        date: '2022-02-08 05:24:54',
-                        rank: 'S',
-                        score_id: '4057765057'
-                      }
-                    let tdmods = JSON.stringify(rsmods).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rsmods', '').replaceAll('TD');
-                    fs.writeFileSync("debug/rsppcalc.json", JSON.stringify(score, null, 2));
-                    let ppfc = new std_ppv2().setPerformance(score);
-                    let pp =  new std_ppv2().setPerformance(scorenofc);
-                    if(pickedmodex == 'osu'){if(rsmods){
-                        pp =  new std_ppv2().setPerformance(scorenofc).setMods(`${rsmods}`)
-                        ppfc = new std_ppv2().setPerformance(score).setMods(`${rsmods}`)
-                        pptd = new std_ppv2().setPerformance(scoretd).setMods(`${tdmods}`)
-                        ppfctd = new std_ppv2().setPerformance(scorefctd).setMods(`${tdmods}`)
-                    }
-                    if(!rsmods){
-                        pp =  new std_ppv2().setPerformance(scorenofc).setMods('NM')
-                        ppfc = new std_ppv2().setPerformance(score).setMods('NM')
-                    }}
-                    if(pickedmodex == 'taiko'){if(rsmods){
-                        pp =  new taiko_ppv2().setPerformance(scorenofc).setMods(`${rsmods}`)
-                        ppfc = new taiko_ppv2().setPerformance(score).setMods(`${rsmods}`)
-                        pptd = new taiko_ppv2().setPerformance(scoretd).setMods(`${tdmods}`)
-                        ppfctd = new taiko_ppv2().setPerformance(scorefctd).setMods(`${tdmods}`)
-                    }
-                    if(!rsmods){
-                        pp =  new taiko_ppv2().setPerformance(scorenofc).setMods('NM')
-                        ppfc = new taiko_ppv2().setPerformance(score).setMods('NM')
-                    }}
-                    if(pickedmodex == 'fruits'){if(rsmods){
-                        pp =  new catch_ppv2().setPerformance(scorenofc).setMods(`${rsmods}`)
-                        ppfc = new catch_ppv2().setPerformance(score).setMods(`${rsmods}`)
-                        pptd = new catch_ppv2().setPerformance(scoretd).setMods(`${tdmods}`)
-                        ppfctd = new catch_ppv2().setPerformance(scorefctd).setMods(`${tdmods}`)
-                    }
-                    if(!rsmods){
-                        pp =  new catch_ppv2().setPerformance(scorenofc).setMods('NM')
-                        ppfc = new catch_ppv2().setPerformance(score).setMods('NM')
-                    }}
-                    if(pickedmodex == 'mania'){if(rsmods){
-                        pp =  new mania_ppv2().setPerformance(scorenofc).setMods(`${rsmods}`)
-                        ppfc = new mania_ppv2().setPerformance(score).setMods(`${rsmods}`)
-                        pptd = new mania_ppv2().setPerformance(scoretd).setMods(`${tdmods}`)
-                        ppfctd = new mania_ppv2().setPerformance(scorefctd).setMods(`${tdmods}`)
-                    }
-                    if(!rsmods){
-                        pp =  new mania_ppv2().setPerformance(scorenofc).setMods('NM')
-                        ppfc = new mania_ppv2().setPerformance(score).setMods('NM')
-                    }}
-                    ;
-
-                if(!rsmods.includes('TD')){
-                    ppw = await pp.compute();
-                    ppiffc1 = await ppfc.compute(rsnochokeacc);
-                    ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                    ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
-                    ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
-                    ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                    ppwrawtotal = ppw['total'];
-                    ppww = Math.abs(ppwrawtotal).toFixed(2);
-                    ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
-
-                    pprawaim = ppw['aim']
-                    pprawspeed = ppw['speed']
-                    pprawacc = ppw['acc']
-                    pprawfl = ppw['fl']
-                    ppcalcacc = ppw['computed_accuracy']
-    
-                    ppfcrawaim = ppiffc1['aim']
-                    ppfcrawspeed = ppiffc1['speed']
-                    ppfcrawacc = ppiffc1['acc']
-                    ppfcrawfl = ppiffc1['fl']
-                    ppfccalcacc = ppiffc1['computed_accuracy']
-    
-                    ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
-                    ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
-                    ppissue = ''
-                    }
-                    if(rsmods.includes('TD')){
-                    ppw = await pptd.compute();
-                    ppiffc1 = await ppfctd.compute(rsnochokeacc);
-                    ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                    ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
-                    ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
-                    ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                    ppwrawtotal = ppw['total'];
-                    ppww = Math.abs(ppwrawtotal).toFixed(2);
-                    ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters   
-
-                    pprawaim = ppw['aim']
-                    pprawspeed = ppw['speed']
-                    pprawacc = ppw['acc']
-                    pprawfl = ppw['fl']
-                    ppcalcacc = ppw['computed_accuracy']
-    
-                    ppfcrawaim = ppiffc1['aim']
-                    ppfcrawspeed = ppiffc1['speed']
-                    ppfcrawacc = ppiffc1['acc']
-                    ppfcrawfl = ppiffc1['fl']
-                    ppfccalcacc = ppiffc1['computed_accuracy']
-    
-                    ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
-                    ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
-                    ppissue = `\n(calculations **don't** include TD)`
-                    }
-
-                if(rspp == 'null' || rspp == 'NaN'){
-                      rspp = ppww
-                  }
-                    if(fc == 'false'){
-                        fcflag = `| **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`
-                    }
-                    if(fc == 'true'){
-                        fcflag = '**FC**'
-                    }
-                    
-                if(rsmods){
-                    calcmods = rsmods.replace('TD', '')
-                    modtoarray1 = calcmods.replace(/(.{2})/g, "$1 ");
-                    modtoarray2 = modtoarray1.slice(0, -1)
-                    modsforsr = modtoarray2.split(/ +/)
-                    starRating = await calculateStarRating(rsmapid, modsforsr);
-                    SR = JSON.stringify(starRating).replace('{', '').replace(':', '').replace('}', '').replace(calcmods, '').replace('nomod', '').replaceAll('"', '')    
-                    SRclean = Math.abs(SR).toFixed(2)}
-                    if(!rsmods || rsmods == 'TD'){
-                        SRclean = rsmapstar
-                    }
+                });*/
+            
                     fulltext = ''
                     for(i = 0; i<5; i++){
-                        let rsmapnameunicode = JSON.stringify(rsdata[0]['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title_unicode', '');
-                        let rsmapnameenglish = JSON.stringify(rsdata[0]['beatmapset'], ['title']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title', '');
+                        //console.log(i)
+                        let rsmapnameunicode = JSON.stringify(rsdata[i]['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title_unicode', '');
+                        let rsmapnameenglish = JSON.stringify(rsdata[i]['beatmapset'], ['title']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title', '');
                         if(rsmapnameunicode != rsmapnameenglish){
                             rsmapname = `${rsmapnameunicode} | ${rsmapnameenglish}`
                         }
                         else{
                             rsmapname = rsmapnameenglish
                         }               
-                        let rsdiffname = JSON.stringify(rsdata[0]['beatmap'], ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('version', '');
+                        let rsdiffname = JSON.stringify(rsdata[i]['beatmap'], ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('version', '');
                         let maptitles =  `${rsmapname} [${rsdiffname}]`
-                        let rsmods = JSON.stringify(rsdata[0], ['mods']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('mods', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
-                        let rsacc = JSON.stringify(rsdata[0], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('accuracy', '');
-                        let rs0s = JSON.stringify(rsdata[0]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_miss', '');
-                        let rs50s = JSON.stringify(rsdata[0]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_50', '');
-                        let rs100s = JSON.stringify(rsdata[0]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_100', '');
-                        let rs300s = JSON.stringify(rsdata[0]['statistics'], ['count_300']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_300', '');
-                        let rsgeki = JSON.stringify(rsdata[0]['statistics'], ['count_geki']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_geki', '');
-                        let rskatu = JSON.stringify(rsdata[0]['statistics'], ['count_katu']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_katu', '');
-                        let rsmaptime = JSON.stringify(rsdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('created_at', '').slice(0, 19).replaceAll('T', ' ')
-                        let rspp1 = JSON.stringify(rsdata[0], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pp', '');
+                        let rsmods = JSON.stringify(rsdata[i], ['mods']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('mods', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
+                        let rsacc = JSON.stringify(rsdata[i], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('accuracy', '');
+                        let rs0s = JSON.stringify(rsdata[i]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_miss', '');
+                        let rs50s = JSON.stringify(rsdata[i]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_50', '');
+                        let rs100s = JSON.stringify(rsdata[i]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_100', '');
+                        let rs300s = JSON.stringify(rsdata[i]['statistics'], ['count_300']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_300', '');
+                        let rsgeki = JSON.stringify(rsdata[i]['statistics'], ['count_geki']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_geki', '');
+                        let rskatu = JSON.stringify(rsdata[i]['statistics'], ['count_katu']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_katu', '');
+                        let rsmaptime = JSON.stringify(rsdata[i], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('created_at', '').slice(0, 19).replaceAll('T', ' ')
+                        let rspp1 = JSON.stringify(rsdata[i], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pp', '');
                         let rspp = Math.abs(rspp1).toFixed(2);
-                        let rsmapstar = JSON.stringify(rsdata[0]['beatmap'], ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
-                        let rsgrade = JSON.stringify(rsdata[0], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rank', '');
-                        let rsmapid = JSON.stringify(rsdata[0]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
-                        let rscombo = JSON.stringify(rsdata[0], ['max_combo']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max_combo', '');
-                        let rstime = JSON.stringify(rsdata[0]['beatmap'], ['total_length']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total_length', '');
-                        let fc = JSON.stringify(rsdata[0], ['perfect']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('perfect', '');
+                        let rsmapstar = JSON.stringify(rsdata[i]['beatmap'], ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
+                        let rsgrade = JSON.stringify(rsdata[i], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rank', '');
+                        rsmapid = JSON.stringify(rsdata[i]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
+                        let rscombo = JSON.stringify(rsdata[i], ['max_combo']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max_combo', '');
+                        let fc = JSON.stringify(rsdata[i], ['perfect']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('perfect', '');
+                        //console.log(rsmapid)
                         if(rsgrade == 'xh' || rsgrade == 'XH'){
                             rsgrade = '<:rankingxh:927797179597357076>'
                         }
@@ -419,8 +215,7 @@ module.exports = {
                         if(fc == 'true'){
                             fcflag = '**FC**'
                         }
-                        fulltext += `**${offsetflag+i+1}**\nScore set on ${rstime}\n [${maptitles}](https://osu.ppy.sh/b/${rsmapid}) ${rsmods2} ${rsmaptime}\n**${(rsacc*100).toFixed(2)}%** | **${rspp}**pp ${fcflag} | **${rsgrade}**\n**${rscombo}x** |  ${hitlist}\n\n`
-                        
+                        fulltext += `**${offsetflag+i+1}**\nScore set on ${rsmaptime}\n [${maptitles}](https://osu.ppy.sh/b/${rsmapid}) ${rsmods2} \n**${(rsacc*100).toFixed(2)}%** | **${rspp}**pp ${fcflag} | **${rsgrade}**\n**${rscombo}x** |  ${hitlist}\n\n`
                     }
                     rscoverlist = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['list']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('list', '').replace('https', 'https:');
                     let Embed = new Discord.MessageEmbed()
@@ -433,8 +228,6 @@ module.exports = {
                         //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
                         interaction.editReply({ content: '⠀', embeds: [Embed]})
                         fs.appendFileSync('osu.log', "\n" + "sent")
-            }
-            )()
             } catch(error){
                 if(error.toString().includes('replaceAll')){
                     interaction.editReply("Error - play data not found (or some other error)")

@@ -6,14 +6,16 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
 //ADDED FOR SLASH CMDS
 const guildid = testguild
 const guild = client.guilds.cache.get(guildid)
-/*let commands 
-
+settoguild = 0
+let commands 
+if(settoguild == 1){
 if (guild) {
     commands = guild.commands
 } else {
     commands = client.application?.commands
-}*/
-let commands = client.application?.commands
+}}
+if(settoguild == 0){
+commands = client.application?.commands}
 commands?.create({
     name: 'ping',
     description: 'replies with pong.',
