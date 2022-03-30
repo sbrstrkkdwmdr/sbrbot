@@ -37,6 +37,7 @@ module.exports = {
         if(!miss){
             miss = 0
         }
+        let totalhits = hit300max + hit300 + hit200 + hit100 + hit50 + miss
         let topequation = Math.floor((300 * hit300) + (100 * hit100) + (50 * hit50) + (miss))
         let bottomequation = Math.floor(300 * (hit300 + hit100 + hit50 + miss))
         if(!mode){
@@ -50,7 +51,26 @@ module.exports = {
             bottomequation = Math.floor(300 * (hit300 + hit100 + hit50 + miss))
             fullequation = (Math.abs((topequation / bottomequation)*100)).toString() + '%'
             shortequation = ((Math.abs((topequation / bottomequation)*100)).toFixed(2)).toString() + '%'
-            interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}`})//can't use edit reply bcs INTERACTION_NOT_REPLIED error, and cant use reply bcs DiscordAPIError: Interaction has already been acknowledged
+            //https://osu.ppy.sh/wiki/en/FAQ#grades
+            grade = 'D'
+            if(hit300 / totalhits > 0.6 && miss == 0){
+                grade = 'C'
+            }
+            if((hit300 / totalhits > 0.7 && miss == 0) || (hit300 / totalhits > 0.8)){
+                grade = 'B'
+            }
+            if((hit300 / totalhits > 0.8 && miss == 0) || (hit300 / totalhits > 0.9)){
+                grade = 'A'
+            }
+            if(Math.abs(hit300 / totalhits) > 0.9 && miss == 0 && Math.abs(hit50 / totalhits) < 0.01){
+                grade = 'S'
+            }
+            if(hit100 < 1 && hit50 < 1 && miss == 0){
+                grade = 'SS'
+            }
+
+
+            interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}\n**Grade:** ${grade}`})//can't use edit reply bcs INTERACTION_NOT_REPLIED error, and cant use reply bcs DiscordAPIError: Interaction has already been acknowledged
             fs.appendFileSync('osu.log', "\n" + "") 
             fs.appendFileSync('osu.log', "\n" + "sent")
             console.groupEnd()
@@ -61,7 +81,20 @@ module.exports = {
             bottomequation = Math.abs(hit300 + hit100 + miss)
             fullequation = (Math.abs((topequation / bottomequation)*100)).toString() + '%'
             shortequation = ((Math.abs((topequation / bottomequation)*100)).toFixed(2)).toString() + '%'
-            interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}`})
+            grade = 'https://osu.ppy.sh/wiki/en/FAQ#grades'
+            if(topequation / bottomequation > 0.8){
+                grade = 'B'
+            }
+            if(topequation / bottomequation > 0.9){
+                grade = 'A'
+            }
+            if(topequation / bottomequation > 0.95){
+                grade = 'S'
+            }
+            if(topequation / bottomequation == 1){
+                grade = 'SS'
+            }
+            interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}\n**Grade:** ${grade}`})
             fs.appendFileSync('osu.log', "\n" + "") 
             fs.appendFileSync('osu.log', "\n" + "sent")
             console.groupEnd()
@@ -89,7 +122,24 @@ module.exports = {
             bottomequation = Math.floor(Math.abs(fruits) + Math.abs(drops))
             fullequation = (Math.abs((topequation / bottomequation)*100)).toString() + '%'
             shortequation = ((Math.abs((topequation / bottomequation)*100)).toFixed(2)).toString() + '%'
-            interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}`})
+            
+            grade = 'D'
+            if(topequation / bottomequation > 0.85){
+                grade = 'C'
+            }
+            if(topequation / bottomequation > 0.9){
+                grade = 'B'
+            }
+            if(topequation / bottomequation > 0.94){
+                grade = 'A'
+            }
+            if(topequation / bottomequation > 0.98){
+                grade = 'S'
+            }
+            if(topequation / bottomequation == 1){
+                grade = 'SS'
+            }
+            interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}\n**Grade:** ${grade}`})
             fs.appendFileSync('osu.log', "\n" + "") 
             console.groupEnd()
             })}
@@ -103,7 +153,26 @@ module.exports = {
             bottomequation = Math.floor(300 * (hit300max + hit300 + hit200 + hit100 + hit50 + miss))
             fullequation = (Math.abs((topequation / bottomequation)*100)).toString() + '%'
             shortequation = ((Math.abs((topequation / bottomequation)*100)).toFixed(2)).toString() + '%'
-            interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}`})
+            if(topequation / bottomequation == 1){
+                grade = 'SS'
+            }
+            grade = 'D'
+            if(topequation / bottomequation == 0.7){
+                grade = 'C'
+            }
+            if(topequation / bottomequation == 0.8){
+                grade = 'B'
+            }
+            if(topequation / bottomequation > 0.9){
+                grade = 'A'
+            }
+            if(topequation / bottomequation > 0.95){
+                grade = 'S'
+            }
+            if(topequation / bottomequation == 1){
+                grade = 'SS'
+            }
+            interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}\n**Grade:** ${grade}`})
             fs.appendFileSync('osu.log', "\n" + "") 
             fs.appendFileSync('osu.log', "\n" + "sent")
             console.groupEnd()
