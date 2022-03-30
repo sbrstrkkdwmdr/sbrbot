@@ -198,16 +198,16 @@ module.exports = {
                             rsmods2 = ''
                         }
                         if(pickedmodex == 'osu'){
-                            hitlist = `**300:** ${rs300s} \n**100:** ${rs100s} \n**50:** ${rs50s} \n**X:** ${rs0s}`
+                            hitlist = `**300:** ${rs300s} | **100:** ${rs100s} | **50:** ${rs50s} | **X:** ${rs0s}`
                         }
                         if(pickedmodex == 'taiko'){
-                            hitlist = `**300(GREAT):** ${rs300s} \n**100(GOOD):** ${rs100s} \n**X:** ${rs0s}`
+                            hitlist = `**300(GREAT):** ${rs300s} | **100(GOOD):** ${rs100s} | **X:** ${rs0s}`
                         }
                         if(pickedmodex == 'fruits'){
-                            hitlist = `**300(Fruits):**${rs300s} \n**100(Drops):**${rs100s} \n**50(Droplets):**${rs50s} \n**X:**${rs0s}`
+                            hitlist = `**300(Fruits):**${rs300s} | **100(Drops):**${rs100s} | **50(Droplets):**${rs50s} | **X:**${rs0s}`
                         }
                         if(pickedmodex == 'mania'){
-                            hitlist = `**300+**:${rsgeki} \n**300:** ${rs300s} \n**200:** ${rskatu} \n**100:** ${rs100s} \n**50:** ${rs50s} \n**X:** ${rs0s}`
+                            hitlist = `**300+**:${rsgeki} | **300:** ${rs300s} | **200:** ${rskatu} | **100:** ${rs100s} | **50:** ${rs50s} | **X:** ${rs0s}`
                         }
                         if(fc == 'false'){
                             fcflag = ``
@@ -215,7 +215,26 @@ module.exports = {
                         if(fc == 'true'){
                             fcflag = '**FC**'
                         }
-                        fulltext += `**${offsetflag+i+1}**\nScore set on ${rsmaptime}\n [${maptitles}](https://osu.ppy.sh/b/${rsmapid}) ${rsmods2} \n**${(rsacc*100).toFixed(2)}%** | **${rspp}**pp ${fcflag} | **${rsgrade}**\n**${rscombo}x** |  ${hitlist}\n\n`
+                        let fulltimeset1 = JSON.stringify(rsdata[i], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 18);
+                        let fulltimeset2 = JSON.stringify(rsdata[i], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 12);
+                        let fulltimeset3 = JSON.stringify(fulltimeset1).slice(12, 18)
+                        //fs.appendFileSync('osu.log', "\n" + fulltimeset3)
+                        let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0,-1)
+                        let fulltimeset5 = fulltimeset4.slice(1, 10)
+                        let fulltimeset = fulltimeset2 + fulltimeset5 + "Z"
+        
+                        let playerlasttoint = new Date(fulltimeset)
+        
+                        let currenttime = new Date()
+        
+                        let minsincelastvis = (playerlasttoint - currenttime) / (1000 * 60);
+                        let minlastvisreform = Math.abs(minsincelastvis).toFixed(0);
+                        //let ww = Math.abs()
+                            
+                            let lastvishours = (Math.trunc(minlastvisreform/60)) % 24;
+                            let lastvisminutes = minlastvisreform % 60;
+                            let minlastvisw = (lastvishours + "h " + lastvisminutes + "m");
+                        fulltext += `**${offsetflag+i+1}** | [${maptitles}](https://osu.ppy.sh/b/${rsmapid}) ${rsmods2}\n${rsmaptime} (${minlastvisw} ago) \n**${(rsacc*100).toFixed(2)}%** | **${rspp}**pp ${fcflag} | **${rsgrade}** | **${rscombo}x**\n${hitlist}\n\n`
                     }
                     rscoverlist = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['list']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('list', '').replace('https', 'https:');
                     let Embed = new Discord.MessageEmbed()
