@@ -153,9 +153,6 @@ module.exports = {
             bottomequation = Math.floor(300 * (hit300max + hit300 + hit200 + hit100 + hit50 + miss))
             fullequation = (Math.abs((topequation / bottomequation)*100)).toString() + '%'
             shortequation = ((Math.abs((topequation / bottomequation)*100)).toFixed(2)).toString() + '%'
-            if(topequation / bottomequation == 1){
-                grade = 'SS'
-            }
             grade = 'D'
             if(topequation / bottomequation == 0.7){
                 grade = 'C'
