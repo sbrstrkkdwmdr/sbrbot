@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../debug/osuauth.json');
+const ChartJsImage = require('chartjs-to-image');
 module.exports = {
     name: 'osu',
     description: '',
@@ -79,7 +80,9 @@ module.exports = {
                 let playerjoined = JSON.stringify(osudata, ['join_date']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('join_date', '').slice(0, 10);
                 let playerfollowers = JSON.stringify(osudata, ['follower_count']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('follower_count', '');
                 let playerprevname = JSON.stringify(osudata, ['previous_usernames']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('previous_usernames', '').replaceAll('[', '').replaceAll(']', '');
-
+                let playcountgraph1 = JSON.stringify(osudata.monthly_playcounts)//.replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('previous_usernames', '').replaceAll('[', '').replaceAll(']', '');
+                //console.log(osudata.monthly_playcounts)
+                let playcountgraph = JSON.parse(playcountgraph1)
                 //let playerrank = JSON.stringify(osudata['statistics'], ['global_rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('global_rank', '');
 
                 if(isNaN(playerrank1)){
@@ -117,7 +120,7 @@ module.exports = {
                 let minsincelastvis = (playerlasttoint - currenttime) / (1000 * 60);
                 let minlastvisreform = Math.abs(minsincelastvis).toFixed(0);
                 //let ww = Math.abs()
-                    
+                    //console.log(playcountgraph1)
                     let lastvishours = (Math.trunc(minlastvisreform/60)) % 24;
                     let lastvisminutes = minlastvisreform % 60;
                     let lastvisdays = Math.trunc((minlastvisreform/60)/24) % 30;
@@ -125,33 +128,61 @@ module.exports = {
                     let lastvisyears = Math.trunc(minlastvisreform/60/24/30/12);
                     //fs.appendFileSync('osu.log', "\n" + minlastvisreform)
                     let minlastvisredo = (lastvisyears + "y " + lastvismonths + "m " +  lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
-                
-            
-            if(playerstatus == true ){let Embed = new Discord.MessageEmbed()
-            .setColor(0x6DDAFF)
-            .setTitle(`${playername}'s osu! profile`)
-            .setURL(`https://osu.ppy.sh/u/${playerid}`)
-            .setThumbnail(playeravatar)
-            .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n` + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_online:927800818445455421> Online**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
-            interaction.channel.send({ content: '⠀', embeds: [Embed]})
-            fs.appendFileSync('osu.log', "\n" + "sent")
-            //interaction.channel.send(mapbg1)
-            }
-            if(playerstatus == false ){let Embed = new Discord.MessageEmbed()
-                .setColor(0x6DDAFF)
-                .setTitle(`${playername}'s osu! profile`)
-                .setURL(`https://osu.ppy.sh/u/${playerid}`)
-                .setThumbnail(playeravatar)
-                .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n`+ playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + `\n **<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago\n**Player joined on** ` + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
-                interaction.channel.send({ content: '⠀', embeds: [Embed]})
-                fs.appendFileSync('osu.log', "\n" + "sent")
-                //interaction.editReply(mapbg1)
+                    playcounts = ''
+                    for(i = 0;i<playcountgraph.length;i++){
+                        playcounts += osudata.monthly_playcounts[i].count + ','
+                    }
+                    playcounts = playcounts.split(',')
+                    data = 'Start,'
+                    for(i = 0;i<(playcountgraph.length - 2);i++){
+                        data +=',' + osudata.monthly_playcounts[i].start_date
+                    }
+                    datacount = data.split(',')
+                    const chart = new ChartJsImage();
+                    chart.setConfig({
+                        type: 'line',
+                        data: {
+                            labels: datacount,
+                        datasets: [{
+                          label: 'Monthly playcounts',
+                          data: playcounts,
+                          fill: false,
+                          borderColor: 'rgb(75, 192, 192)',
+                          borderWidth: 1,
+                          pointRadius: 0
+                        }],
+                        },
+                      });
+                    chart.setBackgroundColor('color: rgb(0,0,0)')
+    
+                    //for some reason min and max values are ignored  
+                    chart.toFile('./files/playcount.png').then(w => {
+                let attachement = new Discord.MessageAttachment('./files/playcount.png', 'playcount.png')
+
+                if(playerstatus == true ){
+                    offlinestat = `**<:osu_online:927800818445455421> Online**`
                 }
+                if(playerstatus == false ){
+                    offlinestat = `**<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago`
+                }
+                    let Embed = new Discord.MessageEmbed()
+                    .setColor(0x6DDAFF)
+                    .setTitle(`${playername}'s osu! profile`)
+                    .setURL(`https://osu.ppy.sh/u/${playerid}`)
+                    .setThumbnail(playeravatar)
+                    .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n`+ playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + `\n ${offlinestat}\n**Player joined on** ` + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
+                    interaction.channel.send({ content: '⠀', embeds: [Embed], files: ['./files/playcount.png']})
+                    fs.appendFileSync('osu.log', "\n" + "sent")
+                    //interaction.editReply(mapbg1)
+                    
+                
+            })
                 
             } catch(error){
                     interaction.channel.send("Error - account not found (or some other error)")
                     fs.appendFileSync('osu.log', "\n" + "Error account not found")
                     fs.appendFileSync('osu.log', "\n" + error)
+                    console.log(error)
                     fs.appendFileSync('osu.log', "\n" + "")
                     console.groupEnd()
                 }
@@ -159,6 +190,7 @@ module.exports = {
         } catch(err){
             fs.appendFileSync('osu.log', "\n" + err)
             fs.appendFileSync('osu.log', "\n" + "")
+            console.log(err)
             console.groupEnd()
         } 
         

@@ -256,7 +256,7 @@ module.exports = {
                                     }],
                                     },
                                   });
-                
+                                  chart.setBackgroundColor('color: rgb(0,0,0)')
                                 //for some reason min and max values are ignored  
                                 chart.toFile('./files/replayhealth.png').then(w => {
         let attachement = new Discord.MessageAttachment('./files/replayhealth.png', 'replayhealth.png')
