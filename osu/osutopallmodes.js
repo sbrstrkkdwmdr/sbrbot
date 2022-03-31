@@ -116,7 +116,10 @@ module.exports = {
                 }).then(res => res.json())
                 .then(output2 => 
                     {
-                    let sort = options.getString('sort').toLowerCase();
+                    let sort = options.getString('sort')//.toLowerCase();
+                    if(sort){
+                        sort = sort.toLowerCase();
+                    }
                     if(sort == 'acc' || sort == 'accuracy'){
                         osutopdata = output2.sort((a, b) => b.accuracy - a.accuracy);
                         sortedby = 'Sorted by: Accuracy'
