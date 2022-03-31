@@ -224,24 +224,35 @@ module.exports = {
                 lifebar2 = (lifebar.replaceAll('|', ' ')).split(/ +/)
                 //console.log(lifebar2)
                 lifebarFULL1 = ''
-                for(i = 1; i<lifebar2.length; i++){
+                for(i = 1; i < (lifebar2.length - 1); i++){
                     text = lifebar2[i]
                     lifebarFULL1 += text.substring(0, text.indexOf(',')) + " "
                 }
-                lifebarFULL = lifebarFULL1.split(/ +/).map(function(item) {
-                    return parseInt(item, 10);
+                lifebarFULL2 = lifebarFULL1.split(/ +/).map(function(item) {
+                    return Math.floor(parseFloat(item, 10) * 100);
                 });
+                lifebarFULLEND = lifebarFULL2.pop()
+                lifebarFULL = lifebarFULL2
                 console.log(lifebarFULL)
+                data = 'Start,'
+                for(i = 0;i<(lifebarFULL.length - 2);i++){
+                    data +=', '
+                }
+                data += 'Finish'
+                datacount = data.split(',')
+
                 const chart = new ChartJsImage();
                                 chart.setConfig({
                                     type: 'line',
                                     data: {
-                                        //labels: ['Health'],
+                                        labels: datacount,
                                     datasets: [{
                                       label: 'Health',
                                       data: lifebarFULL,
                                       fill: false,
                                       borderColor: 'rgb(75, 192, 192)',
+                                      borderWidth: 1,
+                                      pointRadius: 0
                                     }],
                                     },
                                   });
