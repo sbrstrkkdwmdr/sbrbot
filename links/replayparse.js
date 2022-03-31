@@ -5,6 +5,7 @@ const { access_token } = require('../debug/osuauth.json');
 const calc = require('ojsama');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const osuReplayParser = require('osureplayparser');
+const ChartJsImage = require('chartjs-to-image');
 module.exports = {
     name: 'replayparse',
     description: '',
@@ -20,6 +21,7 @@ module.exports = {
         const replay = osuReplayParser.parseReplay(replayPath);
         fs.writeFileSync("debug/replay.json", JSON.stringify(replay, null, 2))
 
+        let lifebar = JSON.stringify(replay, ['life_bar']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('life_bar', '');
         let maphash = JSON.stringify(replay, ['beatmapMD5']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmapMD5', '');
         let playername = JSON.stringify(replay, ['playerName']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('playerName', '');
         let timeset = JSON.stringify(replay, ['timestamp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('timestamp', '');
@@ -219,18 +221,47 @@ module.exports = {
                 let ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
                 //console.log(ppw)
                 //console.log(ppfc)
-
+                lifebar2 = (lifebar.replaceAll('|', ' ')).split(/ +/)
+                //console.log(lifebar2)
+                lifebarFULL1 = ''
+                for(i = 1; i<lifebar2.length; i++){
+                    text = lifebar2[i]
+                    lifebarFULL1 += text.substring(0, text.indexOf(',')) + " "
+                }
+                lifebarFULL = lifebarFULL1.split(/ +/).map(function(item) {
+                    return parseInt(item, 10);
+                });
+                console.log(lifebarFULL)
+                const chart = new ChartJsImage();
+                                chart.setConfig({
+                                    type: 'line',
+                                    data: {
+                                        //labels: ['Health'],
+                                    datasets: [{
+                                      label: 'Health',
+                                      data: lifebarFULL,
+                                      fill: false,
+                                      borderColor: 'rgb(75, 192, 192)',
+                                    }],
+                                    },
+                                  });
+                
+                                //for some reason min and max values are ignored  
+                                chart.toFile('./files/replayhealth.png').then(w => {
+        let attachement = new Discord.MessageAttachment('./files/replayhealth.png', 'replayhealth.png')
         let Embed = new Discord.MessageEmbed()
         .setColor(0x462B71)
         .setTitle(`replay data`)
         //.setURL(`https://osu.ppy.sh/b/` + beatmapid)
-        .setImage(mapbg)
+        .setImage('attachment://files/replayhealth.png')
+        .setThumbnail(mapbg)
         .addField('**SCORE INFO**', `[**${playername}**](https://osu.ppy.sh/u/${playerid})\nScore set on ${bettertimeset}\n${hit300s}/${hit100s}/${hit50s}/${misses}\nCombo:**${maxcombo}** | ${trueacc}%`, true)
         .addField('**PP**', `${ppww}**pp**\n${ppiffcw}**pp** if ${nochokeacc}% FC`, true)
         .addField('**MAP**', `[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${beatmapid}) mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})`, false)
         .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner, false)
         .setThumbnail(`https://a.ppy.sh/${playerid}`);
-        message.reply({embeds: [Embed]})
+        message.reply({embeds: [Embed], files: ['./files/replayhealth.png']})
+    })
 })();
     //})//mapdata2
 } catch (error) {
