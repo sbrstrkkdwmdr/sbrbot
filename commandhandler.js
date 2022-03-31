@@ -1,5 +1,5 @@
 module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval) => {
-
+    const get = require('node-fetch');
 const { prefix } = require('./config.json')
 
 const fs = require('fs');
