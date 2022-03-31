@@ -242,7 +242,7 @@ module.exports = {
                         //.setTitle("Recent plays for ")
                         .setAuthor(`Recent plays for ${rsplayername}`, `https://a.ppy.sh/${rsplayerid}`, `https://osu.ppy.sh/u/${rsplayerid}`)
                         //.setImage(rsmapbg)
-                        .setThumbnail(rscoverlist)
+                        //.setThumbnail(rscoverlist)
                         .setDescription(fulltext)
                         //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
                         interaction.editReply({ content: '⠀', embeds: [Embed]})
