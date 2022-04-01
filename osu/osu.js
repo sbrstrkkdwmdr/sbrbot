@@ -171,7 +171,7 @@ module.exports = {
                     .setURL(`https://osu.ppy.sh/u/${playerid}`)
                     .setThumbnail(playeravatar)
                     .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n`+ playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + `\n ${offlinestat}\n**Player joined on** ` + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
-                    interaction.channel.send({ content: '⠀', embeds: [Embed], files: ['./files/playcount.png']})
+                    interaction.editReply({ content: '⠀', embeds: [Embed], files: ['./files/playcount.png']})
                     fs.appendFileSync('osu.log', "\n" + "sent")
                     //interaction.editReply(mapbg1)
                     
