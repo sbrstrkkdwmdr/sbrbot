@@ -1,3 +1,3 @@
 @ECHO ON
-npm i
-node setup.js
+npm i >> error.log
+node setup.js >> error.log
