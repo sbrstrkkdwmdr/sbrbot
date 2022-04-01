@@ -58,24 +58,25 @@ client.on('roleDelete', role => {
     logchannel.send({ embeds: [embed]})
 })
 client.on('roleUpdate', (oldRole, newRole) => {
-    role.createdAt
-    role.createdTimestamp
-    role.id
-    role.name
-    role.guild.id
     console.log(`
     Role updated!
     ${oldRole.name} | ${oldRole.id}
-    >
+    =>
     ${newRole.name} | ${newRole.id}
     @${oldRole.createdAt} | ${oldRole.createdTimestamp}
     updated in guild - ${oldRole.guild.name} | ${oldRole.guild.id}
     `)
+    perms = ''
+    if(oldRole.permissions != newRole.permissions){
+        oldrollperm = oldRole.permissions.FLAGS.toString()
+        newroleperm = newRole.permissions.FLAGS.toString()
+        perms = `${oldrollperm} => ${newroleperm}`
+    }
     let embed = new Discord.MessageEmbed()
     .setTitle("Role Deleted")
     //.setAuthor(`${role.name} | ${role.id}`)
     .addField('Guild', `${oldRole.guild.name} | ${oldRole.guild.id}`, false)
-    .addField('Info', `${oldRole.name} > ${newRole.name} | ${oldRole.id}\n${oldRole.permissions}\n>\n${newRole.permissions}`, false)
+    .addField('Info', `${oldRole.name} => ${newRole.name} | ${oldRole.id}\n${perms}`, false)
     logchannel.send({ embeds: [embed]})
 })
 }
