@@ -3,6 +3,7 @@ const https = require('https')
 module.exports = (client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
 const { prefix } = require('./config.json')
 client.linkdetect = new Discord.Collection();
+const { recordingchannel } = require('./config.json');
 
 const linkFiles = fs.readdirSync('./links/').filter(file => file.endsWith('.js'));
 for(const file of linkFiles){
@@ -67,7 +68,7 @@ client.on('messageCreate', message => {
         setTimeout(() =>{            
             client.linkdetect.get('replayparse').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         }, 1500);
-        if(message.channelId == '945600391343656970'){
+        if(message.channelId == recordingchannel){
         //replayrecord
         function exec(cmd, handler = function(error, stdout, stderr){console.log(stdout);if(error !== null){console.log(stderr)}})
 {

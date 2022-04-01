@@ -8,3 +8,5 @@ just a bot i'm coding. this is the first thing i've coded
 [booba (pp calculator)](https://github.com/LeaPhant/booba)
 [osuck api](https://pp.osuck.net/pp)
  
+# setup
+To setup the bot, run setup.bat
