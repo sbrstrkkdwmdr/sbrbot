@@ -1,15 +1,17 @@
 const fs = require('fs')
+const { osulogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'osuset',
     description: "Sets your osu! username so you can use osu! commands without specifying a username.",
     async execute(userdatatags, message, args, Discord, currentDate, currentDateISO){
         let pickeduserX = args.splice(0,1000).join(" ");
         if(!pickeduserX || pickeduserX == '' || pickeduserX == []) return message.reply('please input a valid username')
-        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('osu.log', "\n" + "command executed - osu set")
+        fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(osulogdir, "\n" + "command executed - osu set")
         let consoleloguserweeee = message.author
-        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('osu.log', "\n" + "") 
+        fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(osulogdir, "\n" + "") 
         //message.reply('...')
 
 		try {

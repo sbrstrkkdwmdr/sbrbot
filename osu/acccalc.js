@@ -1,14 +1,15 @@
 const fetch = require('node-fetch');
 const fs = require('fs')
+const { osulogdir } = require('../logconfig.json')
 module.exports = {
     name: 'acccalc',
     description: '',
     async execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
-        fs.appendFileSync('osu.log', "\n" + "command executed - accuracy calculator")
-        fs.appendFileSync('osu.log', "\n" + "category - osu")
+        fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(osulogdir, "\n" + "command executed - accuracy calculator")
+        fs.appendFileSync(osulogdir, "\n" + "category - osu")
         let consoleloguserweeee = interaction.member.user
-        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         interaction.reply('calculating...')
         let hit300max =  options.getNumber('300maxes')       
         let hit300 = options.getNumber('300s')
@@ -46,7 +47,7 @@ module.exports = {
         
 (async () => {
         if(mode == 'osu' || mode == 'o' || mode == '1' || mode == 'std' || mode == 'standard'){
-            fs.appendFileSync('osu.log', "\n" + 'osu')
+            fs.appendFileSync(osulogdir, "\n" + 'osu')
             topequation = Math.floor((300 * hit300) + (100 * hit100) + (50 * hit50) + (miss))
             bottomequation = Math.floor(300 * (hit300 + hit100 + hit50 + miss))
             fullequation = (Math.abs((topequation / bottomequation)*100)).toString() + '%'
@@ -71,12 +72,12 @@ module.exports = {
 
 
             interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}\n**Grade:** ${grade}`})//can't use edit reply bcs INTERACTION_NOT_REPLIED error, and cant use reply bcs DiscordAPIError: Interaction has already been acknowledged
-            fs.appendFileSync('osu.log', "\n" + "") 
-            fs.appendFileSync('osu.log', "\n" + "sent")
+            fs.appendFileSync(osulogdir, "\n" + "") 
+            fs.appendFileSync(osulogdir, "\n" + "sent")
             console.groupEnd()
         }
         if(mode == 'taiko' || mode == 't' || mode == '2'){
-            fs.appendFileSync('osu.log', "\n" + 'taiko')
+            fs.appendFileSync(osulogdir, "\n" + 'taiko')
             topequation = Math.abs(hit300 + (hit100 / 2))
             bottomequation = Math.abs(hit300 + hit100 + miss)
             fullequation = (Math.abs((topequation / bottomequation)*100)).toString() + '%'
@@ -95,13 +96,13 @@ module.exports = {
                 grade = 'SS'
             }
             interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}\n**Grade:** ${grade}`})
-            fs.appendFileSync('osu.log', "\n" + "") 
-            fs.appendFileSync('osu.log', "\n" + "sent")
+            fs.appendFileSync(osulogdir, "\n" + "") 
+            fs.appendFileSync(osulogdir, "\n" + "sent")
             console.groupEnd()
         }
         if(mode == 'catch' || mode == 'c' || mode == '3' || mode == 'ctb' || mode == 'catch the beat'){
             const { access_token } = require('../debug/osuauth.json');
-            fs.appendFileSync('osu.log', "\n" + 'ctb')
+            fs.appendFileSync(osulogdir, "\n" + 'ctb')
             if(!mapid) return interaction.channel.send('input a valid map id')
             if(mapid){
             fetch(mapurl, {
@@ -114,7 +115,7 @@ module.exports = {
             }).then(res => res.json())
             .then(mapdata => 
                 {
-            //fs.appendFileSync('osu.log', "\n" + mapdata)
+            //fs.appendFileSync(osulogdir, "\n" + mapdata)
             let fruits = JSON.stringify(mapdata, ['count_circles']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_circles', '');
             let drops = JSON.stringify(mapdata, ['count_sliders']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_sliders', '');
             //let droplets = parseInt(JSON.stringify(mapdata, ['count_spinners']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_spinners', ''));
@@ -140,15 +141,15 @@ module.exports = {
                 grade = 'SS'
             }
             interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}\n**Grade:** ${grade}`})
-            fs.appendFileSync('osu.log', "\n" + "") 
+            fs.appendFileSync(osulogdir, "\n" + "") 
             console.groupEnd()
             })}
-            fs.appendFileSync('osu.log', "\n" + "") 
-            fs.appendFileSync('osu.log', "\n" + "sent")
+            fs.appendFileSync(osulogdir, "\n" + "") 
+            fs.appendFileSync(osulogdir, "\n" + "sent")
             console.groupEnd()
         }
         if(mode == 'mania' || mode == 'm' || mode == '4'){
-            fs.appendFileSync('osu.log', "\n" + 'mania')
+            fs.appendFileSync(osulogdir, "\n" + 'mania')
             topequation = Math.floor((300 * (hit300max + hit300)) + (200 * hit200) + (100 * hit100) + (50 * hit50))
             bottomequation = Math.floor(300 * (hit300max + hit300 + hit200 + hit100 + hit50 + miss))
             fullequation = (Math.abs((topequation / bottomequation)*100)).toString() + '%'
@@ -170,13 +171,13 @@ module.exports = {
                 grade = 'SS'
             }
             interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}\n**Grade:** ${grade}`})
-            fs.appendFileSync('osu.log', "\n" + "") 
-            fs.appendFileSync('osu.log', "\n" + "sent")
+            fs.appendFileSync(osulogdir, "\n" + "") 
+            fs.appendFileSync(osulogdir, "\n" + "sent")
             console.groupEnd()
         }
     })();
     }
 }
-fs.appendFileSync('osu.log', "\n" + "") 
+fs.appendFileSync(osulogdir, "\n" + "") 
 console.groupEnd()
 //client.commands.get('').execute(message, args)

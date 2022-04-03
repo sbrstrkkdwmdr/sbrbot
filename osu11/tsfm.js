@@ -2,17 +2,19 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
+const { osulogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'tsfm',
     description: '',
     async execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         let pickeduserX = args.splice(0,1000).join(" ");
-        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('osu.log', "\n" + "command executed - top score for map")
+        fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(osulogdir, "\n" + "command executed - map scores")
         let consoleloguserweeee = message.author
-        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('osu.log', "\n" + "") 
+        fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(osulogdir, "\n" + "") 
         if(!pickeduserX || pickeduserX == '' || pickeduserX == ' '){
             //console.log('pp')
             try{
@@ -49,8 +51,8 @@ module.exports = {
             }).then(res => res.json())
             .then(output1 => 
                 {
-                    fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
-                    fs.appendFileSync('osu.log', "\n" + "")
+                    fs.appendFileSync(osulogdir, "\n" + "writing data to osuauth.json")
+                    fs.appendFileSync(osulogdir, "\n" + "")
                     
                 try{const osudata = output1;
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
@@ -75,8 +77,8 @@ module.exports = {
                         //let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
                         //const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
                     fs.writeFileSync("debug/mapscore.json", JSON.stringify(mapscoredata, null, 2))
-                    fs.appendFileSync('osu.log', "\n" + "writing data to mapscore.json")
-                    fs.appendFileSync('osu.log', "\n" + "")
+                    fs.appendFileSync(osulogdir, "\n" + "writing data to mapscore.json")
+                    fs.appendFileSync(osulogdir, "\n" + "")
                     console.groupEnd()
                 try{
                     text = ''
@@ -159,21 +161,21 @@ module.exports = {
                        })
             } catch(error){
                     message.reply("Error - no data")
-                    fs.appendFileSync('osu.log', "\n1" + error)
-                    fs.appendFileSync('osu.log', "\n" + error.columnNumber)
+                    fs.appendFileSync(osulogdir, "\n1" + error)
+                    fs.appendFileSync(osulogdir, "\n" + error.columnNumber)
                     //error.columnNumber 
-                    fs.appendFileSync('osu.log', "\n" + "")
+                    fs.appendFileSync(osulogdir, "\n" + "")
                     console.log(error)
                 }
                 });
             } catch(error){
                 message.reply("Error - account not found")
-                fs.appendFileSync('osu.log', "\n" + "Error account not found")
-                fs.appendFileSync('osu.log', "\n" + error)
-                fs.appendFileSync('osu.log', "\n" + "")
+                fs.appendFileSync(osulogdir, "\n" + "Error account not found")
+                fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + "")
             }})
         }   catch(err){
-                fs.appendFileSync('osu.log', "\n2" + err)
+                fs.appendFileSync(osulogdir, "\n2" + err)
             }
         
     }

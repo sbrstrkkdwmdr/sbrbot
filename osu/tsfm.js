@@ -2,20 +2,22 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
+const { osulogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'tsfm',
     description: '',
     async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         interaction.reply('getting data...')
-        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         let pickeduserX = options.getString('username')
         let map = options.getNumber('id')
         let sort = options.getString('sort') + ''.toLowerCase();
-        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('osu.log', "\n" + "command executed - top score for map")
+        fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(osulogdir, "\n" + "command executed - top score for map")
         let consoleloguserweeee = interaction.member.user
-        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('osu.log', "\n" + "") 
+        fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(osulogdir, "\n" + "") 
         if(!pickeduserX){
             try{
                 findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
@@ -54,8 +56,8 @@ module.exports = {
                 {
                     let { prevmap } = require('../debug/storedmap.json');
 
-                    fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
-                    fs.appendFileSync('osu.log', "\n" + "")
+                    fs.appendFileSync(osulogdir, "\n" + "writing data to osuauth.json")
+                    fs.appendFileSync(osulogdir, "\n" + "")
                     
                 try{const osudata = output1;
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
@@ -91,7 +93,7 @@ module.exports = {
                         else if(sort == 'time' || sort == 'date' || sort == 'recent' || sort == 'r'){
                             //osutopdata = output2.sort((a, b) => b.created_at.toLowerCase().slice(0, 10).replaceAll('-', '') - a.created_at.toLowerCase().slice(0, 10).replaceAll('-', ''));
                             osutopdata = output2.scores.sort((a, b) => Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')));
-                            //fs.appendFileSync('osu.log', "\n" + osutopdata[0]['created_at'].slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', ''))
+                            //fs.appendFileSync(osulogdir, "\n" + osutopdata[0]['created_at'].slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', ''))
                             
                             sortedby = 'Sorted by: Most Recent'
                         }
@@ -110,8 +112,8 @@ module.exports = {
                         //let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
                         //const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
                     fs.writeFileSync("debug/mapscore.json", JSON.stringify(mapscoredata, null, 2))
-                    fs.appendFileSync('osu.log', "\n" + "writing data to mapscore.json")
-                    fs.appendFileSync('osu.log', "\n" + "")
+                    fs.appendFileSync(osulogdir, "\n" + "writing data to mapscore.json")
+                    fs.appendFileSync(osulogdir, "\n" + "")
                     console.groupEnd()
                 try{
                     text = ''
@@ -215,10 +217,10 @@ module.exports = {
             const file = require('../debug/storedmap.json');  
             file.prevmap = mapid;
             fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-                if (err) return fs.appendFileSync('osu.log', "\n" + err);
-                fs.appendFileSync('osu.log', "\n" + JSON.stringify(file));
-                fs.appendFileSync('osu.log', "\n" + 'writing to ' + fileName);
-                fs.appendFileSync('osu.log', "\n" + "");
+                if (err) return fs.appendFileSync(osulogdir, "\n" + err);
+                fs.appendFileSync(osulogdir, "\n" + JSON.stringify(file));
+                fs.appendFileSync(osulogdir, "\n" + 'writing to ' + fileName);
+                fs.appendFileSync(osulogdir, "\n" + "");
                 console.groupEnd()
             });
                     let Embed = new Discord.MessageEmbed()
@@ -234,21 +236,21 @@ module.exports = {
                        })
             } catch(error){
                     interaction.channel.send("Error - no data")
-                    fs.appendFileSync('osu.log', "\n1" + error)
-                    fs.appendFileSync('osu.log', "\n" + error.columnNumber)
+                    fs.appendFileSync(osulogdir, "\n1" + error)
+                    fs.appendFileSync(osulogdir, "\n" + error.columnNumber)
                     //error.columnNumber 
-                    fs.appendFileSync('osu.log', "\n" + "")
+                    fs.appendFileSync(osulogdir, "\n" + "")
                     console.log(error)
                 }
                 });
             } catch(error){
                 interaction.channel.send("Error - account not found")
-                fs.appendFileSync('osu.log', "\n" + "Error account not found")
-                fs.appendFileSync('osu.log', "\n" + error)
-                fs.appendFileSync('osu.log', "\n" + "")
+                fs.appendFileSync(osulogdir, "\n" + "Error account not found")
+                fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + "")
             }})
         }   catch(err){
-                fs.appendFileSync('osu.log', "\n2" + err)
+                fs.appendFileSync(osulogdir, "\n2" + err)
             }
         
     }

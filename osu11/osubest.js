@@ -5,11 +5,13 @@ const GET = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { exec } = require("child_process");
+const { osulogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'osubest',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO) {
-        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
 //        `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`
         let url = `https://osutrack-api.ameo.dev/bestplays?mode=0`;
        /* const hiscores = [
@@ -47,8 +49,8 @@ module.exports = {
 {        out.sort((a, b) => b.pp - a.pp);
     const topHiscores = out.slice(0, 5);
         fs.writeFileSync("debug/osubest.json", JSON.stringify(topHiscores, null, 2));
-        fs.appendFileSync('osu.log', "\n" + "writing data to w.json")
-        fs.appendFileSync('osu.log', "\n" + "")
+        fs.appendFileSync(osulogdir, "\n" + "writing data to w.json")
+        fs.appendFileSync(osulogdir, "\n" + "")
         let bmid1 = JSON.stringify(topHiscores[0], ['beatmap_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmap_id', '')
         let bmid2 = JSON.stringify(topHiscores[1], ['beatmap_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmap_id', '')
         let bmid3 = JSON.stringify(topHiscores[2], ['beatmap_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmap_id', '')
@@ -117,11 +119,11 @@ module.exports = {
     }
     
 
-        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('osu.log', "\n" + "command executed - osubest")
+        fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(osulogdir, "\n" + "command executed - osubest")
         let consoleloguserweeee = message.author
-        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('osu.log', "\n" + "") 
+        fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(osulogdir, "\n" + "") 
         console.groupEnd()
         
     }

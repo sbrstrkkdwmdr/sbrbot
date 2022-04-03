@@ -6,18 +6,20 @@ const GET = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { exec } = require("child_process");
+const { osulogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'osutop',
     description: '',
     async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         //const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
-        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('osu.log', "\n" + "command executed - osutop")
-        fs.appendFileSync('osu.log', "\n" + "category - osu")
+        fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(osulogdir, "\n" + "command executed - osutop")
+        fs.appendFileSync(osulogdir, "\n" + "category - osu")
         let consoleloguserweeee = interaction.member.user
-        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('osu.log', "\n" + "") 
+        fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(osulogdir, "\n" + "") 
 
         let pickeduserX = options.getString('user')
         if(!pickeduserX){
@@ -38,7 +40,7 @@ module.exports = {
                     findname = await userdatatags.findOne({ where: { description: pickeduserX}})
                     pickedmode = findname.get('mode')
                 } catch (error) {
-                    fs.appendFileSync('osu.log', "\n" + error)
+                    fs.appendFileSync(osulogdir, "\n" + error)
                 }
             }
             if(!pickedmode){
@@ -64,7 +66,7 @@ module.exports = {
             offsetflag = '0'
         }
         interaction.reply('getting data...')
-        fs.appendFileSync('osu.log', "\n" + pickedmodex + ' from ' + pickedmode)
+        fs.appendFileSync(osulogdir, "\n" + pickedmodex + ' from ' + pickedmode)
         if(!pickeduserX) return interaction.channel.send("Error - no user");
             try{
                 let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
@@ -82,8 +84,8 @@ module.exports = {
                 .then(res => res.json())
                 .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
                 ;
-                fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
-                fs.appendFileSync('osu.log', "\n" + "")
+                fs.appendFileSync(osulogdir, "\n" + "writing data to osuauth.json")
+                fs.appendFileSync(osulogdir, "\n" + "")
                 
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
                 const { access_token } = require('../debug/osuauth.json');
@@ -97,13 +99,13 @@ module.exports = {
                 {
                 try{const osudata = output1;
                 fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
-                fs.appendFileSync('osu.log', "\n" + "writing data to osuid.json")
-                fs.appendFileSync('osu.log', "\n" + "")
+                fs.appendFileSync(osulogdir, "\n" + "writing data to osuid.json")
+                fs.appendFileSync(osulogdir, "\n" + "")
                 
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 if(!playerid) {
                     interaction.channel.send("Error osu04 - account not found")
-                    fs.appendFileSync('osu.log', "\n" + "error - account not found and/or json sent no data")
+                    fs.appendFileSync(osulogdir, "\n" + "error - account not found and/or json sent no data")
                     return;
                 }
                 //interaction.reply(playerid)
@@ -127,7 +129,7 @@ module.exports = {
                     else if(sort == 'time' || sort == 'date' || sort == 'recent' || sort == 'r'){
                         //osutopdata = output2.sort((a, b) => b.created_at.toLowerCase().slice(0, 10).replaceAll('-', '') - a.created_at.toLowerCase().slice(0, 10).replaceAll('-', ''));
                         osutopdata = output2.sort((a, b) => Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')));
-                        //fs.appendFileSync('osu.log', "\n" + osutopdata[0]['created_at'].slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', ''))
+                        //fs.appendFileSync(osulogdir, "\n" + osutopdata[0]['created_at'].slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', ''))
                         
                         sortedby = 'Sorted by: Most Recent'
                     }
@@ -145,15 +147,15 @@ module.exports = {
                     //osutopdata = output2;
 
                     fs.writeFileSync("debug/osutop.json", JSON.stringify(osutopdata, null, 2));
-                    fs.appendFileSync('osu.log', "\n" + "writing data to osutop.json")
-                    fs.appendFileSync('osu.log', "\n" + "")
+                    fs.appendFileSync(osulogdir, "\n" + "writing data to osutop.json")
+                    fs.appendFileSync(osulogdir, "\n" + "")
                     console.groupEnd()
                     try{
                         try{let topplayername = JSON.stringify(osutopdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                     }
                     catch(error) {
                             interaction.channel.send("Error 03 - not enough plays")
-                            fs.appendFileSync('osu.log', "\n" + "error osu03 - not enough plays")
+                            fs.appendFileSync(osulogdir, "\n" + "error osu03 - not enough plays")
                             return;
                         }
                     let topplayername = JSON.stringify(osutopdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
@@ -326,27 +328,27 @@ module.exports = {
                 .addField(`---`, `**[${maptitle4} [${mapdiff4}]](https://osu.ppy.sh/b/${mapurl4}) ${mapmods4}**\nSCORE: ${mapscore4} \nScore set on ${maptimeset4} \n${(Math.abs((mapacc4) * 100).toFixed(2))}% | ${maprank4}\n${hitlist4} \n**${(Math.abs(mappp4).toFixed(2))}**pp | **${(Math.abs(weightedmappp4).toFixed(2))}**pp weighted **${Math.abs(weightedpppercent4).toFixed(2)}**%`, false)
                 .addField(`---`, `**[${maptitle5} [${mapdiff5}]](https://osu.ppy.sh/b/${mapurl5}) ${mapmods5}**\nSCORE: ${mapscore5} \nScore set on ${maptimeset5} \n${(Math.abs((mapacc5) * 100).toFixed(2))}% | ${maprank5}\n${hitlist5} \n**${(Math.abs(mappp5).toFixed(2))}**pp | **${(Math.abs(weightedmappp5).toFixed(2))}**pp weighted **${Math.abs(weightedpppercent5).toFixed(2)}**%`, false)                
                 interaction.editReply({ content: '⠀', embeds: [Embed]})
-                fs.appendFileSync('osu.log', "\n" + "sent")
+                fs.appendFileSync(osulogdir, "\n" + "sent")
             } catch(error){
                 if(error.toString().includes('replaceAll')){
                     interaction.channel.send("Error - account not found (or some other error)")
-                    fs.appendFileSync('osu.log', "\n" + "error - account not found and/or json sent no data")}
+                    fs.appendFileSync(osulogdir, "\n" + "error - account not found and/or json sent no data")}
                     else{interaction.channel.send('unknown error')}
-                    fs.appendFileSync('osu.log', "\n" + error)
-                    fs.appendFileSync('osu.log', "\n" + "")
+                    fs.appendFileSync(osulogdir, "\n" + error)
+                    fs.appendFileSync(osulogdir, "\n" + "")
                     console.groupEnd()
             }
             } ) 
         } catch(error){
                 interaction.channel.send("Error - account not found")
-                fs.appendFileSync('osu.log', "\n" + "Error account not found")
-                fs.appendFileSync('osu.log', "\n" + error)
-                fs.appendFileSync('osu.log', "\n" + "")
+                fs.appendFileSync(osulogdir, "\n" + "Error account not found")
+                fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + "")
                 console.groupEnd()
             }})
             } catch(err){
-                fs.appendFileSync('osu.log', "\n" + err)
-                fs.appendFileSync('osu.log', "\n" + "")
+                fs.appendFileSync(osulogdir, "\n" + err)
+                fs.appendFileSync(osulogdir, "\n" + "")
                 console.groupEnd()
             } 
             

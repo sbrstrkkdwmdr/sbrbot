@@ -5,11 +5,13 @@ const GET = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { exec } = require("child_process");
+const { osulogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'osubestrs',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone) {
-        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
 //        `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`
         let url = `https://osutrack-api.ameo.dev/bestplays?mode=0&from=${curdateyesterday}&to=${curdatetmr}`;
        /* const hiscores = [
@@ -174,16 +176,16 @@ module.exports = {
             //message.reply("```json\nTOP SCORES FOR " + pickeduserX + "\n" + JSON.stringify(topHiscores, null, 2).replaceAll('"', '').replaceAll('beatmap_id', 'beatmap id').replaceAll('[', '').replaceAll(']', '').replaceAll(',', '').replaceAll('}', '').replaceAll('{', '------------') + "```");
     }
     )} catch (error) {
-        fs.appendFileSync('osu.log', "\n" + error)
+        fs.appendFileSync(osulogdir, "\n" + error)
         console.groupEnd()
     }
     
 
-        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('osu.log', "\n" + "command executed - osubest past 24h")
+        fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(osulogdir, "\n" + "command executed - osubest past 24h")
         let consoleloguserweeee = message.author
-        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('osu.log', "\n" + "") 
+        fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(osulogdir, "\n" + "") 
         console.groupEnd()
         
     }

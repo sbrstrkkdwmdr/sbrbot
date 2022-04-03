@@ -1,17 +1,19 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
+const { osulogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'osuauth',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
-        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('osu.log', "\n" + "command executed - osuauth")
-        fs.appendFileSync('osu.log', "\n" + "category - osu")
+        fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(osulogdir, "\n" + "command executed - osuauth")
+        fs.appendFileSync(osulogdir, "\n" + "category - osu")
         let consoleloguserweeee = message.author
-        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('osu.log', "\n" + "") 
+        fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(osulogdir, "\n" + "") 
         try{
             let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
             let body1 = {
@@ -28,13 +30,13 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             .then(message.reply("success"))
-            fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
-            fs.appendFileSync('osu.log', "\n" + "")
-            fs.appendFileSync('osu.log', "\n" + "sent")
+            fs.appendFileSync(osulogdir, "\n" + "writing data to osuauth.json")
+            fs.appendFileSync(osulogdir, "\n" + "")
+            fs.appendFileSync(osulogdir, "\n" + "sent")
             console.groupEnd()
             ;
         } catch(error){
-            fs.appendFileSync('osu.log', "\n" + error)
+            fs.appendFileSync(osulogdir, "\n" + error)
             message.reply("error")
             console.groupEnd()
         }

@@ -1,4 +1,6 @@
 const fs = require('fs')
+const { osulogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'skin',
     description: '',
@@ -49,6 +51,9 @@ module.exports = {
             case '10':
                 interaction.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/10ud")
                 break;
+
+            case '11':
+                interaction.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/11sbrv11")
 
             case 'b1':
                 interaction.reply("https://drive.google.com/drive/u/0/folders/1OexvvV4Zshw3P3R1N0bS3sQD_WEhlQKv")
@@ -116,13 +121,13 @@ module.exports = {
             interaction.reply("***SKINS*** \nnote - not all skins are shown here\n```json\n1 - SaberStrikeCustom\n2 - SaberStrikeCustomv2\n3 - Type X\n4 - Type Y \n5 - Type Z\n6 - SaberStrike『0』\n7 - SaberStrike『1』(most unique cursor dance one)\n8 - sbr\n9 - prjct sbr\n10 - SBR UnDefined\nb1 - Cark\nb2 - Koifish\nb3 - Kanojo Mizuhara\nb4 - Saber's AMOGUS\nb5 - SaberStrike『0』_-Levi-_ edit\nb6 - SaberStrike『Soragaton』\nb7 - sbr 『-hANOJI』```")
 
         }}
-        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('osu.log', "\n" + "command executed - skin")
-        fs.appendFileSync('osu.log', "\n" + "category - osu (no api usage)")
+        fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(osulogdir, "\n" + "command executed - skin")
+        fs.appendFileSync(osulogdir, "\n" + "category - osu (no api usage)")
         let consoleloguserweeee = interaction.member.user
-        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('osu.log', "\n" + "sent")
-        fs.appendFileSync('osu.log', "\n" + "")   
+        fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(osulogdir, "\n" + "sent")
+        fs.appendFileSync(osulogdir, "\n" + "")   
         console.groupEnd()
     }
 }

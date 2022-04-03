@@ -1,18 +1,20 @@
 const fs = require('fs')
+const { osulogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'osuset',
     description: "Sets your osu! username so you can use osu! commands without specifying a username.",
     async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO){
         const pickeduserX = options.getString('username')
-        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('osu.log', "\n" + "command executed - osu set")
-        fs.appendFileSync('osu.log', "\n" + "category - osu (no api usage)")
+        fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(osulogdir, "\n" + "command executed - osu set")
+        fs.appendFileSync(osulogdir, "\n" + "category - osu (no api usage)")
         let consoleloguserweeee = interaction.member.user
-        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('osu.log', "\n" + "") 
+        fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(osulogdir, "\n" + "") 
         //interaction.reply('...')
         let type = options.getString('type')
-        fs.appendFileSync('osu.log', "\n" + type + '|')
+        fs.appendFileSync(osulogdir, "\n" + type + '|')
         if(!type || type == 'username' || type == 'name' || type == 'user' || type == null || type == 'null'){
 		try {
 			// equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
@@ -24,7 +26,7 @@ module.exports = {
 			});
 
 			interaction.reply(`${pickeduserX} added.`)
-            fs.appendFileSync('osu.log', "\n" + "sent")
+            fs.appendFileSync(osulogdir, "\n" + "sent")
 		}
 		catch (error) {
 			if (error.name === 'SequelizeUniqueConstraintError') {
@@ -37,7 +39,7 @@ module.exports = {
 			}
 
 			interaction.reply('Something went wrong with adding a username.');
-            return fs.appendFileSync('osu.log', "\n" + error);
+            return fs.appendFileSync(osulogdir, "\n" + error);
 		}}
         else if(type == 'mode'){
             try {
@@ -49,10 +51,10 @@ module.exports = {
                 });
     
                 interaction.reply(`${pickeduserX} added.`)
-                fs.appendFileSync('osu.log', "\n" + "sent")
+                fs.appendFileSync(osulogdir, "\n" + "sent")
             }
             catch (error) {
-                //fs.appendFileSync('osu.log', "\n" + error)
+                //fs.appendFileSync(osulogdir, "\n" + error)
                 if (error.name === 'SequelizeUniqueConstraintError') {
                     affectedRows = await userdatatags.update({ mode: pickeduserX }, { where: { name: interaction.member.user.id } });
             
@@ -63,7 +65,7 @@ module.exports = {
                 }
                 
                 interaction.reply('Something went wrong with editing mode.');
-                return fs.appendFileSync('osu.log', "\n" + error);
+                return fs.appendFileSync(osulogdir, "\n" + error);
             }}
         else if(type == 'haloinfiniteprofile' || type == 'xbox' || type == 'xboxlive' || type == 'xbx'){
             try {
@@ -75,10 +77,10 @@ module.exports = {
                 });
     
                 interaction.reply(`${pickeduserX} added to xbox live username.`)
-                fs.appendFileSync('osu.log', "\n" + "sent")
+                fs.appendFileSync(osulogdir, "\n" + "sent")
             }
             catch (error) {
-                //fs.appendFileSync('osu.log', "\n" + error)
+                //fs.appendFileSync(osulogdir, "\n" + error)
                 if (error.name === 'SequelizeUniqueConstraintError') {
                     affectedRows = await userdatatags.update({ xboxlive: pickeduserX }, { where: { name: interaction.member.user.id } });
             
@@ -89,7 +91,7 @@ module.exports = {
                 }
                 
                 interaction.reply('Something went wrong with editing xbox live username.');
-                return fs.appendFileSync('osu.log', "\n" + error);
+                return fs.appendFileSync(osulogdir, "\n" + error);
             }}
 else if(type == 'steam'){
             try {
@@ -101,10 +103,10 @@ else if(type == 'steam'){
                 });
     
                 interaction.reply(`${pickeduserX} added to steam username.`)
-                fs.appendFileSync('osu.log', "\n" + "sent")
+                fs.appendFileSync(osulogdir, "\n" + "sent")
             }
             catch (error) {
-                //fs.appendFileSync('osu.log', "\n" + error)
+                //fs.appendFileSync(osulogdir, "\n" + error)
                 if (error.name === 'SequelizeUniqueConstraintError') {
                     affectedRows = await userdatatags.update({ steamusername: pickeduserX }, { where: { name: interaction.member.user.id } });
             
@@ -115,7 +117,7 @@ else if(type == 'steam'){
                 }
                 
                 interaction.reply('Something went wrong with editing steam username.');
-                return fs.appendFileSync('osu.log', "\n" + error);
+                return fs.appendFileSync(osulogdir, "\n" + error);
             }}
         else{
             //return interaction.channel.send("error - can only update mode or username")

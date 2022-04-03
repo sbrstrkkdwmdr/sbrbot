@@ -2,11 +2,13 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
+const { osulogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'pp',
     description: '',
     execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         interaction.reply('getting data...')
         let mapid = options.getNumber('id')
         let mods = options.getString('mods')
@@ -28,12 +30,12 @@ module.exports = {
             moddetect = 'NM'
         }
 
-        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('osu.log', "\n" + "command executed - map pp")
-        fs.appendFileSync('osu.log', "\n" + "category - osu")
+        fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(osulogdir, "\n" + "command executed - map pp")
+        fs.appendFileSync(osulogdir, "\n" + "category - osu")
         let consoleloguserweeee = interaction.member.user
-        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('osu.log', "\n" + "") 
+        fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(osulogdir, "\n" + "") 
         
         try {
         let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
@@ -51,8 +53,8 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
-            fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
-            fs.appendFileSync('osu.log', "\n" + "")
+            fs.appendFileSync(osulogdir, "\n" + "writing data to osuauth.json")
+            fs.appendFileSync(osulogdir, "\n" + "")
             try{
             const { access_token } = require('../debug/osuauth.json');
             
@@ -70,8 +72,8 @@ module.exports = {
 					//let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
 					//const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
                 fs.writeFileSync("debug/map.json", JSON.stringify(mapdata, null, 2))
-                fs.appendFileSync('osu.log', "\n" + "writing data to map.json")
-                fs.appendFileSync('osu.log', "\n" + "")
+                fs.appendFileSync(osulogdir, "\n" + "writing data to map.json")
+                fs.appendFileSync(osulogdir, "\n" + "")
             try{
             let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
             let maplink = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
@@ -109,10 +111,10 @@ module.exports = {
             const file = require('../debug/storedmap.json');  
             file.prevmap = maplink;
             fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-                if (err) return fs.appendFileSync('osu.log', "\n" + err);
-                fs.appendFileSync('osu.log', "\n" + JSON.stringify(file));
-                fs.appendFileSync('osu.log', "\n" + 'writing to ' + fileName);
-                fs.appendFileSync('osu.log', "\n" + "");
+                if (err) return fs.appendFileSync(osulogdir, "\n" + err);
+                fs.appendFileSync(osulogdir, "\n" + JSON.stringify(file));
+                fs.appendFileSync(osulogdir, "\n" + 'writing to ' + fileName);
+                fs.appendFileSync(osulogdir, "\n" + "");
                 console.groupEnd()
               });//all this stuff is to write it to a temporary save file
 
@@ -258,7 +260,7 @@ module.exports = {
             }
 
             let cpolpp = `https://pp.osuck.net/pp?id=${mapid}&mods=${modenum}&combo=${mapmaxcombo}&miss=0&acc=100`
-            //fs.appendFileSync('osu.log', "\n" + cpolpp)
+            //fs.appendFileSync(osulogdir, "\n" + cpolpp)
 
             fetch(cpolpp, {
             }).then(res => res.json())
@@ -324,26 +326,26 @@ module.exports = {
             .addField('**PP VALUES (CPOL)**', `\n**SS:** ${cppSS} \n**95:** ${cpp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
             interaction.editReply({ content: '⠀', embeds: [Embed]})
-            fs.appendFileSync('osu.log', "\n" + "sent")
+            fs.appendFileSync(osulogdir, "\n" + "sent")
         })();
             })//output4
         })
     } catch(error){
 				interaction.channel.send("error")
-				fs.appendFileSync('osu.log', "\n" + error)
-				fs.appendFileSync('osu.log', "\n" + "")
+				fs.appendFileSync(osulogdir, "\n" + error)
+				fs.appendFileSync(osulogdir, "\n" + "")
                 console.groupEnd()
                 console.groupEnd()
                 console.groupEnd()
 			}
             });
         } catch(error){
-            fs.appendFileSync('osu.log', "\n" + error)
+            fs.appendFileSync(osulogdir, "\n" + error)
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()
         } } catch(error) {
-            fs.appendFileSync('osu.log', "\n" + error)
+            fs.appendFileSync(osulogdir, "\n" + error)
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()

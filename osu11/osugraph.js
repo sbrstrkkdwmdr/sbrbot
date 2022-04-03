@@ -3,17 +3,19 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../debug/osuauth.json');
 const ChartJsImage = require('chartjs-to-image');
+const { osulogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'osugraph',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
-        fs.appendFileSync('osu.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         const pickeduserX = args.splice(0,1000).join(" ");
-        fs.appendFileSync('osu.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('osu.log', "\n" + "command executed - osu graph")
+        fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(osulogdir, "\n" + "command executed - osu graph")
         let consoleloguserweeee = message.author
-        fs.appendFileSync('osu.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('osu.log', "\n" + "") 
+        fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(osulogdir, "\n" + "") 
         if(!pickeduserX) return message.reply("user ID required");
         //if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
       
@@ -33,8 +35,8 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
-            fs.appendFileSync('osu.log', "\n" + "writing data to osuauth.json")
-            fs.appendFileSync('osu.log', "\n" + "")
+            fs.appendFileSync(osulogdir, "\n" + "writing data to osuauth.json")
+            fs.appendFileSync(osulogdir, "\n" + "")
             
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
             
@@ -47,8 +49,8 @@ module.exports = {
                 {
                 try{const osudata = output2;
                 fs.writeFileSync("debug/osu.json", JSON.stringify(osudata, null, 2));
-                fs.appendFileSync('osu.log', "\n" + "writing data to osu.json")
-                fs.appendFileSync('osu.log', "\n" + "")
+                fs.appendFileSync(osulogdir, "\n" + "writing data to osu.json")
+                fs.appendFileSync(osulogdir, "\n" + "")
                 console.groupEnd()
                 let playername = JSON.stringify(osudata, ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
@@ -65,7 +67,7 @@ module.exports = {
 
                 let playerrankminval = Math.min(playerranksredo);
 
-                fs.appendFileSync('osu.log', "\n" + playerrankminval)
+                fs.appendFileSync(osulogdir, "\n" + playerrankminval)
 
                 playerranksredo.map(function(element){
                     return element - playerrankminval;
@@ -74,7 +76,7 @@ module.exports = {
                 let playerworstrank = Math.abs((playerranksredo[0]) + 10);
                 let playerbestrank = Math.abs((playerranks[0]) - 10);
 
-                //fs.appendFileSync('osu.log', "\n" + playerrankschronological)
+                //fs.appendFileSync(osulogdir, "\n" + playerrankschronological)
                 //console.log
 
 
@@ -83,7 +85,7 @@ module.exports = {
                     type: 'line',
                     data: graphdata,
                   };*/
-//                fs.appendFileSync('osu.log', "\n" + playerrank0)
+//                fs.appendFileSync(osulogdir, "\n" + playerrank0)
                 const chart = new ChartJsImage();
                 chart.setConfig({
                     type: 'line',
@@ -124,7 +126,7 @@ module.exports = {
 
                 //for some reason min and max values are ignored  
                 chart.toFile('./files/mychart.png').then(w => {
-                //fs.appendFileSync('osu.log', "\n" + graphasimg)
+                //fs.appendFileSync(osulogdir, "\n" + graphasimg)
 
                 let Embed = new Discord.MessageEmbed()
                 .setColor(0x462B71)
@@ -138,14 +140,14 @@ module.exports = {
                 
             } catch(error){
                     message.reply("Error - account not found (or some other error)")
-                    fs.appendFileSync('osu.log', "\n" + "Error account not found")
-                    fs.appendFileSync('osu.log', "\n" + error)
-                    fs.appendFileSync('osu.log', "\n" + "")
+                    fs.appendFileSync(osulogdir, "\n" + "Error account not found")
+                    fs.appendFileSync(osulogdir, "\n" + error)
+                    fs.appendFileSync(osulogdir, "\n" + "")
                     
                 }
         });
         } catch(err){
-            fs.appendFileSync('osu.log', "\n" + err)
+            fs.appendFileSync(osulogdir, "\n" + err)
         } 
         
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
