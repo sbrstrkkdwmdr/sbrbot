@@ -1,28 +1,30 @@
 const fs = require('fs')
+const { adminlogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'refresh',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
-        fs.appendFileSync('admincmd.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')
         if(message.author.id == '503794887318044675'){
             message.delete();
-            fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
-            fs.appendFileSync('admincmd.log', "\n" + "command executed - refresh")
-            fs.appendFileSync('admincmd.log', "\n" + "category - admin")
+            fs.appendFileSync(adminlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+            fs.appendFileSync(adminlogdir, "\n" + "command executed - refresh")
+            fs.appendFileSync(adminlogdir, "\n" + "category - admin")
             let consoleloguserweeee = message.author
-            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            fs.appendFileSync('admincmd.log', "\n" + "")
+            fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync(adminlogdir, "\n" + "")
                 process.exit(); 
           }
                
         else {
             message.channel.send("sorry you cannot use this command")
-            fs.appendFileSync('admincmd.log', "\n" + `${currentDate}`)
-            fs.appendFileSync('admincmd.log', "\n" + "command executed - refresh")
+            fs.appendFileSync(adminlogdir, "\n" + `${currentDate}`)
+            fs.appendFileSync(adminlogdir, "\n" + "command executed - refresh")
             let consoleloguserweeee = message.author
-            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            fs.appendFileSync('admincmd.log', "\n" + "command failed - insufficient permissions")
-            fs.appendFileSync('admincmd.log', "\n" + "")
+            fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync(adminlogdir, "\n" + "command failed - insufficient permissions")
+            fs.appendFileSync(adminlogdir, "\n" + "")
         }  
             console.groupEnd()
     }

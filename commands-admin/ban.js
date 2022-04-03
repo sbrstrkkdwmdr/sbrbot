@@ -1,23 +1,25 @@
 const fs = require('fs')
+const { adminlogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'ban',
     description: '',
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
-        fs.appendFileSync('admincmd.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')
         if(message.member.permissions.has('BAN_MEMBERS')){
-            fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
-            fs.appendFileSync('admincmd.log', "\n" + "command executed - ban")
-            fs.appendFileSync('admincmd.log', "\n" + "category - admin")
+            fs.appendFileSync(adminlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+            fs.appendFileSync(adminlogdir, "\n" + "command executed - ban")
+            fs.appendFileSync(adminlogdir, "\n" + "category - admin")
             let consoleloguserweeee = message.author
-            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            fs.appendFileSync('admincmd.log', "\n" + "")
+            fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync(adminlogdir, "\n" + "")
 
         const user = message.mentions.members.first();
         const reaswon = args.splice(1, 100).join(' ');
         if (!reaswon){
         message.reply("Reason required")
-        fs.appendFileSync('admincmd.log', "\n" + "command failed - no reason")
-        fs.appendFileSync('admincmd.log', "\n" + "")};
+        fs.appendFileSync(adminlogdir, "\n" + "command failed - no reason")
+        fs.appendFileSync(adminlogdir, "\n" + "")};
         if(reaswon){
         if(user){
             const member = message.guild.members.cache.get(user.id)
@@ -30,33 +32,33 @@ module.exports = {
                 .catch(err => {
                     message.reply(`I am unable to ban ${user}. cope harder`)
                 })
-                fs.appendFileSync('admincmd.log', "\n" + `banned ${user} AKA ${user.id} for ${reaswon}`)
-                fs.appendFileSync('admincmd.log', "\n" + "")
+                fs.appendFileSync(adminlogdir, "\n" + `banned ${user} AKA ${user.id} for ${reaswon}`)
+                fs.appendFileSync(adminlogdir, "\n" + "")
                 message.reply(`banned ${user} AKA ${user.id} for ${reaswon}`)}
                 catch(error){
                 message.reply("error")
-                fs.appendFileSync('admincmd.log', "\n" + error)
-                fs.appendFileSync('admincmd.log', "\n" + "")
+                fs.appendFileSync(adminlogdir, "\n" + error)
+                fs.appendFileSync(adminlogdir, "\n" + "")
                 }
             } else {
                 message.reply("User not found")
-                fs.appendFileSync('admincmd.log', "\n" + "command failed - no user")
-                fs.appendFileSync('admincmd.log', "\n" + "")
+                fs.appendFileSync(adminlogdir, "\n" + "command failed - no user")
+                fs.appendFileSync(adminlogdir, "\n" + "")
             }
         } else {
             message.reply("No user mentioned")
-            fs.appendFileSync('admincmd.log', "\n" + "command failed - no user")
-            fs.appendFileSync('admincmd.log', "\n" + "")
+            fs.appendFileSync(adminlogdir, "\n" + "command failed - no user")
+            fs.appendFileSync(adminlogdir, "\n" + "")
         }}
         
 } else {
     message.channel.send("no. cope harder")
-    fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
-    fs.appendFileSync('admincmd.log', "\n" + "command executed - ban")
+    fs.appendFileSync(adminlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+    fs.appendFileSync(adminlogdir, "\n" + "command executed - ban")
     let consoleloguserweeee = message.author
-    fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-    fs.appendFileSync('admincmd.log', "\n" + "command failed - insufficient perms")
-    fs.appendFileSync('admincmd.log', "\n" + "")
+    fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+    fs.appendFileSync(adminlogdir, "\n" + "command failed - insufficient perms")
+    fs.appendFileSync(adminlogdir, "\n" + "")
 }   console.groupEnd()
     }
 }

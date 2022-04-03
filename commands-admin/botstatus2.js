@@ -1,10 +1,12 @@
 const fs = require('fs')
+const { adminlogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'botstatus2',
     description: 'sets the bots status',
 
     execute(interaction, options, client, Discord, currentDate, currentDateISO) {
-        fs.appendFileSync('admincmd.log', "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')
         if(interaction.member.user.id == '503794887318044675')
 {       
         const a = ["WATCHING", "PLAYING", "STREAMING", "LISTENING"];
@@ -28,12 +30,12 @@ module.exports = {
         client.user.setPresence({ activities: [{ name: text, type: type}], status: status,});
 
         interaction.reply("status set!")
-        fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('admincmd.log', "\n" + "command executed - status")
-        fs.appendFileSync('admincmd.log', "\n" + "category - admin")
+        fs.appendFileSync(adminlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(adminlogdir, "\n" + "command executed - status")
+        fs.appendFileSync(adminlogdir, "\n" + "category - admin")
         let consoleloguserweeee = interaction.member.user
-        fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('admincmd.log', "\n" + "")}
+        fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(adminlogdir, "\n" + "")}
         console.groupEnd()
         }
 }

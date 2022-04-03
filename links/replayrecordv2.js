@@ -5,16 +5,18 @@ const { access_token } = require('../debug/osuauth.json');
 const calc = require('ojsama');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const osuReplayParser = require('osureplayparser');
+const { linkfetchlogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'replayrecordv2',
     description: '',
     execute(exec, linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         try{
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("link detector executed - replayparse")
+        fs.appendFileSync(linkfetchlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(linkfetchlogdir, "\n" + "link detector executed - replayparse")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("");
+        fs.appendFileSync(linkfetchlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(linkfetchlogdir, "\n" + "");
         const replayPath = "./files/replay.osr";
         const replay = osuReplayParser.parseReplay(replayPath);
         fs.writeFileSync("debug/replay.json", JSON.stringify(replay, null, 2))
@@ -49,8 +51,8 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
-            console.log("writing data to osuauth.json")
-            console.log("")
+            fs.appendFileSync(linkfetchlogdir, "\n" + "writing data to osuauth.json")
+            fs.appendFileSync(linkfetchlogdir, "\n" + "")
             
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${playername}/osu`;
             
@@ -63,8 +65,8 @@ module.exports = {
                 {
                 try{const osudata = output2;
                 fs.writeFileSync("debug/osu.json", JSON.stringify(osudata, null, 2));
-                console.log("writing data to osu.json")
-                console.log("")
+                fs.appendFileSync(linkfetchlogdir, "\n" + "writing data to osu.json")
+                fs.appendFileSync(linkfetchlogdir, "\n" + "")
                 console.groupEnd() 
                 
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
@@ -72,7 +74,7 @@ module.exports = {
 
             const mapurlold = ` https://osu.ppy.sh/api/get_beatmaps?k=${osuapikey}&h=${maphash}`
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/lookup?k=${osuapikey}&checksum=${maphash}`
-            //console.log(maphash)
+            //fs.appendFileSync(linkfetchlogdir, "\n" + maphash)
             fetch(mapurl, {
                 method: "GET",
                 headers: {
@@ -82,10 +84,10 @@ module.exports = {
             .then(res => res.json())
             .then(output3 => {
                 const mapdata = output3;
-                //console.log(mapdata)
+                //fs.appendFileSync(linkfetchlogdir, "\n" + mapdata)
                 fs.writeFileSync("debug/map.json", JSON.stringify(mapdata, null, 2))
-                console.log("writing data to map.json")
-                console.log("")
+                fs.appendFileSync(linkfetchlogdir, "\n" + "writing data to map.json")
+                fs.appendFileSync(linkfetchlogdir, "\n" + "")
             try{
             let beatmapid = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
             let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
@@ -217,41 +219,41 @@ module.exports = {
                 let ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
 
                 let currentDatefileformat = JSON.stringify(currentDate).replaceAll(':', ';').replaceAll('|', '').replaceAll('{', '').replaceAll('"', '').replaceAll('}', '')
-                //console.log(currentDatefileformat)
+                //fs.appendFileSync(linkfetchlogdir, "\n" + currentDatefileformat)
                 
             
                 let output1 = `${playername}s play at ${bettertimeset} - ${maptitle}[${mapdiff}] - ${ppww}pp - ${ppiffcw} if ${nochokeacc} FC`;
                 let output = JSON.stringify(output1).replaceAll(' ', '_').replaceAll('|', '').replaceAll('{', '').replaceAll('"', '').replaceAll('}', '');
-                //console.log(output)
+                //fs.appendFileSync(linkfetchlogdir, "\n" + output)
                 exec('C:/Users/saber/Desktop/danser-go-dev/danser-go-dev-OTHERS/danser.exe -skip -settings=' + linkargs + ' -r="C:/Users/saber/Desktop/kusa/bot/sbrbot/files/replay.osr" -out=' + output)
                 console.group('--- COMMAND EXECUTION ---')
-                console.log(`${currentDateISO} | ${currentDate}`)
-                console.log("command executed - replayrecord")
-                console.log("category - osu")
+                fs.appendFileSync(linkfetchlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+                fs.appendFileSync(linkfetchlogdir, "\n" + "command executed - replayrecord")
+                fs.appendFileSync(linkfetchlogdir, "\n" + "category - osu")
                 let consoleloguserweeee = message.author
-                console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-                console.log("")
+                fs.appendFileSync(linkfetchlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+                fs.appendFileSync(linkfetchlogdir, "\n" + "")
                 console.groupEnd()
                 message.channel.send('retrieving osr')
 })();
     //})//mapdata2
 } catch (error) {
-    console.log(error)
+    fs.appendFileSync(linkfetchlogdir, "\n" + error)
     return message.reply('error - map does not exist or is a different version to the osu website')
 }
     })
 }       catch(error){
             message.channel.send("Error - 1")
-            console.log(error)
+            fs.appendFileSync(linkfetchlogdir, "\n" + error)
         }
             })
         }        catch(error){
             message.channel.send("Error - 2")
-            console.log(error)
+            fs.appendFileSync(linkfetchlogdir, "\n" + error)
         }
         }   catch(error){
             message.channel.send("Error - 3\nmap doesn't exist or isn't available")
-            console.log(error)
+            fs.appendFileSync(linkfetchlogdir, "\n" + error)
         }
         console.groupEnd()
     }

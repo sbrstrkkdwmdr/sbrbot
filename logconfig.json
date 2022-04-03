@@ -4,5 +4,7 @@
     "adminlogdir": "logs/admin.log",
     "modlogdir": "logs/modlog.log",
     "helplogdir": "logs/help.log",
-    "musiclogdir": "logs/music.log"
+    "musiclogdir": "logs/music.log",
+    "otherlogdir": "logs/other.log",
+    "linkfetchlogdir": "logs/link.log"
 }

@@ -3,6 +3,7 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const calc = require('ojsama');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
+const { linkfetchlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'osulongmaplink',
     description: '',
@@ -12,15 +13,15 @@ module.exports = {
         const grab = JSON.stringify(w.split('#')[1].split('/'))
         const pickeduserX = JSON.stringify(grab).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('osu', '').replaceAll("\\", '').replaceAll('taiko', '').replaceAll('fruits', '').replaceAll('mania', '');
         //console.group("MAP ID:")
-        //console.log(`${w}\n${pickeduserX}\n${grab}`)
+        //fs.appendFileSync(linkfetchlogdir, "\n" + `${w}\n${pickeduserX}\n${grab}`)
         
         //console.groupEnd()
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("link detector executed - map get (long)")
-        console.log("category - osu")
+        fs.appendFileSync(linkfetchlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(linkfetchlogdir, "\n" + "link detector executed - map get (long)")
+        fs.appendFileSync(linkfetchlogdir, "\n" + "category - osu")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") ;
+        fs.appendFileSync(linkfetchlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(linkfetchlogdir, "\n" + "") ;
         try{
             let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
             let body1 = {
@@ -116,10 +117,10 @@ module.exports = {
             const file = require('../debug/storedmap.json');  
             file.prevmap = maplink;
             fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-                if (err) return console.log(err);
-                console.log(JSON.stringify(file));
-                console.log('writing to ' + fileName);
-                console.log("");
+                if (err) return fs.appendFileSync(linkfetchlogdir, "\n" + err);
+                fs.appendFileSync(linkfetchlogdir, "\n" + JSON.stringify(file));
+                fs.appendFileSync(linkfetchlogdir, "\n" + 'writing to ' + fileName);
+                fs.appendFileSync(linkfetchlogdir, "\n" + "");
               });//all this stuff is to write it to a temporary save file
 //            const API_KEY = osuapikey; // osu! api v1 key
   //          const USER = args[0];
@@ -220,8 +221,8 @@ module.exports = {
         //})
     } catch(error){
 				message.reply("error - map not found")
-				console.log(error)
-				console.log("")
+				fs.appendFileSync(linkfetchlogdir, "\n" + error)
+				fs.appendFileSync(linkfetchlogdir, "\n" + "")
                 console.groupEnd()
                 console.groupEnd()
                 console.groupEnd()
@@ -231,7 +232,7 @@ module.exports = {
 		/*	let { version } = require('../map.json');
 			let { cover } = require('../map.json');
 			let { url }
-			console.log(version)*/
+			fs.appendFileSync(linkfetchlogdir, "\n" + version)*/
 	
 
             
@@ -243,7 +244,7 @@ module.exports = {
             message.reply({ embeds: [Embed]})*/
             });
         } catch(error){
-            console.log(error)
+            fs.appendFileSync(linkfetchlogdir, "\n" + error)
             message.channel.send("Error - ")
             console.groupEnd()
             console.groupEnd()
@@ -252,7 +253,7 @@ module.exports = {
         
         catch(error){
             message.channel.send("Error - insufficient link\nmap links should be either `osu.ppy.sh/b/map_id` or `osu.ppy.sh/beatmapsets/mapset_id#osu/map_id`")
-            console.log(error)
+            fs.appendFileSync(linkfetchlogdir, "\n" + error)
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()

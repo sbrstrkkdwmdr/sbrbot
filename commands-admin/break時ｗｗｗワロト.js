@@ -1,16 +1,18 @@
 const fs = require('fs')
+const { adminlogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'break時ｗｗｗワロト',
     description: '',
     execute(message, args, currentDate, currentDateISO) {
         if(message.member.permissions.has('ADMINISTRATOR')){
-            fs.appendFileSync('admincmd.log', "\n" + '--- COMMAND EXECUTION ---')
-            fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
-            fs.appendFileSync('admincmd.log', "\n" + "command executed - break")
-            fs.appendFileSync('admincmd.log', "\n" + "category - admin")
+            fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')
+            fs.appendFileSync(adminlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+            fs.appendFileSync(adminlogdir, "\n" + "command executed - break")
+            fs.appendFileSync(adminlogdir, "\n" + "category - admin")
             let consoleloguserweeee = message.author
-            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            fs.appendFileSync('admincmd.log', "\n" + "")
+            fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync(adminlogdir, "\n" + "")
             console.groupEnd()
         message.channel.send('');   
         message.jkdfhskjfhsdkfhsdkf

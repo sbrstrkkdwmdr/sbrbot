@@ -1,15 +1,17 @@
 const fs = require('fs')
+const { helplogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'measureconvert2',
     description: '',
     execute(interaction, args, Discord, options, currentDate, currentDateISO, ) {
-        fs.appendFileSync('help.log', "\n" + '--- COMMAND EXECUTION ---')
-        fs.appendFileSync('help.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('help.log', "\n" + "command executed - measure convert")
-        fs.appendFileSync('help.log', "\n" + "category - help")
+        fs.appendFileSync(helplogdir, "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(helplogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(helplogdir, "\n" + "command executed - measure convert")
+        fs.appendFileSync(helplogdir, "\n" + "category - help")
         let consoleloguserweeee = interaction.member.user
-        fs.appendFileSync('help.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('help.log', "\n" + "") 
+        fs.appendFileSync(helplogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(helplogdir, "\n" + "") 
         console.groupEnd()
 
         let converttype = options.getString('type')

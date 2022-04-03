@@ -1,4 +1,5 @@
 const fs = require('fs')
+const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'psr',
     description: '',
@@ -18,13 +19,13 @@ module.exports = {
         if(playerguess == "rock" && botguess == "scissors") return message.reply("I picked " + String(`${botguess}`) + " | You win");
         if(playerguess == "rock" && botguess == "rock") return message.reply("I picked " + String(`${botguess}`) + " | We tied");
         if(!playerguess) return message.reply("please pick rock, paper, or scissors");
-        fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
-        fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('cmd.log', "\n" + "command executed - paper scissors rock")
-        fs.appendFileSync('cmd.log', "\n" + "category - general")
+        fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(otherlogdir, "\n" + "command executed - paper scissors rock")
+        fs.appendFileSync(otherlogdir, "\n" + "category - general")
         let consoleloguserweeee = message.author
-        fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('cmd.log', "\n" + "")
+        fs.appendFileSync(otherlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(otherlogdir, "\n" + "")
         console.groupEnd()
     }
 }

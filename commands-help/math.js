@@ -1,15 +1,17 @@
 const fs = require('fs')
+const { helplogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'math',
     description: '',
     execute(message, args, Discord, currentDate, currentDateISO, ) {
-        fs.appendFileSync('help.log', "\n" + '--- COMMAND EXECUTION ---')
-        fs.appendFileSync('help.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('help.log', "\n" + "command executed - math")
-        fs.appendFileSync('help.log', "\n" + "category - help")
+        fs.appendFileSync(helplogdir, "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(helplogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(helplogdir, "\n" + "command executed - math")
+        fs.appendFileSync(helplogdir, "\n" + "category - help")
         let consoleloguserweeee = message.author
-        fs.appendFileSync('help.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('help.log', "\n" + "") 
+        fs.appendFileSync(helplogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(helplogdir, "\n" + "") 
         console.groupEnd()
       //  let part1 = parseInt(args[1]);
         //let part2 = parseInt(args[2]);
@@ -110,7 +112,7 @@ module.exports = {
                 message.reply(evalstring)}
                 catch(error){
                     message.reply("error")
-                    fs.appendFileSync('help.log', "\n" + error)
+                    fs.appendFileSync(helplogdir, "\n" + error)
                 }
                 break;
         }

@@ -1,15 +1,17 @@
+const { adminlogdir } = require('../logconfig.json')
+const fs = require('fs')
 module.exports = {
     name: 'gleave',
     description: '',
     execute(interaction, options, client, Discord, currentDate, currentDateISO) {
         let idofguild = options.getNumber('guildid')
-        console.group('--- COMMAND EXECUTION ---')
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - guild leave")
-        console.log("category - admin")
+        fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(adminlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(adminlogdir, "\n" + "command executed - guild leave")
+        fs.appendFileSync(adminlogdir, "\n" + "category - admin")
         let consoleloguserweeee = interaction.member.user
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("")
+        fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(adminlogdir, "\n" + "")
         if(interaction.member.user.id = 503794887318044675){
         let guildID = client.guilds.cache.get(idofguild);
         if(!guildID){
@@ -18,8 +20,8 @@ module.exports = {
         }
         guildID.leave(); 
 
-        console.log(`left guild - ${guildID}`)
-        console.log("")
+        fs.appendFileSync(adminlogdir, "\n" + `left guild - ${guildID}`)
+        fs.appendFileSync(adminlogdir, "\n" + "")
     }   console.groupEnd()
         }
     }

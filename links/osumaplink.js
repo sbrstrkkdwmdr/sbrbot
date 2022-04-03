@@ -2,6 +2,8 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
+const { linkfetchlogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'osumaplink',
     description: '',
@@ -10,14 +12,14 @@ module.exports = {
         const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('beatmaps').replaceAll('b').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const pickeduserX = w;
         console.group("MAP ID:")
-        console.log(`${w}\n${pickeduserX}`)
+        fs.appendFileSync(linkfetchlogdir, "\n" + `${w}\n${pickeduserX}`)
         console.groupEnd()
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("link detector executed - map get")
-        console.log("category - osu")
+        fs.appendFileSync(linkfetchlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(linkfetchlogdir, "\n" + "link detector executed - map get")
+        fs.appendFileSync(linkfetchlogdir, "\n" + "category - osu")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync(linkfetchlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(linkfetchlogdir, "\n" + "") 
         
         try{
             let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
@@ -117,10 +119,10 @@ module.exports = {
             const file = require('../debug/storedmap.json');  
             file.prevmap = maplink;
             fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-                if (err) return console.log(err);
-                console.log(JSON.stringify(file));
-                console.log('writing to ' + fileName);
-                console.log("");
+                if (err) return fs.appendFileSync(linkfetchlogdir, "\n" + err);
+                fs.appendFileSync(linkfetchlogdir, "\n" + JSON.stringify(file));
+                fs.appendFileSync(linkfetchlogdir, "\n" + 'writing to ' + fileName);
+                fs.appendFileSync(linkfetchlogdir, "\n" + "");
               });
               (async () => {
 
@@ -220,8 +222,8 @@ module.exports = {
         //})
     } catch(error){
 				message.reply("error")
-				console.log(error)
-				console.log("")
+				fs.appendFileSync(linkfetchlogdir, "\n" + error)
+				fs.appendFileSync(linkfetchlogdir, "\n" + "")
                 console.groupEnd()
                 console.groupEnd()
                 console.groupEnd()
@@ -231,7 +233,7 @@ module.exports = {
 		/*	let { version } = require('../map.json');
 			let { cover } = require('../map.json');
 			let { url }
-			console.log(version)*/
+			fs.appendFileSync(linkfetchlogdir, "\n" + version)*/
 	
 
             
@@ -244,7 +246,7 @@ module.exports = {
             });
         } catch(error){
             message.channel.send("Error - LB2")
-            console.log(error)
+            fs.appendFileSync(linkfetchlogdir, "\n" + error)
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()

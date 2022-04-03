@@ -1,4 +1,6 @@
 const fs = require('fs')
+const { otherlogdir } = require('../logconfig.json')
+
 module.exports = {
     name: '8ball',
     description: '',
@@ -7,13 +9,13 @@ module.exports = {
         "i didn't quite catch that, ask again?", "ehhhhhhh", "⠀"];
         let ball = rdm[Math.floor(Math.random() * rdm.length)];
         message.reply(String(`${ball}`))   
-        fs.appendFileSync('cmd.log', "\n" + '--- COMMAND EXECUTION ---')
-        fs.appendFileSync('cmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync('cmd.log', "\n" + "command executed - 8ball")
-        fs.appendFileSync('cmd.log', "\n" + "category - general")
+        fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(otherlogdir, "\n" + "command executed - 8ball")
+        fs.appendFileSync(otherlogdir, "\n" + "category - general")
         let consoleloguserweeee = message.author
-        fs.appendFileSync('cmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync('cmd.log', "\n" + "")
+        fs.appendFileSync(otherlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(otherlogdir, "\n" + "")
         console.groupEnd()
     }
 }

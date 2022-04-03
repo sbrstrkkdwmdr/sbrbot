@@ -2,6 +2,8 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../debug/osuauth.json');
+const { linkfetchlogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'osuprofilelink',
     description: '',
@@ -10,13 +12,13 @@ module.exports = {
         //const pickeduserX = args.splice(0,1000).join(" ");
         const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replace('users', '').replace('u').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const pickeduserX = w;
-        console.log(w)
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - osu profile link")
-        console.log("category - osu")
+        fs.appendFileSync(linkfetchlogdir, "\n" + w)
+        fs.appendFileSync(linkfetchlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(linkfetchlogdir, "\n" + "command executed - osu profile link")
+        fs.appendFileSync(linkfetchlogdir, "\n" + "category - osu")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
+        fs.appendFileSync(linkfetchlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(linkfetchlogdir, "\n" + "") 
         //if(!pickeduserX) return message.reply("user ID required");
         //if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
       
@@ -36,8 +38,8 @@ module.exports = {
             .then(res => res.json())
             .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
             ;
-            console.log("writing data to osuauth.json")
-            console.log("")
+            fs.appendFileSync(linkfetchlogdir, "\n" + "writing data to osuauth.json")
+            fs.appendFileSync(linkfetchlogdir, "\n" + "")
             
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
             
@@ -50,8 +52,8 @@ module.exports = {
                 {
                 try{const osudata = output2;
                 fs.writeFileSync("debug/osu.json", JSON.stringify(osudata, null, 2));
-                console.log("writing data to osu.json")
-                console.log("")
+                fs.appendFileSync(linkfetchlogdir, "\n" + "writing data to osu.json")
+                fs.appendFileSync(linkfetchlogdir, "\n" + "")
                 let playername = JSON.stringify(osudata, ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
                 let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
                 let playeravatar = JSON.stringify(osudata, ['avatar_url']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('avatar_url', '').replaceAll('https', 'https:');
@@ -135,13 +137,13 @@ module.exports = {
                 //message.reply(mapbg1)
                 }} catch(error){
                     message.reply("Error - account not found (or some other error)")
-                    console.log("Error account not found")
-                    console.log(error)
-                    console.log("")
+                    fs.appendFileSync(linkfetchlogdir, "\n" + "Error account not found")
+                    fs.appendFileSync(linkfetchlogdir, "\n" + error)
+                    fs.appendFileSync(linkfetchlogdir, "\n" + "")
                 }
         });
         } catch(err){
-            console.log(err)
+            fs.appendFileSync(linkfetchlogdir, "\n" + err)
         } 
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
     }

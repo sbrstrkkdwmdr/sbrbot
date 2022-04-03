@@ -1,5 +1,6 @@
 //const { danserpath } = require('../config.json')
 //const { linkargs } = require('../main.js')
+const { linkfetchlogdir } = require('../logconfig.json')
 
 module.exports = { 
     name: 'replayrecordhelp',
@@ -12,12 +13,12 @@ module.exports = {
     message.reply({ embeds: [helpembed] })
 
     console.group('--- COMMAND EXECUTION ---')
-    console.log(`${currentDateISO} | ${currentDate}`)
-    console.log("command executed - replayrecord help")
-    console.log("category - osu")
+    fs.appendFileSync(linkfetchlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+    fs.appendFileSync(linkfetchlogdir, "\n" + "command executed - replayrecord help")
+    fs.appendFileSync(linkfetchlogdir, "\n" + "category - osu")
     let consoleloguserweeee = message.author
-    console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-    console.log("")
+    fs.appendFileSync(linkfetchlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+    fs.appendFileSync(linkfetchlogdir, "\n" + "")
     console.groupEnd()
     }
 }

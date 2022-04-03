@@ -1,4 +1,5 @@
 const fs = require('fs')
+const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'getuser',
     description: "say",

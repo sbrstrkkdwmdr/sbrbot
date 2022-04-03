@@ -1,19 +1,20 @@
 const fs = require('fs')
+const { adminlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'purge',
     description: 'ERADICATE',
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
-        fs.appendFileSync('admincmd.log', "\n" + '--- COMMAND EXECUTION ---')
-        fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(adminlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
         if(message.member.permissions.has('ADMINISTRATOR')){
                 try {
             let delcount = args[0];
-            fs.appendFileSync('admincmd.log', "\n" + "command executed - purge")
-            fs.appendFileSync('admincmd.log', "\n" + "category - admin")
+            fs.appendFileSync(adminlogdir, "\n" + "command executed - purge")
+            fs.appendFileSync(adminlogdir, "\n" + "category - admin")
             let consoleloguserweeee = message.author
-            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            fs.appendFileSync('admincmd.log', "\n" + `deleted message count - ${delcount}`)
-            fs.appendFileSync('admincmd.log', "\n" + "")
+            fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync(adminlogdir, "\n" + `deleted message count - ${delcount}`)
+            fs.appendFileSync(adminlogdir, "\n" + "")
 
             if(isNaN(delcount) || parseInt(delcount <= 0)){
                 message.reply("Error: NaN or too low")
@@ -24,14 +25,14 @@ module.exports = {
             await message.channel.bulkDelete(parseInt(delcount) + 1, true);
         } catch(error) {
             message.reply("error")
-            fs.appendFileSync('admincmd.log', "\n" + error)
+            fs.appendFileSync(adminlogdir, "\n" + error)
         }} else {
             message.reply("insufficient permissions")
-            fs.appendFileSync('admincmd.log', "\n" + "command executed - purge")
+            fs.appendFileSync(adminlogdir, "\n" + "command executed - purge")
             let consoleloguserweeee = message.author
-            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            fs.appendFileSync('admincmd.log', "\n" + "command failed - insufficient permissions")
-            fs.appendFileSync('admincmd.log', "\n" + "")
+            fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync(adminlogdir, "\n" + "command failed - insufficient permissions")
+            fs.appendFileSync(adminlogdir, "\n" + "")
         }
     
         /* OLD VER
@@ -48,20 +49,20 @@ module.exports = {
             message.channel.bulkDelete(messages);});} catch(err){
                 message.reply("error")
             }
-            fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
-            fs.appendFileSync('admincmd.log', "\n" + "command executed - purge")
+            fs.appendFileSync(adminlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+            fs.appendFileSync(adminlogdir, "\n" + "command executed - purge")
             let consoleloguserweeee = message.author
-            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            fs.appendFileSync('admincmd.log', "\n" + `deleted message count - ${args[0]}`)
-            fs.appendFileSync('admincmd.log', "\n" + "")
+            fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync(adminlogdir, "\n" + `deleted message count - ${args[0]}`)
+            fs.appendFileSync(adminlogdir, "\n" + "")
         }
         else{
-            fs.appendFileSync('admincmd.log', "\n" + `${currentDateISO} | ${currentDate}`)
-            fs.appendFileSync('admincmd.log', "\n" + "command executed - purge")
+            fs.appendFileSync(adminlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+            fs.appendFileSync(adminlogdir, "\n" + "command executed - purge")
             let consoleloguserweeee = message.author
-            fs.appendFileSync('admincmd.log', "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-            fs.appendFileSync('admincmd.log', "\n" + "command failed - insufficient perms")
-            fs.appendFileSync('admincmd.log', "\n" + "")
+            fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+            fs.appendFileSync(adminlogdir, "\n" + "command failed - insufficient perms")
+            fs.appendFileSync(adminlogdir, "\n" + "")
         }*/
         console.groupEnd()
     }
