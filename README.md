@@ -9,4 +9,6 @@ just a bot i'm coding. this is the first thing i've coded
 [osuck api](https://pp.osuck.net/pp)
  
 # setup
-To setup the bot, run setup.bat
+requires [nodejs v16](https://nodejs.org/en/blog/release/v16.13.0/)  
+To setup the bot,  
+run `npm i` then run setup.bat
