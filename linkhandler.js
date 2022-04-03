@@ -50,6 +50,9 @@ client.on('messageCreate', message => {
     if (message.content.startsWith('https://osu.ppy.sh/u/') || message.content.startsWith('osu.ppy.sh/u/') || message.content.startsWith('https://osu.ppy.sh/users/') || message.content.startsWith('osu.ppy.sh/users/')){
         client.linkdetect.get('osuprofilelink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
     }
+    if (message.content.startsWith('https://osu.ppy.sh/scores/') || message.content.startsWith('osu.ppy.sh/scores/')){
+        client.linkdetect.get('osuscorelink').execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret);
+    }
 
     
 
