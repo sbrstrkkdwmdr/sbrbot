@@ -78,7 +78,7 @@ client.on('messageCreate', message =>{
     const linkargs = message.content.split(/ +/); //linkargs are the message content
     const command = args.shift().toLowerCase(); //grabs command
 
-    const owner = require('./botowners.json');
+    const owners = ['503794887318044675']
 
     let consoleloguserweeee = message.author
     let currentDate = new Date();
@@ -94,8 +94,9 @@ client.on('messageCreate', message =>{
 
     //
     if(!message.content.startsWith(prefix)) return; //the return is so if its just prefix nothing happens
-    //if(message.author.bot) return; //if bot, do nothing
-
+    if(message.author.bot){
+        if(!message.author.id == '755220989494951997') return;
+    }
     if(oncooldown.has(message.author.id)) return message.reply("You're on cooldown");
      if(!oncooldown.has(message.author.id)) {
         oncooldown.add(message.author.id);
@@ -231,11 +232,11 @@ client.on('messageCreate', message =>{
       break;
     
     case 'say':
-        client.commands.get('say').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('say').execute(owners, message, args, currentDate, currentDateISO)
         break;
 
     case 'sayto':
-        client.commands.get('sayto').execute(client, message, args, currentDate, currentDateISO)
+        client.commands.get('sayto').execute(owners, client, message, args, currentDate, currentDateISO)
         break;
     
     case 'paperscissorsrock':case 'rockpaperscissors':case 'psr':case 'scissorsrockpaper':
@@ -333,6 +334,9 @@ client.on('messageCreate', message =>{
     case 'map':
         client.altosucmds.get('map').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
+    case 'mapsearch':
+    client.altosucmds.get('mapsearch').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+    break;
 
     case 'skin':
         client.altosucmds.get('skin').execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)

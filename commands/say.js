@@ -3,7 +3,11 @@ const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'say',
     description: "say",
-    execute(message, args, currentDate, currentDateISO) {
+    execute(owners, message, args, currentDate, currentDateISO) {
+        if(!owners.some(v => (message.author.id.toString()).includes(v))){
+            message.delete();
+            return;
+        };
         const saythis = args.splice(0,1000).join(" ");
         message.delete();
         message.channel.send(saythis)

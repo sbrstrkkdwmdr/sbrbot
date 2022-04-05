@@ -3,8 +3,8 @@ const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'sayto',
     description: "say",
-    execute(client, message, args, currentDate, currentDateISO) {
-        if(message.author == 503794887318044675){
+    execute(owners, client, message, args, currentDate, currentDateISO) {
+        if(owners.some(v => (message.author.id.toString()).includes(v))){
         try{const sendtochannelget = args[0];
         const sendtochannel = client.channels.cache.get(sendtochannelget)
         const saythis = args.splice(1,1000).join(" ");
