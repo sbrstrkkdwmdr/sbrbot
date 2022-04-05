@@ -336,8 +336,7 @@ module.exports = {
                         modenum += 1073741824
                     }
         
-                    let cpolpp = `https://pp.osuck.net/pp?id=${rsmapid}&mods=${modenum}&combo=${rscombo}&miss=0&acc=100`
-                    //fs.appendFileSync(osulogdir, "\n" + cpolpp)
+                    let cpolpp = `https://pp.osuck.net/pp?id=${rsmapid}&mods=${modenum}&miss=${rs0s}&acc=${(rsacc * 100).toFixed(2)}&300=${rs300s}&100=${rs100s}&50=${rs50s}&combo=${rscombo}`                    //fs.appendFileSync(osulogdir, "\n" + cpolpp)
         
                     fetch(cpolpp, {
                     }).then(res => res.json())
