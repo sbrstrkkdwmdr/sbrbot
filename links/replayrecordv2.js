@@ -6,6 +6,7 @@ const calc = require('ojsama');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const osuReplayParser = require('osureplayparser');
 const { linkfetchlogdir } = require('../logconfig.json')
+const { danserpath } = require('../config.json')
 
 module.exports = {
     name: 'replayrecordv2',
@@ -225,7 +226,7 @@ module.exports = {
                 let output1 = `${playername}s play at ${bettertimeset} - ${maptitle}[${mapdiff}] - ${ppww}pp - ${ppiffcw} if ${nochokeacc} FC`;
                 let output = JSON.stringify(output1).replaceAll(' ', '_').replaceAll('|', '').replaceAll('{', '').replaceAll('"', '').replaceAll('}', '');
                 //fs.appendFileSync(linkfetchlogdir, "\n" + output)
-                exec('C:/Users/saber/Desktop/danser-go-dev/danser-go-dev-OTHERS/danser.exe -skip -settings=' + linkargs + ' -r="C:/Users/saber/Desktop/kusa/bot/sbrbot/files/replay.osr" -out=' + output)
+                exec(danserpath + 'danser.exe -skip -settings=' + linkargs + ' -r="files/replay.osr" -out=' + output)
                 console.group('--- COMMAND EXECUTION ---')
                 fs.appendFileSync(linkfetchlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
                 fs.appendFileSync(linkfetchlogdir, "\n" + "command executed - replayrecord")
