@@ -11,16 +11,12 @@ module.exports = {
         console.group('--- LINK DETECTED ---')
         const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('beatmaps').replaceAll('b').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const pickeduserX = w;
-        console.group("MAP ID:")
-        fs.appendFileSync(linkfetchlogdir, "\n" + `${w}\n${pickeduserX}`)
-        console.groupEnd()
         fs.appendFileSync(linkfetchlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync(linkfetchlogdir, "\n" + "link detector executed - map get")
+        fs.appendFileSync(linkfetchlogdir, "\n" + "link detector executed - map get (short)")
         fs.appendFileSync(linkfetchlogdir, "\n" + "category - osu")
         let consoleloguserweeee = message.author
         fs.appendFileSync(linkfetchlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync(linkfetchlogdir, "\n" + "") 
-        
+        fs.appendFileSync(linkfetchlogdir, "\n" + "") ;
         try{
             let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
             let body1 = {
@@ -35,10 +31,11 @@ module.exports = {
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(res => res.json())
-            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)));
-            const { access_token } = require('../debug/osuauth.json');
+            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
+            ;
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickeduserX}`;
-        
+            const { access_token } = require('../debug/osuauth.json');
+            
             fetch(mapurl, {
                 method: "GET",
                 headers: {
@@ -75,11 +72,10 @@ module.exports = {
             }            let mapdiff = JSON.stringify(mapdata, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
             let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '');
             let mapmode = JSON.stringify(mapdata, ['mode']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('mode', '');
-            let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20').replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '');
-
             let mapmaxcombo = JSON.stringify(mapdata, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('max_combo', '');
             let maplength = JSON.stringify(mapdata, ['total_length']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('total_length', '');
             let maphitonly = JSON.stringify(mapdata, ['hit_length']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('hit_length', '');
+            let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20').replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '');
 
             let maphit1 = Math.floor(maphitonly / 60);
             let maphit2 = Math.abs(maphitonly % 60);
@@ -110,10 +106,19 @@ module.exports = {
             if(mapstatus == 'graveyard' || mapstatus == 'pending'){
                 statusimg = '<:statusgraveyard:944512765282897940>'
             }
-            /*let osu = require("ojsama")
-
-            let parser = new osu.parser();
-            let SSpp = osu.ppv2({map: linkargs}).toString()*/
+            if(mapmode == 'osu'){
+                mapimg = '<:modeosu:944181096868884481>'
+            }
+            if(mapmode == 'taiko'){
+                mapimg = '<:modetaiko:944181097053442068>'
+            }
+            if(mapmode == 'fruits'){
+                mapimg = '<:modefruits:944181096206176326>'
+            }
+            if(mapmode == 'mania'){
+            mapimg = '<:modemania:944181095874834453>'
+            }
+            
 
             const fileName = 'debug/storedmap.json';
             const file = require('../debug/storedmap.json');  
@@ -123,86 +128,30 @@ module.exports = {
                 fs.appendFileSync(linkfetchlogdir, "\n" + JSON.stringify(file));
                 fs.appendFileSync(linkfetchlogdir, "\n" + 'writing to ' + fileName);
                 fs.appendFileSync(linkfetchlogdir, "\n" + "");
-              });
-              (async () => {
+              });//all this stuff is to write it to a temporary save file
+              modenum = 0
+  
+              let cpolpp = `https://pp.osuck.net/pp?id=${pickeduserX}&mods=${modenum}&combo=${mapmaxcombo}&miss=0&acc=100`
+              //fs.appendFileSync(osulogdir, "\n" + cpolpp)
+  
+              fetch(cpolpp, {
+              }).then(res => res.json())
+              .then(output4 => {
+                  fs.writeFileSync('cpolppcalc.json', JSON.stringify(output4, null, 2))
+                  cppSS = JSON.stringify(output4['pp']['acc'], ['100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('100', '');
+                  cpp95 = JSON.stringify(output4['pp']['acc'], ['95']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('95', '');
+                  
+                  SRclean = JSON.stringify(output4['stats']['star'], ['pure']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pure', '');
 
-                const score = {
-                    beatmap_id: maplink,
-                    score: '6795149',
-                    maxcombo: mapmaxcombo,
-                    count50: '0',
-                    count100: '0',
-                    count300: '374',
-                    countmiss: '0',
-                    countkatu: '0',
-                    countgeki: '0',
-                    perfect: '0',
-                    enabled_mods: '0',
-                    user_id: '13780464',
-                    date: '2022-02-08 05:24:54',
-                    rank: 'S',
-                    score_id: '4057765057'
-                  }
-                //const score = scorew
-                const score95 = {
-                    beatmap_id: maplink,
-                    score: '6795149',
-                    maxcombo: mapmaxcombo,
-                    count50: '0',
-                    count100: '30',
-                    count300: '374',
-                    countmiss: '0',
-                    countkatu: '0',
-                    countgeki: '0',
-                    perfect: '0',
-                    enabled_mods: '0',
-                    user_id: '13780464',
-                    date: '2022-02-08 05:24:54',
-                    rank: 'S',
-                    score_id: '4057765057'
-                }
-              
-    let pp = new std_ppv2().setPerformance(score)
-    let ppcalc95 = new std_ppv2().setPerformance(score95)
-    let mapimg = '<:modeosu:944181096868884481>'
-    if(mapmode == 'osu'){
-        pp = new std_ppv2().setPerformance(score)
-        ppcalc95 = new std_ppv2().setPerformance(score95)
-        mapimg = '<:modeosu:944181096868884481>'
-        }
-        if(mapmode == 'taiko'){
-            pp = new taiko_ppv2().setPerformance(score)
-            ppcalc95 = new taiko_ppv2().setPerformance(score95)
-            mapimg = '<:modetaiko:944181097053442068>'
-        }
-        if(mapmode == 'fruits'){
-            pp = new catch_ppv2().setPerformance(score)
-            ppcalc95 = new catch_ppv2().setPerformance(score95)
-            mapimg = '<:modefruits:944181096206176326>'
-        }
-        if(mapmode == 'mania'){
-        pp = new mania_ppv2().setPerformance(score)
-        ppcalc95 = new mania_ppv2().setPerformance(score95)
-        mapimg = '<:modemania:944181095874834453>'
-        }
-        let ppSSjson = await pp.compute();
-        let pp95json = await ppcalc95.compute();
 
-                let ppSSstr = JSON.stringify(ppSSjson['total']);
-                let pp95str = JSON.stringify(pp95json['total']);
-
-                let ppSS = Math.abs(ppSSstr).toFixed(2)
-                let pp95 = Math.abs(pp95str).toFixed(2)
-              
-
-            let userinfourl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`
-            fetch(userinfourl, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                }
-            }).then(res => res.json())
-            .then(output3 => {
-            let mapperid = JSON.stringify(output3, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
+    let userinfourl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`
+    fetch(userinfourl, {
+        headers: {
+            Authorization: `Bearer ${access_token}`
+        }
+    }).then(res => res.json())
+    .then(output3 => {
+    let mapperid = JSON.stringify(output3, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
             let Embed = new Discord.MessageEmbed()
             .setColor(0x91FF9A)
             .setTitle(`${mapartist} - ${maptitle} [${mapdiff}]`)
@@ -210,14 +159,14 @@ module.exports = {
             .setURL(`https://osu.ppy.sh/b/${maplink}`)
             .setImage(mapbg)
             .addField('**MAP DETAILS**', `${statusimg} | ${mapimg} \n` + "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n🕐${mapplaylength}`, true)
-            .addField('**PP VALUES**', `\nSS: ${ppSS} \n95: ${pp95}`, true)
+            .addField('**PP VALUES**', `\nSS: ${cppSS} \n95: ${cpp95}`, true)
             .addField('**DOWNLOAD**', `[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`, true)
-            message.reply({embeds: [Embed]})
+            message.reply({ embeds: [Embed]})
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()
             })
-        })();
+        })
             
         //})
     } catch(error){

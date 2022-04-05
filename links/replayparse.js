@@ -130,10 +130,7 @@ module.exports = {
             let mapcircle = JSON.stringify(mapdata2, ['count_circles']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_circles', '');
             let mapslider = JSON.stringify(mapdata2, ['count_sliders']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_sliders', '');
             let mapspinner = JSON.stringify(mapdata2, ['count_spinners']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_spinners', '');
-*/
-(async () => {        
-
-
+*/     
     let nochokeacc300 = Math.floor(300 * hit300s);
     let nochokeacc100 = Math.floor(100 * hit100s);
     let nochokeacc50 = Math.floor(50 * hit50s);
@@ -158,71 +155,124 @@ module.exports = {
         mapid: beatmapid
     }
     fs.writeFileSync('replaydata.json', JSON.stringify(re, null, 2))
+    modenum = 0
+    let cpolmods = mods.toLowerCase();
+    if(cpolmods.includes('nf') || cpolmods.includes('NF')){
+        modenum += 1
+    }
+    if(cpolmods.includes('ez') || cpolmods.includes('EZ') ){
+        modenum += 2
+    }
+    if(cpolmods.includes('td') || cpolmods.includes('TD')){
+        modenum += 4
+    }
+    if(cpolmods.includes('hd') || cpolmods.includes('HD')){
+        modenum += 8
+    }
+    if(cpolmods.includes('hr') || cpolmods.includes('HR')){
+        modenum += 16
+    }
+    if(cpolmods.includes('sd') || cpolmods.includes('SD')){
+        modenum += 32
+    }
+    if(cpolmods.includes('dt') || cpolmods.includes('DT')){
+        modenum += 64
+    }
+    if(cpolmods.includes('rx') || cpolmods.includes('rl') || cpolmods.includes('rlx') || cpolmods.includes('RX') || cpolmods.includes('RL') || cpolmods.includes('RLX')){
+        modenum += 128
+    }
+    if(cpolmods.includes('ht') || cpolmods.includes('HT')){
+        modenum += 256
+    }
+    if(cpolmods.includes('nc') || cpolmods.includes('NC')){
+        modenum += 64//512
+    }
+    if(cpolmods.includes('fl') || cpolmods.includes('FL')){
+        modenum += 1024
+    }
+    if(cpolmods.includes('at') || cpolmods.includes('AT')){
+        modenum += 2048
+    }
+    if(cpolmods.includes('so') || cpolmods.includes('SO')){
+        modenum += 4096
+    }
+    if(cpolmods.includes('ap') || cpolmods.includes('AP')){
+        modenum += 8192
+    }
+    if(cpolmods.includes('pf') || cpolmods.includes('PF')){
+        modenum += 16384
+    }
+    if(cpolmods.includes('1k') || cpolmods.includes('1K')){
+        modenum += 67108864
+    }
+    if(cpolmods.includes('2k') || cpolmods.includes('2K')){
+        modenum += 268435456
+    }
+    if(cpolmods.includes('3k') || cpolmods.includes('3K')){
+        modenum += 134217728
+    }
+    if(cpolmods.includes('4k') || cpolmods.includes('4K')){
+        modenum += 32768
+    }
+    if(cpolmods.includes('5k') || cpolmods.includes('5K')){
+        modenum += 65536
+    }
+    if(cpolmods.includes('6k') || cpolmods.includes('6K')){
+        modenum += 131072
+    }
+    if(cpolmods.includes('7k') || cpolmods.includes('7K')){
+        modenum += 262144
+    }
+    if(cpolmods.includes('8k') || cpolmods.includes('8K')){
+        modenum += 524288
+    }
+    if(cpolmods.includes('9k') || cpolmods.includes('9K')){
+        modenum += 16777216
+    }
+    if(cpolmods.includes('fi') || cpolmods.includes('FI')){
+        modenum += 1048576
+    }
+    if(cpolmods.includes('rdm') || cpolmods.includes('RDM')){
+        modenum += 2097152
+    }
+    if(cpolmods.includes('cn') || cpolmods.includes('CN')){
+        modenum += 4194304
+    }
+    if(cpolmods.includes('tp') || cpolmods.includes('TP')){
+        modenum += 8388608
+    }
+    if(cpolmods.includes('kc') || cpolmods.includes('KC')){
+        modenum += 33554432
+    }
+    if(cpolmods.includes('sv2') || cpolmods.includes('s2') || cpolmods.includes('SV2') || cpolmods.includes('S2')){
+        modenum += 536870912
+    }
+    if(cpolmods.includes('mr') || cpolmods.includes('MR')){
+        modenum += 1073741824
+    }
 
-        const score = {
-            beatmap_id: beatmapid,
-            score: '6795149',
-            maxcombo: '630',
-            count50: hit50s,
-            count100: hit100s,
-            count300: hit300s,
-            countmiss: '0',
-            countkatu: '0',
-            countgeki: '0',
-            perfect: '0',
-            enabled_mods: '0',
-            user_id: '15222484',
-            date: '2022-02-08 05:24:54',
-            rank: 'S',
-            score_id: '4057765057'
-          }
-          const scorenofc = {
-            beatmap_id: beatmapid,
-            score: '6795149',
-            maxcombo: '630',
-            count50: hit50s,
-            count100: hit100s,
-            count300: hit300s,
-            countmiss: misses,
-            countkatu: '0',
-            countgeki: '0',
-            perfect: '0',
-            enabled_mods: '0',
-            user_id: '15222484',
-            date: '2022-02-08 05:24:54',
-            rank: 'A',
-            score_id: '4057765057'
-          }
-          fs.writeFileSync("debug/rsppcalc.json", JSON.stringify(score, null, 2));
-                  //let ppfc = new std_ppv2().setPerformance(score);
-                  //let pp =  new std_ppv2().setPerformance(scorenofc);
-                  if(gamemode == '0'){
-                    pp = new std_ppv2().setPerformance(scorenofc)
-                    ppfc = new std_ppv2().setPerformance(score)
-                }
-                if(gamemode == '1'){
-                    pp = new taiko_ppv2().setPerformance(scorenofc)
-                    ppfc = new taiko_ppv2().setPerformance(score)
-                }
-                if(gamemode == '2'){
-                    pp = new catch_ppv2().setPerformance(scorenofc)
-                    ppfc = new catch_ppv2().setPerformance(score)
-                }
-                if(gamemode == '3'){
-                    pp = new mania_ppv2().setPerformance(scorenofc)
-                    ppfc = new mania_ppv2().setPerformance(score)
-                }
-                let ppw = await pp.compute();
-                let ppiffc1 = await ppfc.compute(nochokeacc);
-                let ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                let ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
-                let ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
-                let ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                let ppwrawtotal = ppw['total'];
-                let ppww = Math.abs(ppwrawtotal).toFixed(2);
-                let ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
-                //fs.appendFileSync(linkfetchlogdir, "\n" + ppw)
-                //fs.appendFileSync(linkfetchlogdir, "\n" + ppfc)
+    let cpolpp = `https://pp.osuck.net/pp?id=${beatmapid}&mods=${mods}&combo=${maxcombo}&miss=0&acc=100`
+    //fs.appendFileSync(osulogdir, "\n" + cpolpp)
+
+    fetch(cpolpp, {
+    }).then(res => res.json())
+    .then(output4 => {
+        fs.writeFileSync('cpolppcalc.json', JSON.stringify(output4, null, 2))
+        let cppSS = JSON.stringify(output4['pp']['acc'], ['100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('100', '');
+        let cpp95 = JSON.stringify(output4['pp']['acc'], ['95']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('95', '');
+        let clength = JSON.stringify(output4['stats']['time'], ['full']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('full', '');
+        cpp = JSON.stringify(output4['pp'], ['current']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('current', '');
+        cppfc = JSON.stringify(output4['pp'], ['fc']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('fc', '');
+        SRclean = JSON.stringify(output4['stats']['star'], ['pure']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pure', '');
+        let cmods = JSON.stringify(output4['mods'], ['name']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('name', '');
+        let cmodbpm = JSON.stringify(output4['stats']['bpm'], ['max']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max', '');
+        
+        if(cppfc != cpp){
+            pptotalthingy = `${cpp}**pp**\n${cppfc}**pp** if ${nochokeacc}% FC`
+        }
+        if(cppfc == cpp){
+            pptotalthingy = `${cpp}**pp** FC`
+        }
                 lifebar2 = (lifebar.replaceAll('|', ' ')).split(/ +/)
                 //fs.appendFileSync(linkfetchlogdir, "\n" + lifebar2)
                 lifebarFULL1 = ''
@@ -269,17 +319,18 @@ module.exports = {
         .setImage('attachment://files/replayhealth.png')
         .setThumbnail(mapbg)
         .addField('**SCORE INFO**', `[**${playername}**](https://osu.ppy.sh/u/${playerid})\nScore set on ${bettertimeset}\n${hit300s}/${hit100s}/${hit50s}/${misses}\nCombo:**${maxcombo}** | ${trueacc}%`, true)
-        .addField('**PP**', `${ppww}**pp**\n${ppiffcw}**pp** if ${nochokeacc}% FC`, true)
-        .addField('**MAP**', `[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${beatmapid}) mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})`, false)
-        .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner, false)
+        .addField('**PP**', `${pptotalthingy}`, true)
+        .addField('**MAP**', `[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${beatmapid}) + ${cmods} mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})`, false)
+        .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  cmodbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner, false)
         .setThumbnail(`https://a.ppy.sh/${playerid}`);
         message.reply({embeds: [Embed], files: ['./files/replayhealth.png']})
     })
-})();
+})
     //})//mapdata2
 } catch (error) {
     fs.appendFileSync(linkfetchlogdir, "\n" + error)
-    return message.reply('error - map does not exist or is a different version to the osu website')
+    message.reply('error - map does not exist or is a different version to the osu website')
+    console.log(error)
 }
     })
 }       catch(error){
