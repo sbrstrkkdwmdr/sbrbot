@@ -251,7 +251,7 @@ module.exports = {
         modenum += 1073741824
     }
 
-    let cpolpp = `https://pp.osuck.net/pp?id=${beatmapid}&mods=${mods}&combo=${maxcombo}&miss=0&acc=100`
+    let cpolpp = `https://pp.osuck.net/pp?id=${beatmapid}&mods=${mods}&combo=${maxcombo}&miss=0&acc=${trueacc}`
     //fs.appendFileSync(osulogdir, "\n" + cpolpp)
 
     fetch(cpolpp, {
