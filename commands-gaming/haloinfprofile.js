@@ -2,38 +2,45 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { haloapikey } = require('../config.json')
+const { otherlogdir } = require('../logconfig.json')
+const lib = require('lib')({token: haloapikey.toString()});
 module.exports = {
     name: 'haloinfprofile',
     description: '',
-    async execute(message, args, client, Discord, currentDate, currentDateISO, trnkey) {
-        console.log(`${currentDateISO} | ${currentDate}`)
-        console.log("command executed - get halo profile")
-        console.log("category - gaming")
+    execute(message, args, client, Discord, currentDate, currentDateISO, trnkey) {
+        fs.appendFileSync(otherlogdir, "\n" +`${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(otherlogdir, "\n" +"command executed - get halo profile")
+        fs.appendFileSync(otherlogdir, "\n" +"category - gaming")
         let consoleloguserweeee = message.author
-        console.log(`requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        console.log("") 
-        const lib = require('lib')({token: haloapikey})
-        let username = args.splice(/ +/).join(' ')
-        if(!username){
-            username = 'Mint Blitz'
+        fs.appendFileSync(otherlogdir, `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
+        fs.appendFileSync(otherlogdir, "\n" +"") 
+        let username = args.splice(0,1000).join(' ')
+        fs.appendFileSync(otherlogdir, "\n" +"pp" + username)
+        if(!username || username == '' || username == ''){
+            username = 'sbrstrkkdw'
         }
         //let url = `https://halo.api.stdlib.com/infinite@0.3.9/appearance/${username}`
-        try{result = await lib.halo.infinite['@0.3.9'].stats['service-record'].multiplayer({
-            gamertag: `${username}`
-        });
+        ( async () => {
+        try{
+            result = await lib.halo.infinite['@0.3.9'].stats['service-record'].multiplayer({
+            gamertag: 'sbrstrkkdw', // required
+            filter: 'matchmade:social',
+            //id: 'ii'
+        })
+        //console.log('test')
         profileresult = await lib.halo.infinite['@0.3.9'].appearance({
-            gamertag: `${username}`
-        });
+            gamertag: 'sbrstrkkdw',
+            //id: 'ii'
+        })
         } catch(error){
             message.reply("error - profile not found")
-            return console.log(error)
+            return fs.appendFileSync(otherlogdir, "\n" + error)
         }
-        let x = ','
         fs.writeFileSync("debug/haloinfdata.json", JSON.stringify(result, null, 2));
         fs.appendFileSync("debug/haloinfdata.json", JSON.stringify(profileresult, null, 2))
         let pfp = JSON.stringify(profileresult['data'], ['emblem_url']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replace('emblem_url', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
         let servicetag = JSON.stringify(profileresult['data'], ['service_tag']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('service_tag', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
-        //console.log(result)
+        //fs.appendFileSync(result)
         let kills1 = JSON.stringify(result['data']['core']['summary'], ['kills']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('kills', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
         let deaths1 = JSON.stringify(result['data']['core']['summary'], ['deaths']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('deaths', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
         let assists1 = JSON.stringify(result['data']['core']['summary'], ['assists']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('assists', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
@@ -87,5 +94,6 @@ module.exports = {
             **Hit Shots:** ${shotland} | **Missed Shots:** ${shotsmiss} | **Accuracy**: ${shotacc}`, false)
             
             message.reply({ embeds: [haloembed]})
+        })();
     }
 }
