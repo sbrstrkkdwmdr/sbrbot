@@ -101,26 +101,14 @@ module.exports = {
             console.groupEnd()
         }
         if(mode == 'catch' || mode == 'c' || mode == '3' || mode == 'ctb' || mode == 'catch the beat'){
-            const { access_token } = require('../debug/osuauth.json');
             fs.appendFileSync(osulogdir, "\n" + 'ctb')
-            if(!mapid) return interaction.channel.send('input a valid map id')
-            if(mapid){
-            fetch(mapurl, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${access_token}`,
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                }
-            }).then(res => res.json())
-            .then(mapdata => 
-                {
+            
             //fs.appendFileSync(osulogdir, "\n" + mapdata)
-            let fruits = JSON.stringify(mapdata, ['count_circles']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_circles', '');
-            let drops = JSON.stringify(mapdata, ['count_sliders']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_sliders', '');
-            //let droplets = parseInt(JSON.stringify(mapdata, ['count_spinners']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_spinners', ''));
+            let hits = hit300 + hit100 + hit50 + hit0
+
+//let droplets = parseInt(JSON.stringify(mapdata, ['count_spinners']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_spinners', ''));
             topequation = Math.floor(hit300 + hit100 + hit50)
-            bottomequation = Math.floor(Math.abs(fruits) + Math.abs(drops))
+            bottomequation = Math.floor(Math.abs(hits))
             fullequation = (Math.abs((topequation / bottomequation)*100)).toString() + '%'
             shortequation = ((Math.abs((topequation / bottomequation)*100)).toFixed(2)).toString() + '%'
             
@@ -143,7 +131,6 @@ module.exports = {
             interaction.channel.send({ content: `**Accuracy:** ${shortequation}\n**Full ver:** ${fullequation}\n**Grade:** ${grade}`})
             fs.appendFileSync(osulogdir, "\n" + "") 
             console.groupEnd()
-            })}
             fs.appendFileSync(osulogdir, "\n" + "") 
             fs.appendFileSync(osulogdir, "\n" + "sent")
             console.groupEnd()
