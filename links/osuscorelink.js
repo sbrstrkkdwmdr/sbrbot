@@ -76,7 +76,7 @@ module.exports = {
                 let hit200 =JSON.stringify(scoredata['statistics'], ['count_katu']).replace('count_katu', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
                 let hit100 = JSON.stringify(scoredata['statistics'], ['count_100']).replace('count_100', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
                 let hit50 = JSON.stringify(scoredata['statistics'], ['count_50']).replace('count_50', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                let hit0 = JSON.stringify(scoredata['statistics'], ['count_0']).replace('count_0', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
+                let hit0 = JSON.stringify(scoredata['statistics'], ['count_miss']).replace('count_miss', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
                 let timeset = JSON.stringify(scoredata['created_at']).replace('created_at', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
                 let mapid = JSON.stringify(scoredata['beatmap'], ['id']).replace('id', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
                 let maptitle = JSON.stringify(scoredata['beatmapset'], ['title']).replace('title', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')//.replace('undefined', '')
@@ -220,7 +220,7 @@ module.exports = {
 
                 fcflag = '**FC**'
                 if(fc == 'false'){
-                    fcflag = `| **${ppiffcw}**pp IF FC ${ppissue}`
+                    fcflag = `| **${ppiffcw}**pp IF FC`
                 }
                 if(fc == 'true'){
                     fcflag = '**FC**'
