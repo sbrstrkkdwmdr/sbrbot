@@ -97,6 +97,7 @@ module.exports = {
             let mapper = JSON.stringify(mapdata['beatmapset'], ['creator']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('creator', '');
             let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20').replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '')
             let maptitle = JSON.stringify(mapdata['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title_unicode', '');
+            let maptitlenormal = JSON.stringify(mapdata['beatmapset'], ['title']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title', '');
             let mapdiff = JSON.stringify(mapdata, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
             let mapcs = JSON.stringify(mapdata, ['cs']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('cs', '');
             let mapar = JSON.stringify(mapdata, ['ar']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('ar', '');
@@ -107,6 +108,11 @@ module.exports = {
             let mapcircle = JSON.stringify(mapdata, ['count_circles']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_circles', '');
             let mapslider = JSON.stringify(mapdata, ['count_sliders']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_sliders', '');
             let mapspinner = JSON.stringify(mapdata, ['count_spinners']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_spinners', '');
+           
+            fullmaptitle = `${maptitle}`
+            if(maptitle != maptitlenormal){
+            fullmaptitle = `${maptitle} \n${maptitlenormal}`
+            }
             /*const mapurl2 = `https://osu.ppy.sh/api/v2/beatmaps/${beatmapid}`
             fetch(mapurl2, {
                 headers: {
@@ -273,6 +279,13 @@ module.exports = {
         if(cppfc == cpp){
             pptotalthingy = `${cpp}**pp** FC`
         }
+        modsifthere = ''
+        if(!cmods == 'NoMod'){
+            modsifthere = `+${cmods}`
+        }
+        if(cmods == 'NoMod'){
+            modsifthere = ''
+        }
                 lifebar2 = (lifebar.replaceAll('|', ' ')).split(/ +/)
                 //fs.appendFileSync(linkfetchlogdir, "\n" + lifebar2)
                 lifebarFULL1 = ''
@@ -320,7 +333,7 @@ module.exports = {
         .setThumbnail(mapbg)
         .addField('**SCORE INFO**', `[**${playername}**](https://osu.ppy.sh/u/${playerid})\nScore set on ${bettertimeset}\n${hit300s}/${hit100s}/${hit50s}/${misses}\nCombo:**${maxcombo}** | ${trueacc}%`, true)
         .addField('**PP**', `${pptotalthingy}`, true)
-        .addField('**MAP**', `[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${beatmapid}) + ${cmods} mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})`, false)
+        .addField('**MAP**', `[${fullmaptitle} \n[${mapdiff}]](https://osu.ppy.sh/b/${beatmapid}) ${modsifthere} mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})`, false)
         .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  cmodbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner, false)
         .setThumbnail(`https://a.ppy.sh/${playerid}`);
         message.reply({embeds: [Embed], files: ['./files/replayhealth.png']})
