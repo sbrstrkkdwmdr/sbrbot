@@ -80,16 +80,16 @@ module.exports = {
                 let playerprevname = JSON.stringify(osudata, ['previous_usernames']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('previous_usernames', '').replaceAll('[', '').replaceAll(']', '');
 
                 if(isNaN(playerrank1)){
-                    playerrank = '---'
+                    playerrank1 = '---'
                 }
                 if(isNaN(playercountryrank1)){
-                    playercountryrank = '---'
+                    playercountryrank1 = '---'
                 }
                 if(playercountryrank1 == 'null'){
-                    playercountryrank == '---'
+                    playercountryrank1 == '---'
                 }
                 if(playerrank1 == 'null'){
-                    playerrank == '---'
+                    playerrank1 == '---'
                 }
                 let playerrank = playerrank1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 let playercountryrank = playercountryrank1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -118,11 +118,22 @@ module.exports = {
                     let lastvishours = (Math.trunc(minlastvisreform/60)) % 24;
                     let lastvisminutes = minlastvisreform % 60;
                     let lastvisdays = Math.trunc((minlastvisreform/60)/24) % 30;
-                    let lastvismonths = Math.trunc(minlastvisreform/60/24/30) % 12;
-                    let lastvisyears = Math.trunc(minlastvisreform/60/24/30/12);
+                    let lastvismonths = Math.trunc(minlastvisreform/60/24/30.437) % 12;
+                    let lastvisyears = Math.trunc(minlastvisreform/525600); //(60/24/30/12)
                     //fs.appendFileSync(osulogdir, "\n" + minlastvisreform)
                     let minlastvisredo = (lastvisyears + "y " + lastvismonths + "m " +  lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
-                
+            if(lastvishours = 0) {
+                minlastvisredo = (lastvisminutes + "m");
+            } //check if under an hour
+            if(lastvisdays = 0) {
+                minlastvisredo = (lastvishours + "h " + lastvisminutes + "m");
+            } //check if under an day
+            if(lastvismonths = 0) {
+                minlastvisredo = (lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
+            } //check if under an month
+            if(lastvisyears = 0) {
+                minlastvisredo = (lastvismonths + "m " +  lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
+            } //check if under an year
             
             if(playerstatus == true ){let Embed = new Discord.MessageEmbed()
             .setColor(0x6DDAFF)

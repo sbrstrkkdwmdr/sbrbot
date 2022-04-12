@@ -88,16 +88,16 @@ module.exports = {
                 //let playerrank = JSON.stringify(osudata['statistics'], ['global_rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('global_rank', '');
 
                 if(isNaN(playerrank1)){
-                    playerrank = '---'
+                    playerrank1 = '---'
                 }
                 if(isNaN(playercountryrank1)){
-                    playercountryrank = '---'
+                    playercountryrank1 = '---'
                 }
                 if(playercountryrank1 == 'null'){
-                    playercountryrank == '---'
+                    playercountryrank1 == '---'
                 }
                 if(playerrank1 == 'null'){
-                    playerrank == '---'
+                    playerrank1 == '---'
                 }
                 let playerrank = playerrank1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 let playercountryrank = playercountryrank1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -122,14 +122,26 @@ module.exports = {
                 let minsincelastvis = (playerlasttoint - currenttime) / (1000 * 60);
                 let minlastvisreform = Math.abs(minsincelastvis).toFixed(0);
                 //let ww = Math.abs()
-                    //console.log(playcountgraph1)
+                    
                     let lastvishours = (Math.trunc(minlastvisreform/60)) % 24;
                     let lastvisminutes = minlastvisreform % 60;
                     let lastvisdays = Math.trunc((minlastvisreform/60)/24) % 30;
-                    let lastvismonths = Math.trunc(minlastvisreform/60/24/30) % 12;
-                    let lastvisyears = Math.trunc(minlastvisreform/60/24/30/12);
+                    let lastvismonths = Math.trunc(minlastvisreform/60/24/30.437) % 12;
+                    let lastvisyears = Math.trunc(minlastvisreform/525600); //(60/24/30/12)
                     //fs.appendFileSync(osulogdir, "\n" + minlastvisreform)
                     let minlastvisredo = (lastvisyears + "y " + lastvismonths + "m " +  lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
+            if(lastvishours = 0) {
+                minlastvisredo = (lastvisminutes + "m");
+            } //check if under an hour
+            if(lastvisdays = 0) {
+                minlastvisredo = (lastvishours + "h " + lastvisminutes + "m");
+            } //check if under an day
+            if(lastvismonths = 0) {
+                minlastvisredo = (lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
+            } //check if under an month
+            if(lastvisyears = 0) {
+                minlastvisredo = (lastvismonths + "m " +  lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
+            } //check if under an year
                     playcounts = ''
                     for(i = 0;i<playcountgraph.length;i++){
                         playcounts += osudata.monthly_playcounts[i].count + ','
