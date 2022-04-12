@@ -198,115 +198,164 @@ module.exports = {
                         trycountstr = `\ntry #${trycount}`
                     }
                 
-                    modenum = 0
-                    let cpolmods = rsmods.toLowerCase();
-                    if(cpolmods.includes('nf') || cpolmods.includes('NF')){
-                        modenum += 1
+                (async () => {
+                    const score = {
+                        beatmap_id: rsmapid,
+                        score: '6795149',
+                        maxcombo: '630',
+                        count50: rs50s,
+                        count100: rs100s,
+                        count300: rs300s,
+                        countmiss: '0',
+                        countkatu: rskatu,
+                        countgeki: rsgeki,
+                        perfect: '0',
+                        enabled_mods: '64',
+                        user_id: rsplayerid,
+                        date: '2022-02-08 05:24:54',
+                        rank: 'S',
+                        score_id: '4057765057'
+                      }
+                      const scorenofc = {
+                        beatmap_id: rsmapid,
+                        score: '6795149',
+                        maxcombo: '630',
+                        count50: rs50s,
+                        count100: rs100s,
+                        count300: rs300s,
+                        countmiss: rs0s,
+                        countkatu: rskatu,
+                        countgeki: rsgeki,
+                        perfect: '0',
+                        enabled_mods: '64',
+                        user_id: rsplayerid,
+                        date: '2022-02-08 05:24:54',
+                        rank: 'S',
+                        score_id: '4057765057'
+                      }
+                      const scoretd = {
+                        beatmap_id: rsmapid,
+                        score: '6795149',
+                        maxcombo: '630',
+                        count50: rs50s,
+                        count100: rs100s,
+                        count300: rs300s,
+                        countmiss: '0',
+                        countkatu: rskatu,
+                        countgeki: rsgeki,
+                        perfect: '0',
+                        enabled_mods: '64',
+                        user_id: rsplayerid,
+                        date: '2022-02-08 05:24:54',
+                        rank: 'S',
+                        score_id: '4057765057'
+                      }
+                      const scorefctd = {
+                        beatmap_id: rsmapid,
+                        score: '6795149',
+                        maxcombo: '630',
+                        count50: rs50s,
+                        count100: rs100s,
+                        count300: rs300s,
+                        countmiss: rs0s,
+                        countkatu: rskatu,
+                        countgeki: rsgeki,
+                        perfect: '0',
+                        enabled_mods: '64',
+                        user_id: rsplayerid,
+                        date: '2022-02-08 05:24:54',
+                        rank: 'S',
+                        score_id: '4057765057'
+                      }
+                    let tdmods = JSON.stringify(rsmods).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rsmods', '').replaceAll('TD');
+                    fs.writeFileSync("debug/rsppcalc.json", JSON.stringify(score, null, 2));
+                    let ppfc = new std_ppv2().setPerformance(score);
+                    let pp =  new std_ppv2().setPerformance(scorenofc);
+                    if(rsmods){
+                        pp =  new std_ppv2().setPerformance(scorenofc).setMods(`${rsmods}`)
+                        ppfc = new std_ppv2().setPerformance(score).setMods(`${rsmods}`)
+                        pptd = new std_ppv2().setPerformance(scoretd).setMods(`${tdmods}`)
+                        ppfctd = new std_ppv2().setPerformance(scorefctd).setMods(`${tdmods}`)
                     }
-                    if(cpolmods.includes('ez') || cpolmods.includes('EZ') ){
-                        modenum += 2
+                    if(!rsmods){
+                        pp =  new std_ppv2().setPerformance(scorenofc).setMods('NM')
+                        ppfc = new std_ppv2().setPerformance(score).setMods('NM')
                     }
-                    if(cpolmods.includes('td') || cpolmods.includes('TD')){
-                        modenum += 4
-                    }
-                    if(cpolmods.includes('hd') || cpolmods.includes('HD')){
-                        modenum += 8
-                    }
-                    if(cpolmods.includes('hr') || cpolmods.includes('HR')){
-                        modenum += 16
-                    }
-                    if(cpolmods.includes('sd') || cpolmods.includes('SD')){
-                        modenum += 32
-                    }
-                    if(cpolmods.includes('dt') || cpolmods.includes('DT')){
-                        modenum += 64
-                    }
-                    if(cpolmods.includes('rx') || cpolmods.includes('rl') || cpolmods.includes('rlx') || cpolmods.includes('RX') || cpolmods.includes('RL') || cpolmods.includes('RLX')){
-                        modenum += 128
-                    }
-                    if(cpolmods.includes('ht') || cpolmods.includes('HT')){
-                        modenum += 256
-                    }
-                    if(cpolmods.includes('nc') || cpolmods.includes('NC')){
-                        modenum += 64//512
-                    }
-                    if(cpolmods.includes('fl') || cpolmods.includes('FL')){
-                        modenum += 1024
-                    }
-                    if(cpolmods.includes('at') || cpolmods.includes('AT')){
-                        modenum += 2048
-                    }
-                    if(cpolmods.includes('so') || cpolmods.includes('SO')){
-                        modenum += 4096
-                    }
-                    if(cpolmods.includes('ap') || cpolmods.includes('AP')){
-                        modenum += 8192
-                    }
-                    if(cpolmods.includes('pf') || cpolmods.includes('PF')){
-                        modenum += 16384
-                    }
-                    if(cpolmods.includes('1k') || cpolmods.includes('1K')){
-                        modenum += 67108864
-                    }
-                    if(cpolmods.includes('2k') || cpolmods.includes('2K')){
-                        modenum += 268435456
-                    }
-                    if(cpolmods.includes('3k') || cpolmods.includes('3K')){
-                        modenum += 134217728
-                    }
-                    if(cpolmods.includes('4k') || cpolmods.includes('4K')){
-                        modenum += 32768
-                    }
-                    if(cpolmods.includes('5k') || cpolmods.includes('5K')){
-                        modenum += 65536
-                    }
-                    if(cpolmods.includes('6k') || cpolmods.includes('6K')){
-                        modenum += 131072
-                    }
-                    if(cpolmods.includes('7k') || cpolmods.includes('7K')){
-                        modenum += 262144
-                    }
-                    if(cpolmods.includes('8k') || cpolmods.includes('8K')){
-                        modenum += 524288
-                    }
-                    if(cpolmods.includes('9k') || cpolmods.includes('9K')){
-                        modenum += 16777216
-                    }
-                    if(cpolmods.includes('fi') || cpolmods.includes('FI')){
-                        modenum += 1048576
-                    }
-                    if(cpolmods.includes('rdm') || cpolmods.includes('RDM')){
-                        modenum += 2097152
-                    }
-                    if(cpolmods.includes('cn') || cpolmods.includes('CN')){
-                        modenum += 4194304
-                    }
-                    if(cpolmods.includes('tp') || cpolmods.includes('TP')){
-                        modenum += 8388608
-                    }
-                    if(cpolmods.includes('kc') || cpolmods.includes('KC')){
-                        modenum += 33554432
-                    }
-                    if(cpolmods.includes('sv2') || cpolmods.includes('s2') || cpolmods.includes('SV2') || cpolmods.includes('S2')){
-                        modenum += 536870912
-                    }
-                    if(cpolmods.includes('mr') || cpolmods.includes('MR')){
-                        modenum += 1073741824
-                    }
-        
-                    let cpolpp = `https://pp.osuck.net/pp?id=${rsmapid}&mods=${modenum}&miss=${rs0s}&acc=${(rsacc * 100).toFixed(2)}&300=${rs300s}&100=${rs100s}&50=${rs50s}&combo=${rscombo}`
-        
-                    fetch(cpolpp, {
-                    }).then(res => res.json())
-                    .then(output4 => {
-                        fs.writeFileSync('debug/cpolppcalc.json', JSON.stringify(output4, null, 2))
-                        rspp = JSON.stringify(output4['pp'], ['current']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('current', '');
-                        ppiffcw = JSON.stringify(output4['pp'], ['fc']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('fc', '');
-                        
-                        SRclean = JSON.stringify(output4['stats']['star'], ['pure']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pure', '');
+                    ;
 
+                if(!rsmods.includes('TD')){
+                    ppw = await pp.compute();
+                    ppiffc1 = await ppfc.compute(rsnochokeacc);
+                    ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                    ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
+                    ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
+                    ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                    ppwrawtotal = ppw['total'];
+                    ppww = Math.abs(ppwrawtotal).toFixed(2);
+                    ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
+
+                    pprawaim = ppw['aim']
+                    pprawspeed = ppw['speed']
+                    pprawacc = ppw['acc']
+                    pprawfl = ppw['fl']
+                    ppcalcacc = ppw['computed_accuracy']
+    
+                    ppfcrawaim = ppiffc1['aim']
+                    ppfcrawspeed = ppiffc1['speed']
+                    ppfcrawacc = ppiffc1['acc']
+                    ppfcrawfl = ppiffc1['fl']
+                    ppfccalcacc = ppiffc1['computed_accuracy']
+    
+                    ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
+                    ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
+                    ppissue = ''
+                    }
+                    if(rsmods.includes('TD')){
+                    ppw = await pptd.compute();
+                    ppiffc1 = await ppfctd.compute(rsnochokeacc);
+                    ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                    ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
+                    ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
+                    ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                    ppwrawtotal = ppw['total'];
+                    ppww = Math.abs(ppwrawtotal).toFixed(2);
+                    ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters   
+
+                    pprawaim = ppw['aim']
+                    pprawspeed = ppw['speed']
+                    pprawacc = ppw['acc']
+                    pprawfl = ppw['fl']
+                    ppcalcacc = ppw['computed_accuracy']
+    
+                    ppfcrawaim = ppiffc1['aim']
+                    ppfcrawspeed = ppiffc1['speed']
+                    ppfcrawacc = ppiffc1['acc']
+                    ppfcrawfl = ppiffc1['fl']
+                    ppfccalcacc = ppiffc1['computed_accuracy']
+    
+                    ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
+                    ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
+                    ppissue = `\n(calculations **don't** include TD)`
+                    }
+
+                //fs.appendFileSync(osulogdir, "\n" + `${pprawaim} | ${pprawspeed} | ${pprawacc} | ${pprawfl} | ${ppcalcacc}`)
+                //fs.appendFileSync(osulogdir, "\n" + `${ppfcrawaim} | ${ppfcrawspeed} | ${ppfcrawacc} | ${ppfcrawfl} | ${ppfccalcacc}`)
+
+                if(rspp == 'null' || rspp == 'NaN'){
+                      rspp = ppww
+                  }
+                  /* => {
+                    aim: 108.36677305976224,
+                    speed: 121.39049498160061,
+                    fl: 514.2615576494688,
+                    acc: 48.88425340242263,
+                    total: 812.3689077733752
+                  } */
+                
+               // if(rspp = "null"){
+                //if(rsgrade != 'F'){
                     if(fc == 'false'){
-                        fcflag = `| **${ppiffcw}**pp IF **${rsnochokeacc}%** FC`
+                        fcflag = `| **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`
                     }
                     if(fc == 'true'){
                         fcflag = '**FC**'
@@ -345,6 +394,18 @@ module.exports = {
                 if(rsmods){
                     rsmodsembed = '+**' + rsmods + '**'
                 }
+
+                if(rsmods){
+                calcmods = rsmods.replace('TD', '')
+                modtoarray1 = calcmods.replace(/(.{2})/g, "$1 ");
+                modtoarray2 = modtoarray1.slice(0, -1)
+                modsforsr = modtoarray2.split(/ +/)
+                starRating = await calculateStarRating(rsmapid, modsforsr);
+                SR = JSON.stringify(starRating).replace('{', '').replace(':', '').replace('}', '').replace(calcmods, '').replace('nomod', '').replaceAll('"', '')    
+                SRclean = Math.abs(SR).toFixed(2)}
+                if(!rsmods || rsmods == 'TD'){
+                    SRclean = rsmapstar
+                }
                     rscoverlist = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['list']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('list', '').replace('https', 'https:');
                     let Embed = new Discord.MessageEmbed()
                         .setColor(0x9AAAC0)
@@ -380,7 +441,7 @@ module.exports = {
                     message.reply({ embeds: [Embed]})
                     }}*/
             }
-            )
+            )()
             } catch(error){
                 if(error.toString().includes('replaceAll')){
                     message.reply("Error - play data not found and/or json sent no data")
