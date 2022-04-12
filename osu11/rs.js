@@ -299,7 +299,7 @@ module.exports = {
                     fetch(cpolpp, {
                     }).then(res => res.json())
                     .then(output4 => {
-                        fs.writeFileSync('cpolppcalc.json', JSON.stringify(output4, null, 2))
+                        fs.writeFileSync('debug/cpolppcalc.json', JSON.stringify(output4, null, 2))
                         rspp = JSON.stringify(output4['pp'], ['current']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('current', '');
                         ppiffcw = JSON.stringify(output4['pp'], ['fc']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('fc', '');
                         
