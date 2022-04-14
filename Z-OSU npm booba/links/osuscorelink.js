@@ -149,10 +149,10 @@ module.exports = {
                 let ppfc = new std_ppv2().setPerformance(score);
                 let pp =  new std_ppv2().setPerformance(scorenofc);
                 if(mode == 'osu'){if(scoremods){
-                    pp =  new std_ppv2().setPerformance(scorenofc).setMods(`${tdmods}`)
-                    ppfc = new std_ppv2().setPerformance(score).setMods(`${tdmods}`)
-                    /*pptd = new std_ppv2().setPerformance(scorenofc).setMods(`${tdmods}`)
-                    ppfctd = new std_ppv2().setPerformance(score).setMods(`${tdmods}`)*/
+                    pp =  new std_ppv2().setPerformance(scorenofc).setMods(`${scoremods}`)
+                    ppfc = new std_ppv2().setPerformance(score).setMods(`${scoremods}`)
+                    pptd = new std_ppv2().setPerformance(scorenofc).setMods(`${tdmods}`)
+                    ppfctd = new std_ppv2().setPerformance(score).setMods(`${tdmods}`)
                 }
                 if(!scoremods){
                     pp =  new std_ppv2().setPerformance(scorenofc).setMods('NM')
@@ -182,8 +182,8 @@ module.exports = {
                     pp =  new mania_ppv2().setPerformance(scorenofc).setMods('NM')
                     ppfc = new mania_ppv2().setPerformance(score).setMods('NM')
                 }}
-                ppw = await pp.compute();
-                ppiffc1 = await ppfc.compute();
+                ppw = await pptd.compute();
+                ppiffc1 = await ppfctd.compute(rsnochokeacc);
                 ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
                 ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
                 ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
@@ -247,16 +247,13 @@ module.exports = {
                     modsz = ''
                 }
             if(scorepp == 'null' || !scorepp){
-                finalscorepp = ppww
+                scorepp = ppww
             }
-            if(scorepp){
-                finalscorepp = parseFloat(scorepp).toFixed(2)
-            }
-            if(scoremods){calcmods = scoremods.replace('TD', '')
+            if(scoremods){calcmods = rsmods.replace('TD', '')
             modtoarray1 = calcmods.replace(/(.{2})/g, "$1 ");
             modtoarray2 = modtoarray1.slice(0, -1)
             modsforsr = modtoarray2.split(/ +/)
-            starRating = await calculateStarRating(mapid, modsforsr);
+            starRating = await calculateStarRating(rsmapid, modsforsr);
             SR = JSON.stringify(starRating).replace('{', '').replace(':', '').replace('}', '').replace(calcmods, '').replace('nomod', '').replaceAll('"', '')    
             SRclean = Math.abs(SR).toFixed(2)}
             if(!scoremods || scoremods == 'TD'){
@@ -268,7 +265,7 @@ module.exports = {
                 .setURL(`https://osu.ppy.sh/scores/${mode}/${pickeduserX}`)
                 .addField('MAP DETAILS', `**[${mapname} [${mapdiff}]](https://osu.ppy.sh/b/${mapid})** ${modsz} ${SRclean}⭐`, false)
                 .addField('SCORE DETAILS', `**${(acc * 100).toFixed(2)}%** | ${grade}\n${hitlist}\n**${scorecombo}x**`, false)
-                .addField('PP', `**${finalscorepp}**pp ${fcflag}`, false)
+                .addField('PP', `**${scorepp}**pp ${fcflag}`, false)
                 .setImage(mapbg)
                 ;
                 message.reply({ embeds: [embed]})
