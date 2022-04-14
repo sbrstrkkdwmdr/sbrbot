@@ -17,24 +17,24 @@ module.exports = {
                 pickeduserX = findname.get('description')}
                 catch (error) {
                 }
-                try{
-                    findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
-                    pickedmode = findname.get('mode')}
-                    catch (error) {
-                    pickedmode = 'osu'
-                    }
             }
-            if(pickeduserX){
-                try{
-                    findname = await userdatatags.findOne({ where: { description: pickeduserX}})
-                    pickedmode = findname.get('mode')
-                } catch (error) {
-                    fs.appendFileSync(osulogdir, "\n" + error)
+        if(pickeduserX && (!pickedmode || pickedmode == undefined)){
+            try{
+                findname = await userdatatags.findOne({ where: { description: pickeduserX}})
+                pickedmode = findname.get('mode')
+            } catch (error) {
+                fs.appendFileSync(osulogdir, "\n" + error)
+            }
+        }
+        if(!pickedmode){
+            try{
+                findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
+                pickedmode = findname.get('mode')
                 }
-            }
-            if(!pickedmode){
-                pickedmodex = 'osu'
-            }
+                catch (error) {
+                pickedmode = 'osu'
+                }
+        }
             else if(pickedmode == 'osu' || pickedmode == 'o' || pickedmode == 'standard' || options.getString('mode') == 'std'){
                 pickedmodex = 'osu'
             }
