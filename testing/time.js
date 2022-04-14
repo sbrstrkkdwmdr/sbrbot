@@ -1,6 +1,7 @@
-let currentTime = new Date();
-let expireTime = new Date('2022-02-01T06:34:50');
-
-let minutes = (expireTime - currentTime) / (1000 * 60);
-
-console.log(minutes);
+const ms = require('ms')
+let time = ('10d 3m 3h').split(/ +/);
+let totaltime = 0
+for(let i = 0; i < time.length; i++){
+    totaltime += ms(time[i])
+}
+console.log(totaltime)
