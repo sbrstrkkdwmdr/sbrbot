@@ -148,6 +148,9 @@ module.exports = {
                 }
                 text = text + `**${i+1}**\n ${mods2} | ${maptime}\n**${(acc*100).toFixed(2)}%** | **${pp}**pp | **${grade}**\n${combo}x/**${mapmaxcombo}**x | ${mapscore300s}/${mapscore100s}/${mapscore50s}/${mapscore0s}\n\n`
             }
+            if(text == '' || text == ' '){
+                text = '**no scores found**'
+            }
                     let Embed = new Discord.MessageEmbed()
                     .setTitle(`${mapartist} - ${maptitle}\n[${mapdiff}]`)
                     //.setThumbnail(`https://a.ppy.sh/${playerid}`)
