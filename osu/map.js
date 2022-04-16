@@ -4,6 +4,7 @@ const fs = require('fs');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const { calculateStarRating } = require('osu-sr-calculator')
 const { osulogdir } = require('../logconfig.json')
+const { doubletimear, halftimear, easymultiplier, hardrockmultiplier } = require('../calculations/approachrate')
 
 module.exports = {
     name: 'map',
@@ -160,8 +161,8 @@ module.exports = {
 
               (async () => {
 
-                    if(moddetect.includes('DT') && !moddetect.includes('HR') && !moddetect.includes('EZ')) {
-                    mapar = Math.abs(((maparNM*2)+13)/3).toFixed(2);
+                if(moddetect.includes('DT') && !moddetect.includes('HR') && !moddetect.includes('EZ')) {
+                    mapar = doubletimear(maparNM);
                     mapod = mapodNM + "^";
                     maphp = maphpNM + "^";
                     mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
@@ -176,7 +177,7 @@ module.exports = {
                     recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                 }
                 if(moddetect.includes('HT') && !moddetect.includes('HR') && !moddetect.includes('EZ')) {
-                    mapar = Math.abs(((maparNM*1.33)-4.3)).toFixed(2);
+                    mapar = halftimear(maparNM);
                     mapod = mapodNM + "⌄";
                     maphp = maphpNM + "⌄";
                     mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
@@ -191,10 +192,10 @@ module.exports = {
                     recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                 }
                 if(moddetect.includes('HR') && !moddetect.includes('HT') && !moddetect.includes('DT')) {
-                    mapcs = Math.abs(mapcsNM * 1.5).toFixed(2)
-                    mapar = Math.abs(maparNM * 1.5).toFixed(2)
-                    maphp = Math.abs(maphpNM * 1.5).toFixed(2)
-                    mapod = Math.abs(mapodNM * 1.5).toFixed(2)
+                    mapcs = Math.abs(mapcsNM * 1.3).toFixed(2)
+                    mapar = Math.abs(maparNM * 1.4).toFixed(2)
+                    maphp = Math.abs(maphpNM * 1.4).toFixed(2)
+                    mapod = Math.abs(mapodNM * 1.4).toFixed(2)
                     if(mapar > 10) {
                         mapar = 10
                     }
@@ -207,21 +208,19 @@ module.exports = {
 
                 }
                 if(moddetect.includes('EZ') && !moddetect.includes('HT') && !moddetect.includes('DT')) {
-                    mapcs = Math.abs(mapcsNM / 2)
-                    mapar = Math.abs(maparNM / 2)
-                    maphp = Math.abs(maphpNM / 2)
-                    mapod = Math.abs(mapodNM / 2)
+                    mapcs = Math.abs(mapcsNM / 2).toFixed(2)
+                    mapar = Math.abs(maparNM / 2).toFixed(2)
+                    maphp = Math.abs(maphpNM / 2).toFixed(2)
+                    mapod = Math.abs(mapodNM / 2).toFixed(2)
                 }
 
-                if(moddetect.includes('EZ') && moddetect.includes('HR')) return interaction.editReply('invalid mods!');
-                if(moddetect.includes('DT') && moddetect.includes('HT')) return interaction.editReply('invalid mods!');
+                if(moddetect.includes('EZ') && moddetect.includes('HR')) return message.reply('invalid mods!');
+                if(moddetect.includes('DT') && moddetect.includes('HT')) return message.reply('invalid mods!');
 
                 if(moddetect.includes('EZ') && moddetect.includes('HT')) {
                     mapcs = Math.abs(mapcsNM / 2);
-                    mapar = Math.abs(((maparNM / 2)*1.33)-4.3)
-                    if(Number.isInteger(mapar * 100) == false ){
-                        mapar = mapar.toFixed(2)
-                    }
+                    mapar = Math.abs(halftimear(maparNM/2))
+
                     maphp = Math.abs(maphpNM / 2) + "⌄";
                     mapod = Math.abs(mapodNM / 2) + "⌄";
                     mapbpm = Math.abs(mapbpmNM * 0.75)
@@ -234,10 +233,8 @@ module.exports = {
                 }
                 if(moddetect.includes('EZ') && moddetect.includes('DT')) {
                     mapcs = Math.abs(mapcsNM / 2);
-                    mapar = Math.abs(((maparNM / 2)+13)/3)
-                    if(Number.isInteger(mapar * 100) == false ){
-                        mapar = mapar.toFixed(2)
-                    }
+                    mapar = Math.abs(doubletimear(maparNM/2))
+
                     maphp = Math.abs(maphpNM / 2) + "^";
                     mapod = Math.abs(mapodNM / 2) + "^";
                     mapbpm = Math.abs(mapbpmNM * 1.5)
@@ -255,13 +252,11 @@ module.exports = {
                     recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                 }
                 if(moddetect.includes('HR') && moddetect.includes('HT')) {
-                    mapcs = Math.abs(mapcsNM * 1.5)
-                    mapar = Math.abs(((maparNM * 1.5)/1.33)-4.3)
-                    maphp = Math.abs(maphpNM * 1.5)//.toFixed(2) //+ "⌄";
-                    mapod = Math.abs(mapodNM * 1.5)//.toFixed(2) //+ "⌄";
-                    if(Number.isInteger(mapar * 100) == false ){
-                        mapar = mapar.toFixed(2)
-                    }
+                    mapcs = Math.abs(mapcsNM * 1.3)
+                    mapar = Math.abs(halftimear(maparNM * 1.4))
+                    maphp = Math.abs(maphpNM * 1.4)//.toFixed(2) //+ "⌄";
+                    mapod = Math.abs(mapodNM * 1.4)//.toFixed(2) //+ "⌄";
+
                     if(maphp >= 10) {
                         maphp = 10 + "⌄"
                     }
@@ -290,15 +285,13 @@ module.exports = {
 
                 }
                 if(moddetect.includes('HR') && moddetect.includes('DT')) {
-                    mapcs = Math.abs(mapcsNM * 1.5);
-                    mapar = Math.abs((((maparNM * 1.5)*2)+13)/3)//.toFixed(2);
-                    if(Number.isInteger(mapar * 100) == false ){
-                        mapar = mapar.toFixed(2)
-                    }
+                    mapcs = Math.abs(mapcsNM * 1.3);
+                    mapar = Math.abs(doubletimear(maparNM * 1.4))
+
                     //fs.appendFileSync(osulogdir, "\n" + Number.isInteger(mapar * 100))
-                    maphp = Math.abs(maphpNM * 1.5)// + "^";
-                    mapod = Math.abs(mapodNM * 1.5)// + "^";
-                    mapbpm = Math.abs(mapbpmNM * 1.5)
+                    maphp = Math.abs(maphpNM * 1.4).toFixed(2)// + "^";
+                    mapod = Math.abs(mapodNM * 1.4).toFixed(2)// + "^";
+                    mapbpm = Math.abs(mapbpmNM * 1.4).toFixed(2)
                     if(Number.isInteger(mapbpm * 100) == false ){
                         mapbpm = mapbpm.toFixed(2)
                     }
