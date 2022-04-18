@@ -7,6 +7,8 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { exec } = require("child_process");
 const { osulogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
+
 
 module.exports = {
     name: 'osutop',
@@ -183,6 +185,7 @@ module.exports = {
                     fs.appendFileSync(osulogdir, "\n" + "Error - play data not found and/or json sent no data")}
                     else{message.reply('unknown error')}
                 fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                 fs.appendFileSync(osulogdir, "\n" + "")
             }
             } ) 
@@ -190,10 +193,12 @@ module.exports = {
                 message.reply("Error - account not found")
                 fs.appendFileSync(osulogdir, "\n" + "Error account not found")
                 fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                 fs.appendFileSync(osulogdir, "\n" + "")
             }})
-            } catch(err){
-                fs.appendFileSync(osulogdir, "\n" + err)
+            } catch(error){
+                fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
             } 
             
     }

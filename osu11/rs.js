@@ -4,6 +4,8 @@ const fs = require('fs');
 const { std_ppv2 } = require('booba');
 const { calculateStarRating } = require('osu-sr-calculator')
 const { osulogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
+
 
 module.exports = {
     name: 'rs',
@@ -18,6 +20,7 @@ module.exports = {
             }
             catch (error) {
                 fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
             }
         }
 
@@ -406,6 +409,7 @@ module.exports = {
                     fs.appendFileSync(osulogdir, "\n" + "Error - play data not found and/or json sent no data")}
                     else{message.reply('unknown error')}
                 fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                 fs.appendFileSync(osulogdir, "\n" + "")
             }
             }catch(error){
@@ -414,6 +418,7 @@ module.exports = {
                     fs.appendFileSync(osulogdir, "\n" + "Error - play data not found and/or json sent no data")}
                     else{message.reply('unknown error')}
                 fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                 fs.appendFileSync(osulogdir, "\n" + "")
             }});
                 } catch(error){
@@ -422,10 +427,12 @@ module.exports = {
                         fs.appendFileSync(osulogdir, "\n" + "error - account not found and/or json sent no data")}
                         else{message.reply('unknown error')}
                     fs.appendFileSync(osulogdir, "\n" + error)
+                    fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                     fs.appendFileSync(osulogdir, "\n" + "")
                 }})
-            } catch(err){
-                fs.appendFileSync(osulogdir, "\n" + err)
+            } catch(error){
+                fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
             }
             
     }

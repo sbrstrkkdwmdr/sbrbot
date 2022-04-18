@@ -1,5 +1,7 @@
 const fs = require('fs')
 const { osulogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
+
 
 module.exports = {
     name: 'osuset',

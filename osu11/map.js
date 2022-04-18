@@ -5,6 +5,8 @@ const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const { calculateStarRating } = require('osu-sr-calculator')
 const { osulogdir } = require('../logconfig.json')
 const { doubletimear, halftimear, easymultiplier, hardrockmultiplier } = require('../calculations/approachrate')
+const { getStackTrace } = require('../somestuffidk/log')
+
 
 module.exports = {
     name: 'map',
@@ -454,6 +456,7 @@ module.exports = {
     } catch(error){
 				message.reply("error")
 				fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
 				fs.appendFileSync(osulogdir, "\n" + "")
                 console.groupEnd()
                 console.groupEnd()
@@ -462,11 +465,13 @@ module.exports = {
             });
         } catch(error){
             fs.appendFileSync(osulogdir, "\n" + error)
+            fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()
         } } catch(error) {
             fs.appendFileSync(osulogdir, "\n" + error)
+            fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()

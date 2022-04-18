@@ -4,6 +4,8 @@ const fs = require('fs');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const { calculateStarRating } = require('osu-sr-calculator')
 const { osulogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
+
 
 module.exports = {
     name: 'rsplus',
@@ -255,6 +257,7 @@ module.exports = {
                     fs.appendFileSync(osulogdir, "\n" + "Error - play data not found and/or json sent no data")}
                     else{interaction.channel.send('unknown error')}
                     fs.appendFileSync(osulogdir, "\n" + error)
+                    fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                     fs.appendFileSync(osulogdir, "\n" + "")
                     console.groupEnd()
             }
@@ -264,6 +267,7 @@ module.exports = {
                     fs.appendFileSync(osulogdir, "\n" + "error - account not found and/or json sent no data")}
                     else{interaction.channel.send('unknown error')}
                     fs.appendFileSync(osulogdir, "\n" + error)
+                    fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                     fs.appendFileSync(osulogdir, "\n" + "")
                     console.groupEnd()
             }});
@@ -273,11 +277,13 @@ module.exports = {
                         fs.appendFileSync(osulogdir, "\n" + "error - account not found and/or json sent no data")}
                         else{interaction.channel.send('unknown error')}
                         fs.appendFileSync(osulogdir, "\n" + error)
+                        fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                         fs.appendFileSync(osulogdir, "\n" + "")
                         console.groupEnd()
                 }})
-            } catch(err){
-                fs.appendFileSync(osulogdir, "\n" + err)
+            } catch(error){
+                fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                 fs.appendFileSync(osulogdir, "\n" + "")
                 console.groupEnd()
             }

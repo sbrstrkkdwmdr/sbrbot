@@ -4,6 +4,7 @@ const fs = require('fs');
 const { access_token } = require('../debug/osuauth.json');
 const ChartJsImage = require('chartjs-to-image');
 const { osulogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osu',
@@ -196,13 +197,15 @@ module.exports = {
                     interaction.channel.send("Error - account not found (or some other error)")
                     fs.appendFileSync(osulogdir, "\n" + "Error account not found")
                     fs.appendFileSync(osulogdir, "\n" + error)
+                    fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                     console.log(error)
                     fs.appendFileSync(osulogdir, "\n" + "")
                     console.groupEnd()
                 }
         });
-        } catch(err){
-            fs.appendFileSync(osulogdir, "\n" + err)
+        } catch(error){
+            fs.appendFileSync(osulogdir, "\n" + error)
+            fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
             fs.appendFileSync(osulogdir, "\n" + "")
             console.log(err)
             console.groupEnd()

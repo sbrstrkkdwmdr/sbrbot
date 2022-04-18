@@ -1,5 +1,6 @@
 const fs = require('fs')
 const { osulogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osuset',
@@ -117,7 +118,9 @@ else if(type == 'steam'){
                 }
                 
                 interaction.reply('Something went wrong with editing steam username.');
-                return fs.appendFileSync(osulogdir, "\n" + error);
+                fs.appendFileSync(osulogdir, "\n" + error);
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
+                return;
             }}
         else{
             //return interaction.channel.send("error - can only update mode or username")

@@ -6,6 +6,8 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { exec } = require("child_process");
 const { osulogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
+
 
 module.exports = {
     name: 'osubest',
@@ -116,6 +118,8 @@ module.exports = {
     }
     )} catch (error) {
         message.reply(error)
+        fs.appendFileSync(osulogdir, "\n" + error)
+        fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
     }
     
 

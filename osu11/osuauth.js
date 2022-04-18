@@ -2,6 +2,8 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { osulogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
+
 
 module.exports = {
     name: 'osuauth',
@@ -35,6 +37,7 @@ module.exports = {
             ;
         } catch(error){
             fs.appendFileSync(osulogdir, "\n" + error)
+            fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
             message.reply("error")
             console.groupEnd()
         }

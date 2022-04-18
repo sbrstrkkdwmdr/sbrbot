@@ -3,6 +3,7 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const { osulogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'pp',
@@ -333,6 +334,7 @@ module.exports = {
     } catch(error){
 				interaction.channel.send("error")
 				fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
 				fs.appendFileSync(osulogdir, "\n" + "")
                 console.groupEnd()
                 console.groupEnd()
@@ -341,11 +343,13 @@ module.exports = {
             });
         } catch(error){
             fs.appendFileSync(osulogdir, "\n" + error)
+            fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()
         } } catch(error) {
             fs.appendFileSync(osulogdir, "\n" + error)
+            fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()

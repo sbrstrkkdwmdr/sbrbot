@@ -3,6 +3,7 @@ const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
 const { osulogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'tsfm',
@@ -237,8 +238,7 @@ module.exports = {
             } catch(error){
                     interaction.channel.send("Error - no data")
                     fs.appendFileSync(osulogdir, "\n1" + error)
-                    fs.appendFileSync(osulogdir, "\n" + error.columnNumber)
-                    //error.columnNumber 
+                    fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                     fs.appendFileSync(osulogdir, "\n" + "")
                     console.log(error)
                 }
@@ -247,6 +247,7 @@ module.exports = {
                 interaction.channel.send("Error - account not found")
                 fs.appendFileSync(osulogdir, "\n" + "Error account not found")
                 fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                 fs.appendFileSync(osulogdir, "\n" + "")
             }})
         }   catch(err){

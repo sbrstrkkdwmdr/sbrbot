@@ -3,6 +3,9 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../debug/osuauth.json');
 const { osulogdir } = require('../logconfig.json')
+//                fs.appendFileSync(osulogdir, "\n" + error)
+const { getStackTrace } = require('../somestuffidk/log')
+
 
 module.exports = {
     name: 'osu',
@@ -158,6 +161,7 @@ module.exports = {
                     message.reply("Error - account not found (or some other error)")
                     fs.appendFileSync(osulogdir, "\n" + "Error account not found")
                     fs.appendFileSync(osulogdir, "\n" + error)
+                    fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                     fs.appendFileSync(osulogdir, "\n" + "")
                     
                 }

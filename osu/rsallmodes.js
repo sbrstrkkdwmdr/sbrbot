@@ -4,6 +4,7 @@ const fs = require('fs');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const { calculateStarRating } = require('osu-sr-calculator')
 const { osulogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'rsallmodes',
@@ -16,6 +17,8 @@ module.exports = {
                 findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
                 pickeduserX = findname.get('description')}
                 catch (error) {
+                    fs.appendFileSync(osulogdir, "\n" + error)
+                    fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                 }
             }
         if(pickeduserX && (!pickedmode || pickedmode == undefined)){
@@ -24,6 +27,7 @@ module.exports = {
                 pickedmode = findname.get('mode')
             } catch (error) {
                 fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
             }
         }
         if(!pickedmode){
@@ -440,6 +444,7 @@ module.exports = {
                     fs.appendFileSync(osulogdir, "\n" + "Error - play data not found and/or json sent no data")}
                     else{interaction.channel.send('unknown error')}
                     fs.appendFileSync(osulogdir, "\n" + error)
+                    fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                     fs.appendFileSync(osulogdir, "\n" + "")
                     console.groupEnd()
             }
@@ -449,6 +454,7 @@ module.exports = {
                     fs.appendFileSync(osulogdir, "\n" + "error - account not found and/or json sent no data")}
                     else{interaction.channel.send('unknown error')}
                     fs.appendFileSync(osulogdir, "\n" + error)
+                    fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                     fs.appendFileSync(osulogdir, "\n" + "")
                     console.groupEnd()
             }});
@@ -458,11 +464,13 @@ module.exports = {
                         fs.appendFileSync(osulogdir, "\n" + "error - account not found and/or json sent no data")}
                         else{interaction.channel.send('unknown error')}
                         fs.appendFileSync(osulogdir, "\n" + error)
+                        fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                         fs.appendFileSync(osulogdir, "\n" + "")
                         console.groupEnd()
                 }})
-            } catch(err){
-                fs.appendFileSync(osulogdir, "\n" + err)
+            } catch(error){
+                fs.appendFileSync(osulogdir, "\n" + error)
+                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                 fs.appendFileSync(osulogdir, "\n" + "")
                 console.groupEnd()
             }
