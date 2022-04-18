@@ -1,5 +1,7 @@
 const fs = require('fs')
 const { helplogdir } = require('../logconfig.json')
+const { findHCF, findLCM, pythag, sigfig } = require('../calculations/other')
+const {doubletimear, halftimear} = require('../calculations/approachrate')
 
 module.exports = {
     name: 'math',
@@ -46,51 +48,27 @@ module.exports = {
                 message.reply(`${problemfactorial}`)
                 break;
             case 'hcf':case 'highestcommonfactor':
-                if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
-                if(part1 != Math.round(part1) || part2 != Math.round(part2)) return message.reply("Error - numbers must be integers");
-                if (part1 < 1 || part2 < 1) return message.reply("Error - values are too low");
-                function findHCF(x, y) {
-                    
-                    while (Math.max(x, y) % Math.min(x, y) != 0) {
-                       if (x > y) {
-                          x %= y;
-                       }
-                       else {
-                          y %= x;
-                       }
-                    }
-                    return Math.min(x, y);
-                }
-                let problemhcf = findHCF(part1, part2);
-                message.reply(`${problemhcf}`)
+                    if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
+                    if(part1 != Math.round(part1) || part2 != Math.round(part2)) return message.reply("Error - numbers must be integers");
+                    if (part1 < 1 || part2 < 1) return message.reply("Error - values are too low");
+                    let problemhcf = findHCF(part1, part2);
+                    message.reply(`${problemhcf}`)
                 break;
             case 'lcm':case 'lowestcommonmultiple':
-                if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
-                if(part1 != Math.round(part1) || part2 != Math.round(part2)) return message.reply("Error - numbers must be integers");
-                if (part1 < 1 || part2 < 1) return message.reply("Error - values are too low");
-                let findLCM = (n1, n2) => {
-                    
-                    let lar = Math.max(n1, n2);
-                    let small = Math.min(n1, n2);
-                    
-                    
-                    let i = lar;
-                    while(i % small !== 0){
-                      i += lar;
-                    }
-                    
-                    
-                    return i;
-                  }
-                  
-                  let problemlcm = findLCM(part1, part2);
-                  message.reply(`${problemlcm}`)
-                  break;
+                    if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
+                    if(part1 != Math.round(part1) || part2 != Math.round(part2)) return message.reply("Error - numbers must be integers");
+                    if (part1 < 1 || part2 < 1) return message.reply("Error - values are too low");
+                    let problemlcm = findLCM(part1, part2);
+                    message.reply(`${problemlcm}`)
+                    break;
             case 'ardt':case 'approachratedoubletime':case 'arifdt':
-                let ARDT1 = Math.abs(part1 * 2 + 13);
-                let ARDT2 = Math.abs(ARDT1 / 3);
-                    message.reply(`${ARDT2}`)
+                    let artodt = doubletimear(part1)
+                    message.reply(`${artodt}`)
                 break;
+            case 'arht':case 'approachratehalftime':case 'arifht':
+                let artoht = halftimear(part1)
+                message.reply(`${artoht}`)
+            break;
             case 'circumference':
                 let circumference1 = Math.abs(2* Math.PI * part1 ); 
                 message.reply(`${circumference1}`)
@@ -98,6 +76,15 @@ module.exports = {
             case 'circlearea':
                 let area = Math.abs(Math.PI*(part1**2))
                 message.reply(`${area}`)
+                break;
+            case 'pythag':case 'hypotenuse':
+                if(!part2 || isNaN(part2)) return message.reply("error") 
+                let pythaganswer = pythag(part1, part2);
+                message.reply(`${pythaganswer}`)
+                break;
+            case 'sigfig':case 'scientificnotation':
+                let sigfiganswer = sigfig(part1, part2)
+                message.reply(`${sigfiganswer}`)
                 break;
             case 'help':
                 let helpembed = new Discord.MessageEmbed()

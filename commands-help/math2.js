@@ -1,5 +1,7 @@
 const fs = require('fs')
 const { helplogdir } = require('../logconfig.json')
+const { findHCF, findLCM, pythag, sigfig } = require('../calculations/other')
+const {doubletimear, halftimear} = require('../calculations/approachrate')
 
 module.exports = {
     name: 'math2',
@@ -28,39 +30,19 @@ module.exports = {
             mathtype = 'help'
         }
         switch(mathtype){
-            case 'add':case '+':case 'addition':case 'sum':
-                if(isNaN(part1) || isNaN(part2)) return interaction.reply("Error - NaN");
-                let problemadd = Math.abs(part1 + part2);
-                interaction.reply(`${problemadd}`)
-                break;
-            case 'subtract':case '-':case 'minus':case 'subtraction':case 'difference':
-                if(isNaN(part1) || isNaN(part2)) return interaction.reply("Error - NaN");
-                let problemsubtract = Math.abs(part1 - part2);
-                interaction.reply(`${problemsubtract}`)
-                break;
-            case 'multiply':case '*':case 'multiplication':case 'product':
-                if(isNaN(part1) || isNaN(part2)) return interaction.reply("Error - NaN");
-                let problemmultiply = Math.abs(part1 * part2);
-                interaction.reply(`${problemmultiply}`)
-                break;
-            case 'divide':case '/':case 'division':
-                if(isNaN(part1) || isNaN(part2)) return interaction.reply("Error - NaN");
-                let problemdivide = Math.abs(part1 / part2);
-                interaction.reply(`${problemdivide}`)
-                break;
             case 'squareroot':case 'sqrt':
-                if(isNaN(part1)) return interaction.reply("Error - NaN");
+                if(isNaN(part1)) return message.reply("Error - NaN");
                 let problemsqrt = Math.sqrt(part1)
-                interaction.reply(`${problemsqrt}`)
+                message.reply(`${problemsqrt}`)
                 break;
             case 'square':
-                if(isNaN(part1)) return interaction.reply("Error - NaN");
-                if (part1 < 1) return interaction.reply("Error - values are too low");
+                if(isNaN(part1)) return message.reply("Error - NaN");
+                if (part1 < 1) return message.reply("Error - values are too low");
                 let problemsquare = Math.abs(part1 * part1)
-                interaction.reply(`${problemsquare}`)
+                message.reply(`${problemsquare}`)
                 break;
             case 'factorial':case '!':
-                if(isNaN(part1)) return interaction.reply("Error - NaN");
+                if(isNaN(part1)) return message.reply("Error - NaN");
                 function factorial(part1){
                     if(part1 == 0 || part1 == 1){
                         return 1;
@@ -69,73 +51,46 @@ module.exports = {
                     }
                 }
                 problemfactorial = factorial(part1)
-                interaction.reply(`${problemfactorial}`)
+                message.reply(`${problemfactorial}`)
                 break;
             case 'hcf':case 'highestcommonfactor':
-                if(isNaN(part1) || isNaN(part2)) return interaction.reply("Error - NaN");
-                if(part1 != Math.round(part1) || part2 != Math.round(part2)) return interaction.reply("Error - numbers must be integers");
-                if (part1 < 1 || part2 < 1) return interaction.reply("Error - values are too low");
-                function findHCF(x, y) {
-                    
-                    while (Math.max(x, y) % Math.min(x, y) != 0) {
-                       if (x > y) {
-                          x %= y;
-                       }
-                       else {
-                          y %= x;
-                       }
-                    }
-                    return Math.min(x, y);
-                }
-                let problemhcf = findHCF(part1, part2);
-                interaction.reply(`${problemhcf}`)
+                    if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
+                    if(part1 != Math.round(part1) || part2 != Math.round(part2)) return message.reply("Error - numbers must be integers");
+                    if (part1 < 1 || part2 < 1) return message.reply("Error - values are too low");
+                    let problemhcf = findHCF(part1, part2);
+                    message.reply(`${problemhcf}`)
                 break;
             case 'lcm':case 'lowestcommonmultiple':
-                if(isNaN(part1) || isNaN(part2)) return interaction.reply("Error - NaN");
-                if(part1 != Math.round(part1) || part2 != Math.round(part2)) return interaction.reply("Error - numbers must be integers");
-                if (part1 < 1 || part2 < 1) return interaction.reply("Error - values are too low");
-                let findLCM = (n1, n2) => {
-                    
-                    let lar = Math.max(n1, n2);
-                    let small = Math.min(n1, n2);
-                    
-                    
-                    let i = lar;
-                    while(i % small !== 0){
-                      i += lar;
-                    }
-                    
-                    
-                    return i;
-                  }
-                  
-                  let problemlcm = findLCM(part1, part2);
-                  interaction.reply(`${problemlcm}`)
-                  break;
+                    if(isNaN(part1) || isNaN(part2)) return message.reply("Error - NaN");
+                    if(part1 != Math.round(part1) || part2 != Math.round(part2)) return message.reply("Error - numbers must be integers");
+                    if (part1 < 1 || part2 < 1) return message.reply("Error - values are too low");
+                    let problemlcm = findLCM(part1, part2);
+                    message.reply(`${problemlcm}`)
+                    break;
             case 'ardt':case 'approachratedoubletime':case 'arifdt':
-                let ARDT1 = Math.abs(part1 * 2 + 13);
-                let ARDT2 = Math.abs(ARDT1 / 3);
-                    interaction.reply(`${ARDT2}`)
+                    let artodt = doubletimear(part1)
+                    message.reply(`${artodt}`)
                 break;
-           /* case 'arht':
-                let arht1 = Math.abs(part1 * 3)
-                let arht2 = Math.abs(arht1 - 13)
-                let arht3 = Math.abs(arht2 / 2)
-                interaction.reply(`${arht3}`)
-                break;*/
-           // case 'add':
-             //   break;
-            case 'power':case '^':
-                let powerof = Math.abs(part1 ** part2)
-                interaction.reply(`${powerof}`)
-                break;
+            case 'arht':case 'approachratehalftime':case 'arifht':
+                let artoht = halftimear(part1)
+                message.reply(`${artoht}`)
+            break;
             case 'circumference':
                 let circumference1 = Math.abs(2* Math.PI * part1 ); 
-                interaction.reply(`${circumference1}`)
+                message.reply(`${circumference1}`)
                 break;
             case 'circlearea':
                 let area = Math.abs(Math.PI*(part1**2))
-                interaction.reply(`${area}`)
+                message.reply(`${area}`)
+                break;
+            case 'pythag':case 'hypotenuse':
+                if(!part2 || isNaN(part2)) return message.reply("error") 
+                let pythaganswer = pythag(part1, part2);
+                message.reply(`${pythaganswer}`)
+                break;
+            case 'sigfig':case 'scientificnotation':
+                let sigfiganswer = sigfig(part1, part2)
+                message.reply(`${sigfiganswer}`)
                 break;
             case 'help':
                 let helpembed = new Discord.MessageEmbed()

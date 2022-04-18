@@ -31,10 +31,13 @@ function pythag (a,b){
     c = Math.sqrt(cp)
     return(c)
 }
-function sigfig (a){
+function sigfig (a, b){
     if(isNaN(a)) return NaN;
     let s = a/(10**(a.toString().length - 1))
-    let b = s + ' x 10^' + (a.toString().length - 1)
-    return b;
+    if(parseInt(b)){
+      s = (a/(10**(a.toString().length - 1))).toFixed(parseInt(b))
+    }
+    let c = s + ' x 10^' + (a.toString().length - 1)
+    return c;
 }
 module.exports = { findHCF, findLCM, pythag, sigfig }
