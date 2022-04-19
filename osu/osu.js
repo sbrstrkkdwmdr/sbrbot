@@ -28,25 +28,6 @@ module.exports = {
 
         interaction.reply('getting data...')
         if(!pickeduserX) return interaction.channel.send("user ID required");
-      
-        try{
-            let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
-            let body1 = {
-                "client_id": osuclientid,
-                "client_secret": osuclientsecret,
-                "grant_type": "client_credentials",
-                "scope": "public"
-            }
-            fetch(oauthurl, {
-                method: "POST",
-                body: JSON.stringify(body1),
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(res => res.json())
-            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
-            ;
-            fs.appendFileSync(osulogdir, "\n" + "writing data to osuauth.json")
-            fs.appendFileSync(osulogdir, "\n" + "")
             
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
             
@@ -203,14 +184,7 @@ module.exports = {
                     console.groupEnd()
                 }
         });
-        } catch(error){
-            fs.appendFileSync(osulogdir, "\n" + error)
-            fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
-            fs.appendFileSync(osulogdir, "\n" + "")
-            console.log(err)
-            console.groupEnd()
-        } 
-        
+
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
     }
 }

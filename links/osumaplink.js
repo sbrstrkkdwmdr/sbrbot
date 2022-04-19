@@ -3,12 +3,12 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const { linkfetchlogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osumaplink',
     description: '',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        console.group('--- LINK DETECTED ---')
         if(message.content.includes("mania") || message.content.includes("fruits") || message.content.includes("taiko")) return;
         const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('beatmaps').replaceAll('b').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const pickeduserX = w;
@@ -18,22 +18,6 @@ module.exports = {
         let consoleloguserweeee = message.author
         fs.appendFileSync(linkfetchlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         fs.appendFileSync(linkfetchlogdir, "\n" + "") ;
-        try{
-            let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
-            let body1 = {
-                "client_id": osuclientid,
-                "client_secret": osuclientsecret,
-                "grant_type": "client_credentials",
-                "scope": "public"
-            }
-            fetch(oauthurl, {
-                method: "POST",
-                body: JSON.stringify(body1),
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(res => res.json())
-            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
-            ;
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickeduserX}`;
             const { access_token } = require('../debug/osuauth.json');
             
@@ -224,6 +208,7 @@ module.exports = {
     } catch(error){
 				message.reply("error")
 				fs.appendFileSync(linkfetchlogdir, "\n" + error)
+                fs.appendFileSync(linkfetchlogdir, "\n" + getStackTrace(error))
 				fs.appendFileSync(linkfetchlogdir, "\n" + "")
                 console.groupEnd()
                 console.groupEnd()
@@ -245,13 +230,6 @@ module.exports = {
             .setDescription(``);
             message.reply({ embeds: [Embed]})*/
             });
-        } catch(error){
-            message.channel.send("Error - LB2")
-            fs.appendFileSync(linkfetchlogdir, "\n" + error)
-            console.groupEnd()
-            console.groupEnd()
-            console.groupEnd()
-        } 
 
     }
 }

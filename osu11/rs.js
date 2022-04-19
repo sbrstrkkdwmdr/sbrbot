@@ -23,30 +23,14 @@ module.exports = {
                 fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
             }
         }
+        findname = await userdatatags.findOne({ where: { description: pickeduserX } });
+        pickedmodex = findname.get('mode')
 
         fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
         fs.appendFileSync(osulogdir, "\n" + "command executed - rs")
         let consoleloguserweeee = message.author
         fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         fs.appendFileSync(osulogdir, "\n" + "") 
-            try{
-                let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
-                let body1 = {
-                    "client_id": osuclientid,
-                    "client_secret": osuclientsecret,
-                    "grant_type": "client_credentials",
-                    "scope": "public"
-                }
-                fetch(oauthurl, {
-                    method: "POST",
-                    body: JSON.stringify(body1),
-                    headers: { 'Content-Type': 'application/json' }
-                })
-                .then(res => res.json())
-                .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
-                ;
-                fs.appendFileSync(osulogdir, "\n" + "writing data to osuauth.json")
-                fs.appendFileSync(osulogdir, "\n" + "")    
 
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
                 const { access_token } = require('../debug/osuauth.json');
@@ -430,10 +414,6 @@ module.exports = {
                     fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                     fs.appendFileSync(osulogdir, "\n" + "")
                 }})
-            } catch(error){
-                fs.appendFileSync(osulogdir, "\n" + error)
-                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
-            }
             
     }
 }

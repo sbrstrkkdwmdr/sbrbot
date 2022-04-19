@@ -3,12 +3,12 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../debug/osuauth.json');
 const { linkfetchlogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osuprofilelink',
     description: '',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
-        console.group('--- LINK DETECTED ---')
         //const pickeduserX = args.splice(0,1000).join(" ");
         const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replace('users', '').replace('u').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const pickeduserX = w;
@@ -21,25 +21,6 @@ module.exports = {
         fs.appendFileSync(linkfetchlogdir, "\n" + "") 
         //if(!pickeduserX) return message.reply("user ID required");
         //if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
-      
-        try{
-            let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
-            let body1 = {
-                "client_id": osuclientid,
-                "client_secret": osuclientsecret,
-                "grant_type": "client_credentials",
-                "scope": "public"
-            }
-            fetch(oauthurl, {
-                method: "POST",
-                body: JSON.stringify(body1),
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(res => res.json())
-            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
-            ;
-            fs.appendFileSync(linkfetchlogdir, "\n" + "writing data to osuauth.json")
-            fs.appendFileSync(linkfetchlogdir, "\n" + "")
             
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
             
@@ -139,12 +120,10 @@ module.exports = {
                     message.reply("Error - account not found (or some other error)")
                     fs.appendFileSync(linkfetchlogdir, "\n" + "Error account not found")
                     fs.appendFileSync(linkfetchlogdir, "\n" + error)
+                    fs.appendFileSync(linkfetchlogdir, "\n" + getStackTrace(error))
                     fs.appendFileSync(linkfetchlogdir, "\n" + "")
                 }
         });
-        } catch(err){
-            fs.appendFileSync(linkfetchlogdir, "\n" + err)
-        } 
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
     }
 }

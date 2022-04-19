@@ -7,6 +7,7 @@ const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const osuReplayParser = require('osureplayparser');
 const ChartJsImage = require('chartjs-to-image');
 const { linkfetchlogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'replayparse',
@@ -37,25 +38,6 @@ module.exports = {
         let mods = JSON.stringify(replay, ['mods']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('mods', '');
         let bettertimeset = JSON.stringify(replay, ['timestamp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('timestamp', '').slice(0, 10);
         let gamemode = JSON.stringify(replay, ['gameMode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('gameMode', '')
-
-        try{
-            let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
-            let body1 = {
-                "client_id": osuclientid,
-                "client_secret": osuclientsecret,
-                "grant_type": "client_credentials",
-                "scope": "public"
-            }
-            fetch(oauthurl, {
-                method: "POST",
-                body: JSON.stringify(body1),
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(res => res.json())
-            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
-            ;
-            fs.appendFileSync(linkfetchlogdir, "\n" + "writing data to osuauth.json")
-            fs.appendFileSync(linkfetchlogdir, "\n" + "")
             
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${playername}/osu`;
             
@@ -342,6 +324,7 @@ module.exports = {
     //})//mapdata2
 } catch (error) {
     fs.appendFileSync(linkfetchlogdir, "\n" + error)
+    fs.appendFileSync(linkfetchlogdir, "\n" + getStackTrace(error))
     message.reply('error - map does not exist or is a different version to the osu website')
     console.log(error)
 }
@@ -349,17 +332,14 @@ module.exports = {
 }       catch(error){
             message.channel.send("Error - 1")
             fs.appendFileSync(linkfetchlogdir, "\n" + error)
+            fs.appendFileSync(linkfetchlogdir, "\n" + getStackTrace(error))
         }
             })
         }        catch(error){
             message.channel.send("Error - 2")
             fs.appendFileSync(linkfetchlogdir, "\n" + error)
+            fs.appendFileSync(linkfetchlogdir, "\n" + getStackTrace(error))
         }
-        }   catch(error){
-            message.channel.send("Error - 3\nmap doesn't exist or isn't available")
-            fs.appendFileSync(linkfetchlogdir, "\n" + error)
-        }
-        console.groupEnd()
     }
 }
 //client.commands.get('').execute(message, args)

@@ -5,12 +5,12 @@ const { access_token } = require('../debug/osuauth.json');
 const { linkfetchlogdir } = require('../logconfig.json')
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const { calculateStarRating } = require('osu-sr-calculator')
+const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osuscorelink',
     description: '',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
-        console.group('--- LINK DETECTED ---')
         let mode = 'osu' //osu, fruits, taiko, mania
         if(linkargs[0].includes('osu')){
             mode = 'osu'
@@ -35,25 +35,6 @@ module.exports = {
         fs.appendFileSync(linkfetchlogdir, "\n" + "") 
         //if(!pickeduserX) return message.reply("user ID required");
         //if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
-      
-        try{
-            let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
-            let body1 = {
-                "client_id": osuclientid,
-                "client_secret": osuclientsecret,
-                "grant_type": "client_credentials",
-                "scope": "public"
-            }
-            fetch(oauthurl, {
-                method: "POST",
-                body: JSON.stringify(body1),
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(res => res.json())
-            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
-            ;
-            fs.appendFileSync(linkfetchlogdir, "\n" + "writing data to osuauth.json")
-            fs.appendFileSync(linkfetchlogdir, "\n" + "")
             
             const getscoreurl = `https://osu.ppy.sh/api/v2/scores/${mode}/${pickeduserX}`;
             
@@ -277,13 +258,11 @@ module.exports = {
                     message.reply("Error - account not found (or some other error)")
                     fs.appendFileSync(linkfetchlogdir, "\n" + "Error account not found")
                     fs.appendFileSync(linkfetchlogdir, "\n" + error)
+                    fs.appendFileSync(linkfetchlogdir, "\n" + getStackTrace(error))
                     fs.appendFileSync(linkfetchlogdir, "\n" + "")
                     console.log(error)
                 }
         });
-        } catch(err){
-            fs.appendFileSync(linkfetchlogdir, "\n" + err)
-        } 
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
     }
 }

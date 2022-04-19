@@ -27,22 +27,6 @@ module.exports = {
         }
         //if(!pickeduserX) return message.reply("user ID or username required");
         //if(isNaN(pickeduserX)){ //return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
-            try{
-                let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
-                let body1 = {
-                    "client_id": osuclientid,
-                    "client_secret": osuclientsecret,
-                    "grant_type": "client_credentials",
-                    "scope": "public"
-                }
-                fetch(oauthurl, {
-                    method: "POST",
-                    body: JSON.stringify(body1),
-                    headers: { 'Content-Type': 'application/json' }
-                })
-                .then(res => res.json())
-                .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
-                ;
                 const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
                 const { access_token } = require('../debug/osuauth.json');
             
@@ -75,6 +59,7 @@ module.exports = {
                 }).then(res => res.json())
                 .then(output2 => 
                     {
+                        if(!output2.scores) return message.reply("error - unranked map");
                         const mapscoredata = output2;
                         //let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
                         //const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
@@ -179,10 +164,6 @@ module.exports = {
                 fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                 fs.appendFileSync(osulogdir, "\n" + "")
             }})
-        }   catch(error){
-                fs.appendFileSync(osulogdir, "\n2" + error)
-                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
-            }
         
     }
 }

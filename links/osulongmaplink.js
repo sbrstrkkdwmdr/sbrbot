@@ -4,11 +4,12 @@ const fs = require('fs');
 const calc = require('ojsama');
 const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const { linkfetchlogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
+
 module.exports = {
     name: 'osulongmaplink',
     description: '',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
-        console.group('--- LINK DETECTED ---')
         if(message.content.includes("mania") || message.content.includes("fruits") || message.content.includes("taiko")) return;
         try{const w = JSON.stringify(linkargs).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('beatmapsets').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');
         const grab = JSON.stringify(w.split('#')[1].split('/'))
@@ -23,22 +24,6 @@ module.exports = {
         let consoleloguserweeee = message.author
         fs.appendFileSync(linkfetchlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         fs.appendFileSync(linkfetchlogdir, "\n" + "") ;
-        try{
-            let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
-            let body1 = {
-                "client_id": osuclientid,
-                "client_secret": osuclientsecret,
-                "grant_type": "client_credentials",
-                "scope": "public"
-            }
-            fetch(oauthurl, {
-                method: "POST",
-                body: JSON.stringify(body1),
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(res => res.json())
-            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
-            ;
             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${pickeduserX}`;
             const { access_token } = require('../debug/osuauth.json');
             
@@ -219,6 +204,7 @@ module.exports = {
     } catch(error){
 				message.reply("error - map not found")
 				fs.appendFileSync(linkfetchlogdir, "\n" + error)
+                fs.appendFileSync(linkfetchlogdir, "\n" + getStackTrace(error))
 				fs.appendFileSync(linkfetchlogdir, "\n" + "")
                 console.groupEnd()
                 console.groupEnd()
@@ -242,15 +228,8 @@ module.exports = {
             });
         } catch(error){
             fs.appendFileSync(linkfetchlogdir, "\n" + error)
+            fs.appendFileSync(linkfetchlogdir, "\n" + getStackTrace(error))
             message.channel.send("Error - ")
-            console.groupEnd()
-            console.groupEnd()
-            console.groupEnd()
-        } } 
-        
-        catch(error){
-            message.channel.send("Error - insufficient link\nmap links should be either `osu.ppy.sh/b/map_id` or `osu.ppy.sh/beatmapsets/mapset_id#osu/map_id`")
-            fs.appendFileSync(linkfetchlogdir, "\n" + error)
             console.groupEnd()
             console.groupEnd()
             console.groupEnd()

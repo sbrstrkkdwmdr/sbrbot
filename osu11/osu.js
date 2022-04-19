@@ -26,26 +26,6 @@ module.exports = {
         fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         fs.appendFileSync(osulogdir, "\n" + "") 
         //if(isNaN(pickeduserX)) return message.reply("You must use ID e.g. 15222484 instead of SaberStrike")
-      
-        try{
-            let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
-            let body1 = {
-                "client_id": osuclientid,
-                "client_secret": osuclientsecret,
-                "grant_type": "client_credentials",
-                "scope": "public"
-            }
-            fetch(oauthurl, {
-                method: "POST",
-                body: JSON.stringify(body1),
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(res => res.json())
-            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
-            ;
-            fs.appendFileSync(osulogdir, "\n" + "writing data to osuauth.json")
-            fs.appendFileSync(osulogdir, "\n" + "")
-            
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${pickeduserX}/osu`;
             
             fetch(userinfourl, {
@@ -166,9 +146,7 @@ module.exports = {
                     
                 }
         });
-        } catch(err){
-            fs.appendFileSync(osulogdir, "\n" + err)
-        } 
+       
         
 //        message.channel.send("I'm not an osu! bot. go use owobot or something")  
     }

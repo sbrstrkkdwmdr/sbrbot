@@ -25,24 +25,6 @@ module.exports = {
         fs.appendFileSync(osulogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         fs.appendFileSync(osulogdir, "\n" + "") 
         
-        try {
-        let oauthurl = new URL ("https://osu.ppy.sh/oauth/token");
-            let body1 = {
-                "client_id": osuclientid,
-                "client_secret": osuclientsecret,
-                "grant_type": "client_credentials",
-                "scope": "public"
-            }
-            fetch(oauthurl, {
-                method: "POST",
-                body: JSON.stringify(body1),
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(res => res.json())
-            .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
-            ;
-            fs.appendFileSync(osulogdir, "\n" + "writing data to osuauth.json")
-            fs.appendFileSync(osulogdir, "\n" + "")
         const modsarray = ["EZ", "NF", "HT", "HR", "SD", "PF", "DT", "NC", "HD", "FL", "RX", "AP", "SO", "TD", "NM"];
         //fs.appendFileSync(osulogdir, "\n" + modsarray)
         //fs.appendFileSync(osulogdir, "\n" + modsarray.length)
@@ -464,12 +446,6 @@ module.exports = {
 			}
             });
         } catch(error){
-            fs.appendFileSync(osulogdir, "\n" + error)
-            fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
-            console.groupEnd()
-            console.groupEnd()
-            console.groupEnd()
-        } } catch(error) {
             fs.appendFileSync(osulogdir, "\n" + error)
             fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
             console.groupEnd()
