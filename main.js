@@ -196,11 +196,18 @@ client.once('ready', () => {
     linkhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
     testhandler(Tags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
     checker(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
+    //looptimerthingyidkwhattocallit(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
     //Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, prefix, monitorEventLoopDelay, setInterval
-
-client.user.setPresence({ activities: [{ name: "you", type: 'WATCHING', video_url: 'https://youtube.com/saberstrkkdwmdr'}], status: `dnd`,});
+    client.user.setPresence({ 
+        activities: [{ 
+            name: "you", 
+            type: 'WATCHING', 
+            url: 'https://youtube.com/saberstrkkdwmdr', 
+        }], 
+        status: `dnd`,
+        afk: 'false'
+        });
 })
-
 try{
 client.login(token)
 console.log(`--------------------------------------------------------------------------------------`)
