@@ -46,4 +46,4 @@ function easymultiplier(ar){
 function hardrockmultiplier(ar){
     return(ar*1.5)
 }
-module.exports = {doubletimear, halftimear, easymultiplier, hardrockmultiplier}
+module.exports = { doubletimear, halftimear, easymultiplier, hardrockmultiplier }
