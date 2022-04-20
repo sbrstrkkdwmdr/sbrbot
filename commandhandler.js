@@ -17,7 +17,7 @@ client.musiccmds = new Discord.Collection();
 client.ecchicmds = new Discord.Collection();
 client.gamingcmds = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));        
+const commandFiles = fs.readdirSync('./commands/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));        
 for(const file of commandFiles){
     const command = require(`./commands/${file}`);
 
@@ -107,6 +107,10 @@ client.on('messageCreate', message =>{
 
     switch (command) //variable to check for
     {
+
+    case 'testingtypescript':
+        client.commands.get('testingtypescript').execute(message, args, currentDate, currentDateISO)
+        break;
 
     case 'test': //if command = 'test' blahblablah
         client.commands.get('test').execute(message, args, currentDate, currentDateISO)
