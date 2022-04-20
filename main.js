@@ -191,6 +191,70 @@ client.once('ready', () => {
 
     //msglogs(client)
     //modlogs(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
+    client.commands = new Discord.Collection();
+    client.linkdetect = new Discord.Collection();
+    client.osucmds = new Discord.Collection();
+    client.altosucmds = new Discord.Collection();
+    client.admincmds = new Discord.Collection();
+    client.helpcmds = new Discord.Collection();
+    client.musiccmds = new Discord.Collection();
+    client.ecchicmds = new Discord.Collection();
+    client.gamingcmds = new Discord.Collection();
+
+    const commandFiles = fs.readdirSync('./commands/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));        
+    for(const file of commandFiles){
+        const command = require(`./commands/${file}`);
+
+        client.commands.set(command.name, command);
+    }
+    const linkFiles = fs.readdirSync('./links/').filter(file => file.endsWith('.js'));
+    for(const file of linkFiles){
+        const link = require(`./links/${file}`);
+
+        client.linkdetect.set(link.name, link);
+    }
+    const osucmdFiles = fs.readdirSync('./osu/').filter(file => file.endsWith('.js'));
+    for(const file of osucmdFiles){
+        const osucmd = require(`./osu/${file}`);
+
+        client.osucmds.set(osucmd.name, osucmd);
+    }
+    const altosucmdFiles = fs.readdirSync('./osu11/').filter(file => file.endsWith('.js'));
+    for(const file of altosucmdFiles){
+        const altosucmd = require(`./osu11/${file}`);
+
+        client.altosucmds.set(altosucmd.name, altosucmd);
+    }
+    const admincmdfiles = fs.readdirSync('./commands-admin/').filter(file => file.endsWith('.js'));
+    for(const file of admincmdfiles){
+        const admincmd = require(`./commands-admin/${file}`);
+
+        client.admincmds.set(admincmd.name, admincmd);
+    }
+    const helpcmdfiles = fs.readdirSync('./commands-help/').filter(file => file.endsWith('.js'));
+    for(const file of helpcmdfiles){
+        const helpcmd = require(`./commands-help/${file}`);
+
+        client.helpcmds.set(helpcmd.name, helpcmd);
+    }
+    const musiccmdfiles = fs.readdirSync('./commands-music/').filter(file => file.endsWith('.js'));
+    for(const file of musiccmdfiles){
+        const musiccmd = require(`./commands-music/${file}`);
+
+        client.musiccmds.set(musiccmd.name, musiccmd);
+    }
+    const ecchicmdfiles = fs.readdirSync('./commands-ecchi/').filter(file => file.endsWith('.js'));
+    for(const file of ecchicmdfiles){
+        const ecchicmd = require(`./commands-ecchi/${file}`);
+
+        client.ecchicmds.set(ecchicmd.name, ecchicmd);
+    }
+    const gamingcmdfiles = fs.readdirSync('./commands-gaming/').filter(file => file.endsWith('.js'));
+    for(const file of gamingcmdfiles){
+        const gamingcmd = require(`./commands-gaming/${file}`);
+
+        client.gamingcmds.set(gamingcmd.name, gamingcmd);
+    }
     commandhandler(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
     slashcommandhandler(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
     linkhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
