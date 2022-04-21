@@ -95,7 +95,15 @@ module.exports = {
                 break;
             default:
                 string = args.splice(/ +/).join(" ");
-                try{evalstring = (eval(string.replaceAll("^", "**").replaceAll("pi", "Math.PI"))).toString()
+                //console.log(string)
+                let letterstoavoid = [
+                    'a','b','c','d','e','f','g','h','j','k','l','m','n','o','q','r','s','t','u','v','w','x','y','z',
+                    '{','}'
+                ]
+                let isvalid = letterstoavoid.find(v => (string.includes(v)))
+                if(isvalid) return message.reply('no letters allowed')
+                try{
+                evalstring = (eval(string.replaceAll("^", "**").replaceAll("pi", "Math.PI"))).toString()
                 message.reply(evalstring)}
                 catch(error){
                     message.reply("error")
