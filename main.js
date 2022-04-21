@@ -14,7 +14,7 @@ const modlogs = require('./modlogs.js')
 const commandhandler = require('./commandhandler.js')
 const slashcommandhandler = require('./slashcommandhandler.js')
 const linkhandler = require('./linkhandler.js')
-const looptimerthingyidkwhattocallit = require(`./loop.js`)
+const loop = require('./loop.js')
 const testhandler = require('./testhandler.js')
 const checker = require('./checker.js')
 
@@ -200,6 +200,7 @@ client.once('ready', () => {
     client.musiccmds = new Discord.Collection();
     client.ecchicmds = new Discord.Collection();
     client.gamingcmds = new Discord.Collection();
+    client.otherstuff = new Discord.Collection();
 
     const commandFiles = fs.readdirSync('./commands/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));        
     for(const file of commandFiles){
@@ -255,12 +256,18 @@ client.once('ready', () => {
 
         client.gamingcmds.set(gamingcmd.name, gamingcmd);
     }
+    const otherfiles = fs.readdirSync('./other/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
+    for(const file of otherfiles){
+        const other = require(`./other/${file}`)
+
+        client.otherstuff.set(other.name, other);
+    }
     commandhandler(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
     slashcommandhandler(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
     linkhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
     testhandler(Tags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
     checker(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
-    //looptimerthingyidkwhattocallit(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
+    loop(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
     //Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, prefix, monitorEventLoopDelay, setInterval
     client.user.setPresence({ 
         activities: [{ 

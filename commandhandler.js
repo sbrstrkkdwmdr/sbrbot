@@ -27,7 +27,6 @@ client.on('messageCreate', message =>{
     let split = new Date().toString().match(/([A-Z]+[\+-][0-9]+.*)/);
     let curtimezone = split[split.length - 1]
 
-    //
     if(!message.content.startsWith(prefix)) return; //the return is so if its just prefix nothing happens
     if(message.author.bot){
         if(!message.author.id == '755220989494951997') return;
@@ -48,7 +47,7 @@ client.on('messageCreate', message =>{
         break;
 
     case 'test': //if command = 'test' blahblablah
-        client.commands.get('test').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('test').execute(client, message, args, currentDate, currentDateISO)
         break;
 
     /*  case 'replay':
