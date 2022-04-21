@@ -28,17 +28,15 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
     //console.log(member)
     //console.log(member.username)
         if(member.presence || member.presences){
-            fs.appendFileSync('logs/presence.log', '\ntrue')
+            fs.appendFileSync('logs/presence.log', '| true ')
             for(i=0 ; i < member.presence.activities.length ; i++){
                 let activitytimestamp = member.presence.activities[i].createdTimestamp//(new Date(member.presence.activities.createdAt)).getTime()
                 //the milliseconds since jan 1 1970 when the activity started
-            
-                //console.log(member.presence.activities)
                 let rightnow = (new Date()).getTime() //current number of milliseconds since jan 1 1970
                 let totaltimems = (rightnow - activitytimestamp) //calculate how long activity has been running for in milliseconds
                 let totaltimes = totaltimems / 1000 //convert to seconds
-                if(member.presence.activities[i].name == 'League of Legends' && totaltimes >= 1800){
-                    console.log(`${member.id} AKA ${member.username} has been playing league for ${totaltimes / 60} minutes!`) // saves it in console
+                if(member.presence.activities[i].name == 'League of Legends' && totaltimes > 1800){
+                    fs.appendFileSync('logs/presence.log', `\n${member.id} AKA ${member.username} has been playing league for ${totaltimes / 60} minutes!\n`) // saves it in logs
                     let user = member.presence.user
                     //console.log('')
                     //user.send('You have been playing league for too long!') // sends a DM
@@ -49,7 +47,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
             }
         } //if presence
         else {
-            fs.appendFileSync('logs/presence.log', '\nfalse')
+            fs.appendFileSync('logs/presence.log', '| false ')
         }
     })()
     }
