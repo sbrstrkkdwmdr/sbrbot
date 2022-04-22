@@ -6,7 +6,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
 //ADDED FOR SLASH CMDS
 const guildid = testguild
 const guild = client.guilds.cache.get(guildid)
-settoguild = 0
+settoguild = 1
 let commands 
 if(settoguild == 1){
 if (guild) {
@@ -368,6 +368,40 @@ commands?.create({
         }
     ]
 })
+commands?.create({
+    name: 'leaderboard',
+    description: 'displays the top 5 plays for a map',
+    fetchReply: true,
+    options: [
+        {
+            name: 'type',
+            description: 'what to filter scores by (global/mods/friends)',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'input',
+            description: 'mods/username',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: 'id',
+            description: 'map id',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: 'offset',
+            description: 'which page? (0 is page 1)',
+            required: false,
+            type: Constants.ApplicationCommandOptionTypes.NUMBER
+        }
+    ]
+})
+
+
+
 //admin??
 commands?.create({
     name: 'botstatus',
@@ -513,6 +547,9 @@ client.on('interactionCreate', async (interaction) =>{
         break;
      case 'rsplus':
         client.osucmds.get('rsplus').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+        break;
+    case 'leaderboard':
+        client.osucmds.get('leaderboard').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
         break;
         //admins---------------
 
