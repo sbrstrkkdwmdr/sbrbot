@@ -71,41 +71,41 @@ module.exports = {
                 fs.appendFileSync(osulogdir, "\n" + "writing data to map.json")
                 fs.appendFileSync(osulogdir, "\n" + "")
             try{
-            let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
-            let maplink = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
-            let mapsetlink = JSON.stringify(mapdata, ['beatmapset_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmapset_id', '');
-            let mapcs = JSON.stringify(mapdata, ['cs']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('cs', '');
-            let mapar = JSON.stringify(mapdata, ['ar']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('ar', '');
-            let mapod = JSON.stringify(mapdata, ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('accuracy', '');
-            let maphp = JSON.stringify(mapdata, ['drain']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('drain', '');
-            let mapsr = JSON.stringify(mapdata, ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
-            let mapbpm = JSON.stringify(mapdata, ['bpm']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('bpm', '');
+            let mapbg = JSON.stringify(mapdata.beatmapset.covers['cover@2x']).replaceAll('"', '');
+            let maplink = JSON.stringify(mapdata.id);
+            let mapsetlink = JSON.stringify(mapdata.beatmapset_id);
+            let mapcs = JSON.stringify(mapdata.cs);
+            let mapar = JSON.stringify(mapdata.ar);
+            let mapod = JSON.stringify(mapdata.accuracy);
+            let maphp = JSON.stringify(mapdata.drain);
+            let mapsr = JSON.stringify(mapdata.difficulty_rating);
+            let mapbpm = JSON.stringify(mapdata.bpm);
             
-            let mapcsNM = JSON.stringify(mapdata, ['cs']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('cs', '');
-            let maparNM = JSON.stringify(mapdata, ['ar']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('ar', '');
-            let mapodNM = JSON.stringify(mapdata, ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('accuracy', '');
-            let maphpNM = JSON.stringify(mapdata, ['drain']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('drain', '');
-            let mapsrNM = JSON.stringify(mapdata, ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
-            let mapbpmNM = JSON.stringify(mapdata, ['bpm']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('bpm', '');
+            let mapcsNM = JSON.stringify(mapdata.cs);
+            let maparNM = JSON.stringify(mapdata.ar);
+            let mapodNM = JSON.stringify(mapdata.accuracy);
+            let maphpNM = JSON.stringify(mapdata.drain);
+            //let mapsrNM = JSON.stringify(mapdata.difficulty_rating);
+            let mapbpmNM = JSON.stringify(mapdata.bpm);
             
-            let mapcircle = JSON.stringify(mapdata, ['count_circles']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_circles', '');
-            let mapslider = JSON.stringify(mapdata, ['count_sliders']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_sliders', '');
-            let mapspinner = JSON.stringify(mapdata, ['count_spinners']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_spinners', '');
-            let mapper = JSON.stringify(mapdata['beatmapset'], ['creator']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('creator', '');
-            let maptitleuni = JSON.stringify(mapdata['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title_unicode', '');
-            let maptitlenorm = JSON.stringify(mapdata['beatmapset'], ['title']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title', '');
+            let mapcircle = JSON.stringify(mapdata.count_circles)
+            let mapslider = JSON.stringify(mapdata.count_sliders)
+            let mapspinner = JSON.stringify(mapdata.count_spinners)
+            let mapper = JSON.stringify(mapdata.beatmapset.creator).replaceAll('"', '');
+            let maptitleuni = JSON.stringify(mapdata.beatmapset.title_unicode).replaceAll('"', '')
+            let maptitlenorm = JSON.stringify(mapdata.beatmapset.title).replaceAll('"', '')
             let maptitle = maptitleuni
             if(maptitlenorm != maptitleuni){
                 maptitle = `${maptitleuni}\n${maptitlenorm}`
             }
             
-            let mapdiff = JSON.stringify(mapdata, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
-            let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '');
-            let mapmaxcombo = JSON.stringify(mapdata, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('max_combo', '');
-            let maplength = JSON.stringify(mapdata, ['total_length']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('total_length', '');
-            let maphitonly = JSON.stringify(mapdata, ['hit_length']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('hit_length', '');
-            let mapmode = JSON.stringify(mapdata, ['mode']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('mode', '');
-            let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20').replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '');
+            let mapdiff = JSON.stringify(mapdata.version).replaceAll('"', '');
+            let mapartist = JSON.stringify(mapdata.beatmapset.artist).replaceAll('"', '');
+            let mapmaxcombo = JSON.stringify(mapdata.max_combo)
+            let maplength = JSON.stringify(mapdata.total_length)
+            let maphitonly = JSON.stringify(mapdata.hit_length)
+            let mapmode = JSON.stringify(mapdata.mode)
+            let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20')//.replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '');
 
             let maphit1 = Math.floor(maphitonly / 60);
             let maphit2 = Math.abs(maphitonly % 60);
