@@ -6,7 +6,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
 //ADDED FOR SLASH CMDS
 const guildid = testguild
 const guild = client.guilds.cache.get(guildid)
-settoguild = 1
+settoguild = 0
 let commands 
 if(settoguild == 1){
 if (guild) {
