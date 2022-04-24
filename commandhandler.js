@@ -158,7 +158,7 @@ client.on('messageCreate', message =>{
         break;
 
     case 'time':
-        client.commands.get('time').execute(message, args, currentDate, currentDateISO)
+        client.commands.get('time').execute(message, args, Discord, currentDate, currentDateISO)
         break;
 
     case 'amoggers':
