@@ -126,7 +126,12 @@ module.exports = {
         let month = tomonthname(rn.getUTCMonth())//tomonthname(rn.getUTCMonth())
         let year = rn.getUTCFullYear()
         let datenow12h = `${day}, ${date} ${month} ${year} ${datenow12hhours}`
-        //console.log(month + '|')
+
+        let monthnum = rn.getUTCMonth()
+        let daynum = rn.getUTCDate()
+        if(month<10) {month = '0' + month}
+        if(day<10) {day = '0' + day}
+        let truedate = `${year}/${monthnum}/${daynum}`
 
         let offset = rn.getTimezoneOffset()
         let relseconds = rn.getSeconds()
@@ -137,11 +142,17 @@ module.exports = {
         let relyear = rn.getFullYear()
         let reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`
 
+        let relmonthnum = rn.getMonth()
+        let reldaynum = rn.getDate()
+        if(relmonthnum<10){relmonthnum = '0' + relmonthnum}
+        if(reldaynum<10){reldaynum = '0' + reldaynum}
+        let reltruedate = `${relyear}/${relmonthnum}/${reldaynum}`
 
         let Embed = new Discord.MessageEmbed()
         .setTitle('Current Time')
         .addField(
             'UTC/GMT+00',
+            `\n**Date**: ${truedate}` +
             `\n**Full Date**: ${datenow12h}` + 
             `\n**Full Date(24h)**: ${Datenow}` +
             `\n\n**Full Date ISO8601**: ${currentDateISO}` +
@@ -150,6 +161,7 @@ module.exports = {
         )
         .addField(
             `UTC/GMT${offset}`,
+            `\n**Date**: ${reltruedate}` +
             `\n**Full Date**: ${reldatenow12h}` +
             `\n**Full Date(24h)**: ${currentDate}`,
             false
