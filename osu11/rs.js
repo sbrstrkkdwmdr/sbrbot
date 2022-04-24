@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const POST = require('node-fetch');
 const fs = require('fs');
-const { std_ppv2 } = require('booba');
+const { std_ppv2, taiko_ppv2, catch_ppv2, mania_ppv2 } = require('booba');
 const { calculateStarRating } = require('osu-sr-calculator')
 const { osulogdir } = require('../logconfig.json')
 const { getStackTrace } = require('../somestuffidk/log')
@@ -25,6 +25,9 @@ module.exports = {
         }
         findname = await userdatatags.findOne({ where: { description: pickeduserX } });
         pickedmodex = findname.get('mode')
+        if(!pickedmodex || pickedmodex == null || pickedmodex == ''){
+            pickedmodex = 'osu'
+        }
 
         fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
         fs.appendFileSync(osulogdir, "\n" + "command executed - rs")
@@ -51,7 +54,7 @@ module.exports = {
                     return;
                 }
 
-                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=osu&offset=0&limit=100`;
+                const recentactiveurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/recent?include_fails=1&mode=${pickedmodex}&offset=0&limit=100`;
                 
                 fetch(recentactiveurl, {
                     headers: {
