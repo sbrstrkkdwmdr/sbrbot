@@ -105,7 +105,7 @@ module.exports = {
             let maplength = JSON.stringify(mapdata.total_length)
             let maphitonly = JSON.stringify(mapdata.hit_length)
             let mapmode = JSON.stringify(mapdata.mode)
-            let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20')//.replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '');
+            let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20').replaceAll('"', '');//.replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '');
 
             let maphit1 = Math.floor(maphitonly / 60);
             let maphit2 = Math.abs(maphitonly % 60);
