@@ -7,6 +7,10 @@ module.exports = {
         let epoch = new Date().getTime()
         let Datenow = new Date(currentDate).toUTCString()
         
+        let msepochsince = parseInt(epoch) - 1640995200000
+        let thedaysthingyiuseonmydiscordstatus = (msepochsince / 1000 / 60 / 60 / 24).toFixed(2)
+        //                                                       ms    s   min hour    day
+
         function to12htime(date) {
             let hours = date.getUTCHours();
             let minutes = date.getUTCMinutes();
@@ -166,11 +170,13 @@ module.exports = {
             `\n**Full Date**: ${datenow12h}` + 
             `\n**Full Date(24h)**: ${Datenow}` +
             `\n\n**Full Date ISO8601**: ${currentDateISO}` +
-            `\n**EPOCH(ms)**: ${epoch}`,
+            `\n**EPOCH(ms)**: ${epoch}` +
+            `\n**Days since Jan 1st 2022**: [${thedaysthingyiuseonmydiscordstatus}]`
+            ,
             false
         )
         .addField(
-            `UTC/GMT${offset}`,
+            `UTC/GMT${offset} (Local Time)`,
             `\n**Date**: ${reltruedate}` +
             `\n**Full Date**: ${reldatenow12h}` +
             `\n**Full Date(24h)**: ${currentDate}`,
