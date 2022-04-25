@@ -90,8 +90,8 @@ module.exports = {
                     maptitle = `${maptitleuni}\n${maptitlenorm}`
                 }
                 
-                let mapdiff = JSON.stringify(mapdata.version)
-                let mapartist = JSON.stringify(mapdata.beatmapset.artist)
+                let mapdiff = JSON.stringify(mapdata.version).replaceAll('"', '');
+                let mapartist = JSON.stringify(mapdata.beatmapset.artist).replaceAll('"', '');
                 let mapmaxcombo = JSON.stringify(mapdata.max_combo)
                 let maplength = JSON.stringify(mapdata.total_length)
                 let maphitonly = JSON.stringify(mapdata.hit_length)
