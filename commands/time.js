@@ -23,6 +23,9 @@ module.exports = {
             if(minutes < 10){
                 minutes = '0' + minutes
             }
+            if(seconds < 10){
+                seconds = '0' + seconds
+            }
             var strTime = hours + ':' + minutes + ':' + seconds + amorpm;
             return strTime;
         }
@@ -41,6 +44,9 @@ module.exports = {
             if(hours == 0) hours = 12 // the hour '0' should be '12'
             if(minutes < 10){
                 minutes = '0' + minutes
+            }
+            if(seconds < 10){
+                seconds = '0' + seconds
             }
             var strTime = hours + ':' + minutes + ':' + seconds + amorpm;
             return strTime;
@@ -133,7 +139,11 @@ module.exports = {
         if(day<10) {day = '0' + day}
         let truedate = `${year}/${monthnum}/${daynum}`
 
-        let offset = rn.getTimezoneOffset()
+        let offsetnum = rn.getTimezoneOffset()
+        if(offsetnum.toString().includes('+')) offsettype = '-';
+        else offsettype = '+';
+        let offset = offsettype + (Math.abs(rn.getTimezoneOffset() / 60).toFixed(2) /*+ 'h'*/).replace('.', ':')
+        
         let relseconds = rn.getSeconds()
         let reldatenow12hhours = relto12htime(rn)
         let relday = dayhuman(rn.getDay())
@@ -151,7 +161,7 @@ module.exports = {
         let Embed = new Discord.MessageEmbed()
         .setTitle('Current Time')
         .addField(
-            'UTC/GMT+00',
+            'UTC/GMT+00:00',
             `\n**Date**: ${truedate}` +
             `\n**Full Date**: ${datenow12h}` + 
             `\n**Full Date(24h)**: ${Datenow}` +
