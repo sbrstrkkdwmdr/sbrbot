@@ -326,6 +326,11 @@ module.exports = {
                     ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
                     ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
                     ppissue = ''
+
+                    if(pickedmodex == 'mania'){
+                        ppww = Math.abs(ppww / 1000).toFixed(2)
+                        ppiffcw = Math.abs(ppiffcw / 1000).toFixed(2)
+                    }
                     
                 if(rspp == 'null' || rspp == 'NaN'){
                       rspp = ppww
