@@ -1,8 +1,7 @@
 const fs = require('fs')
+const prompt = require("prompt-sync")();
 console.log("Setting up config file...")
 console.log("If you don't want to set an option, just put 'null' or press enter")
-const prompt = require("prompt-sync")();
-
 
 prefix = prompt("Prefix  | insert some string like ! or -. you can set the prefix to penis if you want) |=>", "null");
 console.log("")

@@ -1,2 +1,4 @@
 @ECHO ON
-node setup.js >> error.log
+node setup.js
+echo eeeee
+pause
