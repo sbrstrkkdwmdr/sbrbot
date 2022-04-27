@@ -1,36 +1,36 @@
 const fs = require('fs')
+const prompt = require("prompt-sync")();
 console.log("Setting up config file...")
 console.log("If you don't want to set an option, just put 'null' or press enter")
-const prompt = require("prompt-sync")();
 
-
-prefix = prompt("Prefix  | insert some string like ! or -. you can set the prefix to penis if you want) |=>", "null");
+(async () =>{
+prefix = await prompt("Prefix  | insert some string like ! or -. you can set the prefix to penis if you want) |=>", "null");
 console.log("")
-token = prompt("Bot token  | https://discord.com/developers/applications create an application, go to bot, create bot and copy the token) |=>", "null")
+token = await prompt("Bot token  | https://discord.com/developers/applications create an application, go to bot, create bot and copy the token) |=>", "null")
 console.log("")
-googlecx = prompt("Google cx  |  https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4 to get it |=>", "null")
+googlecx = await prompt("Google cx  |  https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4 to get it |=>", "null")
 console.log("")
-googlekey = prompt("Google key |  https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4 to get it |=>", "null")
+googlekey = await prompt("Google key |  https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4 to get it |=>", "null")
 console.log("")
-oapi = prompt("osu! api key |  grab it from https://osu.ppy.sh/p/api | just put anything as the name and url |=>", "null");
+oapi = await prompt("osu! api key |  grab it from https://osu.ppy.sh/p/api | just put anything as the name and url |=>", "null");
 console.log("")
-oclientid = prompt("osu! client ID | In osu! profile settings, create an OAuth application and just set the name to whatever | copy the ID here |=>", "null");
+oclientid = await prompt("osu! client ID | In osu! profile settings, create an OAuth application and just set the name to whatever | copy the ID here |=>", "null");
 console.log("")
-oclientsecret = prompt("osu! client secret | In osu! profile settings, create an OAuth application and just set the name to whatever | copy the client secret here |=>", "null");
+oclientsecret = await prompt("osu! client secret | In osu! profile settings, create an OAuth application and just set the name to whatever | copy the client secret here |=>", "null");
 console.log("")
-joinroll = prompt("Server verified role | Server settings > Roles > 3 dots >copy ID |=>", "null");
+joinroll = await prompt("Server verified role | Server settings > Roles > 3 dots >copy ID |=>", "null");
 console.log("")
-mainguildid = prompt("Server ID | Right click on server > copy ID |=>", "null");
+mainguildid = await prompt("Server ID | Right click on server > copy ID |=>", "null");
 console.log("")
-logchnl = prompt("Channel to send logs to | Right click on channel > copy ID |=>", "null");
+logchnl = await prompt("Channel to send logs to | Right click on channel > copy ID |=>", "null");
 console.log("")
-danserpath = prompt("path to Danser | Double click on the address bar on the top and ctrl c |=>", "null");
+danserpath = await prompt("path to Danser | Double click on the address bar on the top and ctrl c |=>", "null");
 console.log("")
-recordchannel = prompt("recording channel | Right click on channel > copy ID |=>", "null");
+recordchannel = await prompt("recording channel | Right click on channel > copy ID |=>", "null");
 console.log("")
-testguildid = prompt("testguild ID |=>", "null");
+testguildid = await prompt("testguild ID |=>", "null");
 console.log("")
-haloapikey = prompt("token for https://autocode.com/lib/halo/infinite/ |  Go to https://autocode.com/lib/halo/infinite/, press Link and Authenticate, then copy Secret Token |=>", "null")
+haloapikey = await prompt("token for https://autocode.com/lib/halo/infinite/ |  Go to https://autocode.com/lib/halo/infinite/, press Link and Authenticate, then copy Secret Token |=>", "null")
 console.log("")
 let template = {
 	"prefix": prefix,
@@ -52,6 +52,7 @@ let template = {
 }
 
 fs.writeFileSync("config.json", JSON.stringify(template, null, 2))
+})()
 /*
 let template = {
 	"prefix": "insert some string like ! or -. you can set the prefix to penis if you want",
