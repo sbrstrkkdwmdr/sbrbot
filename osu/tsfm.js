@@ -87,7 +87,7 @@ module.exports = {
                     ⠀⠀⠀⡟⡾⣿⢿⢿⢵⣽⣾⣼⣘⢸⢸⣞⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
                     ⠀⠀⠀⠀⠁⠇⠡⠩⡫⢿⣝⡻⡮⣒⢽⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀*/
 
-                        if(!output2.scores) return interaction.editReply("error - unranked map");
+                    if(!output2.scores) return message.reply(`error - unranked map.\nCurrently loaded map: https://osu.ppy.sh/b/${prevmap} \nSend the link to another map to change it.`);
                         if(sort == 'acc' || sort == 'accuracy'){
                             osutopdata = output2.scores.sort((a, b) => b.accuracy - a.accuracy);
                             sortedby = 'Sorted by: Accuracy'
