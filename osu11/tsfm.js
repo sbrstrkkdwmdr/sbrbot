@@ -59,7 +59,7 @@ module.exports = {
                 }).then(res => res.json())
                 .then(output2 => 
                     {
-                        if(!output2.scores) return message.reply("error - unranked map");
+                        if(!output2.scores) return message.reply(`error - unranked map.\nCurrently loaded map: https://osu.ppy.sh/b/${prevmap} \nSend the link to another map to change it.`);
                         const mapscoredata = output2;
                         //let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
                         //const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
