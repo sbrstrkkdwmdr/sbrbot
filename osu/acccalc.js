@@ -106,7 +106,6 @@ module.exports = {
             //fs.appendFileSync(osulogdir, "\n" + mapdata)
             let hits = hit300 + hit100 + hit50 + hit0
 
-//let droplets = parseInt(JSON.stringify(mapdata, ['count_spinners']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_spinners', ''));
             topequation = Math.floor(hit300 + hit100 + hit50)
             bottomequation = Math.floor(Math.abs(hits))
             fullequation = (Math.abs((topequation / bottomequation)*100)).toString() + '%'
