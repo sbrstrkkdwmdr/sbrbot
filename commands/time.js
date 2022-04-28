@@ -16,7 +16,7 @@ module.exports = {
             let minutes = date.getUTCMinutes();
             let seconds = date.getUTCSeconds();
             let amorpm;
-            if(parseInt(hours) > 12){
+            if(parseInt(hours) >= 12){
                 amorpm = 'PM'
             }
             else{
@@ -38,7 +38,7 @@ module.exports = {
             let minutes = date.getMinutes();
             let seconds = date.getSeconds();
             let amorpm;
-            if(parseInt(hours) > 12){
+            if(parseInt(hours) >= 12){
                 amorpm = 'PM'
             }
             else{
