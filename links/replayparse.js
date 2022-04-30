@@ -135,6 +135,8 @@ module.exports = {
     let nochokeacc = Math.abs(nochokeacc1 * 100).toFixed(2);
     let trueacc = Math.abs((nochokeacctop / truaccbottom) * 100).toFixed(2);
 
+    (async () => {        
+
     const re = {
         playername: playername,
         trueacc: trueacc,
@@ -143,129 +145,84 @@ module.exports = {
         mapid: beatmapid
     }
     fs.writeFileSync('replaydata.json', JSON.stringify(re, null, 2))
-    modenum = 0
-    let cpolmods = mods.toLowerCase();
-    if(cpolmods.includes('nf') || cpolmods.includes('NF')){
-        modenum += 1
-    }
-    if(cpolmods.includes('ez') || cpolmods.includes('EZ') ){
-        modenum += 2
-    }
-    if(cpolmods.includes('td') || cpolmods.includes('TD')){
-        modenum += 4
-    }
-    if(cpolmods.includes('hd') || cpolmods.includes('HD')){
-        modenum += 8
-    }
-    if(cpolmods.includes('hr') || cpolmods.includes('HR')){
-        modenum += 16
-    }
-    if(cpolmods.includes('sd') || cpolmods.includes('SD')){
-        modenum += 32
-    }
-    if(cpolmods.includes('dt') || cpolmods.includes('DT')){
-        modenum += 64
-    }
-    if(cpolmods.includes('rx') || cpolmods.includes('rl') || cpolmods.includes('rlx') || cpolmods.includes('RX') || cpolmods.includes('RL') || cpolmods.includes('RLX')){
-        modenum += 128
-    }
-    if(cpolmods.includes('ht') || cpolmods.includes('HT')){
-        modenum += 256
-    }
-    if(cpolmods.includes('nc') || cpolmods.includes('NC')){
-        modenum += 64//512
-    }
-    if(cpolmods.includes('fl') || cpolmods.includes('FL')){
-        modenum += 1024
-    }
-    if(cpolmods.includes('at') || cpolmods.includes('AT')){
-        modenum += 2048
-    }
-    if(cpolmods.includes('so') || cpolmods.includes('SO')){
-        modenum += 4096
-    }
-    if(cpolmods.includes('ap') || cpolmods.includes('AP')){
-        modenum += 8192
-    }
-    if(cpolmods.includes('pf') || cpolmods.includes('PF')){
-        modenum += 16384
-    }
-    if(cpolmods.includes('1k') || cpolmods.includes('1K')){
-        modenum += 67108864
-    }
-    if(cpolmods.includes('2k') || cpolmods.includes('2K')){
-        modenum += 268435456
-    }
-    if(cpolmods.includes('3k') || cpolmods.includes('3K')){
-        modenum += 134217728
-    }
-    if(cpolmods.includes('4k') || cpolmods.includes('4K')){
-        modenum += 32768
-    }
-    if(cpolmods.includes('5k') || cpolmods.includes('5K')){
-        modenum += 65536
-    }
-    if(cpolmods.includes('6k') || cpolmods.includes('6K')){
-        modenum += 131072
-    }
-    if(cpolmods.includes('7k') || cpolmods.includes('7K')){
-        modenum += 262144
-    }
-    if(cpolmods.includes('8k') || cpolmods.includes('8K')){
-        modenum += 524288
-    }
-    if(cpolmods.includes('9k') || cpolmods.includes('9K')){
-        modenum += 16777216
-    }
-    if(cpolmods.includes('fi') || cpolmods.includes('FI')){
-        modenum += 1048576
-    }
-    if(cpolmods.includes('rdm') || cpolmods.includes('RDM')){
-        modenum += 2097152
-    }
-    if(cpolmods.includes('cn') || cpolmods.includes('CN')){
-        modenum += 4194304
-    }
-    if(cpolmods.includes('tp') || cpolmods.includes('TP')){
-        modenum += 8388608
-    }
-    if(cpolmods.includes('kc') || cpolmods.includes('KC')){
-        modenum += 33554432
-    }
-    if(cpolmods.includes('sv2') || cpolmods.includes('s2') || cpolmods.includes('SV2') || cpolmods.includes('S2')){
-        modenum += 536870912
-    }
-    if(cpolmods.includes('mr') || cpolmods.includes('MR')){
-        modenum += 1073741824
-    }
 
-    let cpolpp = `https://pp.osuck.net/pp?id=${beatmapid}&mods=${mods}&combo=${maxcombo}&miss=0&acc=${trueacc}`
-    //fs.appendFileSync(osulogdir, "\n" + cpolpp)
-
-    fetch(cpolpp, {
-    }).then(res => res.json())
-    .then(output4 => {
-        fs.writeFileSync('cpolppcalc.json', JSON.stringify(output4, null, 2))
-        let cppSS = JSON.stringify(output4['pp']['acc'], ['100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('100', '');
-        let cpp95 = JSON.stringify(output4['pp']['acc'], ['95']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('95', '');
-        let clength = JSON.stringify(output4['stats']['time'], ['full']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('full', '');
-        cpp = JSON.stringify(output4['pp'], ['current']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('current', '');
-        cppfc = JSON.stringify(output4['pp'], ['fc']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('fc', '');
-        SRclean = JSON.stringify(output4['stats']['star'], ['pure']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pure', '');
-        let cmods = JSON.stringify(output4['mods'], ['name']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('name', '');
-        let cmodbpm = JSON.stringify(output4['stats']['bpm'], ['max']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max', '');
+    
+    const score = {
+        beatmap_id: beatmapid,
+        score: '6795149',
+        maxcombo: '630',
+        count50: hit50s,
+        count100: hit100s,
+        count300: hit300s,
+        countmiss: '0',
+        countkatu: '0',
+        countgeki: '0',
+        perfect: '0',
+        enabled_mods: '0',
+        user_id: '15222484',
+        date: '2022-02-08 05:24:54',
+        rank: 'S',
+        score_id: '4057765057'
+      }
+      const scorenofc = {
+        beatmap_id: beatmapid,
+        score: '6795149',
+        maxcombo: '630',
+        count50: hit50s,
+        count100: hit100s,
+        count300: hit300s,
+        countmiss: misses,
+        countkatu: '0',
+        countgeki: '0',
+        perfect: '0',
+        enabled_mods: '0',
+        user_id: '15222484',
+        date: '2022-02-08 05:24:54',
+        rank: 'A',
+        score_id: '4057765057'
+      }
+      fs.writeFileSync("debug/rsppcalc.json", JSON.stringify(score, null, 2));
+              //let ppfc = new std_ppv2().setPerformance(score);
+              //let pp =  new std_ppv2().setPerformance(scorenofc);
+              if(gamemode == '0'){
+                pp = new std_ppv2().setPerformance(scorenofc)
+                ppfc = new std_ppv2().setPerformance(score)
+            }
+            if(gamemode == '1'){
+                pp = new taiko_ppv2().setPerformance(scorenofc)
+                ppfc = new taiko_ppv2().setPerformance(score)
+            }
+            if(gamemode == '2'){
+                pp = new catch_ppv2().setPerformance(scorenofc)
+                ppfc = new catch_ppv2().setPerformance(score)
+            }
+            if(gamemode == '3'){
+                pp = new mania_ppv2().setPerformance(scorenofc)
+                ppfc = new mania_ppv2().setPerformance(score)
+            }
+            let ppw = await pp.compute();
+            let ppiffc1 = await ppfc.compute(nochokeacc);
+            let ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+            let ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
+            let ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
+            let ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+            let ppwrawtotal = ppw['total'];
+            let ppww = Math.abs(ppwrawtotal).toFixed(2);
+            let ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
+            //fs.appendFileSync(linkfetchlogdir, "\n" + ppw)
+            //fs.appendFileSync(linkfetchlogdir, "\n" + ppfc)
         
-        if(cppfc != cpp){
-            pptotalthingy = `${cpp}**pp**\n${cppfc}**pp** if ${nochokeacc}% FC`
+        if(ppww != ppiffcw){
+            pptotalthingy = `${ppww}**pp**\n${ppiffcw}**pp** if ${nochokeacc}% FC`
         }
-        if(cppfc == cpp){
-            pptotalthingy = `${cpp}**pp** FC`
+        else {
+            pptotalthingy = `${ppww}**pp** FC`
         }
         modsifthere = ''
-        if(!cmods == 'NoMod'){
-            modsifthere = `+${cmods}`
+        if(!mods.toUpperCase() == 'NM'){
+            modsifthere = `+${mods}`
         }
-        if(cmods == 'NoMod'){
+        if(mods.toUpperCase() == 'NM'){
             modsifthere = ''
         }
                 lifebar2 = (lifebar.replaceAll('|', ' ')).split(/ +/)
@@ -288,6 +245,19 @@ module.exports = {
                 data += 'Finish'
                 datacount = data.split(',')
 
+        let Embed = new Discord.MessageEmbed()
+        .setColor(0x462B71)
+        .setTitle(`replay data`)
+        //.setURL(`https://osu.ppy.sh/b/` + beatmapid)
+        .setImage('attachment://files/replayhealth.png')
+        .setThumbnail(mapbg)
+        .addField('**SCORE INFO**', `[**${playername}**](https://osu.ppy.sh/u/${playerid})\nScore set on ${bettertimeset}\n${hit300s}/${hit100s}/${hit50s}/${misses}\nCombo:**${maxcombo}** | ${trueacc}%`, true)
+        .addField('**PP**', `${pptotalthingy}`, true)
+        .addField('**MAP**', `[${fullmaptitle} \n[${mapdiff}]](https://osu.ppy.sh/b/${beatmapid}) ${modsifthere} mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})`, false)
+        .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner, false)
+        .setThumbnail(`https://a.ppy.sh/${playerid}`);
+
+                console.log(lifebarFULL)
                 const chart = new ChartJsImage();
                                 chart.setConfig({
                                     type: 'line',
@@ -307,20 +277,14 @@ module.exports = {
                                 //for some reason min and max values are ignored  
                                 chart.toFile('./files/replayhealth.png').then(w => {
         let attachement = new Discord.MessageAttachment('./files/replayhealth.png', 'replayhealth.png')
-        let Embed = new Discord.MessageEmbed()
-        .setColor(0x462B71)
-        .setTitle(`replay data`)
-        //.setURL(`https://osu.ppy.sh/b/` + beatmapid)
-        .setImage('attachment://files/replayhealth.png')
-        .setThumbnail(mapbg)
-        .addField('**SCORE INFO**', `[**${playername}**](https://osu.ppy.sh/u/${playerid})\nScore set on ${bettertimeset}\n${hit300s}/${hit100s}/${hit50s}/${misses}\nCombo:**${maxcombo}** | ${trueacc}%`, true)
-        .addField('**PP**', `${pptotalthingy}`, true)
-        .addField('**MAP**', `[${fullmaptitle} \n[${mapdiff}]](https://osu.ppy.sh/b/${beatmapid}) ${modsifthere} mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})`, false)
-        .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  cmodbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner, false)
-        .setThumbnail(`https://a.ppy.sh/${playerid}`);
         message.reply({embeds: [Embed], files: ['./files/replayhealth.png']})
     })
-})
+    .catch(error => {
+        fs.appendFileSync(linkfetchlogdir, "\n" + error)
+        fs.appendFileSync(linkfetchlogdir, "\n" + getStackTrace(error))
+        message.reply({content: "There was an error creating the health chart", embeds: [Embed], files: ['./files/replayhealth.png']})
+    })
+})()
     //})//mapdata2
 } catch (error) {
     fs.appendFileSync(linkfetchlogdir, "\n" + error)
