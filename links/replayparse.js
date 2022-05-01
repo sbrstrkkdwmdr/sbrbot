@@ -244,7 +244,7 @@ module.exports = {
                 }
                 data += 'Finish'
                 datacount = data.split(',')
-
+        
         let Embed = new Discord.MessageEmbed()
         .setColor(0x462B71)
         .setTitle(`replay data`)
@@ -256,8 +256,6 @@ module.exports = {
         .addField('**MAP**', `[${fullmaptitle} \n[${mapdiff}]](https://osu.ppy.sh/b/${beatmapid}) ${modsifthere} mapped by [${mapper}](https://osu.ppy.sh/u/${mapperlink})`, false)
         .addField('**MAP DETAILS**', "CS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + "\n" + mapsr + "⭐ \n" +  mapbpm + "BPM \n<:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner, false)
         .setThumbnail(`https://a.ppy.sh/${playerid}`);
-
-                console.log(lifebarFULL)
                 const chart = new ChartJsImage();
                                 chart.setConfig({
                                     type: 'line',
@@ -282,7 +280,7 @@ module.exports = {
     .catch(error => {
         fs.appendFileSync(linkfetchlogdir, "\n" + error)
         fs.appendFileSync(linkfetchlogdir, "\n" + getStackTrace(error))
-        message.reply({content: "There was an error creating the health chart", embeds: [Embed], files: ['./files/replayhealth.png']})
+        message.reply({content: "There was an error creating the health chart", embeds: [Embed], files: ['./files/error.png']})
     })
 })()
     //})//mapdata2
