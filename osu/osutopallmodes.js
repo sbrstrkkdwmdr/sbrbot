@@ -23,6 +23,7 @@ module.exports = {
         fs.appendFileSync(osulogdir, "\n" + "") 
 
         let pickeduserX = options.getString('user')
+        let altpickedmode = options.getString('mode')
         if(!pickeduserX){
             try{
                 findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
@@ -44,8 +45,12 @@ module.exports = {
                     fs.appendFileSync(osulogdir, "\n" + error)
                 }
             }
-            if(!pickedmode){
+
+            if(!pickedmode && !altpickedmode){
                 pickedmodex = 'osu'
+            }
+            if(altpickedmode){
+                pickedmode = altpickedmode
             }
             else if(pickedmode == 'osu' || pickedmode == 'o' || pickedmode == 'standard' || options.getString('mode') == 'std'){
                 pickedmodex = 'osu'
