@@ -12,7 +12,7 @@ module.exports = {
         //                                                       ms    s   min hour    day
         /**
          * 
-         * @param {*} date 
+         * @param {date} date 
          * @returns to 12 hour time (UTC+00)
          */
         function to12htime(date) {
@@ -39,7 +39,7 @@ module.exports = {
         }
         /**
          * 
-         * @param {*} date 
+         * @param {date} date 
          * @returns relative 12 hour time (non UTC)
          */
         function relto12htime(date) { //relative version of above
@@ -66,7 +66,7 @@ module.exports = {
         } 
         /**
          * 
-         * @param {*} weekdaynum 
+         * @param {int} weekdaynum 
          * @returns weekdays to shorthand name i.e 1 -> Mon
          */
         function dayhuman(weekdaynum){ //date.getUTCDay returns an int so this is to convert to its name
@@ -100,7 +100,7 @@ module.exports = {
         }
         /**
          * 
-         * @param {*} monthnum 
+         * @param {int} monthnum 
          * @returns name of the month in shorthand i.e 1 -> Feb
          */
         function tomonthname(monthnum){//date.getUTCMonth returns an int so this is to convert to its name

@@ -1,7 +1,6 @@
 /**
  * 
- * @param {*} ar 
- * approach rate
+ * @param {number} ar approach rate
  * @returns approach rate if the double time mod is applied
  */
 function doubletimear(ar){
@@ -27,8 +26,7 @@ function doubletimear(ar){
     }
 /**
  * 
- * @param {*} ar 
- * approach rate
+ * @param {number} ar approach rate
  * @returns approach rate if the half time mod is applied
  */
 function halftimear(ar){
