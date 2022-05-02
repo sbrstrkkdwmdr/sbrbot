@@ -225,6 +225,19 @@ module.exports = {
         if(mods.toUpperCase() == 'NM'){
             modsifthere = ''
         }
+
+        /**
+        *lifebar
+        *
+        *converts hp string into an array for chartjs
+        */
+                let lifebar2;
+        
+                        /**
+                 * data 
+                 * - sets column thingies so that chartjs actually shows all the values
+                 */
+                         let data;
                 lifebar2 = (lifebar.replaceAll('|', ' ')).split(/ +/)
                 //fs.appendFileSync(linkfetchlogdir, "\n" + lifebar2)
                 lifebarFULL1 = ''
@@ -238,6 +251,7 @@ module.exports = {
                 lifebarFULLEND = lifebarFULL2.pop()
                 lifebarFULL = lifebarFULL2
                 fs.appendFileSync(linkfetchlogdir, "\n" + lifebarFULL)
+
                 data = 'Start,'
                 for(i = 0;i<(lifebarFULL.length - 2);i++){
                     data +=', '
