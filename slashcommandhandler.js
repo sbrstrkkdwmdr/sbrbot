@@ -127,13 +127,15 @@ commands?.create({
             name: 'mode',
             description: 'what mode?', 
             required: false,
-            type: Constants.ApplicationCommandOptionTypes.STRING
+            type: Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [{'osu': 'osu'}, {'taiko': 'taiko'}, {'catch':'catch'}, {'mania':'mania'}]
         },
         {
             name: 'sort',
             description: 'what to sort plays by. defaults to pp',
             required: false,
-            type: Constants.ApplicationCommandOptionTypes.STRING
+            type: Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [{'Performance points': 'pp'}, {'Score': 'score'}, {'Most recent': 'recent'}, {'Accuracy': 'acc'}]
         }
     ]
 })
@@ -158,7 +160,8 @@ commands?.create({
             name: 'mode',
             description: 'what mode?', 
             required: false,
-            type: Constants.ApplicationCommandOptionTypes.STRING
+            type: Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [{'osu': 'osu'}, {'taiko': 'taiko'}, {'catch':'catch'}, {'mania':'mania'}]
         }
     ]
 })
@@ -266,7 +269,8 @@ commands?.create({
             name: 'mode',
             description: 'what gamemode? (default osu! standard)',
             required: false,
-            type: Constants.ApplicationCommandOptionTypes.STRING
+            type: Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [{'osu': 'osu'}, {'taiko': 'taiko'}, {'catch':'catch'}, {'mania':'mania'}]
         },
         {
             name: 'id',
@@ -291,7 +295,8 @@ commands?.create({
             name: 'type',
             description: 'whether to set mode or username',
             required: false,
-            type: Constants.ApplicationCommandOptionTypes.STRING
+            type: Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [{'username': 'user'}, {'mode': 'mode'}]
         }
     ]
 })
@@ -315,7 +320,8 @@ commands?.create({
             name: 'sort',
             description: 'what to sort plays by. defaults to score',
             required: false,
-            type: Constants.ApplicationCommandOptionTypes.STRING
+            type: Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [{'Performance points': 'pp'}, {'Score': 'score'}, {'Most recent': 'recent'}, {'Accuracy': 'acc'}]
         }
     ]
 })
@@ -339,7 +345,8 @@ commands?.create({
             name: 'sort',
             description: 'what to sort plays by. defaults to score',
             required: false,
-            type: Constants.ApplicationCommandOptionTypes.STRING
+            type: Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [{'Performance points': 'pp'}, {'Score': 'score'}, {'Most recent': 'recent'}, {'Accuracy': 'acc'}]
         }
     ]
 })
