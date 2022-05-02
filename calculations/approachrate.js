@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param {*} ar 
+ * approach rate
+ * @returns approach rate if the double time mod is applied
+ */
 function doubletimear(ar){
     let ms;
     
@@ -19,6 +25,12 @@ function doubletimear(ar){
     }
     return newAR;
     }
+/**
+ * 
+ * @param {*} ar 
+ * approach rate
+ * @returns approach rate if the half time mod is applied
+ */
 function halftimear(ar){
     let ms;
     if(ar>5){
