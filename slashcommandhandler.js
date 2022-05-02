@@ -6,7 +6,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
 //ADDED FOR SLASH CMDS
 const guildid = testguild
 const guild = client.guilds.cache.get(guildid)
-settoguild = 0
+settoguild = 0 //if set to 1, commands will be set to guild only (for testing). if set to 0 it will be set to global (works in all servers but may take a while)
 let commands 
 if(settoguild == 1){
 if (guild) {
@@ -128,14 +128,14 @@ commands?.create({
             description: 'what mode?', 
             required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING,
-            choices: [{'osu': 'osu'}, {'taiko': 'taiko'}, {'catch':'catch'}, {'mania':'mania'}]
+            choices: [{name: 'osu', value: 'osu'}, {name: 'taiko', value: 'taiko'}, {name: 'catch', value: 'catch'}, {name: 'mania', value: 'mania'}]
         },
         {
             name: 'sort',
             description: 'what to sort plays by. defaults to pp',
             required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING,
-            choices: [{'Performance points': 'pp'}, {'Score': 'score'}, {'Most recent': 'recent'}, {'Accuracy': 'acc'}]
+            choices: [{name: 'Performance points', value: 'pp'}, {name: 'Score', value: 'score'}, {name: 'Most recent', value: 'recent'}, {name: 'Accuracy', value: 'acc'}]
         }
     ]
 })
@@ -161,7 +161,7 @@ commands?.create({
             description: 'what mode?', 
             required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING,
-            choices: [{'osu': 'osu'}, {'taiko': 'taiko'}, {'catch':'catch'}, {'mania':'mania'}]
+            choices: [{name: 'osu', value: 'osu'}, {name: 'taiko', value: 'taiko'}, {name: 'catch', value: 'catch'}, {name: 'mania', value: 'mania'}]
         }
     ]
 })
@@ -270,7 +270,7 @@ commands?.create({
             description: 'what gamemode? (default osu! standard)',
             required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING,
-            choices: [{'osu': 'osu'}, {'taiko': 'taiko'}, {'catch':'catch'}, {'mania':'mania'}]
+            choices: [{name: 'osu', value: 'osu'}, {name: 'taiko', value: 'taiko'}, {name: 'catch', value: 'catch'}, {name: 'mania', value: 'mania'}]
         },
         {
             name: 'id',
@@ -296,7 +296,7 @@ commands?.create({
             description: 'whether to set mode or username',
             required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING,
-            choices: [{'username': 'user'}, {'mode': 'mode'}]
+            choices: [{name:'username', value: 'user'}, {name: 'mode', value: 'mode'}]
         }
     ]
 })
@@ -321,7 +321,7 @@ commands?.create({
             description: 'what to sort plays by. defaults to score',
             required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING,
-            choices: [{'Performance points': 'pp'}, {'Score': 'score'}, {'Most recent': 'recent'}, {'Accuracy': 'acc'}]
+            choices: [{name: 'Performance points', value: 'pp'}, {name: 'Score', value: 'score'}, {name: 'Most recent', value: 'recent'}, {name: 'Accuracy', value: 'acc'}]
         }
     ]
 })
@@ -346,7 +346,7 @@ commands?.create({
             description: 'what to sort plays by. defaults to score',
             required: false,
             type: Constants.ApplicationCommandOptionTypes.STRING,
-            choices: [{'Performance points': 'pp'}, {'Score': 'score'}, {'Most recent': 'recent'}, {'Accuracy': 'acc'}]
+            choices: [{name: 'Performance points', value: 'pp'}, {name: 'Score', value: 'score'}, {name: 'Most recent', value: 'recent'}, {name: 'Accuracy', value: 'acc'}]
         }
     ]
 })
@@ -371,7 +371,8 @@ commands?.create({
             name: 'mode',
             description: 'what mode?', 
             required: false,
-            type: Constants.ApplicationCommandOptionTypes.STRING
+            type: Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [{name: 'osu', value: 'osu'}, {name: 'taiko', value: 'taiko'}, {name: 'catch', value: 'catch'}, {name: 'mania', value: 'mania'}]
         }
     ]
 })
@@ -384,7 +385,8 @@ commands?.create({
             name: 'type',
             description: 'what to filter scores by (global/mods/friends)',
             required: false,
-            type: Constants.ApplicationCommandOptionTypes.STRING
+            type: Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [{name: 'global', value: 'global'}, {name: 'mods', value: 'mods'}, {name: 'friends', value: 'friends'}]
         },
         {
             name: 'input',
