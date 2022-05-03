@@ -62,4 +62,13 @@ function sigfig(a, b) {
   let c = s + " x 10^" + (a.toString().length - 1);
   return c;
 }
-module.exports = { findHCF, findLCM, pythag, sigfig };
+/**
+ *
+ * @param {number} number
+ * @returns checks if number is under two decimals, then will return the number with two decimals or less
+ */
+function fixtoundertwo(number) {
+  if ((number * 100).isInteger()) return number;
+  else return number.toFixed(2);
+}
+module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo };
