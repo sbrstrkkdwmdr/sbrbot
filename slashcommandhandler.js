@@ -30,6 +30,21 @@ module.exports = (
     if (settoguild == 0) {
         commands = client.application?.commands;
     }
+
+    modeselection = [
+        { name: "osu", value: "osu" },
+        { name: "taiko", value: "taiko" },
+        { name: "catch", value: "catch" },
+        { name: "mania", value: "mania" },
+    ]
+    scoresorting = [
+        { name: "Performance points", value: "pp" },
+        { name: "Score", value: "score" },
+        { name: "Most recent", value: "recent" },
+        { name: "Accuracy", value: "acc" },
+    ]
+
+
     commands?.create({
         name: "ping",
         description: "replies with pong.",
@@ -156,24 +171,14 @@ module.exports = (
                 description: "what mode?",
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [
-                    { name: "osu", value: "osu" },
-                    { name: "taiko", value: "taiko" },
-                    { name: "catch", value: "catch" },
-                    { name: "mania", value: "mania" },
-                ],
+                choices: modeselection
             },
             {
                 name: "sort",
                 description: "what to sort plays by. defaults to pp",
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [
-                    { name: "Performance points", value: "pp" },
-                    { name: "Score", value: "score" },
-                    { name: "Most recent", value: "recent" },
-                    { name: "Accuracy", value: "acc" },
-                ],
+                choices: scoresorting,
             },
         ],
     });
@@ -199,12 +204,7 @@ module.exports = (
                 description: "what mode?",
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [
-                    { name: "osu", value: "osu" },
-                    { name: "taiko", value: "taiko" },
-                    { name: "catch", value: "catch" },
-                    { name: "mania", value: "mania" },
-                ],
+                choices: modeselection,
             },
         ],
     });
@@ -372,12 +372,7 @@ module.exports = (
                 description: "what to sort plays by. defaults to score",
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [
-                    { name: "Performance points", value: "pp" },
-                    { name: "Score", value: "score" },
-                    { name: "Most recent", value: "recent" },
-                    { name: "Accuracy", value: "acc" },
-                ],
+                choices: scoresorting,
             },
         ],
     });
@@ -402,12 +397,7 @@ module.exports = (
                 description: "what to sort plays by. defaults to score",
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [
-                    { name: "Performance points", value: "pp" },
-                    { name: "Score", value: "score" },
-                    { name: "Most recent", value: "recent" },
-                    { name: "Accuracy", value: "acc" },
-                ],
+                choices: scoresorting,
             },
         ],
     });
@@ -669,8 +659,7 @@ module.exports = (
                         currentDateISO,
                         osuapikey,
                         osuauthtoken,
-                        osuclientid,
-                        osuclientsecret
+                        osuclientid, osuclientsecret
                     );
                 //else client.osucmds.get('osutop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
                 //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
