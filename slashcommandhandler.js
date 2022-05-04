@@ -73,6 +73,20 @@ module.exports = (
                 description: "method",
                 required: true,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
+                choices: [
+                    { name: 'square root', value: 'sqrt' },
+                    { name: 'square', value: 'square' },
+                    { name: 'factorial', value: '!' },
+                    { name: 'highest common factor', value: 'hcf' },
+                    { name: 'lowest common multiple', value: 'lcm' },
+                    { name: 'approach rate if double time', value: 'ardt' },
+                    { name: 'approach rate if half time', value: 'arht' },
+                    { name: 'circumference', value: 'circumference' },
+                    { name: 'area of a circle', value: 'circlearea' },
+                    { name: 'find the hypotenuse of a right angle triangle', value: 'pythag' },
+                    { name: 'number to scientific notation', value: 'sigfig' },
+                    { name: 'list all options', value: 'help' }
+                ]
             },
             {
                 name: "num1",
