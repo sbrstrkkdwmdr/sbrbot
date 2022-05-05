@@ -1,24 +1,15 @@
 //tsfm shorthand for - top score for map
-const fetch = require("node-fetch");
-const POST = require("node-fetch");
-const fs = require("fs");
-const { osulogdir } = require("../logconfig.json");
-const { getStackTrace } = require("../somestuffidk/log");
+const fetch = require('node-fetch');
+const POST = require('node-fetch');
+const fs = require('fs');
+const { osulogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: "tsfm",
     description: "",
     async execute(
-        userdatatags,
-        interaction,
-        options,
-        Discord,
-        currentDate,
-        currentDateISO,
-        osuapikey,
-        osuauthtoken,
-        osuclientid,
-        osuclientsecret
+        userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret
     ) {
         interaction.reply("getting data...");
         fs.appendFileSync(osulogdir, "\n" + "--- COMMAND EXECUTION ---");

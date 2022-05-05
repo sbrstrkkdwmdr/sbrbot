@@ -17,16 +17,7 @@ module.exports = {
     name: "map",
     description: "",
     execute(
-        interaction,
-        options,
-        Discord,
-        currentDate,
-        currentDateISO,
-        osuapikey,
-        osuauthtoken,
-        osuclientid,
-        osuclientsecret
-    ) {
+        interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         fs.appendFileSync(osulogdir, "\n" + "--- COMMAND EXECUTION ---");
         let mapid = options.getNumber("id");
         let mods = options.getString("mods");
