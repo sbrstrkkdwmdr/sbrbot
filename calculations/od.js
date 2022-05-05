@@ -1,7 +1,7 @@
-function oddt(od){
-    
+function oddt(od) {
+
 }
-function odht(od){
-    
+function odht(od) {
+
 }
-module.exports = {oddt, odht}
+module.exports = { oddt, odht }
