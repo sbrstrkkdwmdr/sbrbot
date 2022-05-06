@@ -88,7 +88,7 @@ module.exports = {
                 try {
                     const osudata = output1;
                     fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
-                    let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
+                    let playerid = (osudata.id)
                     if (!playerid) {
                         interaction.channel.send("Error - account not found")
                         fs.appendFileSync(osulogdir, "\n" + "error - account not found and/or json sent no data")
@@ -109,8 +109,8 @@ module.exports = {
                                 fs.appendFileSync(osulogdir, "\n" + "writing data to rs.json")
                                 fs.appendFileSync(osulogdir, "\n" + "")
                                 try {
-                                    let rsplayerid = JSON.stringify(rsdata[0], ['user_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('user_id', '');
-                                    let rsplayername = JSON.stringify(rsdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('username', '');
+                                    let rsplayerid = rsdata[0].user_id
+                                    let rsplayername = rsdata[0].user.username
                                     /*
                                                     const fileName = 'debug/storedmap.json';
                                                     const file = require('../debug/storedmap.json');  
@@ -124,34 +124,39 @@ module.exports = {
                                                     });*/
 
                                     fulltext = ''
-                                    for (i = 0; i < 5; i++) {
+                                    let underamount = 5
+                                    if (rsdata.length < 5){ 
+                                        underamount = rsdata.length
+                                    }
+                                    for (i = 0; i < underamount; i++) {
                                         //console.log(i)
-                                        let rsmapnameunicode = JSON.stringify(rsdata[i]['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title_unicode', '');
-                                        let rsmapnameenglish = JSON.stringify(rsdata[i]['beatmapset'], ['title']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title', '');
+                                        i = parseInt(i)
+                                        rsmapnameunicode = JSON.stringify(rsdata[i].beatmapset.title_unicode).slice(1, -1)
+                                        rsmapnameenglish = JSON.stringify(rsdata[i].beatmapset.title).slice(1, -1)
                                         if (rsmapnameunicode != rsmapnameenglish) {
                                             rsmapname = `${rsmapnameunicode} | ${rsmapnameenglish}`
                                         }
                                         else {
                                             rsmapname = rsmapnameenglish
                                         }
-                                        let rsdiffname = JSON.stringify(rsdata[i]['beatmap'], ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('version', '');
+                                        let rsdiffname = JSON.stringify(rsdata[i].beatmap.version).slice(1, -1)
                                         let maptitles = `${rsmapname} [${rsdiffname}]`
-                                        let rsmods = JSON.stringify(rsdata[i], ['mods']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('mods', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
-                                        let rsacc = JSON.stringify(rsdata[i], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('accuracy', '');
-                                        let rs0s = JSON.stringify(rsdata[i]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_miss', '');
-                                        let rs50s = JSON.stringify(rsdata[i]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_50', '');
-                                        let rs100s = JSON.stringify(rsdata[i]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_100', '');
-                                        let rs300s = JSON.stringify(rsdata[i]['statistics'], ['count_300']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_300', '');
-                                        let rsgeki = JSON.stringify(rsdata[i]['statistics'], ['count_geki']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_geki', '');
-                                        let rskatu = JSON.stringify(rsdata[i]['statistics'], ['count_katu']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_katu', '');
-                                        let rsmaptime = JSON.stringify(rsdata[i], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('created_at', '').slice(0, 19).replaceAll('T', ' ')
-                                        let rspp1 = JSON.stringify(rsdata[i], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pp', '');
+                                        let rsmods = JSON.stringify(rsdata[i].mods).replaceAll(',', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '');
+                                        let rsacc = JSON.parse(rsdata[i].accuracy)
+                                        let rs0s = JSON.parse(rsdata[i].statistics.count_miss)
+                                        let rs50s = JSON.parse(rsdata[i].statistics.count_50)
+                                        let rs100s = JSON.parse(rsdata[i].statistics.count_100)
+                                        let rs300s = JSON.parse(rsdata[i].statistics.count_300)
+                                        let rsgeki = JSON.parse(rsdata[i].statistics.count_geki)
+                                        let rskatu = JSON.parse(rsdata[i].statistics.count_katu)
+                                        let rsmaptime = JSON.stringify(rsdata[i].created_at).slice(1, -1).slice(0, 19).replaceAll('T', ' ')
+                                        let rspp1 = rsdata[i].pp
                                         let rspp = Math.abs(rspp1).toFixed(2);
-                                        let rsmapstar = JSON.stringify(rsdata[i]['beatmap'], ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
-                                        let rsgrade = JSON.stringify(rsdata[i], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('rank', '');
-                                        rsmapid = JSON.stringify(rsdata[i]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
-                                        let rscombo = JSON.stringify(rsdata[i], ['max_combo']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max_combo', '');
-                                        let fc = JSON.stringify(rsdata[i], ['perfect']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('perfect', '');
+                                        let rsmapstar = JSON.stringify(rsdata[i].beatmap.difficulty_rating)
+                                        let rsgrade = rsdata[i].rank.toString()
+                                        rsmapid = rsdata[i].beatmap.id
+                                        let rscombo = rsdata[i].max_combo
+                                        let fc = rsdata[i].perfect
                                         //console.log(rsmapid)
                                         if (rsgrade == 'xh' || rsgrade == 'XH') {
                                             rsgrade = '<:rankingxh:927797179597357076>'
@@ -198,15 +203,15 @@ module.exports = {
                                         if (pickedmodex == 'mania') {
                                             hitlist = `**300+**:${rsgeki} | **300:** ${rs300s} | **200:** ${rskatu} | **100:** ${rs100s} | **50:** ${rs50s} | **X:** ${rs0s}`
                                         }
-                                        if (fc == 'false') {
-                                            fcflag = ``
+                                        if (fc == false) {
+                                            fcflag = `⠀`
                                         }
-                                        if (fc == 'true') {
+                                        if (fc == true) {
                                             fcflag = '**FC**'
                                         }
-                                        let fulltimeset1 = JSON.stringify(rsdata[i], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 18);
-                                        let fulltimeset2 = JSON.stringify(rsdata[i], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('created_at', '').slice(0, 12);
-                                        let fulltimeset3 = JSON.stringify(fulltimeset1).slice(12, 18)
+                                        let fulltimeset1 = (rsdata[i].created_at).slice(0, 18);
+                                        let fulltimeset2 = (rsdata[i].created_at).slice(0, 12);
+                                        let fulltimeset3 = (fulltimeset1).slice(12, 18)
                                         //fs.appendFileSync(osulogdir, "\n" + fulltimeset3)
                                         let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0, -1)
                                         let fulltimeset5 = fulltimeset4.slice(1, 10)
@@ -225,7 +230,7 @@ module.exports = {
                                         let minlastvisw = (lastvishours + "h " + lastvisminutes + "m");
                                         fulltext += `**${offsetflag + i + 1}** | [${maptitles}](https://osu.ppy.sh/b/${rsmapid}) ${rsmods2}\n${rsmaptime} (${minlastvisw} ago) \n**${(rsacc * 100).toFixed(2)}%** | **${rspp}**pp ${fcflag} | **${rsgrade}** | **${rscombo}x**\n${hitlist}\n\n`
                                     }
-                                    rscoverlist = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['list']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('list', '').replace('https', 'https:');
+                                    rscoverlist = (rsdata[0].beatmapset.covers.list)
                                     let Embed = new Discord.MessageEmbed()
                                         .setColor(0x9AAAC0)
                                         //.setTitle("Recent plays for ")

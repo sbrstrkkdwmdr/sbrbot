@@ -10,6 +10,7 @@ const {
     easymultiplier,
     hardrockmultiplier,
 } = require("../calculations/approachrate");
+const { hardrockmult, easymult } = require("../calculations/modmultiplier")
 const { getStackTrace } = require("../somestuffidk/log");
 //            fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
 
@@ -108,25 +109,22 @@ module.exports = {
                         let mapcircle = (mapdata.count_circles);
                         let mapslider = (mapdata.count_sliders);
                         let mapspinner = (mapdata.count_spinners);
-                        let mapper = (mapdata.beatmapset.creator).replaceAll(
-                            '"',
-                            ""
-                        );
+                        let mapper = (mapdata.beatmapset.creator)
                         let maptitleuni = (
                             mapdata.beatmapset.title_unicode
-                        ).replaceAll('"', "");
+                        );
                         let maptitlenorm = (
                             mapdata.beatmapset.title
-                        ).replaceAll('"', "");
+                        );
                         let maptitle = maptitleuni;
                         if (maptitlenorm != maptitleuni) {
                             maptitle = `${maptitleuni}\n${maptitlenorm}`;
                         }
 
-                        let mapdiff = (mapdata.version).replaceAll('"', "");
+                        let mapdiff = (mapdata.version);
                         let mapartist = (
                             mapdata.beatmapset.artist
-                        ).replaceAll('"', "");
+                        );
                         let mapmaxcombo = (mapdata.max_combo);
                         let maplength = (mapdata.total_length);
                         let maphitonly = (mapdata.hit_length);
@@ -156,12 +154,7 @@ module.exports = {
                         let maphptoint = Math.abs(maphp);
                         let mapodtoint = Math.abs(mapod);
 
-                        let mapstatus = (mapdata, ["status"])
-                            .replaceAll("{", "")
-                            .replaceAll('"', "")
-                            .replace("}", "")
-                            .replace(":", "")
-                            .replace("status", "");
+                        let mapstatus = (mapdata.status)
                         if (mapstatus == "ranked") {
                             statusimg = "<:statusranked:944512775579926609>";
                         }
@@ -235,10 +228,11 @@ module.exports = {
                                 !moddetect.includes("HT") &&
                                 !moddetect.includes("DT")
                             ) {
-                                mapcs = Math.abs(mapcsNM * 1.3).toFixed(2);
-                                mapar = Math.abs(maparNM * 1.4).toFixed(2);
-                                maphp = Math.abs(maphpNM * 1.4).toFixed(2);
-                                mapod = Math.abs(mapodNM * 1.4).toFixed(2);
+                                hardrockobj = hardrockmult(mapcsNM, maparNM, mapodNM, maphpNM)
+                                mapcs = hardorckobj.cs
+                                mapar = hardorckobj.ar
+                                maphp = hardorckobj.hp
+                                mapod = hardorckobj.od
                                 if (mapar > 10) {
                                     mapar = 10;
                                 }
@@ -268,7 +262,6 @@ module.exports = {
                             if (moddetect.includes("EZ") && moddetect.includes("HT")) {
                                 mapcs = Math.abs(mapcsNM / 2);
                                 mapar = Math.abs(halftimear(maparNM / 2));
-
                                 maphp = Math.abs(maphpNM / 2) + "⌄";
                                 mapod = Math.abs(mapodNM / 2) + "⌄";
                                 mapbpm = Math.abs(mapbpmNM * 0.75);
@@ -300,23 +293,12 @@ module.exports = {
                                 recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                             }
                             if (moddetect.includes("HR") && moddetect.includes("HT")) {
-                                mapcs = Math.abs(mapcsNM * 1.3);
-                                mapar = Math.abs(halftimear(maparNM * 1.4));
-                                maphp = Math.abs(maphpNM * 1.4); //.toFixed(2) //+ "⌄";
-                                mapod = Math.abs(mapodNM * 1.4); //.toFixed(2) //+ "⌄";
+                                hardrockobj = hardrockmult(mapcsNM, maparNM, mapodNM, maphpNM)
+                                mapcs = hardorckobj.cs
+                                mapar = halftimear(hardorckobj.ar)
+                                maphp = hardorckobj.hp + "⌄"
+                                mapod = hardorckobj.od + "⌄"
 
-                                if (maphp >= 10) {
-                                    maphp = 10 + "⌄";
-                                }
-                                if (mapod >= 10) {
-                                    mapod = 10 + "⌄";
-                                }
-                                if (maphp < 10) {
-                                    maphp = maphp + "⌄";
-                                }
-                                if (mapod < 10) {
-                                    mapod = mapod + "⌄";
-                                }
                                 mapbpm = Math.abs(mapbpmNM * 0.75);
                                 if (Number.isInteger(mapbpm * 100) == false) {
                                     mapbpm = mapbpm.toFixed(2);
@@ -332,7 +314,7 @@ module.exports = {
                                 recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                             }
                             if (moddetect.includes("HR") && moddetect.includes("DT")) {
-                                mapcs = Math.abs(mapcsNM * 1.3);
+                                mapcs = Math.abs(mapcsNM * 1.3).toFixed(2);;
                                 mapar = Math.abs(doubletimear(maparNM * 1.4));
 
                                 //fs.appendFileSync(osulogdir, "\n" + Number.isInteger(mapar * 100))
@@ -482,7 +464,7 @@ module.exports = {
                                 moddetectforsr = modtoarray2.split(/ +/);
                                 starRating = await calculateStarRating(maplink, moddetectforsr);
                                 //fs.appendFileSync(osulogdir, "\n" + starRating)
-                                SR = (starRating)
+                                SR = (starRating).toString()
                                     .replace(moddetectnotd, "")
                                     .replace("nomod", "")
                                     .replaceAll('"', "");
@@ -496,12 +478,7 @@ module.exports = {
                             })
                                 .then((res) => res.json())
                                 .then((output3) => {
-                                    let mapperid = (output3, ["id"])
-                                        .replaceAll("{", "")
-                                        .replaceAll('"', "")
-                                        .replaceAll("}", "")
-                                        .replaceAll(":", "")
-                                        .replaceAll("id", "");
+                                    let mapperid = (output3.id)
                                     let Embed = new Discord.MessageEmbed()
                                         .setColor(0x91ff9a)
                                         .setTitle(`${maptitle}`)
@@ -555,7 +532,7 @@ module.exports = {
                                 });
                         })();
                     } catch (error) {
-                        interaction.editReply("error");
+                        interaction.followUp("error");
                         fs.appendFileSync(osulogdir, "\n" + error);
                         fs.appendFileSync(osulogdir, "\n" + getStackTrace(error));
                         fs.appendFileSync(osulogdir, "\n" + "");

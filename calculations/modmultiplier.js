@@ -12,20 +12,16 @@ function hardrockmult(cs, ar, od, hp) {
     hardrockar = fixtoundertwo(ar * 1.4);
     hardrockod = fixtoundertwo(od * 1.4);
     hardrockhp = fixtoundertwo(hp * 1.4);
-    let hardrockobject = [
-        {
+    let hardrockobject = {
             oldCS: cs,
             oldAR: ar,
             oldOD: od,
             oldHP: hp,
-        },
-        {
             cs: hardrockcs,
             ar: hardrockar,
             od: hardrockod,
             hp: hardrockhp,
-        },
-    ];
+};
 
     return hardrockobject;
 }
@@ -42,20 +38,17 @@ function easymult(cs, ar, od, hp) {
     easyar = fixtoundertwo(ar / 2);
     easyod = fixtoundertwo(od / 2);
     easyhp = fixtoundertwo(hp / 2);
-    let easyobject = [
+    let easyobject = 
         {
             oldCS: cs,
             oldAR: ar,
             oldOD: od,
             oldHP: hp,
-        },
-        {
             cs: easycs,
             ar: easyar,
             od: easyod,
             hp: easyhp,
-        },
-    ];
+        }
 
     return easyobject;
 }

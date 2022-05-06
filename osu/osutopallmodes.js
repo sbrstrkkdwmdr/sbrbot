@@ -152,160 +152,6 @@ module.exports = {
                                 //let mapbg1 = JSON.stringify(osutopdata[0]['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
                                 let topplayeravatar = JSON.stringify(osutopdata[0]['user'], ['avatar_url']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('avatar_url', '').replace('https', 'https:');
 
-                                let maptitle1 = JSON.stringify(osutopdata[0]['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title_unicode', '');
-                                let mapdiff1 = JSON.stringify(osutopdata[0]['beatmap'], ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('version', '');
-                                let mapurl1 = JSON.stringify(osutopdata[0]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('id', '');
-                                let maptimeset1 = JSON.stringify(osutopdata[0], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replace('created_at', '').slice(0, 19).replaceAll('T', ' ');
-                                let mapacc1 = JSON.stringify(osutopdata[0], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('accuracy', '');
-                                let weightedmappp1 = JSON.stringify(osutopdata[0]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
-                                let weightedpppercent1 = JSON.stringify(osutopdata[0]['weight'], ['percentage']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('percentage', '');
-                                let mappp1 = JSON.stringify(osutopdata[0], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
-
-                                let mapmiss1 = JSON.stringify(osutopdata[0]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_miss', '');
-                                let map501 = JSON.stringify(osutopdata[0]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_50', '');
-                                let map1001 = JSON.stringify(osutopdata[0]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_100', '');
-                                let map3001 = JSON.stringify(osutopdata[0]['statistics'], ['count_300']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_300', '');
-                                let map2001 = JSON.stringify(osutopdata[0]['statistics'], ['count_katu']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_katu', '');
-                                let map300max1 = JSON.stringify(osutopdata[0]['statistics'], ['count_geki']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_geki', '');
-                                let maprank1 = JSON.stringify(osutopdata[0], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('rank', '');
-                                let mapscore11 = JSON.stringify(osutopdata[0], ['score']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('score', '');
-                                let mapmods10 = JSON.stringify(osutopdata[0], ['mods']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('mods', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
-                                if (mapmods10) {
-                                    mapmods1 = '+' + mapmods10
-                                }
-                                else {
-                                    mapmods1 = ''
-                                }
-
-                                let maptitle2 = JSON.stringify(osutopdata[1]['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title_unicode', '');
-                                let mapdiff2 = JSON.stringify(osutopdata[1]['beatmap'], ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('version', '');
-                                let mapurl2 = JSON.stringify(osutopdata[1]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('id', '');
-                                let maptimeset2 = JSON.stringify(osutopdata[1], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replace('created_at', '').slice(0, 19).replaceAll('T', ' ');
-                                let mapacc2 = JSON.stringify(osutopdata[1], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('accuracy', '');
-                                let weightedmappp2 = JSON.stringify(osutopdata[1]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
-                                let weightedpppercent2 = JSON.stringify(osutopdata[1]['weight'], ['percentage']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('percentage', '');
-                                let mappp2 = JSON.stringify(osutopdata[1], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
-                                let mapmiss2 = JSON.stringify(osutopdata[1]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_miss', '');
-                                let map502 = JSON.stringify(osutopdata[1]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_50', '');
-                                let map1002 = JSON.stringify(osutopdata[1]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_100', '');
-                                let map3002 = JSON.stringify(osutopdata[1]['statistics'], ['count_300']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_300', '');
-                                let map2002 = JSON.stringify(osutopdata[1]['statistics'], ['count_katu']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_katu', '');
-                                let map300max2 = JSON.stringify(osutopdata[1]['statistics'], ['count_geki']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_geki', '');
-
-                                let maprank2 = JSON.stringify(osutopdata[1], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('rank', '');
-                                let mapscore21 = JSON.stringify(osutopdata[1], ['score']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('score', '');
-                                let mapmods20 = JSON.stringify(osutopdata[1], ['mods']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('mods', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
-                                if (mapmods20) {
-                                    mapmods2 = '+' + mapmods20
-                                }
-                                else {
-                                    mapmods2 = ''
-                                }
-
-                                let maptitle3 = JSON.stringify(osutopdata[2]['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title_unicode', '');
-                                let mapdiff3 = JSON.stringify(osutopdata[2]['beatmap'], ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('version', '');
-                                let mapurl3 = JSON.stringify(osutopdata[2]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('id', '');
-                                let maptimeset3 = JSON.stringify(osutopdata[2], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replace('created_at', '').slice(0, 19).replaceAll('T', ' ');
-                                let mapacc3 = JSON.stringify(osutopdata[2], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('accuracy', '');
-                                let weightedmappp3 = JSON.stringify(osutopdata[2]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
-                                let weightedpppercent3 = JSON.stringify(osutopdata[2]['weight'], ['percentage']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('percentage', '');
-                                let mappp3 = JSON.stringify(osutopdata[2], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
-                                let mapmiss3 = JSON.stringify(osutopdata[2]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_miss', '');
-                                let map503 = JSON.stringify(osutopdata[2]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_50', '');
-                                let map1003 = JSON.stringify(osutopdata[2]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_100', '');
-                                let map3003 = JSON.stringify(osutopdata[2]['statistics'], ['count_300']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_300', '');
-                                let map2003 = JSON.stringify(osutopdata[2]['statistics'], ['count_katu']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_katu', '');
-                                let map300max3 = JSON.stringify(osutopdata[2]['statistics'], ['count_geki']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_geki', '');
-
-                                let maprank3 = JSON.stringify(osutopdata[2], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('rank', '');
-                                let mapscore31 = JSON.stringify(osutopdata[2], ['score']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('score', '');
-                                let mapmods30 = JSON.stringify(osutopdata[2], ['mods']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('mods', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
-                                if (mapmods30) {
-                                    mapmods3 = '+' + mapmods30
-                                }
-                                else {
-                                    mapmods3 = ''
-                                }
-                                let maptitle4 = JSON.stringify(osutopdata[3]['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title_unicode', '');
-                                let mapdiff4 = JSON.stringify(osutopdata[3]['beatmap'], ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('version', '');
-                                let mapurl4 = JSON.stringify(osutopdata[3]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('id', '');
-                                let maptimeset4 = JSON.stringify(osutopdata[3], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replace('created_at', '').slice(0, 19).replaceAll('T', ' ');
-                                let mapacc4 = JSON.stringify(osutopdata[3], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('accuracy', '');
-                                let weightedmappp4 = JSON.stringify(osutopdata[3]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
-                                let weightedpppercent4 = JSON.stringify(osutopdata[3]['weight'], ['percentage']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('percentage', '');
-                                let mappp4 = JSON.stringify(osutopdata[3], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
-                                let mapmiss4 = JSON.stringify(osutopdata[3]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_miss', '');
-                                let map504 = JSON.stringify(osutopdata[3]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_50', '');
-                                let map1004 = JSON.stringify(osutopdata[3]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_100', '');
-                                let map3004 = JSON.stringify(osutopdata[3]['statistics'], ['count_300']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_300', '');
-                                let map2004 = JSON.stringify(osutopdata[3]['statistics'], ['count_katu']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_katu', '');
-                                let map300max4 = JSON.stringify(osutopdata[3]['statistics'], ['count_geki']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_geki', '');
-                                let maprank4 = JSON.stringify(osutopdata[3], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('rank', '');
-                                let mapscore41 = JSON.stringify(osutopdata[3], ['score']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('score', '');
-                                let mapmods40 = JSON.stringify(osutopdata[3], ['mods']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('mods', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
-                                if (mapmods40) {
-                                    mapmods4 = '+' + mapmods40
-                                }
-                                else {
-                                    mapmods4 = ''
-                                }
-                                let maptitle5 = JSON.stringify(osutopdata[4]['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('title_unicode', '');
-                                let mapdiff5 = JSON.stringify(osutopdata[4]['beatmap'], ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('version', '');
-                                let mapurl5 = JSON.stringify(osutopdata[4]['beatmap'], ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('id', '');
-                                let maptimeset5 = JSON.stringify(osutopdata[4], ['created_at']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replace('created_at', '').slice(0, 19).replaceAll('T', ' ');
-                                let mapacc5 = JSON.stringify(osutopdata[4], ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('accuracy', '');
-                                let weightedmappp5 = JSON.stringify(osutopdata[4]['weight'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
-                                let weightedpppercent5 = JSON.stringify(osutopdata[4]['weight'], ['percentage']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('percentage', '');
-                                let mappp5 = JSON.stringify(osutopdata[4], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('pp', '');
-                                let mapmiss5 = JSON.stringify(osutopdata[4]['statistics'], ['count_miss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_miss', '');
-                                let map505 = JSON.stringify(osutopdata[4]['statistics'], ['count_50']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_50', '');
-                                let map1005 = JSON.stringify(osutopdata[4]['statistics'], ['count_100']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_100', '');
-                                let map3005 = JSON.stringify(osutopdata[4]['statistics'], ['count_300']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_300', '');
-                                let map2005 = JSON.stringify(osutopdata[4]['statistics'], ['count_katu']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_katu', '');
-                                let map300max5 = JSON.stringify(osutopdata[4]['statistics'], ['count_geki']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('count_geki', '');
-                                let maprank5 = JSON.stringify(osutopdata[4], ['rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('rank', '');
-                                let mapscore51 = JSON.stringify(osutopdata[4], ['score']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('score', '');
-                                let mapmods50 = JSON.stringify(osutopdata[4], ['mods']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('mods', '').replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
-
-                                mapscore1 = mapscore11.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                mapscore2 = mapscore21.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                mapscore3 = mapscore31.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                mapscore4 = mapscore41.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                mapscore5 = mapscore51.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                if (mapmods50) {
-                                    mapmods5 = '+' + mapmods50
-                                }
-                                else {
-                                    mapmods5 = ''
-                                }
-                                if (pickedmodex == 'osu') {
-                                    hitlist1 = `**300:** ${map3001} **100:** ${map1001} **50:** ${map501} **X:** ${mapmiss1}`
-                                    hitlist2 = `**300:** ${map3002} **100:** ${map1002} **50:** ${map502} **X:** ${mapmiss2}`
-                                    hitlist3 = `**300:** ${map3003} **100:** ${map1003} **50:** ${map503} **X:** ${mapmiss3}`
-                                    hitlist4 = `**300:** ${map3004} **100:** ${map1004} **50:** ${map504} **X:** ${mapmiss4}`
-                                    hitlist5 = `**300:** ${map3005} **100:** ${map1005} **50:** ${map505} **X:** ${mapmiss5}`
-                                }
-                                if (pickedmodex == 'taiko') {
-                                    hitlist1 = `**300(GREAT):** ${map3001} **100(GOOD):** ${map1001} **X:** ${mapmiss1}`
-                                    hitlist2 = `**300(GREAT):** ${map3002} **100(GOOD):** ${map1002} **X:** ${mapmiss2}`
-                                    hitlist3 = `**300(GREAT):** ${map3003} **100(GOOD):** ${map1003} **X:** ${mapmiss3}`
-                                    hitlist4 = `**300(GREAT):** ${map3004} **100(GOOD):** ${map1004} **X:** ${mapmiss4}`
-                                    hitlist5 = `**300(GREAT):** ${map3005} **100(GOOD):** ${map1005} **X:** ${mapmiss5}`
-                                }
-                                if (pickedmodex == 'fruits') {
-                                    hitlist1 = `**300:** ${map3001} **100(Drops):** ${map1001} **50(Droplets):** ${map501} **X:** ${mapmiss1}`
-                                    hitlist2 = `**300:** ${map3002} **100(Drops):** ${map1002} **50(Droplets):** ${map502} **X:** ${mapmiss2}`
-                                    hitlist3 = `**300:** ${map3003} **100(Drops):** ${map1003} **50(Droplets):** ${map503} **X:** ${mapmiss3}`
-                                    hitlist4 = `**300:** ${map3004} **100(Drops):** ${map1004} **50(Droplets):** ${map504} **X:** ${mapmiss4}`
-                                    hitlist5 = `**300:** ${map3005} **100(Drops):** ${map1005} **50(Droplets):** ${map505} **X:** ${mapmiss5}`
-                                }
-                                if (pickedmodex == 'mania') {
-                                    hitlist1 = `**300+**: ${map300max1} **300:** ${map3001} **200:** ${map2001} **100:** ${map1001} **50:** ${map501} **X:** ${mapmiss1}`
-                                    hitlist2 = `**300+**: ${map300max2} **300:** ${map3002} **200:** ${map2002} **100:** ${map1002} **50:** ${map502} **X:** ${mapmiss2}`
-                                    hitlist3 = `**300+**: ${map300max3} **300:** ${map3003} **200:** ${map2003} **100:** ${map1003} **50:** ${map503} **X:** ${mapmiss3}`
-                                    hitlist4 = `**300+**: ${map300max4} **300:** ${map3004} **200:** ${map2004} **100:** ${map1004} **50:** ${map504} **X:** ${mapmiss4}`
-                                    hitlist5 = `**300+**: ${map300max5} **300:** ${map3005} **200:** ${map2005} **100:** ${map1005} **50:** ${map505} **X:** ${mapmiss5}`
-                                }
                                 let Embed = new Discord.MessageEmbed()
                                     .setColor(0x462B71)
                                     .setTitle("Top plays for " + topplayername)
@@ -316,7 +162,14 @@ module.exports = {
                                         maptitle = osutopdata[i].beatmapset.title_unicode.toString()
                                         mapdiff = osutopdata[i].beatmap.version
                                         mapurl = osutopdata[i].beatmap.id 
-                                        mapmods = osutopdata[i].mods
+                                        mapmods1 = osutopdata[i].mods
+
+                                        if(!mapmods1 || mapmods1 == '' || mapmods1 == 'undefined' || mapmods1 == null || mapmods1 == undefined){
+                                            mapmods = ''
+                                        } else {
+                                            mapmods = '+' + mapmods1.toString().replaceAll(",", '')
+                                        }
+
                                         mapscore = osutopdata[i].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                         maptimeset = osutopdata[i].created_at.toString().slice(0, 19).replace("T", "")
                                         mapacc = Math.abs(osutopdata[i].accuracy * 100).toFixed(2)
@@ -342,13 +195,8 @@ module.exports = {
                                         }
                                         mappp = osutopdata[i].pp
                                         weightedmappp = osutopdata[i].weight.pp
-                                        weightedpppercent = Math.abs(osutopdata[i].weight.percentage * 100)
-                                        if(mapmods){
-                                            mapmods2 = `+${mapmods}`
-                                        } else {
-                                            mapmods2 = ``
-                                        }
-                                        Embed.addField(`---`, `**[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${mapurl}) ${mapmods2}**\nSCORE: ${mapscore} \nScore set on ${maptimeset} \n${mapacc}% | ${maprank}\n${hitlist} \n**${(Math.abs(mappp).toFixed(2))}**pp | **${Math.abs(weightedmappp).toFixed(2)}**pp weighted **${weightedpppercent}**%`, false)
+                                        weightedpppercent = Math.abs(osutopdata[i].weight.percentage).toFixed(2)
+                                        Embed.addField(`---`, `**[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${mapurl}) ${mapmods}**\nSCORE: ${mapscore} \nScore set on ${maptimeset} \n${mapacc}% | ${maprank}\n${hitlist} \n**${(Math.abs(mappp).toFixed(2))}**pp | **${Math.abs(weightedmappp).toFixed(2)}**pp weighted **${weightedpppercent}**%`, false)
                                     }
                                 interaction.editReply({ content: '⠀', embeds: [Embed] })
                                 fs.appendFileSync(osulogdir, "\n" + "sent")

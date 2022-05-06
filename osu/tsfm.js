@@ -20,9 +20,8 @@ module.exports = {
         fs.appendFileSync(osulogdir, "\n" + "command executed - top score for map");
         let consoleloguserweeee = interaction.member.user;
         fs.appendFileSync(
-            osulogdir,
-            "\n" +
-            `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`
+            osulogdir, "\n" +
+        `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`
         );
         fs.appendFileSync(osulogdir, "\n" + "");
         if (!pickeduserX) {
@@ -54,15 +53,9 @@ module.exports = {
                 try {
                     const osudata = output1;
                     fs.writeFileSync(
-                        "debug/osuid.json",
-                        JSON.stringify(osudata, null, 2)
+                        "debug/osuid.json", JSON.stringify(osudata, null, 2)
                     );
-                    let playerid = JSON.stringify(osudata, ["id"])
-                        .replaceAll("{", "")
-                        .replaceAll('"', "")
-                        .replaceAll("}", "")
-                        .replaceAll(":", "")
-                        .replaceAll("id", "");
+                    let playerid = osudata.id
                     //interaction.reply(playerid)
 
                     if (!map) {
@@ -78,11 +71,8 @@ module.exports = {
                     const { access_token } = require("../debug/osuauth.json");
 
                     fetch(mapscoreurl, {
-                        method: "GET",
-                        headers: {
-                            Authorization: `Bearer ${access_token}`,
-                            "Content-Type": "application/json",
-                            Accept: "application/json",
+                        method: "GET", headers: {
+                            Authorization: `Bearer ${access_token}`, "Content-Type": "application/json", Accept: "application/json",
                         },
                     })
                         .then((res) => res.json())
@@ -172,12 +162,10 @@ module.exports = {
                             //let mapdataP2 = JSON.stringify("[\n" + mapdataP1 + "\n]");
                             //const mapdata = JSON.stringify("[\n" + mapdataP1 + "\n]");
                             fs.writeFileSync(
-                                "debug/mapscore.json",
-                                JSON.stringify(mapscoredata, null, 2)
+                                "debug/mapscore.json", JSON.stringify(mapscoredata, null, 2)
                             );
                             fs.appendFileSync(
-                                osulogdir,
-                                "\n" + "writing data to mapscore.json"
+                                osulogdir, "\n" + "writing data to mapscore.json"
                             );
                             fs.appendFileSync(osulogdir, "\n" + "");
                             console.groupEnd();
@@ -193,11 +181,8 @@ module.exports = {
 
                                 //let mapdataurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`
                                 fetch(mapdataurl, {
-                                    method: "GET",
-                                    headers: {
-                                        Authorization: `Bearer ${access_token}`,
-                                        "Content-Type": "application/json",
-                                        Accept: "application/json",
+                                    method: "GET", headers: {
+                                        Authorization: `Bearer ${access_token}`, "Content-Type": "application/json", Accept: "application/json",
                                     },
                                 })
                                     .then((res) => res.json())
@@ -299,18 +284,14 @@ module.exports = {
                                         const file = require("../debug/storedmap.json");
                                         file.prevmap = mapid;
                                         fs.writeFile(
-                                            fileName,
-                                            JSON.stringify(file, null, 2),
-                                            function writeJSON(err) {
+                                            fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
                                                 if (err)
                                                     return fs.appendFileSync(osulogdir, "\n" + err);
                                                 fs.appendFileSync(
-                                                    osulogdir,
-                                                    "\n" + JSON.stringify(file)
+                                                    osulogdir, "\n" + JSON.stringify(file)
                                                 );
                                                 fs.appendFileSync(
-                                                    osulogdir,
-                                                    "\n" + "writing to " + fileName
+                                                    osulogdir, "\n" + "writing to " + fileName
                                                 );
                                                 fs.appendFileSync(osulogdir, "\n" + "");
                                                 console.groupEnd();
@@ -322,15 +303,11 @@ module.exports = {
                                             .setURL("https://osu.ppy.sh/b/" + prevmap)
                                             .setImage(`${mapbg}`)
                                             .setAuthor(
-                                                `${playername}'s scores on`,
-                                                `https://a.ppy.sh/${playerid}`,
-                                                `https://osu.ppy.sh/u/${playerid}`
+                                                `${playername}'s scores on`, `https://a.ppy.sh/${playerid}`, `https://osu.ppy.sh/u/${playerid}`
                                             )
                                             .setDescription(`${sortedby}\n${text}`)
                                             .addField(
-                                                "map info",
-                                                `${mapsr}⭐\nCS${mapcs} AR${mapar} OD${mapod} HP${maphp} ${mapbpm}BPM`,
-                                                false
+                                                "map info", `${mapsr}⭐\nCS${mapcs} AR${mapar} OD${mapod} HP${maphp} ${mapbpm}BPM`, false
                                             );
                                         //.setFooter(`${text}`)
                                         interaction.editReply({ content: "⠀", embeds: [Embed] });

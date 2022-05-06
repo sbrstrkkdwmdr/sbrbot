@@ -40,7 +40,7 @@ module.exports = {
                 pickedmode = 'osu'
             }
         }
-        else if (pickedmode == 'osu' || pickedmode == 'o' || pickedmode == 'standard' || options.getString('mode') == 'std') {
+        if (pickedmode == 'osu' || pickedmode == 'o' || pickedmode == 'standard' || options.getString('mode') == 'std') {
             pickedmodex = 'osu'
         }
         else if (pickedmode == 'catch the beat' || pickedmode == 'ctb' || pickedmode == 'c' || pickedmode == 'catch') {
@@ -88,7 +88,7 @@ module.exports = {
                 try {
                     const osudata = output1;
                     fs.writeFileSync("debug/osuid.json", JSON.stringify(osudata, null, 2));
-                    let playerid = (osudata, ['id']).replaceAll('id', '');
+                    let playerid = osudata.id;
                     if (!playerid) {
                         interaction.channel.send("Error - account not found")
                         fs.appendFileSync(osulogdir, "\n" + "error - account not found and/or json sent no data")
@@ -120,7 +120,7 @@ module.exports = {
                                         rsmapname = rsmapnameenglish
                                     }
                                     let rsdiffname = rsdata[0].beatmap.version
-                                    let rsmods = rsdata[0].mods.replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
+                                    let rsmods = rsdata[0].mods.toString().replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
                                     let rsacc = rsdata[0].accuracy
                                     let rs0s = rsdata[0].statistics.count_miss
                                     let rs50s = rsdata[0].statistics.count_50
@@ -148,7 +148,7 @@ module.exports = {
                                     else {
                                         rslengthseconds = rslengthseconds1
                                     }
-                                    let rspasstime = (rsdata[0]['beatmap'], ['hit_length']).replaceAll('hit_length', '');
+                                    let rspasstime = rsdata[0].beatmap.hit_length.toString().replaceAll('hit_length', '');
 
                                     let rsfulltime = `${rslengthminutes}:${rslengthseconds}`;
                                     let rspasspercentage = Math.abs((rspasstime / rstime) * 100).toFixed(2) + '%';
@@ -184,8 +184,8 @@ module.exports = {
                                     let rsnochokeacc = Math.abs(rsnochokeacc1 * 100).toFixed(2);
                                     //^accuracy without misses 
 
-                                    let fulltimeset1 = (rsdata[0], ['created_at']).replaceAll('created_at', '').slice(0, 18);
-                                    let fulltimeset2 = (rsdata[0], ['created_at']).replaceAll('created_at', '').slice(0, 12);
+                                    let fulltimeset1 = (rsdata[0].created_at).slice(0, 18);
+                                    let fulltimeset2 = (rsdata[0].created_at).slice(0, 12);
                                     let fulltimeset3 = (fulltimeset1).slice(12, 18)
                                     //fs.appendFileSync(osulogdir, "\n" + fulltimeset3)
                                     let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0, -1)
@@ -312,10 +312,10 @@ module.exports = {
                                         ;
                                         ppw = await pp.compute();
                                         ppiffc1 = await ppfc.compute(rsnochokeacc);
-                                        ppiffc2 = (ppiffc1['total']).replaceAll('total', '');
+                                        ppiffc2 = (ppiffc1['total']).toString().replaceAll('total', '');
                                         ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
                                         ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
-                                        ppwtostring = (ppw['total']).replaceAll('total', '');
+                                        ppwtostring = (ppw['total']).toString().replaceAll('total', '');
                                         ppwrawtotal = ppw['total'];
                                         ppww = Math.abs(ppwrawtotal).toFixed(2);
                                         ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
@@ -354,10 +354,10 @@ module.exports = {
 
                                         // if(rspp = "null"){
                                         //if(rsgrade != 'F'){
-                                        if (fc == 'false') {
+                                        if (fc == false) {
                                             fcflag = `| **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`
                                         }
-                                        if (fc == 'true') {
+                                        else if (fc == true) {
                                             fcflag = '**FC**'
                                         }
 
@@ -418,7 +418,7 @@ module.exports = {
                                         if (!rsmods || rsmods == 'TD') {
                                             SRclean = rsmapstar
                                         }
-                                        rscoverlist = (rsdata[0]['beatmapset']['covers'], ['list']).replace('list', '').replace('https', 'https:');
+                                        rscoverlist = rsdata[0].beatmapset.covers.list
                                         let Embed = new Discord.MessageEmbed()
                                             .setColor(0x9AAAC0)
                                             .setTitle(recenttitlestring + rsplayername)

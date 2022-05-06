@@ -57,23 +57,30 @@ module.exports = {
                     fs.appendFileSync(osulogdir, "\n" + "writing data to map.json")
                     fs.appendFileSync(osulogdir, "\n" + "")
                     try {
-                        let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');;
-                        let maplink = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
-                        let mapsetlink = JSON.stringify(mapdata, ['beatmapset_id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmapset_id', '');
-                        let mapper = JSON.stringify(mapdata['beatmapset'], ['creator']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('creator', '');
-                        let maptitleuni = JSON.stringify(mapdata['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title_unicode', '');
-                        let maptitlenorm = JSON.stringify(mapdata['beatmapset'], ['title']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title', '');
-                        let maptitle = maptitleuni
+                        let mapbg = (
+                            mapdata.beatmapset.covers["cover@2x"]
+                        ).replaceAll('"', "");
+                        let maplink = (mapdata.id);
+                        let mapsetlink = (mapdata.beatmapset_id);
+                        let mapper = (mapdata.beatmapset.creator)
+                        let maptitleuni = (
+                            mapdata.beatmapset.title_unicode
+                        );
+                        let maptitlenorm = (
+                            mapdata.beatmapset.title
+                        );
+                        let maptitle = maptitleuni;
                         if (maptitlenorm != maptitleuni) {
-                            maptitle = `${maptitleuni}\n${maptitlenorm}`
+                            maptitle = `${maptitleuni}\n${maptitlenorm}`;
                         }
 
-                        let mapdiff = JSON.stringify(mapdata, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
-                        let mapartist = JSON.stringify(mapdata['beatmapset'], ['artist']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('artist', '');
-                        let mapmaxcombo = JSON.stringify(mapdata, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('max_combo', '');
-                        let mapmode = JSON.stringify(mapdata, ['mode']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('mode', '');
-                        let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20').replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '');
-
+                        let mapdiff = (mapdata.version);
+                        let mapartist = (
+                            mapdata.beatmapset.artist
+                        );
+                        let mapmaxcombo = (mapdata.max_combo);
+                        let mapmode = (mapdata.mode);
+                        let mapperlink = (mapper)
                         let mapstatus = JSON.stringify(mapdata, ['status']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('status', '');
                         if (mapstatus == 'ranked') {
                             statusimg = '<:statusranked:944512775579926609>';
