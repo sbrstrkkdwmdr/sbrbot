@@ -81,7 +81,7 @@ module.exports = {
                         let mapmaxcombo = (mapdata.max_combo);
                         let mapmode = (mapdata.mode);
                         let mapperlink = (mapper)
-                        let mapstatus = JSON.stringify(mapdata, ['status']).replaceAll('{', '').replaceAll('"', '').replace('}', '').replace(':', '').replace('status', '');
+                        let mapstatus = (mapdata.status).toString()
                         if (mapstatus == 'ranked') {
                             statusimg = '<:statusranked:944512775579926609>';
                         }
