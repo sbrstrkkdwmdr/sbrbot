@@ -312,11 +312,44 @@ module.exports = {
                                     .setURL(`https://osu.ppy.sh/u/${playerid}`)
                                     .setThumbnail(topplayeravatar)
                                     .setDescription(`${sortedby}`)
-                                    .addField(`---`, `**[${maptitle1} [${mapdiff1}]](https://osu.ppy.sh/b/${mapurl1}) ${mapmods1}**\nSCORE: ${mapscore1} \nScore set on ${maptimeset1} \n${(Math.abs((mapacc1) * 100).toFixed(2))}% | ${maprank1}\n${hitlist1} \n**${(Math.abs(mappp1).toFixed(2))}**pp | **${(Math.abs(weightedmappp1).toFixed(2))}**pp weighted **${Math.abs(weightedpppercent1).toFixed(2)}**%`, false)
-                                    .addField(`---`, `**[${maptitle2} [${mapdiff2}]](https://osu.ppy.sh/b/${mapurl2}) ${mapmods2}**\nSCORE: ${mapscore2} \nScore set on ${maptimeset2} \n${(Math.abs((mapacc2) * 100).toFixed(2))}% | ${maprank2}\n${hitlist2} \n**${(Math.abs(mappp2).toFixed(2))}**pp | **${(Math.abs(weightedmappp2).toFixed(2))}**pp weighted **${Math.abs(weightedpppercent2).toFixed(2)}**%`, false)
-                                    .addField(`---`, `**[${maptitle3} [${mapdiff3}]](https://osu.ppy.sh/b/${mapurl3}) ${mapmods3}**\nSCORE: ${mapscore3} \nScore set on ${maptimeset3} \n${(Math.abs((mapacc3) * 100).toFixed(2))}% | ${maprank3}\n${hitlist3} \n**${(Math.abs(mappp3).toFixed(2))}**pp | **${(Math.abs(weightedmappp3).toFixed(2))}**pp weighted **${Math.abs(weightedpppercent3).toFixed(2)}**%`, false)
-                                    .addField(`---`, `**[${maptitle4} [${mapdiff4}]](https://osu.ppy.sh/b/${mapurl4}) ${mapmods4}**\nSCORE: ${mapscore4} \nScore set on ${maptimeset4} \n${(Math.abs((mapacc4) * 100).toFixed(2))}% | ${maprank4}\n${hitlist4} \n**${(Math.abs(mappp4).toFixed(2))}**pp | **${(Math.abs(weightedmappp4).toFixed(2))}**pp weighted **${Math.abs(weightedpppercent4).toFixed(2)}**%`, false)
-                                    .addField(`---`, `**[${maptitle5} [${mapdiff5}]](https://osu.ppy.sh/b/${mapurl5}) ${mapmods5}**\nSCORE: ${mapscore5} \nScore set on ${maptimeset5} \n${(Math.abs((mapacc5) * 100).toFixed(2))}% | ${maprank5}\n${hitlist5} \n**${(Math.abs(mappp5).toFixed(2))}**pp | **${(Math.abs(weightedmappp5).toFixed(2))}**pp weighted **${Math.abs(weightedpppercent5).toFixed(2)}**%`, false)
+                                    for(i=0;i<5;i++){
+                                        maptitle = osutopdata[i].beatmapset.title_unicode.toString()
+                                        mapdiff = osutopdata[i].beatmap.version
+                                        mapurl = osutopdata[i].beatmap.id 
+                                        mapmods = osutopdata[i].mods
+                                        mapscore = osutopdata[i].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                        maptimeset = osutopdata[i].created_at.toString().slice(0, 19).replace("T", "")
+                                        mapacc = Math.abs(osutopdata[i].accuracy * 100).toFixed(2)
+                                        maprank = osutopdata[i].rank
+                                        map300max = osutopdata[i].statistics.count_geki
+                                        map300 = osutopdata[i].statistics.count_300
+                                        map200 = osutopdata[i].statistics.count_katu
+                                        map100 = osutopdata[i].statistics.count_100
+                                        map50 = osutopdata[i].statistics.count_50
+                                        mapmiss = osutopdata[i].statistics.count_miss
+                                        hitlist = ''
+                                        if (pickedmodex == 'osu') {
+                                            hitlist = `**300:** ${map300} **00:** ${map100} **50:** ${map50} **X:** ${mapmiss}`
+                                        }
+                                        if (pickedmodex == 'taiko') {
+                                            hitlist = `**300(GREAT):** ${map300} **00(GOOD):** ${map100} **X:** ${mapmiss}`
+                                        }
+                                        if (pickedmodex == 'fruits') {
+                                            hitlist = `**300:** ${map300} **00(Drops):** ${map100} **50(Droplets):** ${map50} **X:** ${mapmiss}`
+                                        }
+                                        if (pickedmodex == 'mania') {
+                                            hitlist = `**300+**: ${map300max} **300:** ${map300} **200:** ${map200} **00:** ${map100} **50:** ${map50} **X:** ${mapmiss}`
+                                        }
+                                        mappp = osutopdata[i].pp
+                                        weightedmappp = osutopdata[i].weight.pp
+                                        weightedpppercent = Math.abs(osutopdata[i].weight.percentage * 100)
+                                        if(mapmods){
+                                            mapmods2 = `+${mapmods}`
+                                        } else {
+                                            mapmods2 = ``
+                                        }
+                                        Embed.addField(`---`, `**[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${mapurl}) ${mapmods2}**\nSCORE: ${mapscore} \nScore set on ${maptimeset} \n${mapacc}% | ${maprank}\n${hitlist} \n**${(Math.abs(mappp).toFixed(2))}**pp | **${Math.abs(weightedmappp).toFixed(2)}**pp weighted **${weightedpppercent}**%`, false)
+                                    }
                                 interaction.editReply({ content: '⠀', embeds: [Embed] })
                                 fs.appendFileSync(osulogdir, "\n" + "sent")
                             } catch (error) {

@@ -47,37 +47,37 @@ module.exports = {
              ];*/
         try {
             fetch(url)
-            .then(res => res.json())
-            .then(out => {
-                out.sort((a, b) => b.pp - a.pp);
-                const topHiscores = out.slice(0, 5);
-                fs.writeFileSync("debug/osubest.json", JSON.stringify(topHiscores, null, 2));
-                fs.appendFileSync(osulogdir, "\n" + "writing data to w.json")
-                fs.appendFileSync(osulogdir, "\n" + "")
-                let Embedpenis = new Discord.MessageEmbed()
-                    .setColor(0xFFC1EC)
-                    .setTitle("Top plays of all time")
-                    .setImage(``)
-                for (i = 0; i < 5; i++) {
-                    let bmid = topHiscores[i].beatmap_id
-                    let sc = topHiscores[i].score
-                    let perform = topHiscores.pp
-                    let modify = topHiscores.mods
-                    if (modify) {
-                        mods = modify
-                    } else {
-                        mods = ''
+                .then(res => res.json())
+                .then(out => {
+                    out.sort((a, b) => b.pp - a.pp);
+                    const topHiscores = out.slice(0, 5);
+                    fs.writeFileSync("debug/osubest.json", JSON.stringify(topHiscores, null, 2));
+                    fs.appendFileSync(osulogdir, "\n" + "writing data to w.json")
+                    fs.appendFileSync(osulogdir, "\n" + "")
+                    let Embedpenis = new Discord.MessageEmbed()
+                        .setColor(0xFFC1EC)
+                        .setTitle("Top plays of all time")
+                        .setImage(``)
+                    for (i = 0; i < 5; i++) {
+                        let bmid = topHiscores[i].beatmap_id
+                        let sc = topHiscores[i].score
+                        let perform = topHiscores.pp
+                        let modify = topHiscores.mods
+                        if (modify) {
+                            mods = modify
+                        } else {
+                            mods = ''
+                        }
+                        let grade = topHiscores.rank
+                        let sctime = topHiscores.score_time.toString().slice(0, 10)
+                        let user = topHiscores.user
+                        Embedpenis.addField(`#${i + 1} | Score set on ${sctime} by https://osu.ppy.sh/u/${user}`, `https://osu.ppy.sh/b/${bmid} \n**SCORE**: ${sc} | ${perform}**pp**\n+${mods} | ${grade}`, false)
                     }
-                    let grade = topHiscores.rank
-                    let sctime = topHiscores.score_time.toString().slice(0, 10)
-                    let user = topHiscores.user
-                        .addField(`#${i + 1} | Score set on ${sctime} by https://osu.ppy.sh/u/${user}`, `https://osu.ppy.sh/b/${bmid} \n**SCORE**: ${sc} | ${perform}**pp**\n+${mods} | ${grade}`, false)
-                }
 
-                message.reply({ embeds: [Embedpenis] });
-                //message.reply("```json\nTOP SCORES FOR " + pickeduserX + "\n" + JSON.stringify(topHiscores, null, 2).replaceAll('"', '').replaceAll('beatmap_id', 'beatmap id').replaceAll('[', '').replaceAll(']', '').replaceAll(',', '').replaceAll('}', '').replaceAll('{', '------------') + "```");
-            }
-            )
+                    message.reply({ embeds: [Embedpenis] });
+                    //message.reply("```json\nTOP SCORES FOR " + pickeduserX + "\n" + JSON.stringify(topHiscores, null, 2).replaceAll('"', '').replaceAll('beatmap_id', 'beatmap id').replaceAll('[', '').replaceAll(']', '').replaceAll(',', '').replaceAll('}', '').replaceAll('{', '------------') + "```");
+                }
+                )
         } catch (error) {
             message.reply(error)
             fs.appendFileSync(osulogdir, "\n" + error)
