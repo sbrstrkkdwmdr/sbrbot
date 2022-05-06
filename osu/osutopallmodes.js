@@ -148,9 +148,8 @@ module.exports = {
                                     fs.appendFileSync(osulogdir, "\n" + "error osu03 - not enough plays")
                                     return;
                                 }
-                                let topplayername = JSON.stringify(osutopdata[0]['user'], ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
-                                //let mapbg1 = JSON.stringify(osutopdata[0]['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
-                                let topplayeravatar = JSON.stringify(osutopdata[0]['user'], ['avatar_url']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('avatar_url', '').replace('https', 'https:');
+                                let topplayername = (osutopdata[0].user.username)
+                                let topplayeravatar = (osutopdata[0].user.avatar_url)
 
                                 let Embed = new Discord.MessageEmbed()
                                     .setColor(0x462B71)
