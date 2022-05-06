@@ -40,46 +40,49 @@ module.exports = {
                 fs.appendFileSync(osulogdir, "\n" + "writing data to osu.json")
                 fs.appendFileSync(osulogdir, "\n" + "")
                 console.groupEnd()
-                let playername = JSON.stringify(osudata.username).replaceAll('"', '')
-                let playerid = JSON.stringify(osudata.id)
-                let playeravatar = JSON.stringify(osudata.avatar_url).replace('"', '')
-                let playerrank1 = JSON.stringify(osudata.statistics.global_rank)
-                let playercountryrank1 = JSON.stringify(osudata.statistics.country_rank)
-                let playercountry = JSON.stringify(osudata.country_code).replaceAll('"', '')
-                let playerpp = JSON.stringify(osudata.statistics.pp)
-                let playerplays = JSON.stringify(osudata.statistics.play_count)
-                let playerlevel = JSON.stringify(osudata.statistics.level.current)
-                let playerlevelprogress = JSON.stringify(osudata.statistics.level.progress)
-               // let playerplaystyle = JSON.stringify(osudata.playstyle).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('playstyle', '');
-                let playerstatus = JSON.parse(osudata.is_online);
-                let playeraccuracy = JSON.stringify(osudata.statistics.hit_accuracy).slice(0, 5);
-                let playeracount = JSON.stringify(osudata.statistics.grade_counts.a)
-                let playerscount = JSON.stringify(osudata.statistics.grade_counts.s)
-                let playershcount = JSON.stringify(osudata.statistics.grade_counts.sh)
-                let playerxcount = JSON.stringify(osudata.statistics.grade_counts.ss)
-                let playerxhcount = JSON.stringify(osudata.statistics.grade_counts.ssh)
-                let playerjoined = JSON.stringify(osudata.join_date).replaceAll('"', '').slice(0, 10);
-                let playerfollowers = JSON.stringify(osudata.follower_count)
-                let playerprevname = JSON.stringify(osudata.previous_usernames).replaceAll('[', '').replaceAll(']', '').replaceAll('"', '')
+                let playername = (osudata.username)
+                let playerid = (osudata.id)
+                let playeravatar = (osudata.avatar_url)
+                let playerrank1 = (osudata.statistics.global_rank)
+                let playercountryrank1 = (osudata.statistics.country_rank)
+                let playercountry = (osudata.country_code)
+                let playerpp = (osudata.statistics.pp)
+                let playerplays = (osudata.statistics.play_count)
+                let playerlevel = (osudata.statistics.level.current)
+                let playerlevelprogress = (osudata.statistics.level.progress)
+                // let playerplaystyle = (osudata.playstyle).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('playstyle', '');
+                let playerstatus = (osudata.is_online);
+                let playeraccuracy = (osudata.statistics.hit_accuracy).toString().slice(0, 5);
+                let playeracount = (osudata.statistics.grade_counts.a)
+                let playerscount = (osudata.statistics.grade_counts.s)
+                let playershcount = (osudata.statistics.grade_counts.sh)
+                let playerxcount = (osudata.statistics.grade_counts.ss)
+                let playerxhcount = (osudata.statistics.grade_counts.ssh)
+                let playerjoined = (osudata.join_date).toString().slice(0, 10);
+                let playerfollowers = (osudata.follower_count)
+                let playerprevname = (osudata.previous_usernames).toString().replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll(",", ', ')
+                let playcountgraph1 = (osudata.monthly_playcounts)//.replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('previous_usernames', '').replaceAll('[', '').replaceAll(']', '');
+                //console.log(osudata.monthly_playcounts)
+                let playcountgraph = (playcountgraph1)
 
-                if(isNaN(playerrank1)){
+                if (isNaN(playerrank1)) {
                     playerrank1 = '---'
                 }
-                if(isNaN(playercountryrank1)){
+                if (isNaN(playercountryrank1)) {
                     playercountryrank1 = '---'
                 }
-                if(playercountryrank1 == 'null'){
+                if (playercountryrank1 == 'null') {
                     playercountryrank1 == '---'
                 }
-                if(playerrank1 == 'null'){
+                if (playerrank1 == 'null') {
                     playerrank1 == '---'
                 }
                 let playerrank = playerrank1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 let playercountryrank = playercountryrank1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            
+
                 let playerflag = playercountry.toLowerCase();
 
-                
+
                 //
                 let playerlast = osudata.last_visit
                 /*let fulltimeset = JSON.stringify(osudata, ['last_visit']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('last_visit', '').replaceAll('[', '').replaceAll(']', '').slice(0, 18);

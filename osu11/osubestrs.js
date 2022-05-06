@@ -56,21 +56,22 @@ module.exports = {
                     let Embeda = new Discord.MessageEmbed()
                         .setColor(0xFFC1EC)
                         .setTitle("Top plays from the past 24h")
+                        .setDescription(`The top 10 highest pp scores over the past 24h: from ${curdateyesterday} to ${curdatetmr} | ${curtimezone}`)
                         .setImage(``)
                     for (i = 0; i < 10; i++) {
                         let bmid = topHiscores[i].beatmap_id
                         let sc = topHiscores[i].score
-                        let perform = topHiscores.pp
-                        let modify = topHiscores.mods
+                        let perform = topHiscores[i].pp
+                        let modify = topHiscores[i].mods
                         if (modify) {
                             mods = modify
                         } else {
                             mods = ''
                         }
-                        let grade = topHiscores.rank
-                        let sctime = topHiscores.score_time.toString().slice(0, 10)
-                        let user = topHiscores.user
-                        Embedpenis.addField(`#${i + 1} | Score set on ${sctime} by https://osu.ppy.sh/u/${user}`, `https://osu.ppy.sh/b/${bmid} \n**SCORE**: ${sc} | ${perform}**pp**\n+${mods} | ${grade}`, false)
+                        let grade = topHiscores[i].rank
+                        let sctime = topHiscores[i].score_time.toString().slice(0, 10)
+                        let user = topHiscores[i].user
+                        Embeda.addField(`#${i + 1} | Score set on ${sctime} by https://osu.ppy.sh/u/${user}`, `https://osu.ppy.sh/b/${bmid} \n**SCORE**: ${sc} | ${perform}**pp**\n+${mods} | ${grade}`, false)
                     }
 
 
@@ -80,7 +81,7 @@ module.exports = {
                        .setTitle("The top 10 highest pp scores over the past 24h: from " + curdateyesterday + " to " + curdatetmr + ` | ${curtimezone}`)
                        .setDescription(" ")
                        .addField(`https://osu.ppy.sh/b/${bmid1} \nScore set on ${sctime1} by https://osu.ppy.sh/u/${user1} \n **SCORE**: ${sc1} | ${perform1} **PP**\n + ${modify1} | ${grade1}`)*/
-                    message.reply({ content: `The top 10 highest pp scores over the past 24h: from ${curdateyesterday} to ${curdatetmr} | ${curtimezone}`, embeds: [Embeda] })
+                    message.reply({ embeds: [Embeda] })
                     //message.reply("```json\nTOP SCORES FOR " + pickeduserX + "\n" + JSON.stringify(topHiscores, null, 2).replaceAll('"', '').replaceAll('beatmap_id', 'beatmap id').replaceAll('[', '').replaceAll(']', '').replaceAll(',', '').replaceAll('}', '').replaceAll('{', '------------') + "```");
                 }
                 )

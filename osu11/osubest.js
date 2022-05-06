@@ -61,16 +61,16 @@ module.exports = {
                     for (i = 0; i < 5; i++) {
                         let bmid = topHiscores[i].beatmap_id
                         let sc = topHiscores[i].score
-                        let perform = topHiscores.pp
-                        let modify = topHiscores.mods
+                        let perform = topHiscores[i].pp
+                        let modify = topHiscores[i].mods
                         if (modify) {
                             mods = modify
                         } else {
                             mods = ''
                         }
-                        let grade = topHiscores.rank
-                        let sctime = topHiscores.score_time.toString().slice(0, 10)
-                        let user = topHiscores.user
+                        let grade = topHiscores[i].rank
+                        let sctime = topHiscores[i].score_time.toString().slice(0, 10)
+                        let user = topHiscores[i].user
                         Embedpenis.addField(`#${i + 1} | Score set on ${sctime} by https://osu.ppy.sh/u/${user}`, `https://osu.ppy.sh/b/${bmid} \n**SCORE**: ${sc} | ${perform}**pp**\n+${mods} | ${grade}`, false)
                     }
 
