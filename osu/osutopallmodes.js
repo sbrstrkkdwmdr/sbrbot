@@ -7,7 +7,8 @@ const POST = require('node-fetch');
 const fs = require('fs');
 const { exec } = require("child_process");
 const { osulogdir } = require('../logconfig.json')
-const { getStackTrace } = require('../somestuffidk/log')
+const { getStackTrace } = require('../somestuffidk/log');
+const { isNullOrUndefined } = require('util');
 
 module.exports = {
     name: 'osutop',
@@ -47,11 +48,13 @@ module.exports = {
                 fs.appendFileSync(osulogdir, "\n" + error)
             }
         }
-
+        if(isNullOrUndefined(pickedmode)){
+            pickedmodex = 'osu'
+        }
         if (!pickedmode && !altpickedmode) {
             pickedmodex = 'osu'
         }
-        if (altpickedmode) {
+        else if (altpickedmode) {
             pickedmode = altpickedmode
         }
         else if (pickedmode == 'osu' || pickedmode == 'o' || pickedmode == 'standard' || options.getString('mode') == 'std') {
