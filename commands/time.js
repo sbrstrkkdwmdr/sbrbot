@@ -1,5 +1,7 @@
 const fs = require('fs')
 const { otherlogdir } = require('../logconfig.json')
+const { getStackTrace } = require('../somestuffidk/log')
+
 module.exports = {
     name: 'time',
     description: '',
@@ -226,13 +228,15 @@ module.exports = {
                     `UTC/GMT +??:?? (Requested Time)`,
                     `\nRecived invalid timezone!` +
                     `\nBoth Country and City must be specified` +
-                    `\ni.e **Australia/Melbourne**`
+                    `\ni.e **Australia/Melbourne**` +
+                    `\nCheck [here](https://www.iana.org/time-zones) and [here](https://stackoverflow.com/a/54500197) for valid dates`
                     ,
                     false
                 )
             }
             else {
-                let timezone = args[0];
+                let timezone = args.splice(0, 1000).join(" ");
+                //timezone = 'Europe/Andorra'
                 let timeopts = {
                     timeZone: `${timezone}`,
                     hour12: false
@@ -241,26 +245,49 @@ module.exports = {
                     timeZone: `${timezone}`,
                     hour12: true
                 }
-                let optionaldatefirst = new Date().toString(timeopts);//).toISOString();
+                try {
+                    let optionaldatefirst = new Date(new Date().toLocaleString('en-US', timeopts));
+                } catch (error) {
+                    fs.appendFileSync(otherlogdir, "\n" + error)
+                    fs.appendFileSync(otherlogdir, "\n" + getStackTrace(error))
+                    Embed.addField(
+                        `UTC/GMT +??:?? (Requested Time)`,
+                        `\nRecived invalid timezone!` +
+                        `\nBoth Country and City must be specified` +
+                        `\ni.e **Australia/Melbourne**` + 
+                        `\nCheck [here](https://www.iana.org/time-zones) and [here](https://stackoverflow.com/a/54500197) for valid dates`
+                        ,
+                        false
+                    )
+                    message.reply({ embeds: [Embed] })
+                    return;
+                }
+                let optionaldatefirst = new Date(new Date().toLocaleString('en-US', timeopts));//).toISOString();
                 let optionaldateISO = new Date(optionaldatefirst).toISOString()
                 let optionaldateDate = new Date(optionaldateISO).toLocaleDateString();
                 let optionaldate = new Date(optionaldateISO)//.toString();
                 //let optionaldate12hISO = new Date().toISOString(timeopts2);//.toString(timeopts2);
-                let optionaldate12hfirst = new Date().toString(timeopts2);
+                let optionaldate12hfirst = new Date(new Date().toLocaleString('en-AU', timeopts2));
                 let optionaldateoffset = fixoffset(new Date(optionaldateISO).getTimezoneOffset())
 
                 //let reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`
-                let optionaldate2 = `${dayhuman(optionaldate.getDay())}, ${tomonthname(optionaldate.getMonth())} ${optionaldate.getDate()}`
+                let optionaldate2 = `${dayhuman(optionaldate.getDay())}, ${tomonthname(optionaldate.getMonth())} ${optionaldate.getDate()} ${optionaldate.getFullYear()}`
                 let optionaldatetime = relto12htime(new Date(optionaldate12hfirst))
                 let optionaldate12h = `${optionaldate2} ${optionaldatetime}`
 
+                optionaldatehours = parseInt(optionaldate.getHours())
+                optionaldateutchours = parseInt(new Date().getUTCHours())
+                console.log(optionaldatehours)
+                console.log(optionaldateutchours)
+                optionaldateoffsetNEW = fixoffset((optionaldateutchours - optionaldatehours) * 60) //had to remake another version of offset 
+                
                 Embed
                     .addField(
-                        `UTC/GMT ${optionaldateoffset} (Requested Time)`,
+                        `UTC/GMT ${optionaldateoffsetNEW} (Requested Time)`,
                         `\n**Date**: ${optionaldateDate}` +
                         `\n**Full Date**: ${optionaldate12h}` +
                         `\n**Full Date(24h)**: ${optionaldate}` +
-                        `\n**Full Date ISO8601**: ${optionaldateISO}`
+                        `\n**Full Date ISO8601**: ${optionaldateISO}` +
                         ,
                         false
                     )
