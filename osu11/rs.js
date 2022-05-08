@@ -80,6 +80,9 @@ module.exports = {
                                     }
                                     let rsdiffname = rsdata[0].beatmap.version
                                     let rsmods = rsdata[0].mods.toString().replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
+                                    if (rsmods == '') {
+                                        rsmods == null
+                                    }
                                     let rsacc = rsdata[0].accuracy
                                     let rs0s = rsdata[0].statistics.count_miss
                                     let rs50s = rsdata[0].statistics.count_50
@@ -145,13 +148,7 @@ module.exports = {
                                     let rsnochokeacc = Math.abs(rsnochokeacc1 * 100).toFixed(2);
                                     //^accuracy without misses 
 
-                                    let fulltimeset1 = (rsdata[0].created_at).slice(0, 18);
-                                    let fulltimeset2 = (rsdata[0].created_at).slice(0, 12);
-                                    let fulltimeset3 = (fulltimeset1).slice(12, 18)
-                                    //fs.appendFileSync(osulogdir, "\n" + fulltimeset3)
-                                    let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0, -1)
-                                    let fulltimeset5 = fulltimeset4.slice(1, 10)
-                                    let fulltimeset = fulltimeset2 + fulltimeset5 + "Z"
+                                    let fulltimeset = (rsdata[0].created_at).toString().slice(0, -6) + "Z";
 
                                     let playerlasttoint = new Date(fulltimeset)
 
@@ -355,7 +352,7 @@ module.exports = {
                                             rsmodsembed = '+**' + rsmods + '**'
                                         }
 
-                                        if (rsmods) {
+                                        if (!rsmods == null || !rsmods == undefined) {
                                             calcmods = rsmods.replace('TD', '')
                                             modtoarray1 = calcmods.replace(/(.{2})/g, "$1 ");
                                             modtoarray2 = modtoarray1.slice(0, -1)
@@ -364,7 +361,7 @@ module.exports = {
                                             SR = JSON.stringify(starRating).replace('{', '').replace(':', '').replace('}', '').replace(calcmods, '').replace('nomod', '').replaceAll('"', '')
                                             SRclean = Math.abs(SR).toFixed(2)
                                         }
-                                        if (!rsmods || rsmods == 'TD') {
+                                        if (!rsmods || rsmods == 'TD' || rsmods == null) {
                                             SRclean = rsmapstar
                                         }
                                         rscoverlist = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['list']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('list', '').replace('https', 'https:');

@@ -125,7 +125,7 @@ module.exports = {
 
                                     fulltext = ''
                                     let underamount = 5
-                                    if (rsdata.length < 5){ 
+                                    if (rsdata.length < 5) {
                                         underamount = rsdata.length
                                     }
                                     for (i = 0; i < underamount; i++) {
@@ -209,13 +209,7 @@ module.exports = {
                                         if (fc == true) {
                                             fcflag = '**FC**'
                                         }
-                                        let fulltimeset1 = (rsdata[i].created_at).slice(0, 18);
-                                        let fulltimeset2 = (rsdata[i].created_at).slice(0, 12);
-                                        let fulltimeset3 = (fulltimeset1).slice(12, 18)
-                                        //fs.appendFileSync(osulogdir, "\n" + fulltimeset3)
-                                        let fulltimeset4 = fulltimeset3.replace(/(..?)/g, '$1:').slice(0, -1)
-                                        let fulltimeset5 = fulltimeset4.slice(1, 10)
-                                        let fulltimeset = fulltimeset2 + fulltimeset5 + "Z"
+                                        let fulltimeset = (rsdata[i].created_at).toString().slice(0, -6) + "Z";
 
                                         let playerlasttoint = new Date(fulltimeset)
 
