@@ -121,9 +121,6 @@ module.exports = {
                                     }
                                     let rsdiffname = rsdata[0].beatmap.version
                                     let rsmods = rsdata[0].mods.toString().replaceAll(',', '').replaceAll('[', '').replaceAll(']', '');
-                                    if (rsmods == '') {
-                                        rsmods == null
-                                    }
                                     let rsacc = rsdata[0].accuracy
                                     let rs0s = rsdata[0].statistics.count_miss
                                     let rs50s = rsdata[0].statistics.count_50
@@ -136,7 +133,7 @@ module.exports = {
                                     let rspp1 = rsdata[0].pp
                                     let rspp = Math.abs(rspp1).toFixed(2);
                                     let rsmaptime = rsdata[0].created_at.toString().slice(0, 19).replace('T', ' ')
-                                    let rsmapstar = rsdata[0].beatmap.difficulty_ranking
+                                    let rsmapstar = rsdata[0].beatmap.difficulty_rating
                                     let rsgrade = rsdata[0].rank
                                     let rsmapid = rsdata[0].beatmap.id
                                     let rscombo = rsdata[0].max_combo
