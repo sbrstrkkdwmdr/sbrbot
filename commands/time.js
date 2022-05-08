@@ -287,8 +287,7 @@ module.exports = {
                         `\n**Date**: ${optionaldateDate}` +
                         `\n**Full Date**: ${optionaldate12h}` +
                         `\n**Full Date(24h)**: ${optionaldate}` +
-                        `\n**Full Date ISO8601**: ${optionaldateISO}` +
-                        ,
+                        `\n**Full Date ISO8601**: ${optionaldateISO}`,
                         false
                     )
             }
