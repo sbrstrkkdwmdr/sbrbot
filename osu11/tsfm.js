@@ -108,9 +108,13 @@ module.exports = {
                                             let pp = mapscoredata.scores[i].pp
                                             let grade = mapscoredata.scores[i].rank
                                             let combo = mapscoredata.scores[i].max_combo
-                                            let mods = mapscoredata.scores[i].mods
+                                            let mods = mapscoredata.scores[i].mods.toString()
                                                 .replaceAll("[", "")
-                                                .replaceAll("]", "");
+                                                .replaceAll("]", "")
+                                                .replaceAll(",", '');
+                                            if (rsmods == '') {
+                                                rsmods == null
+                                            }
                                             let acc = mapscoredata.scores[i].accuracy
                                             let mapscore0s = mapscoredata.scores[i].statistics.count_miss
                                             let mapscore50s = mapscoredata.scores[i].statistics.count_50
