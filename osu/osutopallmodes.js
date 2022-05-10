@@ -25,6 +25,7 @@ module.exports = {
 
         let pickeduserX = options.getString('user')
         let altpickedmode = options.getString('mode')
+        let pickedmode;
         if (!pickeduserX) {
             try {
                 findname = await userdatatags.findOne({ where: { name: interaction.member.user.id } });
@@ -48,7 +49,7 @@ module.exports = {
                 fs.appendFileSync(osulogdir, "\n" + error)
             }
         }
-        if(isNullOrUndefined(pickedmode)){
+        if(isNullOrUndefined(altpickedmode)){
             pickedmodex = 'osu'
         }
         if (!pickedmode && !altpickedmode) {
@@ -173,7 +174,7 @@ module.exports = {
                                         }
 
                                         mapscore = osutopdata[i].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                        maptimeset = osutopdata[i].created_at.toString().slice(0, 19).replace("T", "")
+                                        maptimeset = osutopdata[i].created_at.toString().slice(0, 19).replace("T", " ")
                                         mapacc = Math.abs(osutopdata[i].accuracy * 100).toFixed(2)
                                         maprank = osutopdata[i].rank
                                         map300max = osutopdata[i].statistics.count_geki
