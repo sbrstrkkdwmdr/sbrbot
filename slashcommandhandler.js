@@ -1,5 +1,7 @@
 const { Constants } = require('discord.js');
 const { testguild } = require('./config.json')
+const { modeopts, playsortopts } = require('./configs/commandoptions.js')
+
 
 module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
 
@@ -130,14 +132,14 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 description: 'what mode?',
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [{ name: 'osu', value: 'osu' }, { name: 'taiko', value: 'taiko' }, { name: 'catch', value: 'catch' }, { name: 'mania', value: 'mania' }]
+                choices: modeopts
             },
             {
                 name: 'sort',
                 description: 'what to sort plays by. defaults to pp',
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [{ name: 'Performance points', value: 'pp' }, { name: 'Score', value: 'score' }, { name: 'Most recent', value: 'recent' }, { name: 'Accuracy', value: 'acc' }]
+                choices: playsortopts
             }
         ]
     })
@@ -163,7 +165,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 description: 'what mode?',
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [{ name: 'osu', value: 'osu' }, { name: 'taiko', value: 'taiko' }, { name: 'catch', value: 'catch' }, { name: 'mania', value: 'mania' }]
+                choices: modeopts
             }
         ]
     })
@@ -272,7 +274,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 description: 'what gamemode? (default osu! standard)',
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [{ name: 'osu', value: 'osu' }, { name: 'taiko', value: 'taiko' }, { name: 'catch', value: 'catch' }, { name: 'mania', value: 'mania' }]
+                choices: modeopts
             },
             {
                 name: 'id',
@@ -323,7 +325,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 description: 'what to sort plays by. defaults to score',
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [{ name: 'Performance points', value: 'pp' }, { name: 'Score', value: 'score' }, { name: 'Most recent', value: 'recent' }, { name: 'Accuracy', value: 'acc' }]
+                choices: playsortopts
             }
         ]
     })
@@ -348,7 +350,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 description: 'what to sort plays by. defaults to score',
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [{ name: 'Performance points', value: 'pp' }, { name: 'Score', value: 'score' }, { name: 'Most recent', value: 'recent' }, { name: 'Accuracy', value: 'acc' }]
+                choices: playsortopts
             }
         ]
     })
@@ -374,7 +376,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 description: 'what mode?',
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [{ name: 'osu', value: 'osu' }, { name: 'taiko', value: 'taiko' }, { name: 'catch', value: 'catch' }, { name: 'mania', value: 'mania' }]
+                choices: modeopts
             }
         ]
     })
