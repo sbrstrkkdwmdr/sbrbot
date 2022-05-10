@@ -21,10 +21,17 @@ module.exports = {
             catch (error) {
                 fs.appendFileSync(osulogdir, "\n" + error)
                 fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
+                pickedmodex = ''
             }
         }
+        try {
         findname = await userdatatags.findOne({ where: { description: pickeduserX } });
-        pickedmodex = findname.get('mode')
+        pickedmodex = findname.get('mode')}
+        catch(error) {
+            fs.appendFileSync(osulogdir, "\n" + error)
+            fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
+            pickedmodex = 'osu'
+        }
         if (!pickedmodex || pickedmodex == null || pickedmodex == '') {
             pickedmodex = 'osu'
         }
@@ -359,7 +366,9 @@ module.exports = {
                                             SR = JSON.stringify(starRating).replace('{', '').replace(':', '').replace('}', '').replace(calcmods, '').replace('nomod', '').replaceAll('"', '')
                                             SRclean = Math.abs(SR).toFixed(2)
                                         }
-                                        if (!rsmods || rsmods == 'TD' || rsmods == null) {
+                                        else if (!rsmods || rsmods == 'TD' || rsmods == null) {
+                                            SRclean = rsmapstar
+                                        } else {
                                             SRclean = rsmapstar
                                         }
                                         rscoverlist = JSON.stringify(rsdata[0]['beatmapset']['covers'], ['list']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('list', '').replace('https', 'https:');
@@ -399,24 +408,30 @@ module.exports = {
                                     }
                                     )()
                                 } catch (error) {
-                                    if (error.toString().includes('replaceAll')) {
+                                    if (error.message.includes('user_id')) {
                                         message.reply("Error - play data not found and/or json sent no data")
                                         fs.appendFileSync(osulogdir, "\n" + "Error - play data not found and/or json sent no data")
                                     }
-                                    else { message.reply('unknown error') }
+                                    else { 
+                                    message.reply('unknown error') 
+                                    console.log(error)
                                     fs.appendFileSync(osulogdir, "\n" + error)
                                     fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                                     fs.appendFileSync(osulogdir, "\n" + "")
+                                    }
                                 }
                             } catch (error) {
-                                if (error.toString().includes('replaceAll')) {
+                                if (error.message.includes('user_id')) {
                                     message.reply("Error - play data not found and/or json sent no data")
                                     fs.appendFileSync(osulogdir, "\n" + "Error - play data not found and/or json sent no data")
                                 }
-                                else { message.reply('unknown error') }
+                                else { message.reply('unknown error') 
+                                console.log(error)
+
                                 fs.appendFileSync(osulogdir, "\n" + error)
                                 fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
                                 fs.appendFileSync(osulogdir, "\n" + "")
+                            }
                             }
                         });
                 } catch (error) {
