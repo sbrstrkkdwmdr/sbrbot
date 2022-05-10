@@ -32,6 +32,7 @@
     "node-powershell": "^5.0.1",
     "node-pre-gyp": "^0.17.0",
     "ojsama": "^2.2.0",
+    "osu-api-extended": "^2.5.2",
     "osu-bpdpc": "^0.3.0",
     "osu-sr-calculator": "^1.0.13",
     "osureplayparser": "^1.0.1",
