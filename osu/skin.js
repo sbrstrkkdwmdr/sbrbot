@@ -5,7 +5,7 @@ module.exports = {
     name: 'skin',
     description: '',
     execute(interaction, options, currentDate, currentDateISO) {
-        console.group('--- COMMAND EXECUTION ---')
+        //console.group('--- COMMAND EXECUTION ---')
         let skinname = options.getString('skin')
         if (!skinname) {
             interaction.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skins")
