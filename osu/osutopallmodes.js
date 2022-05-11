@@ -57,6 +57,7 @@ module.exports = {
         }
         else if (altpickedmode) {
             pickedmode = altpickedmode
+            pickedmodex = altpickedmode
         }
         else if (pickedmode == 'osu' || pickedmode == 'o' || pickedmode == 'standard' || options.getString('mode') == 'std') {
             pickedmodex = 'osu'
