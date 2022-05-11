@@ -16,7 +16,78 @@ let playsortopts = [
     { name: 'Most recent', value: 'recent' },
     { name: 'Accuracy', value: 'acc' }
 ]
-timezoneopts = [
+let skincmdopts = [
+    { name: 'SaberStrikeCustom', value: '1' },
+    { name: 'SaberStrikeCustom[v2]', value: '2' },
+    { name: '『SaberStrike [Type X]』', value: '3' },
+    { name: 'SaberStrike 『Y』', value: '4' },
+    { name: 'SaberStrike 『Z』', value: '5' },
+    {name: 'SaberStrike 『0』', value: '6'},
+    {name: 'SaberStrike 『1』', value: '7'},
+    {name: 'sbr', value: '8'},
+    {name: 'prjct. sbr', value: '9'},
+    {name: 'SBR UnDefined (UD)', value: '10'},
+    {name: 'sbr v11', value: '11'},
+    {name: 'Cark_irl', value: 'b1'},
+    {name: '@koifish', value: 'b2'},
+    {name: 'Kanojo Mizuhara', value: 'b3'},
+    {name: "Saber's AMOGUS", value: 'b4'},
+    {name: 'SaberStrike『0』_-Levi-_ edit', value: 'b5'},
+    {name: 'SaberStrike『Soragaton』', value: 'b6'},
+    {name: 'sbr『-hANOJI』', value: 'b7'}
+]
+
+let mathcmdopts = [
+    {name: 'Help', value: 'help'},
+    {name: 'Square root', value: 'sqrt'},
+    {name: 'Square', value: 'square'},
+    {name: 'Factorial (!)', value: '!'},
+    {name: 'Highest common factor', value: 'hcf'},
+    {name: 'Lowest common multiple', value: 'lcm'},
+    {name: 'Approach rate with doubletime', value: 'ardt'},
+    {name: 'Approach rate if halftime', value: 'arht'},
+    {name: 'Circumference of a circle', value: 'circumference'},
+    {name: 'Area of a circle', value: 'circlearea'},
+    {name: 'Length of the hypotenuse (pythagorus theorem)', value: 'pythag'},
+    {name: 'Conversion to scientific notation (significant figures)', value: 'sigfig'}
+]
+
+let conversionopts = [
+    //help
+    {name: 'Help', value: 'help'},
+    {name: 'SI units conversion', value: 'metricprefixes'},
+    
+    //temp
+    {name: 'Celsius to fahrenheit', value: 'c>f'},
+    {name: 'Celsius to kelvin', value: 'c>k'},
+    {name: 'Fahrenheit to celsius', value: 'f>c'},
+    {name: 'Kelvin to celsius', value: 'k>c'},
+    {name: 'Kelvin to fahrenheit', value: 'k>f'},
+
+    //weight in size order
+   {name: 'Inches to feet', value: 'in>fe'},
+   {name: 'Inches to metres', value: 'in>m'},
+   {name: 'Inches to miles', value: 'in>mi'},
+
+   {name: 'Feet to inches', value: 'fe>in'},
+   {name: 'Feet to metres', value: 'fe>m'},
+   {name: 'Feet to miles', value: 'fe>mi'},
+
+   {name: 'Metres to inches', value: 'm>in'},
+   {name: 'Metres to feet', value: 'm>fe'},
+   {name: 'Metres to miles', value: 'm>mi'},
+
+   {name: 'Miles to inches', value: 'mi>in'},
+   {name: 'Miles to feet', value: 'mi>fe'},
+   {name: 'Miles to metres', value: 'mi>m'},
+
+    //time
+    //volume
+    //mass
+]
+
+
+let timezoneopts = [
     { name: 'Abidjan (Africa, Côte d’Ivoire/Ivory Coast)', value: 'Africa/Abidjan' },
     { name: 'Accra (Africa, Ghana)', value: 'Africa/Accra' },
     { name: 'Algiers (Africa, Algeria)', value: 'Africa/Algiers' },
@@ -393,3 +464,4 @@ timezoneopts = [
     //
     //
 ]
+module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, timezoneopts }

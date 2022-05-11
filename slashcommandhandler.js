@@ -1,6 +1,6 @@
 const { Constants } = require('discord.js');
 const { testguild } = require('./config.json')
-const { modeopts, playsortopts } = require('./configs/commandoptions.js')
+const { modeopts, playsortopts, timezoneopts, skincmdopts, mathcmdopts, conversionopts } = require('./configs/commandoptions.js')
 
 
 module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
@@ -44,7 +44,8 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 name: 'type',
                 description: 'what you are converting.',
                 required: true,
-                type: Constants.ApplicationCommandOptionTypes.STRING
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                choices: conversionopts
             },
             {
                 name: 'number',
@@ -62,7 +63,8 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 name: 'type',
                 description: 'method',
                 required: true,
-                type: Constants.ApplicationCommandOptionTypes.STRING
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                choices: mathcmdopts
             },
             {
                 name: 'num1',
@@ -177,7 +179,8 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 name: 'skin',
                 description: 'the skin',
                 required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                choices: skincmdopts
             }
         ]
     })
