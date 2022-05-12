@@ -54,6 +54,7 @@ module.exports = {
 
                 case '11':
                     interaction.reply("https://sbrstrkkdwmdr.github.io/sbr-web/osu-skin/main-skin/11sbrv11")
+                    break;
 
                 case 'b1':
                     interaction.reply("https://drive.google.com/drive/u/0/folders/1OexvvV4Zshw3P3R1N0bS3sQD_WEhlQKv")

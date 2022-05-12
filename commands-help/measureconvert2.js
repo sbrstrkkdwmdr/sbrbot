@@ -41,6 +41,13 @@ module.exports = {
                 .addField('decreasing', 'deci(d) - 10^-1\ncenti(c) - 10^-2\nmilli(m) - 10^-3\nmicro(μ) - 10^-6\nnano(n) - 10^-9\npico(p) - 10^-12\nfemto(f) - 10^-15\natto(a) - 10^-18\nzepto(z) - 10^-21\nyocto(y) - 10^-24', false)
                 interaction.reply({ embeds: [metricEmbed]});
                 break;
+            case 'bruh':
+                let Embedbruh = new Discord.MessageEmbed()
+                .setTitle('Conversion cOnversion coNversion conVersion convErsion conveRsion converSion conversIon conversiOn conversioN')
+                .addField('??? to ???', 'You are an idiot', false)
+                .addField('**Formula**', '', false)
+                interaction.reply({ embeds: [Embedbruh]})
+                break;
             //temperature-------------------
             case 'ctok':case 'c>k':
                 let answerck = Math.abs(num1 + 273.15);
