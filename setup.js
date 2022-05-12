@@ -1,6 +1,32 @@
 const fs = require('fs')
 const prompt = require("prompt-sync")();
 console.log("Setting up config file...")
+
+let pretemplate = {
+    "prefix": 'prefix',
+    "token": 'bot token',
+    "cx": 'googlecx key  https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4',
+    "key": 'google key  https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4',
+    "osuapikey": 'osu api key (v1)',
+    "osuauthtoken": "just-leave-this-blank-the-commands-generate-these-itself",
+    "osuclientid": 'osu client id (api v2)',
+    "osuclientsecret": 'osu client secret (api v2)',
+    "joinrole": 'join role ID (leave blank if you want)',
+    "guildid": "main guild id",
+    "loggingchannel": 'channel for logging',
+    "trnkey": "unused atm. something something trn tracker",
+    "danserpath": 'main path to danser for recording',
+    "recordingchannel": 'channel to send .osrs for to record w/ danser',
+    "testguild": "testing guild id. for local slash commands (initialises faster than global, but won't appear in other servers",
+    "haloapikey": 'autocode.com/lib/halo or smth. no longer used because it keeps changing bot status'
+}
+
+
+fs.writeFileSync("config.json", JSON.stringify(pretemplate, null, 2))
+fs.writeFileSync("other/blankfile.txt", '')
+fs.writeFileSync("debug/blankfile.txt", '')
+fs.writeFileSync("logs/blankfile.txt", '')
+
 console.log("If you don't want to set an option, just put 'null' or press enter")
 
 prefix = prompt("Prefix  | insert some string like ! or -. you can set the prefix to penis if you want) |=>", "null");
@@ -51,6 +77,15 @@ let template = {
 }
 
 fs.writeFileSync("config.json", JSON.stringify(template, null, 2))
+
+let emptyarray = `['example string werwerwerewr',\n 'example string two eoijodigd',\n "double quotes work too"]`
+
+fs.writeFileSync("antitriggerwords.json", emptyarray)
+fs.writeFileSync("bannedwords.json", emptyarray)
+fs.writeFileSync("botowners.json", emptyarray)
+fs.writeFileSync("triggerwords.json", emptyarray)
+
+
 /*
 let template = {
     "prefix": "insert some string like ! or -. you can set the prefix to penis if you want",
