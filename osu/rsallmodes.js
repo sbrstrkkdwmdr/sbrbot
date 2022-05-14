@@ -329,7 +329,7 @@ module.exports = {
                                         ppfcrawfl = ppiffc1.fl
                                         ppfccalcacc = ppiffc1.computed_accuracy
 
-                                        if (rspp == null || rspp == NaN) {
+                                        if (rspp == null || rspp == NaN  || rspp == 0) {
                                             rspp = ppww
                                         }
                                         /* => {

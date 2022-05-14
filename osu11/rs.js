@@ -305,7 +305,7 @@ module.exports = {
                                         }
 
 
-                                        if (rspp == null || rspp == NaN) {
+                                        if (rspp == null || rspp == NaN  || rspp == 0) {
                                             rspp = ppww
                                         }
                                         /* => {
