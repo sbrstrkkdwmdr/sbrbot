@@ -123,36 +123,51 @@ module.exports = {
                                                         console.groupEnd()
                                                     });*/
 
+                                                    fs.writeFileSync("debug/rs.json", JSON.stringify(rsdata, null, 2))
+
                                     fulltext = ''
                                     let underamount = 5
                                     if (rsdata.length < 5) {
                                         underamount = rsdata.length
                                     }
+
+                                    let Embed = new Discord.MessageEmbed()
+                                        .setColor(0x9AAAC0)
+                                        //.setTitle("Recent plays for ")
+                                        .setAuthor(`Recent plays for ${rsplayername}`, `https://a.ppy.sh/${rsplayerid}`, `https://osu.ppy.sh/u/${rsplayerid}`)
+                                        //.setImage(rsmapbg)
+                                        //.setThumbnail(rscoverlist)
+                                        //.setDescription(fulltext)
+
+
                                     for (i = 0; i < underamount; i++) {
                                         //console.log(i)
                                         i = parseInt(i)
-                                        rsmapnameunicode = JSON.stringify(rsdata[i].beatmapset.title_unicode).slice(1, -1)
-                                        rsmapnameenglish = JSON.stringify(rsdata[i].beatmapset.title).slice(1, -1)
+                                        rsmapnameunicode = (rsdata[i].beatmapset.title_unicode).toString()
+                                        rsmapnameenglish = (rsdata[i].beatmapset.title).toString()
                                         if (rsmapnameunicode != rsmapnameenglish) {
                                             rsmapname = `${rsmapnameunicode} | ${rsmapnameenglish}`
                                         }
                                         else {
                                             rsmapname = rsmapnameenglish
                                         }
-                                        let rsdiffname = JSON.stringify(rsdata[i].beatmap.version).slice(1, -1)
+                                        let rsdiffname = (rsdata[i].beatmap.version).toString()
                                         let maptitles = `${rsmapname} [${rsdiffname}]`
-                                        let rsmods = JSON.stringify(rsdata[i].mods).replaceAll(',', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '');
-                                        let rsacc = JSON.parse(rsdata[i].accuracy)
-                                        let rs0s = JSON.parse(rsdata[i].statistics.count_miss)
-                                        let rs50s = JSON.parse(rsdata[i].statistics.count_50)
-                                        let rs100s = JSON.parse(rsdata[i].statistics.count_100)
-                                        let rs300s = JSON.parse(rsdata[i].statistics.count_300)
-                                        let rsgeki = JSON.parse(rsdata[i].statistics.count_geki)
-                                        let rskatu = JSON.parse(rsdata[i].statistics.count_katu)
-                                        let rsmaptime = JSON.stringify(rsdata[i].created_at).slice(1, -1).slice(0, 19).replaceAll('T', ' ')
-                                        let rspp1 = rsdata[i].pp
+                                        let rsmods = (rsdata[i].mods).toString().replaceAll(',', '').replaceAll('[', '').replaceAll(']', '')
+                                        let rsacc = (rsdata[i].accuracy)
+                                        let rs0s = (rsdata[i].statistics.count_miss)
+                                        let rs50s = (rsdata[i].statistics.count_50)
+                                        let rs100s = (rsdata[i].statistics.count_100)
+                                        let rs300s = (rsdata[i].statistics.count_300)
+                                        let rsgeki = (rsdata[i].statistics.count_geki)
+                                        let rskatu = (rsdata[i].statistics.count_katu)
+                                        let rsmaptime = (rsdata[i].created_at).toString().slice(0, 19).replaceAll('T', ' ')
+                                        let rspp1 = JSON.parse(rsdata[i].pp)
                                         let rspp = Math.abs(rspp1).toFixed(2);
-                                        let rsmapstar = JSON.stringify(rsdata[i].beatmap.difficulty_rating)
+                                        if(rspp == 0 || rspp == '0'){
+                                            rspp = 'null'
+                                        }
+                                        let rsmapstar = (rsdata[i].beatmap.difficulty_rating).toString()
                                         let rsgrade = rsdata[i].rank.toString()
                                         rsmapid = rsdata[i].beatmap.id
                                         let rscombo = rsdata[i].max_combo
@@ -222,16 +237,23 @@ module.exports = {
                                         let lastvishours = (Math.trunc(minlastvisreform / 60)) % 24;
                                         let lastvisminutes = minlastvisreform % 60;
                                         let minlastvisw = (lastvishours + "h " + lastvisminutes + "m");
-                                        fulltext += `**${offsetflag + i + 1}** | [${maptitles}](https://osu.ppy.sh/b/${rsmapid}) ${rsmods2}\n${rsmaptime} (${minlastvisw} ago) \n**${(rsacc * 100).toFixed(2)}%** | **${rspp}**pp ${fcflag} | **${rsgrade}** | **${rscombo}x**\n${hitlist}\n\n`
+
+                                        Embed.addField(`**${offsetflag + i + 1}**`,
+                                        `[${maptitles}](https://osu.ppy.sh/b/${rsmapid}) ${rsmods2}\n${rsmaptime} (${minlastvisw} ago) \n**${(rsacc * 100).toFixed(2)}%** | **${rspp}**pp ${fcflag} | **${rsgrade}** | **${rscombo}x**\n${hitlist}\n\n`,
+                                        false
+                                        )
+                                        //fulltext += `**${offsetflag + i + 1}** | [${maptitles}](https://osu.ppy.sh/b/${rsmapid}) ${rsmods2}\n${rsmaptime} (${minlastvisw} ago) \n**${(rsacc * 100).toFixed(2)}%** | **${rspp}**pp ${fcflag} | **${rsgrade}** | **${rscombo}x**\n${hitlist}\n\n`
                                     }
                                     rscoverlist = (rsdata[0].beatmapset.covers.list)
+                                    /*
                                     let Embed = new Discord.MessageEmbed()
                                         .setColor(0x9AAAC0)
                                         //.setTitle("Recent plays for ")
                                         .setAuthor(`Recent plays for ${rsplayername}`, `https://a.ppy.sh/${rsplayerid}`, `https://osu.ppy.sh/u/${rsplayerid}`)
                                         //.setImage(rsmapbg)
                                         //.setThumbnail(rscoverlist)
-                                        .setDescription(fulltext)
+                                        //.setDescription(fulltext)
+                                        */
                                     //.setDescription(`Score set **${minlastvisw}** ago on **${rsmaptime}** by **[${rsplayername}](https://osu.ppy.sh/u/${rsplayerid})** \n**[${rsmapname} [${rsdiffname}]](https://osu.ppy.sh/b/${rsmapid})** +**${rsmods}** **${rsmapstar}**⭐ \n **${(Math.abs((rsacc) * 100).toFixed(2))}%** | **${rsgrade}** | \n**300:**${rs300s} **100:**${rs100s} **50:**${rs50s} **X:**${rs0s} \n**${rspp}**pp | **${ppiffcw}**pp IF **${rsnochokeacc}%** FC | **${rscombo}x**`);
                                     interaction.editReply({ content: '⠀', embeds: [Embed] })
                                     fs.appendFileSync(osulogdir, "\n" + "sent")
