@@ -307,36 +307,29 @@ module.exports = {
                                         ;
                                         ppw = await pp.compute();
                                         ppiffc1 = await ppfc.compute(rsnochokeacc);
-                                        ppiffc2 = (ppiffc1['total']).toString().replaceAll('total', '');
+                                        ppiffc2 = ppiffc1.total
                                         ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
                                         ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
-                                        ppwtostring = (ppw['total']).toString().replaceAll('total', '');
-                                        ppwrawtotal = ppw['total'];
+                                        ppwtostring = JSON.stringify(ppw.total).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                                        ppwrawtotal = ppw.total;
                                         ppww = Math.abs(ppwrawtotal).toFixed(2);
                                         ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
 
-                                        pprawaim = ppw['aim']
-                                        pprawspeed = ppw['speed']
-                                        pprawacc = ppw['acc']
-                                        pprawfl = ppw['fl']
-                                        ppcalcacc = ppw['computed_accuracy']
+                                        fs.writeFileSync("debug/rsppcalcpp.json", JSON.stringify(ppw, null, 2))
 
-                                        ppfcrawaim = ppiffc1['aim']
-                                        ppfcrawspeed = ppiffc1['speed']
-                                        ppfcrawacc = ppiffc1['acc']
-                                        ppfcrawfl = ppiffc1['fl']
-                                        ppfccalcacc = ppiffc1['computed_accuracy']
+                                        pprawaim = ppw.aim
+                                        pprawspeed = ppw.speed
+                                        pprawacc = ppw.acc
+                                        pprawfl = ppw.fl
+                                        ppcalcacc = ppw.computed_accuracy
 
-                                        ppcalcaccround = Math.abs(ppcalcacc).toFixed(2)
-                                        ppfccalcaccround = Math.abs(ppfccalcacc).toFixed(2)
-                                        ppissue = ''
+                                        ppfcrawaim = ppiffc1.aim
+                                        ppfcrawspeed = ppiffc1.speed
+                                        ppfcrawacc = ppiffc1.acc
+                                        ppfcrawfl = ppiffc1.fl
+                                        ppfccalcacc = ppiffc1.computed_accuracy
 
-                                        if (pickedmodex == 'mania') {
-                                            ppww = Math.abs(ppww / 1000).toFixed(2)
-                                            ppiffcw = Math.abs(ppiffcw / 1000).toFixed(2)
-                                        }
-
-                                        if (rspp == 'null' || rspp == 'NaN') {
+                                        if (rspp == null || rspp == NaN) {
                                             rspp = ppww
                                         }
                                         /* => {
