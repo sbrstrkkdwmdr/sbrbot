@@ -21,11 +21,10 @@ let pretemplate = {
     "haloapikey": 'autocode.com/lib/halo or smth. no longer used because it keeps changing bot status'
 }
 
-
 fs.writeFileSync("config.json", JSON.stringify(pretemplate, null, 2))
-fs.writeFileSync("other/blankfile.txt", '')
-fs.writeFileSync("debug/blankfile.txt", '')
-fs.writeFileSync("logs/blankfile.txt", '')
+fs.mkdirSync("./other/",)
+fs.mkdirSync("./debug/",)
+fs.mkdirSync("./logs/",)
 
 console.log("If you don't want to set an option, just put 'null' or press enter")
 
@@ -78,12 +77,16 @@ let template = {
 
 fs.writeFileSync("config.json", JSON.stringify(template, null, 2))
 
-let emptyarray = `['example string werwerwerewr',\n 'example string two eoijodigd',\n "double quotes work too"]`
+let emptyarray = `["example string werwerwerewr",\n "example string two eoijodigd",\n "make sure to use double quotes or else it won't work", "ඞඞ22ඞඞ"]`
+
+let mapobj = `{\n     "prevmap": 1721919\n}`
 
 fs.writeFileSync("antitriggerwords.json", emptyarray)
 fs.writeFileSync("bannedwords.json", emptyarray)
 fs.writeFileSync("botowners.json", emptyarray)
 fs.writeFileSync("triggerwords.json", emptyarray)
+fs.writeFileSync("debug/timesince.txt", 'Thu Jan 1 1970 00:00:01 GMT+0100 (Greenwich Mean Time)')
+fs.writeFileSync("debug/storedmap.json", '{"prevmap": 1983406 }')
 
 
 /*
