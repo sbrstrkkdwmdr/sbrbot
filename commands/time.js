@@ -178,6 +178,28 @@ module.exports = {
         let month = tomonthname(rn.getUTCMonth())//tomonthname(rn.getUTCMonth())
         let year = rn.getUTCFullYear()
         let datenow12h = `${day}, ${date} ${month} ${year} ${datenow12hhours}`
+        let lasttime = (fs.readFileSync('debug/timesince.txt')).toString()
+
+        let lasttimetodateobj = new Date(lasttime)
+        let timetonum = (rn - lasttimetodateobj) / (1000 * 60)
+
+        let lasvisdays = (Math.trunc(timetonum / 60 / 24));
+        let lastvishours = (Math.trunc(timetonum / 60)) % 24;
+        let lastvisminutes = Math.trunc(timetonum % 60);
+        let minlastvisw = ''
+
+        if(lasvisdays > 0){
+            minlastvisw += lasvisdays + "d "
+        }
+        if(lastvishours > 0){
+            minlastvisw += lastvishours + "h "
+        }
+        if(lastvisminutes > 0){
+            minlastvisw += lastvisminutes + "m " //+ lastvisminutes + "m");
+        }
+
+
+        fs.writeFileSync('debug/timesince.txt', rn.toString() )
 
         let monthnum = rn.getUTCMonth()
         let daynum = rn.getUTCDate()
@@ -202,6 +224,7 @@ module.exports = {
         if (reldaynum < 10) { reldaynum = '0' + reldaynum }
         let reltruedate = `${relyear}/${relmonthnum}/${reldaynum}`
 
+
         let Embed = new Discord.MessageEmbed()
             .setTitle('Current Time')
             .addField(
@@ -219,7 +242,9 @@ module.exports = {
                 `UTC/GMT${offset} (Host's Local Time)`,
                 `\n**Date**: ${reltruedate}` +
                 `\n**Full Date**: ${reldatenow12h}` +
-                `\n**Full Date(24h)**: ${currentDate}`,
+                `\n**Full Date(24h)**: ${currentDate}` + 
+                `\n**Time since command was last used**: ${minlastvisw} `
+                ,
                 false
             )
         if (args[0]) {
