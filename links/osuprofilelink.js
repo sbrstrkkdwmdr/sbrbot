@@ -35,56 +35,51 @@ module.exports = {
                     fs.writeFileSync("debug/osu.json", JSON.stringify(osudata, null, 2));
                     fs.appendFileSync(linkfetchlogdir, "\n" + "writing data to osu.json")
                     fs.appendFileSync(linkfetchlogdir, "\n" + "")
-                    let playername = JSON.stringify(osudata, ['username']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('username', '');
-                    let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
-                    let playeravatar = JSON.stringify(osudata, ['avatar_url']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('avatar_url', '').replaceAll('https', 'https:');
-                    let playerrank1 = JSON.stringify(osudata['statistics'], ['global_rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('global_rank', '');
-                    let playercountryrank = JSON.stringify(osudata['statistics'], ['country_rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('country_rank', '');
-                    let playercountry = JSON.stringify(osudata, ['country_code']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('country_code', '');
-                    let playerpp = JSON.stringify(osudata['statistics'], ['pp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('pp', '');
-                    let playerplays = JSON.stringify(osudata['statistics'], ['play_count']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('play_count', '');
-                    let playerlevel = JSON.stringify(osudata['statistics']['level'], ['current']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('current', '');
-                    let playerlevelprogress = JSON.stringify(osudata['statistics']['level'], ['progress']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('progress', '');
-                    // let playerplaystyle = JSON.stringify(osudata, ['playstyle']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('playstyle', '');
-                    let playerstatus = osudata['is_online'];
-                    let playeraccuracy = JSON.stringify(osudata['statistics'], ['hit_accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('hit_accuracy', '').slice(0, 5);
-                    let playeracount = JSON.stringify(osudata['statistics']['grade_counts'], ['a']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('a', '');
-                    let playerscount = JSON.stringify(osudata['statistics']['grade_counts'], ['s']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('s', '');
-                    let playershcount = JSON.stringify(osudata['statistics']['grade_counts'], ['sh']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('sh', '');
-                    let playerxcount = JSON.stringify(osudata['statistics']['grade_counts'], ['ss']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('ss', '');
-                    let playerxhcount = JSON.stringify(osudata['statistics']['grade_counts'], ['ssh']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('ssh', '');
-                    let playerjoined = JSON.stringify(osudata, ['join_date']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('join_date', '').slice(0, 10);
-                    let playerfollowers = JSON.stringify(osudata, ['follower_count']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('follower_count', '');
-                    let playerprevname = JSON.stringify(osudata, ['previous_usernames']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('previous_usernames', '').replaceAll('[', '').replaceAll(']', '');
-
-                    let playerrank = JSON.stringify(osudata['statistics'], ['global_rank']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('global_rank', '');
-
-                    if (playerrank1 < 1000000000 && playerrank1 > 999999) {
-                        playerrankp1 = Math.floor(playerrank1 / 1000000);
-                        playerrankp2 = Math.floor(playerrank1 / 1000) % 1000;
-                        playerrankp3 = playerrank1 % 1000;
-                        playerrank = `${playerrankp1},${playerrankp2},${playerrankp3}`
+                    let playername = (osudata.username)
+                    let playerid = (osudata.id)
+                    let playeravatar = (osudata.avatar_url)
+                    let playerrank1 = (osudata.statistics.global_rank)
+                    let playercountryrank1 = (osudata.statistics.country_rank)
+                    let playercountry = (osudata.country_code)
+                    let playerpp = (osudata.statistics.pp)
+                    let playerplays = (osudata.statistics.play_count)
+                    let playerlevel = (osudata.statistics.level.current)
+                    let playerlevelprogress = (osudata.statistics.level.progress)
+                    // let playerplaystyle = (osudata.playstyle).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('playstyle', '');
+                    let playerstatus = (osudata.is_online);
+                    let playeraccuracy = (osudata.statistics.hit_accuracy).toString().slice(0, 5);
+                    let playeracount = (osudata.statistics.grade_counts.a)
+                    let playerscount = (osudata.statistics.grade_counts.s)
+                    let playershcount = (osudata.statistics.grade_counts.sh)
+                    let playerxcount = (osudata.statistics.grade_counts.ss)
+                    let playerxhcount = (osudata.statistics.grade_counts.ssh)
+                    let playerjoined = (osudata.join_date).toString().slice(0, 10);
+                    let playerfollowers = (osudata.follower_count)
+                    let playerprevname = (osudata.previous_usernames).toString().replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll(",", ', ')
+                    let playcountgraph1 = (osudata.monthly_playcounts)//.replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('previous_usernames', '').replaceAll('[', '').replaceAll(']', '');
+                    //console.log(osudata.monthly_playcounts)
+                    let playcountgraph = (playcountgraph1)
+    
+                    if (isNaN(playerrank1)) {
+                        playerrank1 = '---'
                     }
-
-                    if (playerrank1 < 1000000 && playerrank1 > 999) {
-                        playerrankp1 = Math.floor(playerrank1 / 1000);
-                        playerrankp2 = playerrank1 % 1000;
-                        playerrank = `${playerrankp1},${playerrankp2}`
+                    if (isNaN(playercountryrank1)) {
+                        playercountryrank1 = '---'
                     }
-                    if (playerrank1 < 1000) {
-                        playerrank = playerrank1
+                    if (playercountryrank1 == 'null') {
+                        playercountryrank1 == '---'
                     }
-
                     if (playerrank1 == 'null') {
-                        playerrank == '---'
+                        playerrank1 == '---'
                     }
-                    if (playercountryrank == 'null') {
-                        playercountryrank == '---'
-                    }
-
-
-                    let playerlast = JSON.stringify(osudata, ['last_visit']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replace(':', '').replaceAll('last_visit', '').replaceAll('[', '').replaceAll(']', '');
-
+                    let playerrank = playerrank1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    let playercountryrank = playercountryrank1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    
+                    let playerflag = playercountry.toLowerCase();
+    
+    
+                    //
+                    let playerlast = osudata.last_visit
                     let playerlasttoint = new Date(playerlast)
 
                     let currenttime = new Date()
@@ -105,7 +100,7 @@ module.exports = {
                             .setTitle(`${playername}'s osu! profile`)
                             .setURL(`https://osu.ppy.sh/u/${playerid}`)
                             .setThumbnail(playeravatar)
-                            .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ")\n" + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_online:927800818445455421> Online**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
+                            .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n`+ playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + "\n **<:osu_online:927800818445455421> Online**\n**Player joined on** " + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
                         message.reply({ embeds: [Embed] })
                         //message.reply(mapbg1)
                     }
@@ -115,7 +110,7 @@ module.exports = {
                             .setTitle(`${playername}'s osu! profile`)
                             .setURL(`https://osu.ppy.sh/u/${playerid}`)
                             .setThumbnail(playeravatar)
-                            .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ")\n" + playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + `\n **<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago\n**Player joined on** ` + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
+                            .setDescription("**Global Rank:** " + playerrank + " (#" + playercountryrank + " " + playercountry + ` :flag_${playerflag}:)\n`+ playerpp + "**pp**\n**Accuracy:** " + playeraccuracy + "%\n**Level:** " + playerlevel + "+" + playerlevelprogress + "%\n**Playcount:** " + playerplays + `\n **<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago\n**Player joined on** ` + playerjoined + "\n**Followers:** " + playerfollowers + "\n**Previous names:** " + playerprevname + "\n<:rankingxh:927797179597357076>" + playerxhcount + " <:rankingX:927797179832229948>" + playerxcount + " <:rankingSH:927797179710570568>" + playershcount + " <:rankingS:927797179618295838>" + playerscount + " <:rankingA:927797179739930634>" + playeracount);
                         message.reply({ embeds: [Embed] })
                         //message.reply(mapbg1)
                     }
