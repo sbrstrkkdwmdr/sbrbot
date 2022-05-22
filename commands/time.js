@@ -197,6 +197,9 @@ module.exports = {
         if(lastvisminutes > 0){
             minlastvisw += lastvisminutes + "m " //+ lastvisminutes + "m");
         }
+        if(minlastvisw == ''){
+            minlastvisw = 'now'
+        }
 
 
         fs.writeFileSync('debug/timesince.txt', rn.toString() )
@@ -254,7 +257,7 @@ module.exports = {
                     `\nRecived invalid timezone!` +
                     `\nBoth Country and City must be specified` +
                     `\ni.e **Australia/Melbourne**` +
-                    `\nCheck [here](https://www.iana.org/time-zones) and [here](https://stackoverflow.com/a/54500197) for valid dates`
+                    `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
                     ,
                     false
                 )
@@ -280,7 +283,7 @@ module.exports = {
                         `\nRecived invalid timezone!` +
                         `\nBoth Country and City must be specified` +
                         `\ni.e **Australia/Melbourne**` + 
-                        `\nCheck [here](https://www.iana.org/time-zones) and [here](https://stackoverflow.com/a/54500197) for valid dates`
+                        `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
                         ,
                         false
                     )
