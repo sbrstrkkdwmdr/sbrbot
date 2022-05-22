@@ -243,6 +243,9 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
             case 'osusave': case 'osuset':
                 client.altosucmds.get('osuset').execute(userdatatags, message, args, Discord, currentDate, currentDateISO)
                 break;
+            case 'leaderboard': case 'lb':
+                client.altosucmds.get('leaderboard').execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+                break;
             /*
                 case 'maniars':case 'maniarecent':case 'rsmania':case 'recentmania':
                     client.altosucmds.get('maniars').execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
