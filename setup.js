@@ -25,6 +25,7 @@ fs.writeFileSync("config.json", JSON.stringify(pretemplate, null, 2))
 fs.mkdirSync("./other/",)
 fs.mkdirSync("./debug/",)
 fs.mkdirSync("./logs/",)
+fs.writeFileSync("./debug/osuauth.json")
 
 console.log("If you don't want to set an option, just put 'null' or press enter")
 

@@ -295,7 +295,7 @@ module.exports = {
                 let optionaldateDate = new Date(optionaldateISO).toLocaleDateString();
                 let optionaldate = new Date(optionaldateISO)//.toString();
                 //let optionaldate12hISO = new Date().toISOString(timeopts2);//.toString(timeopts2);
-                let optionaldate12hfirst = new Date(new Date().toLocaleString('en-AU', timeopts2));
+                let optionaldate12hfirst = new Date(new Date().toLocaleString('en-US', timeopts2));
                 let optionaldateoffset = fixoffset(new Date(optionaldateISO).getTimezoneOffset())
 
                 //let reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`
