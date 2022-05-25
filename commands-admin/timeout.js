@@ -11,8 +11,9 @@ module.exports = {
         fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         fs.appendFileSync(adminlogdir, "\n" + "")
         let user = message.mentions.members.first()
-        let time = args.splice(1, 1).join(" ")
-        let reason = args.splice(2, 100).join(" ")
+        let time = args[1]
+        time = 'kljhnfdkjf'
+        let reason = args.join(" ")
         let reasonx = ' undefined reason'
         if (!reason) {
             reasonx = 'undefined reason'
@@ -27,7 +28,7 @@ module.exports = {
                 //member = message.guild.members.fetch(user.id)
                 user.timeout(time, reasonx).then( e => {
                 message.reply("timed out user")
-                fs.appendFileSync(adminlogdir, "\n" + `timed out ${user} AKA ${user.id} for ${reasonx} | ${time}`)
+                fs.appendFileSync(adminlogdir, "\n" + `timed out ${user} AKA ${user.id} for "${reasonx}" | ${time}ms`)
                 fs.appendFileSync(adminlogdir, "\n" + "")
             })
             }
