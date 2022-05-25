@@ -39,7 +39,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                                 fs.appendFileSync('logs/presence.log', `\n${member.id} AKA ${member.username} has been playing league for ${totaltimes / 60} minutes!\n`) // saves it in logs
                                 let user = member.presence.user
                                 //console.log('')
-                                user.send('You have been playing league for too long!') // sends a DM
+                                //user.send('You have been playing league for too long!') // sends a DM
                                 /*member.ban({
                                     reason: 'league player',
                                     

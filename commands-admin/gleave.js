@@ -12,16 +12,16 @@ module.exports = {
         let consoleloguserweeee = interaction.member.user
         fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         fs.appendFileSync(adminlogdir, "\n" + "")
-        if(interaction.member.user.id = 503794887318044675){
-        let guildID = client.guilds.cache.get(idofguild);
-        if(!guildID){
-        message.reply("id bro");
-        return(false)
-        }
-        guildID.leave(); 
+        if (interaction.member.user.id = 503794887318044675) {
+            let guildID = client.guilds.cache.get(idofguild);
+            if (!guildID) {
+                message.reply("id bro");
+                return (false)
+            }
+            guildID.leave();
 
-        fs.appendFileSync(adminlogdir, "\n" + `left guild - ${guildID}`)
-        fs.appendFileSync(adminlogdir, "\n" + "")
-    }   console.groupEnd()
-        }
+            fs.appendFileSync(adminlogdir, "\n" + `left guild - ${guildID}`)
+            fs.appendFileSync(adminlogdir, "\n" + "")
+        } console.groupEnd()
     }
+}

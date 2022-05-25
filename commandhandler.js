@@ -385,6 +385,9 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
             case 'delcommand':
                 client.admincmds.get('delcmd').execute(message, args, client, Discord, currentDate, currentDateISO)
                 break;
+            case 'timeout':
+                client.admincmds.get('timeout').execute(message, args, client, Discord, currentDate, currentDateISO)
+                break;
             //MUSIC --------------------
             case 'play':
                 //client.musiccmds.get('play').execute(message, args, command, client, Discord, currentDate, currentDateISO)
