@@ -13,5 +13,5 @@ module.exports = {
         fs.appendFileSync(adminlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         fs.appendFileSync(adminlogdir, "\n" + "")
         console.groupEnd()
-        }
     }
+}

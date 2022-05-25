@@ -13,7 +13,7 @@ module.exports = {
         let user = message.mentions.members.first()
         let time = args.splice(1, 1).join(" ")
         let reason = args.splice(2, 100).join(" ")
-        let reasonx = ' '
+        let reasonx = ' undefined reason'
         if (!reason) {
             reasonx = 'undefined reason'
         } else {
@@ -27,7 +27,7 @@ module.exports = {
                 //member = message.guild.members.fetch(user.id)
                 user.timeout(time, reasonx).then( e => {
                 message.reply("timed out user")
-                fs.appendFileSync(adminlogdir, "\n" + `timed out ${user} AKA ${user.id} for ${reaswon}`)
+                fs.appendFileSync(adminlogdir, "\n" + `timed out ${user} AKA ${user.id} for ${reasonx} | ${time}`)
                 fs.appendFileSync(adminlogdir, "\n" + "")
             })
             }
