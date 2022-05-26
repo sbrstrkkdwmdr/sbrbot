@@ -75,6 +75,9 @@ module.exports = {
 
         }
         message.channel.send({ embeds: [leaderboardEmbed] })
+        fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
+        fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
+        fs.appendFileSync(osulogdir, "\n" + "command executed - leaderboard")
 
         /*
         let users = await userdatatags.findAll({ 
