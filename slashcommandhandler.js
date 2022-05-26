@@ -1,6 +1,6 @@
 const { Constants } = require('discord.js');
 const { testguild } = require('./config.json')
-const { modeopts, playsortopts, timezoneopts, skincmdopts, mathcmdopts, conversionopts } = require('./configs/commandoptions.js')
+const { modeopts, playsortopts, timezoneopts, skincmdopts, mathcmdopts, conversionopts, gifopts } = require('./configs/commandoptions.js')
 
 
 module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
@@ -107,6 +107,19 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 description: 'what to remind',
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING
+            }
+        ]
+    })
+    commands?.create({
+        name: 'gif',
+        description: 'sends a gif to chad',
+        options: [
+            {
+                name: 'type',
+                description: 'what type of gif to send',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                choices: gifopts
             }
         ]
     })
@@ -508,7 +521,9 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
             case 'remind':
                 client.commands.get('remindslash').execute(interaction, options, client, Discord, currentDate, currentDateISO)
                 break;
-
+            case 'gif':
+                client.commands.get('gifslash').execute(interaction, options, currentDate, currentDateISO)
+                break;
             //------osu
             case 'rs':
                 client.osucmds.get('rsallmodes').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)

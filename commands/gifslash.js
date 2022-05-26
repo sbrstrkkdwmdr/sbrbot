@@ -2,9 +2,9 @@ const fs = require('fs')
 const { otherlogdir } = require('../logconfig.json')
 
 module.exports = {
-    name: 'gif',
+    name: 'gifslash',
     description: 'gif',
-    execute(message, args, currentDate, currentDateISO) {
+    execute(interaction, options, currentDate, currentDateISO) {
 
 
         function cryabtit() {
@@ -272,60 +272,62 @@ module.exports = {
             return url;
         }*/
 
-        let str = message.content
-        if (str.includes('cry about it')) {
-            thelink = cryabtit()
-            message.channel.send(thelink)
+        let str = options.getString('type')
+        switch (str) {
+            case 'cry about it':
+                thelink = cryabtit()
+                interaction.channel.send(thelink)
+                break;
+            case 'speech bubble':
+                thelink = speechbubble()
+                interaction.channel.send(thelink)
+                break;
+            case 'chad speak':
+                thelink = 'https://cdn.discordapp.com/attachments/724514625005158403/979287601146118184/gigachad_speak.png'
+                interaction.channel.send(thelink)
+                break;
+            case 'reaction':
+                thelink = reaction()
+                interaction.channel.send(thelink)
+                break;
+            case 'skill issue':
+                thelink = skillissue()
+                interaction.channel.send(thelink)
+                break;
+            case 'no bitches':
+                thelink = nobitches()
+                interaction.channel.send(thelink)
+                break;
+            case 'agree':
+                thelink = agree()
+                interaction.channel.send(thelink)
+                break;
+            case 'cope':
+                thelink = cope()
+                interaction.channel.send(thelink)
+                break;
+            case 'disagree':
+                thelink = disagree()
+                interaction.channel.send(thelink)
+                break;
+            case 'nocare':
+                thelink = nocare()
+                interaction.channel.send(thelink)
+                break;
+            case 'misspell':
+                thelink = misspell()
+                interaction.channel.send(thelink)
+                break;
+            case 'compliment':
+                thelink = compliment()
+                interaction.channel.send(thelink)
+                break;
+            case 'insult':
+                thelink = insult()
+                interaction.channel.send(thelink)
+                break;
         }
-        else if (str.includes('speech bubble') || str.includes('speaking')) {
-            thelink = speechbubble()
-            message.channel.send(thelink)
-        }
-        else if (str.includes('chad speak')) {
-            thelink = 'https://cdn.discordapp.com/attachments/724514625005158403/979287601146118184/gigachad_speak.png'
-            message.channel.send(thelink)
-        }
-        else if (str.includes('reaction')) {
-            thelink = reaction()
-            message.channel.send(thelink)
-        }
-        else if (str.includes('skill issue')) {
-            thelink = skillissue()
-            message.channel.send(thelink)
-        }
-        else if (str.includes('no bitches')) {
-            thelink = nobitches()
-            message.channel.send(thelink)
-        }
-        else if (str.includes('agree') && !str.includes('disagree')) {
-            thelink = agree()
-            message.channel.send(thelink)
-        }
-        else if (str.includes('cope')) {
-            thelink = cope()
-            message.channel.send(thelink)
-        }
-        else if (str.includes('disagree')) {
-            thelink = disagree()
-            message.channel.send(thelink)
-        }
-        else if (str.includes('nocare')) {
-            thelink = nocare()
-            message.channel.send(thelink)
-        }
-        else if (str.includes('misspell')) {
-            thelink = misspell()
-            message.channel.send(thelink)
-        }
-        else if (str.includes('compliment')) {
-            thelink = compliment()
-            message.channel.send(thelink)
-        }
-        else if (str.includes('insult')) {
-            thelink = insult()
-            message.channel.send(thelink)
-        }
-        message.delete()
+        interaction.reply({ content: 'success', ephemeral: true })
 
 
 

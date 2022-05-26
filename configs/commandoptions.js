@@ -97,6 +97,22 @@ let conversionopts = [
     //mass
 ]
 
+let gifopts = [
+    { name: 'cry about it', value: 'cry about it'},
+    { name: 'speaking', value: 'speech bubble'},
+    { name: 'chad speaking', value: 'chad speak'},
+    { name: 'live reaction', value: 'reaction'},
+    { name: 'skill issue', value: 'skill issue'},
+    { name: 'no bitches', value: 'no bitches'},
+    { name: 'agree', value: 'agree'},
+    { name: 'cope harder', value: 'cope'},
+    { name: 'disagree', value: 'disagree'},
+    { name: 'i dont care', value: 'nocare'},
+    { name: 'spelling issue', value: 'misspell'},
+    { name: 'compliment', value: 'compliment'},
+    { name: 'insult', value: 'insult'}
+]
+
 
 let timezoneopts = [
     { name: 'Abidjan (Africa, Côte d’Ivoire/Ivory Coast)', value: 'Africa/Abidjan' },
@@ -475,4 +491,4 @@ let timezoneopts = [
     //
     //
 ]
-module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, timezoneopts }
+module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts }
