@@ -15,7 +15,9 @@ module.exports = {
             fs.appendFileSync(adminlogdir, "\n" + "")
 
             const user = message.mentions.members.first();
-            const reaswon = args.splice(1, 100).join(' ');
+            //const reaswon = args.splice(1, 1000).join(' ');
+            rsone = message.content.toString().indexOf(' ')
+            const reaswon = message.content.substring(rsone + 1)
             if (!reaswon) {
                 message.reply("Reason required")
                 fs.appendFileSync(adminlogdir, "\n" + "command failed - no reason")

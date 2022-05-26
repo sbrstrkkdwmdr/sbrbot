@@ -26,7 +26,7 @@ module.exports = {
         if (user) {
             try {
                 //member = message.guild.members.fetch(user.id)
-                user.timeout(time, reasonx).then( e => {
+                user.timeout(time, `${reasonx}`).then( e => {
                 message.reply("timed out user")
                 fs.appendFileSync(adminlogdir, "\n" + `timed out ${user} AKA ${user.id} for "${reasonx}" | ${time}ms`)
                 fs.appendFileSync(adminlogdir, "\n" + "")

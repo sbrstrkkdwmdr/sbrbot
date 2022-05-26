@@ -20,7 +20,7 @@ module.exports = {
                     member
                         .kick(`${reason}`)
                         .then(() => {
-                            message.reply(`successfully kicked ${user.tag} | ${user.tag}`);
+                            message.reply(`successfully kicked ${user.tag} | ${user.id}`);
                             fs.appendFileSync(adminlogdir, "\n" + `kicked user - ${user.id} ${user.tag}`)
                             fs.appendFileSync(adminlogdir, "\n" + "")
                         })
