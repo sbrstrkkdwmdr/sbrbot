@@ -28,17 +28,26 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
         let curtimezone = split[split.length - 1]
 
         if (!message.content.startsWith(prefix)) return; //the return is so if its just prefix nothing happens
-        if (message.author.bot) {
-            if (!message.author.id == '755220989494951997') return;
+        if(message.author.bot && message.content.includes("You're on cooldown")){
+            setTimeout(() => {
+                message.delete();
+            }, 1)
         }
-        if (oncooldown.has(message.author.id)) return message.reply("You're on cooldown");
+        if (message.author.bot && !message.author.id == '755220989494951997') return;
+        if (oncooldown.has(message.author.id)) {
+            message.channel.send(`You're on cooldown\nTime left: ${getTimeLeft(timeouttime)}ms (this is definitely the wrong number)`)
+        };
+
         if (!oncooldown.has(message.author.id)) {
             oncooldown.add(message.author.id);
             setTimeout(() => {
                 oncooldown.delete(message.author.id)
             }, 3000)
+            timeouttime = setTimeout(() => {}, 3000)
         }
-
+        function getTimeLeft(timeout) {
+            return Math.ceil((timeout._idleStart + timeout._idleTimeout) / 1000);
+        }
         switch (command) //variable to check for
         {
 
@@ -197,6 +206,9 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 break;
             case 'getuser':
                 client.commands.get('getuser').execute(message, client, Discord, args, currentDate, currentDateISO)
+                break;
+            case 'gif':
+                client.commands.get('gif').execute(message, args, currentDate, currentDateISO)
                 break;
             //SBR ONLY --------------------------------------------------------
             case 'testlog':
