@@ -24,20 +24,20 @@ module.exports = {
             const replay = osuReplayParser.parseReplay(replayPath);
             fs.writeFileSync("debug/replay.json", JSON.stringify(replay, null, 2))
 
-            let lifebar = JSON.stringify(replay, ['life_bar']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('life_bar', '');
-            let maphash = JSON.stringify(replay, ['beatmapMD5']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('beatmapMD5', '');
-            let playername = JSON.stringify(replay, ['playerName']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('playerName', '');
-            let timeset = JSON.stringify(replay, ['timestamp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('timestamp', '');
-            let maxcombo = JSON.stringify(replay, ['max_combo']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('max_combo', '');
-            let hit300s = JSON.stringify(replay, ['number_300s']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('number_300s', '').replaceAll('-', '');
-            let hit100s = JSON.stringify(replay, ['number_100s']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('number_100s', '');
-            let hit50s = JSON.stringify(replay, ['number_50s']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('number_50s', '');
-            let misses = JSON.stringify(replay, ['misses']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('misses', '');
-            let hitkatu = JSON.stringify(replay, ['katus']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('katus', '');
-            let hitgeki = JSON.stringify(replay, ['gekis']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('gekis', '');
-            let mods = JSON.stringify(replay, ['mods']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('mods', '');
-            let bettertimeset = JSON.stringify(replay, ['timestamp']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('timestamp', '').slice(0, 10);
-            let gamemode = JSON.stringify(replay, ['gameMode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('gameMode', '')
+            let lifebar = replay.life_bar.toString()
+            let maphash = replay.beatmapMD5.toString()
+            let playername = replay.playerName.toString()
+            let timeset = replay.timestamp 
+            let maxcombo = replay.max_combo
+            let hit300s = replay.number_300s
+            let hit100s = replay.number_100s
+            let hit50s = replay.number_50s
+            let misses = replay.misses
+            let hitkatu = replay.katus
+            let hitgeki= replay.gekis
+            let mods = replay.mods.toString()
+            let bettertimeset = replay.timestamp.toString().slice(0, 10);
+            let gamemode = replay.gameMode
 
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${playername}/osu`;
 
@@ -74,51 +74,28 @@ module.exports = {
                                 fs.appendFileSync(linkfetchlogdir, "\n" + "writing data to map.json")
                                 fs.appendFileSync(linkfetchlogdir, "\n" + "")
                                 try {
-                                    let beatmapid = JSON.stringify(mapdata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
-                                    let mapbg = JSON.stringify(mapdata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
-                                    let mapper = JSON.stringify(mapdata['beatmapset'], ['creator']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('creator', '');
-                                    let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20').replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '')
-                                    let maptitle = JSON.stringify(mapdata['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title_unicode', '');
-                                    let maptitlenormal = JSON.stringify(mapdata['beatmapset'], ['title']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title', '');
-                                    let mapdiff = JSON.stringify(mapdata, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
-                                    let mapcs = JSON.stringify(mapdata, ['cs']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('cs', '');
-                                    let mapar = JSON.stringify(mapdata, ['ar']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('ar', '');
-                                    let mapod = JSON.stringify(mapdata, ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('accuracy', '');
-                                    let maphp = JSON.stringify(mapdata, ['drain']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('drain', '');
-                                    let mapsr = JSON.stringify(mapdata, ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
-                                    let mapbpm = JSON.stringify(mapdata, ['bpm']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('bpm', '');
-                                    let mapcircle = JSON.stringify(mapdata, ['count_circles']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_circles', '');
-                                    let mapslider = JSON.stringify(mapdata, ['count_sliders']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_sliders', '');
-                                    let mapspinner = JSON.stringify(mapdata, ['count_spinners']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_spinners', '');
+                                    let beatmapid = mapdata.id
+                                    let mapbg = mapdata.beatmapset.covers.covers
+                                    let mapper = mapdata.beatmapset.creator.toString()
+                                    let mapperlink = mapper.replaceAll(' ', '%20')
+                                    let maptitle = mapdata.beatmapset.title_unicode.toString()
+                                    let maptitlenormal = mapdata.beatmapset.title.toString()
+                                    let mapdiff = mapdata.version
+                                    let mapcs = mapdata.cs
+                                    let mapar = mapdata.ar
+                                    let mapod = mapdata.accuracy
+                                    let maphp = mapdata.drain
+                                    let mapsr = mapdata.difficulty_rating
+                                    let mapbpm = mapdata.bpm
+                                    let mapcircle = mapdata.count_circles
+                                    let mapslider = mapdata.count_sliders
+                                    let mapspinner = mapdata.count_spinners
 
                                     fullmaptitle = `${maptitle}`
                                     if (maptitle != maptitlenormal) {
                                         fullmaptitle = `${maptitle} \n${maptitlenormal}`
                                     }
-                                    /*const mapurl2 = `https://osu.ppy.sh/api/v2/beatmaps/${beatmapid}`
-                                    fetch(mapurl2, {
-                                        headers: {
-                                            Authorization: `Bearer ${access_token}`
-                                        }
-                                    })
-                                    .then(res => res.json())
-                                    .then(output4 => {
-                                    const mapdata2 = output4;
-                                    let mapbg = JSON.stringify(mapdata2['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
-                                    let mapper = JSON.stringify(mapdata2['beatmapset'], ['creator']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('creator', '');
-                                    let mapperlink = JSON.stringify(mapper).replaceAll(' ', '%20')
-                                    let maptitle = JSON.stringify(mapdata2['beatmapset'], ['title_unicode']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('title_unicode', '');
-                                    let mapdiff = JSON.stringify(mapdata2, ['version']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('version', '');
-                                    let mapcs = JSON.stringify(mapdata2, ['cs']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('cs', '');
-                                    let mapar = JSON.stringify(mapdata2, ['ar']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('ar', '');
-                                    let mapod = JSON.stringify(mapdata2, ['accuracy']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('accuracy', '');
-                                    let maphp = JSON.stringify(mapdata2, ['drain']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('drain', '');
-                                    let mapsr = JSON.stringify(mapdata2, ['difficulty_rating']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('difficulty_rating', '');
-                                    let mapbpm = JSON.stringify(mapdata2, ['bpm']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('bpm', '');
-                                    let mapcircle = JSON.stringify(mapdata2, ['count_circles']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_circles', '');
-                                    let mapslider = JSON.stringify(mapdata2, ['count_sliders']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_sliders', '');
-                                    let mapspinner = JSON.stringify(mapdata2, ['count_spinners']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('count_spinners', '');
-                        */
+
                                     let nochokeacc300 = Math.floor(300 * hit300s);
                                     let nochokeacc100 = Math.floor(100 * hit100s);
                                     let nochokeacc50 = Math.floor(50 * hit50s);
@@ -202,11 +179,11 @@ module.exports = {
                                         }
                                         let ppw = await pp.compute();
                                         let ppiffc1 = await ppfc.compute(nochokeacc);
-                                        let ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+                                        let ppiffc2 = ppiffc1.total
                                         let ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
                                         let ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
-                                        let ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                                        let ppwrawtotal = ppw['total'];
+                                        let ppwtostring = ppw.total.toString()
+                                        let ppwrawtotal = ppw.total;
                                         let ppww = Math.abs(ppwrawtotal).toFixed(2);
                                         let ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters
                                         //fs.appendFileSync(linkfetchlogdir, "\n" + ppw)
@@ -302,7 +279,7 @@ module.exports = {
                                     fs.appendFileSync(linkfetchlogdir, "\n" + error)
                                     fs.appendFileSync(linkfetchlogdir, "\n" + getStackTrace(error))
                                     message.reply('error - map does not exist or is a different version to the osu website')
-                                    console.log(error)
+                                    //console.log(error)
                                 }
                             })
                     } catch (error) {

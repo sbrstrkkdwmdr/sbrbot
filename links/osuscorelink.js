@@ -49,30 +49,28 @@ module.exports = {
                     fs.writeFileSync("debug/score.json", JSON.stringify(scoredata, null, 2));
                     fs.appendFileSync(linkfetchlogdir, "\n" + "writing data to score.json")
                     fs.appendFileSync(linkfetchlogdir, "\n" + "")
-                    let playername = JSON.stringify(scoredata['user'], ['username']).replace('username', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    //console.log(playername)
-                    let playerid = JSON.stringify(scoredata['user'], ['id']).replace('id', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let hitmax = JSON.stringify(scoredata['statistics'], ['count_geki']).replace('count_geki', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let hit300 = JSON.stringify(scoredata['statistics'], ['count_300']).replace('count_300', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let hit200 = JSON.stringify(scoredata['statistics'], ['count_katu']).replace('count_katu', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let hit100 = JSON.stringify(scoredata['statistics'], ['count_100']).replace('count_100', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let hit50 = JSON.stringify(scoredata['statistics'], ['count_50']).replace('count_50', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let hit0 = JSON.stringify(scoredata['statistics'], ['count_miss']).replace('count_miss', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let timeset = JSON.stringify(scoredata['created_at']).replace('created_at', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let mapid = JSON.stringify(scoredata['beatmap'], ['id']).replace('id', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let maptitle = JSON.stringify(scoredata['beatmapset'], ['title']).replace('title', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')//.replace('undefined', '')
-                    let maptitleunicode = JSON.stringify(scoredata['beatmapset'], ['title_unicode']).replace('title_unicode', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let mapdiff = JSON.stringify(scoredata['beatmap'], ['version']).replace('version', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let scoremods = JSON.stringify(scoredata['mods']).replace('mods', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '').replace('[', '').replace(']', '').replaceAll(',', '')
-                    let scorepp = JSON.stringify(scoredata['pp']).replace('pp', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let acc = JSON.stringify(scoredata['accuracy']).replace('accuracy', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let scorecombo = JSON.stringify(scoredata['max_combo']).replace('max_combo', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let fc = JSON.stringify(scoredata['perfect']).replace('perfect', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let grade = JSON.stringify(scoredata['rank']).replace('rank', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
-                    let mapsr = JSON.stringify(scoredata['beatmap'], ['difficulty_rating']).replace('difficulty_rating', '').replace('{', '').replace('}', '').replaceAll('"', '').replace(':', '')
 
-                    let mapbg = JSON.stringify(scoredata['beatmapset']['covers'], ['cover']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replace('cover', '').replace('https', 'https:');
-                    //console.log(mapid)
+                    let playername = scoredata.user.username.toString()
+                    let playerid = scoredata.user.id
+                    let hitmax = scoredata.statistics.count_geki
+                    let hit300 = scoredata.statistics.count_300
+                    let hit200 = scoredata.statistics.count_katu
+                    let hit100 = scoredata.statistics.count_100
+                    let hit50 = scoredata.statistics.count_50
+                    let hit0 = scoredata.statistics.count_miss
+                    let timeset = scoredata.created_at
+                    let mapid = scoredata.beatmap.id
+                    let maptitle = scoredata.beatmapset.title.toString()
+                    let maptitleunicode = scoredata.beatmapset.title_unicode.toString()
+                    let mapdiff = scoredata.beatmap.version.toString()
+                    let scoremods = scoredata.mods.toString()
+                    let scorepp = scoredata.pp
+                    let acc = scoredata.accuracy
+                    let scorecombo = scoredata.max_combo
+                    let fc = scoredata.perfect
+                    let grade = scoredata.rank
+                    let mapsr = scoredata.beatmap.difficulty_rating
+                    let mapbg = scoredata.beatmapset.covers.cover.toString()
 
                     if (maptitle != maptitleunicode) {
                         mapname = `${maptitleunicode}\n${maptitle}`
@@ -173,20 +171,21 @@ module.exports = {
                         }
                         ppw = await pp.compute();
                         ppiffc1 = await ppfc.compute();
-                        ppiffc2 = JSON.stringify(ppiffc1['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
+
+                        ppiffc2 = ppiffc1.total
                         ppiffcw = Math.abs(ppiffc2).toFixed(2).toString();
                         ppiffcfull = Math.abs(ppiffc2).toString(); //fc pp without filters
-                        ppwtostring = JSON.stringify(ppw['total']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('total', '');
-                        ppwrawtotal = ppw['total'];
+                        ppwtostring = ppw.total.toString()
+                        ppwrawtotal = ppw.total
                         ppww = Math.abs(ppwrawtotal).toFixed(2);
                         ppwfull = Math.abs(ppwrawtotal).toString(); //the pp without filters   
 
 
                         fcflag = '**FC**'
-                        if (fc == 'false') {
+                        if (fc == false) {
                             fcflag = `| **${ppiffcw}**pp IF FC`
                         }
-                        if (fc == 'true') {
+                        if (fc == true) {
                             fcflag = '**FC**'
                         }
 
