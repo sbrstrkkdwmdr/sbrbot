@@ -57,7 +57,7 @@ module.exports = {
             return url;
         }
         function speechbubble() {
-            let randomnum = Math.floor(Math.random() * 14 + 1)
+            let randomnum = Math.floor(Math.random() * 15 + 1)
             let url;
             switch (randomnum) {
                 case 1:
@@ -101,6 +101,9 @@ module.exports = {
                     break;
                 case 14:
                     url = 'https://media.discordapp.net/attachments/894054954661204009/956769254269648917/lil-nas-x-pregnant.gif' //lil nas x pregnant
+                    break;
+                case 15:
+                    url = 'https://media.discordapp.net/attachments/855538143302385727/978751222293098536/delta_dannerif-5-a495e94394.gif' //idk what this is but theres a girl that looks like kasane teto and an 8 in the middle
                     break;
                 default:
                     url = 'err'
