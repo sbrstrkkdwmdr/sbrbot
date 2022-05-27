@@ -155,6 +155,18 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 choices: playsortopts
+            },
+            {
+                name: 'mapper',
+                description: 'only show maps made by this mapper',
+                required: false,
+                type: Constants.ApplicationCommandOptionTypes.STRING
+            },
+            {
+                name: 'mods',
+                description: 'only show scores with these mods. add exact at the start to hard filter',
+                required: false,
+                type: Constants.ApplicationCommandOptionTypes.STRING
             }
         ]
     })

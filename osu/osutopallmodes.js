@@ -49,7 +49,7 @@ module.exports = {
                 fs.appendFileSync(osulogdir, "\n" + error)
             }
         }
-        if(isNullOrUndefined(altpickedmode)){
+        if (isNullOrUndefined(altpickedmode)) {
             pickedmodex = 'osu'
         }
         if (!pickedmode && !altpickedmode) {
@@ -112,30 +112,54 @@ module.exports = {
                         }
                     }).then(res => res.json())
                         .then(output2 => {
+                            resortdata = output2
+                            filterby = '⠀'
+                            let mappersort = options.getString('mapper')
+                            if (mappersort) {
+                                resortdata = output2.filter(word => word.beatmapset.creator.toLowerCase() == mappersort.toLowerCase());
+                                filterby = 'Filtered by:\nMapper: ' + mappersort
+                                //fs.write(resortdata)
+                                //console.log('pe')
+                            }
+                            let modsort = options.getString('mods')
+                            if (modsort) {
+
+                                if (modsort.includes('exact')) {
+                                    modsort2 = modsort.toLowerCase().slice(5)
+                                    resortdata = resortdata.filter(word => word.mods.toString().replaceAll(",", '').toLowerCase() == modsort2)
+                                    filterby += `\nMods: ${modsort2.toUpperCase()} (hard filter)`
+                                }
+                                else {
+                                    resortdata = resortdata.filter(word => word.mods.toString().replaceAll(",", '').toLowerCase().includes(modsort2))
+                                    filterby += `\nMods: ${modsort2.toUpperCase()}`
+                                }
+
+                            }
+
                             let sort = options.getString('sort')//.toLowerCase();
                             if (sort) {
                                 sort = sort.toLowerCase();
                             }
                             if (sort == 'acc' || sort == 'accuracy') {
-                                osutopdata = output2.sort((a, b) => b.accuracy - a.accuracy);
+                                osutopdata = resortdata.sort((a, b) => b.accuracy - a.accuracy);
                                 sortedby = 'Sorted by: Accuracy'
                             }
                             else if (sort == 'time' || sort == 'date' || sort == 'recent' || sort == 'r') {
-                                //osutopdata = output2.sort((a, b) => b.created_at.toLowerCase().slice(0, 10).replaceAll('-', '') - a.created_at.toLowerCase().slice(0, 10).replaceAll('-', ''));
-                                osutopdata = output2.sort((a, b) => Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')));
+                                //osutopdata = resortdata.sort((a, b) => b.created_at.toLowerCase().slice(0, 10).replaceAll('-', '') - a.created_at.toLowerCase().slice(0, 10).replaceAll('-', ''));
+                                osutopdata = resortdata.sort((a, b) => Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')));
                                 //fs.appendFileSync(osulogdir, "\n" + osutopdata[0]['created_at'].slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', ''))
 
                                 sortedby = 'Sorted by: Most Recent'
                             }
                             else if (sort == 'score') {
-                                osutopdata = output2.sort((a, b) => b.score - a.score);
+                                osutopdata = resortdata.sort((a, b) => b.score - a.score);
                                 sortedby = 'Sorted by: Score'
                             }
                             /*if(sort == 'score'){
                                 osutopdata = output2.sort((a, b) => a.pp - b.pp);
                             }*/
                             else {
-                                osutopdata = output2.sort((a, b) => b.pp - a.pp);
+                                osutopdata = resortdata.sort((a, b) => b.pp - a.pp);
                                 sortedby = '⠀'
                             }
                             //osutopdata = output2;
@@ -161,47 +185,47 @@ module.exports = {
                                     .setTitle("Top plays for " + topplayername)
                                     .setURL(`https://osu.ppy.sh/u/${playerid}`)
                                     .setThumbnail(topplayeravatar)
-                                    .setDescription(`${sortedby}`)
-                                    for(i=0;i<5;i++){
-                                        maptitle = osutopdata[i].beatmapset.title_unicode.toString()
-                                        mapdiff = osutopdata[i].beatmap.version
-                                        mapurl = osutopdata[i].beatmap.id 
-                                        mapmods1 = osutopdata[i].mods
+                                    .setDescription(`${filterby}\n${sortedby}`)
+                                for (i = 0; i < 5 && i < osutopdata.length; i++) {
+                                    maptitle = osutopdata[i].beatmapset.title_unicode.toString()
+                                    mapdiff = osutopdata[i].beatmap.version
+                                    mapurl = osutopdata[i].beatmap.id
+                                    mapmods1 = osutopdata[i].mods
 
-                                        if(!mapmods1 || mapmods1 == '' || mapmods1 == 'undefined' || mapmods1 == null || mapmods1 == undefined){
-                                            mapmods = ''
-                                        } else {
-                                            mapmods = '+' + mapmods1.toString().replaceAll(",", '')
-                                        }
-
-                                        mapscore = osutopdata[i].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                        maptimeset = osutopdata[i].created_at.toString().slice(0, 19).replace("T", " ")
-                                        mapacc = Math.abs(osutopdata[i].accuracy * 100).toFixed(2)
-                                        maprank = osutopdata[i].rank
-                                        map300max = osutopdata[i].statistics.count_geki
-                                        map300 = osutopdata[i].statistics.count_300
-                                        map200 = osutopdata[i].statistics.count_katu
-                                        map100 = osutopdata[i].statistics.count_100
-                                        map50 = osutopdata[i].statistics.count_50
-                                        mapmiss = osutopdata[i].statistics.count_miss
-                                        hitlist = ''
-                                        if (pickedmodex == 'osu') {
-                                            hitlist = `**300:** ${map300} **00:** ${map100} **50:** ${map50} **X:** ${mapmiss}`
-                                        }
-                                        if (pickedmodex == 'taiko') {
-                                            hitlist = `**300(GREAT):** ${map300} **00(GOOD):** ${map100} **X:** ${mapmiss}`
-                                        }
-                                        if (pickedmodex == 'fruits') {
-                                            hitlist = `**300:** ${map300} **00(Drops):** ${map100} **50(Droplets):** ${map50} **X:** ${mapmiss}`
-                                        }
-                                        if (pickedmodex == 'mania') {
-                                            hitlist = `**300+**: ${map300max} **300:** ${map300} **200:** ${map200} **00:** ${map100} **50:** ${map50} **X:** ${mapmiss}`
-                                        }
-                                        mappp = osutopdata[i].pp
-                                        weightedmappp = osutopdata[i].weight.pp
-                                        weightedpppercent = Math.abs(osutopdata[i].weight.percentage).toFixed(2)
-                                        Embed.addField(`---`, `**[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${mapurl}) ${mapmods}**\nSCORE: ${mapscore} \nScore set on ${maptimeset} \n${mapacc}% | ${maprank}\n${hitlist} \n**${(Math.abs(mappp).toFixed(2))}**pp | **${Math.abs(weightedmappp).toFixed(2)}**pp weighted **${weightedpppercent}**%`, false)
+                                    if (!mapmods1 || mapmods1 == '' || mapmods1 == 'undefined' || mapmods1 == null || mapmods1 == undefined) {
+                                        mapmods = ''
+                                    } else {
+                                        mapmods = '+' + mapmods1.toString().replaceAll(",", '')
                                     }
+
+                                    mapscore = osutopdata[i].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    maptimeset = osutopdata[i].created_at.toString().slice(0, 19).replace("T", " ")
+                                    mapacc = Math.abs(osutopdata[i].accuracy * 100).toFixed(2)
+                                    maprank = osutopdata[i].rank
+                                    map300max = osutopdata[i].statistics.count_geki
+                                    map300 = osutopdata[i].statistics.count_300
+                                    map200 = osutopdata[i].statistics.count_katu
+                                    map100 = osutopdata[i].statistics.count_100
+                                    map50 = osutopdata[i].statistics.count_50
+                                    mapmiss = osutopdata[i].statistics.count_miss
+                                    hitlist = ''
+                                    if (pickedmodex == 'osu') {
+                                        hitlist = `**300:** ${map300} **00:** ${map100} **50:** ${map50} **X:** ${mapmiss}`
+                                    }
+                                    if (pickedmodex == 'taiko') {
+                                        hitlist = `**300(GREAT):** ${map300} **00(GOOD):** ${map100} **X:** ${mapmiss}`
+                                    }
+                                    if (pickedmodex == 'fruits') {
+                                        hitlist = `**300:** ${map300} **00(Drops):** ${map100} **50(Droplets):** ${map50} **X:** ${mapmiss}`
+                                    }
+                                    if (pickedmodex == 'mania') {
+                                        hitlist = `**300+**: ${map300max} **300:** ${map300} **200:** ${map200} **00:** ${map100} **50:** ${map50} **X:** ${mapmiss}`
+                                    }
+                                    mappp = osutopdata[i].pp
+                                    weightedmappp = osutopdata[i].weight.pp
+                                    weightedpppercent = Math.abs(osutopdata[i].weight.percentage).toFixed(2)
+                                    Embed.addField(`---`, `**[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${mapurl}) ${mapmods}**\nSCORE: ${mapscore} \nScore set on ${maptimeset} \n${mapacc}% | ${maprank}\n${hitlist} \n**${(Math.abs(mappp).toFixed(2))}**pp | **${Math.abs(weightedmappp).toFixed(2)}**pp weighted **${weightedpppercent}**%`, false)
+                                }
                                 interaction.editReply({ content: '⠀', embeds: [Embed] })
                                 fs.appendFileSync(osulogdir, "\n" + "sent")
                             } catch (error) {
