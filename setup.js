@@ -87,7 +87,7 @@ fs.writeFileSync("bannedwords.json", emptyarray)
 fs.writeFileSync("botowners.json", emptyarray)
 fs.writeFileSync("triggerwords.json", emptyarray)
 fs.writeFileSync("debug/timesince.txt", 'Thu Jan 1 1970 00:00:01 GMT+0100 (Greenwich Mean Time)')
-fs.writeFileSync("debug/storedmap.json", '{"prevmap": 1983406 }')
+fs.writeFileSync("debug/storedmap.json", '{"prevmap": 1983406}')
 
 
 /*
