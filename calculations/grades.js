@@ -7,7 +7,7 @@
  * @returns an array containing grades and accuracy
  */
 function calcgrade(hit300, hit100, hit50, miss) {
-    topequation = Math.floor((300 * hit300) + (100 * hit100) + (50 * hit50) + (miss))
+    topequation = Math.floor((300 * hit300) + (100 * hit100) + (50 * hit50))
     bottomequation = Math.floor(300 * (hit300 + hit100 + hit50 + miss))
     fullequation = (Math.abs((topequation / bottomequation) * 100)).toString() + '%'
     shortequation = ((Math.abs((topequation / bottomequation) * 100)).toFixed(2)).toString() + '%'
