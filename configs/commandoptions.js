@@ -1,3 +1,5 @@
+const { Constants } = require('discord.js');
+
 /**
  * @type {Array}
  */
@@ -491,4 +493,52 @@ let timezoneopts = [
     //
     //
 ]
-module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts }
+
+//
+
+let useridsortopts = [
+    {
+        name: 'username',
+        description: 'username or ID works (mode name if set to mode)',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.STRING
+    },
+    {
+        name: 'id',
+        description: 'map id',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.NUMBER
+    },
+    {
+        name: 'sort',
+        description: 'what to sort plays by. defaults to score',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.STRING,
+        choices: playsortopts
+    }
+]
+
+let useroffsetmodeopts = [
+    {
+        name: 'user',
+        description: 'the user. can be in ID or username',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.STRING
+    },
+    {
+        name: 'offset',
+        description: 'if you want page offset',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.NUMBER
+    },
+    {
+        name: 'mode',
+        description: 'what mode?',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.STRING,
+        choices: modeopts
+    }
+]
+
+
+module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts }

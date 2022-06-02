@@ -1,6 +1,6 @@
 const { Constants } = require('discord.js');
 const { testguild } = require('./config.json')
-const { modeopts, playsortopts, timezoneopts, skincmdopts, mathcmdopts, conversionopts, gifopts } = require('./configs/commandoptions.js')
+const { modeopts, playsortopts, timezoneopts, skincmdopts, mathcmdopts, conversionopts, gifopts, useridsortopts, useroffsetmodeopts } = require('./configs/commandoptions.js')
 
 
 module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
@@ -174,27 +174,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
         name: 'rs',
         description: 'most recent play for user',
         fetchReply: true,
-        options: [
-            {
-                name: 'user',
-                description: 'the user. can be in ID or username',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-            {
-                name: 'offset',
-                description: 'if you want page offset',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: 'mode',
-                description: 'what mode?',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: modeopts
-            }
-        ]
+        options: useroffsetmodeopts
     })
     commands?.create({
         name: 'skin',
@@ -304,12 +284,6 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 choices: modeopts
             },
-            {
-                name: 'id',
-                description: 'map id (CTB only)',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
         ]
     })
 
@@ -335,78 +309,18 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
     commands?.create({
         name: 'tsfm',
         description: 'returns scores for a map',
-        options: [
-            {
-                name: 'username',
-                description: 'username or ID works (mode name if set to mode)',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-            {
-                name: 'id',
-                description: 'map id',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: 'sort',
-                description: 'what to sort plays by. defaults to score',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: playsortopts
-            }
-        ]
+        options: useridsortopts
     })
     commands?.create({
         name: 'scores',//prev - tsfm
         description: 'returns scores for a map',
-        options: [
-            {
-                name: 'username',
-                description: 'username or ID works (mode name if set to mode)',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-            {
-                name: 'id',
-                description: 'map id',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: 'sort',
-                description: 'what to sort plays by. defaults to score',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: playsortopts
-            }
-        ]
+        options: useridsortopts
     })
     commands?.create({
         name: 'rsplus',
         description: 'most recent play for user',
         fetchReply: true,
-        options: [
-            {
-                name: 'user',
-                description: 'the user. can be in ID or username',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-            {
-                name: 'offset',
-                description: 'if you want page offset',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: 'mode',
-                description: 'what mode?',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: modeopts
-            }
-        ]
+        options: useroffsetmodeopts
     })
     commands?.create({
         name: 'leaderboard',
