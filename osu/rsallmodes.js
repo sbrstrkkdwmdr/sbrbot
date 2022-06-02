@@ -342,8 +342,9 @@ module.exports = {
 
                                         // if(rspp = "null"){
                                         //if(rsgrade != 'F'){
+                                            ppissue = ''
                                         if (fc == false) {
-                                            fcflag = `| **${ppiffcw}**pp IF **${ppfccalcaccround}%** FC ${ppissue}`
+                                            fcflag = `| **${ppiffcw}**pp IF **${rsnochokeacc}%** FC ${ppissue}`
                                         }
                                         else if (fc == true) {
                                             fcflag = '**FC**'
