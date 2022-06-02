@@ -410,10 +410,11 @@ module.exports = {
                                             SRclean = rsmapstar
                                         }
                                         rscoverlist = rsdata[0].beatmapset.covers.list
+                                        //author = {name: `${minlastvisw} ago on ${rsmaptime}${trycountstr}`, url:`https://osu.ppy.sh/u/${rsplayerid}`, iconURL: `https://a.ppy.sh/${rsplayerid}`}
                                         let Embed = new Discord.MessageEmbed()
                                             .setColor(0x9AAAC0)
                                             .setTitle(recenttitlestring + rsplayername)
-                                            .setAuthor(`${minlastvisw} ago on ${rsmaptime}${trycountstr}`, `https://a.ppy.sh/${rsplayerid}`, `https://osu.ppy.sh/u/${rsplayerid}`)
+                                            .setAuthor({name: `${minlastvisw} ago on ${rsmaptime}${trycountstr}`, url:`https://osu.ppy.sh/u/${rsplayerid}`, iconURL: `https://a.ppy.sh/${rsplayerid}`})
                                             //.setImage(rsmapbg)
                                             .setThumbnail(rscoverlist)
                                             //.setThumbnail(`https://a.ppy.sh/${rsplayerid}`)

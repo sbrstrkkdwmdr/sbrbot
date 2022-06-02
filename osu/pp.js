@@ -308,7 +308,7 @@ module.exports = {
                                             let Embed = new Discord.MessageEmbed()
                                                 .setColor(0x91FF9A)
                                                 .setTitle(`pp values for ${maptitle}`)
-                                                .setAuthor(`${mapper}`, `https://a.ppy.sh/${mapperid}`, `https://osu.ppy.sh/u/${mapperlink}`)
+                                                .setAuthor({ name: `${mapper}`, url: `https://osu.ppy.sh/u/${mapperlink}`, iconURL: `https://a.ppy.sh/${mapperid}` })
                                                 .setURL(`https://osu.ppy.sh/b/${maplink}`)
                                                 .setImage(mapbg)
                                                 .addField('**PP VALUES**', `\n**SS:** ${ppSS} \n**95:** ${pp95} ${modissue}`, true)

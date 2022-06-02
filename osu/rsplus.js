@@ -123,7 +123,7 @@ module.exports = {
                                                         console.groupEnd()
                                                     });*/
 
-                                                    fs.writeFileSync("debug/rs.json", JSON.stringify(rsdata, null, 2))
+                                    fs.writeFileSync("debug/rs.json", JSON.stringify(rsdata, null, 2))
 
                                     fulltext = ''
                                     let underamount = 5
@@ -134,10 +134,10 @@ module.exports = {
                                     let Embed = new Discord.MessageEmbed()
                                         .setColor(0x9AAAC0)
                                         //.setTitle("Recent plays for ")
-                                        .setAuthor(`Recent plays for ${rsplayername}`, `https://a.ppy.sh/${rsplayerid}`, `https://osu.ppy.sh/u/${rsplayerid}`)
-                                        //.setImage(rsmapbg)
-                                        //.setThumbnail(rscoverlist)
-                                        //.setDescription(fulltext)
+                                        .setAuthor({ name: `Recent plays for ${rsplayername}`, url: `https://osu.ppy.sh/u/${rsplayerid}`, iconURL: `https://a.ppy.sh/${rsplayerid}` })
+                                    //.setImage(rsmapbg)
+                                    //.setThumbnail(rscoverlist)
+                                    //.setDescription(fulltext)
 
 
                                     for (i = 0; i < underamount; i++) {
@@ -164,7 +164,7 @@ module.exports = {
                                         let rsmaptime = (rsdata[i].created_at).toString().slice(0, 19).replaceAll('T', ' ')
                                         let rspp1 = JSON.parse(rsdata[i].pp)
                                         let rspp = Math.abs(rspp1).toFixed(2);
-                                        if(rspp == 0 || rspp == '0'){
+                                        if (rspp == 0 || rspp == '0') {
                                             rspp = 'null'
                                         }
                                         let rsmapstar = (rsdata[i].beatmap.difficulty_rating).toString()
@@ -239,8 +239,8 @@ module.exports = {
                                         let minlastvisw = (lastvishours + "h " + lastvisminutes + "m");
 
                                         Embed.addField(`**${offsetflag + i + 1}**`,
-                                        `[${maptitles}](https://osu.ppy.sh/b/${rsmapid}) ${rsmods2}\n${rsmaptime} (${minlastvisw} ago) \n**${(rsacc * 100).toFixed(2)}%** | **${rspp}**pp ${fcflag} | **${rsgrade}** | **${rscombo}x**\n${hitlist}\n\n`,
-                                        false
+                                            `[${maptitles}](https://osu.ppy.sh/b/${rsmapid}) ${rsmods2}\n${rsmaptime} (${minlastvisw} ago) \n**${(rsacc * 100).toFixed(2)}%** | **${rspp}**pp ${fcflag} | **${rsgrade}** | **${rscombo}x**\n${hitlist}\n\n`,
+                                            false
                                         )
                                         //fulltext += `**${offsetflag + i + 1}** | [${maptitles}](https://osu.ppy.sh/b/${rsmapid}) ${rsmods2}\n${rsmaptime} (${minlastvisw} ago) \n**${(rsacc * 100).toFixed(2)}%** | **${rspp}**pp ${fcflag} | **${rsgrade}** | **${rscombo}x**\n${hitlist}\n\n`
                                     }

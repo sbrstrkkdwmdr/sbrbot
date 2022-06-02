@@ -437,7 +437,7 @@ module.exports = {
                                     let Embed = new Discord.MessageEmbed()
                                         .setColor(0x91FF9A)
                                         .setTitle(`${maptitle}`)
-                                        .setAuthor(`${mapper}`, `https://a.ppy.sh/${mapperid}`, `https://osu.ppy.sh/u/${mapperlink}`)
+                                        .setAuthor({ name: `${mapper}`, url: `https://osu.ppy.sh/u/${mapperlink}`, iconURL: `https://a.ppy.sh/${mapperid}` })
                                         .setURL(`https://osu.ppy.sh/b/${maplink}`)
                                         .setImage(mapbg)
                                         //.setDescription(`[${mapartist} - ` + maptitle + ` [${mapdiff}]](https://osu.ppy.sh/b/` + maplink + `)\n mapped by `+ mapper + "\n\nCS" + mapcs + " AR" + mapar + " OD" + mapod + " HP" + maphp + " | " + mapsr + "⭐ \n" +  mapbpm + "BPM | <:circle:927478586028474398>" +  mapcircle + " <:slider:927478585701330976>" +  mapslider + " 🔁" +  mapspinner + `\n\n--**PP VALUES**--\nSS: ${ppSS} | 95: ${pp95} \n\n**DOWNLOAD**\n[Bancho](https://osu.ppy.sh/beatmapsets/` + mapsetlink + `/download) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}?n=1) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.moe/d/${mapsetlink})\n[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${maplink})`);

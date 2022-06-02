@@ -151,7 +151,7 @@ module.exports = {
                                             //.setThumbnail(`https://a.ppy.sh/${playerid}`)
                                             .setURL('https://osu.ppy.sh/b/' + prevmap)
                                             .setImage(`${mapbg}`)
-                                            .setAuthor(`${playername}'s scores on`, `https://a.ppy.sh/${playerid}`, `https://osu.ppy.sh/u/${playerid}`)
+                                            .setAuthor({ name: `${playername}'s scores on`, url: `https://osu.ppy.sh/u/${playerid}`, iconURL: `https://a.ppy.sh/${playerid}` })
                                             .setDescription(`${text}`)
                                             .addField('map info', `${mapsr}⭐\nCS${mapcs} AR${mapar} OD${mapod} HP${maphp} ${mapbpm}BPM`, false)
                                         //.setFooter(`${text}`)
