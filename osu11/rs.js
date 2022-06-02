@@ -359,7 +359,7 @@ module.exports = {
                                             rsmodsembed = '+**' + rsmods + '**'
                                         }
 
-                                        if (!rsmods == null || !rsmods == undefined) {
+                                        if (rsmods != null || rsmods != undefined || rsmods != 'TD') {
                                             calcmods = rsmods.replace('TD', '')
                                             modtoarray1 = calcmods.replace(/(.{2})/g, "$1 ");
                                             modtoarray2 = modtoarray1.slice(0, -1)

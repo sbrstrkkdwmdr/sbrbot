@@ -104,7 +104,7 @@ module.exports = {
                                             maptitle = `${maptitleuni}\n${maptitlenorm}`;
                                         }
 
-                                        for (i = 0; i < mapscoredata.scores.length; i++) {
+                                        for (i = 0; i < mapscoredata.scores.length && i < 5; i++) {
                                             let pp = mapscoredata.scores[i].pp
                                             let grade = mapscoredata.scores[i].rank
                                             let combo = mapscoredata.scores[i].max_combo
