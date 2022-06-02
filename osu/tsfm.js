@@ -57,16 +57,15 @@ module.exports = {
                     );
                     let playerid = osudata.id
                     //interaction.reply(playerid)
-
-                    if (!map) {
-                        mapscoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}/scores/users/${playerid}/all`;
-                        mapdataurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`;
-                        mapid = prevmap;
-                    }
                     if (map) {
                         mapscoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${map}/scores/users/${playerid}/all`;
                         mapdataurl = `https://osu.ppy.sh/api/v2/beatmaps/${map}`;
                         mapid = map;
+                    }
+                    if (!map) {
+                        mapscoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}/scores/users/${playerid}/all`;
+                        mapdataurl = `https://osu.ppy.sh/api/v2/beatmaps/${prevmap}`;
+                        mapid = prevmap;
                     }
                     const { access_token } = require("../debug/osuauth.json");
 
@@ -93,7 +92,7 @@ module.exports = {
                                   ⠀⠀⠀⠀⠁⠇⠡⠩⡫⢿⣝⡻⡮⣒⢽⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀*/
 
                             if (!output2.scores)
-                                return message.reply(
+                                return interaction.reply(
                                     `error - unranked map.\nCurrently loaded map: https://osu.ppy.sh/b/${prevmap} \nSend the link to another map to change it.`
                                 );
                             if (sort == "acc" || sort == "accuracy") {

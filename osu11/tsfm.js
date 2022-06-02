@@ -112,8 +112,8 @@ module.exports = {
                                                 .replaceAll("[", "")
                                                 .replaceAll("]", "")
                                                 .replaceAll(",", '');
-                                            if (rsmods == '') {
-                                                rsmods == null
+                                            if (mods == '') {
+                                                mods == null
                                             }
                                             let acc = mapscoredata.scores[i].accuracy
                                             let mapscore0s = mapscoredata.scores[i].statistics.count_miss
