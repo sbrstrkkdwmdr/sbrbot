@@ -70,7 +70,9 @@ function sigfig(a, b) {
  * @returns checks if number is under two decimals, then will return the number with two decimals or less
  */
 function fixtoundertwo(number) {
-    if ((number * 100).isInteger()) return number;
+    truenum = number * 100
+    parsed = parseInt(truenum)
+    if (truenum == parsed) return number;
     else return number.toFixed(2);
 }
 module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo };

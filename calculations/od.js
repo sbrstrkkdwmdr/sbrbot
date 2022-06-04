@@ -72,7 +72,7 @@ function odht(od) {
     return odobj;
 }
 
-console.log(oddt(9))
+//console.log(oddt(9))
 
 module.exports = { oddt, odht }
 /*

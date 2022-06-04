@@ -7,10 +7,9 @@ const { osulogdir } = require("../logconfig.json");
 const {
     doubletimear,
     halftimear,
-    easymultiplier,
-    hardrockmultiplier,
 } = require("../calculations/approachrate");
 const { hardrockmult, easymult } = require("../calculations/modmultiplier")
+const { oddt, odht } = require("../calculations/od.js")
 const { getStackTrace } = require("../somestuffidk/log");
 //            fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
 
@@ -191,8 +190,8 @@ module.exports = {
                                 !moddetect.includes("EZ")
                             ) {
                                 mapar = doubletimear(maparNM);
-                                mapod = mapodNM + "^";
-                                maphp = maphpNM + "^";
+                                mapod = oddt(mapodNM).od_num// ;
+                                maphp = maphpNM ;
                                 mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
                                 maphit1 = Math.floor(maphitonly / 1.5 / 60);
                                 maphit2 = Math.floor((maphitonly / 1.5) % 60);
@@ -210,8 +209,8 @@ module.exports = {
                                 !moddetect.includes("EZ")
                             ) {
                                 mapar = halftimear(maparNM);
-                                mapod = mapodNM + "⌄";
-                                maphp = maphpNM + "⌄";
+                                mapod = (odht(mapodNM)).od_num ;
+                                maphp = maphpNM ;
                                 mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
                                 maphit1 = Math.floor(maphitonly / 0.75 / 60);
                                 maphit2 = Math.floor((maphitonly / 0.75) % 60);
@@ -229,10 +228,10 @@ module.exports = {
                                 !moddetect.includes("DT")
                             ) {
                                 hardrockobj = hardrockmult(mapcsNM, maparNM, mapodNM, maphpNM)
-                                mapcs = hardorckobj.cs
-                                mapar = hardorckobj.ar
-                                maphp = hardorckobj.hp
-                                mapod = hardorckobj.od
+                                mapcs = hardrockobj.cs
+                                mapar = hardrockobj.ar
+                                maphp = hardrockobj.hp
+                                mapod = hardrockobj.od
                                 if (mapar > 10) {
                                     mapar = 10;
                                 }
@@ -262,8 +261,8 @@ module.exports = {
                             if (moddetect.includes("EZ") && moddetect.includes("HT")) {
                                 mapcs = Math.abs(mapcsNM / 2);
                                 mapar = Math.abs(halftimear(maparNM / 2));
-                                maphp = Math.abs(maphpNM / 2) + "⌄";
-                                mapod = Math.abs(mapodNM / 2) + "⌄";
+                                maphp = Math.abs(maphpNM / 2) ;
+                                mapod = odht(Math.abs(mapodNM / 2)).od_num
                                 mapbpm = Math.abs(mapbpmNM * 0.75);
                                 if (Number.isInteger(mapbpm * 100) == false) {
                                     mapbpm = mapbpm.toFixed(2);
@@ -276,8 +275,8 @@ module.exports = {
                                 mapcs = Math.abs(mapcsNM / 2);
                                 mapar = Math.abs(doubletimear(maparNM / 2));
 
-                                maphp = Math.abs(maphpNM / 2) + "^";
-                                mapod = Math.abs(mapodNM / 2) + "^";
+                                maphp = Math.abs(maphpNM / 2) ;
+                                mapod = oddt(Math.abs(mapodNM / 2)).od_num// ;
                                 mapbpm = Math.abs(mapbpmNM * 1.5);
                                 if (Number.isInteger(mapbpm * 100) == false) {
                                     mapbpm = mapbpm.toFixed(2);
@@ -294,10 +293,10 @@ module.exports = {
                             }
                             if (moddetect.includes("HR") && moddetect.includes("HT")) {
                                 hardrockobj = hardrockmult(mapcsNM, maparNM, mapodNM, maphpNM)
-                                mapcs = hardorckobj.cs
-                                mapar = halftimear(hardorckobj.ar)
-                                maphp = hardorckobj.hp + "⌄"
-                                mapod = hardorckobj.od + "⌄"
+                                mapcs = hardrockobj.cs
+                                mapar = halftimear(hardrockobj.ar)
+                                maphp = hardrockobj.hp 
+                                mapod = odht(hardrockobj.od).od_num
 
                                 mapbpm = Math.abs(mapbpmNM * 0.75);
                                 if (Number.isInteger(mapbpm * 100) == false) {
@@ -314,12 +313,11 @@ module.exports = {
                                 recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                             }
                             if (moddetect.includes("HR") && moddetect.includes("DT")) {
-                                mapcs = Math.abs(mapcsNM * 1.3).toFixed(2);;
-                                mapar = Math.abs(doubletimear(maparNM * 1.4));
-
-                                //fs.appendFileSync(osulogdir, "\n" + Number.isInteger(mapar * 100))
-                                maphp = Math.abs(maphpNM * 1.4).toFixed(2); // + "^";
-                                mapod = Math.abs(mapodNM * 1.4).toFixed(2); // + "^";
+                                hardrockobj = hardrockmult(mapcsNM, maparNM, mapodNM, maphpNM)
+                                mapcs = hardrockobj.cs
+                                mapar = doubletimear(hardrockobj.ar)
+                                maphp = hardrockobj.hp 
+                                mapod = oddt(hardrockobj.od).od_num
                                 mapbpm = Math.abs(mapbpmNM * 1.4).toFixed(2);
                                 if (Number.isInteger(mapbpm * 100) == false) {
                                     mapbpm = mapbpm.toFixed(2);
@@ -333,21 +331,6 @@ module.exports = {
                                     maphit2 = "00";
                                 }
                                 recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
-                                if (maphp >= 10) {
-                                    maphp = 10 + "^";
-                                }
-                                if (mapod >= 10) {
-                                    mapod = 10 + "^";
-                                }
-                                if (maphp < 10) {
-                                    maphp = maphp + "^";
-                                }
-                                if (mapod < 10) {
-                                    mapod = mapod + "^";
-                                }
-                                if (mapar > 11) {
-                                    mapar = 11;
-                                }
                             }
 
                             const score = {
@@ -462,9 +445,11 @@ module.exports = {
                                 modtoarray1 = moddetectnotd.replace(/(.{2})/g, "$1 ");
                                 modtoarray2 = modtoarray1.slice(0, -1);
                                 moddetectforsr = modtoarray2.split(/ +/);
-                                starRating = await calculateStarRating(maplink, moddetectforsr);
+                                moddetectforsrtoproperty = moddetectforsr.join("")
+                                starRating = await calculateStarRating(maplink, moddetectforsr, false, false);
                                 //fs.appendFileSync(osulogdir, "\n" + starRating)
-                                SR = (starRating).toString()
+                                let firstgrab = starRating[Object.keys(starRating)[0]]
+                                SR = (firstgrab).toString()
                                     .replace(moddetectnotd, "")
                                     .replace("nomod", "")
                                     .replaceAll('"', "");
