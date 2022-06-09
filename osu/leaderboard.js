@@ -38,18 +38,19 @@ module.exports = {
             offset = 0
         }
         let pageoffset = offset * 5
-        /*
+
+        
         let mods;
         let input = options.getString('input')
-        if(type) type2 = type.toLowerCase()
+        if(type) type2 = type.toLowerCase();
         if(input && type2 == ('mod' || 'mods')){
             mods = input
         }
         else {
             mods = 'NM'
-        }*/ //will add when ranking types get added to osu!api v2 https://osu.ppy.sh/docs/index.html?javascript#get-beatmap-scores
+        } //will add when ranking types get added to osu!api v2 https://osu.ppy.sh/docs/index.html?javascript#get-beatmap-scores
 
-        let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}`//?mods=${mods}`
+        let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}?mode=osu?mods=${mods}`//?mods=${mods}`
         try {
             const { access_token } = require('../debug/osuauth.json');
 
