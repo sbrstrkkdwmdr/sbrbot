@@ -246,6 +246,7 @@ client.once('ready', () => {
 
         client.musiccmds.set(musiccmd.name, musiccmd);
     }
+    /*
     const ecchicmdfiles = fs.readdirSync('./commands-ecchi/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
     for (const file of ecchicmdfiles) {
         const ecchicmd = require(`./commands-ecchi/${file}`);
@@ -255,9 +256,10 @@ client.once('ready', () => {
     const gamingcmdfiles = fs.readdirSync('./commands-gaming/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
     for (const file of gamingcmdfiles) {
         const gamingcmd = require(`./commands-gaming/${file}`);
+        
 
         client.gamingcmds.set(gamingcmd.name, gamingcmd);
-    }
+    }*/
     const otherfiles = fs.readdirSync('./other/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
     for (const file of otherfiles) {
         const other = require(`./other/${file}`)
