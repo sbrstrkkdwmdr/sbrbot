@@ -28,7 +28,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
         let curtimezone = split[split.length - 1]
 
         if (!message.content.startsWith(prefix)) return; //the return is so if its just prefix nothing happens
-        if(message.author.bot && message.content.includes("You're on cooldown")){
+        if (message.author.bot && message.content.includes("You're on cooldown")) {
             setTimeout(() => {
                 message.delete();
             }, 1)
@@ -43,7 +43,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
             setTimeout(() => {
                 oncooldown.delete(message.author.id)
             }, 3000)
-            timeouttime = setTimeout(() => {}, 3000)
+            timeouttime = setTimeout(() => { }, 3000)
         }
         function getTimeLeft(timeout) {
             return Math.ceil((timeout._idleStart + timeout._idleTimeout) / 1000);
@@ -96,27 +96,10 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
             case 'avatar': case 'av': case 'pfp':
                 client.commands.get('avatar').execute(message, args, Discord, currentDate, currentDateISO)
                 break;
-            case 'giveadmin':
-                client.commands.get('giveadmin').execute(message, args, currentDate, currentDateISO)
-                break;
-            case 'token':
-                client.commands.get('token').execute(message, args, currentDate, currentDateISO)
-                break;
             case 'roll': case 'numgen':
                 client.commands.get('roll').execute(message, args, currentDate, currentDateISO)
                 break;
 
-            case 'pingperson':
-                client.commands.get('pingperson').execute(message, args, currentDate, currentDateISO)
-                break;
-
-            case 'unread':
-                client.commands.get('unread').execute(message, args, currentDate, currentDateISO)
-                break;
-
-            case 'idk':
-                client.commands.get('idk').execute(message, args, currentDate, currentDateISO)
-                break;
 
             case 'image':
                 client.commands.get('image').execute(message, args, Discord, get, client, currentDate, currentDateISO)
@@ -140,26 +123,10 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 client.commands.get('active').execute(message, args, Discord, currentDate, currentDateISO)
                 break;
             //FUN --------------------------------------------------------------------
-            case 'ghostping':
-                client.commands.get('ghostping').execute(message, args, currentDate, currentDateISO)
-                break;
-            case 'insult':
-                client.commands.get('insult').execute(message, args, currentDate, currentDateISO)
-                break;
-            case 'unchi':
-                client.commands.get('unchi').execute(message, args, currentDate, currentDateISO)
-                break;
 
-            case 'unko':
-                client.commands.get('unko').execute(message, args, currentDate, currentDateISO)
-                break;
 
             case '8ball': case 'ask':
                 client.commands.get('8ball').execute(message, args, currentDate, currentDateISO)
-                break;
-
-            case 'emojify':
-                client.commands.get('emojify').execute(message, args, currentDate, currentDateISO)
                 break;
 
             case 'dadjoke': case 'pun':
@@ -174,10 +141,6 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 client.commands.get('amoggers').execute(message, args, Discord, currentDate, currentDateISO)
                 break;
 
-            case '1100': case 'count100':
-                client.commands.get('1100').execute(message, args, currentDate, currentDateISO)
-                break;
-
             case 'say':
                 client.commands.get('say').execute(owners, message, args, currentDate, currentDateISO)
                 break;
@@ -190,10 +153,6 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 client.commands.get('psr').execute(message, args, currentDate, currentDateISO)
                 break;
 
-            case '4k':
-                client.commands.get('4k').execute(message, args, currentDate, currentDateISO)
-                break;
-
             case 'owoify':
                 client.commands.get('owoify').execute(message, args, currentDate, currentDateISO)
                 break;
@@ -203,9 +162,6 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 break;
             case 'addmsg':
                 client.commands.get('addmsg').execute(message, args, currentDate, currentDateISO)
-                break;
-            case 'getuser':
-                client.commands.get('getuser').execute(message, client, Discord, args, currentDate, currentDateISO)
                 break;
             case 'gif':
                 client.commands.get('gif').execute(message, args, currentDate, currentDateISO)
@@ -297,39 +253,6 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
 
             case 'ctbrs': case 'ctbtop': case 'maniars': case 'maniatop': case 'map': case 'osutop': case 'rs': case 'skin': case 'taikors': case 'taikotop':
                 message.reply('use the / command (/rs mode:mode /osutop mode:mode)')
-                break;
-            //HENTAI-----------------------------------------------------------------------------------------
-
-
-            case 'hentai': case 'nhentai':
-                client.ecchicmds.get('hentai').execute(message, args, currentDate, currentDateISO)
-                break;
-
-            case 'horny':
-                client.ecchicmds.get('horny').execute(message, args, currentDate, currentDateISO)
-                break;
-
-            case 'hornyjail':
-                client.ecchicmds.get('hornyjail').execute(message, args, currentDate, currentDateISO)
-                break;
-
-            case 'danbooru':
-                client.ecchicmds.get('danbooru').execute(message, args, currentDate, currentDateISO)
-                break;
-            case 'lolibooru':
-                client.ecchicmds.get('lolibooru').execute(message, args, currentDate, currentDateISO)
-                break;
-
-            case 'yanderegen':
-                client.ecchicmds.get('yanderegen').execute(message, args, currentDate, currentDateISO)
-                break;
-
-            case 'konachangen':
-                client.ecchicmds.get('konachangen').execute(message, args, currentDate, currentDateISO)
-                break;
-
-            case 'pixiv':
-                client.ecchicmds.get('pixiv').execute(message, args, currentDate, currentDateISO)
                 break;
 
             //ADMIN-----------------------------------------------------------------------------------------
@@ -428,21 +351,6 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
             case 'np':
                 //client.musiccmds.get('musicnp').execute(message, args, client, Discord, ytdl, currentDate, currentDateISO)
                 client.commands.get('WIP').execute(message, args, currentDate)
-                break;
-
-            //gaming----
-            case 'profilesplitgate': case 'splitgateprofile':
-                //client.gamingcmds.get('splitgateprofile').execute(message, args, client, Discord, currentDate, currentDateISO)
-                client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
-                break;
-
-            case 'apexprofile':
-                //client.gamingcmds.get('apexprofile').execute(message, args, client, Discord, currentDate, currentDateISO)
-                client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
-                break;
-            case 'haloinfprofile': case 'haloprofile':
-                client.gamingcmds.get('haloinfprofile').execute(message, args, client, Discord, currentDate, currentDateISO, trnkey)
-                //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
                 break;
 
             default:
