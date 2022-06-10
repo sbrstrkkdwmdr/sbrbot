@@ -57,7 +57,7 @@ module.exports = {
             return url;
         }
         function speechbubble() {
-            let randomnum = Math.floor(Math.random() * 15 + 1)
+            let randomnum = Math.floor(Math.random() * 16 + 1)
             let url;
             switch (randomnum) {
                 case 1:
@@ -104,6 +104,9 @@ module.exports = {
                     break;
                 case 15:
                     url = 'https://media.discordapp.net/attachments/855538143302385727/978751222293098536/delta_dannerif-5-a495e94394.gif' //idk what this is but theres a girl that looks like kasane teto and an 8 in the middle
+                    break;
+                case 16:
+                    url = 'https://tenor.com/view/nerd-nerd-emoji-meme-speech-bubble-bubble-gif-25115885' //nerd emoji guy
                     break;
                 default:
                     url = 'err'
@@ -265,6 +268,24 @@ module.exports = {
             }
             return url;
         }
+        function ratio() {
+            let url;
+            let randomnum = Math.floor(Math.random() * 3 + 1)
+            switch (randomnum) {
+                case 1:
+                    url = 'https://tenor.com/view/dont-care-didnt-ask-cope-_ratio-skill-issue-canceled-gif-24148064' //ratio guy goes into car
+                    break;
+                case 2:
+                    url = 'https://tenor.com/view/ratio-skill-issue-skill-issue-ur-bald-gif-23967610' //nerd emoji
+                    break;
+                case 3:
+                    url = 'https://tenor.com/view/ratiobozo-ratio-gif-23500921' //dog smiley wtf
+                    break;
+                case 4:
+                    url = 'https://tenor.com/view/ratio-didnt-ask-you-fell-off-cope-dont-know-what-youre-talking-about-gif-23606778'
+                    break;
+            }
+        }
         /*
         function skillissue() {
             let url;
@@ -327,6 +348,10 @@ module.exports = {
                 break;
             case 'insult':
                 thelink = insult()
+                interaction.channel.send(thelink)
+                break;
+            case 'ratio':
+                thelink = ratio()
                 interaction.channel.send(thelink)
                 break;
         }
