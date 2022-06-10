@@ -3,7 +3,7 @@ const { otherlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: '8ball',
-    description: '',
+    description: '8baleel',
     execute(message, args, currentDate, currentDateISO) {
         let rdm = ["yes", "no clue.", "知らない", "nope", "yeah", "definitely maybe not", "nah", "yeah of course", "絶対!!!", "多分", 
         "i didn't quite catch that, ask again?", "ehhhhhhh", "⠀"];

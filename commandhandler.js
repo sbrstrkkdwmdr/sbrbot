@@ -73,7 +73,8 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 break;
 
             case 'help':
-                client.helpcmds.get('help').execute(message, args, currentDate, currentDateISO)
+                //client.helpcmds.get('help').execute(message, args, currentDate, currentDateISO)
+                client.helpcmds.get('helpalt').execute(message, args, client, currentDate, currentDateISO)
                 break;
 
             case 'info':
