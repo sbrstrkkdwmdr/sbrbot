@@ -90,7 +90,7 @@ for (const file of musiccmdfiles) {
     const musiccmd = require(`./commands-music/${file}`);
 
     client.musiccmds.set(musiccmd.name, musiccmd);
-}
+}/*
 const ecchicmdfiles = fs.readdirSync('./commands-ecchi/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
 for (const file of ecchicmdfiles) {
     const ecchicmd = require(`./commands-ecchi/${file}`);
@@ -102,7 +102,7 @@ for (const file of gamingcmdfiles) {
     const gamingcmd = require(`./commands-gaming/${file}`);
 
     client.gamingcmds.set(gamingcmd.name, gamingcmd);
-}
+}*/
 //const modLogs = require('./modlogs/')
 /*if (!Date.prototype.toISOString) {
 (function() {
