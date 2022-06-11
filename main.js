@@ -300,10 +300,11 @@ try {
         headers: { 'Content-Type': 'application/json' }
     })
         .then(res => res.json())
-        .then(output => fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2)))
-    //console.group("--- ")
-    console.log("saved osuauth")
-    //console.groupEnd()
+        .then(output => {
+            fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2))
+            console.log("saved osuauth")
+        })
+    //console.group("--- ")    //console.groupEnd()
     //
 } //turns on the bot
 catch (error) {
