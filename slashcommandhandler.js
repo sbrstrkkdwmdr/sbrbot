@@ -140,7 +140,9 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 name: 'offset',
                 description: 'if you want page offset',
                 required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                max_value: 19,
+                min_value: 0
             },
             {
                 name: 'mode',
@@ -167,6 +169,12 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 description: 'only show scores with these mods. add exact at the start to hard filter',
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING
+            },
+            {
+                name: 'detailed',
+                description: 'whether or not to show extra details',
+                required: false,
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN
             }
         ]
     })
