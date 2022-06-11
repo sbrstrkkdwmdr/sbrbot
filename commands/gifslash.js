@@ -57,7 +57,7 @@ module.exports = {
             return url;
         }
         function speechbubble() {
-            let randomnum = Math.floor(Math.random() * 16 + 1)
+            let randomnum = Math.floor(Math.random() * 20 + 1)
             let url;
             switch (randomnum) {
                 case 1:
@@ -107,6 +107,21 @@ module.exports = {
                     break;
                 case 16:
                     url = 'https://tenor.com/view/nerd-nerd-emoji-meme-speech-bubble-bubble-gif-25115885' //nerd emoji guy
+                    break;
+                case 17:
+                    url = 'https://media.discordapp.net/attachments/965669674492764160/969044374107336734/yuuka.gif' // yuuka
+                    break;
+                case 18:
+                    url = 'https://media.discordapp.net/attachments/297712669342040064/969077431497527347/LettyWhiteRockJohnson.gif' // letty white rock jhohnosn (who)
+                    break;
+                case 19:
+                    url = 'https://cdn.discordapp.com/attachments/968450905634656326/970003694055747644/MushiMikoNya.gif' //idk who this is either but anime girl
+                    break;
+                case 20:
+                    url = 'https://media.discordapp.net/attachments/960980200613625896/967546422155182130/Untitled2.gif' //touhou1?!?!?
+                    break;
+                case 21:
+                    url = ''
                     break;
                 default:
                     url = 'err'
@@ -251,7 +266,7 @@ module.exports = {
         }
         function insult() {
             let url;
-            let randomnum = Math.floor(Math.random() * 4 + 1)
+            let randomnum = Math.floor(Math.random() * 5 + 1)
             switch (randomnum) {
                 case 1:
                     url = 'https://tenor.com/view/dies-dies-of-cringe-dies-from-cringe-meme-dr-strange-dr-strange2-gif-25621125' //dies from cringe
@@ -264,6 +279,9 @@ module.exports = {
                     break;
                 case 4:
                     url = 'https://tenor.com/view/touhou-fumo-reisen-gif-20875565' // reisen fumo die
+                    break;
+                case 5:
+                    url = 'https://tenor.com/view/kys-gif-24272600' // capri sun kill urself
                     break;
             }
             return url;
@@ -285,6 +303,17 @@ module.exports = {
                     url = 'https://tenor.com/view/ratio-didnt-ask-you-fell-off-cope-dont-know-what-youre-talking-about-gif-23606778'
                     break;
             }
+            return url;
+        }
+        function reactiontoinf() {
+            let url;
+            let randomnum = Math.floor(Math.random() * 3 + 1)
+            switch (randomnum) {
+                case 1:
+                    url = 'https://tenor.com/view/kumala-la-kumala-mrtti-gif-25688572'
+                    break;
+            }
+            return url
         }
         /*
         function skillissue() {
@@ -352,6 +381,10 @@ module.exports = {
                 break;
             case 'ratio':
                 thelink = ratio()
+                interaction.channel.send(thelink)
+                break;
+            case 'reaction to info':
+                thelink = reactiontoinf()
                 interaction.channel.send(thelink)
                 break;
         }

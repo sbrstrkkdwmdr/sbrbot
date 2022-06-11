@@ -113,7 +113,8 @@ let gifopts = [
     { name: 'spelling issue', value: 'misspell' },
     { name: 'compliment', value: 'compliment' },
     { name: 'insult', value: 'insult' },
-    { name: 'ratio', value: 'ratio' }
+    { name: 'ratio', value: 'ratio' },
+    { name: 'reaction to that information', value: 'reaction to info'}
 ]
 
 
