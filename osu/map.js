@@ -185,13 +185,13 @@ module.exports = {
 
                         (async () => {
                             if (
-                                moddetect.includes("DT") &&
+                                (moddetect.includes("DT") || moddetect.includes("NC")) &&
                                 !moddetect.includes("HR") &&
                                 !moddetect.includes("EZ")
                             ) {
                                 mapar = doubletimear(maparNM);
                                 mapod = oddt(mapodNM).od_num// ;
-                                maphp = maphpNM ;
+                                maphp = maphpNM;
                                 mapbpm = Math.abs(mapbpmNM * 1.5).toFixed(2);
                                 maphit1 = Math.floor(maphitonly / 1.5 / 60);
                                 maphit2 = Math.floor((maphitonly / 1.5) % 60);
@@ -209,8 +209,8 @@ module.exports = {
                                 !moddetect.includes("EZ")
                             ) {
                                 mapar = halftimear(maparNM);
-                                mapod = (odht(mapodNM)).od_num ;
-                                maphp = maphpNM ;
+                                mapod = (odht(mapodNM)).od_num;
+                                maphp = maphpNM;
                                 mapbpm = Math.abs(mapbpmNM * 0.75).toFixed(2);
                                 maphit1 = Math.floor(maphitonly / 0.75 / 60);
                                 maphit2 = Math.floor((maphitonly / 0.75) % 60);
@@ -225,7 +225,7 @@ module.exports = {
                             if (
                                 moddetect.includes("HR") &&
                                 !moddetect.includes("HT") &&
-                                !moddetect.includes("DT")
+                                !(moddetect.includes("DT") || moddetect.includes("NC"))
                             ) {
                                 hardrockobj = hardrockmult(mapcsNM, maparNM, mapodNM, maphpNM)
                                 mapcs = hardrockobj.cs
@@ -245,7 +245,7 @@ module.exports = {
                             if (
                                 moddetect.includes("EZ") &&
                                 !moddetect.includes("HT") &&
-                                !moddetect.includes("DT")
+                                !(moddetect.includes("DT") || moddetect.includes("NC"))
                             ) {
                                 mapcs = Math.abs(mapcsNM / 2).toFixed(2);
                                 mapar = Math.abs(maparNM / 2).toFixed(2);
@@ -253,15 +253,23 @@ module.exports = {
                                 mapod = Math.abs(mapodNM / 2).toFixed(2);
                             }
 
-                            if (moddetect.includes("EZ") && moddetect.includes("HR"))
-                                return message.reply("invalid mods!");
-                            if (moddetect.includes("DT") && moddetect.includes("HT"))
-                                return message.reply("invalid mods!");
+                            if (moddetect.includes("EZ") && moddetect.includes("HR")) {
+                                setTimeout(() => {
+                                    interaction.editReply("invalid mods!")
+                                }, 500)
+                                return
+                            }
 
+                            if ((moddetect.includes("DT") || moddetect.includes("NC")) && moddetect.includes("HT")) {
+                                setTimeout(() => {
+                                    interaction.editReply("invalid mods!")
+                                }, 500)
+                                return
+                            }
                             if (moddetect.includes("EZ") && moddetect.includes("HT")) {
                                 mapcs = Math.abs(mapcsNM / 2);
                                 mapar = Math.abs(halftimear(maparNM / 2));
-                                maphp = Math.abs(maphpNM / 2) ;
+                                maphp = Math.abs(maphpNM / 2);
                                 mapod = odht(Math.abs(mapodNM / 2)).od_num
                                 mapbpm = Math.abs(mapbpmNM * 0.75);
                                 if (Number.isInteger(mapbpm * 100) == false) {
@@ -271,11 +279,11 @@ module.exports = {
                                 maphit2 = Math.floor((maphitonly / 0.75) % 60);
                                 recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                             }
-                            if (moddetect.includes("EZ") && moddetect.includes("DT")) {
+                            if (moddetect.includes("EZ") && (moddetect.includes("DT") || moddetect.includes("NC"))) {
                                 mapcs = Math.abs(mapcsNM / 2);
                                 mapar = Math.abs(doubletimear(maparNM / 2));
 
-                                maphp = Math.abs(maphpNM / 2) ;
+                                maphp = Math.abs(maphpNM / 2);
                                 mapod = oddt(Math.abs(mapodNM / 2)).od_num// ;
                                 mapbpm = Math.abs(mapbpmNM * 1.5);
                                 if (Number.isInteger(mapbpm * 100) == false) {
@@ -295,7 +303,7 @@ module.exports = {
                                 hardrockobj = hardrockmult(mapcsNM, maparNM, mapodNM, maphpNM)
                                 mapcs = hardrockobj.cs
                                 mapar = halftimear(hardrockobj.ar)
-                                maphp = hardrockobj.hp 
+                                maphp = hardrockobj.hp
                                 mapod = odht(hardrockobj.od).od_num
 
                                 mapbpm = Math.abs(mapbpmNM * 0.75);
@@ -312,11 +320,11 @@ module.exports = {
                                 }
                                 recordedmaplength = `${maphit1}:${maphit2} (${mapplaylength})`;
                             }
-                            if (moddetect.includes("HR") && moddetect.includes("DT")) {
+                            if (moddetect.includes("HR") && (moddetect.includes("DT") || moddetect.includes("NC"))) {
                                 hardrockobj = hardrockmult(mapcsNM, maparNM, mapodNM, maphpNM)
                                 mapcs = hardrockobj.cs
                                 mapar = doubletimear(hardrockobj.ar)
-                                maphp = hardrockobj.hp 
+                                maphp = hardrockobj.hp
                                 mapod = oddt(hardrockobj.od).od_num
                                 mapbpm = Math.abs(mapbpmNM * 1.4).toFixed(2);
                                 if (Number.isInteger(mapbpm * 100) == false) {
@@ -372,12 +380,17 @@ module.exports = {
                             let moddetectnotd = moddetect;
                             if (moddetect.includes("TD")) {
                                 moddetectnotd = (moddetect)
-                                    .replaceAll("TD")
-                                    .replaceAll("undefined");
+                                    .replaceAll("TD", '')
+                                    .replaceAll("undefined", '');
                                 modissue = `\n(calculations **don't** include TD)`;
                             }
+
                             if (moddetect == "TD") {
                                 moddetectnotd = "NM";
+                            }
+                            if (moddetectnotd.includes('NC')) {
+                                moddetectnotd = moddetectnotd.replace('NC', 'DT')
+                                console.log(moddetectnotd)
                             }
                             let pp = new std_ppv2()
                                 .setPerformance(score)
