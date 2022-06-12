@@ -97,14 +97,14 @@ module.exports = {
                     fs.appendFileSync(osulogdir, "\n" + "writing data to osuid.json")
                     fs.appendFileSync(osulogdir, "\n" + "")
 
-                    let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
+                    let playerid = osudata.id
                     if (!playerid) {
                         interaction.channel.send("Error osu04 - account not found")
                         fs.appendFileSync(osulogdir, "\n" + "error - account not found and/or json sent no data")
                         return;
                     }
                     //interaction.reply(playerid)
-                    const osutopurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/best?mode=${pickedmodex}&limit=100&offset=${offsetflag * 5}`;
+                    const osutopurl = `https://osu.ppy.sh/api/v2/users/${playerid}/scores/best?mode=${pickedmodex}&limit=100&offset=0`;
 
                     fetch(osutopurl, {
                         headers: {
@@ -187,10 +187,11 @@ module.exports = {
                                     .setThumbnail(topplayeravatar)
                                     .setDescription(`${filterby}\n${sortedby}`)
                                 for (i = 0; i < 5 && i < osutopdata.length; i++) {
-                                    maptitle = osutopdata[i].beatmapset.title_unicode.toString()
-                                    mapdiff = osutopdata[i].beatmap.version
-                                    mapurl = osutopdata[i].beatmap.id
-                                    mapmods1 = osutopdata[i].mods
+                                    offsettrue = offsetflag * 5 + i
+                                    maptitle = osutopdata[offsettrue].beatmapset.title_unicode.toString()
+                                    mapdiff = osutopdata[offsettrue].beatmap.version
+                                    mapurl = osutopdata[offsettrue].beatmap.id
+                                    mapmods1 = osutopdata[offsettrue].mods
 
                                     if (!mapmods1 || mapmods1 == '' || mapmods1 == 'undefined' || mapmods1 == null || mapmods1 == undefined) {
                                         mapmods = ''
@@ -198,16 +199,17 @@ module.exports = {
                                         mapmods = '+' + mapmods1.toString().replaceAll(",", '')
                                     }
 
-                                    mapscore = osutopdata[i].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                    maptimeset = osutopdata[i].created_at.toString().slice(0, 19).replace("T", " ")
-                                    mapacc = Math.abs(osutopdata[i].accuracy * 100).toFixed(2)
-                                    maprank = osutopdata[i].rank
-                                    map300max = osutopdata[i].statistics.count_geki
-                                    map300 = osutopdata[i].statistics.count_300
-                                    map200 = osutopdata[i].statistics.count_katu
-                                    map100 = osutopdata[i].statistics.count_100
-                                    map50 = osutopdata[i].statistics.count_50
-                                    mapmiss = osutopdata[i].statistics.count_miss
+                                    mapscore = osutopdata[offsettrue].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    maptimeset = osutopdata[offsettrue].created_at.toString().slice(0, 19).replace("T", " ")
+                                    mapacc = Math.abs(osutopdata[offsettrue].accuracy * 100).toFixed(2)
+                                    maprank = gradetoemoji(osutopdata[offsettrue].rank)
+                                    map300max = osutopdata[offsettrue].statistics.count_geki
+                                    map300 = osutopdata[offsettrue].statistics.count_300
+                                    map200 = osutopdata[offsettrue].statistics.count_katu
+                                    map100 = osutopdata[offsettrue].statistics.count_100
+                                    map50 = osutopdata[offsettrue].statistics.count_50
+                                    mapmiss = osutopdata[offsettrue].statistics.count_miss
+                                    maxcombo = osutopdata[offsettrue].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                     hitlist = ''
                                     if (pickedmodex == 'osu') {
                                         hitlist = `**300:** ${map300} **00:** ${map100} **50:** ${map50} **X:** ${mapmiss}`
@@ -221,11 +223,77 @@ module.exports = {
                                     if (pickedmodex == 'mania') {
                                         hitlist = `**300+**: ${map300max} **300:** ${map300} **200:** ${map200} **00:** ${map100} **50:** ${map50} **X:** ${mapmiss}`
                                     }
-                                    mappp = osutopdata[i].pp
-                                    weightedmappp = osutopdata[i].weight.pp
-                                    weightedpppercent = Math.abs(osutopdata[i].weight.percentage).toFixed(2)
-                                    Embed.addField(`---`, `**[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${mapurl}) ${mapmods}**\nSCORE: ${mapscore} \nScore set on ${maptimeset} \n${mapacc}% | ${maprank}\n${hitlist} \n**${(Math.abs(mappp).toFixed(2))}**pp | **${Math.abs(weightedmappp).toFixed(2)}**pp weighted **${weightedpppercent}**%`, false)
+                                    mappp = osutopdata[offsettrue].pp
+                                    weightedmappp = osutopdata[offsettrue].weight.pp
+                                    weightedpppercent = Math.abs(osutopdata[offsettrue].weight.percentage).toFixed(2)
+                                    Embed.addField(`#${offsettrue + 1}`, `**[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${mapurl}) ${mapmods}**\n**SCORE:** ${mapscore} | **Combo:** ${maxcombo}\nScore set on ${maptimeset} \n**${mapacc}%** | **${maprank}**\n${hitlist} \n**${(Math.abs(mappp).toFixed(2))}**pp | **${Math.abs(weightedmappp).toFixed(2)}**pp weighted at **${weightedpppercent}**%`, false)
                                 }
+                                let detailed = options.getBoolean('detailed')
+                                if (detailed) {
+                                    let commonmods = modemods(osutopdata).mods.toString().replaceAll(',', '')
+                                    let commonmapper = modemappers(osutopdata).beatmapset.creator.toString()
+                                    let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    let maxpp = (osutopdata.sort((a, b) => b.pp - a.pp))[0].pp.toFixed(2)
+                                    let minpp = (osutopdata.sort((a, b) => a.pp - b.pp))[0].pp.toFixed(2)
+                                    let avgpp;
+                                    let totalpp = 0;
+                                    for (i2 = 0; i2 < osutopdata.length; i2++) {
+                                        totalpp += osutopdata[i2].pp
+                                    }
+                                    avgpp = (totalpp / osutopdata.length).toFixed(2)
+
+
+                                    Embed.addField('-', `**Most common mapper:** ${commonmapper}\n**Most common mods:** ${commonmods}\n**Max combo:** ${highestcombo}`, true)
+                                    Embed.addField('-', `**Max pp:** ${maxpp}pp\n**Min pp:** ${minpp}pp\n**Avg. pp:** ${avgpp}pp\n`, true)
+
+                                }
+
+                                //taken from https://stackoverflow.com/a/20762713
+                                function modemods(arr) {
+                                    return arr.sort((a, b) => //swap b and a to make it least common
+                                        arr.filter(v => v.mods === a.mods).length
+                                        - arr.filter(v => v.mods === b.mods).length
+                                    ).pop();
+                                }
+                                function modemappers(arr) {
+                                    return arr.sort((a, b) => //swap b and a to make it least common
+                                        arr.filter(v => v.beatmapset.creator === a.beatmapset.creator).length
+                                        - arr.filter(v => v.beatmapset.creator === b.beatmapset.creator).length
+                                    ).pop();
+                                }
+
+                                function gradetoemoji(grade) {
+                                    let e;
+                                    switch (grade) {
+                                        case 'XH':
+                                            e = '<:rankingxh:927797179597357076>'
+                                            break;
+                                        case 'X':
+                                            e = '<:rankingX:927797179832229948>'
+                                            break;
+                                        case 'SH':
+                                            e = '<:rankingSH:927797179710570568>'
+                                            break;
+                                        case 'S':
+                                            e = '<:rankingS:927797179618295838>'
+                                            break;
+                                        case 'A':
+                                            e = '<:rankingA:927797179739930634>'
+                                            break;
+                                        case 'B':
+                                            e = '<:rankingB:927797179697991700>'
+                                            break;
+                                        case 'C':
+                                            e = '<:rankingC:927797179584757842>'
+                                            break;
+                                        case 'D':
+                                            e = '<:rankingD:927797179534438421>'
+                                            break;
+                                    }
+                                    return e
+                                }
+
+
                                 interaction.editReply({ content: '⠀', embeds: [Embed] })
                                 fs.appendFileSync(osulogdir, "\n" + "sent")
                             } catch (error) {
