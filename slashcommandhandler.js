@@ -437,19 +437,19 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 break;
 
             case 'ping':
-                client.helpcmds.get('ping2').execute(interaction, client, Discord, currentDate, currentDateISO)
+                client.helpcmds.get('pingslash').execute(interaction, client, Discord, currentDate, currentDateISO)
                 break;
 
             case 'convert':
-                client.helpcmds.get('measureconvert2').execute(interaction, client, Discord, options, currentDate, currentDateISO)
+                client.helpcmds.get('measureconvertslash').execute(interaction, client, Discord, options, currentDate, currentDateISO)
                 break;
 
             case 'math':
-                client.helpcmds.get('math2').execute(interaction, client, Discord, options, currentDate, currentDateISO)
+                client.helpcmds.get('mathslash').execute(interaction, client, Discord, options, currentDate, currentDateISO)
                 break;
 
             case 'help':
-                client.helpcmds.get('help2').execute(interaction, options, Discord, commands, currentDate, currentDateISO)
+                client.helpcmds.get('helpslash').execute(interaction, options, Discord, commands, currentDate, currentDateISO)
                 break;
 
             case 'remind':
@@ -519,7 +519,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
             //admins---------------
 
             case 'botstatus':
-                client.admincmds.get('botstatus2').execute(interaction, options, client, Discord, currentDate, currentDateISO)
+                client.admincmds.get('botstatusslash').execute(interaction, options, client, Discord, currentDate, currentDateISO)
                 break;
 
             case 'guildleave':

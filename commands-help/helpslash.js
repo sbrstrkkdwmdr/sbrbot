@@ -2,7 +2,7 @@ const fs = require('fs')
 const { helplogdir } = require('../logconfig.json')
 
 module.exports = {
-    name: 'help2',
+    name: 'helpslash',
     description: '',
     execute(interaction, options, Discord, commands, currentDate, currentDateISO) {
         fs.appendFileSync(helplogdir, "\n" + '--- COMMAND EXECUTION ---')

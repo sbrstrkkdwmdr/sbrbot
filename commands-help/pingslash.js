@@ -2,7 +2,7 @@ const fs = require('fs')
 const { helplogdir } = require('../logconfig.json')
 
 module.exports = {
-    name: 'ping2',
+    name: 'pingslash',
     description: 'ping',
     execute(interaction, client, Discord, currentDate, currentDateISO) {
         fs.appendFileSync(helplogdir, "\n" + '--- COMMAND EXECUTION ---')

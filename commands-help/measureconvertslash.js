@@ -2,7 +2,7 @@ const fs = require('fs')
 const { helplogdir } = require('../logconfig.json')
 
 module.exports = {
-    name: 'measureconvert2',
+    name: 'measureconvertslash',
     description: 'Converts units to other units' + 
     '\nUsage: /convert type:[first type]>[second type] number:[number]' + 
     '\nUse `/convert help` for a list of types',

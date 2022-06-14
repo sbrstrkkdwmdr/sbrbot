@@ -2,8 +2,10 @@ const fs = require('fs')
 const { adminlogdir } = require('../logconfig.json')
 
 module.exports = {
-    name: 'botstatus2',
-    description: 'sets the bots status',
+    name: 'botstatusslash',
+    description: 
+    'Sets the bots status' + 
+    '\nUsage: `/botstatus [0-3] [text]`',
 
     execute(interaction, options, client, Discord, currentDate, currentDateISO) {
         fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')
