@@ -5,7 +5,9 @@ const {doubletimear, halftimear} = require('../calculations/approachrate')
 
 module.exports = {
     name: 'math',
-    description: '',
+    description: 'Performs a simple math problem' + 
+    '\nUsage: `sbr-math [problem]` or `sbr-math [type] [first number] [second number]`' +
+    '\nUse `sbr-math help` for a list of method types',
     execute(message, args, Discord, currentDate, currentDateISO, ) {
         fs.appendFileSync(helplogdir, "\n" + '--- COMMAND EXECUTION ---')
         fs.appendFileSync(helplogdir, "\n" + `${currentDateISO} | ${currentDate}`)

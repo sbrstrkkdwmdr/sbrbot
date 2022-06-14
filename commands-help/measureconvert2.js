@@ -3,7 +3,9 @@ const { helplogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'measureconvert2',
-    description: '',
+    description: 'Converts units to other units' + 
+    '\nUsage: /convert type:[first type]>[second type] number:[number]' + 
+    '\nUse `/convert help` for a list of types',
     execute(interaction, args, Discord, options, currentDate, currentDateISO, ) {
         fs.appendFileSync(helplogdir, "\n" + '--- COMMAND EXECUTION ---')
         fs.appendFileSync(helplogdir, "\n" + `${currentDateISO} | ${currentDate}`)

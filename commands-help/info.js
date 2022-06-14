@@ -3,7 +3,7 @@ const { helplogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'info',
-    description: '',
+    description: 'info',
     execute(message, args, currentDate, currentDateISO) {
         fs.appendFileSync(helplogdir, "\n" + '--- COMMAND EXECUTION ---')
         message.channel.send('bot coded by SaberStrike in node js\nsource code - https://github.com/sbrstrkkdwmdr/sbrbot\nhttps://discord.js.org/#/docs/discord.js/stable/general/welcome')
