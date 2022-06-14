@@ -10,6 +10,7 @@ module.exports = {
     name: 'scores',
     description: 'Returns all scores on a given map for the user' + 
     '\nUsage: `sbr-scores [map id]`' + 
+    '\nAliases: c' +
     '\nIf a username isn\'t given, then it will search the database for one' + 
     '\nIf no map ID is given, then the last map requested will be used',
     async execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {

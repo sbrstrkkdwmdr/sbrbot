@@ -2,7 +2,7 @@ const {Player} = require('discord-player');
 const fs = require('fs')
 module.exports = {
     name: 'musicnp',
-    description: '',
+    description: 'WIP',
     async execute(message, args, client, Discord, ytdl, currentDate, currentDateISO) {
       fs.appendFileSync('checker.log', "\n" + '--- COMMAND EXECUTION ---')
       const player = new Player(client);

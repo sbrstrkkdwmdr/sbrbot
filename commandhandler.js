@@ -35,7 +35,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
         }
         if (message.author.bot && !message.author.id == '755220989494951997') return;
         if (oncooldown.has(message.author.id)) {
-            message.channel.send(`You're on cooldown\nTime left: ${getTimeLeft(timeouttime)}ms (this is definitely the wrong number)`)
+            return message.channel.send(`You're on cooldown\nTime left: ${getTimeLeft(timeouttime)}ms (this is definitely the wrong number)`)
         };
 
         if (!oncooldown.has(message.author.id)) {
