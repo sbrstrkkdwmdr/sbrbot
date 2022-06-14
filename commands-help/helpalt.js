@@ -19,10 +19,10 @@ module.exports = {
                     desc = client.commands.get(`${args[0]}`).description
 
                 } else if (client.linkdetect.get(`${args[0]}`)) {
-                    desc = client.commands.get(`${args[0]}`).description
+                    desc = client.linkdetect.get(`${args[0]}`).description
                 }
                 else if (client.osucmds.get(`${args[0]}`)) {
-                    desc = client.commands.get(`${args[0]}`).description
+                    desc = client.osucmds.get(`${args[0]}`).description
                 }
                 else if (client.altosucmds.get(`${args[0]}`)) {
                     desc = client.altosucmds.get(`${args[0]}`).description
@@ -52,7 +52,7 @@ module.exports = {
                 let consoleloguserweeee = message.author
                 fs.appendFileSync(helplogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
                 fs.appendFileSync(helplogdir, "\n" + getStackTrace(e))
-                fs.appendFileSync(helplogdir, "\n" + error)
+                fs.appendFileSync(helplogdir, "\n" + e)
                 fs.appendFileSync(helplogdir, "\n" + "")
             }
             message.channel.send(desc)
