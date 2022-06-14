@@ -112,7 +112,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 break;
 
             case 'ytsearch':
-                client.commands.get('ytsearch').execute(message, args, Discord, client, currentDate, currentDateISO)
+                client.commands.get('ytsearch').execute(message, args, client, Discord, currentDate, currentDateISO)
                 //client.commands.get('WIP').execute(message, args, currentDate, currentDateISO)
                 break;
 
