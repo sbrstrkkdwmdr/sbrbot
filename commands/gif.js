@@ -3,7 +3,8 @@ const { otherlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'gif',
-    description: 'gif',
+    description: 'Responds with a gif depending on the arguments given' +
+        '\nUsage: [CHECK gifslash]',
     execute(message, args, currentDate, currentDateISO) {
 
 

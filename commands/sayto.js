@@ -2,7 +2,9 @@ const fs = require('fs')
 const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'sayto',
-    description: "say",
+    description:
+    'Says the args given to a set channel' + 
+    'Usage: `sbr-say [channel id] [text]`',
     execute(owners, client, message, args, currentDate, currentDateISO) {
         if(owners.some(v => (message.author.id.toString()).includes(v))){
         try{const sendtochannelget = args[0];

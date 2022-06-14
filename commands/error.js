@@ -2,7 +2,7 @@ const fs = require('fs')
 const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'error',
-    description: '',
+    description: 'error: no description',
     execute(message, args, currentDate, currentDateISO) {
         fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
         fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
@@ -13,7 +13,7 @@ module.exports = {
         fs.appendFileSync(otherlogdir, "\n" + "")
         console.groupEnd()
         let errorlist = args[0];
-        switch(errorlist){
+        switch (errorlist) {
 
         }
     }

@@ -2,7 +2,9 @@ const fs = require('fs')
 const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'say',
-    description: "say",
+    description: 
+    'Says the args given' + 
+    'Usage: `sbr-say [message]`',
     execute(owners, message, args, currentDate, currentDateISO) {
         if(!owners.some(v => (message.author.id.toString()).includes(v))){
             message.delete();

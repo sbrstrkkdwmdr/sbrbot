@@ -4,10 +4,8 @@ const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: "remind",
     category: "utility",
-    description:{
-        usage: "remind <time> <reminder>",
-        content:  "Helps remind you something",
-    },
+    description: 'Sets a reminder to send in a set amount of time' +
+        'Usage: `sbr-remind [time in d/h/m/s] [reminder]`',
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
         fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
         let time = args[0];
@@ -28,7 +26,7 @@ module.exports = {
 
         if (!args[0]) return message.channel.send({ embeds: [notime] })
         if (
-            !args[0].endsWith("d") &&   
+            !args[0].endsWith("d") &&
             !args[0].endsWith("m") &&
             !args[0].endsWith("h") &&
             !args[0].endsWith("s")
@@ -39,25 +37,25 @@ module.exports = {
         if (!reminder) return message.channel.send({ embeds: [reminderembed] })
 
         const remindertime = new Discord.MessageEmbed()
-        .setColor('#33F304')
-        .setTitle(`\**A reminder has been set to go off in ${time}**`);
+            .setColor('#33F304')
+            .setTitle(`\**A reminder has been set to go off in ${time}**`);
 
         message.channel.send({ embeds: [remindertime] })
 
         const reminderdm = new Discord.MessageEmbed()
-        .setColor('#7289DA')
-        .setTitle('**REMINDER**')
-        .setDescription(`${reminder}`);
+            .setColor('#7289DA')
+            .setTitle('**REMINDER**')
+            .setDescription(`${reminder}`);
 
         async function reminderlmao() {
-           try{
-            setTimeout(() => {
-                user.send({ embeds: [reminderdm] })
-            }, ms(`${time}`));
-           }catch(err){
-            fs.appendFileSync(otherlogdir, "\n" + "reminder error")
-           } 
-           
+            try {
+                setTimeout(() => {
+                    user.send({ embeds: [reminderdm] })
+                }, ms(`${time}`));
+            } catch (err) {
+                fs.appendFileSync(otherlogdir, "\n" + "reminder error")
+            }
+
         }
         reminderlmao();
 

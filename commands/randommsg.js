@@ -2,7 +2,7 @@ const fs = require('fs')
 const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'randommsg',
-    description: '',
+    description: 'random msg',
     execute(message, args, currentDate, currentDateISO) {
         fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
         fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)

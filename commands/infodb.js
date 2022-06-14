@@ -3,7 +3,7 @@ const fs = require('fs')
 const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'infodb',
-    description: '',
+    description: 'no description, private command',
     execute(message, args, Discord, currentDate, currentDateISO) {
         if (message.author.id == '503794887318044675' || message.author.id == '755220989494951997') {
             fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')

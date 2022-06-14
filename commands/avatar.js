@@ -3,7 +3,10 @@ const fs = require('fs')
 const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'avatar',
-    description: '',
+    description:
+        'Sends the avatar/pfp of the mentioned user' +
+        '\nUsage: `sbr-avatar <@id>`' +
+        '\nAliases: av, pfp',
     execute(message, args, Discord, currentDate, currentDateISO) {
         fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
         fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
@@ -16,13 +19,14 @@ module.exports = {
         console.groupEnd()
         if (!message.mentions.users.size) {
             message.channel.send('This command requires someone to be mentioned.');
-            return;}
+            return;
+        }
         else {
             let user = message.mentions.users.first();
             let avatarEmbed = new Discord.MessageEmbed()
-            .setColor(0xFFC1EC)
-            .setAuthor(user.username)
-            .setImage(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=2048`);
+                .setColor(0xFFC1EC)
+                .setAuthor(user.username)
+                .setImage(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=2048`);
             message.reply({ embeds: [avatarEmbed] });
         }
     }

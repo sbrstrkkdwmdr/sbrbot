@@ -2,7 +2,7 @@ const fs = require('fs')
 const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'addmsg',
-    description: '',
+    description: 'no description',
     execute(message, args, currentDate, currentDateISO) {
         fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
         fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
@@ -12,7 +12,7 @@ module.exports = {
         fs.appendFileSync(otherlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
         fs.appendFileSync(otherlogdir, "\n" + "")
         console.groupEnd()
-        fs.appendFileSync('randommessages.txt',  args.splice(0,1000).join(" ") + '\n')
+        fs.appendFileSync('randommessages.txt', args.splice(0, 1000).join(" ") + '\n')
         /* if(args[0]){
             fs.readFile('randommessages.txt', function(error, msgarray) {
                 if(error) throw error;
