@@ -1,4 +1,6 @@
 const fs = require('fs')
+const { osulogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'skin',
     description: 'sbr-skin',

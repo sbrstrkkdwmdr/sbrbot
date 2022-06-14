@@ -6,9 +6,9 @@ const { osulogdir } = require('../logconfig.json')
 const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
-    name: "scores",
+    name: "scoresslash",
     description: "Returns all scores on a given map for the user" +
-        '\nUsage: `/tsfm id:mapid`' +
+        '\nUsage: `/scores id:mapid`' +
         '\nOptions:\nusername: the user to fetch scores from\nid: the map id to fetch scores from\nsort: what to sort plays by (defaults to date)' +
         '\nIf a username isn\'t given, then it will search the database for one' +
         '\nIf no map ID is given, then the last map requested will be used',

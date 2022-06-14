@@ -7,7 +7,7 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osuauth',
-    description: '',
+    description: 'e',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)
