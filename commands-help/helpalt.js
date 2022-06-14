@@ -9,193 +9,33 @@ module.exports = {
         if(!helper){
         message.channel.send('commands listed here - https://sbrstrkkdwmdr.github.io/sbr-web/botcmd')}
         else{
-        switch(helper){            
-            case '8ball':case 'ask':
-                message.reply(client.commands.get('8ball').description)
-                break;
-            case 'amoggers':
-                message.channel.send(client.commands.get('amoggers').description)
-                break;
-            case 'avatar':case 'av':case 'pfp':
-                message.channel.send("Sends an embed of the mentioned user's avatar/profile picture.\nUsage: `sbr-avatar @(username)` ")
-                break;
-            case 'ban':
-                message.channel.send("Bans the mentioned user.\nUsage: `sbr-ban @(username) did not enjoy game`\nAdditional note: requires a reason in order to be ban")
-                break;
-            case 'banid':
-                message.channel.send("Bans the targeted user.\nUsage: `sbr-ban (user.id) did not enjoy game`\nAdditional note: requires a reason in order to ban")
-                break;
-            case 'botstatus':
-                message.channel.send("Sets the status of the bot.\nUsage: `sbr-botstatus [n] amogus`\n[n] controls the activity type. \n 0 = watching \n 1 = playing \n 2 = streaming \n 3= listening. Fully custom statuses aren't available")
-                break;
-            case 'break':
-                message.channel.send("Force crashes the bot.\nUsage: `sbr-(command)` \nAdditional note: it might not force a crash this command is intentionally coded bad.")
-                break;
-            case 'crash':
-                message.channel.send("Force crashes the bot.\nUsage: `sbr-crash` \nOnly certain users can crash the bot.")
-                break;
-            case 'dadjoke':case 'pun':
-                message.channel.send("Replies with a random dad joke.\nUsage: `sbr-dadjoke` \nThe dad jokes are limited. pls send me some so I can add them to the bot.")
-                break;
-            case 'gleave':case 'guildleave':case 'leaveguild':
-                message.channel.send("Leaves the mentioned guild.\nUsage: `sbr-gleave [guild.id]`")
-                break;
-            case 'guildid':
-                message.channel.send("Sends the current guild's ID.\nUsage: `sbr-guildid`")
-                break;
-            case 'help':
-                message.channel.send("Sends the list to help commands. Can also be used to find more information on a command.\nUsage 1: `sbr-help` \nUsage 2: `sbr-help amoggers`")
-                break;
-            case 'image':
-                message.channel.send("Sends an image using google API.\nUsage:`sbr-image [search]` \n")
-                break;
-            case 'image5':
-                message.channel.send("Sends the top 5 images from google's api.\nUsage: `sbr-image [search]`")
-                break;
-            case 'info':
-                message.channel.send("info.\nUsage:`sbr-info`")
-                break;
-            case 'join':
-                message.channel.send("Adds the verified role.\nUsage:`sbr-join` \nOnly works in SS.")
-                break;                
-            case 'kick':
-                message.channel.send("Kicks the mentioned user.\nUsage:`sbr-kick @username`")
-                break;
-            case 'links':
-                message.channel.send("Links.\nUsage:`sbr-links`")
-                break;
-            case 'math':case 'calculate':
-                message.channel.send("Calculates a math problem.\nUsage:`sbr-math add 5 5`\nArguments: `add`, `subtract`, `multiply`, `divide`, `squareroot`, `square`, `factorial`, `hcf`, `lcm`")
-                break;
-            case 'measureconvert':case 'convert':
-                message.channels.send("Converts one measurement to another\nUsage: `sbr-convert k>c 273.15`\nUse `sbr-convert help` for more information")
-                break;    
-            case 'play':
-                message.channel.send("Plays a song from youtube.\nUsage:`sbr-play https://youtube.com/watch?v=LINK`\n Currently only works using urls.")
-                break;
-            case 'queue':
-                message.channel.send("Displays song queue.\nUsage:`sbr-queue`")
-                break;
-            case 'skip':
-                message.channel.send("Skips the current song.\nUsage:`sbr-skip`")
-                break;
-            case 'stop':
-                message.channel.send("Disconnects the bot from vc.\nUsage:`sbr-stop`")
-                break;
-            case 'node_modules':
-                message.channel.send("A big folder that lets stuff run in nodejs. \n||Still not as big as your mum :kekw: :troll: :pepelaugh:||")
-                break;
-            case 'paperscissorsrock':case 'psr':
-                message.channel.send("Plays paper scissors rock / rock paper scissors.\nUsage:`sbr-paperscissorsrock paper`")
-                break;
-            case 'ping':
-                message.channel.send("Checks the latency/ping of the bot and API and sends back a value in ms.\nUsage:`sbr-ping`")
-                break;
-            case 'purge':
-                message.channel.send("Bulk deletes a certain number of messages.\nUsage:`sbr-purge [n]`\n[n] = number of messages to delete.\nMessages over 2 weeks old cannot be deleted and may cause errors.")
-                break;
-            case 'remind':
-                message.channel.send("Sends a reminder in x time.\nUsage:`sbr-remind [t] FC yomi yori 240bpm ver.`\nTime can be in days, hours, minutes and seconds. Using multiple values (hours and minutes together) will just send instantly.")
-                break;                
-            case 'roll':case 'numgen':
-                message.channel.send("Generates a random number. The limit is controllable by the user.\nUsage:`sbr-roll` or `sbr-roll 727`")
-                break;
-            case 'serverlist':case 'servers':
-                message.channel.send("Lists all guilds the bot is in including IDs.\nUsage:`sbr-serverlist`")
-                break;
-            case 'template':
-                message.channel.send("a.\nUsage:``")
-                break;
-            case 'time':
-                message.channel.send("Sends the current time of whatever is hosting the bot.\nUsage:`sbr-time`")
-                break;
-            case 'unban':
-                message.channel.send("Unbans the mentioned user ID.\nUsage:`sbr-unban (user.id)`")
-                break;
-            case 'ytsearch':
-                //message.channel.send("Sends the first result of a search on youtube.\nUsage:`sbr-ytsearch osus` \n")
-                message.channel.send("Sends the first five results of a search on youtube. \nUsage: `sbr-ytsearch osus`\nEmbeds are disabled so the channel doesn't get filled up.")
-                break;
-            //case 'ytsearch5':
-                //message.channel.send("Sends the first five results of a search on youtube. \nUsage: `sbr-ytsearch5 osus`\nEmbeds are disabled so the channel doesn't get filled up.")
-                //break;    
+            console.log(`${args[0]}`)
+            console.log(client.commands.get(`${args[0]}`))
 
-            //OSUCMD
-            case 'ctbrs':
-                message.channel.send("Sends information about the user's most recent osu! ctb play.\nUsage:`sbr-ctbrs (ID)`")
-                break;
-            case 'ctbtop':
-                message.channel.send("Sends information about the user's top 5 osu! ctb plays.\nUsage:`sbr-ctbtop (ID)`\nDoesn't work if there's under 5 plays\nArguments: -p (page offset)")
-                break;
-            case 'danser':
-                message.channel.send("Sends links to danser.\nUsage: `sbr-danser`")
-                break;
-            case 'maniars':
-                message.channel.send("Sends information about the user's most recent osu! mania play.\nUsage:`sbr-maniars (ID)`")
-                break;
-            case 'maniatop':
-                message.channel.send("Sends information about the user's top 5 osu! mania plays.\nUsage:`sbr-maniatop (ID)`\nDoesn't work if there's under 5 plays\nArguments: -p (page offset)")
-                break;
-            case 'map':case 'mapinfo':
-                message.channel.send("Sends information about the mentioned map.\nUsage:`sbr-map (ID)` | `sbr-map (ID) (Mods)` `sbr-map (Mods)`")
-                break;
-            case 'mapsearch':case 'mapget':
-                message.channel.send("Sends information about the requested map.\nUsage:`sbr-mapsearch`")
-                break;
-            case 'osu':
-                message.channel.send("Sends information about the user's osu! profile.\nUsage:`sbr-osu (username)`")
-                break;
-            case 'osubest': 
-                message.channel.send("Sends the top 5 plays of all time.\nUsage:`sbr-osubest`")
-                break;
-            case 'osubestrs':
-                message.channel.send("Sends the top 10 plays from the past 24h. \nUsage:`sbr-osubestrs`")
-                break;
-            case 'osutop':
-                message.channel.send("Sends information about the user's top osu! standard 5 plays.\nUsage:`sbr-osutop (ID)`\nDoesn't work if there's under 5 plays\nArguments: -p (page offset)")
-                break;
-            case 'osutest':
-                message.channel.send("Just whatever osu! command api thingy I'm testing.\nUsage:`sbr-osutest`")
-                break;
-            case 'pastmap':
-                message.channel.send("Sends information about the mentioned map with modded values.\nUsage:`sbr-map (MODS)`\nKinda useless as of 2022-02-27.")
-                break;
-            case 'pp':
-                message.channel.send("Sends the pp values for a map.\nUsage: `sbr-pp (MODS)` | `sbr-pp (MAPID)` | `sbr-pp (MAPID) (MODS)`")
-                break;
-            case 'rs':case 'recent':
-                message.channel.send("Sends information about the user's most recent osu! play.\nUsage:`sbr-rs (ID)`\nArguments: -p (page offset)")
-                break;
-            case 'rsplus':
-                message.channel.send("Sends information about the mentioned user's 5 most recent osu! plays.\nUsage:`sbr-rsplus @username`")
-                break;
-            case 'skin':
-                message.channel.send("Sends the link to all skins or a specific skin. \nUsage: `sbr-skin`\nUsage 2:`sbr-skin 10`")
-                break;
-            case 'taikors':
-                message.channel.send("Sends information about the user's most recent osu! taiko play.\nUsage:`sbr-taikors (ID)`")
-                break;
-            case 'taikotop':
-                message.channel.send("Sends information about the user's top 5 osu! taiko plays.\nUsage:`sbr-taikotop (ID)`\nDoesn't work if there's under 5 plays")
-                break;
-            case 'tsfm':case 'c':
-                message.channel.send("Sends the top score for a user for a map. \nUsage:`sbr-tsfm 15222484`\n`sbr-tsfm (playerid)`")
-                break;
+            if(client.commands.get(`${args[0]}`)){
+                let desc = client.commands.get(`${args[0]}`).description
+                console.log(desc)
+                console.log(client.commands.get(`${args[0]}`))
+            } else if (client.linkdetect.get(`${args[0]}`)){
+                let desc = client.commands.get(`${args[0]}`).description
+                console.log(desc)
+                console.log(client.commands.get(`${args[0]}`))
+            }
+            else if (client.osucmds.get(`${args[0]}`)){
+                let desc = client.commands.get(`${args[0]}`).description
+                console.log(desc)
+                console.log(client.commands.get(`${args[0]}`))
+            }
+            else if (client.altosucmds.get(`${args[0]}`)){}
+            else if (client.admincmds.get(`${args[0]}`)){}
+            else if (client.helpcmds.get(`${args[0]}`)){}
+            else if (client.musiccmds.get(`${args[0]}`)){}
+            else if (client.otherstuff.get(`${args[0]}`)){}
 
-            //LINKDETECTOR
-            case 'osulongmaplink':
-                message.channel.send("Sends information about a linked map.\nUsage:`https://osu.ppy.sh/beatmapsets/1124121#taiko/2352956`\nthere can be other text in the message but the link must be first")
-                break;
-            case 'osumaplink':
-                message.channel.send("Sends information about a linked map.\nUsage:`https://osu.ppy.sh/b/1545686`\nthere can be other text in the message but the link must be first")
-                break;
-            case 'osuprofilelink':
-                message.channel.send("Sends information about the a linked osu! profile.\nUsage:`https://osu.ppy.sh/u/15222484`\nthere can be other text in the message but the link must be first")
-                break;
-            default:
-                message.channel.send(`command "${helper}" not found`)
-                message.channel.send('commands listed here - https://sbrstrkkdwmdr.github.io/sbr-web/botcmd')
-        }}
+            else {
+                message.channel.send(`command "${helper}" not found\ncommands listed here - https://sbrstrkkdwmdr.github.io/sbr-web/botcmd\nNote: some commands have different module names so they may not show up with the help command\nFor slash commands try [name]slash`)
+            }
+            }
 
 
         fs.appendFileSync(helplogdir, "\n" + `${currentDateISO} | ${currentDate}`)  
