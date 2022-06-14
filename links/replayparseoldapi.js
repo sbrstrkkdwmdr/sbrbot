@@ -7,7 +7,7 @@ const { std_ppv2 } = require("booba");
 const osuReplayParser = require("osureplayparser");
 module.exports = {
   name: "replayparseoldapi",
-  description: "",
+  description: "replayparse but uses apiv1",
   execute(
     linkargs,
     message,

@@ -4,6 +4,7 @@ const { linkfetchlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'replayrecordhelp',
+    description: 'no description',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         let helpembed = new Discord.MessageEmbed()
             .setTitle('osr recording help')

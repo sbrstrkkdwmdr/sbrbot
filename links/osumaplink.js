@@ -7,7 +7,7 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osumaplink',
-    description: '',
+    description: 'Returns map data from the link given',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         if (message.content.includes("mania") || message.content.includes("fruits") || message.content.includes("taiko")) return;
         const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replaceAll('beatmaps').replaceAll('b').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');

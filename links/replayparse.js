@@ -11,7 +11,7 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'replayparse',
-    description: '',
+    description: 'Parses a replay and returns it\'s information',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         try {
             fs.appendFileSync(linkfetchlogdir, "\n" + `${currentDateISO} | ${currentDate}`)

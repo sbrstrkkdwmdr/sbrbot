@@ -10,7 +10,7 @@ const { danserpath } = require('../config.json')
 
 module.exports = {
     name: 'replayrecordv2',
-    description: '',
+    description: 'Records a replay from a given .osr file.',
     execute(exec, linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         try {
             fs.appendFileSync(linkfetchlogdir, "\n" + `${currentDateISO} | ${currentDate}`)

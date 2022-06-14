@@ -5,6 +5,7 @@ const { linkfetchlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'replayrecord',
+    description: 'Records a replay given. Currently using `replayrecordv2`',
     execute(exec, linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         /*let settings = linkargs;
         if(!settings || settings == 'undefined' || settings == null || settings == 'null') {

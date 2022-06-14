@@ -7,7 +7,7 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osuprofilelink',
-    description: '',
+    description: 'Returns osu! profile data from the link given',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
         //const pickeduserX = args.splice(0,1000).join(" ");
         const w = JSON.stringify(linkargs[0]).replaceAll("https", '').replaceAll(":", "").replaceAll("//", '').replaceAll('osu.ppy.sh', '').replace('users', '').replace('u').replaceAll('/', '').replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').replaceAll('undefined', '');

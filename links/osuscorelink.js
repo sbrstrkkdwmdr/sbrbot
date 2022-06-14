@@ -9,7 +9,7 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osuscorelink',
-    description: '',
+    description: 'Returns score information from the link given',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
         let mode = 'osu' //osu, fruits, taiko, mania
         if (linkargs[0].includes('osu')) {

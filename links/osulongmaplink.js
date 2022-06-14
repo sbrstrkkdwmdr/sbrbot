@@ -8,7 +8,7 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osulongmaplink',
-    description: '',
+    description: 'returns map data from the link given',
     execute(linkargs, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         if (message.content.includes("mania") || message.content.includes("fruits") || message.content.includes("taiko")) return;
         try {
