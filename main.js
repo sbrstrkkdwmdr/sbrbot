@@ -200,8 +200,6 @@ client.once('ready', () => {
     client.admincmds = new Discord.Collection();
     client.helpcmds = new Discord.Collection();
     client.musiccmds = new Discord.Collection();
-    client.ecchicmds = new Discord.Collection();
-    client.gamingcmds = new Discord.Collection();
     client.otherstuff = new Discord.Collection();
 
     const commandFiles = fs.readdirSync('./commands/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
