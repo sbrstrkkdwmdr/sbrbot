@@ -7,8 +7,12 @@ const { osulogdir } = require('../logconfig.json')
 const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
-    name: 'osu',
-    description: '',
+    name: 'osuslash',
+    description:
+        'Returns information for an osu! profile' +
+        '\nUsage: `/osu user:[username]`' +
+        '\nIf a username isn\'t given, then it will search the database for one' +
+        '\nOptions: \nuser: username',
     async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
         fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         let pickeduserX = options.getString('user')

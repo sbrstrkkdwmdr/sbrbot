@@ -11,7 +11,8 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osubestrs',
-    description: '',
+    description: 'Returns the top ten pp plays of the past 24h' +
+    '\nUsage: `sbr-osubestrs`',
     execute(message, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone) {
         fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         //        `https://osutrack-api.ameo.dev/hiscores?user=${pickeduserX}&mode=0`

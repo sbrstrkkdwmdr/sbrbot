@@ -1,7 +1,7 @@
 const fs = require('fs')
 module.exports = {
     name: 'skin',
-    description: '',
+    description: 'sbr-skin',
     execute(message, args, currentDate, currentDateISO) {
         fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         let skinname = args[0];

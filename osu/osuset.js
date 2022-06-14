@@ -3,8 +3,12 @@ const { osulogdir } = require('../logconfig.json')
 const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
-    name: 'osuset',
-    description: "Sets your osu! username so you can use osu! commands without specifying a username.",
+    name: 'osusetslash',
+    description: "Sets your osu! username or mode so you can use osu! commands without specifying a username." +
+        '\nUsage: `/osuset type:[username/mode] username:[username or mode]`' +
+        '\nExample: `/osuset type:username username:SaberStrike' +
+        '\n`/osuset type:mode username:mania`' +
+        '\nOptions:\ntype: whether to set the username or gamemode\ninput:the username or mode to set',
     async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO) {
         const pickeduserX = options.getString('username')
         fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)

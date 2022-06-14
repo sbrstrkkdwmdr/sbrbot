@@ -11,8 +11,14 @@ const { getStackTrace } = require('../somestuffidk/log');
 const { isNullOrUndefined } = require('util');
 
 module.exports = {
-    name: 'osutop',
-    description: '',
+    name: 'osutopslash',
+    description:
+        'Returns the top 5 plays for the user' +
+        '\nUsage: `/osutop user:[username] offset:[page # - 1] mode:[gamemode] sort:[pp/acc/score/recent] mapper:[name] mods:[mods] detailed:[boolean]`' +
+        '\nOptions:\nuser: username\noffset: what page number (subtract 1)\nmode: what gamemode[osu/taiko/catch/mania\nsort: what to sort plays by [pp/score/acc/most recent]\nmapper: only show plays with maps from this mapper\nmods: only show scores with these mods\ndetailed: show extra details(most common mapper, mods, avg pp etc.)' +
+        '\nIf a username isn\'t given, then it will search the database for one'
+    ,
+
     async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         //const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work

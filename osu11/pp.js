@@ -8,7 +8,9 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'pp',
-    description: '',
+    description: 'Returns the pp for the map' +
+        '\nUsage: `sbr-pp [map id]`' +
+        '\nIf no map ID is given, then the last map requested will be used',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         const pickeduserX = args[0];

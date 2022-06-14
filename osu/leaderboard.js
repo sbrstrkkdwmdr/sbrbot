@@ -10,8 +10,12 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 
 module.exports = {
-    name: 'leaderboard',
-    description: '',
+    name: 'leaderboardslash',
+    description:
+        'Returns the top five plays for a map' +
+        '\nUsage: `/leaderboard id:[map id]`' +
+        '\nOptions:\ntype: filter scores by global or mods [WIP]\ninput: useless option. don\'t use it\nid: map id\noffset: page offset' +
+        '\nIf no map ID is given, then the last map requested will be used',
     execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         interaction.reply('getting data...')
@@ -39,11 +43,11 @@ module.exports = {
         }
         let pageoffset = offset * 5
 
-        
+
         let mods;
         let input = options.getString('input')
-        if(type) type2 = type.toLowerCase();
-        if(input && type2 == ('mod' || 'mods')){
+        if (type) type2 = type.toLowerCase();
+        if (input && type2 == ('mod' || 'mods')) {
             mods = input
         }
         else {

@@ -1,6 +1,6 @@
 module.exports = {
     name: 'danser',
-    description: '',
+    description: 'danser',
     execute(message, args, currentDate, currentDateISO) {
         console.group('--- COMMAND EXECUTION ---')
         let variablenamelol = args[0]

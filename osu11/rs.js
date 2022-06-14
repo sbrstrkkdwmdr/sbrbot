@@ -9,7 +9,10 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'rs',
-    description: '',
+    description: 'Returns information for the most recent play of the user' +
+    '\nUsage: sbr-rs [username]' +
+    '\nIf a username isn\'t given, then it will search the database for one'
+    ,
     async execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         let pickeduserX = args.splice(0, 1000).join(" ");

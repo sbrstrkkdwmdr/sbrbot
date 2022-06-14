@@ -2,8 +2,8 @@ const fs = require('fs')
 const { osulogdir } = require('../logconfig.json')
 
 module.exports = {
-    name: 'skin',
-    description: '',
+    name: 'skinslash',
+    description: '/skin skin:[1-11]',
     execute(interaction, options, currentDate, currentDateISO) {
         //console.group('--- COMMAND EXECUTION ---')
         let skinname = options.getString('skin')

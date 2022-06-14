@@ -12,7 +12,10 @@ const { oddt, odht } = require("../calculations/od.js")
 
 module.exports = {
     name: 'map',
-    description: '',
+    description: 'Returns information for a map' +
+        '\nUsage: `sbr-map [map id] [mods]`' +
+        '\nIf no map ID is given, then the last map requested will be used' +
+        '\nDefault mods are NM. TD is ignored',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         const pickeduserX = args[0];

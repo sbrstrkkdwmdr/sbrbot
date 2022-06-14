@@ -300,7 +300,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
         description: 'set your username / mode',
         options: [
             {
-                name: 'username',
+                name: 'input',
                 description: 'username or ID works (mode name if set to mode)',
                 required: true,
                 type: Constants.ApplicationCommandOptionTypes.STRING
@@ -341,13 +341,13 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 choices: [{ name: 'global', value: 'global' }, { name: 'mods', value: 'mods' }, { name: 'friends', value: 'friends' }]
-            },
+            },/*
             {
                 name: 'input',
                 description: 'mods/username',
                 required: false,
                 type: Constants.ApplicationCommandOptionTypes.STRING
-            },
+            },*/
             {
                 name: 'id',
                 description: 'map id',
@@ -460,61 +460,38 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 break;
             //------osu
             case 'rs':
-                client.osucmds.get('rsallmodes').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                //console.log(interaction.commandId)
-                /*
-                if(!options.getString('mode') || options.getString('mode') == 'osu' || options.getString('mode') == 'o' || options.getString('mode') == 'standard' || options.getString('mode') == 'std'){
-                client.osucmds.get('rs').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                return;
-                }
-                if(options.getString('mode') == 'catch the beat' || options.getString('mode') == 'ctb' || options.getString('mode') == 'c' || options.getString('mode') == 'catch') {
-                    client.osucmds.get('ctbrs').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                    return;
-                }
-                if(options.getString('mode') == 'mania' || options.getString('mode') == 'm') {
-                    client.osucmds.get('maniars').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                    return;
-                }
-                if(options.getString('mode') == 'taiko' || options.getString('mode') == 't') {
-                    client.osucmds.get('taikors').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                    return;
-                }
-                else interaction.reply(`error: mode doesn't exist. list of modes: osu, taiko, ctb, mania`)*/
-                //else client.osucmds.get('rs').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
+                client.osucmds.get('rsslash').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
                 break;
             case 'osutop':
-                client.osucmds.get('osutop').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                //else client.osucmds.get('osutop').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
+                client.osucmds.get('osutopslash').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
                 break;
             case 'skin':
                 client.osucmds.get('skin').execute(interaction, options, currentDate, currentDateISO)
                 break;
             case 'map':
-                client.osucmds.get('map').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+                client.osucmds.get('mapslash').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
                 break
             case 'osu':
-                client.osucmds.get('osu').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+                client.osucmds.get('osuslash').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
                 //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
                 break;
             case 'pp':
-                client.osucmds.get('pp').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+                client.osucmds.get('ppslash').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
                 break;
             case 'accuracycalculator':
                 client.osucmds.get('acccalc').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
                 break;
             case 'setuser':
-                client.osucmds.get('osuset').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO)
+                client.osucmds.get('osusetslash').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO)
                 break;
             case 'tsfm': case 'scores':
-                client.osucmds.get('tsfm').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+                client.osucmds.get('scores').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
                 break;
             case 'rsplus':
                 client.osucmds.get('rsplus').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
                 break;
             case 'leaderboard':
-                client.osucmds.get('leaderboard').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+                client.osucmds.get('leaderboardslash').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
                 break;
             //admins---------------
 

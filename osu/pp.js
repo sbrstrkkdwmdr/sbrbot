@@ -6,8 +6,11 @@ const { osulogdir } = require('../logconfig.json')
 const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
-    name: 'pp',
-    description: '',
+    name: 'ppslash',
+    description: 'Returns the pp for a map' +
+        '\nUsage: `/pp id:mapid`' +
+        '\nOptions:\nid: the map id\nmods: what mods to use for pp calculation' +
+        '\nIf no map ID is given, then the last map requested will be used',
     execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         interaction.reply('getting data...')

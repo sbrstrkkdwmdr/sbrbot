@@ -12,7 +12,10 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osutop',
-    description: '',
+    description: 'Returns top 5 plays for the user' + 
+    'Usage: `sbr-osutop [username]`' + 
+    '\nIf a username isn\'t given, then it will search the database for one'
+    ,
     async execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         //const pickeduserX = args.splice(0,1000).join(" "); //if it was just args 0 it would only take the first argument, so spaced usernames like "my angel lumine" wouldn't work
         fs.appendFileSync(osulogdir, "\n" + `${currentDateISO} | ${currentDate}`)

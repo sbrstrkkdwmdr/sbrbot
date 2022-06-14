@@ -9,7 +9,7 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osugraph',
-    description: '',
+    description: 'e',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,) {
         fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         const pickeduserX = args.splice(0,1000).join(" ");

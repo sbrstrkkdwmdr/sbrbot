@@ -201,8 +201,8 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 client.altosucmds.get('osubestrs').execute(message, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone)
                 break;
 
-            case 'tsfm': case 'c':
-                client.altosucmds.get('tsfm').execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            case 'tsfm': case 'c':case 'scores':
+                client.altosucmds.get('scores').execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
                 break;
 
             case 'osuauth':

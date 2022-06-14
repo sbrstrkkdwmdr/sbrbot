@@ -9,7 +9,11 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'rsplus',
-    description: '',
+    description: 'Returns information for the five most recent plays of the user' +
+        '\nUsage: `/rsplus user:username`' +
+        '\nOptions:\nuser: the username\nmode: the gamemode' +
+        '\nIf a username isn\'t given, then it will search the database for one'
+    ,
     async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         let pickeduserX = options.getString('user')
         let pickedmode = options.getString('mode')

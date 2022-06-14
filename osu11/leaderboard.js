@@ -12,7 +12,7 @@ const { access_token } = require('../debug/osuauth.json');
 
 module.exports = {
     name: 'leaderboard',
-    description: '',
+    description: 'use leaderboardslash',
     async execute(userdatatags, message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         let offsetnum = 0
         let mode = 'osu'

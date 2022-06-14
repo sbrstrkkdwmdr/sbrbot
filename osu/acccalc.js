@@ -3,7 +3,13 @@ const fs = require('fs')
 const { osulogdir } = require('../logconfig.json')
 module.exports = {
     name: 'acccalc',
-    description: '',
+    description: 'Calculates accuracy for all modes' +
+        '\nUsage:' +
+        '\n`/acccalc mode:osu 300s:[number] 100s:[number] 50s:[number] miss:[number]`' +
+        '\n`/acccalc mode:taiko 300s:[number] 100s:[number] miss:[number]`' +
+        '\n`/acccalc mode:catch 300s:[number] 100s:[number] 50s:[number] miss:[number]`' +
+        '\n`/acccalc mode:mania 300maxes:[number] 300s:[number] 200s:[number] 100s:[number] 50s:[number] miss:[number]`' +
+        '\nOptions: \nmode: what mode to calculate\n300maxes: 300+(mania only). aka gekis\n300s: hit300s (100%). Taiko: hit Great. Catch: Fruits caught\n200s: 66.66%. aka katus\n100s: 33.33%. Taiko: hit Good. Catch: Drops caught\n50s: 16.66%. Catch: Droplets caught\nmiss: 0%',
     async execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         fs.appendFileSync(osulogdir, "\n" + '--- COMMAND EXECUTION ---')
         fs.appendFileSync(osulogdir, "\n" + "command executed - accuracy calculator")

@@ -4,7 +4,7 @@ const fs = require('fs');
 const { access_token } = require('../debug/osuauth.json');
 module.exports = {
     name: 'mapsearch',
-    description: '',
+    description: 'e',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
         const pickeduserX = args.splice(0, 100).join(' ');

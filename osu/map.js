@@ -14,8 +14,14 @@ const { getStackTrace } = require("../somestuffidk/log");
 //            fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
 
 module.exports = {
-    name: "map",
-    description: "",
+    name: 'mapslash',
+    description:
+        'Returns information for a map' +
+        '\nUsage: `/map id:[map id] mods:[mods in shorthand]`' +
+        '\nExample: `/map id:3610012 mods:HDDTHR`' +
+        '\nIf no map ID is given, then the last map requested will be used' +
+        '\nDefault mods are NM. TD is ignored' +
+        '\nOptions: \nid: map id\n mods: mods to add to pp calculation',
     execute(
         interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         fs.appendFileSync(osulogdir, "\n" + "--- COMMAND EXECUTION ---");

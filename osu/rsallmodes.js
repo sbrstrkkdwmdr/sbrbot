@@ -7,8 +7,12 @@ const { osulogdir } = require('../logconfig.json')
 const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
-    name: 'rsallmodes',
-    description: '',
+    name: 'rsslash',
+    description: 'Returns information for the most recent play of the user' +
+        '\nUsage: `/rs user:[name]`' +
+        '\nOptions:\nuser: the username\nmode: the gamemode' +
+        '\nIf a username isn\'t given, then it will search the database for one'
+    ,
     async execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         let pickeduserX = options.getString('user')
         let pickedmode = options.getString('mode')
@@ -329,7 +333,7 @@ module.exports = {
                                         ppfcrawfl = ppiffc1.fl
                                         ppfccalcacc = ppiffc1.computed_accuracy
 
-                                        if (rspp == null || rspp == NaN  || rspp == 0) {
+                                        if (rspp == null || rspp == NaN || rspp == 0) {
                                             rspp = ppww
                                         }
                                         /* => {
@@ -342,7 +346,7 @@ module.exports = {
 
                                         // if(rspp = "null"){
                                         //if(rsgrade != 'F'){
-                                            ppissue = ''
+                                        ppissue = ''
                                         if (fc == false) {
                                             fcflag = `| **${ppiffcw}**pp IF **${rsnochokeacc}%** FC ${ppissue}`
                                         }
@@ -414,7 +418,7 @@ module.exports = {
                                         let Embed = new Discord.MessageEmbed()
                                             .setColor(0x9AAAC0)
                                             .setTitle(recenttitlestring + rsplayername)
-                                            .setAuthor({name: `${minlastvisw} ago on ${rsmaptime}${trycountstr}`, url:`https://osu.ppy.sh/u/${rsplayerid}`, iconURL: `https://a.ppy.sh/${rsplayerid}`})
+                                            .setAuthor({ name: `${minlastvisw} ago on ${rsmaptime}${trycountstr}`, url: `https://osu.ppy.sh/u/${rsplayerid}`, iconURL: `https://a.ppy.sh/${rsplayerid}` })
                                             //.setImage(rsmapbg)
                                             .setThumbnail(rscoverlist)
                                             //.setThumbnail(`https://a.ppy.sh/${rsplayerid}`)
@@ -432,11 +436,12 @@ module.exports = {
                                         interaction.editReply("Error - play data not found (or some other error)")
                                         fs.appendFileSync(osulogdir, "\n" + "Error - play data not found and/or json sent no data")
                                     }
-                                    else { interaction.channel.send('unknown error') 
-                                    fs.appendFileSync(osulogdir, "\n" + error)
-                                    fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
-                                    fs.appendFileSync(osulogdir, "\n" + "")
-                                }
+                                    else {
+                                        interaction.channel.send('unknown error')
+                                        fs.appendFileSync(osulogdir, "\n" + error)
+                                        fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
+                                        fs.appendFileSync(osulogdir, "\n" + "")
+                                    }
                                     console.groupEnd()
                                 }
                             } catch (error) {
@@ -444,12 +449,13 @@ module.exports = {
                                     interaction.channel.send("Error - account not found (or some other error)")
                                     fs.appendFileSync(osulogdir, "\n" + "error - account not found and/or json sent no data")
                                 }
-                                else { interaction.channel.send('unknown error') 
-                                fs.appendFileSync(osulogdir, "\n" + error)
-                                fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
-                                fs.appendFileSync(osulogdir, "\n" + "")
-                                console.groupEnd()
-                            }
+                                else {
+                                    interaction.channel.send('unknown error')
+                                    fs.appendFileSync(osulogdir, "\n" + error)
+                                    fs.appendFileSync(osulogdir, "\n" + getStackTrace(error))
+                                    fs.appendFileSync(osulogdir, "\n" + "")
+                                    console.groupEnd()
+                                }
                             }
                         });
                 } catch (error) {

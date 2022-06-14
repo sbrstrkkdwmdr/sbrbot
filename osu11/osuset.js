@@ -5,7 +5,8 @@ const { getStackTrace } = require('../somestuffidk/log')
 
 module.exports = {
     name: 'osuset',
-    description: "Sets your osu! username so you can use osu! commands without specifying a username.",
+    description: "Sets your osu! username so you can use osu! commands without specifying a username." + 
+    '\nUsage: `sbr-osuset [name]`',
     async execute(userdatatags, message, args, Discord, currentDate, currentDateISO){
         let pickeduserX = args.splice(0,1000).join(" ");
         if(!pickeduserX || pickeduserX == '' || pickeduserX == []) return message.reply('please input a valid username')

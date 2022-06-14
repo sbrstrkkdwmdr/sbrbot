@@ -3,7 +3,7 @@ const fs = require('fs');
 const { std_ppv2 } = require('booba');
 module.exports = {
     name: 'pastmap',
-    description: '',
+    description: 'e',
     execute(message, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret) {
         console.group('--- COMMAND EXECUTION ---')
         let pickedmods = args[0];
