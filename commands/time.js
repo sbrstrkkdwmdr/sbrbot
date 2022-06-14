@@ -6,8 +6,8 @@ module.exports = {
     name: 'time',
     description: 
     'Returns the current time given' +
-    'Usage: `sbr-time` or `sbr-time [region/continent/country]/[city/town]`' +
-    'All allowed timezones are here: https://www.iana.org/time-zones and here: https://stackoverflow.com/a/54500197'
+    '\nUsage: `sbr-time` or `sbr-time [region/continent/country]/[city/town]`' +
+    '\nAll allowed timezones are here: https://www.iana.org/time-zones and here: https://stackoverflow.com/a/54500197'
     ,
     execute(message, args, Discord, currentDate, currentDateISO) {
         let epoch = new Date().getTime()

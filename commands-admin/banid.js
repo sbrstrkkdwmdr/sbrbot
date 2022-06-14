@@ -3,7 +3,7 @@ const { adminlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'banid',
-    description: '',
+    description: 'just use ban',
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
         fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')
         if(message.member.permissions.has('BAN_MEMBERS')){

@@ -2,7 +2,11 @@ const { adminlogdir } = require('../logconfig.json')
 const fs = require('fs')
 module.exports = {
     name: 'gleave',
-    description: '',
+    description: 
+    'Makes the bot leave a guild/server' + 
+    '\nUsage: `/guildleave guildid:[id]`' 
+    //'Aliases:'
+    ,
     execute(interaction, options, client, Discord, currentDate, currentDateISO) {
         let idofguild = options.getNumber('guildid')
         fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')

@@ -4,7 +4,7 @@ module.exports = {
     name: 'roll',
     description: 
     'Returns a random number between 0 and 100. the maximum value can be changed' + 
-    'Usage: `sbr-roll` or `sbr-roll [number]`',
+    '\nUsage: `sbr-roll` or `sbr-roll [number]`',
     execute(message, args, currentDate, currentDateISO) {
         if (message.member.permissions.has('SEND_MESSAGES')) {
             fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')

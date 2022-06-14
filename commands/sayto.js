@@ -4,7 +4,7 @@ module.exports = {
     name: 'sayto',
     description:
     'Says the args given to a set channel' + 
-    'Usage: `sbr-say [channel id] [text]`',
+    '\nUsage: `sbr-say [channel id] [text]`',
     execute(owners, client, message, args, currentDate, currentDateISO) {
         if(owners.some(v => (message.author.id.toString()).includes(v))){
         try{const sendtochannelget = args[0];

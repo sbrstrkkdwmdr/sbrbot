@@ -6,7 +6,7 @@ module.exports = {
     name: 'ytsearch',
     description:
         'Uses the YouTube api to return a youtube search' +
-        'Usage: `sbr-ytsearch [query]`',
+        '\nUsage: `sbr-ytsearch [query]`',
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
         fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
         try {
@@ -47,7 +47,7 @@ module.exports = {
                             `\nPublished by [${creator}](${creatorurl})` +
                             `\n${date}` +
                             `\nDuration: ${length}  (${searchvid[i].seconds}s)` +
-                            `\nVideo Description: \`${description}\`` + 
+                            `\nVideo Description: \`${description}\`` +
                             `\n\n`
                     }
                     if (curtxt == '') {

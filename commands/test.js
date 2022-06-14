@@ -2,7 +2,7 @@ const fs = require('fs')
 const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'test',
-    description: '',
+    description: 'e',
     execute(message, args, currentDate, currentDateISO) {
         message.channel.send("there's a test?")
         fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')

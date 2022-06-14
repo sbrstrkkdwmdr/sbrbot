@@ -2,7 +2,8 @@ const fs = require('fs')
 const { adminlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'serverlist',
-    description: '',
+    description: 'Returns a list of all servers the bot has joined' + 
+    '\nUsage: `/guildlist`',
     execute(interaction, options, client, Discord, currentDate, currentDateISO) {
         fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')
         interaction.reply('getting data...')

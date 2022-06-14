@@ -2,7 +2,7 @@ const fs = require('fs')
 const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'slashtest',
-    description: '',
+    description: 'e',
     execute(interaction, options, client, Discord, currentDate, currentDateISO) {
         fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
         fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)

@@ -3,7 +3,9 @@ const { adminlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'botstatus',
-    description: 'sets the bots status',
+    description: 
+    'Sets the bots status' + 
+    '\nUsage: `sbr-botstatus [0-3] [text]`',
     ownerOnly: true,
 
     execute(message, args, client, Discord, currentDate, currentDateISO) {

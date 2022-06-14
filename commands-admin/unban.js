@@ -2,7 +2,7 @@ const fs = require('fs')
 const { adminlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'unban',
-    description: 'unban',
+    description: 'Unbans the user based on id' + '\nUsage: `sbr-unban [id]`',
     async execute(message, args, currentDate, currentDateISO) {
         fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')
         if(message.member.permissions.has('BAN_MEMBERS')){

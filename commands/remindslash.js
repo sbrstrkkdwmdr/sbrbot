@@ -6,7 +6,7 @@ module.exports = {
     category: "utility",
     description:
         'Sets a reminder to send in a set amount of time' +
-        'Usage: `/remind time:[time in d/h/m/s] reminder:[reminder]`',
+        '\nUsage: `/remind time:[time in d/h/m/s] reminder:[reminder]`',
     async execute(interaction, options, client, Discord, currentDate, currentDateISO) {
         fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
         let time = options.getString('time').split(/ +/);

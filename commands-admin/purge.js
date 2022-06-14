@@ -2,7 +2,8 @@ const fs = require('fs')
 const { adminlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'purge',
-    description: 'ERADICATE',
+    description: 'Deletes the specified amount of messages' + 
+    '\nUsage: `sbr-purge [number<100]`',
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
         fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')
         fs.appendFileSync(adminlogdir, "\n" + `${currentDateISO} | ${currentDate}`)

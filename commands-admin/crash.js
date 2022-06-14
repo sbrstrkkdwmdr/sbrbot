@@ -3,7 +3,9 @@ const { adminlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'crash',
-    description: '',
+    description: 
+    'Force crashes the bot' + 
+    '\nUsage: `sbr-crash`',
     execute(message, args, currentDate, currentDateISO) {
         if(message.author.id == '503794887318044675'){
             fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')

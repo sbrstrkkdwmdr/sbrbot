@@ -2,7 +2,7 @@ const fs = require('fs')
 const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: 'WIP',
-    description: '',
+    description: 'w',
     execute(message, args, currentDate, currentDateISO) {
         message.channel.send("the current command is unavailable")
         fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')

@@ -3,6 +3,7 @@ const { adminlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'guildid',
+    description: 'WIP',
     execute(message, args, currentDate, currentDateISO) {
         message.channel.send("WIP")
         fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')

@@ -4,7 +4,7 @@ module.exports = {
     name: 'say',
     description: 
     'Says the args given' + 
-    'Usage: `sbr-say [message]`',
+    '\nUsage: `sbr-say [message]`',
     execute(owners, message, args, currentDate, currentDateISO) {
         if(!owners.some(v => (message.author.id.toString()).includes(v))){
             message.delete();

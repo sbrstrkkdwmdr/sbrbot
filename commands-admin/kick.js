@@ -3,7 +3,8 @@ const { adminlogdir } = require('../logconfig.json')
 const fs = require('fs')
 module.exports = {
     name: 'kick',
-    description: '',
+    description: 'Kicks the mentioned user' + 
+    '\nUsage: `sbr-kick <@id>`',
     execute(message, args, client, Discord, currentDate, currentDateISO) {
         if (message.member.permissions.has('KICK_MEMBERS')) {
             fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')

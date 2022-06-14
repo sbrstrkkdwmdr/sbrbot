@@ -3,7 +3,7 @@ const { adminlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'refresh',
-    description: '',
+    description: 'turns the bot off then back on again. WIP',
     execute(message, args, currentDate, currentDateISO) {
         fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')
         if(message.author.id == '503794887318044675'){

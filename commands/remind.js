@@ -4,8 +4,9 @@ const { otherlogdir } = require('../logconfig.json')
 module.exports = {
     name: "remind",
     category: "utility",
-    description: 'Sets a reminder to send in a set amount of time' +
-        'Usage: `sbr-remind [time in d/h/m/s] [reminder]`',
+    description:
+        'Sets a reminder to send in a set amount of time' +
+        '\nUsage: `sbr-remind [time in d/h/m/s] [reminder]`',
     async execute(message, args, client, Discord, currentDate, currentDateISO) {
         fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
         let time = args[0];

@@ -3,7 +3,7 @@ const { adminlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'auto',
-    description: '',
+    description: 'no description',
     execute(message, args, currentDate, currentDateISO) {
         if(message.author.id == '503794887318044675'){
             message.reply("success")

@@ -3,7 +3,10 @@ const { adminlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'debugget',
-    description: 'debug files',
+    description: 
+    'Returns debug files' + 
+    '\nUsage: `sbr-debugget [name.json]`' + 
+    '\nExample: `sbr-debugget rs.json`',
     //ownerOnly: true,
 
     execute(message, args, client, Discord, currentDate, currentDateISO) {

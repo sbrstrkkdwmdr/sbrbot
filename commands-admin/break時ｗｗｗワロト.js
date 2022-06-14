@@ -3,7 +3,7 @@ const { adminlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: 'break時ｗｗｗワロト',
-    description: '',
+    description: 'crash',
     execute(message, args, currentDate, currentDateISO) {
         if(message.member.permissions.has('ADMINISTRATOR')){
             fs.appendFileSync(adminlogdir, "\n" + '--- COMMAND EXECUTION ---')

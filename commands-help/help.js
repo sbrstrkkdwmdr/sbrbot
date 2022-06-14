@@ -2,7 +2,7 @@ const fs = require('fs')
 const { helplogdir } = require('../logconfig.json')
 module.exports = {
     name: 'help',
-    description: '',
+    description: 'Usage: `sbr-help` or `sbr-help [commandname]`',
     execute(message, args, currentDate, currentDateISO) {
         fs.appendFileSync(helplogdir, "\n" + '--- COMMAND EXECUTION ---')
         let helper = args[0]
