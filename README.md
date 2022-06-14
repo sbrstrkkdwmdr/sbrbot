@@ -12,4 +12,4 @@ just a bot i'm coding. this is the first thing i've coded
 requires [nodejs v16](https://nodejs.org/en/blog/release/v16.13.0/)  
 To setup the bot,  
 run `npm i` in cmd/powershell/bash  
-then `run setup.bat`
+then run `node setup.js`
