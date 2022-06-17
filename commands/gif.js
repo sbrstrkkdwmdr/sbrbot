@@ -109,6 +109,9 @@ module.exports = {
                 case 14:
                     url = 'https://media.discordapp.net/attachments/894054954661204009/956769254269648917/lil-nas-x-pregnant.gif' //lil nas x pregnant
                     break;
+                case 15:
+                    url = 'https://cdn.discordapp.com/attachments/724514625005158403/986254595179286548/20220612_194813.jpg' //monogatari girl
+                    break;
                 default:
                     url = 'err'
                     break;
