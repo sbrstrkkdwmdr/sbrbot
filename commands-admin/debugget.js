@@ -1,5 +1,6 @@
 const fs = require("fs");
 const { adminlogdir } = require('../logconfig.json')
+const path = require('path')
 
 module.exports = {
     name: 'debugget',
@@ -18,7 +19,12 @@ module.exports = {
             }
         else {
             //fs.appendFileSync(adminlogdir, "\n" + 'error')
-            message.reply("error - file doesn't exist")
+            let debugdir = fs.readdirSync('debug')
+            let alldebugfiles = debugdir.toString().replaceAll(',', ', ')
+            message.channel.send(
+                'error - file doesn\'t exist' + 
+                `\nAll files:\n${alldebugfiles}`
+            )
         }
         fs.appendFileSync(adminlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
         fs.appendFileSync(adminlogdir, "\n" + "command executed - debug get")
