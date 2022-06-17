@@ -315,7 +315,7 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
                 client.commands.get('infodb').execute(message, args, Discord, currentDate, currentDateISO)
                 break;
             case 'debug':
-                client.admincmds.get('debugget').execute(message, args, Discord, currentDate, currentDateISO)
+                client.admincmds.get('debug').execute(message, args, Discord, currentDate, currentDateISO)
                 break;
 
             case 'delcommand':

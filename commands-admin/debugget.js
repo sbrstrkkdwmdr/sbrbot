@@ -3,7 +3,7 @@ const { adminlogdir } = require('../logconfig.json')
 const path = require('path')
 
 module.exports = {
-    name: 'debugget',
+    name: 'debug',
     description: 
     'Returns debug files' + 
     '\nUsage: `sbr-debugget [name.json]`' + 
@@ -23,7 +23,7 @@ module.exports = {
             let alldebugfiles = debugdir.toString().replaceAll(',', ', ')
             message.channel.send(
                 'error - file doesn\'t exist' + 
-                `\nAll files:\n${alldebugfiles}`
+                `\nAll files:\n\`${alldebugfiles}\``
             )
         }
         fs.appendFileSync(adminlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
