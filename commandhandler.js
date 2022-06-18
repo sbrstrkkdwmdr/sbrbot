@@ -1,13 +1,15 @@
 module.exports =(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
+    const oncooldown = new Set();
+
     client.on('messageCreate', async (message) => {
     
     let currentDate = new Date();
     let currentDateISO = new Date().toISOString();
     
-    const args = message.content.slice(prefix.length).split(/ +/);
+    const args = message.content.slice(config.prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
     
-    if (!message.content.startsWith(prefix)) return; //the return is so if its just prefix nothing happens
+    if (!message.content.startsWith(config.prefix)) return; //the return is so if its just prefix nothing happens
     if (message.author.bot && message.content.includes("You're on cooldown")) {
         setTimeout(() => {
             message.delete();
@@ -28,10 +30,10 @@ module.exports =(userdata, client, Discord, osuApiKey, osuClientID, osuClientSec
     function getTimeLeft(timeout) {
         return Math.ceil((timeout._idleStart + timeout._idleTimeout) / 1000);
     }
-
+    let interaction = null;
     switch(command){
         case 'ping':
-            client.commands.get('ping').execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+            client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
             break;
     }
 

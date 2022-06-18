@@ -185,11 +185,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         //make a variable that is the current date
         let currentDate = new Date()
         let currentDateISO = new Date().toISOString()
+        let message = null;
 
         const { commandName, options } = interaction
         switch (commandName) {
             case 'ping':
-                client.commands.get('ping').execute(client, Discord, interaction, currentDate, currentDateISO)
+                client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'help':
                 client.commands.get('help').execute(client, Discord, interaction, currentDate, currentDateISO)
