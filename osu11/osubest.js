@@ -7,7 +7,7 @@ const fs = require('fs');
 const { exec } = require("child_process");
 const { osulogdir } = require('../logconfig.json')
 const { getStackTrace } = require('../somestuffidk/log')
-
+const { ModIntToString, OrderMods } = require('../calculations/modparse')
 
 module.exports = {
     name: 'osubest',
@@ -61,11 +61,11 @@ module.exports = {
                         .setImage(``)
                     for (i = 0; i < 5; i++) {
                         let bmid = topHiscores[i].beatmap_id
-                        let sc = topHiscores[i].score
+                        let sc = topHiscores[i].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         let perform = topHiscores[i].pp
                         let modify = topHiscores[i].mods
                         if (modify) {
-                            mods = modify
+                            mods = OrderMods(ModIntToString(modify))
                         } else {
                             mods = ''
                         }
