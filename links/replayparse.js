@@ -9,6 +9,11 @@ const ChartJsImage = require('chartjs-to-image');
 const { linkfetchlogdir } = require('../logconfig.json')
 const { getStackTrace } = require('../somestuffidk/log')
 
+const { doubletimear, halftimear } = require('../calculations/approachrate.js')
+const { easymult, hardrockmult } = require('../calculations/modmultiplier.js')
+const { oddt, odht } = require('../calculations/od.js')
+
+
 module.exports = {
     name: 'replayparse',
     description: 'Parses a replay and returns it\'s information',
@@ -27,14 +32,14 @@ module.exports = {
             let lifebar = replay.life_bar.toString()
             let maphash = replay.beatmapMD5.toString()
             let playername = replay.playerName.toString()
-            let timeset = replay.timestamp 
+            let timeset = replay.timestamp
             let maxcombo = replay.max_combo
             let hit300s = replay.number_300s
             let hit100s = replay.number_100s
             let hit50s = replay.number_50s
             let misses = replay.misses
             let hitkatu = replay.katus
-            let hitgeki= replay.gekis
+            let hitgeki = replay.gekis
             let mods = replay.mods.toString()
             let bettertimeset = replay.timestamp.toString().slice(0, 10);
             let gamemode = replay.gameMode
@@ -52,9 +57,9 @@ module.exports = {
                         fs.writeFileSync("debug/osu.json", JSON.stringify(osudata, null, 2));
                         fs.appendFileSync(linkfetchlogdir, "\n" + "writing data to osu.json")
                         fs.appendFileSync(linkfetchlogdir, "\n" + "")
-                        console.groupEnd()
 
-                        let playerid = JSON.stringify(osudata, ['id']).replaceAll('{', '').replaceAll('"', '').replaceAll('}', '').replaceAll(':', '').replaceAll('id', '');
+
+                        let playerid = osudata.id
 
 
                         const mapurlold = ` https://osu.ppy.sh/api/get_beatmaps?k=${osuapikey}&h=${maphash}`
@@ -161,21 +166,22 @@ module.exports = {
                                         fs.writeFileSync("debug/rsppcalc.json", JSON.stringify(score, null, 2));
                                         //let ppfc = new std_ppv2().setPerformance(score);
                                         //let pp =  new std_ppv2().setPerformance(scorenofc);
+                                        let nontouchmods = mods.replaceAll('TD', '')
                                         if (gamemode == '0') {
-                                            pp = new std_ppv2().setPerformance(scorenofc)
-                                            ppfc = new std_ppv2().setPerformance(score)
+                                            pp = new std_ppv2().setPerformance(scorenofc).setMods(nontouchmods)
+                                            ppfc = new std_ppv2().setPerformance(score).setMods(nontouchmods)
                                         }
                                         if (gamemode == '1') {
-                                            pp = new taiko_ppv2().setPerformance(scorenofc)
-                                            ppfc = new taiko_ppv2().setPerformance(score)
+                                            pp = new taiko_ppv2().setPerformance(scorenofc).setMods(nontouchmods)
+                                            ppfc = new taiko_ppv2().setPerformance(score).setMods(nontouchmods)
                                         }
                                         if (gamemode == '2') {
-                                            pp = new catch_ppv2().setPerformance(scorenofc)
-                                            ppfc = new catch_ppv2().setPerformance(score)
+                                            pp = new catch_ppv2().setPerformance(scorenofc).setMods(nontouchmods)
+                                            ppfc = new catch_ppv2().setPerformance(score).setMods(nontouchmods)
                                         }
                                         if (gamemode == '3') {
-                                            pp = new mania_ppv2().setPerformance(scorenofc)
-                                            ppfc = new mania_ppv2().setPerformance(score)
+                                            pp = new mania_ppv2().setPerformance(scorenofc).setMods(nontouchmods)
+                                            ppfc = new mania_ppv2().setPerformance(score).setMods(nontouchmods)
                                         }
                                         let ppw = await pp.compute();
                                         let ppiffc1 = await ppfc.compute(nochokeacc);
@@ -196,7 +202,7 @@ module.exports = {
                                             pptotalthingy = `${ppww}**pp** FC`
                                         }
                                         modsifthere = ''
-                                        if (!mods.toUpperCase() == 'NM') {
+                                        if (mods.toUpperCase() != 'NM') {
                                             modsifthere = `+${mods}`
                                         }
                                         if (mods.toUpperCase() == 'NM') {
