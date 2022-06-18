@@ -94,6 +94,19 @@ module.exports = {
                     let lastvisyears = Math.trunc(minlastvisreform / 60 / 24 / 30 / 12);
                     let minlastvisredo = (lastvisyears + "y " + lastvismonths + "m " + lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
 
+                    if (lastvisyears < 1) {
+                        minlastvisredo = (lastvismonths + "m " + lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
+                    } //check if under an year
+                    if (lastvismonths < 1) {
+                        minlastvisredo = (lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
+                    } //check if under an month
+                    if (lastvisdays < 1) {
+                        minlastvisredo = (lastvishours + "h " + lastvisminutes + "m");
+                    } //check if under an day
+                    if (lastvishours < 1) {
+                        minlastvisredo = (lastvisminutes + "m");
+                    } //check if under an hour
+
                     if (playerstatus == true) {
                         let Embed = new Discord.MessageEmbed()
                             .setColor(0x6DDAFF)

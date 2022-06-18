@@ -112,18 +112,18 @@ module.exports = {
                     let lastvisyears = Math.trunc(minlastvisreform / 525600); //(60/24/30/12)
                     //fs.appendFileSync(osulogdir, "\n" + minlastvisreform)
                     let minlastvisredo = (lastvisyears + "y " + lastvismonths + "m " + lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
-                    if (lastvishours = 0) {
-                        minlastvisredo = (lastvisminutes + "m");
-                    } //check if under an hour
-                    if (lastvisdays = 0) {
-                        minlastvisredo = (lastvishours + "h " + lastvisminutes + "m");
-                    } //check if under an day
-                    if (lastvismonths = 0) {
-                        minlastvisredo = (lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
-                    } //check if under an month
-                    if (lastvisyears = 0) {
+                    if (lastvisyears < 1) {
                         minlastvisredo = (lastvismonths + "m " + lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
                     } //check if under an year
+                    if (lastvismonths < 1) {
+                        minlastvisredo = (lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
+                    } //check if under an month
+                    if (lastvisdays < 1) {
+                        minlastvisredo = (lastvishours + "h " + lastvisminutes + "m");
+                    } //check if under an day
+                    if (lastvishours < 1) {
+                        minlastvisredo = (lastvisminutes + "m");
+                    } //check if under an hour
 
                     if (playerstatus == true) {
                         let Embed = new Discord.MessageEmbed()
