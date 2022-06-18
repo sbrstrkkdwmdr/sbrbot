@@ -29,7 +29,7 @@ function ModStringToInt(mods) {
         modInt += 256
     }
     if (mods.toUpperCase().includes('NC')) {
-        modInt += 64//512
+        modInt += 512
     }
     if (mods.toUpperCase().includes('FL')) {
         modInt += 1024
@@ -93,6 +93,9 @@ function ModStringToInt(mods) {
     }
     if (mods.toUpperCase().includes('MR')) {
         modInt += 1073741824
+    }
+    if (mods.toUpperCase().includes('NC') && !mods.toUpperCase(mods).includes('DT')) {
+        modInt += 64
     }
     return modInt;
 }

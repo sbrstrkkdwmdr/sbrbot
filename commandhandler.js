@@ -13,7 +13,6 @@ module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osucli
         const linkargs = message.content.split(/ +/); //linkargs are the message content
         const command = args.shift().toLowerCase(); //grabs command
 
-        const owners = ['503794887318044675']
 
         let consoleloguserweeee = message.author
         let currentDate = new Date();
