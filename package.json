@@ -1,11 +1,19 @@
 {
   "name": "sbrbot",
   "version": "1.0.1",
-  "description": "\t",
+  "description": "ww",
   "main": "main.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "sbrstrkkdwmdr",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.8.0",
+    "fs": "^0.0.1-security",
+    "node-fetch": "^2.6.7",
+    "sequelize": "^6.21.0",
+    "sqlite3": "^5.0.8"
+  }
 }
