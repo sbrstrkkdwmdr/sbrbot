@@ -10,9 +10,12 @@
   "author": "sbrstrkkdwmdr",
   "license": "ISC",
   "dependencies": {
+    "booba": "^0.0.15",
     "discord.js": "^13.8.0",
     "fs": "^0.0.1-security",
     "node-fetch": "^2.6.7",
+    "osu-sr-calculator": "^1.0.13",
+    "osumodcalculator": "^1.0.4",
     "sequelize": "^6.21.0",
     "sqlite3": "^5.0.8"
   }

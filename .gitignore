@@ -2,3 +2,5 @@ config.json
 node_modules/
 osuauth.json
 commands.log
+debugosu/
+prevmap.json

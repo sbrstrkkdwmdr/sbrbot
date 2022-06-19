@@ -167,13 +167,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     commands?.create({
-        name: 'leaveGuild',
+        name: 'leaveguild',
         description: 'Leaves a server',
         options: [
             {
                 name: 'guild',
                 description: 'The server to leave',
-                type: Constants.ApplicationCommandOptionTypes.GUILD,
+                type: Constants.ApplicationCommandOptionTypes.INTEGER,
                 required: true,
             }
         ]
@@ -193,35 +193,35 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'help':
-                client.commands.get('help').execute(client, Discord, interaction, currentDate, currentDateISO)
+                client.commands.get('help').execute(message, client, Discord, interaction, currentDate, currentDateISO)
                 break;
             case 'osu':
-                client.osucmds.get('osu').execute(client, Discord, interaction, currentDate, currentDateISO, osuApiKey, osuClientID, osuClientSecret)
+                client.osucmds.get('osu').execute(message, client, Discord, interaction, currentDate, currentDateISO, config)
 
                 break;
             case 'osuset':
-                client.osucmds.get('osuset').execute(client, Discord, interaction, currentDate, currentDateISO, osuApiKey, osuClientID, osuClientSecret)
+                client.osucmds.get('osuset').execute(message, client, Discord, interaction, currentDate, currentDateISO, config)
                 break;
             case 'osutop':
-                client.osucmds.get('osutop').execute(client, Discord, interaction, currentDate, currentDateISO, osuApiKey, osuClientID, osuClientSecret)
+                client.osucmds.get('osutop').execute(message, client, Discord, interaction, currentDate, currentDateISO, config)
                 break;
             case 'map':
-                client.osucmds.get('map').execute(client, Discord, interaction, currentDate, currentDateISO, osuApiKey, osuClientID, osuClientSecret)
+                client.osucmds.get('map').execute(message, client, Discord, interaction, currentDate, currentDateISO, config)
                 break;
             case 'rs':
-                client.osucmds.get('rs').execute(client, Discord, interaction, currentDate, currentDateISO, osuApiKey, osuClientID, osuClientSecret)
+                client.osucmds.get('rs').execute(message, client, Discord, interaction, currentDate, currentDateISO, config)
                 break;
             case 'mapscores':
-                client.osucmds.get('mapscores').execute(client, Discord, interaction, currentDate, currentDateISO, osuApiKey, osuClientID, osuClientSecret)
+                client.osucmds.get('mapscores').execute(message, client, Discord, interaction, currentDate, currentDateISO, config)
                 break;
             case 'checkperms':
-                client.admincmds.get('checkperms').execute(client, Discord, interaction, currentDate, currentDateISO)
+                client.admincmds.get('checkperms').execute(message, client, Discord, interaction, currentDate, currentDateISO)
                 break;
             case 'servers':
-                client.admincmds.get('servers').execute(client, Discord, interaction, currentDate, currentDateISO)
+                client.admincmds.get('servers').execute(message, client, Discord, interaction, currentDate, currentDateISO)
                 break;
-            case 'leaveGuild':
-                client.admincmds.get('leaveGuild').execute(client, Discord, interaction, currentDate, currentDateISO)
+            case 'leaveguild':
+                client.admincmds.get('leaveguild').execute(message, client, Discord, interaction, currentDate, currentDateISO)
                 break;
             default:
                 interaction.reply({content: 'Command not found', ephemeral: true})
