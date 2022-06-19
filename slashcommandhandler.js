@@ -186,6 +186,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let currentDate = new Date()
         let currentDateISO = new Date().toISOString()
         let message = null;
+        let args = null
 
         const { commandName, options } = interaction
         switch (commandName) {
@@ -196,23 +197,23 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.commands.get('help').execute(message, client, Discord, interaction, currentDate, currentDateISO)
                 break;
             case 'osu':
-                client.osucmds.get('osu').execute(message, client, Discord, interaction, currentDate, currentDateISO, config)
+                client.osucmds.get('osu').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
 
                 break;
             case 'osuset':
-                client.osucmds.get('osuset').execute(message, client, Discord, interaction, currentDate, currentDateISO, config)
+                client.osucmds.get('osuset').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'osutop':
-                client.osucmds.get('osutop').execute(message, client, Discord, interaction, currentDate, currentDateISO, config)
+                client.osucmds.get('osutop').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'map':
-                client.osucmds.get('map').execute(message, client, Discord, interaction, currentDate, currentDateISO, config)
+                client.osucmds.get('map').execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config)
                 break;
             case 'rs':
-                client.osucmds.get('rs').execute(message, client, Discord, interaction, currentDate, currentDateISO, config)
+                client.osucmds.get('rs').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'mapscores':
-                client.osucmds.get('mapscores').execute(message, client, Discord, interaction, currentDate, currentDateISO, config)
+                client.osucmds.get('mapscores').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'checkperms':
                 client.admincmds.get('checkperms').execute(message, client, Discord, interaction, currentDate, currentDateISO)

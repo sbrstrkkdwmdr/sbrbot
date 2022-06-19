@@ -84,6 +84,16 @@ client.once('ready', () => {
     linkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     slashcommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
+    client.user.setPresence({
+        activities: [{
+            name: "you",
+            type: 'WATCHING',
+            url: 'https://youtube.com/saberstrkkdwmdr',
+        }],
+        status: `dnd`,
+        afk: 'false'
+    });
+
 })
 client.login(token)
 fetch('https://osu.ppy.sh/oauth/token', {
