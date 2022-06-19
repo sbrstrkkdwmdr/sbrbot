@@ -51,7 +51,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'user',
                 description: 'The user to display the profile of',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                required: true,
+                required: false,
             }
         ]
     })
