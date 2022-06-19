@@ -40,7 +40,7 @@ module.exports = {
                 mapmods = 'NM';
             }
             else {
-                mapmods = osucalc.toUpperCase().OrderMods(mapmods);
+                mapmods = osucalc.OrderMods(mapmods.toUpperCase());
             }
             //interaction.reply('Fetching map info...');
             
@@ -96,8 +96,8 @@ module.exports = {
                     }
                     //dt only
                     if (mapmods.includes('DT') || mapmods.includes('NC') && (!mapmods.includes('HR')) && (!mapmods.includes('EZ')) && (!mapmods.includes('HT'))) {
-                        ar = osucalc.DoubleTimeAR(ar)
-                        od = osucalc.odDT(od)
+                        ar = (osucalc.DoubleTimeAR(ar)).ar
+                        od = (osucalc.odDT(od)).od_num
                         bpm = (bpm * 1.5).toFixed(2)
 
                         maphitmins = Math.floor((maphitonly / 1.5) / 60)
@@ -110,8 +110,8 @@ module.exports = {
                     }
                     //ht only
                     if (mapmods.includes('HT') && (!mapmods.includes('DT')) && (!mapmods.includes('NC')) && (!mapmods.includes('HR')) && (!mapmods.includes('EZ'))) {
-                        ar = osucalc.HalfTimeAR(ar)
-                        od = osucalc.odHT(od)
+                        ar = osucalc.HalfTimeAR(ar).ar
+                        od = osucalc.odHT(od).od_num
                         bpm = (bpm * 0.75).toFixed(2)
 
                         maphitmins = Math.floor((maphitonly / 0.75) / 60)
@@ -142,8 +142,8 @@ module.exports = {
                     if (mapmods.includes('EZ') && (mapmods.includes('DT') || !mapmods.includes('NC')) && (!mapmods.includes('HR')) && (!mapmods.includes('HT'))) {
                         let toeasy = osucalc.toEZ(cs, ar, od, hp)
                         cs = toeasy.cs
-                        ar = osucalc.DoubleTimeAR(toeasy.ar)
-                        od = osucalc.odDT(toeasy.od)
+                        ar = osucalc.DoubleTimeAR(toeasy.ar).ar
+                        od = osucalc.odDT(toeasy.od).od_num
                         hp = toeasy.hp
                         bpm = (bpm * 1.5).toFixed(2)
                         maphitmins = Math.floor((maphitonly / 1.5) / 60)
@@ -158,8 +158,8 @@ module.exports = {
                     if (mapmods.includes('EZ') && mapmods.includes('HT') && !mapmods.includes('DT') && (!mapmods.includes('HR')) && (!mapmods.includes('NC'))) {
                         let toeasy = osucalc.toEZ(cs, ar, od, hp)
                         cs = toeasy.cs
-                        ar = osucalc.HalfTimeAR(toeasy.ar)
-                        od = osucalc.odHT(toeasy.od)
+                        ar = osucalc.HalfTimeAR(toeasy.ar).ar
+                        od = osucalc.odHT(toeasy.od).od_num
                         hp = toeasy.hp
                         bpm = (bpm * 0.75).toFixed(2)
                         maphitmins = Math.floor((maphitonly / 0.75) / 60)
@@ -175,8 +175,8 @@ module.exports = {
                     if (mapmods.includes('HR') && (mapmods.includes('DT') || mapmods.includes('NC')) && !mapmods.includes('EZ') && (!mapmods.includes('HT'))) {
                         let tohardrock = osucalc.toHR(cs, ar, od, hp)
                         cs = tohardrock.cs
-                        ar = osucalc.DoubleTimeAR(tohardrock.ar)
-                        od = osucalc.odDT(tohardrock.od)
+                        ar = osucalc.DoubleTimeAR(tohardrock.ar).ar
+                        od = osucalc.odDT(tohardrock.od).od_num
                         hp = tohardrock.hp
                         bpm = (bpm * 1.5).toFixed(2)
 
@@ -192,8 +192,8 @@ module.exports = {
                     if (mapmods.includes('HR') && mapmods.includes('HT') && !mapmods.includes('DT') && !mapmods.includes('EZ') && (!mapmods.includes('NC'))) {
                         let tohardrock = osucalc.toHR(cs, ar, od, hp)
                         cs = tohardrock.cs
-                        ar = osucalc.HalfTimeAR(tohardrock.ar)
-                        od = osucalc.odHT(tohardrock.od)
+                        ar = osucalc.HalfTimeAR(tohardrock.ar).ar
+                        od = osucalc.odHT(tohardrock.od).od_num
                         hp = tohardrock.hp
                         bpm = (bpm * 0.75).toFixed(2)
 
@@ -311,7 +311,7 @@ module.exports = {
                                     )
                                     .addField(
                                         "**PP**",
-                                        `SS: ${ppComputedString}pp \n 95:${pp95ComputedString}pp \n` +
+                                        `SS: ${ppComputedString}pp \n 95: ${pp95ComputedString}pp \n` +
                                         `${modissue}`,
                                         true
                                     )
