@@ -196,9 +196,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'help':
                 client.commands.get('help').execute(message, client, Discord, interaction, currentDate, currentDateISO)
                 break;
+
             case 'osu':
                 client.osucmds.get('osu').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
-
                 break;
             case 'osuset':
                 client.osucmds.get('osuset').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
@@ -210,11 +210,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.osucmds.get('map').execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config)
                 break;
             case 'rs':
-                client.osucmds.get('rs').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'mapscores':
                 client.osucmds.get('mapscores').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
+
             case 'checkperms':
                 client.admincmds.get('checkperms').execute(message, client, Discord, interaction, currentDate, currentDateISO)
                 break;
@@ -225,9 +226,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.admincmds.get('leaveguild').execute(message, client, Discord, interaction, currentDate, currentDateISO)
                 break;
             default:
-                interaction.reply({content: 'Command not found', ephemeral: true})
+                interaction.reply({ content: 'Command not found', ephemeral: true })
                 break;
-            }
+        }
     })
 
 }
