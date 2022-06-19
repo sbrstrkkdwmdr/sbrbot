@@ -246,7 +246,7 @@ module.exports = {
                         let fixedmods = mapmods.replace('TD', '')
                         let modissue = ''
                         if (mapmods.includes('TD')) {
-                            modissue = 'calculations aren\'t supported for TD'
+                            modissue = '\ncalculations aren\'t supported for TD'
                         }
 
                         let pp = new ppcalc.std_ppv2().setPerformance(score).setMods(fixedmods);
