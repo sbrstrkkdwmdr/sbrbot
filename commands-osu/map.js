@@ -649,7 +649,7 @@ module.exports = {
                                         `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapid})`,
                                         true
                                     )
-                                    interaction.editReply({ content: "⠀", embeds: [Embed] });
+=                                    interaction.editReply({ content: "⠀", embeds: [Embed] });
                                     fs.appendFileSync('./commands.log', `\n command success!\n\n`)
                             })
                     })();

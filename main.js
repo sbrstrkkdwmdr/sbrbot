@@ -70,7 +70,7 @@ const userdata = sequelize.define('userdata', {
         type: Sequelize.INTEGER,
         unique: true
     },
-    description: Sequelize.TEXT,
+    osuname: Sequelize.TEXT,
     mode: {
         type: Sequelize.STRING,
         defaultValue: 'osu',

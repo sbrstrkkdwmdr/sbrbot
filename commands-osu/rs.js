@@ -19,8 +19,8 @@ module.exports = {
                 if (findname == null) {
                     return message.reply('Error - no username found')
                 } else {
-                    user = findname.get('description')
-                    if (user.isEmpty()) {
+                    user = findname.get('osuname')
+                    if (user.length < 1) {
                         return message.reply('Error - no username found')
                     }
                 }
@@ -31,7 +31,7 @@ module.exports = {
                     mode = 'osu'
                 } else {
                     mode = findname.get('mode')
-                    if (mode.isEmpty()) {
+                    if (mode.length < 1) {
                         mode = 'osu'
                     }
                 }
@@ -273,8 +273,8 @@ module.exports = {
                 if (findname == null) {
                     return interaction.reply('Error - no username found')
                 } else {
-                    user = findname.get('description')
-                    if (user.isEmpty()) {
+                    user = findname.get('osuname')
+                    if (user.length < 1) {
                         return interaction.reply('Error - no username found')
                     }
                 }
@@ -285,7 +285,7 @@ module.exports = {
                     mode = 'osu'
                 } else {
                     mode = findname.get('mode')
-                    if (mode.isEmpty()) {
+                    if (mode.length < 1) {
                         mode = 'osu'
                     }
                 }

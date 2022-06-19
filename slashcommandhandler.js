@@ -69,8 +69,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'mode',
                 description: 'The mode to set the profile to',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                required: false,
-
+                required: true,
+                choices: modeopts
             }
         ]
     })
@@ -89,6 +89,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The mode to display the top plays of',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: false,
+                choices: modeopts
             },
             {
                 name: 'sort',
@@ -201,7 +202,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.osucmds.get('osu').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'osuset':
-                client.osucmds.get('osuset').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                client.osucmds.get('osuset').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'osutop':
                 client.osucmds.get('osutop').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)

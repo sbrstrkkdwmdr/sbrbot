@@ -4,3 +4,4 @@ osuauth.json
 commands.log
 debugosu/
 prevmap.json
+*.sqlite
