@@ -6,29 +6,30 @@ module.exports = {
         let fullCommandList = new Discord.MessageEmbed()
             .setColor('#0099ff')
             .setTitle('Command List')
+            .setDescription('use `/help <command>` to get more info on a command')
             .addField('Main commands',
                 `**ping** - Displays the bot's ping\n` +
                 `**help** - Displays this message\n`
                 , false)
             .addField('osu! commands',
-                `**osu** \`[user (integer/string, optional)]\`- displays a user's profile\n` +
-                `**osuset** \`[user (integer/string, required)] [mode (string, optional)]\` - sets your osu! username\n` +
-                `**osutop** \`[user (integer/string, optional)] [mode (string, optional)] [sort (string, optional)] [page (integer, optional)] [mapper (string, optional)] [detailed (boolean, optional)]\` - displays the user's top plays\n` +
-                `**map** \`[id (integer, optional)] [mods (string, optional)]\` - displays the map info for a beatmap\n` +
-                `**rs** \`[user (integer/string, optional)] [mode (string, optional)] [offset (integer, optional)]\`  - displays the most recent score for the user\n` +
-                `**scores** \`[user (integer/string, optional)] [id (integer, optional)] [sort (string, optional)]\` - displays the users scores for a given beatmap`
+                `**osu** \`[user (optional)]\`- displays a user's profile\n` +
+                `**osuset** \`[user (required)] [mode (optional)]\` - sets your osu! username\n` +
+                `**osutop** \`[user (optional)] [mode (optional)] [sort (optional)] [page (optional)] [mapper (optional)] [detailed (booleanoptional)]\` - displays the user's top plays\n` +
+                `**map** \`[id (optional)] [mods (optional)]\` - displays the map info for a beatmap\n` +
+                `**rs** \`[user (optional)] [mode (optional)] [offset (optional)]\`  - displays the most recent score for the user\n` +
+                `[WIP]**scores** \`[user (optional)] [id (optional)] [sort (optional)]\` - displays the users scores for a given beatmap`
                 , false)
             .addField('admin commands',
-                '**checkperms** \`[user (user, required)]\` - checks the permissions of a given user\n' +
-                '**leaveguild** \`[guild (integer, required)]\` - leaves a given server\n' +
-                '**servers** - displays all servers the bot is in', false)
+                '[WIP]**checkperms** \`[user (required)]\` - checks the permissions of a given user\n' +
+                '[WIP]**leaveguild** \`[guild (required)]\` - leaves a given server\n' +
+                '[WIP]**servers** - displays all servers the bot is in', false)
             .addField('other commands',
-                '**gif** \`[type (string, required)]\` - displays a gif of a given type\n' +
-                '**ytsearch** \`[query (string, required)]\` - searches youtube for a given query\n' +
-                '**imagesearch** \`[query (string, required)]\` - searches google images for a given query\n' +
-                '**remind** \`[reminder (string, required)] [time (string, required)]\` - creates a reminder\n' +
-                '**math** \`[expression (string, required)]\` - evaluates a math expression\n' +
-                '**convert** \`[value (string, required)] [from (string, required)] [to (string, required)]\` - converts a value from one unit to another\n', false
+                '[WIP]**gif** \`[type (required)]\` - displays a gif of a given type\n' +
+                '[WIP]**ytsearch** \`[query (required)]\` - searches youtube for a given query\n' +
+                '[WIP]**imagesearch** \`[query (required)]\` - searches google images for a given query\n' +
+                '[WIP]**remind** \`[reminder (required)] [time (required)]\` - creates a reminder\n' +
+                '[WIP]**math** \`[expression (required)]\` - evaluates a math expression\n' +
+                '[WIP]**convert** \`[value (required)] [from (required)] [to (required)]\` - converts a value from one unit to another\n', false
             )
 
 
