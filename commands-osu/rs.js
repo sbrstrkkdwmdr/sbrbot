@@ -60,6 +60,8 @@ module.exports = {
                     }).then(res => res.json())
                         .then(rsdata => {
                             try {
+                                fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata))
+
                                 let hittime = rsdata[0].beatmap.hit_length
                                 let hitseconds = (hittime % 60)
                                 let hitminutes = Math.floor(hittime / 60)
@@ -250,7 +252,7 @@ module.exports = {
                                             `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x`, true)
                                         .addField('PP',
                                             `**${rspp}**pp \n${fcflag}`, true);
-                                            message.reply({ content: '⠀', embeds: [Embed] })
+                                    message.reply({ content: '⠀', embeds: [Embed] })
 
                                 })();
                             } catch (error) {
@@ -322,6 +324,8 @@ module.exports = {
                     }).then(res => res.json())
                         .then(rsdata => {
                             try {
+                                fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata))
+
                                 let hittime = rsdata[0].beatmap.hit_length
                                 let hitseconds = (hittime % 60)
                                 let hitminutes = Math.floor(hittime / 60)
