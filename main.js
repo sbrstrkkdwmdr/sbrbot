@@ -86,7 +86,7 @@ client.once('ready', () => {
 
     client.user.setPresence({
         activities: [{
-            name: "you",
+            name: "you | currently being rewritten",
             type: 'WATCHING',
             url: 'https://youtube.com/saberstrkkdwmdr',
         }],

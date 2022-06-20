@@ -21,7 +21,7 @@ module.exports = {
                 prevmap = JSON.parse(fs.readFileSync('./configs/prevmap.json', 'utf8'));
             } catch {
                 console.log('no map in prevmap.json\nCreating default file...')
-                fs.writeFileSync('./configs/prevmap.json', JSON.stringify({ id: 32345 }));
+                fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: 32345 }), null, 2));
             }
         } else {
             return console.log('Error - missing prevmap.json in configs folder');
@@ -63,7 +63,7 @@ module.exports = {
             })
                 .then(res => res.json())
                 .then(json => {
-                    fs.writeFileSync('debugosu/map.json', JSON.stringify(json));
+                    fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
                     
                     try {
                         let mapper = json.beatmapset.creator 
@@ -94,7 +94,7 @@ module.exports = {
                     if (mapstatus == "graveyard" || mapstatus == "pending") {
                         statusimg = "<:statusgraveyard:944512765282897940>";
                     }
-                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify({ id: mapid }));
+                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapid }), null, 2));
 
                     //CALCULATE MODS DETAILES
 
@@ -374,7 +374,7 @@ module.exports = {
             })
                 .then(res => res.json())
                 .then(json => {
-                    fs.writeFileSync('debugosu/map.json', JSON.stringify(json));
+                    fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
 
                     try {
                         let mapper = json.beatmapset.creator 
@@ -404,7 +404,7 @@ module.exports = {
                     if (mapstatus == "graveyard" || mapstatus == "pending") {
                         statusimg = "<:statusgraveyard:944512765282897940>";
                     }
-                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify({ id: mapid }));
+                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapid }), null, 2));
 
                     //CALCULATE MODS DETAILES
 

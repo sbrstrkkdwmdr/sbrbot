@@ -7,7 +7,7 @@ module.exports = {
     description: 'Return information of a user\'s osu! profile',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
-            fs.appendFileSync('./commands.log', `${currentDate} | ${currentDateISO}\n - ${message.author.id} - ${message.content}\n`)
+            fs.appendFileSync('./commands.log', `${currentDate} | ${currentDateISO}\n - ${message.author.id} - osu! profile\n`)
             let user = args.join(' ')
             if (user.length < 1) {
                 findname = await userdata.findOne({ where: { userid: message.author.id } })
@@ -24,7 +24,7 @@ module.exports = {
                 }
             }).then(res => res.json())
                 .then(osudata => {
-                    fs.writeFileSync('debugosu/osu.json', JSON.stringify(osudata))
+                    fs.writeFileSync('debugosu/osu.json', JSON.stringify(osudata, null, 2))
                     try {
                         let osustats = osudata.statistics
                         let grades = osustats.grade_counts
@@ -123,7 +123,7 @@ module.exports = {
         }
 
         if (interaction != null) {
-            fs.appendFileSync('./commands.log', `${currentDate} | ${currentDateISO}\n - ${interaction.member.user.id} - ${interaction}\n`)
+            fs.appendFileSync('./commands.log', `${currentDate} | ${currentDateISO}\n - ${interaction.member.user.id} - osu! profile\n`)
             let user = interaction.options.getString('user')
             if (user == null) {
                 findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
@@ -141,7 +141,7 @@ module.exports = {
                 }
             }).then(res => res.json())
                 .then(osudata => {
-                    fs.writeFileSync('debugosu/osu.json', JSON.stringify(osudata))
+                    fs.writeFileSync('debugosu/osu.json', JSON.stringify(osudata, null, 2))
                     try {
                         let osustats = osudata.statistics
                         let grades = osustats.grade_counts

@@ -60,7 +60,7 @@ module.exports = {
                     }).then(res => res.json())
                         .then(rsdata => {
                             try {
-                                fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata))
+                                fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata, null, 2))
 
                                 let hittime = rsdata[0].beatmap.hit_length
                                 let hitseconds = (hittime % 60)
@@ -324,7 +324,7 @@ module.exports = {
                     }).then(res => res.json())
                         .then(rsdata => {
                             try {
-                                fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata))
+                                fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata, null, 2))
 
                                 let hittime = rsdata[0].beatmap.hit_length
                                 let hitseconds = (hittime % 60)
