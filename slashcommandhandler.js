@@ -199,7 +199,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
 
             case 'osu':
-                client.osucmds.get('osu').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'osuset':
                 client.osucmds.get('osuset').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
@@ -227,7 +227,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.admincmds.get('leaveguild').execute(message, client, Discord, interaction, currentDate, currentDateISO)
                 break;
             default:
-                interaction.reply({ content: 'Command not found', ephemeral: true })
+                interaction.reply({ content: 'Command not found - no longer exists or is currently being rewritten', ephemeral: true })
                 break;
         }
     })
