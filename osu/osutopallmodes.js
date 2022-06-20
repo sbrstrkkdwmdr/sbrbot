@@ -218,19 +218,19 @@ module.exports = {
                                     maxcombo = osutopdata[offsettrue].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                     hitlist = ''
                                     if (pickedmodex == 'osu') {
-                                        hitlist = `**300:** ${map300} **00:** ${map100} **50:** ${map50} **X:** ${mapmiss}`
+                                        hitlist = `**300:** ${map300} **100:** ${map100} **50:** ${map50} **X:** ${mapmiss}`
                                     }
                                     if (pickedmodex == 'taiko') {
-                                        hitlist = `**300(GREAT):** ${map300} **00(GOOD):** ${map100} **X:** ${mapmiss}`
+                                        hitlist = `**300(GREAT):** ${map300} **100(GOOD):** ${map100} **X:** ${mapmiss}`
                                     }
                                     if (pickedmodex == 'fruits') {
-                                        hitlist = `**300:** ${map300} **00(Drops):** ${map100} **50(Droplets):** ${map50} **X:** ${mapmiss}`
+                                        hitlist = `**300:** ${map300} **100(Drops):** ${map100} **50(Droplets):** ${map50} **X:** ${mapmiss}`
                                     }
                                     if (pickedmodex == 'mania') {
-                                        hitlist = `**300+**: ${map300max} **300:** ${map300} **200:** ${map200} **00:** ${map100} **50:** ${map50} **X:** ${mapmiss}`
+                                        hitlist = `**300+**: ${map300max} **300:** ${map300} **200:** ${map200} **100:** ${map100} **50:** ${map50} **X:** ${mapmiss}`
                                     }
                                     mappp = osutopdata[offsettrue].pp
-                                    weightedmappp = osutopdata[offsettrue].weight.pp
+                                    weightedmappp = osutopdata[offsettrue].weight.pp    
                                     weightedpppercent = Math.abs(osutopdata[offsettrue].weight.percentage).toFixed(2)
                                     Embed.addField(`#${offsettrue + 1}`, `**[${maptitle} [${mapdiff}]](https://osu.ppy.sh/b/${mapurl}) ${mapmods}**\n**SCORE:** ${mapscore} | **Combo:** ${maxcombo}\nScore set on ${maptimeset} \n**${mapacc}%** | **${maprank}**\n${hitlist} \n**${(Math.abs(mappp).toFixed(2))}**pp | **${Math.abs(weightedmappp).toFixed(2)}**pp weighted at **${weightedpppercent}**%`, false)
                                 }
