@@ -1,6 +1,11 @@
 module.exports = {
     name: 'gif',
-    description: 'Sends a random gif from the type given',
+    description: 'Sends a random gif from the type given\n' + 
+    'Slash command: `/gif <type>`\n' + 
+    'Command: `sbr-gif [type]`\n' +
+    'Options:\n' + 
+    '⠀⠀`type`: string, required. The type of gif to send.'
+    ,
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
             if (args[0] == null) {

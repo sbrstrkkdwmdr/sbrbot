@@ -5,7 +5,19 @@ const fetch = require('node-fetch')
 
 module.exports = {
     name: 'osutop',
-    description: 'Displays the top plays of the user',
+    description: 'Displays the top plays of the user\n' +
+    'Command: `sbr-osutop <user>`\n' +
+    'Slash Command: `/osutop [user] [mode] [sort] [page] [mapper] [mods] [detailed]`\n' +
+    'Options:\n' +
+    '⠀⠀`user`: string, optional. The user to display the top plays of\n' +
+    '⠀⠀`mode`: string, optional. The mode of the user\n' + 
+    '⠀⠀`sort`: string, optional. Sort plays by this value\n' +
+    '⠀⠀`page`: integer, optional. The page to display the top plays of\n' +
+    '⠀⠀`mapper`: string, optional. Filter the top plays to show maps from this mapper\n' +
+    '⠀⠀`mods`: string, optional. Filter the top plays to show only plays with these mods\n' +
+    '⠀⠀`detailed`: boolean, optional. Whether to display extra details\n'
+    ,
+
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
             fs.appendFileSync('./commands.log', `${currentDate} | ${currentDateISO}\n - ${message.author.id} - osu! profile\n`)

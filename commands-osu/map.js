@@ -6,10 +6,13 @@ const ppcalc = require('booba')
 
 module.exports = {
     name: 'map',
-    description: 'Return information of a map\n' +
-        'Usage: `/map [id] [mods]`\n' +
-        'Example: `/map 123456789`\n' +
-        'Example: `/map 123456789 HDDT`' +
+    description: 
+        'Returns the information of a map\n' +
+        'Command: `sbr-map <id> <mods>`\n' +
+        'Slash command: `/map [id] [mods]`\n' +
+        'Options:\n' +
+        '⠀⠀`id`: integer, optional. the id of the beatmap\n' +
+        '⠀⠀`mods`: string, optional. the mods of the beatmap\n' +
         'If no map id is provided, the most recent map will be used'
     ,
     execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config) {

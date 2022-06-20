@@ -1,6 +1,11 @@
 module.exports = {
     name: 'osuset',
-    description: 'Sets the osu! username of the user',
+    description: 'Sets the osu! username of the user\n' + 
+    'Command: `sbr-osuset <username>`\n' +
+    'Slash Command: `/osuset [username] [mode]`\n' + 
+    'Options:\n' +
+    '⠀⠀`username`: string, required. The osu! username of the user\n' +
+    '⠀⠀`mode`: string, optional. The mode of the user. If omitted, the default mode \'osu\' will be used.\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) { }
 

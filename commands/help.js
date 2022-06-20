@@ -1,6 +1,10 @@
 module.exports = {
     name: 'help',
-    description: 'Displays all commands',
+    description: 'Displays all commands\n' +
+    'Command: `sbr-help`\n' +
+    'Slash command: `/help [command]`\n' +
+    'Options:\n' +
+    '⠀⠀`command` - string, optional. The command to get help for. If omitted, all commands will be displayed.\n',
     execute(message, client, Discord, interaction, currentDate, currentDateISO, config) {
 
         let fullCommandList = new Discord.MessageEmbed()

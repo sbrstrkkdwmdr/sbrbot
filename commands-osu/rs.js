@@ -6,7 +6,13 @@ const fetch = require('node-fetch')
 
 module.exports = {
     name: 'rs',
-    description: 'Displays the most recent score for the user',
+    description: 'Displays the most recent score for the user\n' + 
+    'Command: `sbr-rs <user>`\n' +
+    'Slash command: `/rs [user][page][mode]`\n' + 
+    'Options:\n' +
+    '⠀⠀`user`: The user to display the most recent score of\n' +
+    '⠀⠀`page`: The page to display the most recent score of\n' +
+    '⠀⠀`mode`: The mode to display the most recent score of\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
 

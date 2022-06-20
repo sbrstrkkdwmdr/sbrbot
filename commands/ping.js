@@ -1,7 +1,10 @@
 const fs = require('fs');
 module.exports = {
     name: 'ping',
-    description: 'Pong!',
+    description: 'Pong!\n'+
+    'Command: `sbr-ping`\n' +
+    'Slash command: `/ping`'
+    ,
     execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
             fs.appendFileSync('commands.log', `Event: ping (message command)\nTime: ${currentDate} | ${currentDateISO}`)

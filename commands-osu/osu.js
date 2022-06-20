@@ -4,7 +4,11 @@ const fetch = require('node-fetch');
 
 module.exports = {
     name: 'osu',
-    description: 'Return information of a user\'s osu! profile',
+    description: 'Return information of a user\'s osu! profile\n' + 
+    'Command: `sbr-osu [user]`\n' +
+    'Slash command: `/osu [user]`' + 
+    'Options:\n' + 
+    '⠀⠀`user`: string/integer, optional. The osu! username of the user.',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
             fs.appendFileSync('./commands.log', `${currentDate} | ${currentDateISO}\n - ${message.author.id} - osu! profile\n`)
