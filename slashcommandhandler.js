@@ -96,6 +96,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The sort to display the top plays of',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: false,
+                choices: playsortopts
             },
             {
                 name: 'page',
@@ -106,6 +107,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'mapper',
                 description: 'Filter the top plays to show maps from this mapper',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: false,
+            },
+            {
+                name: 'mods',
+                description: 'Filter the top plays to show only plays with these mods',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: false,
             },
@@ -144,9 +151,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         description: 'Displays the user\'s scores for a set map',
         options: useridsortopts
     })
-
-
-
 
 
     //below are admin related commands
@@ -205,7 +209,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.osucmds.get('osuset').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'osutop':
-                client.osucmds.get('osutop').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'map':
                 client.osucmds.get('map').execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config)

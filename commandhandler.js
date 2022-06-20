@@ -47,9 +47,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'rs':case 'recent':
                 client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'osu':
+            case 'osu':case 'profile':
                 client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+            case 'osutop':case 'top':
+                client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+            break;
         }
 
 
