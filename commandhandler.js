@@ -38,6 +38,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'help':
                 client.commands.get('help').execute(message, client, Discord, interaction, currentDate, currentDateISO);
                 break;
+            case 'gif':
+                client.commands.get('gif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
 
             //osu commands below
 
