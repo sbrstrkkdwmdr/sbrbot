@@ -1,10 +1,10 @@
 module.exports = {
     name: 'help',
     description: 'Displays all commands\n' +
-    'Command: `sbr-help`\n' +
-    'Slash command: `/help [command]`\n' +
-    'Options:\n' +
-    '⠀⠀`command` - string, optional. The command to get help for. If omitted, all commands will be displayed.\n',
+        'Command: `sbr-help`\n' +
+        'Slash command: `/help [command]`\n' +
+        'Options:\n' +
+        '⠀⠀`command` - string, optional. The command to get help for. If omitted, all commands will be displayed.\n',
     execute(message, client, Discord, interaction, currentDate, currentDateISO, config) {
 
         let fullCommandList = new Discord.MessageEmbed()
@@ -45,35 +45,34 @@ module.exports = {
 
         if (interaction != null) {
             let command = interaction.options.getString('command')
+            let commandInfo = new Discord.MessageEmbed()
+                .setColor('#0099ff')
             if (client.commands.get(command)) {
-                let commandInfo = new Discord.MessageEmbed()
-                    .setColor('#0099ff')
-                    .setTitle(client.commands.get(command).name)
-                    .setDescription(client.commands.get(command).description)
-                interaction.reply({ embeds: [commandInfo] })
+
+                commandInfo.setTitle(client.commands.get(command).name)
+                commandInfo.setDescription(client.commands.get(command).description)
+
             } else if (client.osucmds.get(command)) {
-                let commandInfo = new Discord.MessageEmbed()
-                    .setColor('#0099ff')
-                    .setTitle(client.osucmds.get(command).name)
-                    .setDescription(client.osucmds.get(command).description)
-                interaction.reply({ embeds: [commandInfo] })
+
+                commandInfo.setTitle(client.osucmds.get(command).name)
+                commandInfo.setDescription(client.osucmds.get(command).description)
+
             }
             else if (client.admincmds.get(command)) {
-                let commandInfo = new Discord.MessageEmbed()
-                    .setColor('#0099ff')
-                    .setTitle(client.admincmds.get(command).name)
-                    .setDescription(client.admincmds.get(command).description)
-                interaction.reply({ embeds: [commandInfo] })
+
+                commandInfo.setTitle(client.admincmds.get(command).name)
+                commandInfo.setDescription(client.admincmds.get(command).description)
+
             } else if (client.links.get(command)) {
-                let commandInfo = new Discord.MessageEmbed()
-                    .setColor('#0099ff')
-                    .setTitle(client.links.get(command).name)
-                    .setDescription(client.links.get(command).description)
-                interaction.reply({ embeds: [commandInfo] })
+
+                commandInfo.setTitle(client.links.get(command).name)
+                commandInfo.setDescription(client.links.get(command).description)
             }
             else {
-                interaction.reply({ embeds: [fullCommandList] })
+                return interaction.reply({ embeds: [fullCommandList] })
             }
+            interaction.reply({ embeds: [commandInfo] })
+
         }
 
     }
