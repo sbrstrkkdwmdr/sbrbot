@@ -32,6 +32,7 @@ const { prefix, token, osuApiKey, osuClientID, osuClientSecret } = require('./co
 client.commands = new Discord.Collection();
 client.links = new Discord.Collection();
 client.osucmds = new Discord.Collection();
+client.admincmds = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -54,7 +55,7 @@ for (const file of osuFiles) {
 const admincommandFiles = fs.readdirSync('./commands-admin').filter(file => file.endsWith('.js'));
 for (const file of admincommandFiles) {
     const admincommand = require(`./commands-admin/${file}`);
-    client.commands.set(admincommand.name, admincommand);
+    client.admincmds.set(admincommand.name, admincommand);
 }
 
 
