@@ -17,7 +17,7 @@
     "fs": "^0.0.1-security",
     "https": "^1.0.0",
     "node-fetch": "^2.6.7",
-    "osumodcalculator": "^1.0.4",
+    "osumodcalculator": "^1.0.5",
     "osureplayparser": "^1.0.1",
     "sequelize": "^6.21.0",
     "sqlite3": "^5.0.8"
