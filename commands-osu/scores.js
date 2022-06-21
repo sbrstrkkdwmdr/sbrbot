@@ -107,7 +107,7 @@ module.exports = {
                                             let scorestats = score.statistics
                                             let scoremode = score.mode_int
                                             let mods = score.mods
-                                            if (mods != null) {
+                                            if (mods.toString().length != 0) {
                                                 ifmods = '**+' + mods.toString().replaceAll(',', '') + '**'
                                             } else {
                                                 ifmods = ''
@@ -272,7 +272,7 @@ module.exports = {
                                             let scorestats = score.statistics
                                             let scoremode = score.mode_int
                                             let mods = score.mods
-                                            if (mods != null) {
+                                            if (mods.toString().length != 0) {
                                                 ifmods = '**+' + mods.toString().replaceAll(',', '') + '**'
                                             } else {
                                                 ifmods = ''
