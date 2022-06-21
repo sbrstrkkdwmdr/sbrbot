@@ -259,6 +259,7 @@ module.exports = {
                                         .addField('PP',
                                             `**${rspp}**pp \n${fcflag}`, true);
                                     message.reply({ content: '⠀', embeds: [Embed] })
+                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata.beatmap.id }), null, 2));
 
                                 })();
                             } catch (error) {
@@ -523,6 +524,7 @@ module.exports = {
                                         .addField('PP',
                                             `**${rspp}**pp \n${fcflag}`, true);
                                     interaction.editReply({ content: '⠀', embeds: [Embed] })
+                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata.beatmap.id }), null, 2));
 
                                 })();
                             } catch (error) {
