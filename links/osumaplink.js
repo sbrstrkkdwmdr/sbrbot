@@ -29,7 +29,7 @@ module.exports = {
             console.log(error)
             return message.channel.send('Please enter a valid beatmap link.')
         }
-        fs.appendFileSync('link.log', `LINK DETECT EVENT - osu map link\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!map link: ${message.content}\n`, 'utf-8')
+        fs.appendFileSync('link.log', `LINK DETECT EVENT - osumaplink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!map link: ${message.content}\n`, 'utf-8')
 
         let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}`
         fetch(mapurl, {

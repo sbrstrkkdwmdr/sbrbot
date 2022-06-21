@@ -27,7 +27,7 @@ module.exports = {
         }).then(res => res.json())
             .then(scoredata => {
                 fs.writeFileSync('debugosu/scoreparse.json', JSON.stringify(scoredata, null, 2));
-                fs.appendFileSync('link.log', `LINK DETECT EVENT - osu score link\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\n`, 'utf-8')
+                fs.appendFileSync('link.log', `LINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\n`, 'utf-8')
 
                     (async () => {
 

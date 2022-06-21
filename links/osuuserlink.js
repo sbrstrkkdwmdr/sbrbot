@@ -12,7 +12,7 @@ module.exports = {
         if (isNaN(user)) {
             return;
         }
-        fs.appendFileSync('link.log', `LINK DETECT EVENT - osu profile link\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!profile link: ${message.content}\n`, 'utf-8')
+        fs.appendFileSync('link.log', `LINK DETECT EVENT - osuuserlink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!profile link: ${message.content}\n`, 'utf-8')
         const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
         fetch(userurl, {
             headers: {
