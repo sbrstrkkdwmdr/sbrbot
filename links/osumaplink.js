@@ -2,6 +2,7 @@ const fs = require('fs')
 const fetch = require('node-fetch')
 const { access_token } = require('../configs/osuauth.json')
 const ppcalc = require('booba')
+const osucalc = require('osumodcalculator')
 
 
 module.exports = {
@@ -19,12 +20,18 @@ module.exports = {
         try {
             if (messagenohttp.includes('beatmapsets')) {
 
-                id = messagenohttp.split('#')[1].split('/')[1]
+                idfirst = messagenohttp.split('#')[1].split('/')[1]
             }
             else {
                 //make a variable that takes everything after the last '/'
-                id = messagenohttp.split('/')[messagenohttp.split('/').length - 1]
+                idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1]
             }
+            if(isNaN(idfirst)){
+                id = idfirst.split(' ')[0]
+            } else {
+                id = idfirst
+            }
+
         } catch (error) {
             console.log(error)
             return message.channel.send('Please enter a valid beatmap link.')
@@ -72,7 +79,7 @@ module.exports = {
 
             if (((mapmods.includes('DT') || mapmods.includes('NC')) && mapmods.includes('HT') || (mapmods.includes('HR') && mapmods.includes('EZ')))) {
                 setTimeout(() => {
-                    interaction.editReply("invalid mods!")
+                    message.reply("invalid mods!")
                 }, 500)
                 return
             }
