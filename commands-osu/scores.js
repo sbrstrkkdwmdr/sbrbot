@@ -26,6 +26,7 @@ module.exports = {
 
 
         if (message != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - scores (message)\n${currentDate} | ${currentDateISO}\n recieved map scores command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             let id = null
             if (user == null || user.length == 0) {
@@ -166,6 +167,8 @@ module.exports = {
                                     }
                                     Embed.setDescription(scoretxt)
                                     message.reply({ embeds: [Embed] })
+                                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+
                                 })
                         })
                 })
@@ -173,6 +176,7 @@ module.exports = {
         }
 
         if (interaction != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - scores (interaction)\n${currentDate} | ${currentDateISO}\n recieved map scores command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let user = interaction.options.getString('username')
 
             let id = interaction.options.getNumber('id')
@@ -331,6 +335,8 @@ module.exports = {
                                     }
                                     Embed.setDescription(scoretxt)
                                     interaction.reply({ embeds: [Embed] })
+                                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+
                                 })
                         })
                 })

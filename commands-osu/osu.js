@@ -11,7 +11,7 @@ module.exports = {
     '⠀⠀`user`: string/integer, optional. The osu! username of the user.',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
-            fs.appendFileSync('./commands.log', `${currentDate} | ${currentDateISO}\n - ${message.author.id} - osu! profile\n`)
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (message)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             if (user.length < 1) {
                 findname = await userdata.findOne({ where: { userid: message.author.id } })
@@ -120,6 +120,8 @@ module.exports = {
                     `)
 
                         message.reply({ content: '⠀', embeds: [Embed] })
+                        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+
                     } catch (error) {
                         message.reply('no osu! profile found\nNo user found with the name `' + user + '`')
                     }
@@ -127,7 +129,7 @@ module.exports = {
         }
 
         if (interaction != null) {
-            fs.appendFileSync('./commands.log', `${currentDate} | ${currentDateISO}\n - ${interaction.member.user.id} - osu! profile\n`)
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let user = interaction.options.getString('user')
             if (user == null) {
                 findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
@@ -237,6 +239,8 @@ module.exports = {
                     `)
 
                         interaction.reply({ content: '⠀', embeds: [Embed] })
+                        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+
                     } catch (error) {
                         interaction.reply('no osu! profile found\nNo user found with the name `' + user + '`')
                     }

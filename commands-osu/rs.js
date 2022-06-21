@@ -15,6 +15,7 @@ module.exports = {
     '⠀⠀`mode`: The mode to display the most recent score of\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (message)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
             let user = args.join(' ');
             let page = 0
@@ -42,9 +43,6 @@ module.exports = {
                     }
                 }
             }
-
-            //message.reply('Fetching data...')
-            fs.appendFileSync('./commands.log', `${currentDate} | ${currentDateISO} - \n${message.author.tag} - rs - ${user} - ${mode} - ${page}\n`)
 
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
 
@@ -259,6 +257,8 @@ module.exports = {
                                         .addField('PP',
                                             `**${rspp}**pp \n${fcflag}`, true);
                                     message.reply({ content: '⠀', embeds: [Embed] })
+                                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+
                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata.beatmap.id }), null, 2));
 
                                 })();
@@ -309,7 +309,7 @@ module.exports = {
             }
 
             interaction.reply('Fetching data...')
-            fs.appendFileSync('./commands.log', `${currentDate} | ${currentDateISO} - \n${interaction.member.user.username} - ${interaction.commandName} - ${user} - ${mode} - ${page}\n`)
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
 
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
 
@@ -524,6 +524,8 @@ module.exports = {
                                         .addField('PP',
                                             `**${rspp}**pp \n${fcflag}`, true);
                                     interaction.editReply({ content: '⠀', embeds: [Embed] })
+                                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+
                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata.beatmap.id }), null, 2));
 
                                 })();

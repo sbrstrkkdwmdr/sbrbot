@@ -6,21 +6,21 @@ const fetch = require('node-fetch')
 module.exports = {
     name: 'osutop',
     description: 'Displays the top plays of the user\n' +
-    'Command: `sbr-osutop <user>`\n' +
-    'Slash Command: `/osutop [user] [mode] [sort] [page] [mapper] [mods] [detailed]`\n' +
-    'Options:\n' +
-    '⠀⠀`user`: string, optional. The user to display the top plays of\n' +
-    '⠀⠀`mode`: string, optional. The mode of the user\n' + 
-    '⠀⠀`sort`: string, optional. Sort plays by this value\n' +
-    '⠀⠀`page`: integer, optional. The page to display the top plays of\n' +
-    '⠀⠀`mapper`: string, optional. Filter the top plays to show maps from this mapper\n' +
-    '⠀⠀`mods`: string, optional. Filter the top plays to show only plays with these mods\n' +
-    '⠀⠀`detailed`: boolean, optional. Whether to display extra details\n'
+        'Command: `sbr-osutop <user>`\n' +
+        'Slash Command: `/osutop [user] [mode] [sort] [page] [mapper] [mods] [detailed]`\n' +
+        'Options:\n' +
+        '⠀⠀`user`: string, optional. The user to display the top plays of\n' +
+        '⠀⠀`mode`: string, optional. The mode of the user\n' +
+        '⠀⠀`sort`: string, optional. Sort plays by this value\n' +
+        '⠀⠀`page`: integer, optional. The page to display the top plays of\n' +
+        '⠀⠀`mapper`: string, optional. Filter the top plays to show maps from this mapper\n' +
+        '⠀⠀`mods`: string, optional. Filter the top plays to show only plays with these mods\n' +
+        '⠀⠀`detailed`: boolean, optional. Whether to display extra details\n'
     ,
 
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
-            fs.appendFileSync('./commands.log', `${currentDate} | ${currentDateISO}\n - ${message.author.id} - osu! profile\n`)
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (message)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             if (user.length < 1) {
                 findname = await userdata.findOne({ where: { userid: message.author.id } })
@@ -150,6 +150,8 @@ module.exports = {
                                 `, false)
                                 }
                                 message.reply({ content: '⠀', embeds: [topEmbed] })
+                                fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+
                             })
                     } catch (error) {
                         message.reply('user ' + user + ' not found')
@@ -159,7 +161,7 @@ module.exports = {
         }
 
         if (interaction != null) {
-            fs.appendFileSync('./commands.log', `${currentDate} | ${currentDateISO}\n - ${interaction.member.user.id} - osu! profile\n`)
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let user = interaction.options.getString('user')
             if (user == null) {
                 findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
@@ -390,6 +392,8 @@ module.exports = {
                                     ).pop();
                                 }
                                 interaction.reply({ content: '⠀', embeds: [topEmbed] })
+                                fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+
                             })
                     } catch (error) {
                         interaction.reply('user ' + user + ' not found')

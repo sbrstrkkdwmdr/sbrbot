@@ -6,7 +6,7 @@ const ppcalc = require('booba')
 
 module.exports = {
     name: 'map',
-    description: 
+    description:
         'Returns the information of a map\n' +
         'Command: `sbr-map <id> <mods>`\n' +
         'Slash command: `/map [id] [mods]`\n' +
@@ -17,7 +17,6 @@ module.exports = {
     ,
     execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config) {
         //check if file configs/prevmap.json exists
-        fs.appendFileSync('./commands.log', `\n Command requested - get map\n${currentDate} | ${currentDateISO}`, 'utf8');
         if (fs.existsSync('./configs/prevmap.json')) {
             //console.log('hello there')
             try {
@@ -30,18 +29,19 @@ module.exports = {
             return console.log('Error - missing prevmap.json in configs folder');
         }
 
-        if (message != null) { 
+        if (message != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (message)\n${currentDate} | ${currentDateISO}\n recieved get map info command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
             //message.channel.send('Fetching map info...');
             let mapid;
             let mapmods;
 
-            if (!isNaN(args[0])){
+            if (!isNaN(args[0])) {
                 mapid = args[0];
             } else {
                 mapmods = args[0];
             }
-            if(args[1] && isNaN(args[1])){
+            if (args[1] && isNaN(args[1])) {
                 mapmods = args[1];
             }
 
@@ -55,7 +55,7 @@ module.exports = {
                 mapmods = osucalc.OrderMods(mapmods.toUpperCase());
             }
             //interaction.reply('Fetching map info...');
-            
+
             fetch(`https://osu.ppy.sh/api/v2/beatmaps/${mapid}?`, {
                 method: 'GET',
                 headers: {
@@ -69,7 +69,7 @@ module.exports = {
                     fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
 
                     try {
-                        let mapper = json.beatmapset.creator 
+                        let mapper = json.beatmapset.creator
                     } catch (error) {
                         message.channel.send('Error - map not found');
                         return;
@@ -340,13 +340,13 @@ module.exports = {
                                     )
                                     .addField(
                                         "**DOWNLOAD**",
-                                        `[osu!](https://osu.ppy.sh/b/${mapid}) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.io/d/${mapsetlink})\n\n` + 
+                                        `[osu!](https://osu.ppy.sh/b/${mapid}) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.io/d/${mapsetlink})\n\n` +
                                         `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapid})`,
                                         true
                                     )
-                                    console.log('true')
-                                    message.channel.send({embeds: [Embed] });
-                                    fs.appendFileSync('./commands.log', `\n command success!\n\n`)
+                                console.log('true')
+                                message.channel.send({ embeds: [Embed] });
+                                fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                             })
                     })();
 
@@ -355,6 +355,7 @@ module.exports = {
         }
 
         if (interaction != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (interaction)\n${currentDate} | ${currentDateISO}\n recieved get map command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             interaction.reply('Fetching map info...');
             let mapid = interaction.options.getInteger('id');
             let mapmods = interaction.options.getString('mods');
@@ -368,7 +369,7 @@ module.exports = {
                 mapmods = osucalc.OrderMods(mapmods.toUpperCase());
             }
             //interaction.reply('Fetching map info...');
-            
+
             fetch(`https://osu.ppy.sh/api/v2/beatmaps/${mapid}?`, {
                 method: 'GET',
                 headers: {
@@ -382,7 +383,7 @@ module.exports = {
                     fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
 
                     try {
-                        let mapper = json.beatmapset.creator 
+                        let mapper = json.beatmapset.creator
                     } catch (error) {
                         message.channel.send('Error - map not found');
                         return;
@@ -652,12 +653,12 @@ module.exports = {
                                     )
                                     .addField(
                                         "**DOWNLOAD**",
-                                        `[osu!](https://osu.ppy.sh/b/${mapid}) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.io/d/${mapsetlink})\n\n` + 
+                                        `[osu!](https://osu.ppy.sh/b/${mapid}) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.io/d/${mapsetlink})\n\n` +
                                         `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapid})`,
                                         true
                                     )
-=                                    interaction.editReply({ content: "⠀", embeds: [Embed] });
-                                    fs.appendFileSync('./commands.log', `\n command success!\n\n`)
+                                    = interaction.editReply({ content: "⠀", embeds: [Embed] });
+                                fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                             })
                     })();
 
