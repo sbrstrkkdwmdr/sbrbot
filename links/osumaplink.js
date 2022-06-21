@@ -44,6 +44,15 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json()).then(json => {
+            try {
+                let mapper = json.beatmapset.creator
+            } catch (error) {
+                message.channel.send('Error - map not found');
+                return;
+            }
+            fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
+            fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: json.id }), null, 2));
+
             let mapperlink = (`${json.beatmapset.creator}`).replaceAll(' ', '%20');
             let maphitonly = json.hit_length
             let maphitmins = Math.floor(maphitonly / 60)

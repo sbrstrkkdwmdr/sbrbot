@@ -27,6 +27,7 @@ module.exports = {
             }
         }).then(res => res.json()).then(mapdata => {
             fs.writeFileSync('debugosu/replaymap.json', JSON.stringify(mapdata, null, 2))
+            fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
 
             const userurl = `https://osu.ppy.sh/api/v2/users/${replay.playerName}`
 
