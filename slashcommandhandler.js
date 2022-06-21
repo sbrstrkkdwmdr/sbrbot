@@ -220,8 +220,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'rs':
                 client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
-            case 'mapscores':
-                client.osucmds.get('mapscores').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+            case 'scores':
+                client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
 
             case 'checkperms':
