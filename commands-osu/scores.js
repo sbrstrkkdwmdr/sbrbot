@@ -68,10 +68,14 @@ module.exports = {
                             scoredata = scoredataPreSort
                             let sortdata
 
-                            scoredata = scoredataPreSort.scores.sort((a, b) =>
-                                Math.abs(b.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")) -
-                                Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
-                            sortdata = 'Sorted by: Most recent'
+                            try {
+                                scoredata = scoredataPreSort.scores.sort((a, b) =>
+                                    Math.abs(b.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")) -
+                                    Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
+                                sortdata = 'Sorted by: Most recent'
+                            } catch (error) {
+                                return message.reply('Error - no scores found')
+                            }
 
 
 
@@ -223,23 +227,27 @@ module.exports = {
                             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}`
                             scoredata = scoredataPreSort
                             let sortdata = ''
-                            if (sort == 'score') {
-                                scoredata = scoredataPreSort.scores.sort((a, b) => b.score - a.score)
-                                sortdata = 'Sorted by: score'
-                            }
-                            if (sort == 'acc') {
-                                scoredata = scoredataPreSort.scores.sort((a, b) => b.accuracy - a.accuracy)
-                                sortdata = 'Sorted by: accuracy'
-                            }
-                            if (sort == 'pp') {
-                                scoredata = scoredataPreSort.scores.sort((a, b) => b.pp - a.pp)
-                                sortdata = 'Sorted by: pp'
-                            }
-                            if (sort == 'recent') {
-                                scoredata = scoredataPreSort.scores.sort((a, b) =>
-                                    Math.abs(b.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")) -
-                                    Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
-                                sortdata = 'Sorted by: Most recent'
+                            try{
+                                if (sort == 'score') {
+                                    scoredata = scoredataPreSort.scores.sort((a, b) => b.score - a.score)
+                                    sortdata = 'Sorted by: score'
+                                }
+                                if (sort == 'acc') {
+                                    scoredata = scoredataPreSort.scores.sort((a, b) => b.accuracy - a.accuracy)
+                                    sortdata = 'Sorted by: accuracy'
+                                }
+                                if (sort == 'pp') {
+                                    scoredata = scoredataPreSort.scores.sort((a, b) => b.pp - a.pp)
+                                    sortdata = 'Sorted by: pp'
+                                }
+                                if (sort == 'recent') {
+                                    scoredata = scoredataPreSort.scores.sort((a, b) =>
+                                        Math.abs(b.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")) -
+                                        Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
+                                    sortdata = 'Sorted by: Most recent'
+                                }
+                            } catch (error) {
+                                return interaction.reply('Error - no scores found')
                             }
 
 
