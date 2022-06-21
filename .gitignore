@@ -5,3 +5,4 @@ commands.log
 debugosu/
 prevmap.json
 *.sqlite
+*.log
