@@ -225,7 +225,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
 
             case 'checkperms':
-                client.admincmds.get('checkperms').execute(message, client, Discord, interaction, currentDate, currentDateISO)
+                client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'servers':
                 client.admincmds.get('servers').execute(message, client, Discord, interaction, currentDate, currentDateISO)

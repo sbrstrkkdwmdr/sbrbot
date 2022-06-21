@@ -59,6 +59,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'scores':case 'c':
                 client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+
+            //admincmds below
+            case 'checkperms':
+                client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
         }
 
 
