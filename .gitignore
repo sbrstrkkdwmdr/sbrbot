@@ -6,3 +6,4 @@ debugosu/
 prevmap.json
 *.sqlite
 *.log
+files/replay.osr
