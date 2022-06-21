@@ -47,22 +47,28 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'map':
                 client.osucmds.get('map').execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config);
                 break;
-            case 'rs':case 'recent':
+            case 'rs': case 'recent':
                 client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'osu':case 'profile':
+            case 'osu': case 'profile':
                 client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'osutop':case 'top':
+            case 'osutop': case 'top':
                 client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-            break;
-            case 'scores':case 'c':
+                break;
+            case 'scores': case 'c':
                 client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
 
             //admincmds below
-            case 'checkperms':case 'fetchperms':case 'checkpermissions':case 'permissions':
+            case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions':
                 client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'leaveguild': case 'leave':
+                client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'servers':
+                client.admincmds.get('servers').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
         }
 

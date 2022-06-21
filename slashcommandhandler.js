@@ -228,10 +228,10 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'servers':
-                client.admincmds.get('servers').execute(message, client, Discord, interaction, currentDate, currentDateISO)
+                client.admincmds.get('servers').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'leaveguild':
-                client.admincmds.get('leaveguild').execute(message, client, Discord, interaction, currentDate, currentDateISO)
+                client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             default:
                 interaction.reply({ content: 'Command not found - no longer exists or is currently being rewritten', ephemeral: true })
