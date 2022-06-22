@@ -36,7 +36,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'help':
-                client.commands.get('help').execute(message, client, Discord, interaction, currentDate, currentDateISO);
+                client.commands.get('help').execute(message, args, client, Discord, interaction, currentDate, currentDateISO);
                 break;
             case 'gif':
                 client.commands.get('gif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
@@ -44,7 +44,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
             //osu commands below
 
-            case 'map':
+            case 'map': case 'm':
                 client.osucmds.get('map').execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config);
                 break;
             case 'rs': case 'recent':
@@ -61,7 +61,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
 
             //admincmds below
-            case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions':
+            case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
                 client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'leaveguild': case 'leave':

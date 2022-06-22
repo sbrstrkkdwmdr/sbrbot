@@ -199,7 +199,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'help':
-                client.commands.get('help').execute(message, client, Discord, interaction, currentDate, currentDateISO)
+                client.commands.get('help').execute(message, args, client, Discord, interaction, currentDate, currentDateISO)
                 break;
             case 'gif':
                 client.commands.get('gif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
