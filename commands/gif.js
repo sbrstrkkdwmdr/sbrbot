@@ -215,7 +215,7 @@ module.exports = {
             return url;
         }
         function speechbubble() {
-            let randomnum = Math.floor(Math.random() * 20 + 1)
+            let randomnum = Math.floor(Math.random() * 21 + 1)
             let url;
             switch (randomnum) {
                 case 1:
@@ -279,7 +279,7 @@ module.exports = {
                     url = 'https://media.discordapp.net/attachments/960980200613625896/967546422155182130/Untitled2.gif' //touhou1?!?!?
                     break;
                 case 21:
-                    url = ''
+                    url = 'https://cdn.discordapp.com/attachments/724514625005158403/989314110250451004/zanei.png' //zan'ei jumps
                     break;
                 default:
                     url = 'err'
