@@ -41,6 +41,18 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
         ]
     })
+    commands?.create({
+        name: 'image',
+        description: 'Searches the Google API and returns the first five results',
+        options: [
+            {
+                name: 'query',
+                description: 'The parameters for the search',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true
+            }
+        ]
+    })
 
     //below are osu related commands
     commands?.create({
@@ -203,6 +215,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'gif':
                 client.commands.get('gif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                break;
+            case 'image':
+                client.commands.get('image').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
 
             case 'osu':
