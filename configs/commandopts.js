@@ -40,7 +40,7 @@ let skincmdopts = [
 ]
 
 let mathcmdopts = [
-    { name: 'Help', value: 'help' },
+    //{ name: 'Help', value: 'help' },
     { name: 'Square root', value: 'sqrt' },
     { name: 'Square', value: 'square' },
     { name: 'Factorial (!)', value: '!' },
@@ -51,52 +51,64 @@ let mathcmdopts = [
     { name: 'Circumference of a circle', value: 'circumference' },
     { name: 'Area of a circle', value: 'circlearea' },
     { name: 'Length of the hypotenuse (pythagorus theorem)', value: 'pythag' },
-    { name: 'Conversion to scientific notation (significant figures)', value: 'sigfig' }
+    { name: 'Conversion to scientific notation (significant figures)', value: 'sigfig' },
+    { name: 'OD if doubletime', value: 'oddt' },
+    { name: 'OD if halftime', value: 'odht' },
+    { name: 'OD in milliseconds', value: 'odms' },
+    { name: 'Approach rate in milliseconds', value: 'arms' },
+    { name: 'Milliseconds to Approach rate', value: 'msar' },
+    { name: 'Mod integer to string', value: 'modintstring' }
+
+
 ]
 
 let conversionopts = [
+    //https://www.ewh.ieee.org/soc/ias/pub-dept/abbreviation.pdf
+
     //help
     { name: 'Help', value: 'help' },
     { name: 'SI units conversion', value: 'metricprefixes' },
 
     //temp
-    { name: 'Celsius to fahrenheit', value: 'c>f' },
-    { name: 'Celsius to kelvin', value: 'c>k' },
-    { name: 'Celsius to celsius', value: 'bruh' },
+    { name: 'Celsius', value: 'c' },
+    { name: 'Kelvin', value: 'k' },
+    { name: 'Fahrenheit', value: 'f' },
+    //3
 
-    { name: 'Fahrenheit to celsius', value: 'f>c' },
-    { name: 'Fahrenheit to kelvin', value: 'f>k' },
-    { name: 'Fahrenheit to fahrenheit', value: 'bruh' },
-
-    { name: 'Kelvin to celsius', value: 'k>c' },
-    { name: 'Kelvin to fahrenheit', value: 'k>f' },
-    { name: 'Kelvin to kelvin', value: 'bruh' },
-
-
-    //weight in size order
-    //{ name: 'Inches to inches', value: 'bruh' },
-    { name: 'Inches to feet', value: 'in>fe' },
-    { name: 'Inches to metres', value: 'in>m' },
-    { name: 'Inches to miles', value: 'in>mi' },
-
-    { name: 'Feet to inches', value: 'fe>in' },
-    //{ name: 'Feet to feet', value: 'bruh' },
-    { name: 'Feet to metres', value: 'fe>m' },
-    { name: 'Feet to miles', value: 'fe>mi' },
-
-    { name: 'Metres to inches', value: 'm>in' },
-    { name: 'Metres to feet', value: 'm>fe' },
-    //{ name: 'Metres to metres', value: 'bruh' },
-    { name: 'Metres to miles', value: 'm>mi' },
-
-    { name: 'Miles to inches', value: 'mi>in' },
-    { name: 'Miles to feet', value: 'mi>fe' },
-    { name: 'Miles to metres', value: 'mi>m' },
-    //{ name: 'Miles to miles', value: 'bruh' }
+    //distance
+    { name: 'Inches', value: 'in' },
+    { name: 'Feet', value: 'ft' },
+    { name: 'Metres', value: 'm' },
+    { name: 'Miles', value: 'mi' },
+    //4
 
     //time
+    { name: 'Seconds', value: 's' },
+    { name: 'Minutes', value: 'min' },
+    { name: 'Days', value: 'day' },
+    { name: 'Hours', value: 'h' },
+    { name: 'Years', value: 'year' },
+    //5
+
     //volume
-    //mass
+
+    { name: 'Fluid ounce', value: 'floz' }, //US
+    { name: 'Cup', value: 'cup' }, //US
+    { name: 'Pint', value: 'pt' }, //US
+    { name: 'Litre', value: 'l' }, //100cm^3
+    { name: 'Gallon', value: 'gal' }, //US, not imperial
+
+    { name: 'Metres^3', value: 'm3' }, // 10,000vm^3
+
+    //7
+
+    //mass/weight
+    { name: 'Grams', value: 'g' },
+    { name: 'Ounce', value: 'oz' },
+    { name: 'Pound', value: 'lb' },
+    { name: 'Metric Tonne', value: 'ton' }
+    //4
+
 ]
 
 let gifopts = [
@@ -114,7 +126,7 @@ let gifopts = [
     { name: 'compliment', value: 'compliment' },
     { name: 'insult', value: 'insult' },
     { name: 'ratio', value: 'ratio' },
-    { name: 'reaction to that information', value: 'reaction to info'}
+    { name: 'reaction to that information', value: 'reaction to info' }
 ]
 
 

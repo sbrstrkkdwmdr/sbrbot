@@ -98,12 +98,14 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'What to convert the value from',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: true,
+                choices: cmdconfig.conversionopts
             },
             {
                 name: 'type2',
                 description: 'What to convert the value to',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: true,
+                choices: cmdconfig.conversionopts
             },
             {
                 name: 'number',
