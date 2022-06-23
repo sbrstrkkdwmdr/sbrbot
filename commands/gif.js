@@ -122,11 +122,11 @@ module.exports = {
                 let str = args.join(' ')
                 switch (str) {
                     case 'cry about it':
-                        thelink = cryabtit[Math.floor(Math.random() * [cryabtit].length)]
+                        thelink = cryabtit[Math.floor(Math.random() * cryabtit.length)]
                         interaction.channel.send(thelink)
                         break;
                     case 'speech bubble':
-                        thelink = speechbubble[Math.floor(Math.random() * [speechbubble].length)]
+                        thelink = speechbubble[Math.floor(Math.random() * speechbubble.length)]
                         interaction.channel.send(thelink)
                         break;
                     case 'chad speak':
