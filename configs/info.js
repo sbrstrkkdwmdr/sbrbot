@@ -45,6 +45,75 @@ let cmds = [
         usage: 'sbr-ping',
         slashusage: '/ping',
         options: []
+    },
+    {
+        name: 'image',
+        description: 'Searches the Google API and returns the first five results',
+        usage: 'sbr-image <query>',
+        slashusage: '/image [query]',
+        options: [
+            {
+                name: 'query',
+                description: '`string, required`. The parameters for the search'
+            }
+        ]
+    },
+    {
+        name: 'ytsearch',
+        description: 'Searches the YouTube API and returns the first five results',
+        usage: 'sbr-ytsearch <query>',
+        slashusage: '/ytsearch [query]',
+        options: [
+            {
+                name: 'query',
+                description: '`string, required`. The parameters for the search'
+            }
+        ]
+    },
+    {
+        name: 'math',
+        description: 'Solves a simple math problem',
+        usage: 'sbr-math <problem>',
+        slashusage: '/math [type] [num1] [num2]',
+        options: [
+            {
+                name: 'problem',
+                description: '`string, required, message command only`. The math equation to solve i.e `sbr-math 1-2+3/4`'
+            },
+            {
+                name: 'type',
+                description: '`string, required, / command only`. The type of equation to solve '
+            },
+            {
+                name: 'num1',
+                description: '`number, required, / command only`. The first number to use in the equation'
+            },
+            {
+                name: 'num2',
+                description: '`number, optional, / command only`. The second number to use in the equation'
+            }
+        ],
+        aliases: 'solve'
+    },
+    {
+        name: 'convert',
+        description: 'Converts one value to another',
+        usage: 'sbr-convert <type1> <type2> <number>',
+        slashusage: '/convert [type1] [type2] [number]',
+        options: [
+            {
+                name: 'type1',
+                description: '`string, required`. What to convert the value from (ie km)'
+            },
+            {
+                name: 'type2',
+                description: '`string, required`. What to convert the value to (ie miles)'
+            },
+            {
+                name: 'number',
+                description: '`number, required`. The value to convert'
+            }
+        ]
     }
 ]
 
@@ -58,7 +127,7 @@ let osucmds = [
         options: [
             {
                 name: 'title',
-                description: '`string, optional`. The title of the map to search. Must be placed between two "s.'
+                description: '`string, optional, message command only`. The title of the map to search. Must be placed between two "s.'
             },
             {
                 name: 'id',
