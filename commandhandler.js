@@ -53,6 +53,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'convert':
                 client.commands.get('convert').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+            case '8ball':
+                client.commands.get('8ball').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'roll':
+                client.commands.get('roll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
 
             //osu commands below
 

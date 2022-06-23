@@ -22,7 +22,7 @@ module.exports = {
         let embedres = new Discord.MessageEmbed()
             .setDescription('⠀');
         if (message != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - convert (message)\n${currentDate} | ${currentDateISO}\n recieved convert command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             message.reply('Just use the slash command')
             /*             switch (args[0]) {
                 default:
@@ -31,7 +31,7 @@ module.exports = {
             } */
         }
         if (interaction != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - convert (interaction)\n${currentDate} | ${currentDateISO}\n recieved convert command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let cat1 = interaction.options.getString('type1')
             let cat2 = interaction.options.getString('type2')
             let num = interaction.options.getNumber('number')
