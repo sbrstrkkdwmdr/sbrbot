@@ -19,4 +19,22 @@ function exec(cmd, handler = function (error, stdout, stderr) { console.log(stdo
     const childfork = require('child_process');
     return childfork.exec(cmd, handler);
 }
-module.exports = { isOwner, exec }
+function shorten(txt) {
+    if (txt.length > 65) {
+        newtxt = txt.substring(0, 64) + '...'
+    } else {
+        newtxt = txt
+    }
+
+    return newtxt
+}
+function lengthshorten(txt) {
+    if (txt.length > 150) {
+        newtxt = txt.substring(0, 149) + '...'
+    } else {
+        newtxt = txt
+    }
+
+    return newtxt
+}
+module.exports = { isOwner, exec, shorten }
