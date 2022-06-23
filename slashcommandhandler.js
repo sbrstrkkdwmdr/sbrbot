@@ -115,6 +115,22 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
         ]
     })
+    commands?.create({
+        name: '8ball',
+        description: 'Responds to a question',
+    })
+    commands?.create({
+        name: 'roll',
+        description: 'Returns a random number',
+        options: [
+            {
+                name: 'number',
+                description: 'The maximum number to get',
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                required: false
+            }
+        ]
+    })
 
     //below are osu related commands
     commands?.create({
@@ -289,6 +305,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'convert':
                 client.commands.get('convert').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case '8ball':
+                client.commands.get('8ball').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'roll':
+                client.commands.get('roll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
 
             //osu below
