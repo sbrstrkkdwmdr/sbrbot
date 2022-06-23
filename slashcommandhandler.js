@@ -1,6 +1,5 @@
 const { Constants } = require('discord.js');
-const { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts } = require('./configs/commandopts.js')
-
+const cmdconfig = require('./configs/commandopts')
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
     const guildID = config.testGuildID;
     const guild = client.guilds.cache.get(guildID);
@@ -37,7 +36,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The type of gif to send',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: true,
-                choices: gifopts
+                choices: cmdconfig.gifopts
             }
         ]
     })
@@ -61,6 +60,55 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'query',
                 description: 'The parameters for the search',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true
+            }
+        ]
+    })
+    commands?.create({
+        name: 'math',
+        description: 'Solves a simple math problem',
+        options: [
+            {
+                name: 'type',
+                description: 'The parameters for the search',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+                choices: cmdconfig.mathcmdopts
+            },
+            {
+                name: 'num1',
+                description: 'The first number',
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                required: true
+            },
+            {
+                name: 'num2',
+                description: 'The second number',
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                required: false
+            }
+        ]
+    })
+    commands?.create({
+        name: 'convert',
+        description: 'Converts one value to another',
+        options: [
+            {
+                name: 'type1',
+                description: 'What to convert the value from',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+            },
+            {
+                name: 'type2',
+                description: 'What to convert the value to',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+            },
+            {
+                name: 'number',
+                description: 'The value to convert',
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
                 required: true
             }
         ]
@@ -94,7 +142,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The mode to set the profile to',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: true,
-                choices: modeopts
+                choices: cmdconfig.modeopts
             }
         ]
     })
@@ -113,14 +161,14 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The mode to display the top plays of',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: false,
-                choices: modeopts
+                choices: cmdconfig.modeopts
             },
             {
                 name: 'sort',
                 description: 'The sort to display the top plays of',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: false,
-                choices: playsortopts
+                choices: cmdconfig.playsortopts
             },
             {
                 name: 'page',
@@ -168,12 +216,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'rs',
         description: 'Displays the user\'s most recent score',
-        options: useroffsetmodeopts
+        options: cmdconfig.useroffsetmodeopts
     })
     commands?.create({
         name: 'scores',
         description: 'Displays the user\'s scores for a set map',
-        options: useridsortopts
+        options: cmdconfig.useridsortopts
     })
 
 
@@ -234,6 +282,14 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'ytsearch':
                 client.commands.get('ytsearch').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+            case 'math':
+                client.commands.get('math').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'convert':
+                client.commands.get('convert').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+
+            //osu below
 
             case 'osu':
                 client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
@@ -253,6 +309,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'scores':
                 client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
+
+
+            //admin 
+
+
 
             case 'checkperms':
                 client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
