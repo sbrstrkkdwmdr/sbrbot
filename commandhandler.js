@@ -41,7 +41,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'gif':
                 client.commands.get('gif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'image':
+            case 'image': case 'imagesearch':
                 client.commands.get('image').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'ytsearch': case 'yt':

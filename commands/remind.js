@@ -30,13 +30,14 @@ module.exports = {
             async function sendremind() {
                 try {
                     setTimeout(() => {
-                        message.author.send({ embeds: [reminder] })
+                        message.channel.send({ embeds: [reminder] })
                     }, ms(`${time}`));
                 } catch (error) {
                     console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
                 }
             }
             sendremind();
+            fs.appendFileSync('commands.log', `\nCommand Information\nMessage Content: ${message.content}`)
 
         }
         if (interaction != null) {
@@ -46,7 +47,7 @@ module.exports = {
             let time = interaction.options.getString('time').replaceAll(' ', '')
 
             if (!time.endsWith('d') && !time.endsWith('h') && !time.endsWith('m') && !time.endsWith('s')) {
-                return message.channel.send('Incorrect time format: please use `d`, `h`, `m`, or `s`')
+                return interaction.reply({ content: 'Incorrect time format: please use `d`, `h`, `m`, or `s`', ephemeral: true })
             }
 
             let reminder = new Discord.MessageEmbed()
@@ -54,18 +55,34 @@ module.exports = {
                 .setTitle('REMINDER')
                 .setDescription(`${remindertxt}`)
 
-            interaction.reply({content: 'success!', ephemeral: true})
+            interaction.reply({ content: 'success!', ephemeral: true })
 
-            async function sendremind() {
-                try {
-                    setTimeout(() => {
-                        interaction.member.user.send({ embeds: [reminder] })
-                    }, ms(`${time}`));
-                } catch (error) {
-                    console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
+            let sendtochannel = interaction.options.getBoolean('sendinchannel')
+            if (sendtochannel == true) {
+                async function sendremind() {
+                    try {
+                        setTimeout(() => {
+                            interaction.channel.send({ embeds: [reminder] })
+                        }, ms(`${time}`));
+                    } catch (error) {
+                        console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
+                    }
                 }
+                sendremind();
+
+            } else {
+                async function sendremind() {
+                    try {
+                        setTimeout(() => {
+                            interaction.member.user.send({ embeds: [reminder] })
+                        }, ms(`${time}`));
+                    } catch (error) {
+                        console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
+                    }
+                }
+                sendremind();
             }
-            sendremind();
+            fs.appendFileSync('commands.log', `\nCommand Information\nreminder:${remindertxt}\ntime:${time}\nSendInChannel:${sendtochannel}`)
         }
     }
 }

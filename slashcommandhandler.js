@@ -136,17 +136,23 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         description: 'Reminds the user of something',
         options: [
             {
-                name: 'reminder',
-                description: 'The reminder',
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                required: true
-            },
-            {
                 name: 'time',
                 description: 'How long to wait before sending the reminder. Must end in d, h, m, or s',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: true
-            },            
+            }, 
+            {
+                name: 'reminder',
+                description: 'The reminder',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true
+            },    
+            {
+                name: 'sendinchannel',
+                description: 'If true, the reminder will be sent into the channel',
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+                required: false
+            }       
         ]
     })
 

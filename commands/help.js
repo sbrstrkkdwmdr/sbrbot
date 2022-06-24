@@ -35,7 +35,7 @@ module.exports = {
             .addField('other commands',
                 '**gif** \`[type (required)]\` - displays a gif of a given type\n' +
                 '**ytsearch** \`[query (required)]\` - searches youtube for a given query\n' +
-                '**imagesearch** \`[query (required)]\` - searches google images for a given query\n' +
+                '**image** \`[query (required)]\` - searches google images for a given query\n' +
                 '**8ball** - responds with a yes/no/maybe/??? answer  \n' + 
                 '**roll** \`[number (optional)]\` - returns a number between 1-100 (or the given number)\n', false
             )
@@ -151,6 +151,7 @@ module.exports = {
                     .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
                 message.reply({ embeds: [fullCommandList] })
             }
+            fs.appendFileSync('commands.log', `\nCommand Information\n${message.content}`)
         }
 
 
@@ -259,6 +260,7 @@ module.exports = {
                 return interaction.reply({ embeds: [fullCommandList] })
             }
             interaction.reply({ embeds: [commandInfo] })
+            fs.appendFileSync('commands.log', `\nCommand Information\nCommand: ${command}`)
 
         }
 

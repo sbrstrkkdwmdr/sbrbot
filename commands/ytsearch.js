@@ -31,6 +31,7 @@ module.exports = {
             }
             fs.writeFileSync('debug/ytsearch.json', JSON.stringify(searching, null, 2))
             message.channel.send({ embeds: [embed] })
+            fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
         }
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - ytsearch (interaction)\n${currentDate} | ${currentDateISO}\n recieved search youtube command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
@@ -57,6 +58,7 @@ module.exports = {
             }
             fs.writeFileSync('debug/ytsearch.json', JSON.stringify(searching, null, 2))
             interaction.reply({ embeds: [embed] })
+            fs.appendFileSync('commands.log', `\nCommand Information\nquery: ${query}`)
         }
     }
 }

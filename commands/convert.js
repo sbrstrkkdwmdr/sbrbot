@@ -587,6 +587,7 @@ module.exports = {
                     interaction.reply({ content: 'Invalid conversion or it hasn\'t been added yet', embeds: [EmbedList] })
                     break;
             }
+            fs.appendFileSync('commands.log', `\nCommand Information\ntype1: ${cat1}\ntyp2: ${cat2}\nvalue: ${num}`)
         }
     }
 }

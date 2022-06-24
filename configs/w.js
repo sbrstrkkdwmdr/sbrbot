@@ -4,4 +4,4 @@ let chocomint = `chocomint's Made of Fire HDDT 98.54 full combo. Without a doubt
 
 let chocomintshort = commandchecks.discshort(chocomint)
 
-module.exports = { chocomint, chocomintshort}
+module.exports = { chocomint, chocomintshort }

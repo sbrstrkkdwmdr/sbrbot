@@ -188,7 +188,9 @@ module.exports = {
                         break;
 
                 }
+                fs.appendFileSync('commands.log', `\nCommand Information\n${message.content}`)
                 message.delete()
+                
             }
         }
         if (interaction != null) {
@@ -256,6 +258,7 @@ module.exports = {
                     break;
             }
             interaction.reply({ content: 'success', ephemeral: true })
+            fs.appendFileSync('commands.log', `\nCommand Information\ngif type: ${str}`)
         }
         /*
         function skillissue() {

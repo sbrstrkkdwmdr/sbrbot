@@ -36,6 +36,7 @@ module.exports = {
                 message.channel.send(`${error}`)
                 console.log(error)
             }
+            fs.appendFileSync('commands.log', `\nCommand Information\nMessae Content: ${message.content}`)
         }
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - math (interaction)\n${currentDate} | ${currentDateISO}\n recieved math command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
@@ -107,8 +108,8 @@ module.exports = {
                 default:
                     interaction.reply('Error - invalid type')
                     break;
-
             }
+            fs.appendFileSync('commands.log', `\nCommand Information\ntype: ${type}\nnum1: ${num1}\nnum2: ${num2}`)
         }
     }
 }

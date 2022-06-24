@@ -23,10 +23,12 @@ module.exports = {
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - 8ball (message)\n${currentDate} | ${currentDateISO}\n recieved 8ball command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             message.channel.send(q)
+            fs.appendFileSync('commands.log', `\nCommand Information\n${message.content}\n${q}`)
         }
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - 8ball (message)\n${currentDate} | ${currentDateISO}\n recieved 8ball command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             interaction.reply(q)
+            fs.appendFileSync('commands.log', `\nCommand Information\n${q}`)
         }
     }
 }

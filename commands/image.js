@@ -29,6 +29,7 @@ module.exports = {
                 .setTitle(`IMAGE RESULTS FOR ${args.join(' ')}`)
                 .setDescription(`${resimg}`)
             message.channel.send({ embeds: [imageEmbed] })
+            fs.appendFileSync('commands.log', `\nCommand Information\nQuery: ${args.join(' ')}`)
 
         }
         if (interaction != null) {
@@ -59,6 +60,7 @@ module.exports = {
                 .setDescription(`${resimg}`)
 
             interaction.reply({ embeds: [imageEmbed] })
+            fs.appendFileSync('commands.log', `\nCommand Information\nquery: ${query}`)
 
         }
     }
