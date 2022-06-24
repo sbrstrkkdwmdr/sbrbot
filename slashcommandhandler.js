@@ -131,6 +131,24 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
         ]
     })
+    commands?.create({
+        name: 'remind',
+        description: 'Reminds the user of something',
+        options: [
+            {
+                name: 'reminder',
+                description: 'The reminder',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true
+            },
+            {
+                name: 'time',
+                description: 'How long to wait before sending the reminder. Must end in d, h, m, or s',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true
+            },            
+        ]
+    })
 
     //below are osu related commands
     commands?.create({
@@ -223,6 +241,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The id of the map to display',
                 type: Constants.ApplicationCommandOptionTypes.INTEGER,
                 required: false,
+                minValue: 1
             },
             {
                 name: 'mods',
@@ -270,6 +289,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The server to leave',
                 type: Constants.ApplicationCommandOptionTypes.INTEGER,
                 required: true,
+                minValue: 1
             }
         ]
 
@@ -311,6 +331,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'roll':
                 client.commands.get('roll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'remind':
+                client.commands.get('remind').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
 
             //osu below

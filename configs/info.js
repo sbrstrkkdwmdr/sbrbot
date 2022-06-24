@@ -134,6 +134,22 @@ let cmds = [
                 description: '`integer, optional`. The maximum number. If omitted, the max will be 100'
             }
         ]
+    },
+    {
+        name: 'remind',
+        description: 'Sends a reminder to the user',
+        usage: 'sbr-remind <time> <reminder>',
+        slashusage: '/remind [reminder] [time]',
+        options: [
+            {
+                name: 'time',
+                description: '`string, required`. How long to wait to send the reminder. \nFormat: <number><type> i.e 2d3h1m6s\ntypes: `d`(days) `h`(hours) `m`(minutes) `s`(seconds)'
+            },
+            {
+                name: 'reminder',
+                description: '`string, optional (only in msg command)`. The reminder to set'
+            }
+        ]
     }
 ]
 

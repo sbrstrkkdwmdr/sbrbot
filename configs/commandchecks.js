@@ -7,9 +7,9 @@ const owners = require('./config.json').ownerusers
  * @param {integer} userid 
  * @returns whether or not the user id is an owner
  */
-function isOwner(userid){
-    for(let i = 0; i < owners.length; i++){
-        if(owners[i] == userid){
+function isOwner(userid) {
+    for (let i = 0; i < owners.length; i++) {
+        if (owners[i] == userid) {
             return true
         }
     }
@@ -37,4 +37,14 @@ function lengthshorten(txt) {
 
     return newtxt
 }
-module.exports = { isOwner, exec, shorten }
+function discshort(txt) {
+    if (txt.length > 4000) {
+        newtxt = txt.substring(0, 3999)
+    } else {
+        newtxt = txt
+    }
+
+    return newtxt
+}
+
+module.exports = { isOwner, exec, shorten, lengthshorten, discshort }

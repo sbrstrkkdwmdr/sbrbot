@@ -1,4 +1,5 @@
 const commandhelp = require('../configs/info.js')
+const fs = require('fs')
 module.exports = {
     name: 'help',
     description: 'Displays all commands\n' +
@@ -15,7 +16,7 @@ module.exports = {
             .addField('Main commands',
                 `**ping** - Displays the bot's ping\n` +
                 `**help** - Displays this message\n` + 
-                '**remind** \`[reminder (required)] [time (required)]\` - creates a reminder\n' +
+                '**remind** \`[time (required)] [reminder (required)]\` - creates a reminder\n' +
                 '**math** \`[expression (required)]\` - evaluates a math expression\n' +
                 '**convert** \`[value (required)] [from (required)] [to (required)]\` - converts a value from one unit to another\n'
                 , false)

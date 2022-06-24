@@ -59,6 +59,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'roll':
                 client.commands.get('roll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+            case 'remind':
+                client.commands.get('remind').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
 
             //osu commands below
 
