@@ -11,7 +11,6 @@ module.exports = {
         ]
 
         let q = responses[Math.floor(Math.random() * responses.length)]
-
         if (q == 3) {
             if (message != null) return message.channel.send('sbr-gif speech bubble')
             if (interaction != null) {

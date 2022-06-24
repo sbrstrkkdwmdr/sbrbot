@@ -114,6 +114,26 @@ let cmds = [
                 description: '`number, required`. The value to convert'
             }
         ]
+    },
+    {
+        name: '8ball',
+        description: 'Responds with a yes or no or maybe answer',
+        usage: 'sbr-8ball',
+        slashusage: '/8ball',
+        options: [],
+        aliases: 'ask'
+    },
+    {
+        name: 'roll',
+        description: '',
+        usage: 'sbr-roll <number>',
+        slashusage: '/roll [number]',
+        options: [
+            {
+                name: 'number',
+                description: '`integer, optional`. The maximum number. If omitted, the max will be 100'
+            }
+        ]
     }
 ]
 
