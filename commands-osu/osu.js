@@ -121,9 +121,12 @@ module.exports = {
 
                         message.reply({ content: '⠀', embeds: [Embed] })
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                        fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
                     } catch (error) {
                         message.reply('no osu! profile found\nNo user found with the name `' + user + '`')
+                        fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+
                     }
                 })
         }
@@ -240,9 +243,12 @@ module.exports = {
 
                         interaction.reply({ content: '⠀', embeds: [Embed] })
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                        fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
 
                     } catch (error) {
                         interaction.reply('no osu! profile found\nNo user found with the name `' + user + '`')
+                        fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
+
                     }
 
 

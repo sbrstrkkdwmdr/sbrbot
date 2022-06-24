@@ -22,10 +22,14 @@ module.exports = {
                 guild.leave()
                 fs.appendFileSync('commands.log', 'success\n\n', 'utf-8')
                 fs.appendFileSync('commands.log', `left guild ${guild.name} | ${guild.id}`, 'utf-8')
+                fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+
             } else {
                 message.reply('Error - you do not have the permissions to use this command')
                 fs.appendFileSync('commands.log', 'failed\n\n', 'utf-8')
                 fs.appendFileSync('commands.log', `${message.author.id} is not an owner`, 'utf-8')
+                fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+
             }
         }
         if (interaction != null) {

@@ -25,6 +25,8 @@ module.exports = {
                     })
                     interaction.reply('added to the database')
                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                    fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
+
 
                 } catch (error) {
                     affectedRows = await userdata.update({
@@ -33,6 +35,7 @@ module.exports = {
                     }, { where: { userid: interaction.member.user.id } })
                     if (affectedRows > 0) {
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                        fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
                         return interaction.reply('updated the database')
                     }
@@ -48,6 +51,8 @@ module.exports = {
                     })
                     interaction.reply('added to the database')
                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                    fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
+
 
                 } catch (error) {
                     affectedRows = await userdata.update({
@@ -56,6 +61,7 @@ module.exports = {
                     }, { where: { userid: interaction.member.user.id } })
                     if (affectedRows > 0) {
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                        fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
                         return interaction.reply('updated the database')
                     }

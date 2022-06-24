@@ -681,6 +681,7 @@ module.exports = {
                                     )
                                 message.channel.send({ embeds: [Embed] });
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
                             })
                     })();
 
@@ -993,6 +994,7 @@ module.exports = {
                                     )
                                     = interaction.editReply({ content: "⠀", embeds: [Embed] });
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                fs.appendFileSync('commands.log', `\nCommand Information\nmap id: ${mapid}\nmap mods: ${mapmods}\nmode: ${mapmode}`)
                             })
                     })();
 

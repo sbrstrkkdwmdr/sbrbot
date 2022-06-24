@@ -31,6 +31,8 @@ module.exports = {
                 .setColor('#C9FF93')
                 ;
             message.reply({ embeds: [embed] })
+            fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+
         }
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - checkperms (interaction)\n${currentDate} | ${currentDateISO}\n recieved checkperms command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
@@ -47,6 +49,7 @@ module.exports = {
                     .setColor('#C9FF93')
                     ;
                 interaction.reply({ embeds: [embed] })
+                fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user} AKA ${user.tag}`)
             }
             else {
                 interaction.reply({ content: 'Error' })

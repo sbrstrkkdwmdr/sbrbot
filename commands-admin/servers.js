@@ -14,6 +14,8 @@ module.exports = {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - SERVERS (message)\n${currentDate} | ${currentDateISO}\n recieved SERVERS command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
             message.reply('Servers:\n' + servers)
+            fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+
         }
         if (interaction != null) {
             

@@ -6,13 +6,13 @@ const fetch = require('node-fetch')
 
 module.exports = {
     name: 'rs',
-    description: 'Displays the most recent score for the user\n' + 
-    'Command: `sbr-rs <user>`\n' +
-    'Slash command: `/rs [user][page][mode]`\n' + 
-    'Options:\n' +
-    '⠀⠀`user`: The user to display the most recent score of\n' +
-    '⠀⠀`page`: The page to display the most recent score of\n' +
-    '⠀⠀`mode`: The mode to display the most recent score of\n',
+    description: 'Displays the most recent score for the user\n' +
+        'Command: `sbr-rs <user>`\n' +
+        'Slash command: `/rs [user][page][mode]`\n' +
+        'Options:\n' +
+        '⠀⠀`user`: The user to display the most recent score of\n' +
+        '⠀⠀`page`: The page to display the most recent score of\n' +
+        '⠀⠀`mode`: The mode to display the most recent score of\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (message)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
@@ -260,10 +260,13 @@ module.exports = {
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
 
                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata.beatmap.id }), null, 2));
+                                    fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
                                 })();
                             } catch (error) {
-                                return message.reply('Error - no score found')
+                                message.reply('Error - no score found')
+                                fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                                return;
                             }
 
                         })
@@ -525,11 +528,13 @@ module.exports = {
                                             `**${rspp}**pp \n${fcflag}`, true);
                                     interaction.editReply({ content: '⠀', embeds: [Embed] })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                    fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
 
                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata.beatmap.id }), null, 2));
 
                                 })();
                             } catch (error) {
+                                fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
                                 return interaction.editReply('Error - no score found')
                             }
 

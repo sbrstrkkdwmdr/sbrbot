@@ -172,6 +172,7 @@ module.exports = {
                                     Embed.setDescription(scoretxt)
                                     message.reply({ embeds: [Embed] })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                    fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
                                 })
                         })
@@ -344,6 +345,7 @@ module.exports = {
                                     Embed.setDescription(scoretxt)
                                     interaction.reply({ embeds: [Embed] })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                    fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nmap id: ${id}\nsort: ${sort}`)
 
                                 })
                         })

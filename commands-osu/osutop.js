@@ -151,10 +151,13 @@ module.exports = {
                                 }
                                 message.reply({ content: '⠀', embeds: [topEmbed] })
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
                             })
                     } catch (error) {
                         message.reply('user ' + user + ' not found')
+                        fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+
                     }
                 })
 
@@ -393,10 +396,12 @@ module.exports = {
                                 }
                                 interaction.reply({ content: '⠀', embeds: [topEmbed] })
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
-
+                                fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
                             })
                     } catch (error) {
                         interaction.reply('user ' + user + ' not found')
+                        fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
+
                     }
                 })
         }
