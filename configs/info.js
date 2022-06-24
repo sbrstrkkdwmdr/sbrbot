@@ -125,7 +125,7 @@ let cmds = [
     },
     {
         name: 'roll',
-        description: '',
+        description: 'Returns between 1-100 or the given number',
         usage: 'sbr-roll <number>',
         slashusage: '/roll [number]',
         options: [

@@ -14,7 +14,10 @@ module.exports = {
             .setDescription('use `/help <command>` to get more info on a command')
             .addField('Main commands',
                 `**ping** - Displays the bot's ping\n` +
-                `**help** - Displays this message\n`
+                `**help** - Displays this message\n` + 
+                '**remind** \`[reminder (required)] [time (required)]\` - creates a reminder\n' +
+                '**math** \`[expression (required)]\` - evaluates a math expression\n' +
+                '**convert** \`[value (required)] [from (required)] [to (required)]\` - converts a value from one unit to another\n'
                 , false)
             .addField('osu! commands',
                 `**osu** \`[user (optional)]\`- displays a user's profile\n` +
@@ -30,11 +33,10 @@ module.exports = {
                 '**servers** - displays all servers the bot is in', false)
             .addField('other commands',
                 '**gif** \`[type (required)]\` - displays a gif of a given type\n' +
-                '[WIP]**ytsearch** \`[query (required)]\` - searches youtube for a given query\n' +
-                '[WIP]**imagesearch** \`[query (required)]\` - searches google images for a given query\n' +
-                '[WIP]**remind** \`[reminder (required)] [time (required)]\` - creates a reminder\n' +
-                '[WIP]**math** \`[expression (required)]\` - evaluates a math expression\n' +
-                '[WIP]**convert** \`[value (required)] [from (required)] [to (required)]\` - converts a value from one unit to another\n', false
+                '**ytsearch** \`[query (required)]\` - searches youtube for a given query\n' +
+                '**imagesearch** \`[query (required)]\` - searches google images for a given query\n' +
+                '**8ball** - responds with a yes/no/maybe/??? answer  \n' + 
+                '**roll** \`[number (optional)]\` - returns a number between 1-100 (or the given number)\n', false
             )
 
 
