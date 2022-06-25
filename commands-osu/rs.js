@@ -98,7 +98,7 @@ module.exports = {
                                 let rspassinfo = ''
                                 switch (grade) {
                                     case 'F':
-                                        rspassinfo = `\n${hitstr}/${totalstr} (${(hittime / totaltime * 100).toFixed(2)}%)`
+                                        rspassinfo = `\n${hitstr}/${totalstr} (${(hittime / totaltime * 100).toFixed(2)}% completed)`
                                         rsgrade = 'F'
                                         break;
                                     case 'D':
@@ -253,13 +253,13 @@ module.exports = {
                                             `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${rsdata[0].beatmap.difficulty_rating}⭐`, false)
                                         .addField('SCORE DETAILS',
                                             `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
-                                            `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x`, true)
+                                            `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x Combo`, true)
                                         .addField('PP',
                                             `**${rspp}**pp \n${fcflag}`, true);
                                     message.reply({ content: '⠀', embeds: [Embed] })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
 
-                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata.beatmap.id }), null, 2));
+                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0].beatmap.id }), null, 2));
                                     fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
                                 })();
@@ -530,7 +530,7 @@ module.exports = {
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
 
-                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata.beatmap.id }), null, 2));
+                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0].beatmap.id }), null, 2));
 
                                 })();
                             } catch (error) {
