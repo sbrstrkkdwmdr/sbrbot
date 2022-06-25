@@ -323,11 +323,20 @@ module.exports = {
                                         pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                                     }
 
-                                    let ppComputed = await pp.compute();
-                                    let pp95Computed = await pp95.compute();
-
-                                    let ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
-                                    let pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
+                                    try {
+                                        let ppComputed = await pp.compute();
+                                        let pp95Computed = await pp95.compute();
+            
+                                        ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
+                                        pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
+                                        ppissue = ''
+            
+                                    } catch (error) {
+                                        ppComputedString = NaN
+                                        pp95ComputedString = NaN
+                                        ppissue = 'Error - pp calculator could not fetch beatmap'
+                                        fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
+                                    }
 
                                     if (mapmods == null || mapmods == '' || mapmods == 'NM') {
                                         maptitle = `${json.beatmapset.artist} - ${json.beatmapset.title} [${json.version}]`
@@ -384,6 +393,9 @@ module.exports = {
                     })
                 return;
             }
+
+//==============================================================================================================================================================================================
+
             let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}`
 
             fetch(mapurl, {
@@ -697,7 +709,7 @@ module.exports = {
                 })
 
         }
-
+//==============================================================================================================================================================================================
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (interaction)\n${currentDate} | ${currentDateISO}\n recieved get map command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             interaction.reply('Fetching map info...');
