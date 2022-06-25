@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 module.exports = {
     name: 'gif',
     description: 'Sends a random gif from the type given\n' +
