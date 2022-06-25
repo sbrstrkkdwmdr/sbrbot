@@ -183,9 +183,9 @@ function checkisaudio(filename) {
  * @param {int} userid 
  * @returns check if user is banned from sending videos
  */
-function checkisvidban(userid) {
-    for (let i = 0; i < config.blockvidusers.length; i++) {
-        if (config.blockvidusers[i] == userid) {
+function checkisfileblocked(userid) {
+    for (let i = 0; i < config.fileblockedusers.length; i++) {
+        if (config.fileblockedusers[i] == userid) {
             return true
         }
     }
@@ -194,7 +194,7 @@ function checkisvidban(userid) {
 
 module.exports = {
     audiofiletype,
-    checkisvidban,
+    checkisfileblocked,
     checkisaudio,
     checkisimage,
     checkisvideo,

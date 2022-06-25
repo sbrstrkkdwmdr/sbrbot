@@ -8,9 +8,10 @@ let config =
     "osuClientSecret": "null",
     "osuApiKey": "null",
     "testGuildID": "null",
-    "ownerusers": [],
+    "ownerusers": [], //add your ID to the array to access admin commands
     "googlecx": "null", //https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4 to get it
-    "googlekey": "null" //https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4 to get it
+    "googlekey": "null", //https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4 to get it
+    "fileblockedusers": [] // add user id here to auto-delete any audio, videos or images they send
 }
 if (fs.existsSync('./configs/config.json')){
     try {
