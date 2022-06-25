@@ -12,7 +12,7 @@ module.exports = {
 
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         //let mods = message.content.split('+')[1]
-        if(message.content.split('+')[1]){
+        if (message.content.split('+')[1]) {
             mapmods = message.content.split('+')[1]
         } else {
             mapmods = 'NM'
@@ -26,7 +26,7 @@ module.exports = {
                 //make a variable that takes everything after the last '/'
                 idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1]
             }
-            if(isNaN(idfirst)){
+            if (isNaN(idfirst)) {
                 id = idfirst.split(' ')[0]
             } else {
                 id = idfirst
@@ -267,12 +267,19 @@ module.exports = {
                     pp = new ppcalc.mania_ppv2().setPerformance(score).setMods(fixedmods);
                     pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                 }
+                try {
+                    let ppComputed = await pp.compute();
+                    let pp95Computed = await pp95.compute();
 
-                let ppComputed = await pp.compute();
-                let pp95Computed = await pp95.compute();
-
-                let ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
-                let pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
+                    ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
+                    pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
+                    ppissue = ''
+                } catch(error){
+                    ppComputed = NaN
+                    ppComputedString = NaN
+                    ppissue = 'Error - pp calculator could not fetch beatmap'
+                    fs.appendFileSync('link.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
+                }
 
                 if (mapmods == null || mapmods == '' || mapmods == 'NM') {
                     maptitle = `${json.beatmapset.artist} - ${json.beatmapset.title} [${json.version}]`

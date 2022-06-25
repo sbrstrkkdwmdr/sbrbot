@@ -198,16 +198,27 @@ module.exports = {
                                     }
 
                                     let rspp = rsdata[0].pp
+                                    try {
+                                        let ppc = await pp.compute()
+                                        let ppfcd = await ppfc.compute()
 
-                                    let ppc = await pp.compute()
-                                    let ppfcd = await ppfc.compute()
+                                        ppiffc = ppfcd.total.toFixed(2)
 
-                                    let ppiffc = ppfcd.total.toFixed(2)
+                                        if (rspp == null) {
+                                            rspp = ppc.total.toFixed(2)
+                                        } else {
+                                            rspp = rspp.toFixed(2)
+                                        }
 
-                                    if (rspp == null) {
-                                        rspp = ppc.total.toFixed(2)
-                                    } else {
-                                        rspp = rspp.toFixed(2)
+                                        ppissue = ''
+
+                                    } catch (error) {
+                                        if (rspp == null) {
+                                            rspp = NaN
+                                        }
+                                        ppiffc = NaN
+                                        ppissue = 'Error - pp calculator could not fetch beatmap'
+                                        fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
                                     }
 
                                     if (rsdata[0].perfect == true) {
@@ -255,7 +266,7 @@ module.exports = {
                                             `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
                                             `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`, true)
                                         .addField('PP',
-                                            `**${rspp}**pp \n${fcflag}`, true);
+                                            `**${rspp}**pp \n${fcflag}\n${ppissue}`, true);
                                     message.reply({ content: '⠀', embeds: [Embed] })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
 
@@ -468,16 +479,27 @@ module.exports = {
                                     }
 
                                     let rspp = rsdata[0].pp
+                                    try {
+                                        let ppc = await pp.compute()
+                                        let ppfcd = await ppfc.compute()
 
-                                    let ppc = await pp.compute()
-                                    let ppfcd = await ppfc.compute()
+                                        ppiffc = ppfcd.total.toFixed(2)
 
-                                    let ppiffc = ppfcd.total.toFixed(2)
+                                        if (rspp == null) {
+                                            rspp = ppc.total.toFixed(2)
+                                        } else {
+                                            rspp = rspp.toFixed(2)
+                                        }
 
-                                    if (rspp == null) {
-                                        rspp = ppc.total.toFixed(2)
-                                    } else {
-                                        rspp = rspp.toFixed(2)
+                                        ppissue = ''
+
+                                    } catch (error) {
+                                        if (rspp == null) {
+                                            rspp = NaN
+                                        }
+                                        ppiffc = NaN
+                                        ppissue = 'Error - pp calculator could not fetch beatmap'
+                                        fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
                                     }
 
                                     if (rsdata[0].perfect == true) {
@@ -525,7 +547,7 @@ module.exports = {
                                             `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
                                             `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`, true)
                                         .addField('PP',
-                                            `**${rspp}**pp \n${fcflag}`, true);
+                                            `**${rspp}**pp \n${fcflag}\n${ppissue}`, true);
                                     interaction.editReply({ content: '⠀', embeds: [Embed] })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)

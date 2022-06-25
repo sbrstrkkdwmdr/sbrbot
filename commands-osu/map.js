@@ -365,7 +365,7 @@ module.exports = {
                                                 .addField(
                                                     "**PP**",
                                                     `SS: ${ppComputedString}pp \n 95: ${pp95ComputedString}pp \n` +
-                                                    `${modissue}`,
+                                                    `${modissue}\n${ppissue}`,
                                                     true
                                                 )
                                                 .addField(
@@ -628,11 +628,20 @@ module.exports = {
                             pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                         }
 
-                        let ppComputed = await pp.compute();
-                        let pp95Computed = await pp95.compute();
+                        try {
+                            let ppComputed = await pp.compute();
+                            let pp95Computed = await pp95.compute();
 
-                        let ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
-                        let pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
+                            ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
+                            pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
+                            ppissue = ''
+
+                        } catch (error) {
+                            ppComputedString = NaN
+                            pp95ComputedString = NaN
+                            ppissue = 'Error - pp calculator could not fetch beatmap'
+                            fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
+                        }
 
                         if (mapmods == null || mapmods == '' || mapmods == 'NM') {
                             maptitle = `${json.beatmapset.artist} - ${json.beatmapset.title} [${json.version}]`
@@ -670,7 +679,7 @@ module.exports = {
                                     .addField(
                                         "**PP**",
                                         `SS: ${ppComputedString}pp \n 95: ${pp95ComputedString}pp \n` +
-                                        `${modissue}`,
+                                        `${modissue}\n${ppissue}`,
                                         true
                                     )
                                     .addField(
@@ -941,11 +950,20 @@ module.exports = {
                             pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                         }
 
-                        let ppComputed = await pp.compute();
-                        let pp95Computed = await pp95.compute();
+                        try {
+                            let ppComputed = await pp.compute();
+                            let pp95Computed = await pp95.compute();
 
-                        let ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
-                        let pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
+                            ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
+                            pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
+                            ppissue = ''
+
+                        } catch (error) {
+                            ppComputedString = NaN
+                            pp95ComputedString = NaN
+                            ppissue = 'Error - pp calculator could not fetch beatmap'
+                            fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
+                        }
 
                         if (mapmods == null || mapmods == '' || mapmods == 'NM') {
                             maptitle = `${json.beatmapset.artist} - ${json.beatmapset.title} [${json.version}]`
@@ -983,7 +1001,7 @@ module.exports = {
                                     .addField(
                                         "**PP**",
                                         `SS: ${ppComputedString}pp \n 95: ${pp95ComputedString}pp \n` +
-                                        `${modissue}`,
+                                        `${modissue}\n${ppissue}`,
                                         true
                                     )
                                     .addField(
@@ -992,7 +1010,7 @@ module.exports = {
                                         `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapid})`,
                                         true
                                     )
-                                    = interaction.editReply({ content: "⠀", embeds: [Embed] });
+                                    interaction.editReply({ content: "⠀", embeds: [Embed] });
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                 fs.appendFileSync('commands.log', `\nCommand Information\nmap id: ${mapid}\nmap mods: ${mapmods}\nmode: ${mapmode}`)
                             })

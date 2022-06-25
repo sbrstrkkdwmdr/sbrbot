@@ -11,9 +11,9 @@ module.exports = {
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
 
         try {
-            let scorelink = messagenohttp.split('/scores/')[1]
-            let scoremode = scorelink.split('/')[0]
-            let scoreid = scorelink.split('/')[1]
+            scorelink = messagenohttp.split('/scores/')[1]
+            scoremode = scorelink.split('/')[0]
+            scoreid = scorelink.split('/')[1]
         } catch (error) {
             return;
         }
@@ -28,7 +28,7 @@ module.exports = {
             .then(scoredata => {
                 fs.writeFileSync('debugosu/scoreparse.json', JSON.stringify(scoredata, null, 2));
                 fs.appendFileSync('link.log', `LINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\n`, 'utf-8')
-
+                ;
                     (async () => {
 
                         let ranking = scoredata.rank
@@ -110,8 +110,16 @@ module.exports = {
                             hitlist = `${gamehits.count_geki}/${gamehits.count_300}/${gamehits.count_katu}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
                             fcacc = osucalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy
                         }
+                        try {
+                            let ppfc2 = await ppfc.compute()
+                            ppiffc = ppfc2.total.toFixed(2)
+                            ppissue = ''
+                        } catch(error){
+                            ppiffc = NaN
+                            ppissue = 'Error - pp calculator could not fetch beatmap'
+                            fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
 
-                        let ppfc2 = await ppfc.compute()
+                        }
 
                         let artist = scoredata.beatmapset.artist
                         let artistuni = scoredata.beatmapset.artist_unicode
@@ -133,10 +141,10 @@ module.exports = {
                             .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.beatmap_id}`)
                             .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`)
                             .setDescription(`
-                        ${scoredata.accuracy.toFixed(2)}% | ${grade}
+                        ${(scoredata.accuracy * 100).toFixed(2)}% | ${grade}
                         \`${hitlist}\`
                         ${scoredata.max_combo}x
-                        ${scoredata.pp.toFixed(2)}pp | ${ppfc2.total.toFixed(2)}pp if ${fcacc}% FC
+                        ${scoredata.pp.toFixed(2)}pp | ${ppiffc}pp if ${fcacc} FC\n${ppissue}
                         `)
                         message.reply({ embeds: [scoreembed] })
                     })();
