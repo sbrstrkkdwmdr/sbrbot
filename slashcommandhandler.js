@@ -140,19 +140,37 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'How long to wait before sending the reminder. Must end in d, h, m, or s',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: true
-            }, 
+            },
             {
                 name: 'reminder',
                 description: 'The reminder',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: true
-            },    
+            },
             {
                 name: 'sendinchannel',
                 description: 'If true, the reminder will be sent into the channel',
                 type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
                 required: false
-            }       
+            }
+        ]
+    })
+    commands?.create({
+        name: 'say',
+        description: 'Send a message to a channel',
+        options: [
+            {
+                name: 'message',
+                description: 'The message to send',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true
+            },
+            {
+                name: 'channel',
+                description: 'The channel to send the message to',
+                type: Constants.ApplicationCommandOptionTypes.CHANNEL,
+                required: false
+            }
         ]
     })
 
@@ -340,6 +358,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'remind':
                 client.commands.get('remind').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'say':
+                client.commands.get('say').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
 
             //osu below

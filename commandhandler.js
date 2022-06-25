@@ -62,6 +62,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'remind':
                 client.commands.get('remind').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+            case 'say':
+                client.commands.get('say').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
 
             //osu commands below
 
@@ -90,6 +93,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'servers':
                 client.admincmds.get('servers').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+
+
+            // music
+
+            case 'sfx':
+                client.musiccmds.get('sfx').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
         }
 
