@@ -10,10 +10,12 @@
   "author": "sbrstrkkdwmdr",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/voice": "^0.10.0",
     "booba": "^0.0.15",
     "chartjs-to-image": "^1.0.5",
     "child_process": "^1.0.2",
     "discord.js": "^13.8.0",
+    "ffmpeg-static": "^4.4.1",
     "fs": "^0.0.1-security",
     "https": "^1.0.0",
     "ms": "^2.1.3",

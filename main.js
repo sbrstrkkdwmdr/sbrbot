@@ -33,6 +33,7 @@ client.commands = new Discord.Collection();
 client.links = new Discord.Collection();
 client.osucmds = new Discord.Collection();
 client.admincmds = new Discord.Collection();
+client.musiccmds = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -58,6 +59,11 @@ for (const file of admincommandFiles) {
     client.admincmds.set(admincommand.name, admincommand);
 }
 
+const musicCommandFiles = fs.readdirSync('./commands-music').filter(file => file.endsWith('js'));
+for (const file of musicCommandFiles) {
+    const musiccommand = require(`./commands-music/${file}`)
+    client.musiccmds.set(musiccommand.name, musiccommand)
+}
 
 const sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',
