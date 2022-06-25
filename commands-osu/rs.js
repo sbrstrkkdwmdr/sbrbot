@@ -253,7 +253,7 @@ module.exports = {
                                             `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${rsdata[0].beatmap.difficulty_rating}⭐`, false)
                                         .addField('SCORE DETAILS',
                                             `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
-                                            `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x Combo`, true)
+                                            `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`, true)
                                         .addField('PP',
                                             `**${rspp}**pp \n${fcflag}`, true);
                                     message.reply({ content: '⠀', embeds: [Embed] })
@@ -368,7 +368,7 @@ module.exports = {
                                 let rspassinfo = ''
                                 switch (grade) {
                                     case 'F':
-                                        rspassinfo = `\n${hitstr}/${totalstr} (${(hittime / totaltime * 100).toFixed(2)}%)`
+                                        rspassinfo = `\n${hitstr}/${totalstr} (${(hittime / totaltime * 100).toFixed(2)}% completed)`
                                         rsgrade = 'F'
                                         break;
                                     case 'D':
@@ -523,7 +523,7 @@ module.exports = {
                                             `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${rsdata[0].beatmap.difficulty_rating}⭐`, false)
                                         .addField('SCORE DETAILS',
                                             `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
-                                            `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x`, true)
+                                            `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`, true)
                                         .addField('PP',
                                             `**${rspp}**pp \n${fcflag}`, true);
                                     interaction.editReply({ content: '⠀', embeds: [Embed] })
