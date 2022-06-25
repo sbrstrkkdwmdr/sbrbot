@@ -1,612 +1,407 @@
 const { Constants } = require('discord.js');
-const { testguild } = require('./config.json')
-const { modeopts, playsortopts, timezoneopts, skincmdopts, mathcmdopts, conversionopts, gifopts, useridsortopts, useroffsetmodeopts } = require('./configs/commandoptions.js')
-
-
-module.exports = (userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token) => {
-
-    //ADDED FOR SLASH CMDS
-    const guildid = testguild
-    const guild = client.guilds.cache.get(guildid)
-    settoguild = 0 //if set to 1, commands will be set to guild only (for testing). if set to 0 it will be set to global (works in all servers but may take a while)
+const cmdconfig = require('./configs/commandopts')
+module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
+    const guildID = config.testGuildID;
+    const guild = client.guilds.cache.get(guildID);
     let commands
-    if (settoguild == 1) {
-        if (guild) {
-            commands = guild.commands
-        } else {
-            commands = client.application?.commands
-        }
-    }
-    if (settoguild == 0) {
+    settoguild = 0
+    if (settoguild == 1 && guild) {
+        commands = guild.commands
+    } else {
         commands = client.application?.commands
     }
+
     commands?.create({
         name: 'ping',
-        description: 'replies with pong.',
-    })
-    commands?.create({
-        name: 'test',
-        description: 'test if / works',
-        options: [
-            {
-                name: 'type',
-                description: 'which command to test?',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            }
-        ]
-    })
-    commands?.create({
-        name: 'convert',
-        description: 'convert values (eg fahrenheit to kelvin)',
-        options: [
-            {
-                name: 'type',
-                description: 'what you are converting.',
-                required: true,
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: conversionopts
-            },
-            {
-                name: 'number',
-                description: 'the number to convert',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            }
-        ]
-    })
-    commands?.create({
-        name: 'math',
-        description: 'simple math calculator',
-        options: [
-            {
-                name: 'type',
-                description: 'method',
-                required: true,
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: mathcmdopts
-            },
-            {
-                name: 'num1',
-                description: 'first number',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: 'num2',
-                description: 'second number',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            }
-        ]
+        description: 'Pong!',
     })
     commands?.create({
         name: 'help',
-        description: 'lists all commands',
+        description: 'Displays all commands',
         options: [
             {
                 name: 'command',
-                description: 'provide info on this command',
+                description: 'Displays help for a specific command',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            }
-        ]
-    })
-    commands?.create({
-        name: 'remind',
-        description: 'sets a reminder',
-        options: [
-            {
-                name: 'time',
-                description: 'how long to set it for',
-                required: true,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-            {
-                name: 'reminder',
-                description: 'what to remind',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
             }
         ]
     })
     commands?.create({
         name: 'gif',
-        description: 'sends a gif to chad',
+        description: 'Sends a random gif',
         options: [
             {
                 name: 'type',
-                description: 'what type of gif to send',
-                required: true,
+                description: 'The type of gif to send',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: gifopts
+                required: true,
+                choices: cmdconfig.gifopts
+            }
+        ]
+    })
+    commands?.create({
+        name: 'image',
+        description: 'Searches the Google API and returns the first five results',
+        options: [
+            {
+                name: 'query',
+                description: 'The parameters for the search',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true
+            }
+        ]
+    })
+    commands?.create({
+        name: 'ytsearch',
+        description: 'Searches the YouTube API and returns the first five results',
+        options: [
+            {
+                name: 'query',
+                description: 'The parameters for the search',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true
+            }
+        ]
+    })
+    commands?.create({
+        name: 'math',
+        description: 'Solves a simple math problem',
+        options: [
+            {
+                name: 'type',
+                description: 'The parameters for the search',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+                choices: cmdconfig.mathcmdopts
+            },
+            {
+                name: 'num1',
+                description: 'The first number',
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                required: true
+            },
+            {
+                name: 'num2',
+                description: 'The second number',
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                required: false
+            }
+        ]
+    })
+    commands?.create({
+        name: 'convert',
+        description: 'Converts one value to another',
+        options: [
+            {
+                name: 'type1',
+                description: 'What to convert the value from',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+                choices: cmdconfig.conversionopts
+            },
+            {
+                name: 'type2',
+                description: 'What to convert the value to',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+                choices: cmdconfig.conversionopts
+            },
+            {
+                name: 'number',
+                description: 'The value to convert',
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                required: true
+            }
+        ]
+    })
+    commands?.create({
+        name: '8ball',
+        description: 'Responds to a question',
+    })
+    commands?.create({
+        name: 'roll',
+        description: 'Returns a random number',
+        options: [
+            {
+                name: 'number',
+                description: 'The maximum number to get',
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                required: false
+            }
+        ]
+    })
+    commands?.create({
+        name: 'remind',
+        description: 'Reminds the user of something',
+        options: [
+            {
+                name: 'time',
+                description: 'How long to wait before sending the reminder. Must end in d, h, m, or s',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true
+            },
+            {
+                name: 'reminder',
+                description: 'The reminder',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true
+            },
+            {
+                name: 'sendinchannel',
+                description: 'If true, the reminder will be sent into the channel',
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+                required: false
+            }
+        ]
+    })
+    commands?.create({
+        name: 'say',
+        description: 'Send a message to a channel',
+        options: [
+            {
+                name: 'message',
+                description: 'The message to send',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true
+            },
+            {
+                name: 'channel',
+                description: 'The channel to send the message to',
+                type: Constants.ApplicationCommandOptionTypes.CHANNEL,
+                required: false
             }
         ]
     })
 
-    //osu----------------
-
+    //below are osu related commands
     commands?.create({
-        name: 'osutop',
-        description: 'top 5 plays for a user',
+        name: 'osu',
+        description: 'Displays the user\'s osu! profile',
         options: [
             {
                 name: 'user',
-                description: 'the user. can be in ID or username',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-            {
-                name: 'offset',
-                description: 'if you want page offset',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER,
-                max_value: 19,
-                min_value: 0
-            },
-            {
-                name: 'mode',
-                description: 'what mode?',
-                required: false,
+                description: 'The user to display the profile of',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: modeopts
-            },
-            {
-                name: 'sort',
-                description: 'what to sort plays by. defaults to pp',
                 required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: playsortopts
-            },
-            {
-                name: 'mapper',
-                description: 'only show maps made by this mapper',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-            {
-                name: 'mods',
-                description: 'only show scores with these mods. add exact at the start to hard filter',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-            {
-                name: 'detailed',
-                description: 'whether or not to show extra details',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.BOOLEAN
             }
         ]
     })
     commands?.create({
-        name: 'rs',
-        description: 'most recent play for user',
-        fetchReply: true,
-        options: useroffsetmodeopts
-    })
-    commands?.create({
-        name: 'skin',
-        description: 'skins!!!',
+        name: 'osuset',
+        description: 'Sets the user\'s osu! profile',
         options: [
             {
-                name: 'skin',
-                description: 'the skin',
-                required: false,
+                name: 'user',
+                description: 'The user to set the profile of',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: skincmdopts
+                required: true,
+            },
+            {
+                name: 'mode',
+                description: 'The mode to set the profile to',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+                choices: cmdconfig.modeopts
+            }
+        ]
+    })
+    commands?.create({
+        name: 'osutop',
+        description: 'Displays the top plays of the user',
+        options: [
+            {
+                name: 'user',
+                description: 'The user to display the top plays of',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: false,
+            },
+            {
+                name: 'mode',
+                description: 'The mode to display the top plays of',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: false,
+                choices: cmdconfig.modeopts
+            },
+            {
+                name: 'sort',
+                description: 'The sort to display the top plays of',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: false,
+                choices: cmdconfig.playsortopts
+            },
+            {
+                name: 'page',
+                description: 'The page to display the top plays of',
+                type: Constants.ApplicationCommandOptionTypes.INTEGER,
+                required: false,
+            },
+            {
+                name: 'mapper',
+                description: 'Filter the top plays to show maps from this mapper',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: false,
+            },
+            {
+                name: 'mods',
+                description: 'Filter the top plays to show only plays with these mods',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: false,
+            },
+            {
+                name: 'detailed',
+                description: 'Show all details',
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+                required: false,
             }
         ]
     })
     commands?.create({
         name: 'map',
-        description: 'search for a map',
+        description: 'Displays the map info of the map',
         options: [
             {
                 name: 'id',
-                description: 'the map id. Uses the last stored map if not used.',
+                description: 'The id of the map to display',
+                type: Constants.ApplicationCommandOptionTypes.INTEGER,
                 required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
+                minValue: 1
             },
             {
                 name: 'mods',
-                description: 'mods/game modifiers.',
+                description: 'The mods to display the map info of',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-        ]
+            }]
     })
     commands?.create({
-        name: 'osu',
-        description: 'osu! profile info',
+        name: 'rs',
+        description: 'Displays the user\'s most recent score',
+        options: cmdconfig.useroffsetmodeopts
+    })
+    commands?.create({
+        name: 'scores',
+        description: 'Displays the user\'s scores for a set map',
+        options: cmdconfig.useridsortopts
+    })
+
+
+    //below are admin related commands
+    commands?.create({
+        name: 'checkperms',
+        description: 'Checks the permissions of a user',
         options: [
             {
                 name: 'user',
-                description: 'username or ID',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-        ]
-    })
-    commands?.create({
-        name: 'pp',
-        description: 'pp values for a map',
-        options: [
-            {
-                name: 'id',
-                description: 'the map id. Uses the last stored map if not used.',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: 'mods',
-                description: 'mods/game modifiers.',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-        ]
-    })
-    commands?.create({
-        name: 'accuracycalculator',
-        description: "calculate a play's accuracy",
-        options: [
-            {
-                name: '300s',
-                description: 'hit 300s',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: '100s',
-                description: 'hit 100s',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: '50s',
-                description: 'hit 50s',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: '0s',
-                description: 'misses',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: '200s',
-                description: 'hit 200s (mania only)',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: '300maxes',
-                description: 'hit 300+ (mania only)',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: 'mode',
-                description: 'what gamemode? (default osu! standard)',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: modeopts
-            },
-        ]
-    })
-
-    commands?.create({
-        name: 'setuser',
-        description: 'set your username / mode',
-        options: [
-            {
-                name: 'input',
-                description: 'username or ID works (mode name if set to mode)',
+                description: 'The user to check the permissions of',
+                type: Constants.ApplicationCommandOptionTypes.USER,
                 required: true,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-            {
-                name: 'type',
-                description: 'whether to set mode or username',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [{ name: 'username', value: 'user' }, { name: 'mode', value: 'mode' }]
             }
         ]
     })
     commands?.create({
-        name: 'tsfm',
-        description: 'returns scores for a map',
-        options: useridsortopts
+        name: 'servers',
+        description: 'Displays all servers the bot is in',
+
     })
     commands?.create({
-        name: 'scores',//prev - tsfm
-        description: 'returns scores for a map',
-        options: useridsortopts
-    })
-    commands?.create({
-        name: 'rsplus',
-        description: 'most recent play for user',
-        fetchReply: true,
-        options: useroffsetmodeopts
-    })
-    commands?.create({
-        name: 'leaderboard',
-        description: 'displays the top 5 plays for a map',
-        fetchReply: true,
+        name: 'leaveguild',
+        description: 'Leaves a server',
         options: [
             {
-                name: 'type',
-                description: 'what to filter scores by (global/mods/friends)',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                choices: [{ name: 'global', value: 'global' }, { name: 'mods', value: 'mods' }, { name: 'friends', value: 'friends' }]
-            },/*
-            {
-                name: 'input',
-                description: 'mods/username',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },*/
-            {
-                name: 'id',
-                description: 'map id',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            },
-            {
-                name: 'offset',
-                description: 'which page? (0 is page 1)',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
-            }
-        ]
-    })
-
-
-
-    //admin??
-    commands?.create({
-        name: 'botstatus',
-        description: 'edit the bots status! (requires permissions)',
-        options: [
-            {
-                name: 'type',
-                description: 'status type (playing, watching etc.)',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-            {
-                name: 'text',
-                description: 'text for the status',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            },
-            {
-                name: 'status',
-                description: 'availability (do not disturb, online etc.)',
-                required: false,
-                type: Constants.ApplicationCommandOptionTypes.STRING
-            }
-        ]
-    })
-    commands?.create({
-        name: 'guildleave',
-        description: 'get the bot to leave a guild',
-        options: [
-            {
-                name: 'guildid',
-                description: 'the id of the guild to leave',
+                name: 'guild',
+                description: 'The server to leave',
+                type: Constants.ApplicationCommandOptionTypes.INTEGER,
                 required: true,
-                type: Constants.ApplicationCommandOptionTypes.NUMBER
+                minValue: 1
             }
         ]
-    })
-    commands?.create({
-        name: 'guildlist',
-        description: 'list all guilds the bot is in',
-    })
-    commands?.create({
-        name: 'menutest',
-        description: 'some menu test',
+
     })
 
     client.on('interactionCreate', async (interaction) => {
-        if (!interaction.isCommand()) return
-        //console.log(interaction)
-
-        let consoleloguserweeee = interaction.author
-        let currentDate = new Date();
-        let currentDateISO = new Date().toISOString();
-        let currentDateForSomeApiThing = new Date().toISOString().slice(0, 10);
-        let timeStamp = new Date().getTime();
-        let curdateyesterdaytimestamp = timeStamp - 24 * 60 * 60 * 1000;
-        let curdateyesterday = new Date(curdateyesterdaytimestamp).toISOString().slice(0, 10);
-        let curdatetmrtimestamp = timeStamp + 24 * 60 * 60 * 1000;
-        let curdatetmr = new Date(curdatetmrtimestamp).toISOString().slice(0, 10);
-        let split = new Date().toString().match(/([A-Z]+[\+-][0-9]+.*)/);
-        let curtimezone = split[split.length - 1]
+        if (!interaction.isCommand()) return;
+        //make a variable that is the current date
+        let currentDate = new Date()
+        let currentDateISO = new Date().toISOString()
+        let message = null;
+        let args = null
 
         const { commandName, options } = interaction
-
-        switch (commandName) //variable to check for
-        {
-
-            case 'test': //if command = 'test' blahblablah
-                client.commands.get('slashtest').execute(interaction, options, client, Discord, currentDate, currentDateISO)
-                break;
-
+        switch (commandName) {
             case 'ping':
-                client.helpcmds.get('pingslash').execute(interaction, client, Discord, currentDate, currentDateISO)
+                client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
-
-            case 'convert':
-                client.helpcmds.get('measureconvertslash').execute(interaction, client, Discord, options, currentDate, currentDateISO)
-                break;
-
-            case 'math':
-                client.helpcmds.get('mathslash').execute(interaction, client, Discord, options, currentDate, currentDateISO)
-                break;
-
             case 'help':
-                client.helpcmds.get('helpslash').execute(interaction, options, Discord, commands, currentDate, currentDateISO)
-                break;
-
-            case 'remind':
-                client.commands.get('remindslash').execute(interaction, options, client, Discord, currentDate, currentDateISO)
+                client.commands.get('help').execute(message, args, client, Discord, interaction, currentDate, currentDateISO)
                 break;
             case 'gif':
-                client.commands.get('gifslash').execute(interaction, options, currentDate, currentDateISO)
+                client.commands.get('gif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
-            //------osu
-            case 'rs':
-                client.osucmds.get('rsslash').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            case 'image':
+                client.commands.get('image').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'ytsearch':
+                client.commands.get('ytsearch').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'math':
+                client.commands.get('math').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'convert':
+                client.commands.get('convert').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case '8ball':
+                client.commands.get('8ball').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'roll':
+                client.commands.get('roll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'remind':
+                client.commands.get('remind').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'say':
+                client.commands.get('say').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+
+            //osu below
+
+            case 'osu':
+                client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                break;
+            case 'osuset':
+                client.osucmds.get('osuset').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'osutop':
-                client.osucmds.get('osutopslash').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;
-            case 'skin':
-                client.osucmds.get('skin').execute(interaction, options, currentDate, currentDateISO)
+                client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'map':
-                client.osucmds.get('mapslash').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break
-            case 'osu':
-                client.osucmds.get('osuslash').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
+                client.osucmds.get('map').execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config)
                 break;
-            case 'pp':
-                client.osucmds.get('ppslash').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
+            case 'rs':
+                client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
-            case 'accuracycalculator':
-                client.osucmds.get('acccalc').execute(interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;
-            case 'setuser':
-                client.osucmds.get('osusetslash').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO)
-                break;
-            case 'tsfm': case 'scores':
-                client.osucmds.get('scores').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;
-            case 'rsplus':
-                client.osucmds.get('rsplus').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;
-            case 'leaderboard':
-                client.osucmds.get('leaderboardslash').execute(userdatatags, interaction, options, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;
-            //admins---------------
-
-            case 'botstatus':
-                client.admincmds.get('botstatusslash').execute(interaction, options, client, Discord, currentDate, currentDateISO)
+            case 'scores':
+                client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
 
-            case 'guildleave':
-                client.admincmds.get('gleave').execute(interaction, options, client, Discord, currentDate, currentDateISO)
-                break;
-            case 'guildlist':
-                client.admincmds.get('serverlist').execute(interaction, options, client, Discord, currentDate, currentDateISO)
-                break;
 
-            /*
-            case  'links':
-                client.helpcmds.get('links').execute(interaction, args, currentDate, currentDateISO)
-                break;
-        
-            case 'roll':case 'numgen':
-                client.commands.get('roll').execute(interaction, args, currentDate, currentDateISO)
-                break; 
-        
-            case 'osu':
-                client.osucmds.get('osu').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret,)
-                break;
-        
-            case 'osugraph':
-                client.osucmds.get('osugraph').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;
-        
-            case 'osutop':
-                client.osucmds.get('osutop').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
-                break;
-        
-            case 'osutest':
-                client.osucmds.get('osutest').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                //client.commands.get('WIP').execute(interaction, args, currentDate, currentDateISO)
-                break;
-            case 'osubest':
-                client.osucmds.get('osubest').execute(interaction, args, Discord, currentDate, currentDateISO)
-                break;
-        
-            case 'map':case 'mapinfo':
-                client.osucmds.get('map').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;
-        
-            case 'pastmap'://case 'mapinfo':
-                client.osucmds.get('pastmap').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;
-        
-            case 'osuid':
-                client.osucmds.get('osuid').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;
-        
-            case 'osubestrs':
-              client.osucmds.get('osubestrs').execute(interaction, args, Discord, currentDate, currentDateISO, curdateyesterday, curdatetmr, curtimezone)
-              break;
-        
-            case 'danser':
-                client.osucmds.get('danser').execute(interaction, args, currentDate, currentDateISO)
-                break;
-        
-            case 'skin':
-                client.osucmds.get('skin').execute(interaction, args, currentDate, currentDateISO)
-                break;
-        
-            case 'tsfm':case 'c':
-                client.osucmds.get('tsfm').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;
-            
-            case 'osuauth':
-                client.osucmds.get('osuauth').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;  
-        
-            case 'osusave':case 'osuset':
-                client.osucmds.get('osusave').call(interaction, args, Discord, currentDate, currentDateISO)
-                break;
-        
-            case 'maniars':case 'maniarecent':case 'rsmania':case 'recentmania':
-                client.osucmds.get('maniars').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;
-            case 'maniatop':case 'topmania':
-                client.osucmds.get('maniatop').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;
-            /*case 'maniatsfm':case 'maniac':case 'tsfmmania':case 'cmania':
-                client.osucmds.get('maniatsfm').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-                break;*/
-            /*
-    
-        case 'taikors':case 'taikorecent':case 'rstaiko':case 'recenttaiko':
-            client.osucmds.get('taikors').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-            break;
-        case 'taikotop':case 'toptaiko':
-            client.osucmds.get('taikotop').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-            break;
-            
-        case 'ctbrs':case 'ctbrecent':case 'rsctb':case 'recentctb':
-            client.osucmds.get('ctbrs').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-            break;
-        case 'ctbtop':case 'topctb':
-            client.osucmds.get('ctbtop').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-            break;
-        
-        case 'pp':
-            client.osucmds.get('pp').execute(interaction, args, Discord, currentDate, currentDateISO, osuapikey, osuauthtoken, osuclientid, osuclientsecret)
-            break;*/
+            //admin 
 
+
+
+            case 'checkperms':
+                client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                break;
+            case 'servers':
+                client.admincmds.get('servers').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                break;
+            case 'leaveguild':
+                client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                break;
             default:
-                return;
+                interaction.reply({ content: 'Command not found - no longer exists or is currently being rewritten', ephemeral: true })
                 break;
         }
+    })
 
-    });
-
-}// end
+}

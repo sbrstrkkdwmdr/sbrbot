@@ -1,45 +1,67 @@
 const fs = require('fs')
-const { cx, key } = require('../config.json');
-const { otherlogdir } = require('../logconfig.json')
+const fetch = require('node-fetch')
+
 module.exports = {
     name: 'image',
-    description: 'Returns the first google result for the parameters given' +
-        '\nUsage: `sbr-image [search]`',
-    async execute(message, args, Discord, get, client, currentDate, currentDateISO) {
-        //message.channel.send("WIP")
-        fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
-        fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync(otherlogdir, "\n" + "command executed - image")
-        fs.appendFileSync(otherlogdir, "\n" + "category - general")
-        let consoleloguserweeee = message.author
-        fs.appendFileSync(otherlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync(otherlogdir, "\n" + "")
-        console.groupEnd()
-        if (!args.length) return message.channel.send('Please specify the name of the image you want to search.')
+    description: 'null',
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+        if (message != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - image (message)\n${currentDate} | ${currentDateISO}\n recieved image command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
-        // Note that ephemeral messages are only available with Interactions, so we can't make the response here as an ephemeral.
-        // Meaning People can search dirty things and the image will be seen by everyone, It's up to you on how you can make this safe.
+            if (!args.length) {
+                return message.channel.send('Please specify the name of the image you want to search.')
+            }
+            let res =
+                await fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${args.join(' ')}&cx=${config.googlecx}&key=${config.googlekey}&searchType=image`).catch(error => fs.appendFileSync(otherlogdir, "\n" + e));
 
-        //const cx = process.env.GOOGLE_CX // Watch the video to get your google cx.
-        //const key = process.env.GOOGLE_KEY // Watch the video to get your google api key.
-        let searchthing = args.splice(0, 100).join(" ")
+            if (!res) return message.channel.send('Unable to fetch the requested image.')
+            if (res.status >= 400) return message.channel.status(`Error ${res.status}`)
 
-        let res = await get(`https://customsearch.googleapis.com/customsearch/v1?q=${searchthing}&cx=${cx}&key=${key}&searchType=image`).catch(error => fs.appendFileSync(otherlogdir, "\n" + e));
+            response = await res.json();
+            fs.writeFileSync('debug/image.json', JSON.stringify(response, null, 2))
+            if (response.items.length < 1) return message.channel.send('Error - no results found')
 
-        if (!res) return message.channel.send('Unable to fetch the requested image.');
-        if (res.status >= 400) return message.channel.send(`Error ${res.status}: ${res.statusText}`);
+            let resimg = ''
+            for (i = 0; i < 5 && i < response.items.length; i++) {
+                resimg += `\n\n<${response.items[i].link}>`
+            }
+            let imageEmbed = new Discord.MessageEmbed()
+                .setTitle(`IMAGE RESULTS FOR ${args.join(' ')}`)
+                .setDescription(`${resimg}`)
+            message.channel.send({ embeds: [imageEmbed] })
+            fs.appendFileSync('commands.log', `\nCommand Information\nQuery: ${args.join(' ')}`)
 
-        res = await res.json();
-        if (!res.items?.length) return message.channel.send('No results found.');
+        }
+        if (interaction != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - image (interaction)\n${currentDate} | ${currentDateISO}\n recieved image command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
 
-        message.channel.send({
-            embeds: [
-                new Discord.MessageEmbed()
-                    .setColor('RANDOM')
-                    .setImage(res.items[0].link)
-                    .setTitle(`Image result for ${searchthing}.`)
-                    .setDescription(`requested by ${consoleloguserweeee.tag}`)
-            ]
-        });
+            let query = interaction.options.getString('query')
+
+            if (!query) {
+                return interaction.reply('Please specify the name of the image you want to search.')
+            }
+            let res =
+                await fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${query}&cx=${config.googlecx}&key=${config.googlekey}&searchType=image`).catch(error => fs.appendFileSync('other.log', "\n" + error));
+
+            if (!res) return interaction.reply('Unable to fetch the requested image.')
+            if (res.status >= 400) return interaction.reply(`Error ${res.status}`)
+
+            response = await res.json();
+            fs.writeFileSync('debug/image.json', JSON.stringify(response, null, 2))
+            if (response.items.length < 1) return interaction.reply('Error - no results found')
+
+            let resimg = ''
+            for (i = 0; i < 5 && i < response.items.length; i++) {
+                resimg += `\n\n<${response.items[i].link}>`
+            }
+
+            let imageEmbed = new Discord.MessageEmbed()
+                .setTitle(`IMAGE RESULTS FOR ${query}`)
+                .setDescription(`${resimg}`)
+
+            interaction.reply({ embeds: [imageEmbed] })
+            fs.appendFileSync('commands.log', `\nCommand Information\nquery: ${query}`)
+
+        }
     }
 }

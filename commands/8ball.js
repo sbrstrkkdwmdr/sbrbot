@@ -1,24 +1,34 @@
 const fs = require('fs')
-const { otherlogdir } = require('../logconfig.json')
 
 module.exports = {
     name: '8ball',
-    description: 'Generates a random yes, no or maybe response.' +
-        '\nUsage: `sbr-8ball`' +
-        '\nAliases: `ask`',
-    execute(message, args, currentDate, currentDateISO) {
-        let rdm = ["yes", "no clue.", "知らない", "nope", "yeah", "definitely maybe not", "nah", "yeah of course", "絶対!!!", "多分",
-            "i didn't quite catch that, ask again?", "ehhhhhhh", "⠀"];
-        let ball = rdm[Math.floor(Math.random() * rdm.length)];
-        message.reply(String(`${ball}`))
-        fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
-        fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync(otherlogdir, "\n" + "command executed - 8ball")
-        fs.appendFileSync(otherlogdir, "\n" + "category - general")
-        let consoleloguserweeee = message.author
-        fs.appendFileSync(otherlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync(otherlogdir, "\n" + "")
-        console.groupEnd()
+    description: 'w',
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+
+        let responses = [
+            'yes', 'no', 'What? no', '知らない', 'nope', 'yeahhh', 'a strong maybe', 'definitely maybe not', 'nah', 'yeah of course', '多分', '絶対!!!',
+            'come again?', 'ehhhh', '⠀', '💀', '🥺', 'bruhhh', 'splish splash your question is trash', 3
+        ]
+
+        let q = responses[Math.floor(Math.random() * responses.length)]
+        if (q == 3) {
+            if (message != null) return message.channel.send('sbr-gif speech bubble')
+            if (interaction != null) {
+                interaction.channel.send('sbr-gif speech bubble')
+                interaction.reply({ content: ';)', ephemeral: true })
+                return;
+            }
+        }
+
+        if (message != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - 8ball (message)\n${currentDate} | ${currentDateISO}\n recieved 8ball command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            message.channel.send(q)
+            fs.appendFileSync('commands.log', `\nCommand Information\n${message.content}\n${q}`)
+        }
+        if (interaction != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - 8ball (message)\n${currentDate} | ${currentDateISO}\n recieved 8ball command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            interaction.reply(q)
+            fs.appendFileSync('commands.log', `\nCommand Information\n${q}`)
+        }
     }
 }
-//client.commands.get('').execute(message, args)

@@ -1,25 +1,38 @@
 const fs = require('fs')
-const { otherlogdir } = require('../logconfig.json')
+const commandchecks = require('../configs/commandchecks.js');
+
 module.exports = {
     name: 'say',
-    description: 
-    'Says the args given' + 
-    '\nUsage: `sbr-say [message]`',
-    execute(owners, message, args, currentDate, currentDateISO) {
-        if(!owners.some(v => (message.author.id.toString()).includes(v))){
+    description: 'template text\n' +
+    'Command: `sbr-command-name`\n' +
+    'Options: \n' +
+    '    `--option-name`: `option-description`\n',
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction){
+        if(message != null){
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - say (message)\n${currentDate} | ${currentDateISO}\n recieved say command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            if(commandchecks.isOwner(message.author.id)){
             message.delete();
+            message.channel.send(args.join(' '))
+            } else {
+                message.channel.send('L + ratio + no + you do not have permissions + no bitches + L')
+            }
             return;
-        };
-        const saythis = args.splice(0,1000).join(" ");
-        message.delete();
-        message.channel.send(saythis)
-        fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
-        fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync(otherlogdir, "\n" + "command executed - say")
-        fs.appendFileSync(otherlogdir, "\n" + "category - general")
-        let consoleloguserweeee = message.author
-        fs.appendFileSync(otherlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync(otherlogdir, "\n" + "")
-        console.groupEnd()
+        }
+        if(interaction != null){
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - say (interaction)\n${currentDate} | ${currentDateISO}\n recieved say command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            let msg = interaction.options.getString('message')
+            let channel = interaction.options.getChannel('channel')
+            //console.log(channel)
+            if(!channel){
+                channel = interaction.channel
+            }
+            interaction.reply({content: 'success', ephemeral: true})
+            if(commandchecks.isOwner(interaction.member.user.id)){
+                return 
+            }
+            channel.send(`${msg}`)
+        }
+
+        fs.appendFileSync('commands.log', 'success\n\n', 'utf-8')
     }
 }

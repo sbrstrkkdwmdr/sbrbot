@@ -1,91 +1,64 @@
 const fs = require('fs')
-const yts = require('yt-search');
-const { otherlogdir } = require('../logconfig.json')
+const fetch = require('node-fetch')
+const yts = require('yt-search')
+const cmdchecks = require('../configs/commandchecks.js')
 
 module.exports = {
     name: 'ytsearch',
-    description:
-        'Uses the YouTube api to return a youtube search' +
-        '\nUsage: `sbr-ytsearch [query]`',
-    async execute(message, args, client, Discord, currentDate, currentDateISO) {
-        fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
-        try {
+    description: 'null',
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+        if (message != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - ytsearch (message)\n${currentDate} | ${currentDateISO}\n recieved search youtube command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             if (!args.length) {
-                message.reply('No search query given') //Checks if the user gave any search queries
-            } else {
-                const searched = await yts.search(args.splice(0, 100).join(" ")); //Searches for videos
-                if (!searched.videos.length) {
-                    message.reply("no results found")
-                } else {
-                    /*
-                        let creator1 = JSON.stringify(searched.videos[0].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
-                        let creator2 = JSON.stringify(searched.videos[1].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
-                        let creator3 = JSON.stringify(searched.videos[2].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
-                        let creator4 = JSON.stringify(searched.videos[3].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
-                        let creator5 = JSON.stringify(searched.videos[4].author, ['name']).replaceAll('name', '').replaceAll("{", "").replaceAll("}", "").replaceAll('"', "").replaceAll(":", "");
-                        message.reply(`[1] ${searched.videos[0].title} by ${creator1} \nurl: <${searched.videos[0].url}> \n \n[2] ${searched.videos[1].title} by ${creator2} \nurl: <${searched.videos[1].url}> \n \n[3] ${searched.videos[2].title} by ${creator3} \nurl: <${searched.videos[2].url}> \n \n[4] ${searched.videos[3].title} by ${creator4} \nurl: <${searched.videos[3].url}> \n \n[5] ${searched.videos[4].title} by ${creator5} \nurl: <${searched.videos[4].url}>`); //Sends the result
-                        //message.reply(`${searched.videos[0].title} by ${creator1} | ${searched.videos[0].url}`)//sends result
-                    */
-                    let searchvid = searched.videos
-
-                    let embed = new Discord.MessageEmbed()
-                        .setTitle('Results for' + args.splice().join(" "))
-                        //.setTitle('')
-                        ;
-                    let curtxt = ''
-                    for (i = 0; i < 5 && i < searchvid.length; i++) {
-                        let creator = searchvid[i].author.name
-                        let title = shorten(searchvid[i].title)
-                        let url = searchvid[i].url
-                        let creatorurl = searchvid[i].author.url
-                        let date = searchvid[i].ago
-                        let length = searchvid[i].timestamp
-                        let description = descshorten(searchvid[i].description)
-
-                        curtxt +=
-                            `**${i + 1} | [${title}](${url})**` +
-                            `\nPublished by [${creator}](${creatorurl})` +
-                            `\n${date}` +
-                            `\nDuration: ${length}  (${searchvid[i].seconds}s)` +
-                            `\nVideo Description: \`${description}\`` +
-                            `\n\n`
-                    }
-                    if (curtxt == '') {
-                        curtxt = 'Error: no results'
-                    }
-                    embed.setDescription(curtxt)
-                    //console.log(searchvid)
-                    message.reply({ embeds: [embed] })
-                    function shorten(txt) {
-                        if (txt.length > 65) {
-                            newtxt = txt.substring(0, 64) + '...'
-                        } else {
-                            newtxt = txt
-                        }
-
-                        return newtxt
-                    }
-                    function descshorten(txt) {
-                        if (txt.length > 100) {
-                            newtxt = txt.substring(0, 99) + '...'
-                        } else {
-                            newtxt = txt
-                        }
-
-                        return newtxt
-                    }
-                }
+                return message.channel.send('Please specify the video you want to search.')
             }
-        } catch (error) {
-            message.reply("error")
-            fs.appendFileSync(otherlogdir, "\n" + error)
+            const searching = await yts.search(args.join(' '))
+            if (searching.videos.length < 1) {
+                return message.channel.send('No results found')
+            }
+            let vids = searching.videos
+            let embed = new Discord.MessageEmbed()
+                .setTitle(`Results for ${args.join(' ')}`)
+                ;
+            for (i = 0; i < 5 && i < vids.length; i++) {
+                embed.addField(`#${i + 1}`,
+                    `[${cmdchecks.shorten(vids[i].title)}](${vids[i].url})
+                Published by [${vids[i].author.name}](${vids[i].author.url})
+                ${vids[i].ago}
+                Duration: ${vids[i].timestamp} (${vids[i].seconds}s)
+                Description: \`${vids[i].description}\`
+                `, false)
+            }
+            fs.writeFileSync('debug/ytsearch.json', JSON.stringify(searching, null, 2))
+            message.channel.send({ embeds: [embed] })
+            fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
         }
-        fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync(otherlogdir, "\n" + "command executed - yt search")
-        fs.appendFileSync(otherlogdir, "\n" + "category - general")
-        let consoleloguserweeee = message.author
-        fs.appendFileSync(otherlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync(otherlogdir, "\n" + "")
-        console.groupEnd()
+        if (interaction != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - ytsearch (interaction)\n${currentDate} | ${currentDateISO}\n recieved search youtube command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            let query = interaction.options.getString('query')
+            if (!query) {
+                return interaction.reply('Please specify the video you want to search.')
+            }
+            const searching = await yts.search(query)
+            if (searching.videos.length < 1) {
+                return interaction.reply('No results found')
+            }
+            let vids = searching.videos
+            let embed = new Discord.MessageEmbed()
+                .setTitle(`Results for ${query}`)
+                ;
+            for (i = 0; i < 5 && i < vids.length; i++) {
+                embed.addField(`#${i + 1}`,
+                    `[${cmdchecks.shorten(vids[i].title)}](${vids[i].url})
+                Published by [${vids[i].author.name}](${vids[i].author.url})
+                ${vids[i].ago}
+                Duration: ${vids[i].timestamp} (${vids[i].seconds}s)
+                Description: \`${vids[i].description}\`
+                `, false)
+            }
+            fs.writeFileSync('debug/ytsearch.json', JSON.stringify(searching, null, 2))
+            interaction.reply({ embeds: [embed] })
+            fs.appendFileSync('commands.log', `\nCommand Information\nquery: ${query}`)
+        }
     }
 }

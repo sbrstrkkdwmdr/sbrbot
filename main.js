@@ -1,27 +1,16 @@
-const Discord = require('discord.js'); //uses discord.js to run
-const fetch = require('node-fetch');
-//added in discordjs 13
+const Discord = require('discord.js');
 const { Client, Intents } = require('discord.js');
-const { token } = require('./config.json'); //get the value "token" from config.json
-const { osuauthtoken, osuapikey, osuclientid, osuclientsecret } = require('./config.json');
-const { trnkey } = require('./config.json')
-process.on('warning', e => console.warn(e.stack));
-//const triggerwords = require('./triggerwords.js')
+const fs = require('fs');
+const Sequelize = require('sequelize');
+const fetch = require('node-fetch');
 
-//const msglogs = require('./sbrmsg.js')
-//const modlogs = require('./sbrmodlogs.js')
-const modlogs = require('./modlogs.js')
-const commandhandler = require('./commandhandler.js')
-const slashcommandhandler = require('./slashcommandhandler.js')
-const linkhandler = require('./linkhandler.js')
-const loop = require('./loop.js')
-const testhandler = require('./testhandler.js')
-const checker = require('./checker.js')
 
-//MUSIC
-const ytdl = require("ytdl-core");
+const commandHandler = require('./commandHandler.js');
+const linkHandler = require('./linkHandler.js');
+const slashcommandHandler = require('./slashcommandHandler.js');
+const checker = require('./checker.js');
+const config = require('./configs/config.json');
 
-//const client = new Discord.Client();
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
@@ -37,277 +26,99 @@ const client = new Client({
         Intents.FLAGS.GUILD_VOICE_STATES,
         Intents.FLAGS.GUILD_WEBHOOKS,
     ]
-});
+})
 
-const { prefix } = require('./config.json')
-//const prefix = insertvaluehere; //prefix
-
-const fs = require('fs');
-const { monitorEventLoopDelay } = require('perf_hooks');
-const { setInterval } = require('timers/promises');
+const { prefix, token, osuApiKey, osuClientID, osuClientSecret } = require('./configs/config.json');
 
 client.commands = new Discord.Collection();
-client.linkdetect = new Discord.Collection();
+client.links = new Discord.Collection();
 client.osucmds = new Discord.Collection();
 client.admincmds = new Discord.Collection();
-client.helpcmds = new Discord.Collection();
 client.musiccmds = new Discord.Collection();
-client.ecchicmds = new Discord.Collection();
-client.gamingcmds = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
-
     client.commands.set(command.name, command);
 }
-const linkFiles = fs.readdirSync('./links/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
+
+const linkFiles = fs.readdirSync('./links').filter(file => file.endsWith('.js'));
 for (const file of linkFiles) {
     const link = require(`./links/${file}`);
-
-    client.linkdetect.set(link.name, link);
+    client.links.set(link.name, link);
 }
-const osucmdFiles = fs.readdirSync('./osu/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-for (const file of osucmdFiles) {
-    const osucmd = require(`./osu/${file}`);
 
-    client.osucmds.set(osucmd.name, osucmd);
+const osuFiles = fs.readdirSync('./commands-osu').filter(file => file.endsWith('.js'));
+for (const file of osuFiles) {
+    const osu = require(`./commands-osu/${file}`);
+    client.osucmds.set(osu.name, osu);
 }
-const admincmdfiles = fs.readdirSync('./commands-admin/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-for (const file of admincmdfiles) {
-    const admincmd = require(`./commands-admin/${file}`);
 
-    client.admincmds.set(admincmd.name, admincmd);
+const admincommandFiles = fs.readdirSync('./commands-admin').filter(file => file.endsWith('.js'));
+for (const file of admincommandFiles) {
+    const admincommand = require(`./commands-admin/${file}`);
+    client.admincmds.set(admincommand.name, admincommand);
 }
-const helpcmdfiles = fs.readdirSync('./commands-help/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-for (const file of helpcmdfiles) {
-    const helpcmd = require(`./commands-help/${file}`);
 
-    client.helpcmds.set(helpcmd.name, helpcmd);
+const musicCommandFiles = fs.readdirSync('./commands-music').filter(file => file.endsWith('js'));
+for (const file of musicCommandFiles) {
+    const musiccommand = require(`./commands-music/${file}`)
+    client.musiccmds.set(musiccommand.name, musiccommand)
 }
-const musiccmdfiles = fs.readdirSync('./commands-music/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-for (const file of musiccmdfiles) {
-    const musiccmd = require(`./commands-music/${file}`);
 
-    client.musiccmds.set(musiccmd.name, musiccmd);
-}/*
-const ecchicmdfiles = fs.readdirSync('./commands-ecchi/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-for (const file of ecchicmdfiles) {
-    const ecchicmd = require(`./commands-ecchi/${file}`);
-
-    client.ecchicmds.set(ecchicmd.name, ecchicmd);
-}
-const gamingcmdfiles = fs.readdirSync('./commands-gaming/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-for (const file of gamingcmdfiles) {
-    const gamingcmd = require(`./commands-gaming/${file}`);
-
-    client.gamingcmds.set(gamingcmd.name, gamingcmd);
-}*/
-//const modLogs = require('./modlogs/')
-/*if (!Date.prototype.toISOString) {
-(function() {
- 
-function pad(number) {
-    var r = String(number);
-        if (r.length === 1) {
-        r = '0' + r;
-    }
-    return r;
-    }
- 
-Date.prototype.toISOString = function() {
-    return this.getUTCFullYear() +
-    '-' + pad(this.getUTCMonth() + 1) +
-    '-' + pad(this.getUTCDate()) +
-    'T' + pad(this.getUTCHours()) +
-    'h' + pad(this.getUTCMinutes()) +
-    'm' + pad(this.getUTCSeconds()) +
-    's' + String((this.getUTCMilliseconds() / 1000).toFixed(3)).slice(2, 5) +
-    'ms';
-};
-
-}());
-}*/
-//const curtimezone = new Date().getTimezoneOffset();
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize('database', 'user', 'password', {
+const sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
     logging: false,
-    // SQLite only
     storage: 'database.sqlite',
 });
-const Tags = sequelize.define('tags', {
-    name: {
-        type: Sequelize.STRING,
-        unique: true,
-    },
-    description: Sequelize.TEXT,
-    username: Sequelize.STRING,
-    usage_count: {
+
+const userdata = sequelize.define('userdata', {
+    userid: {
         type: Sequelize.INTEGER,
-        defaultValue: 0,
-        allowNull: false,
+        unique: true
     },
-});
-const userdatatags = sequelize.define('tags', {
-    name: {
-        type: Sequelize.STRING,
-        unique: true,
-    },
-    description: Sequelize.TEXT,
-    username: {
-        type: Sequelize.STRING,
-        unique: true,
-    },
+    osuname: Sequelize.TEXT,
     mode: {
         type: Sequelize.STRING,
-        unique: true,
-    },
-    usage_count: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
-        allowNull: false,
-    },
-    xboxlive: {
-        type: Sequelize.STRING,
-        unique: true,
-    },
-    steamusername: {
-        type: Sequelize.STRING,
-        unique: true,
-    },
-});
+        defaultValue: 'osu',
+    }
+    
+})
 client.once('ready', () => {
-    Tags.sync();
-    userdatatags.sync();
-    let currentDate = new Date();
-    let currentDateISO = new Date().toISOString();
-    console.group('--- BOT IS NOW ONLINE ---')
-    //console.log(triggerwords)
-    console.log(`${currentDateISO} | ${currentDate}`)
-    //console.log('kwsmrksnsm is online!'); //message shown when bot turns on
-    console.log(`API Latency is ${Math.round(client.ws.ping)}ms`);
-    console.log("")
-    console.groupEnd()
+    userdata.sync()
+    console.log('Ready!');
+    commandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    linkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    slashcommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    checker(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
-    //msglogs(client)
-    //modlogs(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
-    client.commands = new Discord.Collection();
-    client.linkdetect = new Discord.Collection();
-    client.osucmds = new Discord.Collection();
-    client.altosucmds = new Discord.Collection();
-    client.admincmds = new Discord.Collection();
-    client.helpcmds = new Discord.Collection();
-    client.musiccmds = new Discord.Collection();
-    client.otherstuff = new Discord.Collection();
-
-    const commandFiles = fs.readdirSync('./commands/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-    for (const file of commandFiles) {
-        const command = require(`./commands/${file}`);
-
-        client.commands.set(command.name, command);
-    }
-    const linkFiles = fs.readdirSync('./links/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-    for (const file of linkFiles) {
-        const link = require(`./links/${file}`);
-
-        client.linkdetect.set(link.name, link);
-    }
-    const osucmdFiles = fs.readdirSync('./osu/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-    for (const file of osucmdFiles) {
-        const osucmd = require(`./osu/${file}`);
-
-        client.osucmds.set(osucmd.name, osucmd);
-    }
-    const altosucmdFiles = fs.readdirSync('./osu11/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-    for (const file of altosucmdFiles) {
-        const altosucmd = require(`./osu11/${file}`);
-
-        client.altosucmds.set(altosucmd.name, altosucmd);
-    }
-    const admincmdfiles = fs.readdirSync('./commands-admin/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-    for (const file of admincmdfiles) {
-        const admincmd = require(`./commands-admin/${file}`);
-
-        client.admincmds.set(admincmd.name, admincmd);
-    }
-    const helpcmdfiles = fs.readdirSync('./commands-help/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-    for (const file of helpcmdfiles) {
-        const helpcmd = require(`./commands-help/${file}`);
-
-        client.helpcmds.set(helpcmd.name, helpcmd);
-    }
-    const musiccmdfiles = fs.readdirSync('./commands-music/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-    for (const file of musiccmdfiles) {
-        const musiccmd = require(`./commands-music/${file}`);
-
-        client.musiccmds.set(musiccmd.name, musiccmd);
-    }
-    /*
-    const ecchicmdfiles = fs.readdirSync('./commands-ecchi/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-    for (const file of ecchicmdfiles) {
-        const ecchicmd = require(`./commands-ecchi/${file}`);
-
-        client.ecchicmds.set(ecchicmd.name, ecchicmd);
-    }
-    const gamingcmdfiles = fs.readdirSync('./commands-gaming/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-    for (const file of gamingcmdfiles) {
-        const gamingcmd = require(`./commands-gaming/${file}`);
-        
-
-        client.gamingcmds.set(gamingcmd.name, gamingcmd);
-    }*/
-    const otherfiles = fs.readdirSync('./other/').filter(file => (file.endsWith('.js') || file.endsWith('.ts')));
-    for (const file of otherfiles) {
-        const other = require(`./other/${file}`)
-
-        client.otherstuff.set(other.name, other);
-    }
-    commandhandler(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
-    slashcommandhandler(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
-    linkhandler(client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
-    testhandler(Tags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval, token)
-    checker(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
-    loop(userdatatags, client, Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, monitorEventLoopDelay, setInterval)
-    //Discord, osuauthtoken, osuapikey, osuclientid, osuclientsecret, trnkey, ytdl, prefix, monitorEventLoopDelay, setInterval
     client.user.setPresence({
         activities: [{
-            name: "you",
+            name: "you | sbr-help",
             type: 'WATCHING',
             url: 'https://youtube.com/saberstrkkdwmdr',
         }],
         status: `dnd`,
         afk: 'false'
     });
+
 })
-try {
-    client.login(token)
-    console.log(`--------------------------------------------------------------------------------------`)
-    //
-    let oauthurl = new URL("https://osu.ppy.sh/oauth/token");
-    let body1 = {
-        "client_id": osuclientid,
-        "client_secret": osuclientsecret,
-        "grant_type": "client_credentials",
-        "scope": "public"
-    }
-    fetch(oauthurl, {
-        method: "POST",
-        body: JSON.stringify(body1),
-        headers: { 'Content-Type': 'application/json' }
+client.login(token)
+fetch('https://osu.ppy.sh/oauth/token', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'}
+        ,
+    body: JSON.stringify({
+        grant_type: 'client_credentials',
+        client_id: osuClientID,
+        client_secret: osuClientSecret,
+        scope: 'public'
     })
-        .then(res => res.json())
-        .then(output => {
-            fs.writeFileSync("debug/osuauth.json", JSON.stringify(output, null, 2))
-            console.log("saved osuauth")
-        })
-    //console.group("--- ")    //console.groupEnd()
-    //
-} //turns on the bot
-catch (error) {
-    console.group("--- DEBUG ---")
-    console.log("login error")
-    console.log(error)
-    console.groupEnd()
+
+}).then(res => res.json())
+.then(res => {
+    fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
 }
+)

@@ -1,38 +1,28 @@
 const fs = require('fs')
-const { otherlogdir } = require('../logconfig.json')
+
 module.exports = {
     name: 'roll',
-    description: 
-    'Returns a random number between 0 and 100. the maximum value can be changed' + 
-    '\nUsage: `sbr-roll` or `sbr-roll [number]`',
-    execute(message, args, currentDate, currentDateISO) {
-        if (message.member.permissions.has('SEND_MESSAGES')) {
-            fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
-            let user = message.author
-            let w = args.slice(0).join(' ')
-            if (w > 0) {
-                let score = Math.floor(Math.random() * w + 1)
-                message.channel.send(` ${user} has rolled a(n) ${score} `)
-                fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
-                fs.appendFileSync(otherlogdir, "\n" + "command executed - roll")
-                fs.appendFileSync(otherlogdir, "\n" + "category - general")
-                let consoleloguserweeee = message.author
-                fs.appendFileSync(otherlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-                fs.appendFileSync(otherlogdir, "\n" + "")
+    description: 'w',
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+        if (message != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - roll (message)\n${currentDate} | ${currentDateISO}\n recieved roll command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            if (!args[0] || parseInt(args[0]) < 1) {
+                message.channel.send(`${Math.floor(Math.random() * 100 + 1)}`)
+            } else {
+                message.channel.send(`${Math.floor(Math.random() * args[0] + 1)}`)
             }
-            else {
-                let score = Math.floor(Math.random() * 100 + 1)
-                message.channel.send(` ${user} has rolled a(n) ${score} `)
-                fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
-                fs.appendFileSync(otherlogdir, "\n" + "command executed - roll")
-                fs.appendFileSync(otherlogdir, "\n" + "category - general")
-                let consoleloguserweeee = message.author
-                fs.appendFileSync(otherlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-                fs.appendFileSync(otherlogdir, "\n" + "")
+            fs.appendFileSync('commands.log', `\nCommand Information\nMessage content: ${message.content}`)
 
+        }
+        if (interaction != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - roll (interaction)\n${currentDate} | ${currentDateISO}\n recieved roll command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            let num = interaction.options.getNumber('number')
+            if(!num){
+                interaction.reply(`${Math.floor(Math.random() * 100 + 1)}`)
+            } else {
+                interaction.reply(`${Math.floor(Math.random() * num + 1)}`)
             }
-            console.groupEnd()
+            fs.appendFileSync('commands.log', `\nCommand Information\nnum: ${num}`)
         }
     }
 }
-//client.commands.get('').execute(message, args)

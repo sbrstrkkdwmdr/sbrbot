@@ -1,80 +1,88 @@
 const ms = require('ms')
+const fetch = require('node-fetch')
+const notxt = require('../configs/w.js')
 const fs = require('fs')
-const { otherlogdir } = require('../logconfig.json')
 module.exports = {
-    name: "remind",
-    category: "utility",
-    description:
-        'Sets a reminder to send in a set amount of time' +
-        '\nUsage: `sbr-remind [time in d/h/m/s] [reminder]`',
-    async execute(message, args, client, Discord, currentDate, currentDateISO) {
-        fs.appendFileSync(otherlogdir, "\n" + '--- COMMAND EXECUTION ---')
-        let time = args[0];
-        let user = message.author
-        let reminder = args.splice(1).join(' ')
+    name: 'remind',
+    description: 'null',
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+        let timetype = ['s', 'm', 'h', 'd']
+        if (message != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
-        const notime = new Discord.MessageEmbed()
-            .setColor('#F30B04')
-            .setTitle(`**Please specify the time!**`);
+            let time = args[0]
+            let remindertxt = args.join(' ').replaceAll(args[0], '')
 
-        const wrongtime = new Discord.MessageEmbed()
-            .setColor('#F30B04')
-            .setTitle(`**Incorrect time format: d, m, h, or s.**`);
-
-        const reminderembed = new Discord.MessageEmbed()
-            .setColor('#F30B04')
-            .setTitle(`**Error: no reminder text**`);
-
-        if (!args[0]) return message.channel.send({ embeds: [notime] })
-        if (
-            !args[0].endsWith("d") &&
-            !args[0].endsWith("m") &&
-            !args[0].endsWith("h") &&
-            !args[0].endsWith("s")
-        )
-
-
-            return message.channel.send({ embeds: [wrongtime] })
-        if (!reminder) return message.channel.send({ embeds: [reminderembed] })
-
-        const remindertime = new Discord.MessageEmbed()
-            .setColor('#33F304')
-            .setTitle(`\**A reminder has been set to go off in ${time}**`);
-
-        message.channel.send({ embeds: [remindertime] })
-
-        const reminderdm = new Discord.MessageEmbed()
-            .setColor('#7289DA')
-            .setTitle('**REMINDER**')
-            .setDescription(`${reminder}`);
-
-        async function reminderlmao() {
-            try {
-                setTimeout(() => {
-                    user.send({ embeds: [reminderdm] })
-                }, ms(`${time}`));
-            } catch (err) {
-                fs.appendFileSync(otherlogdir, "\n" + "reminder error")
+            if (!args[0]) {
+                return message.channel.send('Please specify a time')
             }
+            if (!args[1]) {
+                remindertxt = notxt.chocomintshort
+            }
+            if (!args[0].endsWith('d') && !args[0].endsWith('h') && !args[0].endsWith('m') && !args[0].endsWith('s')) {
+                return message.channel.send('Incorrect time format: please use `d`, `h`, `m`, or `s`')
+            }
+            let reminder = new Discord.MessageEmbed()
+                .setColor('#7289DA')
+                .setTitle('REMINDER')
+                .setDescription(`${remindertxt}`)
+
+            async function sendremind() {
+                try {
+                    setTimeout(() => {
+                        message.channel.send({ embeds: [reminder] })
+                    }, ms(`${time}`));
+                } catch (error) {
+                    console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
+                }
+            }
+            sendremind();
+            fs.appendFileSync('commands.log', `\nCommand Information\nMessage Content: ${message.content}`)
 
         }
-        reminderlmao();
+        if (interaction != null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - reminder (interaction)\n${currentDate} | ${currentDateISO}\n recieved reminder command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
 
-        fs.appendFileSync(otherlogdir, "\n" + `${currentDateISO} | ${currentDate}`)
-        fs.appendFileSync(otherlogdir, "\n" + "command executed - remind")
-        fs.appendFileSync(otherlogdir, "\n" + "category - general")
-        let consoleloguserweeee = message.author
-        fs.appendFileSync(otherlogdir, "\n" + `requested by ${consoleloguserweeee.id} aka ${consoleloguserweeee.tag}`)
-        fs.appendFileSync(otherlogdir, "\n" + ms(time))
-        fs.appendFileSync(otherlogdir, "\n" + "")
-        console.groupEnd()
+            let remindertxt = interaction.options.getString('reminder')
+            let time = interaction.options.getString('time').replaceAll(' ', '')
+
+            if (!time.endsWith('d') && !time.endsWith('h') && !time.endsWith('m') && !time.endsWith('s')) {
+                return interaction.reply({ content: 'Incorrect time format: please use `d`, `h`, `m`, or `s`', ephemeral: true })
+            }
+
+            let reminder = new Discord.MessageEmbed()
+                .setColor('#7289DA')
+                .setTitle('REMINDER')
+                .setDescription(`${remindertxt}`)
+
+            interaction.reply({ content: 'success!', ephemeral: true })
+
+            let sendtochannel = interaction.options.getBoolean('sendinchannel')
+            if (sendtochannel == true) {
+                async function sendremind() {
+                    try {
+                        setTimeout(() => {
+                            interaction.channel.send({ embeds: [reminder] })
+                        }, ms(`${time}`));
+                    } catch (error) {
+                        console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
+                    }
+                }
+                sendremind();
+
+            } else {
+                async function sendremind() {
+                    try {
+                        setTimeout(() => {
+                            interaction.member.user.send({ embeds: [reminder] })
+                        }, ms(`${time}`));
+                    } catch (error) {
+                        console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
+                    }
+                }
+                sendremind();
+            }
+            fs.appendFileSync('commands.log', `\nCommand Information\nreminder:${remindertxt}\ntime:${time}\nSendInChannel:${sendtochannel}`)
+        }
     }
 }
-/*
-
-            let Embed = new Discord.MessageEmbed()
-            .setColor(0xFFC1EC)
-            .setTitle("amoggers")
-            .setImage(`https://media.discordapp.net/attachments/724514625005158403/921733161229107210/amoggers.png`);
-            message.reply({ embeds: [Embed] });
-             */
