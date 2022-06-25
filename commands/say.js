@@ -1,4 +1,6 @@
 const fs = require('fs')
+const commandchecks = require('../configs/commandchecks.js');
+
 module.exports = {
     name: 'say',
     description: 'template text\n' +
@@ -8,7 +10,7 @@ module.exports = {
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction){
         if(message != null){
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - say (message)\n${currentDate} | ${currentDateISO}\n recieved say command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
-            if(message.author.id == '503794887318044675'){
+            if(commandchecks.isOwner(message.author.id)){
             message.delete();
             message.channel.send(args.join(' '))
             } else {
@@ -25,7 +27,7 @@ module.exports = {
                 channel = interaction.channel
             }
             interaction.reply({content: 'success', ephemeral: true})
-            if(interaction.member.user.id != '503794887318044675'){
+            if(commandchecks.isOwner(interaction.member.user.id)){
                 return 
             }
             channel.send(`${msg}`)
