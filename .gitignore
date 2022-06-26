@@ -8,3 +8,4 @@ prevmap.json
 *.log
 files/replay.osr
 debug/
+*.bat
