@@ -26,11 +26,12 @@ module.exports = {
             if(!channel){
                 channel = interaction.channel
             }
-            interaction.reply({content: 'success', ephemeral: true})
             if(commandchecks.isOwner(interaction.member.user.id)){
-                return 
+                interaction.reply({content: 'success', ephemeral: true})
+                channel.send(`${msg}`) 
+            } else {
+                interaction.reply({content: 'L + ratio + no permissions 🥺🥺🥺', ephemeral: true})
             }
-            channel.send(`${msg}`)
         }
 
         fs.appendFileSync('commands.log', 'success\n\n', 'utf-8')
