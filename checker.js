@@ -10,7 +10,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 //message.reply('balls')
                 message.delete()
                 message.channel.send('🤢🤮🤮🤢')
-                message.channel.send(`Video sent from <@${message.author.id}> spoilered: ||${message.attachments.first().url}||`)
+                message.channel.send(`File sent from <@${message.author.id}> spoilered: ||${message.attachments.first().url}||`)
             }
         }
 
