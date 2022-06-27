@@ -39,7 +39,7 @@ module.exports = {
             '🇾',
             '🇿'
         ]
-        
+
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - poll (message)\n${currentDate} | ${currentDateISO}\n recieved poll command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
 
@@ -65,7 +65,13 @@ module.exports = {
 
 
             for (i = 0; i < optsarr.length && i < 20; i++) {
-                optstxt += `${react[i]} = ${optsarr[i]}\n`
+                if (optsarr[i].length > 150) {
+                    curtxt = optsarr[i].substring(0, 149) + '...'
+                    optstxt += `${react[i]} = ${curtxt}\n`
+
+                } else {
+                    optstxt += `${react[i]} = ${optsarr[i]}\n`
+                }
             }
             pollEmbedDefault.setTitle(`${title}`)
             pollEmbedDefault.setDescription(`${optstxt}`)
