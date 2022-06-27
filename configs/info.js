@@ -150,6 +150,39 @@ let cmds = [
                 description: '`string, optional (only in msg command)`. The reminder to set'
             }
         ]
+    },
+    {
+        name: 'say',
+        description: 'Sends a message',
+        usage: 'sbr-say <message>',
+        slashusage: '/say [channel] [message]',
+        options: [
+            {
+                name: 'message',
+                description: '`string, required`. The message to send'
+            }, 
+            {
+                name: 'channel',
+                description: '`channel, optional`. The channel to send the message to. <#ChannelId>. If omited, sends the message to the current channel'
+            }
+        ]
+    },
+    {
+        name: 'poll',
+        description: 'Creates a poll',
+        usage: 'sbr-poll title',
+        slashusage: '/poll [title] [options]',
+        options: [
+            {
+                name: 'title',
+                description: '`string, required`. The title of the poll'
+            },
+            {
+                name: 'options',
+                description: '`string, required`. The options of the poll. Each option should be separated with a `+`. Max limit of 26'
+            }
+        ]
+
     }
 ]
 

@@ -65,6 +65,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'say':
                 client.commands.get('say').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+            case 'poll': case 'vote':
+                client.commands.get('poll').execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config);
+                break;
 
             //osu commands below
 

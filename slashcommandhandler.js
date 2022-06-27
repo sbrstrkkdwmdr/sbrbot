@@ -173,6 +173,25 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
         ]
     })
+    commands?.create({
+        name: 'poll',
+        description: 'Creates a poll',
+        options: [
+            {
+                name: 'title',
+                description: 'The title of the poll',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+            },
+            {
+                name: 'options',
+                description: 'The options. SEPARATE WITH +',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+            }
+
+        ]
+    })
 
     //below are osu related commands
     commands?.create({
@@ -361,6 +380,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'say':
                 client.commands.get('say').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'poll':
+                client.commands.get('poll').execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config);
                 break;
 
             //osu below
