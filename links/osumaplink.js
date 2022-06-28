@@ -274,18 +274,31 @@ module.exports = {
                     ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
                     pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
                     ppissue = ''
-                } catch(error){
+                } catch (error) {
                     ppComputed = NaN
                     ppComputedString = NaN
                     ppissue = 'Error - pp calculator could not fetch beatmap'
                     fs.appendFileSync('link.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
                 }
 
+                let mapname = json.beatmapset.title
+                let mapnameuni = json.beatmapset.title_unicode
+                let a = json.beatmapset.artist
+                let auni = json.beatmapset.artist_unicode
+
+                if (mapname != mapnameuni) {
+                    mapname = `${mapname} (${mapnameuni})`
+                }
+
+                if (a != auni) {
+                    a = `${a} (${auni})`
+                }
+
                 if (mapmods == null || mapmods == '' || mapmods == 'NM') {
-                    maptitle = `${json.beatmapset.artist} - ${json.beatmapset.title} [${json.version}]`
+                    maptitle = `${a} - ${mapname} [${json.version}]`
                 }
                 else {
-                    maptitle = `${json.beatmapset.artist} - ${json.beatmapset.title} [${json.version}] + ${mapmods}`
+                    maptitle = `${a} - ${mapname} [${json.version}] + ${mapmods}`
                 }
 
                 let mapsetlink = json.beatmapset_id

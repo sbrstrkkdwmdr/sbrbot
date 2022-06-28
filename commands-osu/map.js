@@ -108,6 +108,8 @@ module.exports = {
                                 mapid = json.id
 
 
+
+
                                 let mapperlink = (`${json.beatmapset.creator}`).replaceAll(' ', '%20');
                                 let maphitonly = json.hit_length
                                 let maphitmins = Math.floor(maphitonly / 60)
@@ -326,11 +328,11 @@ module.exports = {
                                     try {
                                         let ppComputed = await pp.compute();
                                         let pp95Computed = await pp95.compute();
-            
+
                                         ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
                                         pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
                                         ppissue = ''
-            
+
                                     } catch (error) {
                                         ppComputedString = NaN
                                         pp95ComputedString = NaN
@@ -338,11 +340,24 @@ module.exports = {
                                         fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
                                     }
 
+                                    let mapname = json.beatmapset.title
+                                    let mapnameuni = json.beatmapset.title_unicode
+                                    let a = json.beatmapset.artist
+                                    let auni = json.beatmapset.artist_unicode
+
+                                    if (mapname != mapnameuni) {
+                                        mapname = `${mapname} (${mapnameuni})`
+                                    }
+
+                                    if (a != auni) {
+                                        a = `${a} (${auni})`
+                                    }
+
                                     if (mapmods == null || mapmods == '' || mapmods == 'NM') {
-                                        maptitle = `${json.beatmapset.artist} - ${json.beatmapset.title} [${json.version}]`
+                                        maptitle = `${a} - ${mapname} [${json.version}]`
                                     }
                                     else {
-                                        maptitle = `${json.beatmapset.artist} - ${json.beatmapset.title} [${json.version}] + ${mapmods}`
+                                        maptitle = `${a} - ${mapname} [${json.version}] + ${mapmods}`
                                     }
 
                                     let mapsetlink = json.beatmapset_id
@@ -394,7 +409,7 @@ module.exports = {
                 return;
             }
 
-//==============================================================================================================================================================================================
+            //==============================================================================================================================================================================================
 
             let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}`
 
@@ -655,11 +670,24 @@ module.exports = {
                             fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
                         }
 
+                        let mapname = json.beatmapset.title
+                        let mapnameuni = json.beatmapset.title_unicode
+                        let a = json.beatmapset.artist
+                        let auni = json.beatmapset.artist_unicode
+
+                        if (mapname != mapnameuni) {
+                            mapname = `${mapname} (${mapnameuni})`
+                        }
+
+                        if (a != auni) {
+                            a = `${a} (${auni})`
+                        }
+
                         if (mapmods == null || mapmods == '' || mapmods == 'NM') {
-                            maptitle = `${json.beatmapset.artist} - ${json.beatmapset.title} [${json.version}]`
+                            maptitle = `${a} - ${mapname} [${json.version}]`
                         }
                         else {
-                            maptitle = `${json.beatmapset.artist} - ${json.beatmapset.title} [${json.version}] + ${mapmods}`
+                            maptitle = `${a} - ${mapname} [${json.version}] + ${mapmods}`
                         }
 
                         let mapsetlink = json.beatmapset_id
@@ -709,7 +737,7 @@ module.exports = {
                 })
 
         }
-//==============================================================================================================================================================================================
+        //==============================================================================================================================================================================================
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (interaction)\n${currentDate} | ${currentDateISO}\n recieved get map command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             interaction.reply('Fetching map info...');
@@ -977,11 +1005,24 @@ module.exports = {
                             fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
                         }
 
+                        let mapname = json.beatmapset.title
+                        let mapnameuni = json.beatmapset.title_unicode
+                        let a = json.beatmapset.artist
+                        let auni = json.beatmapset.artist_unicode
+
+                        if (mapname != mapnameuni) {
+                            mapname = `${mapname} (${mapnameuni})`
+                        }
+
+                        if (a != auni) {
+                            a = `${a} (${auni})`
+                        }
+
                         if (mapmods == null || mapmods == '' || mapmods == 'NM') {
-                            maptitle = `${json.beatmapset.artist} - ${json.beatmapset.title} [${json.version}]`
+                            maptitle = `${a} - ${mapname} [${json.version}]`
                         }
                         else {
-                            maptitle = `${json.beatmapset.artist} - ${json.beatmapset.title} [${json.version}] + ${mapmods}`
+                            maptitle = `${a} - ${mapname} [${json.version}] + ${mapmods}`
                         }
 
                         let mapsetlink = json.beatmapset_id
@@ -1022,7 +1063,7 @@ module.exports = {
                                         `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapid})`,
                                         true
                                     )
-                                    interaction.editReply({ content: "⠀", embeds: [Embed] });
+                                interaction.editReply({ content: "⠀", embeds: [Embed] });
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                 fs.appendFileSync('commands.log', `\nCommand Information\nmap id: ${mapid}\nmap mods: ${mapmods}\nmode: ${mapmode}`)
                             })
