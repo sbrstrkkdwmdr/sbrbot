@@ -130,6 +130,8 @@ module.exports = {
                     }
                 })
         }
+        
+//==============================================================================================================================================================================================
 
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
