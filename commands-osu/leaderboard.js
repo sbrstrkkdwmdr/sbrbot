@@ -122,11 +122,15 @@ module.exports = {
                                    ${hitlist}
                                 `
                             }
-                            if (scoretxt == '') {
-                                scoretxt = 'Error - no scores found '
+                            if (lbdata.length < 1 || scoretxt.length < 10) {
+                                scoretxt = 'Error - no scores found'
+                            }
+                            if (mapdata.status == 'graveyard' || mapdata.status == 'pending'){
+                                scoretxt = 'Error - map is unranked'
                             }
                             lbEmbed.setDescription(`${scoretxt}`)
                             message.channel.send({ embeds: [lbEmbed] })
+                            fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
                         })
 
 
@@ -229,54 +233,59 @@ module.exports = {
                             let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`
 
                             for (i = 0; i < lbdata.length && i < 5; i++) {
-                                try{
-                                let score = lbdata[i + (page * 5)]
+                                try {
+                                    let score = lbdata[i + (page * 5)]
 
-                                let gamestats = score.statistics
+                                    let gamestats = score.statistics
 
-                                let hitgeki = gamestats.count_geki
-                                let hit300 = gamestats.count_300
-                                let hitkatu = gamestats.count_katu
-                                let hit100 = gamestats.count_100
-                                let hit50 = gamestats.count_50
-                                let miss = gamestats.count_miss
-                                let mode = score.mode_int
-                                let hitlist;
-                                switch (mode) {
-                                    case 0: //std
-                                        hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
-                                        break;
-                                    case 1: //taiko
-                                        hitlist = `${hit300}/${hit100}/${miss}`
-                                        break;
-                                    case 2: //catch/fruits
-                                        hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
-                                        break;
-                                    case 3: //mania
-                                        hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
-                                        break;
-                                }
-                                if (score.mods) {
-                                    ifmods = `+${score.mods.join('')}`
-                                } else {
-                                    ifmods = ''
-                                }
+                                    let hitgeki = gamestats.count_geki
+                                    let hit300 = gamestats.count_300
+                                    let hitkatu = gamestats.count_katu
+                                    let hit100 = gamestats.count_100
+                                    let hit50 = gamestats.count_50
+                                    let miss = gamestats.count_miss
+                                    let mode = score.mode_int
+                                    let hitlist;
+                                    switch (mode) {
+                                        case 0: //std
+                                            hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
+                                            break;
+                                        case 1: //taiko
+                                            hitlist = `${hit300}/${hit100}/${miss}`
+                                            break;
+                                        case 2: //catch/fruits
+                                            hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
+                                            break;
+                                        case 3: //mania
+                                            hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
+                                            break;
+                                    }
+                                    if (score.mods) {
+                                        ifmods = `+${score.mods.join('')}`
+                                    } else {
+                                        ifmods = ''
+                                    }
 
-                                scoretxt += `
+                                    scoretxt += `
                                    **#${i + page + 1} | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
                                    Score set on ${score.created_at}
                                    ${(score.accuracy * 100).toFixed(2)}% | ${score.rank} | ${score.pp}pp
                                    ${ifmods} | ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
                                    ${hitlist}
-                                `} catch (error){
+                                `} catch (error) {
 
                                 }
                             }
-                            if (scoretxt == '') {
+                            if (lbdata.length < 1 || scoretxt.length < 10) {
                                 scoretxt = 'Error - no scores found '
+                            }
+                            if (mapdata.status == 'graveyard' || mapdata.status == 'pending'){
+                                scoretxt = 'Error - map is unranked'
                             }
                             lbEmbed.setDescription(`${scoretxt}`)
                             interaction.reply({ embeds: [lbEmbed] })
+                            fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
+
                         })
 
 
