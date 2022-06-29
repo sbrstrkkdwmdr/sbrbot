@@ -5,7 +5,7 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         let pollEmbedDefault = new Discord.MessageEmbed()
             .setDescription('✅ for yes\n❌ for no')
             ;
