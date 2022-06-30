@@ -18,7 +18,7 @@ module.exports = {
                 guild = message.guild
             }
             if (commandchecks.isOwner(message.author.id)) {
-                message.reply('Leaving guild...')
+                message.reply({content: 'Leaving guild...', allowedMentions: { repliedUser: false }})
                 guild.leave()
                 fs.appendFileSync('commands.log', 'success\n\n', 'utf-8')
                 fs.appendFileSync('commands.log', `left guild ${guild.name} | ${guild.id}`, 'utf-8')

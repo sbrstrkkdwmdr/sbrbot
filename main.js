@@ -9,6 +9,8 @@ const commandHandler = require('./commandHandler.js');
 const linkHandler = require('./linkHandler.js');
 const slashcommandHandler = require('./slashcommandHandler.js');
 const checker = require('./checker.js');
+const musichandler = require('./musicHandler.js');
+
 const config = require('./configs/config.json');
 
 const client = new Client({
@@ -92,6 +94,7 @@ client.once('ready', () => {
     linkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     slashcommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     checker(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    musichandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
     client.user.setPresence({
         activities: [{

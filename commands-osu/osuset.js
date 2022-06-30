@@ -8,7 +8,7 @@ module.exports = {
         '⠀⠀`mode`: string, optional. The mode of the user. If omitted, the default mode \'osu\' will be used.\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
-            message.reply('please use the slash command instead')
+            message.reply({ content: 'please use the slash command instead', allowedMentions: { repliedUser: false } })
         }
 
         if (interaction != null) {
@@ -23,7 +23,7 @@ module.exports = {
                         osuname: username,
                         mode: 'osu',
                     })
-                    interaction.reply('added to the database')
+                    interaction.reply({ content: 'added to the database', allowedMentions: { repliedUser: false } })
                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                     fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
@@ -37,9 +37,9 @@ module.exports = {
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
-                        return interaction.reply('updated the database')
+                        return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
                     }
-                    return interaction.reply('failed to update the database')
+                    return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
                 }
             }
             else {
@@ -49,7 +49,7 @@ module.exports = {
                         osuname: username,
                         mode: mode,
                     })
-                    interaction.reply('added to the database')
+                    interaction.reply({ content: 'added to the database', allowedMentions: { repliedUser: false } })
                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                     fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
@@ -63,9 +63,9 @@ module.exports = {
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
-                        return interaction.reply('updated the database')
+                        return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
                     }
-                    return interaction.reply('failed to update the database')
+                    return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
 
 
                 }

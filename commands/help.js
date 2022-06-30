@@ -15,12 +15,13 @@ module.exports = {
             .setDescription('use `/help <command>` to get more info on a command')
             .addField('Main commands',
                 `**ping** - Displays the bot's ping\n` +
-                `**help** - Displays this message\n` + 
+                `**help** - Displays this message\n` +
                 '**remind** \`[time (required)] [reminder (required)]\` - creates a reminder\n' +
                 '**math** \`[expression (required)]\` - evaluates a math expression\n' +
-                '**convert** \`[value (required)] [from (required)] [to (required)]\` - converts a value from one unit to another\n'
+                '**convert** \`[from (required)] [to (required)] [value (required)]\` - converts a value from one unit to another\n'
                 , false)
             .addField('osu! commands',
+                `**leaderboard** \`[id (optional)] [page (optional)] [mods (optional)]\` - displays the top five plays of a map \n` +
                 `**osu** \`[user (optional)]\`- displays a user's profile\n` +
                 `**osuset** \`[user (required)] [mode (optional)]\` - sets your osu! username\n` +
                 `**osutop** \`[user (optional)] [mode (optional)] [sort (optional)] [page (optional)] [mapper (optional)] [detailed (booleanoptional)]\` - displays the user's top plays\n` +
@@ -28,23 +29,32 @@ module.exports = {
                 `**rs** \`[user (optional)] [mode (optional)] [offset (optional)]\`  - displays the most recent score for the user\n` +
                 `**scores** \`[user (optional)] [id (optional)] [sort (optional)]\` - displays the users scores for a given beatmap`
                 , false)
-            .addField('admin commands',
+            .addField('Admin commands',
                 '**checkperms** \`[user (required)]\` - checks the permissions of a given user\n' +
                 '**leaveguild** \`[guild (required)]\` - leaves a given server\n' +
                 '**servers** - displays all servers the bot is in', false)
-            .addField('other commands',
+            .addField('General commands',
                 '**gif** \`[type (required)]\` - displays a gif of a given type\n' +
                 '**ytsearch** \`[query (required)]\` - searches youtube for a given query\n' +
                 '**image** \`[query (required)]\` - searches google images for a given query\n' +
-                '**8ball** - responds with a yes/no/maybe/??? answer  \n' + 
+                '**8ball** - responds with a yes/no/maybe/??? answer  \n' +
                 '**roll** \`[number (optional)]\` - returns a number between 1-100 (or the given number)\n', false
             )
+            .addField('Music commands (WIP)',
+                '**play** \`[query (required)]\` - plays a song from youtube\n' +
+                '**skip** - skips the current song\n' +
+                '**stop** - stops the current song\n' +
+                '**pause** - pauses the current song\n' +
+                '**resume** - resumes the current song\n' +
+                '**queue** - displays the current queue\n' +
+                '**np** - displays the current song\n'
+                , false)
 
 
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             if (!args[0]) {
-                message.reply({ embeds: [fullCommandList] })
+                message.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
             }
             if (args[0]) {
                 let command = args[0].toString()
@@ -145,11 +155,11 @@ module.exports = {
                     fullCommandList
                         .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
 
-                    return message.reply({ embeds: [fullCommandList] })
+                    return message.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
                 }
                 fullCommandList
                     .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
-                message.reply({ embeds: [fullCommandList] })
+                message.reply({ embeds: [commandInfo], allowedMentions: { repliedUser: false } })
             }
             fs.appendFileSync('commands.log', `\nCommand Information\n${message.content}`)
         }
@@ -257,9 +267,9 @@ module.exports = {
             else {
                 fullCommandList
                     .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
-                return interaction.reply({ embeds: [fullCommandList] })
+                return interaction.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
             }
-            interaction.reply({ embeds: [commandInfo] })
+            interaction.reply({ embeds: [commandInfo], allowedMentions: { repliedUser: false } })
             fs.appendFileSync('commands.log', `\nCommand Information\nCommand: ${command}`)
 
         }

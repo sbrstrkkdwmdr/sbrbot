@@ -4,11 +4,11 @@ const fetch = require('node-fetch');
 
 module.exports = {
     name: 'osu',
-    description: 'Return information of a user\'s osu! profile\n' + 
-    'Command: `sbr-osu [user]`\n' +
-    'Slash command: `/osu [user]`' + 
-    'Options:\n' + 
-    '⠀⠀`user`: string/integer, optional. The osu! username of the user.',
+    description: 'Return information of a user\'s osu! profile\n' +
+        'Command: `sbr-osu [user]`\n' +
+        'Slash command: `/osu [user]`' +
+        'Options:\n' +
+        '⠀⠀`user`: string/integer, optional. The osu! username of the user.',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (message)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
@@ -18,7 +18,7 @@ module.exports = {
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
-                    return message.reply('no osu! username found')
+                    return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                 }
             }
             const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
@@ -119,17 +119,19 @@ module.exports = {
                     ${isonline}
                     `)
 
-                        message.reply({ content: '⠀', embeds: [Embed] })
+                        message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
                     } catch (error) {
-                        message.reply('no osu! profile found\nNo user found with the name `' + user + '`')
+                        message.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false } })
                         fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
                     }
                 })
         }
+
+        //==============================================================================================================================================================================================
 
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
@@ -139,7 +141,7 @@ module.exports = {
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
-                    return interaction.reply('no osu! username found')
+                    return interaction.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                 }
             }
             //interaction.reply('Searching for ' + user + '...')
@@ -241,12 +243,12 @@ module.exports = {
                     ${isonline}
                     `)
 
-                        interaction.reply({ content: '⠀', embeds: [Embed] })
+                        interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
 
                     } catch (error) {
-                        interaction.reply('no osu! profile found\nNo user found with the name `' + user + '`')
+                        interaction.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false } })
                         fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
 
                     }

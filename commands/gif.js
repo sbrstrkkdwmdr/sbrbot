@@ -25,27 +25,28 @@ module.exports = {
             'https://media.discordapp.net/attachments/716812353034780703/855178667420024863/ezgif.com-gif-maker_1.gif', //zitron map og
         ]
         let speechbubble = [
-            'https://media.discordapp.net/attachments/698111941238980634/926143071891116093/image0.gif', //the angry birds gif which somehow fixed my laptop screen when i put it in the bottom right corner
-            'https://media.discordapp.net/attachments/885710706350116915/946818088857370696/yes.gif', // bunny girl + mask
-            'https://media.discordapp.net/attachments/837435513212370976/948682024456167474/image0.gif', // guy sucking on a door handle
-            'https://media.discordapp.net/attachments/652388390095814658/949917542963617802/ezgif-7-49533ed57a.gif', //gura yapping
-            'https://media.discordapp.net/attachments/877077345054380052/946909426432999474/screenshot2324_-_Copy.gif', //that one section of the big black
-            'https://i.imgur.com/4kHRrcn.gif', // beast troll minecraft
-            'https://media.discordapp.net/attachments/801693686010216461/937316740059258911/SPOILER_4024ab0508989392.gif', //sotarks
-            'https://media.discordapp.net/attachments/878855036992622652/960730586903887902/sph.gif', //felix nsfw\
-            'https://cdn.discordapp.com/attachments/796366644653719592/963160984057425999/poland.gif', // poland
-            'https://media.discordapp.net/attachments/98226572468690944/977994968461365298/chokeplay-1.gif', //fubuki getting choked and enjoying it
             'https://cdn.discordapp.com/attachments/724514625005158403/979287600852500490/amogus_speak.png', // among ASS speaking
             'https://cdn.discordapp.com/attachments/724514625005158403/979287601443926032/guardian_speak.png', //minecraft guardian inside glass inside a stone box surrounding my guardian farm
-            'https://media.discordapp.net/attachments/861689222586171393/953156001320812564/LOChMeR.gif', //hitcircle default skin 
-            'https://media.discordapp.net/attachments/894054954661204009/956769254269648917/lil-nas-x-pregnant.gif', //lil nas x pregnant
-            'https://media.discordapp.net/attachments/855538143302385727/978751222293098536/delta_dannerif-5-a495e94394.gif', //idk what this is but theres a girl that looks like kasane teto and an 8 in the middle
-            'https://tenor.com/view/nerd-nerd-emoji-meme-speech-bubble-bubble-gif-25115885', //nerd emoji guy
-            'https://media.discordapp.net/attachments/965669674492764160/969044374107336734/yuuka.gif', // yuuka
-            'https://media.discordapp.net/attachments/297712669342040064/969077431497527347/LettyWhiteRockJohnson.gif', // letty white rock jhohnosn (who)
-            'https://cdn.discordapp.com/attachments/968450905634656326/970003694055747644/MushiMikoNya.gif', //idk who this is either but anime girl
-            'https://media.discordapp.net/attachments/960980200613625896/967546422155182130/Untitled2.gif', //touhou1?!?!?
             'https://cdn.discordapp.com/attachments/724514625005158403/989314110250451004/zanei.png', //zan'ei jumps
+            'https://cdn.discordapp.com/attachments/796366644653719592/963160984057425999/poland.gif', // poland
+            'https://cdn.discordapp.com/attachments/968450905634656326/970003694055747644/MushiMikoNya.gif', //idk who this is either but anime girl
+            'https://i.imgur.com/4kHRrcn.gif', // beast troll minecraft
+            'https://media.discordapp.net/attachments/297712669342040064/969077431497527347/LettyWhiteRockJohnson.gif', // letty white rock jhohnosn (who)
+            'https://media.discordapp.net/attachments/652388390095814658/949917542963617802/ezgif-7-49533ed57a.gif', //gura yapping
+            'https://media.discordapp.net/attachments/698111941238980634/926143071891116093/image0.gif', //the angry birds gif which somehow fixed my laptop screen when i put it in the bottom right corner
+            'https://media.discordapp.net/attachments/801693686010216461/937316740059258911/SPOILER_4024ab0508989392.gif', //sotarks
+            'https://media.discordapp.net/attachments/837435513212370976/948682024456167474/image0.gif', // guy sucking on a door handle
+            'https://media.discordapp.net/attachments/855538143302385727/978751222293098536/delta_dannerif-5-a495e94394.gif', //idk what this is but theres a girl that looks like kasane teto and an 8 in the middle
+            'https://media.discordapp.net/attachments/861689222586171393/953156001320812564/LOChMeR.gif', //hitcircle default skin 
+            'https://media.discordapp.net/attachments/877077345054380052/946909426432999474/screenshot2324_-_Copy.gif', //that one section of the big black
+            'https://media.discordapp.net/attachments/878855036992622652/960730586903887902/sph.gif', //felix nsfw\
+            'https://media.discordapp.net/attachments/885710706350116915/946818088857370696/yes.gif', // bunny girl + mask
+            'https://media.discordapp.net/attachments/894054954661204009/956769254269648917/lil-nas-x-pregnant.gif', //lil nas x pregnant
+            'https://media.discordapp.net/attachments/960980200613625896/967546422155182130/Untitled2.gif', //touhou1?!?!?
+            'https://media.discordapp.net/attachments/965669674492764160/969044374107336734/yuuka.gif', // yuuka
+            'https://media.discordapp.net/attachments/98226572468690944/977994968461365298/chokeplay-1.gif', //fubuki getting choked and enjoying it
+            'https://tenor.com/view/nerd-nerd-emoji-meme-speech-bubble-bubble-gif-25115885', //nerd emoji guy
+            'https://media.discordapp.net/attachments/843627338839490560/977578032946626621/deranker.gif', //osu rank graph going down (bad)
         ]
         let reaction = [
             'https://tenor.com/view/jerma-jerma985-burger-eating-tucker-carson-gif-22054018', // jerma eating
@@ -125,141 +126,147 @@ module.exports = {
                 switch (str) {
                     case 'cry about it':
                         thelink = cryabtit[Math.floor(Math.random() * cryabtit.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'speech bubble':
                         thelink = speechbubble[Math.floor(Math.random() * speechbubble.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'chad speak':
                         thelink = 'https://cdn.discordapp.com/attachments/724514625005158403/979287601146118184/gigachad_speak.png'
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'reaction':
                         thelink = reaction[Math.floor(Math.random() * reaction.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'skill issue':
                         thelink = skillissue[Math.floor(Math.random() * skillissue.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'no bitches':
                         thelink = nobitches[Math.floor(Math.random() * nobitches.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'agree':
                         thelink = agree[Math.floor(Math.random() * agree.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'cope':
                         thelink = cope[Math.floor(Math.random() * cope.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'disagree':
                         thelink = disagree[Math.floor(Math.random() * disagree.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'nocare':
                         thelink = nocare[Math.floor(Math.random() * nocare.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'misspell':
                         thelink = misspell[Math.floor(Math.random() * misspell.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'compliment':
                         thelink = compliment[Math.floor(Math.random() * compliment.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'insult':
                         thelink = insult[Math.floor(Math.random() * insult.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'ratio':
                         thelink = ratio[Math.floor(Math.random() * ratio.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'reaction to info':
                         thelink = reactiontoinf[Math.floor(Math.random() * reactiontoinf.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     default:
                         message.author.send('invald type\n' +
                             'Valid types: cry about it, speech bubble, chad speak, reaction, skill issue, no bitches, agree, cope, disagree, nocare, misspell, compliment, insult, ratio, reaction to info'
                         )
+                        return;
                         break;
 
                 }
+                message.channel.send(thelink)
                 fs.appendFileSync('commands.log', `\nCommand Information\n${message.content}`)
                 message.delete()
-                
+
             }
         }
         if (interaction != null) {
             let str = interaction.options.getString('type')
             switch (str) {
                 case 'cry about it':
-                    thelink = cryabtit[Math.floor(Math.random() * [cryabtit].length)]
-                    interaction.channel.send(thelink)
+                    thelink = cryabtit[Math.floor(Math.random() * cryabtit.length)]
+
                     break;
                 case 'speech bubble':
-                    thelink = speechbubble[Math.floor(Math.random() * [speechbubble].length)]
-                    interaction.channel.send(thelink)
+                    thelink = speechbubble[Math.floor(Math.random() * speechbubble.length)]
+
                     break;
                 case 'chad speak':
                     thelink = 'https://cdn.discordapp.com/attachments/724514625005158403/979287601146118184/gigachad_speak.png'
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'reaction':
                     thelink = reaction[Math.floor(Math.random() * reaction.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'skill issue':
                     thelink = skillissue[Math.floor(Math.random() * skillissue.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'no bitches':
                     thelink = nobitches[Math.floor(Math.random() * nobitches.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'agree':
                     thelink = agree[Math.floor(Math.random() * agree.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'cope':
                     thelink = cope[Math.floor(Math.random() * cope.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'disagree':
                     thelink = disagree[Math.floor(Math.random() * disagree.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'nocare':
                     thelink = nocare[Math.floor(Math.random() * nocare.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'misspell':
                     thelink = misspell[Math.floor(Math.random() * misspell.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'compliment':
                     thelink = compliment[Math.floor(Math.random() * compliment.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'insult':
                     thelink = insult[Math.floor(Math.random() * insult.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'ratio':
                     thelink = ratio[Math.floor(Math.random() * ratio.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'reaction to info':
                     thelink = reactiontoinf[Math.floor(Math.random() * reactiontoinf.length)]
-                    interaction.channel.send(thelink)
+                    break;
+                default:
+                    return;
                     break;
             }
-            interaction.reply({ content: 'success', ephemeral: true })
+            interaction.channel.send(thelink)
+
+            interaction.reply({ content: 'success', ephemeral: true, allowedMentions: { repliedUser: false } })
             fs.appendFileSync('commands.log', `\nCommand Information\ngif type: ${str}`)
         }
         /*

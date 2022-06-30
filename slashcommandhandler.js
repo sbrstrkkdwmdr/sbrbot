@@ -173,6 +173,25 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
         ]
     })
+    commands?.create({
+        name: 'poll',
+        description: 'Creates a poll',
+        options: [
+            {
+                name: 'title',
+                description: 'The title of the poll',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+            },
+            {
+                name: 'options',
+                description: 'The options. SEPARATE WITH +',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+            }
+
+        ]
+    })
 
     //below are osu related commands
     commands?.create({
@@ -284,6 +303,30 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         description: 'Displays the user\'s scores for a set map',
         options: cmdconfig.useridsortopts
     })
+    commands?.create({
+        name: 'leaderboard',
+        description: 'Displays the top five plays on a specific map',
+        options: [
+            {
+                name: 'id',
+                description: 'The id of the map to display',
+                required: false,
+                type: Constants.ApplicationCommandOptionTypes.INTEGER
+            },
+            {
+                name: 'page',
+                description: 'Which page to display',
+                required: false,
+                type: Constants.ApplicationCommandOptionTypes.INTEGER
+            },
+            {
+                name: 'mods',
+                description: 'What mods to sort',
+                required: false,
+                type: Constants.ApplicationCommandOptionTypes.STRING
+            }
+        ]
+    })
 
 
     //below are admin related commands
@@ -362,6 +405,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'say':
                 client.commands.get('say').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+            case 'poll':
+                client.commands.get('poll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
 
             //osu below
 
@@ -382,6 +428,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'scores':
                 client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                break;
+            case 'leaderboard':
+                client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
 
 

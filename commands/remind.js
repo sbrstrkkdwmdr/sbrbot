@@ -14,13 +14,13 @@ module.exports = {
             let remindertxt = args.join(' ').replaceAll(args[0], '')
 
             if (!args[0]) {
-                return message.channel.send('Please specify a time')
+                return message.reply({ content: 'Please specify a time', allowedMentions: { repliedUser: false } })
             }
             if (!args[1]) {
                 remindertxt = notxt.chocomintshort
             }
             if (!args[0].endsWith('d') && !args[0].endsWith('h') && !args[0].endsWith('m') && !args[0].endsWith('s')) {
-                return message.channel.send('Incorrect time format: please use `d`, `h`, `m`, or `s`')
+                return message.reply({ content: 'Incorrect time format: please use `d`, `h`, `m`, or `s`', allowedMentions: { repliedUser: false } })
             }
             let reminder = new Discord.MessageEmbed()
                 .setColor('#7289DA')
@@ -55,7 +55,7 @@ module.exports = {
                 .setTitle('REMINDER')
                 .setDescription(`${remindertxt}`)
 
-            interaction.reply({ content: 'success!', ephemeral: true })
+            interaction.reply({ content: 'success!', ephemeral: true, allowedMentions: { repliedUser: false } })
 
             let sendtochannel = interaction.options.getBoolean('sendinchannel')
             if (sendtochannel == true) {
