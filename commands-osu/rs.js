@@ -203,6 +203,7 @@ module.exports = {
                                         let ppfcd = await ppfc.compute()
 
                                         ppiffc = ppfcd.total.toFixed(2)
+                                        fs.writeFileSync(`debugosu/rspp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
 
                                         if (rspp == null) {
                                             rspp = ppc.total.toFixed(2)
@@ -484,7 +485,7 @@ module.exports = {
                                         let ppfcd = await ppfc.compute()
 
                                         ppiffc = ppfcd.total.toFixed(2)
-
+                                        fs.writeFileSync(`debugosu/rspp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
                                         if (rspp == null) {
                                             rspp = ppc.total.toFixed(2)
                                         } else {
