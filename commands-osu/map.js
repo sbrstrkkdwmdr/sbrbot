@@ -144,9 +144,8 @@ module.exports = {
                                 let moddedlength = maphitstr
 
                                 if (((mapmods.includes('DT') || mapmods.includes('NC')) && mapmods.includes('HT') || (mapmods.includes('HR') && mapmods.includes('EZ')))) {
-                                    setTimeout(() => {
-                                        interaction.editReply("invalid mods!")
-                                    }, 500)
+                                    message.reply({ content: `${mapmods} is an invalid mod combination`, allowedMentions: { repliedUser: false } })
+
                                     return
                                 }
                                 //dt only
@@ -475,7 +474,7 @@ module.exports = {
 
                     if (((mapmods.includes('DT') || mapmods.includes('NC')) && mapmods.includes('HT') || (mapmods.includes('HR') && mapmods.includes('EZ')))) {
                         setTimeout(() => {
-                            interaction.editReply("invalid mods!")
+                            message.reply({ content: `${mapmods} is an invalid combination`, allowedMentions: { repliedUser: false } })
                         }, 500)
                         return
                     }
@@ -740,7 +739,7 @@ module.exports = {
         //==============================================================================================================================================================================================
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (interaction)\n${currentDate} | ${currentDateISO}\n recieved get map command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-            interaction.reply('Fetching map info...');
+            interaction.reply({ content: 'Fetching map info...', allowedMentions: { repliedUser: false } });
             let mapid = interaction.options.getInteger('id');
             let mapmods = interaction.options.getString('mods');
             if (mapid == null || mapid == '') {
@@ -769,7 +768,7 @@ module.exports = {
                     try {
                         let mapper = json.beatmapset.creator
                     } catch (error) {
-                        message.channel.send('Error - map not found');
+                        interaction.reply({ content: 'Error - map not found', allowedMentions: { repliedUser: false } });
                         return;
                     }
                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: json.id }), null, 2));
@@ -810,7 +809,7 @@ module.exports = {
 
                     if (((mapmods.includes('DT') || mapmods.includes('NC')) && mapmods.includes('HT') || (mapmods.includes('HR') && mapmods.includes('EZ')))) {
                         setTimeout(() => {
-                            interaction.editReply("invalid mods!")
+                            interaction.editReply({ content: `${mapmods} is an invalid mod combination`, allowedMentions: { repliedUser: false } })
                         }, 500)
                         return
                     }
@@ -1063,7 +1062,7 @@ module.exports = {
                                         `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapid})`,
                                         true
                                     )
-                                interaction.editReply({ content: "⠀", embeds: [Embed] });
+                                interaction.editReply({ content: "⠀", embeds: [Embed], allowedMentions: { repliedUser: false } });
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                 fs.appendFileSync('commands.log', `\nCommand Information\nmap id: ${mapid}\nmap mods: ${mapmods}\nmode: ${mapmode}`)
                             })

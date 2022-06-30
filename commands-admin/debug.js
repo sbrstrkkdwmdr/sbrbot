@@ -11,39 +11,39 @@ module.exports = {
                 return message.channel.send('Please specify a command to return debug files for.')
             }
             switch (command) {
-                case 'leaderboard':case 'lb':
+                case 'leaderboard': case 'lb':
                     /*
                     'debugosu/maplb.json'
                     'debugosu/maplbmap.json'
                     */
-                   message.channel.send({files: [`debugosu\\maplb.json`, `debugosu\\maplbmap.json`]})
+                    debugfiles = [`debugosu\\maplb.json`, `debugosu\\maplbmap.json`]
                     break;
                 case 'map':
                     /*
                     map.json
                     maptxt.json
                     */
-                   message.channel.send({files: [`debugosu\\map.json`, `debugosu\\maptxt.json`]})
+                    debugfiles = [`debugosu\\map.json`, `debugosu\\maptxt.json`]
                     break;
                 case 'osu':
                     /*
                     osu.json
                     */
-                     message.channel.send({files: [`debugosu\\osu.json`]})
+                    debugfiles = [`debugosu\\osu.json`]
                     break;
                 case 'osutop':
                     /*
                     osutop.json
                     osutopname.json
                     */
-                    message.channel.send({files: [`debugosu\\osutop.json`, `debugosu\\osutopname.json`]})
+                    debugfiles = [`debugosu\\osutop.json`, `debugosu\\osutopname.json`]
                     break;
-                case 'rs':case 'recent':
+                case 'rs': case 'recent':
                     /*
                     rs.json
                     rspp.json
                     */
-                    message.channel.send({files: [`debugosu\\rs.json`, `debugosu\\rspp.json`]})
+                    debugfiles = [`debugosu\\rs.json`, `debugosu\\rspp.json`]
                     break;
                 case 'scores': case 'c':
                     /*
@@ -51,45 +51,49 @@ module.exports = {
                     scoresmap.json
                     scorespresort.json
                     */
-                    message.channel.send({files: [`debugosu\\scores.json`, `debugosu\\scoresmap.json`, `debugosu\\scorespresort.json`]})
+                    debugfiles = [`debugosu\\scores.json`, `debugosu\\scoresmap.json`, `debugosu\\scorespresort.json`]
                     break;
                 case 'score':
-                /*
-                scoreparse.json
-                */
-                message.channel.send({files: [`debugosu\\scoreparse.json`]})
-                break;
+                    /*
+                    scoreparse.json
+                    */
+                    debugfiles = [`debugosu\\scoreparse.json`]
+                    break;
 
                 case 'replay': case 'replayparse':
-                /*
-                replay.json
-                replaymap.json
-                replayuser.json
-                */
-                message.channel.send({files: [`debugosu\\replay.json`, `debugosu\\replaymap.json`, `debugosu\\replayuser.json`]})
-                break;
+                    /*
+                    replay.json
+                    replaymap.json
+                    replayuser.json
+                    */
+                    debugfiles = [`debugosu\\replay.json`, `debugosu\\replaymap.json`, `debugosu\\replayuser.json`]
+                    break;
 
-               case 'image':case 'imagesearch':
-                /*
-                image.json
-                */
-               message.channel.send('Cannot send image debug file - contains sensitive information')
-                //message.channel.send({files: [`debug\\image.json`]})
-                break;
+                case 'image': case 'imagesearch':
+                    /*
+                    image.json
+                    */
+                    return message.reply({ content: 'Cannot send image debug file - contains sensitive information', allowedMentions: { repliedUser: false } })
+                    //message.channel.send({files: [`debug\\image.json`]})
+                    break;
 
-               case 'yt':case 'ytsearch':
-                /*
-                ytsearch.json
-                */
-                message.channel.send({files: [`debug\\ytsearch.json`]})
-               break;
-               case 'time':
-                /*
-                timesince.txt
-                */
-                message.channel.send({files: [`debug\\timesince.txt`]})
-                break;
+                case 'yt': case 'ytsearch':
+                    /*
+                    ytsearch.json
+                    */
+                    debugfiles = [`debug\\ytsearch.json`]
+                    break;
+                case 'time':
+                    /*
+                    timesince.txt
+                    */
+                    debugfiles = [`debug\\timesince.txt`]
+                    break;
+                default:
+                    message.reply({ content: 'error - no file found', allowedMentions: { repliedUser: false } })
+                    break;
             }
+            message.reply({ files: debugfiles, allowedMentions: { repliedUser: false } })
         }
 
     }

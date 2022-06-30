@@ -98,7 +98,7 @@ module.exports = {
                     `
                     )
 
-                message.reply({ embeds: [Embed] })
+                message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
 
             })
 

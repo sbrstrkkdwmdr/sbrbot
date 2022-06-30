@@ -54,7 +54,7 @@ module.exports = {
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             if (!args[0]) {
-                message.reply({ embeds: [fullCommandList] })
+                message.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
             }
             if (args[0]) {
                 let command = args[0].toString()
@@ -155,11 +155,11 @@ module.exports = {
                     fullCommandList
                         .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
 
-                    return message.reply({ embeds: [fullCommandList] })
+                    return message.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
                 }
                 fullCommandList
                     .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
-                message.reply({ embeds: [fullCommandList] })
+                message.reply({ embeds: [commandInfo], allowedMentions: { repliedUser: false } })
             }
             fs.appendFileSync('commands.log', `\nCommand Information\n${message.content}`)
         }
@@ -267,9 +267,9 @@ module.exports = {
             else {
                 fullCommandList
                     .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
-                return interaction.reply({ embeds: [fullCommandList] })
+                return interaction.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
             }
-            interaction.reply({ embeds: [commandInfo] })
+            interaction.reply({ embeds: [commandInfo], allowedMentions: { repliedUser: false } })
             fs.appendFileSync('commands.log', `\nCommand Information\nCommand: ${command}`)
 
         }

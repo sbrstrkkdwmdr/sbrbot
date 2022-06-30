@@ -171,7 +171,7 @@ module.exports = {
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
-                    return interaction.reply('no osu! username found')
+                    return interaction.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                 }
             }
             let gamemode = interaction.options.getString('mode')
@@ -217,7 +217,7 @@ module.exports = {
                                 try {
                                     let usernametesting = osutopdataPreSort[0].user.username
                                 } catch (error) {
-                                    return interaction.reply('failed to get osu! top plays')
+                                    return interaction.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false } })
                                 }
                                 filtereddata = osutopdataPreSort
                                 filterinfo = ''
@@ -264,7 +264,7 @@ module.exports = {
                                     let usernamefortests = osutopdata[0].user.username
 
                                 } catch (error) {
-                                    return interaction.reply('no plays found for the options given')
+                                    return interaction.reply({ content: 'no plays found for the options given', allowedMentions: { repliedUser: false } })
                                 }
                                 let topEmbed = new Discord.MessageEmbed()
                                     .setColor(0x462B71)
@@ -394,12 +394,12 @@ module.exports = {
                                         - arr.filter(v => v.beatmapset.creator === b.beatmapset.creator).length
                                     ).pop();
                                 }
-                                interaction.reply({ content: '⠀', embeds: [topEmbed] })
+                                interaction.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false } })
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                 fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
                             })
                     } catch (error) {
-                        interaction.reply('user ' + user + ' not found')
+                        interaction.reply({ content: 'user ' + user + ' not found', allowedMentions: { repliedUser: false } })
                         fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
 
                     }

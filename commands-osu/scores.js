@@ -192,11 +192,11 @@ module.exports = {
             if (user == null || user.length == 0) {
                 findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
                 if (findname == null) {
-                    return interaction.reply('Error - no username found')
+                    return interaction.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                 } else {
                     user = findname.get('osuname')
                     if (user.length < 1) {
-                        return interaction.reply('Error - no username found')
+                        return interaction.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                     }
                 }
             }
@@ -215,7 +215,7 @@ module.exports = {
             }).then(res => res.json())
                 .then(userdata => {
                     if (userdata.length < 1) {
-                        return interaction.reply('Error - no user found')
+                        return interaction.reply({ content: 'Error - no user found', allowedMentions: { repliedUser: false } })
                     }
                     let userid = userdata.id
 
@@ -250,7 +250,7 @@ module.exports = {
                                     sortdata = 'Sorted by: Most recent'
                                 }
                             } catch (error) {
-                                return interaction.reply('Error - no scores found')
+                                return interaction.reply({ content: 'Error - no scores found', allowedMentions: { repliedUser: false } })
                             }
 
 
@@ -345,7 +345,7 @@ module.exports = {
                                         }
                                     }
                                     Embed.setDescription(scoretxt)
-                                    interaction.reply({ embeds: [Embed] })
+                                    interaction.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nmap id: ${id}\nsort: ${sort}`)
 

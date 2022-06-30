@@ -45,7 +45,7 @@ module.exports = {
 
             let name = args.join(' ')
             if (!args[0]) {
-                message.reply('Please specify a title!')
+                message.reply({ content: 'Please specify a title!', allowedMentions: { repliedUser: false } })
                 return;
             }
             pollEmbedDefault.setTitle(`${name}`)
@@ -75,7 +75,7 @@ module.exports = {
             }
             pollEmbedDefault.setTitle(`${title}`)
             pollEmbedDefault.setDescription(`${optstxt}`)
-            interaction.reply({ content: 'success', ephemeral: true })
+            interaction.reply({ content: 'success', ephemeral: true, allowedMentions: { repliedUser: false } })
             interaction.channel.send({ embeds: [pollEmbedDefault] }).then(sentEmbed => {
                 for (i = 0; i < optsarr.length && i < 20; i++) {
                     sentEmbed.react(react[i])

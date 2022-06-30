@@ -284,7 +284,7 @@ module.exports = {
                                 scoretxt = 'Error - map is unranked'
                             }
                             lbEmbed.setDescription(`${scoretxt}`)
-                            interaction.reply({ embeds: [lbEmbed] })
+                            interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
                             fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
 
                         })

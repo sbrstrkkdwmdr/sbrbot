@@ -295,11 +295,11 @@ module.exports = {
             if (user == null) {
                 findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
                 if (findname == null) {
-                    return interaction.reply('Error - no username found')
+                    return interaction.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                 } else {
                     user = findname.get('osuname')
                     if (user.length < 1) {
-                        return interaction.reply('Error - no username found')
+                        return interaction.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                     }
                 }
             }
@@ -323,7 +323,7 @@ module.exports = {
                 }
             }
 
-            interaction.reply('Fetching data...')
+            interaction.reply({ content: 'Fetching data...' })
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
 
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
@@ -549,7 +549,7 @@ module.exports = {
                                             `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`, true)
                                         .addField('PP',
                                             `**${rspp}**pp \n${fcflag}\n${ppissue}`, true);
-                                    interaction.editReply({ content: '⠀', embeds: [Embed] })
+                                    interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
 
@@ -558,7 +558,7 @@ module.exports = {
                                 })();
                             } catch (error) {
                                 fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
-                                return interaction.editReply('Error - no score found')
+                                return interaction.editReply({ content: 'Error - no score found', allowedMentions: { repliedUser: false } })
                             }
 
                         })

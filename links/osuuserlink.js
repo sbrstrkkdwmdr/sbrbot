@@ -1,6 +1,6 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
-const {access_token} = require('../configs/osuauth.json')
+const { access_token } = require('../configs/osuauth.json')
 
 module.exports = {
     name: 'osuuserlink',
@@ -111,11 +111,11 @@ module.exports = {
                 ${isonline}
                 `)
 
-                    message.reply({ content: '⠀', embeds: [Embed] })
+                    message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
 
                 } catch (error) {
-                    message.reply('no osu! profile found\nNo user found with the name `' + user + '`')
+                    message.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false } })
                 }
             })
 

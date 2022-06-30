@@ -34,7 +34,7 @@ module.exports = {
 
         } catch (error) {
             console.log(error)
-            return message.channel.send('Please enter a valid beatmap link.')
+            return message.reply({ content: 'Please enter a valid beatmap link.', allowedMentions: { repliedUser: false } })
         }
         fs.appendFileSync('link.log', `LINK DETECT EVENT - osumaplink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!map link: ${message.content}\n`, 'utf-8')
 
@@ -47,7 +47,7 @@ module.exports = {
             try {
                 let mapper = json.beatmapset.creator
             } catch (error) {
-                message.channel.send('Error - map not found');
+                message.reply({ content: 'Error - map not found', allowedMentions: { repliedUser: false } });
                 return;
             }
             fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
@@ -88,7 +88,7 @@ module.exports = {
 
             if (((mapmods.includes('DT') || mapmods.includes('NC')) && mapmods.includes('HT') || (mapmods.includes('HR') && mapmods.includes('EZ')))) {
                 setTimeout(() => {
-                    message.reply("invalid mods!")
+                    message.reply({ content: "invalid mods!", allowedMentions: { repliedUser: false } })
                 }, 500)
                 return
             }
@@ -340,7 +340,7 @@ module.exports = {
                                 true
                             )
                         //console.log('true')
-                        message.channel.send({ embeds: [Embed] });
+                        message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
                         fs.appendFileSync('link.log', '\nsuccess\n\n', 'utf-8')
                     })
             })();

@@ -30,7 +30,7 @@ module.exports = {
                 .setDescription(`${permissions}`)
                 .setColor('#C9FF93')
                 ;
-            message.reply({ embeds: [embed] })
+            message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
             fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
         }
@@ -48,11 +48,11 @@ module.exports = {
                     .setDescription(`${permissions}`)
                     .setColor('#C9FF93')
                     ;
-                interaction.reply({ embeds: [embed] })
+                interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
                 fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user} AKA ${user.tag}`)
             }
             else {
-                interaction.reply({ content: 'Error' })
+                interaction.reply({ content: 'Error', allowedMentions: { repliedUser: false } })
             }
 
         }

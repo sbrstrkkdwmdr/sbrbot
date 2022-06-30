@@ -126,74 +126,76 @@ module.exports = {
                 switch (str) {
                     case 'cry about it':
                         thelink = cryabtit[Math.floor(Math.random() * cryabtit.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'speech bubble':
                         thelink = speechbubble[Math.floor(Math.random() * speechbubble.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'chad speak':
                         thelink = 'https://cdn.discordapp.com/attachments/724514625005158403/979287601146118184/gigachad_speak.png'
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'reaction':
                         thelink = reaction[Math.floor(Math.random() * reaction.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'skill issue':
                         thelink = skillissue[Math.floor(Math.random() * skillissue.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'no bitches':
                         thelink = nobitches[Math.floor(Math.random() * nobitches.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'agree':
                         thelink = agree[Math.floor(Math.random() * agree.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'cope':
                         thelink = cope[Math.floor(Math.random() * cope.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'disagree':
                         thelink = disagree[Math.floor(Math.random() * disagree.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'nocare':
                         thelink = nocare[Math.floor(Math.random() * nocare.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'misspell':
                         thelink = misspell[Math.floor(Math.random() * misspell.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'compliment':
                         thelink = compliment[Math.floor(Math.random() * compliment.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'insult':
                         thelink = insult[Math.floor(Math.random() * insult.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'ratio':
                         thelink = ratio[Math.floor(Math.random() * ratio.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     case 'reaction to info':
                         thelink = reactiontoinf[Math.floor(Math.random() * reactiontoinf.length)]
-                        interaction.channel.send(thelink)
+
                         break;
                     default:
                         message.author.send('invald type\n' +
                             'Valid types: cry about it, speech bubble, chad speak, reaction, skill issue, no bitches, agree, cope, disagree, nocare, misspell, compliment, insult, ratio, reaction to info'
                         )
+                        return;
                         break;
 
                 }
+                message.channel.send(thelink)
                 fs.appendFileSync('commands.log', `\nCommand Information\n${message.content}`)
                 message.delete()
-                
+
             }
         }
         if (interaction != null) {
@@ -201,66 +203,70 @@ module.exports = {
             switch (str) {
                 case 'cry about it':
                     thelink = cryabtit[Math.floor(Math.random() * cryabtit.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'speech bubble':
                     thelink = speechbubble[Math.floor(Math.random() * speechbubble.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'chad speak':
                     thelink = 'https://cdn.discordapp.com/attachments/724514625005158403/979287601146118184/gigachad_speak.png'
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'reaction':
                     thelink = reaction[Math.floor(Math.random() * reaction.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'skill issue':
                     thelink = skillissue[Math.floor(Math.random() * skillissue.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'no bitches':
                     thelink = nobitches[Math.floor(Math.random() * nobitches.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'agree':
                     thelink = agree[Math.floor(Math.random() * agree.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'cope':
                     thelink = cope[Math.floor(Math.random() * cope.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'disagree':
                     thelink = disagree[Math.floor(Math.random() * disagree.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'nocare':
                     thelink = nocare[Math.floor(Math.random() * nocare.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'misspell':
                     thelink = misspell[Math.floor(Math.random() * misspell.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'compliment':
                     thelink = compliment[Math.floor(Math.random() * compliment.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'insult':
                     thelink = insult[Math.floor(Math.random() * insult.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'ratio':
                     thelink = ratio[Math.floor(Math.random() * ratio.length)]
-                    interaction.channel.send(thelink)
+
                     break;
                 case 'reaction to info':
                     thelink = reactiontoinf[Math.floor(Math.random() * reactiontoinf.length)]
-                    interaction.channel.send(thelink)
+                    break;
+                default:
+                    return;
                     break;
             }
-            interaction.reply({ content: 'success', ephemeral: true })
+            interaction.channel.send(thelink)
+
+            interaction.reply({ content: 'success', ephemeral: true, allowedMentions: { repliedUser: false } })
             fs.appendFileSync('commands.log', `\nCommand Information\ngif type: ${str}`)
         }
         /*

@@ -11,10 +11,10 @@ module.exports = {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - time (message)\n${currentDate} | ${currentDateISO}\n recieved time command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let epoch = new Date().getTime()
             let Datenow = new Date(currentDate).toUTCString()
-    
+
             let msepochsince = parseInt(epoch) - 1640995200000
             let thedaysthingyiuseonmydiscordstatus = (msepochsince / 1000 / 60 / 60 / 24).toFixed(2)
-            
+
             let rn = new Date()
             let seconds = rn.getUTCSeconds()
             let datenow12hhours = calc.to12htime(rn)
@@ -169,7 +169,7 @@ module.exports = {
                 }
             }
             //message.channel.send(`${currentDateISO} | ${currentDate}`) 
-            message.channel.send({ embeds: [Embed] })
+            message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
         }
 
         //==============================================================================================================================================================================================
