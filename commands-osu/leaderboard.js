@@ -59,6 +59,7 @@ module.exports = {
                     let fulltitle = `${artist} - ${title} [${mapdata.version}]`
 
                     let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}/scores`
+                    fs.writeFileSync('debugosu/maplbmap.json', JSON.stringify(mapdata, null, 2))
 
                     fetch(mapscoresurl, {
                         method: 'GET',
@@ -187,7 +188,7 @@ module.exports = {
                     let fulltitle = `${artist} - ${title} [${mapdata.version}]`
 
                     let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}/scores`
-
+                    fs.writeFileSync('debugosu/maplbmap.json', JSON.stringify(mapdata, null, 2))
                     fetch(mapscoresurl, {
                         method: 'GET',
                         headers: {
