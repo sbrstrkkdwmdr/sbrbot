@@ -30,7 +30,7 @@ module.exports = {
         }
 
         if (message != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (message)\n${currentDate} | ${currentDateISO}\n recieved get map info command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (message)\n${currentDate} | ${currentDateISO}\n recieved get map info command\nrequested by ${message.author.id} AKA ${message.author.tag}]\nMessage content: ${message.content}`, 'utf-8')
 
             //message.channel.send('Fetching map info...');
             let mapid;
@@ -75,7 +75,7 @@ module.exports = {
                             //message.channel.send("Information for \"" + maptitle + '"')
                         } catch (error) {
                             console.log(error)
-                            message.channel.send("No maps found for the parameters: \"" + maptitle + '"')
+                            message.reply({ content: "No maps found for the parameters: \"" + maptitle + '"', allowedMentions: { repliedUser: false } })
                             return;
                         }
                         let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}`
@@ -101,7 +101,7 @@ module.exports = {
                                         ifid = `Found map id = ${mapid}`
                                     }
 
-                                    message.channel.send('Error - map not found\n' + ifid);
+                                    message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false } });
                                     return;
                                 }
                                 fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: json.id }), null, 2));
@@ -398,7 +398,7 @@ module.exports = {
                                                     `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapid})`,
                                                     true
                                                 )
-                                            message.channel.send({ embeds: [Embed] });
+                                            message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
                                             fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                         })
                                 })();
@@ -433,7 +433,7 @@ module.exports = {
                             ifid = `Found map id = ${mapid}`
                         }
 
-                        message.channel.send('Error - map not found\n' + ifid);
+                        message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false } });
                         return;
                     }
                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: json.id }), null, 2));
@@ -728,7 +728,7 @@ module.exports = {
                                         `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapid})`,
                                         true
                                     )
-                                message.channel.send({ embeds: [Embed] });
+                                message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                 fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
                             })
@@ -737,7 +737,7 @@ module.exports = {
                 })
 
         }
-//==============================================================================================================================================================================================
+        //==============================================================================================================================================================================================
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (interaction)\n${currentDate} | ${currentDateISO}\n recieved get map command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             interaction.reply('Fetching map info...');

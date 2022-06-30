@@ -27,7 +27,7 @@ module.exports = {
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
-                    return message.reply('no osu! username found')
+                    return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                 }
             }
 
@@ -73,7 +73,7 @@ module.exports = {
                                 try {
                                     let usernametesting = osutopdata[0].user.username
                                 } catch (error) {
-                                    return message.reply('failed to get osu! top plays')
+                                    return message.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false } })
                                 }
                                 let topEmbed = new Discord.MessageEmbed()
                                     .setColor(0x462B71)
@@ -149,7 +149,7 @@ module.exports = {
                                 ${(osutopdata[scoreoffset].pp).toFixed(2)}pp | ${(osutopdata[scoreoffset].weight.pp).toFixed(2)}pp (Weighted at **${(osutopdata[scoreoffset].weight.percentage).toFixed(2)}%**)
                                 `, false)
                                 }
-                                message.reply({ content: '⠀', embeds: [topEmbed] })
+                                message.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false } })
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                 fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 

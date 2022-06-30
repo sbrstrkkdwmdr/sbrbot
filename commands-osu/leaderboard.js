@@ -130,7 +130,7 @@ module.exports = {
                                 scoretxt = 'Error - map is unranked'
                             }
                             lbEmbed.setDescription(`${scoretxt}`)
-                            message.channel.send({ embeds: [lbEmbed] })
+                            message.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
                             fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
                         })
 

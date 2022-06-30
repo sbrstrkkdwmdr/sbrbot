@@ -32,11 +32,11 @@ module.exports = {
             if (user == null || user.length == 0) {
                 findname = await userdata.findOne({ where: { userid: message.author.id } })
                 if (findname == null) {
-                    return message.reply('Error - no username found')
+                    return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                 } else {
                     user = findname.get('osuname')
                     if (user.length < 1) {
-                        return message.reply('Error - no username found')
+                        return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                     }
                 }
             }
@@ -52,7 +52,7 @@ module.exports = {
             }).then(res => res.json())
                 .then(userdata => {
                     if (userdata.length < 1) {
-                        return message.reply('Error - no user found')
+                        return message.reply({ content: 'Error - no user found', allowedMentions: { repliedUser: false } })
                     }
                     let userid = userdata.id
 
@@ -74,7 +74,7 @@ module.exports = {
                                     Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
                                 sortdata = 'Sorted by: Most recent'
                             } catch (error) {
-                                return message.reply('Error - no scores found')
+                                return message.reply({ content: 'Error - no scores found', allowedMentions: { repliedUser: false } })
                             }
 
 
@@ -170,7 +170,7 @@ module.exports = {
                                         }
                                     }
                                     Embed.setDescription(scoretxt)
-                                    message.reply({ embeds: [Embed] })
+                                    message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                     fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
@@ -180,7 +180,7 @@ module.exports = {
 
         }
 
-//==============================================================================================================================================================================================
+        //==============================================================================================================================================================================================
 
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - scores (interaction)\n${currentDate} | ${currentDateISO}\n recieved map scores command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
@@ -230,7 +230,7 @@ module.exports = {
                             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}`
                             scoredata = scoredataPreSort
                             let sortdata = ''
-                            try{
+                            try {
                                 if (sort == 'score') {
                                     scoredata = scoredataPreSort.scores.sort((a, b) => b.score - a.score)
                                     sortdata = 'Sorted by: score'

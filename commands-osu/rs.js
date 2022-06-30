@@ -24,11 +24,11 @@ module.exports = {
             if (user == null || user.length == 0) {
                 findname = await userdata.findOne({ where: { userid: message.author.id } })
                 if (findname == null) {
-                    return message.reply('Error - no username found')
+                    return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                 } else {
                     user = findname.get('osuname')
                     if (user.length < 1) {
-                        return message.reply('Error - no username found')
+                        return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                     }
                 }
             }
@@ -268,7 +268,7 @@ module.exports = {
                                             `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`, true)
                                         .addField('PP',
                                             `**${rspp}**pp \n${fcflag}\n${ppissue}`, true);
-                                    message.reply({ content: '⠀', embeds: [Embed] })
+                                    message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
 
                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0].beatmap.id }), null, 2));
@@ -276,7 +276,7 @@ module.exports = {
 
                                 })();
                             } catch (error) {
-                                message.reply('Error - no score found')
+                                message.reply({ content: 'Error - no score found', allowedMentions: { repliedUser: false } })
                                 fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
                                 return;
                             }
