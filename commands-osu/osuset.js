@@ -8,7 +8,7 @@ module.exports = {
         '⠀⠀`mode`: string, optional. The mode of the user. If omitted, the default mode \'osu\' will be used.\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
-            message.reply('please use the slash command instead')
+            message.reply({ content: 'please use the slash command instead', allowedMentions: { repliedUser: false } })
         }
 
         if (interaction != null) {
