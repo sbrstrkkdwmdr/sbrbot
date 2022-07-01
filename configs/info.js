@@ -352,6 +352,26 @@ let admincmds = [
         usage: 'sbr-servers',
         slashusage: '/servers',
         options: []
+    },
+    {
+        name: 'voice',
+        description: 'Changes voice settings for a user',
+        usage: 'sbr-voice <user> <type> <channel>',
+        slashusage: '/voice [user] [type] [channel]',
+        options: [
+            {
+                name: 'user',
+                description: '`user/mention, optional`. The user to change the voice settings of. If omitted, the message author will be used (message command only)'
+            },
+            {
+                name: 'type',
+                description: '`string, required`. The type of voice setting to change. Valid types are: "mute", "deafen", "move", "disconnect"'
+            },
+            {
+                name: 'channel',
+                description: '`integer/channel, optional`. The channel to move the user to.'
+            }
+        ]
     }
 ]
 

@@ -358,8 +358,40 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 required: true,
                 minValue: 1
             }
-        ]
+        ],
+        //channelTypes: ['GuildText']
 
+    })
+    commands?.create({
+        name: 'voice',
+        description: 'Controls a user\'s voice settings',
+        options: [
+            {
+                name: 'user',
+                description: 'The user to control',
+                type: Constants.ApplicationCommandOptionTypes.USER,
+                required: true,
+            },
+            {
+                name: 'type',
+                description: 'The type of voice control to perform',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+                choices: [
+                    { name: 'Mute', value: 'mute' },
+                    { name: 'Deafen', value: 'deafen' },
+                    { name: 'Move to another channel', value: 'move' },
+                    { name: 'Disconnect', value: 'disconnect' }
+                ]
+            },
+            {
+                name: 'channel',
+                description: 'The channel to move the user to',
+                type: Constants.ApplicationCommandOptionTypes.CHANNEL,
+                required: false,
+            }
+        ],
+        //channelTypes: ['GuildText']
     })
 
     client.on('interactionCreate', async (interaction) => {
@@ -370,8 +402,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let message = null;
         let args = null
 
-        const { commandName, options } = interaction
-        switch (commandName) {
+        switch (interaction.commandName) {
             case 'ping':
                 client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
@@ -446,6 +477,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'leaveguild':
                 client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                break;
+            case 'voice':
+                client.admincmds.get('voice').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             default:
                 interaction.reply({ content: 'Command not found - no longer exists or is currently being rewritten', ephemeral: true })

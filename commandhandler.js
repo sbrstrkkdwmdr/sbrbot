@@ -106,6 +106,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'debug':
                 client.admincmds.get('debug').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+            case 'voice':
+                client.admincmds.get('voice').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'crash':
+                client.admincmds.get('crash').execute(message, args, userdata, client, Discord);
+                break;
 
 
             // music
