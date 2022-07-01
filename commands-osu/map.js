@@ -67,7 +67,7 @@ module.exports = {
                     }
                 }).then(res => res.json())
                     .then(mapidtest => {
-                        fs.appendFileSync('commands.log', `fetched title - ${maptitle}`)
+                        fs.appendFileSync('commands.log', `\nfetched title - ${maptitle}`)
                         fs.writeFileSync('debugosu/maptxt.json', JSON.stringify(mapidtest, null, 2))
                         try {
                             sortbyhigh = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)
