@@ -26,11 +26,15 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         //MESSAGE LOGGER
     })
     client.on('messageDelete', message => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(message.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nmessageDelete event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${message.author.username}#${message.author.discriminator}'s message has been deleted:\n ${message.content}\n`)
     })
     client.on('messageUpdate', (oldMessage, newMessage) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldMessage.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nmessageUpdate event\n${currentDate} | ${currentDateISO}\n `);
 
@@ -49,21 +53,29 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     //GUILD MEMBER LOGGER
     client.on('guildBanAdd', (ban) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(ban.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nguildBanAdd event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${ban.user.username}#${ban.user.discriminator} (${ban.user.id}) was banned`)//by ${ban.client.user.username}#${ban.client.user.discriminator} (${ban.client.user.id})\n
     })
     client.on('guildBanRemove', (ban) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(ban.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nguildBanRemove event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${ban.user.username}#${ban.user.discriminator} (${ban.user.id}) was unbanned\n`)//by ${ban.client.user.username}#${ban.client.user.discriminator} (${ban.client.user.id})
     })
     client.on('guildMemberRemove', (member) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(member.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `guildMemberRemove event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${member.user.username}#${member.user.discriminator} (${member.user.id}) left the server or was kicked\n`)
     })
     client.on('guildMemberUpdate', (oldMember, newMember) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldMember.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nguildMemberUpdate event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${oldMember.user.username}#${oldMember.user.discriminator} (${oldMember.user.id})has been updated:\n`)
@@ -86,6 +98,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     //USER LOGGER
     client.on('userUpdate', (oldUser, newUser) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         client.guilds.cache.forEach(guild => {
             if (guild.members.cache.has(oldUser.id)) {
                 fs.appendFileSync(`./logs/${guild.id}.log`, `\nuserUpdate event\n${currentDate} | ${currentDateISO}\n `);
@@ -117,6 +131,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     //GENERAL GUILD UPDATE LOGGER
     client.on('channelCreate', (channel) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(channel.guild.id)
         //fs.appendFileSync(`./logs/${guild.id}.log`, `\nChannel ${channel.name} (${channel.id}) was created\n`)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nchannelCreate event\n${currentDate} | ${currentDateISO}\n `);
@@ -157,6 +173,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         }
     })
     client.on('channelDelete', (channel) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(channel.guild.id)
         //fs.appendFileSync(`./logs/${guild.id}.log`, `\nChannel ${channel.name} (${channel.id}) was deleted\n`)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nchannelDelete event\n${currentDate} | ${currentDateISO}\n `);
@@ -199,6 +217,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     client.on('channelUpdate', (oldChannel, newChannel) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldChannel.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nchannelUpdate event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Channel ${oldChannel.name} (${oldChannel.id}) was updated \n`)
@@ -215,16 +235,22 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     client.on('emojiCreate', (emoji) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(emoji.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nemojiCreate event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Emoji ${emoji.name} (${emoji.id}) was created\n`)
     })
     client.on('emojiDelete', (emoji) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(emoji.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nemojiDelete event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nEmoji ${emoji.name} (${emoji.id}) was deleted\n`)
     })
     client.on('emojiUpdate', (oldEmoji, newEmoji) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldEmoji.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nemojiUpdate event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nEmoji ${oldEmoji.name} (${oldEmoji.id}) was updated\n`)
@@ -237,36 +263,50 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     client.on('guildScheduledEventCreate', (guildScheduledEvent) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(guildScheduledEvent.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nevent\n${currentDate} | ${currentDateISO}\n `);
 
     })
     client.on('guildScheduledEventDelete', (guildScheduledEvent) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(guildScheduledEvent.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nevent\n${currentDate} | ${currentDateISO}\n `);
 
     })
     client.on('guildScheduledEventUpdate', (oldGuildScheduledEvent, newGuildScheduledEvent) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldGuildScheduledEvent.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nevent\n${currentDate} | ${currentDateISO}\n `);
 
     })
     client.on('guildScheduledEventUserAdd', (guildScheduledEvent, user) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(guildScheduledEvent.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nevent\n${currentDate} | ${currentDateISO}\n `);
 
     })
     client.on('guildScheduledEventUserRemove', (guildScheduledEvent, user) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(guildScheduledEvent.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nevent\n${currentDate} | ${currentDateISO}\n `);
 
     })
     client.on('guildUnavailable', (guild) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guildlog = client.guilds.cache.get(guild.id)
         fs.appendFileSync(`./logs/${guildlog.id}.log`, `\nguildUnavailable event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guildlog.id}.log`, `Guild ${guild.name} (${guild.id}) was unavailable\n`)
     })
     client.on('guildUpdate', (oldGuild, newGuild) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldGuild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nguildUpdate event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Guild ${oldGuild.name} (${oldGuild.id}) was updated\n`)
@@ -277,42 +317,58 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     client.on('inviteCreate', (invite) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(invite.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\ninviteCreate event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Invite ${invite.code} was created (${invite.url})\n`)
     })
     client.on('inviteDelete', (invite) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(invite.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\ninviteDelete event\n${currentDate} | ${currentDateISO}\n `);
 
         fs.appendFileSync(`./logs/${guild.id}.log`, `Invite ${invite.code} was deleted (${invite.url})\n`)
     })
     client.on('roleCreate', (role) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(role.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nroleCreate event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Role ${role.name} (${role.id}) was created\n`)
     })
     client.on('roleDelete', (role) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(role.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nroleDelete event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Role ${role.name} (${role.id}) was deleted\n`)
     })
     client.on('roleUpdate', (oldRole, newRole) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(role.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nroleUpdate event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Role ${oldRole.name} (${oldRole.id}) was updated to ${newRole.name}\nColour: ${oldRole.color} => ${newRole.color}\nPermissions: ${oldRole.permissions} => ${newRole.permissions}\n`)
     })
     client.on('stageInstanceCreate', (stageInstance) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(stageInstance.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nstageInstanceCreate event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Stage Instance ${stageInstance.topic} (${stageInstance.id}) was created in ${stageInstance.channel} (${stageInstance.channel.id})\n`)
     })
     client.on('stageInstanceDelete', (stageInstance) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(stageInstance.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nstageInstanceDelete event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Stage Instance ${stageInstance.topic} (${stageInstance.id}) was deleted in ${stageInstance.channel} (${stageInstance.channel.id})\n`)
     })
     client.on('stageInstanceUpdate', (oldStageInstance, newStageInstance) => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldStageInstance.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nstageInstanceUpdate event\n${currentDate} | ${currentDateISO}\n `);
 
@@ -332,9 +388,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     })
     //MISC
     client.on('debug', info => {
+        let currentDate = new Date();
+        let currentDateISO = new Date().toISOString();
         //console.log(info)
         fs.appendFileSync(`./logs/general.log`, `\ndebug event\n${currentDate} | ${currentDateISO}\n `);
-        fs.appendFileSync(`./logs/general.log`, `\n${info}\n`)
+        fs.appendFileSync(`./logs/general.log`, `${info}\n`)
     })
 
 }
