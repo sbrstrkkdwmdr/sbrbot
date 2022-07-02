@@ -372,6 +372,29 @@ let admincmds = [
                 description: '`integer/channel, optional`. The channel to move the user to.'
             }
         ]
+    },
+    {
+        name: 'log',
+        description: 'Returns the logs for the current guild',
+        usage: 'sbr-log',
+        slashusage: '/log',
+        options: []
+    },
+    {
+        name: 'find',
+        description: 'Returns name from the id given',
+        usage: 'sbr-find <type> <id>',
+        slashusage: '/find [type] [id]',
+        options: [
+            {
+                name: 'type',
+                description: '`string, required`. The type of id to find. Valid types are: "user", "guild", "channel", "role", "emoji"'
+            },
+            {
+                name: 'id',
+                description: '`integer, required`. The id of the object to find'
+            }
+        ]  
     }
 ]
 
