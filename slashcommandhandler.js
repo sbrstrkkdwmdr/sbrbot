@@ -393,6 +393,32 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         ],
         //channelTypes: ['GuildText']
     })
+    commands?.create({
+        name: 'find',
+        description: 'Returns the name of something from the id given',
+        options: [
+            {
+                name: 'type',
+                description: 'The type of thing to find',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+                choices: [
+                    { name: 'User', value: 'user' },
+                    { name: 'Channel', value: 'channel' },
+                    { name: 'Guild', value: 'guild' },
+                    { name: 'Role', value: 'role' },
+                    { name: 'Emoji', value: 'emoji' },
+                ]
+            },
+            {
+                name: 'id',
+                description: 'The id of the thing to find',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+                minValue: 1
+            }
+        ]
+    })
 
     client.on('interactionCreate', async (interaction) => {
         if (!interaction.isCommand()) return;
@@ -480,6 +506,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'voice':
                 client.admincmds.get('voice').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'find':
+                client.admincmds.get('find').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             default:
                 interaction.reply({ content: 'Command not found - no longer exists or is currently being rewritten', ephemeral: true })
