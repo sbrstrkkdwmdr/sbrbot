@@ -266,36 +266,51 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(guildScheduledEvent.guild.id)
-        fs.appendFileSync(`./logs/${guild.id}.log`, `\nevent\n${currentDate} | ${currentDateISO}\n `);
+        fs.appendFileSync(`./logs/${guild.id}.log`, `\nguildScheduledEventCreate event\n${currentDate} | ${currentDateISO}\n `);
+        fs.appendFileSync(`./logs/${guild.id}.log`, `Scheduled Event ${guildScheduledEvent.name} (${guildScheduledEvent.id}) was created\n`)
 
     })
     client.on('guildScheduledEventDelete', (guildScheduledEvent) => {
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(guildScheduledEvent.guild.id)
-        fs.appendFileSync(`./logs/${guild.id}.log`, `\nevent\n${currentDate} | ${currentDateISO}\n `);
-
+        fs.appendFileSync(`./logs/${guild.id}.log`, `\nguildScheduledEventDelete event\n${currentDate} | ${currentDateISO}\n `);
+        fs.appendFileSync(`./logs/${guild.id}.log`, `Scheduled Event ${guildScheduledEvent.name} (${guildScheduledEvent.id}) was deleted\n`)
     })
     client.on('guildScheduledEventUpdate', (oldGuildScheduledEvent, newGuildScheduledEvent) => {
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldGuildScheduledEvent.guild.id)
-        fs.appendFileSync(`./logs/${guild.id}.log`, `\nevent\n${currentDate} | ${currentDateISO}\n `);
+        fs.appendFileSync(`./logs/${guild.id}.log`, `\nguildScheduledEventUpdate event\n${currentDate} | ${currentDateISO}\n `);
+        fs.appendFileSync(`./logs/${guild.id}.log`, `Scheduled Event ${oldGuildScheduledEvent.name} (${oldGuildScheduledEvent.id}) was updated\n`)
+        if (oldGuildScheduledEvent.name != newGuildScheduledEvent.name) {
+            fs.appendFileSync(`./logs/${guild.id}.log`, `name changed: ${oldGuildScheduledEvent.name} => ${newGuildScheduledEvent.name}\n`)
+        }
+        if (oldGuildScheduledEvent.channel != newGuildScheduledEvent.channel) {
+            fs.appendFileSync(`./logs/${guild.id}.log`, `channel changed: ${oldGuildScheduledEvent.channel.name} => ${newGuildScheduledEvent.channel.name}\n`)
+        }
+        if (oldGuildScheduledEvent.description != newGuildScheduledEvent.description) {
+            fs.appendFileSync(`./logs/${guild.id}.log`, `description changed: ${oldGuildScheduledEvent.description} => ${newGuildScheduledEvent.description}\n`)
+        }
+        if (oldGuildScheduledEvent.privacy != newGuildScheduledEvent.privacy) {
+            fs.appendFileSync(`./logs/${guild.id}.log`, `privacy changed: ${oldGuildScheduledEvent.privacy} => ${newGuildScheduledEvent.privacy}\n`)
+        }
 
     })
     client.on('guildScheduledEventUserAdd', (guildScheduledEvent, user) => {
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(guildScheduledEvent.guild.id)
-        fs.appendFileSync(`./logs/${guild.id}.log`, `\nevent\n${currentDate} | ${currentDateISO}\n `);
+        fs.appendFileSync(`./logs/${guild.id}.log`, `\nguildScheduledEventUserAdd event\n${currentDate} | ${currentDateISO}\n `);
+        fs.appendFileSync(`./logs/${guild.id}.log`, `User ${user.username} (${user.id}) was added to Scheduled Event ${guildScheduledEvent.name} (${guildScheduledEvent.id})\n`)
 
     })
     client.on('guildScheduledEventUserRemove', (guildScheduledEvent, user) => {
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(guildScheduledEvent.guild.id)
-        fs.appendFileSync(`./logs/${guild.id}.log`, `\nevent\n${currentDate} | ${currentDateISO}\n `);
-
+        fs.appendFileSync(`./logs/${guild.id}.log`, `\nguildScheduledEventUserRemove event\n${currentDate} | ${currentDateISO}\n `);
+        fs.appendFileSync(`./logs/${guild.id}.log`, `User ${user.username} (${user.id}) was removed from Scheduled Event ${guildScheduledEvent.name} (${guildScheduledEvent.id})\n`)
     })
     client.on('guildUnavailable', (guild) => {
         let currentDate = new Date();
