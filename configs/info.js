@@ -160,7 +160,7 @@ let cmds = [
             {
                 name: 'message',
                 description: '`string, required`. The message to send'
-            }, 
+            },
             {
                 name: 'channel',
                 description: '`channel, optional`. The channel to send the message to. <#ChannelId>. If omited, sends the message to the current channel'
@@ -225,7 +225,7 @@ let osucmds = [
     {
         name: 'osuset',
         description: 'Sets the user\'s name for osu! commands (bancho only)',
-/*         usage: 'sbr-osuset <username>', */
+        /*         usage: 'sbr-osuset <username>', */
         slashusage: '/osuset [username] [mode]',
         options: [
             {
@@ -399,25 +399,124 @@ let admincmds = [
                 name: 'id',
                 description: '`integer, required`. The id of the object to find'
             }
-        ]  
-    }
-]
-
-let linkcmds = [
-    {
-        name: 'name',
-        description: 'description',
-        usage: 'usage for command using messageCreate event',
-        slashusage: 'usage for command using interactionCreate event',
-        options: [
-            {
-                name: 'option name',
-                description: 'description name'
-            }
         ]
     }
 ]
 
+let links = [
+    {
+        name: 'osumaplink',
+        description: 'Returns information from a map link',
+        usage: '`https://osu.ppy.sh/b/<id>` or `https://osu.ppy.sh/s/<setid>#<gamemode>/<id>`',
+        params: [
+            {
+                name: 'id',
+                description: '`integer, required`. The ID of the map'
+            },
+            {
+                name: 'setid',
+                description: '`integer, required`. The ID of the set. Only needed if using beatmapset link'
+            },
+            {
+                name: 'gamemode',
+                description: '`string, required`. The gamemode of the map. Only needed if using beatmapset link. Valid types are: "osu", "taiko", "fruits", "mania"'
+            }
+        ],
+        aliases: 'osu.ppy.sh/beatmaps/<id>, osu.ppy.sh/beatmapsets/<setid>#<gamemode>/<id>'
+    },
+    {
+        name: 'osuuserlink',
+        description: 'Returns information from a user link',
+        usage: '`https://osu.ppy.sh/u/<id/name>` or `https://osu.ppy.sh/users/<id/name>`',
+        params: [
+            {
+                name: 'id/name',
+                description: '`integer/string, required`. The ID or username of the user'
+            }
+        ]
+    },
+    {
+        name: 'replayparse',
+        description: 'Returns information from a replay file',
+        usage: '`<file>`',
+        params: [
+            {
+                name: 'file',
+                description: '`.osr file, required`. The replay file to parse'
+            }
+        ]
+    },
+    {
+        name: 'scoreparse',
+        description: 'Returns information from a score link',
+        usage: '`https://osu.ppy.sh/scores/<gamemode>/<id>`',
+        params: [
+            {
+                name: 'id',
+                description: '`integer, required`. The ID of the score'
+            },
+            {
+                name: 'gamemode',
+                description: '`string, required`. The gamemode of the score. Valid types are: "osu", "taiko", "fruits", "mania"'
+            }                           
+        ],
+        aliases: '`'
+    }
+
+]
+let musiccmds = [
+    {
+        name: 'play',
+        description: 'Plays a song',
+        usage: 'sbr-play <url>',
+        slashusage: '/play [url]',
+        options: [
+            {
+                name: 'url',
+                description: '`string, required`. The url of the song to play'
+            }
+        ]
+    },
+    {
+        name: 'skip',
+        description: 'Skips the current song',
+        usage: 'sbr-skip',
+        slashusage: '/skip',
+        options: []
+    },
+    {
+        name: 'stop',
+        description: 'Stops the current song',
+        usage: 'sbr-stop',
+        slashusage: '/stop',
+        options: [],
+        aliases: 'pause'
+    },
+    {
+        name: 'resume',
+        description: 'Resumes the current song',
+        usage: 'sbr-resume',
+        slashusage: '/resume',
+        options: [],
+        aliases: 'unpause'
+    },
+    {
+        name: 'np',
+        description: 'Retrieves the current song',
+        usage: 'sbr-np',
+        slashusage: '/np',
+        options: [],
+        aliases: 'nowplaying'
+    },
+    {
+        name: 'queue',
+        description: 'Retrieves the current queue',
+        usage: 'sbr-queue',
+        slashusage: '/queue',
+        options: [],
+        aliases: 'q'
+    }
+]
 
 
-module.exports = { cmds, osucmds, admincmds, linkcmds }
+module.exports = { cmds, osucmds, admincmds, links, musiccmds }
