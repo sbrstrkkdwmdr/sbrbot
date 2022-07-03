@@ -2,6 +2,7 @@ const fs = require('fs');
 const osucalc = require('osumodcalculator')
 const { access_token } = require('../configs/osuauth.json')
 const fetch = require('node-fetch')
+const emojis = require('../configs/emojis.js')
 
 module.exports = {
     name: 'osutop',
@@ -93,31 +94,35 @@ module.exports = {
                                     let maptimeset = osutopdata[scoreoffset].created_at.toString().slice(0, 19).replace("T", " ")
 
                                     let ranking = osutopdata[scoreoffset].rank.toUpperCase()
-                                    if (ranking == 'F') {
-                                        grade = '---'
-                                    } else if (ranking == 'D') {
-                                        grade = '<:rankingD:927797179534438421>'
-                                    } else if (ranking == 'C') {
-                                        grade = '<:rankingC:927797179584757842>'
-                                    }
-                                    else if (ranking == 'B') {
-                                        grade = '<:rankingB:927797179697991700>'
-                                    }
-                                    else if (ranking == 'A') {
-                                        grade = '<:rankingA:927797179739930634>'
-                                    }
-                                    else if (ranking == 'S') {
-                                        grade = '<:rankingS:927797179618295838>'
-                                    }
-                                    else if (ranking == 'SH') {
-                                        grade = '<:rankingSH:927797179710570568>'
-                                    }
-                                    else if (ranking == 'X') {
-                                        grade = '<:rankingX:927797179832229948>'
-                                    }
-                                    else if (ranking == 'XH') {
-                                        grade = '<:rankingxh:927797179597357076>'
-                                    }
+                                    switch (ranking) {
+                                        case 'F':
+                                            grade = emojis.grades.F
+                                            break;
+                                        case 'D':
+                                            grade = emojis.grades.D
+                                            break;
+                                        case 'C':
+                                            grade = emojis.grades.C
+                                            break;
+                                        case 'B':
+                                            grade = emojis.grades.B
+                                            break;
+                                        case 'A':
+                                            grade = emojis.grades.A
+                                            break;
+                                        case 'S':
+                                            grade = emojis.grades.S
+                                            break;
+                                        case 'SH':
+                                            grade = emojis.grades.SH
+                                            break;
+                                        case 'X':
+                                            grade = emojis.grades.X
+                                            break;
+                                        case 'XH':
+                                            grade = emojis.grades.XH
+                                            break;
+                                    };
 
 
                                     let hitlist = ''
@@ -285,31 +290,35 @@ module.exports = {
                                     let maptimeset = osutopdata[scoreoffset].created_at.toString().slice(0, 19).replace("T", " ")
 
                                     let ranking = osutopdata[scoreoffset].rank.toUpperCase()
-                                    if (ranking == 'F') {
-                                        grade = '---'
-                                    } else if (ranking == 'D') {
-                                        grade = '<:rankingD:927797179534438421>'
-                                    } else if (ranking == 'C') {
-                                        grade = '<:rankingC:927797179584757842>'
-                                    }
-                                    else if (ranking == 'B') {
-                                        grade = '<:rankingB:927797179697991700>'
-                                    }
-                                    else if (ranking == 'A') {
-                                        grade = '<:rankingA:927797179739930634>'
-                                    }
-                                    else if (ranking == 'S') {
-                                        grade = '<:rankingS:927797179618295838>'
-                                    }
-                                    else if (ranking == 'SH') {
-                                        grade = '<:rankingSH:927797179710570568>'
-                                    }
-                                    else if (ranking == 'X') {
-                                        grade = '<:rankingX:927797179832229948>'
-                                    }
-                                    else if (ranking == 'XH') {
-                                        grade = '<:rankingxh:927797179597357076>'
-                                    }
+                                    switch (ranking) {
+                                        case 'F':
+                                            grade = 'F'
+                                            break;
+                                        case 'D':
+                                            grade = emojis.grades.D
+                                            break;
+                                        case 'C':
+                                            grade = emojis.grades.C
+                                            break;
+                                        case 'B':
+                                            grade = emojis.grades.B
+                                            break;
+                                        case 'A':
+                                            grade = emojis.grades.A
+                                            break;
+                                        case 'S':
+                                            grade = emojis.grades.S
+                                            break;
+                                        case 'SH':
+                                            grade = emojis.grades.SH
+                                            break;
+                                        case 'X':
+                                            grade = emojis.grades.X
+                                            break;
+                                        case 'XH':
+                                            grade = emojis.grades.XH
+                                            break;
+                                    };
 
 
                                     let hitlist = ''

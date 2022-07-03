@@ -3,6 +3,7 @@ const fs = require('fs');
 const osucalc = require('osumodcalculator')
 const ppcalc = require('booba')
 const fetch = require('node-fetch')
+const emojis = require('../configs/emojis.js')
 
 module.exports = {
     name: 'rs',
@@ -99,31 +100,31 @@ module.exports = {
                                 switch (grade) {
                                     case 'F':
                                         rspassinfo = `\n${hitstr}/${totalstr} (${(hittime / totaltime * 100).toFixed(2)}% completed)`
-                                        rsgrade = 'F'
+                                        rsgrade = emojis.grades.F
                                         break;
                                     case 'D':
-                                        rsgrade = '<:rankingD:927797179534438421>'
+                                        rsgrade = emojis.grades.D
                                         break;
                                     case 'C':
-                                        rsgrade = '<:rankingC:927797179584757842>'
+                                        rsgrade = emojis.grades.C
                                         break;
                                     case 'B':
-                                        rsgrade = '<:rankingB:927797179697991700>'
+                                        rsgrade = emojis.grades.B
                                         break;
                                     case 'A':
-                                        rsgrade = '<:rankingA:927797179739930634>'
+                                        rsgrade = emojis.grades.A
                                         break;
                                     case 'S':
-                                        rsgrade = '<:rankingS:927797179618295838>'
+                                        rsgrade = emojis.grades.S
                                         break;
                                     case 'SH':
-                                        rsgrade = '<:rankingSH:927797179710570568>'
+                                        rsgrade = emojis.grades.SH
                                         break;
                                     case 'X':
-                                        rsgrade = '<:rankingX:927797179832229948>'
+                                        rsgrade = emojis.grades.X
                                         break;
                                     case 'XH':
-                                        rsgrade = '<:rankingxh:927797179597357076>'
+                                        rsgrade = emojis.grades.XH
                                         break;
                                 };
 
@@ -381,31 +382,31 @@ module.exports = {
                                 switch (grade) {
                                     case 'F':
                                         rspassinfo = `\n${hitstr}/${totalstr} (${(hittime / totaltime * 100).toFixed(2)}% completed)`
-                                        rsgrade = 'F'
+                                        rsgrade = emojis.grades.F
                                         break;
                                     case 'D':
-                                        rsgrade = '<:rankingD:927797179534438421>'
+                                        rsgrade = emojis.grades.D
                                         break;
                                     case 'C':
-                                        rsgrade = '<:rankingC:927797179584757842>'
+                                        rsgrade = emojis.grades.C
                                         break;
                                     case 'B':
-                                        rsgrade = '<:rankingB:927797179697991700>'
+                                        rsgrade = emojis.grades.B
                                         break;
                                     case 'A':
-                                        rsgrade = '<:rankingA:927797179739930634>'
+                                        rsgrade = emojis.grades.A
                                         break;
                                     case 'S':
-                                        rsgrade = '<:rankingS:927797179618295838>'
+                                        rsgrade = emojis.grades.S
                                         break;
                                     case 'SH':
-                                        rsgrade = '<:rankingSH:927797179710570568>'
+                                        rsgrade = emojis.grades.SH
                                         break;
                                     case 'X':
-                                        rsgrade = '<:rankingX:927797179832229948>'
+                                        rsgrade = emojis.grades.X
                                         break;
                                     case 'XH':
-                                        rsgrade = '<:rankingxh:927797179597357076>'
+                                        rsgrade = emojis.grades.XH
                                         break;
                                 };
 

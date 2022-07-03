@@ -3,6 +3,7 @@ const fetch = require('node-fetch')
 const { access_token } = require('../configs/osuauth.json')
 const ppcalc = require('booba')
 const osucalc = require('osumodcalculator')
+const emojis = require('../configs/emojis.js')
 
 
 module.exports = {
@@ -69,16 +70,16 @@ module.exports = {
                 let maphitstr = `${maphitmins}:${maphitseconds}`
                 let mapstatus = (json.status)
                 if (mapstatus == "ranked") {
-                    statusimg = "<:statusranked:944512775579926609>";
+                    statusimg = emojis.rankedstatus.ranked;
                 }
                 if (mapstatus == "approved" || mapstatus == "qualified") {
-                    statusimg = "<:statusapproved:944512764913811467>";
+                    statusimg = emojis.rankedstatus.approved;
                 }
                 if (mapstatus == "loved") {
-                    statusimg = "<:statusloved:944512775810588733>";
+                    statusimg = emojis.rankedstatus.loved;
                 }
                 if (mapstatus == "graveyard" || mapstatus == "pending") {
-                    statusimg = "<:statusgraveyard:944512765282897940>";
+                    statusimg = emojis.rankedstatus.graveyard;
                 }
                 fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: id }), null, 2));
 
@@ -255,21 +256,21 @@ module.exports = {
 
                     let pp = new ppcalc.std_ppv2().setPerformance(score).setMods(fixedmods);
                     let pp95 = new ppcalc.std_ppv2().setPerformance(score95).setMods(fixedmods);
-                    let mapimg = "<:modeosu:944181096868884481>";
+                    let mapimg = emojis.gamemodes.standard;
 
                     let mapmode = json.mode
                     if (mapmode == "taiko") {
-                        mapimg = "<:modetaiko:944181097053442068>";
+                        mapimg = emojis.gamemodes.taiko;
                         pp = new ppcalc.taiko_ppv2().setPerformance(score).setMods(fixedmods);
                         pp95 = new ppcalc.taiko_ppv2().setPerformance(score95).setMods(fixedmods);
                     }
                     if (mapmode == "fruits") {
-                        mapimg = "<:modefruits:944181096206176326>";
+                        mapimg = emojis.gamemodes.fruits;
                         pp = new ppcalc.catch_ppv2().setPerformance(score).setMods(fixedmods);
                         pp95 = new ppcalc.catch_ppv2().setPerformance(score95).setMods(fixedmods);
                     }
                     if (mapmode == "mania") {
-                        mapimg = "<:modemania:944181095874834453>";
+                        mapimg = emojis.gamemodes.mania;
                         pp = new ppcalc.mania_ppv2().setPerformance(score).setMods(fixedmods);
                         pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                     }
@@ -329,7 +330,7 @@ module.exports = {
                                     `${statusimg} | ${mapimg} \n` +
                                     `CS${cs} AR${ar} OD${od} HP${hp} \n` +
                                     `${json.difficulty_rating}⭐ | ${bpm}BPM\n` +
-                                    `<:circle:927478586028474398>${json.count_circles} | <:slider:927478585701330976>${json.count_sliders} | 🔁${json.count_spinners} \n` +
+                                    `${emojis.mapobjs.circle}${json.count_circles} | ${emojis.mapobjs.slider}${json.count_sliders} | ${emojis.mapobjs.spinner}${json.count_spinners} \n` +
                                     `${moddedlength}`,
                                     true
                                 )
@@ -427,7 +428,7 @@ module.exports = {
 
                         .setAuthor({ name: `${setdata.creator}`, url: `https://osu.ppy.sh/u/${mapperid}`, iconURL: `https://a.ppy.sh/${mapperid}` })
 
-                        let beatmaps = setdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
+                    let beatmaps = setdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
 
                     for (i = 0; i < setdata.beatmaps.length; i++) {
                         let curbm = beatmaps[i];
@@ -452,7 +453,7 @@ module.exports = {
                         Embed.addField(`${curbm.version}`,
                             `${mapimg} | ${curbm.difficulty_rating}⭐ \n` +
                             `CS${curbm.cs} AR${curbm.ar} OD${curbm.accuracy} HP${curbm.drain} \n` +
-                            `${moddedlength} ${curbm.bpm}BPM | <:circle:927478586028474398>${curbm.count_circles} <:slider:927478585701330976>${curbm.count_sliders} 🔁${curbm.count_spinners}`,
+                            `${moddedlength} ${curbm.bpm}BPM | ${emojis.mapobjs.circle}${curbm.count_circles} ${emojis.mapobjs.slider}${curbm.count_sliders} ${emojis.mapobjs.spinner}${curbm.count_spinners}`,
                             false)
                     }
                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });

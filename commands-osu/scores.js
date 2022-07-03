@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../configs/osuauth.json')
+const emojis = require('../configs/emojis.js')
 
 module.exports = {
     name: 'scores',
@@ -134,36 +135,39 @@ module.exports = {
                                             }
                                             let ranking = score.rank
                                             switch (ranking) {
+                                                case 'F':
+                                                    grade = emojis.grades.F
+                                                    break;
                                                 case 'D':
-                                                    grade = '<:rankingD:927797179534438421>'
+                                                    grade = emojis.grades.D
                                                     break;
                                                 case 'C':
-                                                    grade = '<:rankingC:927797179584757842>'
+                                                    grade = emojis.grades.C
                                                     break;
                                                 case 'B':
-                                                    grade = '<:rankingB:927797179697991700>'
+                                                    grade = emojis.grades.B
                                                     break;
                                                 case 'A':
-                                                    grade = '<:rankingA:927797179739930634>'
+                                                    grade = emojis.grades.A
                                                     break;
                                                 case 'S':
-                                                    grade = '<:rankingS:927797179618295838>'
+                                                    grade = emojis.grades.S
                                                     break;
                                                 case 'SH':
-                                                    grade = '<:rankingSH:927797179710570568>'
+                                                    grade = emojis.grades.SH
                                                     break;
                                                 case 'X':
-                                                    grade = '<:rankingX:927797179832229948>'
+                                                    grade = emojis.grades.X
                                                     break;
                                                 case 'XH':
-                                                    grade = '<:rankingxh:927797179597357076>'
+                                                    grade = emojis.grades.XH
                                                     break;
                                             };
 
 
                                             scoretxt +=
                                                 `-
-                                                **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.id})** ${ifmods} | ${score.created_at.toString()}
+                                                **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id})** ${ifmods} | ${score.created_at.toString()}
                                                 ${(score.accuracy * 100).toFixed(2)} | ${grade} | ${score.pp.toFixed(2)}pp
                                                 \`${hitlist}\` | ${score.max_combo}x/**${mapdata.max_combo}x**\n`
 
@@ -309,29 +313,32 @@ module.exports = {
                                             }
                                             let ranking = score.rank
                                             switch (ranking) {
+                                                case 'F':
+                                                    grade = emojis.grades.F
+                                                    break;
                                                 case 'D':
-                                                    grade = '<:rankingD:927797179534438421>'
+                                                    grade = emojis.grades.D
                                                     break;
                                                 case 'C':
-                                                    grade = '<:rankingC:927797179584757842>'
+                                                    grade = emojis.grades.C
                                                     break;
                                                 case 'B':
-                                                    grade = '<:rankingB:927797179697991700>'
+                                                    grade = emojis.grades.B
                                                     break;
                                                 case 'A':
-                                                    grade = '<:rankingA:927797179739930634>'
+                                                    grade = emojis.grades.A
                                                     break;
                                                 case 'S':
-                                                    grade = '<:rankingS:927797179618295838>'
+                                                    grade = emojis.grades.S
                                                     break;
                                                 case 'SH':
-                                                    grade = '<:rankingSH:927797179710570568>'
+                                                    grade = emojis.grades.SH
                                                     break;
                                                 case 'X':
-                                                    grade = '<:rankingX:927797179832229948>'
+                                                    grade = emojis.grades.X
                                                     break;
                                                 case 'XH':
-                                                    grade = '<:rankingxh:927797179597357076>'
+                                                    grade = emojis.grades.XH
                                                     break;
                                             };
 

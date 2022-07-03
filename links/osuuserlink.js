@@ -1,6 +1,7 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
 const { access_token } = require('../configs/osuauth.json')
+const emojis = require('../configs/emojis.js')
 
 module.exports = {
     name: 'osuuserlink',
@@ -67,13 +68,13 @@ module.exports = {
 
                     let online = osudata.is_online;
 
-                    let isonline = '`**<:osu_offline:927800829153513472> Offline**'
+                    let isonline = `**${emojis.onlinestatus.offline} Offline**`
 
                     if (online == true) {
-                        isonline = '**<:osu_online:927800818445455421> Online**'
+                        isonline = `**${emojis.onlinestatus.online} Online**`
                     }
                     else {
-                        isonline = `**<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago`
+                        isonline = `**${emojis.onlinestatus.offline} Offline** | Last online ${minlastvisredo} ago`
                     }
 
                     let prevnames = osudata.previous_usernames;
@@ -103,7 +104,7 @@ module.exports = {
                 **Accuracy:** ${(osustats.hit_accuracy).toFixed(2)}%
                 **Play Count:** ${playcount}
                 **Level:** ${osustats.level.current}.${osustats.level.progress}
-                <:rankingxh:927797179597357076>${grades.ssh} <:rankingX:927797179832229948>${grades.ss} <:rankingSH:927797179710570568>${grades.sh} <:rankingS:927797179618295838> ${grades.s} <:rankingA:927797179739930634>${grades.a}
+                ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
                 
                 **Player joined on** ${osudata.join_date.toString().slice(0, 10)}
                 **Followers:** ${osudata.follower_count}

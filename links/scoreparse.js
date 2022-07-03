@@ -3,6 +3,7 @@ const fetch = require('node-fetch')
 const ppcalc = require('booba')
 const osucalc = require('osumodcalculator')
 const { access_token } = require('../configs/osuauth.json')
+const emojis = require('../configs/emojis.js')
 
 module.exports = {
     name: 'scoreparse',
@@ -33,33 +34,33 @@ module.exports = {
 
                     let ranking = scoredata.rank
 
-                    switch (ranking) {
+                    switch (ranking.toUpperCase()) {
                         case 'F':
-                            grade = 'F'
+                            grade = emojis.grades.F
                             break;
                         case 'D':
-                            grade = '<:rankingD:927797179534438421>'
+                            grade = emojis.grades.D
                             break;
                         case 'C':
-                            grade = '<:rankingC:927797179584757842>'
+                            grade = emojis.grades.C
                             break;
                         case 'B':
-                            grade = '<:rankingB:927797179697991700>'
+                            grade = emojis.grades.B
                             break;
                         case 'A':
-                            grade = '<:rankingA:927797179739930634>'
+                            grade = emojis.grades.A
                             break;
                         case 'S':
-                            grade = '<:rankingS:927797179618295838>'
+                            grade = emojis.grades.S
                             break;
                         case 'SH':
-                            grade = '<:rankingSH:927797179710570568>'
+                            grade = emojis.grades.SH
                             break;
                         case 'X':
-                            grade = '<:rankingX:927797179832229948>'
+                            grade = emojis.grades.X
                             break;
                         case 'XH':
-                            grade = '<:rankingxh:927797179597357076>'
+                            grade = emojis.grades.XH
                             break;
                     };
                     let gamehits = scoredata.statistics
@@ -147,6 +148,7 @@ module.exports = {
                         ${scoredata.pp.toFixed(2)}pp | ${ppiffc}pp if ${fcacc} FC\n${ppissue}
                         `)
                     message.reply({ embeds: [scoreembed], allowedMentions: { repliedUser: false } })
+                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
                 })();
             })
     }
