@@ -354,7 +354,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'guild',
                 description: 'The server to leave',
-                type: Constants.ApplicationCommandOptionTypes.INTEGER,
+                type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: true,
                 minValue: 1
             }
