@@ -377,8 +377,13 @@ let admincmds = [
         name: 'log',
         description: 'Returns the logs for the current guild',
         usage: 'sbr-log',
-        slashusage: '/log',
-        options: []
+        slashusage: '/log [guildid]',
+        options: [
+            {
+                name: 'guildid',
+                description: '`integer, optional`. The id of the guild to retrieve the logs of. If omitted, the logs of the guild the message is sent in will be returned'
+            }
+        ]
     },
     {
         name: 'find',

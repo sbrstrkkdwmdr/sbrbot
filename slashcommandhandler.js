@@ -419,6 +419,19 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
         ]
     })
+    commands?.create({
+        name: 'log',
+        description: 'Displays the log of a server',
+        options: [
+            {
+                name: 'guildid',
+                description: 'The guild to display the log of',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: false,
+                minValue: 1
+            },
+        ]
+    })
 
     client.on('interactionCreate', async (interaction) => {
         if (!interaction.isCommand()) return;
@@ -509,6 +522,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'find':
                 client.admincmds.get('find').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'log':
+                client.admincmds.get('log').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             default:
                 interaction.reply({ content: 'Command not found - no longer exists or is currently being rewritten', ephemeral: true })
