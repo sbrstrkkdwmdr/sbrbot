@@ -47,6 +47,8 @@ module.exports = {
             'https://media.discordapp.net/attachments/98226572468690944/977994968461365298/chokeplay-1.gif', //fubuki getting choked and enjoying it
             'https://tenor.com/view/nerd-nerd-emoji-meme-speech-bubble-bubble-gif-25115885', //nerd emoji guy
             'https://media.discordapp.net/attachments/843627338839490560/977578032946626621/deranker.gif', //osu rank graph going down (bad)
+            'https://cdn.discordapp.com/attachments/903512449469267991/992776650565627986/373E2B63-77FA-4916-8902-1EC50B4B6F26.gif', //dog
+            'https://cdn.discordapp.com/attachments/903512449469267991/992776826940305439/8806F06C-0A48-4141-AD08-434D2578D199.gif' //upside down boot
         ]
         let reaction = [
             'https://tenor.com/view/jerma-jerma985-burger-eating-tucker-carson-gif-22054018', // jerma eating
