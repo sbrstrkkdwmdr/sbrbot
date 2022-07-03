@@ -449,10 +449,12 @@ module.exports = {
                         Embed.addField(`${curbm.version}`,
                             `${mapimg} | ${curbm.difficulty_rating}⭐ \n` +
                             `CS${curbm.cs} AR${curbm.ar} OD${curbm.accuracy} HP${curbm.drain} \n` +
-                            `${moddedlength} ${curbm.bpm}BPM`,
+                            `${moddedlength} ${curbm.bpm}BPM | <:circle:927478586028474398>${curbm.count_circles} <:slider:927478585701330976>${curbm.count_sliders} 🔁${curbm.count_spinners}`,
                             false)
                     }
                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
+                    
+                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: setdata.beatmaps[setdata.beatmaps.length - 1].id }), null, 2));
 
 
                 }
