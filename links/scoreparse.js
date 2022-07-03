@@ -31,8 +31,13 @@ module.exports = {
                 fs.appendFileSync('link.log', `LINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\n`, 'utf-8')
                     ;
                 (async () => {
+                    try {
+                        let ranking = scoredata.rank.toUpperCase()
+                    } catch (error) {
+                        return message.reply({ content: 'This score is unsubmitted/failed and cannot be parsed', allowedMentions: { repliedUser: false } })
 
-                    let ranking = scoredata.rank
+                    }
+                    let ranking = scoredata.rank ? scoredata.rank : 'f'
                     let scoregrade = emojis.grades.F
                     switch (ranking.toUpperCase()) {
                         case 'F':
@@ -69,7 +74,7 @@ module.exports = {
                     if (scoredata.mods) {
                         modint = osucalc.ModStringToInt(scoredata.mods.join(''))
                     }
-                    
+
                     let score = {
                         beatmap_id: scoredata.beatmap.id,
                         score: '6795149',
@@ -89,7 +94,7 @@ module.exports = {
                     }
 
                     let mode = scoredata.mode
-                    
+
                     if (mode == 'osu') {
                         ppfc = new ppcalc.std_ppv2().setPerformance(score)
                         hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
@@ -120,10 +125,10 @@ module.exports = {
                         ppissue = 'Error - pp calculator could not fetch beatmap'
                         fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
 
-                    }       
+                    }
 
-                    let scorepp = scoredata.pp 
-                    if(isNaN(scorepp)){
+                    let scorepp = scoredata.pp
+                    if (isNaN(scorepp)) {
                         scorepp = 'N/A'
                     }
                     let artist = scoredata.beatmapset.artist
@@ -138,7 +143,7 @@ module.exports = {
                     if (title != titleuni) {
                         title = `${title} (${titleuni})`
                     }
-                    
+
                     let scoreembed = new Discord.MessageEmbed()
                         .setColor('#0099ff')
                         .setAuthor({ name: `${scoredata.user.username}`, iconURL: `https://a.ppy.sh/${scoredata.user.id}`, url: `https://osu.ppy.sh/users/${scoredata.user.id}` })
