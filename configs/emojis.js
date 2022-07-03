@@ -12,11 +12,11 @@ let gamemodes = {
     mania: '<:modemania:944181095874834453>' //piano
 }
 
-let rankedstats = {
-  ranked: '<:statusranked:944512775579926609>',
-  approved: '<:statusapproved:944512764913811467>',
-  loved: '<:statusloved:944512775810588733>',
-  graveyard: '<:statusgraveyard:944512765282897940>'  
+let rankedstatus = {
+    ranked: '<:statusranked:944512775579926609>',
+    approved: '<:statusapproved:944512764913811467>',
+    loved: '<:statusloved:944512775810588733>',
+    graveyard: '<:statusgraveyard:944512765282897940>'
 }
 
 let grades = {
@@ -30,5 +30,9 @@ let grades = {
     D: '<:rankingD:927797179534438421>',
     F: 'F',
 }
+let onlinestatus = {
+    online: '<:osu_online:927800818445455421>',
+    offline: '<:osu_offline:927800829153513472>'
+}
 
-module.exports = { mapobjs, gamemodes, rankedstats, grades }
+module.exports = { mapobjs, gamemodes, rankedstatus, grades, onlinestatus }
