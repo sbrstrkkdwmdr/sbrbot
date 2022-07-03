@@ -422,7 +422,7 @@ let links = [
                 description: '`string, required`. The gamemode of the map. Only needed if using beatmapset link. Valid types are: "osu", "taiko", "fruits", "mania"'
             }
         ],
-        aliases: 'osu.ppy.sh/beatmaps/<id>, osu.ppy.sh/beatmapsets/<setid>#<gamemode>/<id>'
+        aliases: 'osu.ppy.sh/beatmaps/<id>, osu.ppy.sh/beatmapsets/<setid>#<gamemode>/<id>, osu.ppy.sh/s/<setid>, osu.ppy.sh/beatmapsets/<setid>'
     },
     {
         name: 'osuuserlink',
