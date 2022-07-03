@@ -71,6 +71,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'time':
                 client.commands.get('time').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+            case 'emojify':
+                client.commands.get('emojify').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
 
             //osu commands below
 
@@ -80,7 +83,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'rs': case 'recent':
                 client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'osu': case 'profile':case 'o':
+            case 'osu': case 'profile': case 'o':
                 client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'osutop': case 'top':
