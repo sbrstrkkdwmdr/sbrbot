@@ -33,34 +33,34 @@ module.exports = {
                 (async () => {
 
                     let ranking = scoredata.rank
-
+                    let scoregrade = emojis.grades.F
                     switch (ranking.toUpperCase()) {
                         case 'F':
-                            grade = emojis.grades.F
+                            scoregrade = emojis.grades.F
                             break;
                         case 'D':
-                            grade = emojis.grades.D
+                            scoregrade = emojis.grades.D
                             break;
                         case 'C':
-                            grade = emojis.grades.C
+                            scoregrade = emojis.grades.C
                             break;
                         case 'B':
-                            grade = emojis.grades.B
+                            scoregrade = emojis.grades.B
                             break;
                         case 'A':
-                            grade = emojis.grades.A
+                            scoregrade = emojis.grades.A
                             break;
                         case 'S':
-                            grade = emojis.grades.S
+                            scoregrade = emojis.grades.S
                             break;
                         case 'SH':
-                            grade = emojis.grades.SH
+                            scoregrade = emojis.grades.SH
                             break;
                         case 'X':
-                            grade = emojis.grades.X
+                            scoregrade = emojis.grades.X
                             break;
                         case 'XH':
-                            grade = emojis.grades.XH
+                            scoregrade = emojis.grades.XH
                             break;
                     };
                     let gamehits = scoredata.statistics
@@ -69,7 +69,7 @@ module.exports = {
                     if (scoredata.mods) {
                         modint = osucalc.ModStringToInt(scoredata.mods.join(''))
                     }
-
+                    
                     let score = {
                         beatmap_id: scoredata.beatmap.id,
                         score: '6795149',
@@ -84,12 +84,12 @@ module.exports = {
                         enabled_mods: modint,
                         user_id: scoredata.user_id,
                         date: '2022-02-08 05:24:54',
-                        rank: 'S',
+                        rank: ranking,
                         score_id: '4057765057'
                     }
 
                     let mode = scoredata.mode
-
+                    
                     if (mode == 'osu') {
                         ppfc = new ppcalc.std_ppv2().setPerformance(score)
                         hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
@@ -120,8 +120,12 @@ module.exports = {
                         ppissue = 'Error - pp calculator could not fetch beatmap'
                         fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
 
-                    }
+                    }       
 
+                    let scorepp = scoredata.pp 
+                    if(isNaN(scorepp)){
+                        scorepp = 'N/A'
+                    }
                     let artist = scoredata.beatmapset.artist
                     let artistuni = scoredata.beatmapset.artist_unicode
                     let title = scoredata.beatmapset.title
@@ -134,7 +138,7 @@ module.exports = {
                     if (title != titleuni) {
                         title = `${title} (${titleuni})`
                     }
-
+                    
                     let scoreembed = new Discord.MessageEmbed()
                         .setColor('#0099ff')
                         .setAuthor({ name: `${scoredata.user.username}`, iconURL: `https://a.ppy.sh/${scoredata.user.id}`, url: `https://osu.ppy.sh/users/${scoredata.user.id}` })
@@ -142,10 +146,10 @@ module.exports = {
                         .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.beatmap_id}`)
                         .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`)
                         .setDescription(`
-                        ${(scoredata.accuracy * 100).toFixed(2)}% | ${grade}
+                        ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade}
                         \`${hitlist}\`
                         ${scoredata.max_combo}x
-                        ${scoredata.pp.toFixed(2)}pp | ${ppiffc}pp if ${fcacc} FC\n${ppissue}
+                        ${scorepp}pp | ${ppiffc}pp if ${fcacc} FC\n${ppissue}
                         `)
                     message.reply({ embeds: [scoreembed], allowedMentions: { repliedUser: false } })
                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
