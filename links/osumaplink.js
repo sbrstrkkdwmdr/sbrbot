@@ -426,8 +426,11 @@ module.exports = {
                     `)
 
                         .setAuthor({ name: `${setdata.creator}`, url: `https://osu.ppy.sh/u/${mapperid}`, iconURL: `https://a.ppy.sh/${mapperid}` })
+
+                        let beatmaps = setdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
+
                     for (i = 0; i < setdata.beatmaps.length; i++) {
-                        let curbm = setdata.beatmaps[i];
+                        let curbm = beatmaps[i];
                         let mapmode = curbm.mode
                         if (mapmode == "taiko") {
                             mapimg = "<:modetaiko:944181097053442068>";
@@ -453,7 +456,7 @@ module.exports = {
                             false)
                     }
                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
-                    
+
                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: setdata.beatmaps[setdata.beatmaps.length - 1].id }), null, 2));
 
 
