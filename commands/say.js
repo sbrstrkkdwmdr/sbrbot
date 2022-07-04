@@ -1,5 +1,6 @@
 const fs = require('fs')
 const commandchecks = require('../configs/commandchecks.js');
+const defaulttext = require('../configs/w').chocomint
 
 module.exports = {
     name: 'say',
@@ -12,6 +13,11 @@ module.exports = {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - say (message)\n${currentDate} | ${currentDateISO}\n recieved say command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             if (commandchecks.isOwner(message.author.id)) {
                 message.delete();
+                if(!args[0]){
+                    message.channel.send(defaulttext.substring(0, defaulttext.length / 2))
+                    message.channel.send(defaulttext.substring(defaulttext.length / 2, defaulttext.length))
+                    return
+                }
                 message.channel.send(args.join(' '))
             } else {
                 message.reply({ content: 'L + ratio + no + you do not have permissions + no bitches + L', allowedMentions: { repliedUser: false } })
