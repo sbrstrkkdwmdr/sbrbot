@@ -345,7 +345,7 @@ module.exports = {
 
                                             scoretxt +=
                                                 `-
-                                                **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.id})** ${ifmods} | ${score.created_at.toString()}
+                                                **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id})** ${ifmods} | ${score.created_at.toString()}
                                                 ${(score.accuracy * 100).toFixed(2)} | ${grade} | ${score.pp.toFixed(2)}pp
                                                 \`${hitlist}\` | ${score.max_combo}x/**${mapdata.max_combo}x**\n`
 
