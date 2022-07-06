@@ -115,8 +115,8 @@ client.once('ready', () => {
             type: 'WATCHING',
             url: 'https://youtube.com/saberstrkkdwmdr',
         }],
-        status: `dnd`,
-        afk: 'false'
+        status: 'dnd',
+        afk: false
     });
 
 })
