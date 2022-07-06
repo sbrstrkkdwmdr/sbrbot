@@ -329,9 +329,9 @@ module.exports = {
                                     "**MAP DETAILS**",
                                     `${statusimg} | ${mapimg} \n` +
                                     `CS${cs} AR${ar} OD${od} HP${hp} \n` +
-                                    `${json.difficulty_rating}⭐ | ${bpm}BPM\n` +
+                                    `${json.difficulty_rating}⭐ | ${bpm}BPM⏱\n` +
                                     `${emojis.mapobjs.circle}${json.count_circles} | ${emojis.mapobjs.slider}${json.count_sliders} | ${emojis.mapobjs.spinner}${json.count_spinners} \n` +
-                                    `${moddedlength}`,
+                                    `${moddedlength}🕐`,
                                     true
                                 )
                                 .addField(
@@ -453,7 +453,7 @@ module.exports = {
                         Embed.addField(`${curbm.version}`,
                             `${mapimg} | ${curbm.difficulty_rating}⭐ \n` +
                             `CS${curbm.cs} AR${curbm.ar} OD${curbm.accuracy} HP${curbm.drain} \n` +
-                            `${moddedlength} ${curbm.bpm}BPM | ${emojis.mapobjs.circle}${curbm.count_circles} ${emojis.mapobjs.slider}${curbm.count_sliders} ${emojis.mapobjs.spinner}${curbm.count_spinners}`,
+                            `${moddedlength}🕐 ${curbm.bpm}BPM⏱ | ${emojis.mapobjs.circle}${curbm.count_circles} ${emojis.mapobjs.slider}${curbm.count_sliders} ${emojis.mapobjs.spinner}${curbm.count_spinners}`,
                             false)
                     }
                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });

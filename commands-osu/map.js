@@ -381,9 +381,9 @@ module.exports = {
                                                     "**MAP DETAILS**",
                                                     `${statusimg} | ${mapimg} \n` +
                                                     `CS${cs} AR${ar} OD${od} HP${hp} \n` +
-                                                    `${json.difficulty_rating}⭐ | ${bpm}BPM\n` +
+                                                    `${json.difficulty_rating}⭐ | ${bpm}BPM⏱\n` +
                                                     `${emojis.mapobjs.circle}${json.count_circles} | ${emojis.mapobjs.slider}${json.count_sliders} | ${emojis.mapobjs.spinner}${json.count_spinners}\n` +
-                                                    `${moddedlength}`,
+                                                    `${moddedlength}🕐`,
                                                     true
                                                 )
                                                 .addField(
@@ -711,9 +711,9 @@ module.exports = {
                                         "**MAP DETAILS**",
                                         `${statusimg} | ${mapimg} \n` +
                                         `CS${cs} AR${ar} OD${od} HP${hp} \n` +
-                                        `${json.difficulty_rating}⭐ | ${bpm}BPM\n` +
+                                        `${json.difficulty_rating}⭐ | ${bpm}BPM⏱\n` +
                                         `${emojis.mapobjs.circle}${json.count_circles} | ${emojis.mapobjs.slider}${json.count_sliders} | ${emojis.mapobjs.spinner}${json.count_spinners} \n` +
-                                        `${moddedlength}`,
+                                        `${moddedlength}🕐`,
                                         true
                                     )
                                     .addField(
@@ -1046,9 +1046,9 @@ module.exports = {
                                         "**MAP DETAILS**",
                                         `${statusimg} | ${mapimg} \n` +
                                         `CS${cs} AR${ar} OD${od} HP${hp} \n` +
-                                        `${json.difficulty_rating}⭐ | ${bpm}BPM\n` +
+                                        `${json.difficulty_rating}⭐ | ${bpm}BPM⏱\n` +
                                         `${emojis.mapobjs.circle}${json.count_circles} | ${emojis.mapobjs.slider}${json.count_sliders} | ${emojis.mapobjs.spinner}${json.count_spinners} \n` +
-                                        `${moddedlength}`,
+                                        `${moddedlength}🕐`,
                                         true
                                     )
                                     .addField(
