@@ -39,7 +39,7 @@ module.exports = {
             'https://media.discordapp.net/attachments/855538143302385727/978751222293098536/delta_dannerif-5-a495e94394.gif', //idk what this is but theres a girl that looks like kasane teto and an 8 in the middle
             'https://media.discordapp.net/attachments/861689222586171393/953156001320812564/LOChMeR.gif', //hitcircle default skin 
             'https://media.discordapp.net/attachments/877077345054380052/946909426432999474/screenshot2324_-_Copy.gif', //that one section of the big black
-            'https://media.discordapp.net/attachments/878855036992622652/960730586903887902/sph.gif', //felix nsfw\
+            /* 'https://media.discordapp.net/attachments/878855036992622652/960730586903887902/sph.gif', //felix nsfw\ */
             'https://media.discordapp.net/attachments/885710706350116915/946818088857370696/yes.gif', // bunny girl + mask
             'https://media.discordapp.net/attachments/894054954661204009/956769254269648917/lil-nas-x-pregnant.gif', //lil nas x pregnant
             'https://media.discordapp.net/attachments/960980200613625896/967546422155182130/Untitled2.gif', //touhou1?!?!?
@@ -48,7 +48,20 @@ module.exports = {
             'https://tenor.com/view/nerd-nerd-emoji-meme-speech-bubble-bubble-gif-25115885', //nerd emoji guy
             'https://media.discordapp.net/attachments/843627338839490560/977578032946626621/deranker.gif', //osu rank graph going down (bad)
             'https://cdn.discordapp.com/attachments/903512449469267991/992776650565627986/373E2B63-77FA-4916-8902-1EC50B4B6F26.gif', //dog
-            'https://cdn.discordapp.com/attachments/903512449469267991/992776826940305439/8806F06C-0A48-4141-AD08-434D2578D199.gif' //upside down boot
+            'https://cdn.discordapp.com/attachments/903512449469267991/992776826940305439/8806F06C-0A48-4141-AD08-434D2578D199.gif', //upside down boot
+            'https://media.discordapp.net/attachments/923571142801915964/993500133096439828/unknown.png', //horny guy suck cock finland flag
+            'https://cdn.discordapp.com/attachments/903512449469267991/993503753837740032/961460810859835463.png', // crying glasses wojak
+            'https://cdn.discordapp.com/attachments/903512449469267991/993515597709189130/received_568368178206882.jpg', // malding gluttony wojak
+            'https://cdn.discordapp.com/attachments/653760219708391445/992520290309505074/unknown.png', //cat
+            'https://cdn.discordapp.com/attachments/848722603009900565/993759868144070716/age_tier_list.gif', // age tier list
+            'https://cdn.discordapp.com/attachments/848722603009900565/993757803938332702/soy.gif', // ebina from umaru greentext
+            'https://tenor.com/view/speech-bubble-discord-who-cares-handsome-squidward-squidward-gif-25418980', //squidward cosplay
+            'https://tenor.com/view/felix-re-zero-felix-argyle-speech-bubble-speech-gif-25397116', // felix gaming
+            'https://tenor.com/view/speech-speech-bubble-meme-joke-arbys-we-have-the-meats-gif-24803181', //arby's
+            'https://tenor.com/view/among-us-amongla-speech-bubble-meme-saraiva-gif-25059294', // among us speaking 
+            'https://tenor.com/view/speech-bubble-chad-handsome-discord-gif-25759083' //
+            
+
         ]
         let reaction = [
             'https://tenor.com/view/jerma-jerma985-burger-eating-tucker-carson-gif-22054018', // jerma eating
