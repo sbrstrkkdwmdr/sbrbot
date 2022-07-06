@@ -71,7 +71,15 @@ module.exports = {
                     }).then(res => res.json())
                         .then(lbdatapresort => {
                             let lbdata = lbdatapresort.scores
-
+                            if (args[1] && args[1] == 'links' && lbdata.length > 0){
+                                sctxt = ''
+                                for(i=0;i<lbdata.length;i++){
+                                    sctxt += `\nhttps://osu.ppy.sh/scores/${lbdata[i].mode}/${lbdata[i].id}`
+                                }
+                                fs.writeFileSync('debugosu/maplbscores.txt', sctxt)
+                                message.reply({files: ['debugosu/maplbscores.txt'], allowedMentions: { repliedUser: false }})
+                                return;
+                            }
                             fs.writeFileSync('debugosu/maplb.json', JSON.stringify(lbdata, null, 2))
 
                             let lbEmbed = new Discord.MessageEmbed()
