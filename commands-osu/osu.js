@@ -2,6 +2,8 @@ const { access_token } = require('../configs/osuauth.json');
 const fs = require('fs')
 const fetch = require('node-fetch');
 const emojis = require('../configs/emojis.js');
+const chartjsimg = require('chartjs-to-image');
+const osufunc = require('../configs/osufunc.js')
 
 module.exports = {
     name: 'osu',
@@ -243,8 +245,73 @@ module.exports = {
                     ${prevnameslist}
                     ${isonline}
                     `)
+                        if (interaction.options.getBoolean('detailed') == true) {
+                            let mode = osudata.playmode 
+                            //chart creation
+                            data = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
 
-                        interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
+                            const chart = new chartjsimg()
+                                .setConfig({
+                                    type: 'line',
+                                    data: {
+                                        labels: data,
+                                        datasets: [{
+                                            label: 'Monthly Playcount',
+                                            data: osudata.monthly_playcounts.map(x => x.count),
+                                            fill: false,
+                                            borderColor: 'rgb(75, 192, 192)',
+                                            borderWidth: 1,
+                                            pointRadius: 0
+                                        }]
+                                    }
+                                })
+                            chart.setBackgroundColor('color: rgb(0,0,0)')
+                            chart.toFile('./debugosu/playergraph.jpg').then(() => {
+
+                                let usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
+                                fetch(usertopurl, {
+                                    headers: {
+                                        Authorization: `Bearer ${access_token}`
+                                    }
+                                }).then(res => res.json())
+                                    .then(osutopdata => {
+                                        let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                        let maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
+                                        let minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
+                                        let avgpp;
+                                        let totalpp = 0;
+                                        for (i2 = 0; i2 < osutopdata.length; i2++) {
+                                            totalpp += osutopdata[i2].pp
+                                        }
+                                        avgpp = (totalpp / osutopdata.length).toFixed(2)
+                                        Embed.addField(
+                                            '-', `
+                                    **Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
+                                    **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
+                                    **Gamemode:** ${mode}
+                                    **Highest combo:** ${highestcombo}
+                                `, true)
+                                        Embed.addField(
+                                            '-', `
+                                    **Highest pp:** ${maxpp}
+                                    **Lowest pp:** ${minpp}
+                                    **Average pp:** ${avgpp}
+                                    **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
+                                    **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
+                                `, true)
+
+                                        interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, files: ['./debugosu/playergraph.jpg'] })
+
+
+
+
+
+
+                                    })
+                            })
+                        } else {
+                            interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
+                        }
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
 
