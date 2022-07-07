@@ -3,6 +3,7 @@ const osucalc = require('osumodcalculator')
 const { access_token } = require('../configs/osuauth.json')
 const fetch = require('node-fetch')
 const emojis = require('../configs/emojis.js')
+const osufunc = require('../configs/osufunc.js')
 
 module.exports = {
     name: 'osutop',
@@ -369,9 +370,8 @@ module.exports = {
                                         }
                                         topEmbed.addField(`#${scoreoffset + 1}`,
                                             ` 
-                                        [**${score.beatmapset.title} [${score.beatmap.version}]**](https://osu.ppy.sh/b/${score.beatmap.id}) 
-                                        ${ifmods} | ${Math.abs(score.accuracy * 100).toFixed(2)}% | ${(score.pp).toFixed(2)}pp
-                                        `)
+                                        [**${score.beatmapset.title} [${score.beatmap.version}]**](https://osu.ppy.sh/b/${score.beatmap.id}) ${ifmods} | ${Math.abs(score.accuracy * 100).toFixed(2)}% | ${(score.pp).toFixed(2)}pp
+                                        `, true)
                                     }
                                 }
                                 if (detailed == true) {
@@ -398,8 +398,8 @@ module.exports = {
                                     }
                                     topEmbed.addField(
                                         '-', `
-                                    **Most common mapper:** ${modemappers(osutopdata).beatmapset.creator}
-                                    **Most common mods:** ${modemods(osutopdata).mods.toString().replaceAll(',', '')}
+                                    **Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
+                                    **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
                                     **Gamemode:** ${gamemode}
                                     **Hits:** ${hittype}
                                     **Highest combo:** ${highestcombo}
@@ -414,18 +414,6 @@ module.exports = {
                                 `, true)
                                 } else {
 
-                                }
-                                function modemods(arr) {
-                                    return arr.sort((a, b) => //swap b and a to make it least common
-                                        arr.filter(v => v.mods === a.mods).length
-                                        - arr.filter(v => v.mods === b.mods).length
-                                    ).pop();
-                                }
-                                function modemappers(arr) {
-                                    return arr.sort((a, b) => //swap b and a to make it least common
-                                        arr.filter(v => v.beatmapset.creator === a.beatmapset.creator).length
-                                        - arr.filter(v => v.beatmapset.creator === b.beatmapset.creator).length
-                                    ).pop();
                                 }
                                 interaction.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false } })
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
