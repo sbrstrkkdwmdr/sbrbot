@@ -253,6 +253,9 @@ module.exports = {
                                         Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
                                     sortdata = 'Sorted by: Most recent'
                                 }
+                                if (interaction.options.getBoolean('compact') == true) {
+                                    filterinfo += `\ncompact mode`
+                                }
                             } catch (error) {
                                 return interaction.reply({ content: 'Error - no scores found', allowedMentions: { repliedUser: false } })
                             }
@@ -343,9 +346,9 @@ module.exports = {
                                             };
 
                                             if (interaction.options.getBoolean('compact') == true) {
-                                            scoretxt += `
+                                                scoretxt += `
                                             **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id})**
-                                            ${(score.accuracy * 100).toFixed(2)}% | ${score.pp}pp | ${ifmods}`  
+                                            ${(score.accuracy * 100).toFixed(2)}% | ${score.pp}pp | ${ifmods}`
                                             }
                                             else {
                                                 scoretxt +=

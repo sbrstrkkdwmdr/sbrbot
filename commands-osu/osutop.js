@@ -265,6 +265,9 @@ module.exports = {
                                     osutopdata = filtereddata.sort((a, b) => Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
                                     filterinfo += `\nsorted by recent`
                                 }
+                                if (interaction.options.getBoolean('compact') == true){
+                                    filterinfo += `\ncompact mode`
+                                }
                                 try {
                                     let usernamefortests = osutopdata[0].user.username
 
@@ -275,9 +278,11 @@ module.exports = {
                                     .setColor(0x462B71)
                                     .setTitle(`Top plays of ${osutopdata[0].user.username}`)
                                     .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
-                                    .setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 5)}`)
                                 if (interaction.options.getBoolean('compact') == false) {
+                                    topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 5)}`)
+
                                     for (let i = 0; i < 5 && i < osutopdata.length; i++) {
+
                                         let scoreoffset = page * 5 + i
 
                                         let score = osutopdata[scoreoffset].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -353,13 +358,19 @@ module.exports = {
 
                                     }
                                 } else {
-                                    for(let i = 0; i < 10 && i < osutopdata.length; i++){
-                                        let scoreoffset = page * 5 + i
+                                    topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 10)}`)
+                                    for (let i = 0; i < 10 && i < osutopdata.length; i++) {
+                                        let scoreoffset = page * 10 + i
                                         let score = osutopdata[scoreoffset]
+                                        if (!score.mods || score.mods == '' || score.mods == 'undefined' || score.mods == null || score.mods == undefined) {
+                                            ifmods = ''
+                                        } else {
+                                            ifmods = '+' + score.mods.join('').toString()
+                                        }
                                         topEmbed.addField(`#${scoreoffset + 1}`,
-                                        ` 
+                                            ` 
                                         [**${score.beatmapset.title} [${score.beatmap.version}]**](https://osu.ppy.sh/b/${score.beatmap.id}) 
-                                        +${ifmods} | ${Math.abs(score.accuracy * 100).toFixed(2)}% | ${(score.pp).toFixed(2)}pp
+                                        ${ifmods} | ${Math.abs(score.accuracy * 100).toFixed(2)}% | ${(score.pp).toFixed(2)}pp
                                         `)
                                     }
                                 }
