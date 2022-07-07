@@ -529,6 +529,12 @@ let useridsortopts = [
         required: false,
         type: Constants.ApplicationCommandOptionTypes.STRING,
         choices: playsortopts
+    },
+    {
+        name: 'compact',
+        description: 'Whether or not to show the compact version of the scores',
+        type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+        required: false,
     }
 ]
 

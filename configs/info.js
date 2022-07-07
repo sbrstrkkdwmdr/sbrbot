@@ -242,7 +242,7 @@ let osucmds = [
         name: 'osutop',
         description: 'Retrieves the top 5 plays for the user',
         usage: 'sbr-osutop <user>',
-        slashusage: '/osutop [user] [mode] [sort] [page] [mapper] [mods] [detailed]',
+        slashusage: '/osutop [user] [mode] [sort] [page] [mapper] [mods] [detailed] [compact]',
         options: [
             {
                 name: 'user',
@@ -271,6 +271,10 @@ let osucmds = [
             {
                 name: 'detailed',
                 description: '`boolean, optional. Enables/Disables displaying extra details. Most common mapper, mod combo, max combo, min/avg/max pp'
+            },
+            {
+                name: 'compact',
+                description: '`boolean, optional. Enables/Disables compact mode. Displays only the map name, mods, accuracy and pp'
             }
         ],
         aliases: 'top'
@@ -300,7 +304,7 @@ let osucmds = [
         name: 'scores',
         description: 'Retrieves the user\'s score for a set map',
         usage: 'sbr-scores <user> <id>',
-        slashusage: '/scores [user] [id] [sort]',
+        slashusage: '/scores [user] [id] [sort] [compact]',
         options: [
             {
                 name: 'user',
@@ -314,6 +318,10 @@ let osucmds = [
                 name: 'sort',
                 description: '`string, optional`. How to sort the plays by. If omitted, plays will be sorted by most recent'
             },
+            {
+                name: 'compact',
+                description: '`boolean, optional. Enables/Disables compact mode. Displays only the mods, accuracy and pp'
+            }
         ],
         aliases: 'c'
     }

@@ -342,13 +342,18 @@ module.exports = {
                                                     break;
                                             };
 
-
-                                            scoretxt +=
-                                                `-
+                                            if (interaction.options.getBoolean('compact') == true) {
+                                            scoretxt += `
+                                            **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id})**
+                                            ${(score.accuracy * 100).toFixed(2)}% | ${score.pp}pp | ${ifmods}`  
+                                            }
+                                            else {
+                                                scoretxt +=
+                                                    `-
                                                 **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id})** ${ifmods} | ${score.created_at.toString()}
-                                                ${(score.accuracy * 100).toFixed(2)} | ${grade} | ${score.pp.toFixed(2)}pp
+                                                ${(score.accuracy * 100).toFixed(2)}% | ${grade} | ${score.pp}pp
                                                 \`${hitlist}\` | ${score.max_combo}x/**${mapdata.max_combo}x**\n`
-
+                                            }
                                         }
                                     }
                                     Embed.setDescription(scoretxt)

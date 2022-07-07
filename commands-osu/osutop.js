@@ -276,79 +276,92 @@ module.exports = {
                                     .setTitle(`Top plays of ${osutopdata[0].user.username}`)
                                     .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
                                     .setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 5)}`)
-                                for (let i = 0; i < 5 && i < osutopdata.length; i++) {
-                                    let scoreoffset = page * 5 + i
+                                if (interaction.options.getBoolean('compact') == false) {
+                                    for (let i = 0; i < 5 && i < osutopdata.length; i++) {
+                                        let scoreoffset = page * 5 + i
 
-                                    let score = osutopdata[scoreoffset].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                    let hitgeki = osutopdata[scoreoffset].statistics.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                    let hit300 = osutopdata[scoreoffset].statistics.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                    let hitkatu = osutopdata[scoreoffset].statistics.count_katu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                    let hit100 = osutopdata[scoreoffset].statistics.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                    let hit50 = osutopdata[scoreoffset].statistics.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                    let miss = osutopdata[scoreoffset].statistics.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                    let combo = osutopdata[scoreoffset].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                    let maptimeset = osutopdata[scoreoffset].created_at.toString().slice(0, 19).replace("T", " ")
+                                        let score = osutopdata[scoreoffset].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                        let hitgeki = osutopdata[scoreoffset].statistics.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                        let hit300 = osutopdata[scoreoffset].statistics.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                        let hitkatu = osutopdata[scoreoffset].statistics.count_katu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                        let hit100 = osutopdata[scoreoffset].statistics.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                        let hit50 = osutopdata[scoreoffset].statistics.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                        let miss = osutopdata[scoreoffset].statistics.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                        let combo = osutopdata[scoreoffset].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                        let maptimeset = osutopdata[scoreoffset].created_at.toString().slice(0, 19).replace("T", " ")
 
-                                    let ranking = osutopdata[scoreoffset].rank.toUpperCase()
-                                    switch (ranking) {
-                                        case 'F':
-                                            grade = 'F'
-                                            break;
-                                        case 'D':
-                                            grade = emojis.grades.D
-                                            break;
-                                        case 'C':
-                                            grade = emojis.grades.C
-                                            break;
-                                        case 'B':
-                                            grade = emojis.grades.B
-                                            break;
-                                        case 'A':
-                                            grade = emojis.grades.A
-                                            break;
-                                        case 'S':
-                                            grade = emojis.grades.S
-                                            break;
-                                        case 'SH':
-                                            grade = emojis.grades.SH
-                                            break;
-                                        case 'X':
-                                            grade = emojis.grades.X
-                                            break;
-                                        case 'XH':
-                                            grade = emojis.grades.XH
-                                            break;
-                                    };
+                                        let ranking = osutopdata[scoreoffset].rank.toUpperCase()
+                                        switch (ranking) {
+                                            case 'F':
+                                                grade = 'F'
+                                                break;
+                                            case 'D':
+                                                grade = emojis.grades.D
+                                                break;
+                                            case 'C':
+                                                grade = emojis.grades.C
+                                                break;
+                                            case 'B':
+                                                grade = emojis.grades.B
+                                                break;
+                                            case 'A':
+                                                grade = emojis.grades.A
+                                                break;
+                                            case 'S':
+                                                grade = emojis.grades.S
+                                                break;
+                                            case 'SH':
+                                                grade = emojis.grades.SH
+                                                break;
+                                            case 'X':
+                                                grade = emojis.grades.X
+                                                break;
+                                            case 'XH':
+                                                grade = emojis.grades.XH
+                                                break;
+                                        };
 
 
-                                    let hitlist = ''
-                                    if (gamemode == 'osu') {
-                                        hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
-                                    }
-                                    if (gamemode == 'taiko') {
-                                        hitlist = `${hit300}/${hit100}/${miss}`
-                                    }
-                                    if (gamemode == 'fruits' || gamemode == 'catch') {
-                                        hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
-                                    }
-                                    if (gamemode == 'mania') {
-                                        hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
-                                    }
-                                    topmods = osutopdata[scoreoffset].mods
+                                        let hitlist = ''
+                                        if (gamemode == 'osu') {
+                                            hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
+                                        }
+                                        if (gamemode == 'taiko') {
+                                            hitlist = `${hit300}/${hit100}/${miss}`
+                                        }
+                                        if (gamemode == 'fruits' || gamemode == 'catch') {
+                                            hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
+                                        }
+                                        if (gamemode == 'mania') {
+                                            hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
+                                        }
+                                        topmods = osutopdata[scoreoffset].mods
 
-                                    if (!topmods || topmods == '' || topmods == 'undefined' || topmods == null || topmods == undefined) {
-                                        ifmods = ''
-                                    } else {
-                                        ifmods = '+' + topmods.toString().replaceAll(",", '')
+                                        if (!topmods || topmods == '' || topmods == 'undefined' || topmods == null || topmods == undefined) {
+                                            ifmods = ''
+                                        } else {
+                                            ifmods = '+' + topmods.toString().replaceAll(",", '')
+                                        }
+                                        topEmbed.addField(`#${scoreoffset + 1}`,
+                                            `
+                                            [**${osutopdata[scoreoffset].beatmapset.title} [${osutopdata[scoreoffset].beatmap.version}]**](https://osu.ppy.sh/b/${osutopdata[scoreoffset].beatmap.id}) ${ifmods}
+                                            **Score set on** ${maptimeset}
+                                            **SCORE:** ${score} | x${combo} | ${Math.abs(osutopdata[scoreoffset].accuracy * 100).toFixed(2)}% | ${grade}
+                                            \`${hitlist}\`
+                                            ${(osutopdata[scoreoffset].pp).toFixed(2)}pp | ${(osutopdata[scoreoffset].weight.pp).toFixed(2)}pp (Weighted at **${(osutopdata[scoreoffset].weight.percentage).toFixed(2)}%**)
+                                            `, false)
+
                                     }
-                                    topEmbed.addField(`#${scoreoffset + 1}`,
-                                        `
-                                [**${osutopdata[scoreoffset].beatmapset.title} [${osutopdata[scoreoffset].beatmap.version}]**](https://osu.ppy.sh/b/${osutopdata[scoreoffset].beatmap.id}) ${ifmods}
-                                **Score set on** ${maptimeset}
-                                **SCORE:** ${score} | x${combo} | ${Math.abs(osutopdata[scoreoffset].accuracy * 100).toFixed(2)}% | ${grade}
-                                \`${hitlist}\`
-                                ${(osutopdata[scoreoffset].pp).toFixed(2)}pp | ${(osutopdata[scoreoffset].weight.pp).toFixed(2)}pp (Weighted at **${(osutopdata[scoreoffset].weight.percentage).toFixed(2)}%**)
-                                `, false)
+                                } else {
+                                    for(let i = 0; i < 10 && i < osutopdata.length; i++){
+                                        let scoreoffset = page * 5 + i
+                                        let score = osutopdata[scoreoffset]
+                                        topEmbed.addField(`#${scoreoffset + 1}`,
+                                        ` 
+                                        [**${score.beatmapset.title} [${score.beatmap.version}]**](https://osu.ppy.sh/b/${score.beatmap.id}) 
+                                        +${ifmods} | ${Math.abs(score.accuracy * 100).toFixed(2)}% | ${(score.pp).toFixed(2)}pp
+                                        `)
+                                    }
                                 }
                                 if (detailed == true) {
                                     let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

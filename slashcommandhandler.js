@@ -272,6 +272,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'Show all details',
                 type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
                 required: false,
+            },
+            {
+                name: 'compact',
+                description: 'Whether or not to show the compact version of the top plays',
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+                required: false,
             }
         ]
     })
