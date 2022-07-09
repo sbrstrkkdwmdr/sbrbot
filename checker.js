@@ -363,7 +363,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     client.on('roleUpdate', (oldRole, newRole) => {
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
-        let guild = client.guilds.cache.get(role.guild.id)
+        let guild = client.guilds.cache.get(oldRole.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nroleUpdate event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Role ${oldRole.name} (${oldRole.id}) was updated to ${newRole.name}\nColour: ${oldRole.color} => ${newRole.color}\nPermissions: ${oldRole.permissions} => ${newRole.permissions}\n`)
     })
