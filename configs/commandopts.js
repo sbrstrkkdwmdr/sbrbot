@@ -559,6 +559,33 @@ let useroffsetmodeopts = [
         choices: modeopts
     }
 ]
+let rsopts = [
+    {
+        name: 'user',
+        description: 'the username or id',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.STRING
+    },
+    {
+        name: 'page',
+        description: 'the page to show',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.NUMBER
+    },
+    {
+        name: 'mode',
+        description: 'what mode to show',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.STRING,
+        choices: modeopts
+    },
+    {
+        name: 'list',
+        description: 'Enables list mode',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.BOOLEAN
+    }
+]
 
 
-module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts }
+module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts }

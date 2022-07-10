@@ -308,7 +308,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'rs',
         description: 'Displays the user\'s most recent score',
-        options: cmdconfig.useroffsetmodeopts
+        options: cmdconfig.rsopts
     })
     commands?.create({
         name: 'scores',
