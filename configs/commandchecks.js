@@ -191,6 +191,37 @@ function checkisfileblocked(userid) {
     }
     return false
 }
+/**
+ * 
+ * @param {string} str string to check for
+ * @param {string} pat part of string to check for
+ * @param {number} n the nth time to check for as in 2 = second time it appears
+ * @returns the index of the nth time a substring appears in a string
+ */
+function nthIndex(str, pat, n){
+    var L= str.length, i= -1;
+    while(n-- && i++<L){
+        i= str.indexOf(pat, i);
+        if (i < 0) break;
+    }
+    return i;
+}// got from https://stackoverflow.com/a/14482123
+
+/**
+ * 
+ * @param {string} str string to check for
+ * @param {string} pat part of string to check for
+ * @param {number} n the nth time to check for as in 2 = second time it appears
+ * @returns the index of the nth time a substring appears in a string but from the end
+ */
+ function nthIndexLast(str, pat, n){
+    var L= str.length, i= -1;
+    while(n-- && i++<L){
+        i= str.lastIndexOf(pat, i);
+        if (i < 0) break;
+    }
+    return i;
+}
 
 module.exports = {
     audiofiletype,
@@ -205,4 +236,6 @@ module.exports = {
     lengthshorten,
     shorten,
     vidfiletypes,
+    nthIndex,
+    nthIndexLast
 }
