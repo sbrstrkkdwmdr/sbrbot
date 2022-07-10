@@ -80,7 +80,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nguildMemberUpdate event\n${currentDate} | ${currentDateISO}\n `);
         fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${oldMember.user.username}#${oldMember.user.discriminator} (${oldMember.user.id})has been updated:\n`)
         if (oldMember.avatar != newMember.avatar) {
-            fs.appendFileSync(`./logs/${guild.id}.log`, `avatar changed: ${oldMember.displayAvatarURL()} => ${newNember.displayAvatarURL()}\n`)
+            fs.appendFileSync(`./logs/${guild.id}.log`, `avatar changed: ${oldMember.displayAvatarURL()} => ${newMember.displayAvatarURL()}\n`)
         }
         if (oldMember.nickname != newMember.nickname) {
             fs.appendFileSync(`./logs/${guild.id}.log`, `nickname changed: ${oldMember.nickname} => ${newMember.nickname}\n`)
