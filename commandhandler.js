@@ -17,7 +17,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         }
         if (message.author.bot && !message.author.id == '755220989494951997') return;
         if (oncooldown.has(message.author.id)) {
-            return message.channel.send(`You're on cooldown\nTime left: ${getTimeLeft(timeouttime)}ms (this is definitely the wrong number)`)
+            return message.channel.send(`You're on cooldown\nTime left: ${getTimeLeft(timeouttime)}ms`);
         };
 
         if (!oncooldown.has(message.author.id)) {
@@ -28,7 +28,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             timeouttime = setTimeout(() => { }, 3000)
         }
         function getTimeLeft(timeout) {
-            return Math.ceil((timeout._idleStart + timeout._idleTimeout) / 1000);
+            return Math.ceil(timeout._idleStart - timeout._idleTimeout)
         }
         let interaction = null;
         switch (command) {
