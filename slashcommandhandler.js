@@ -41,30 +41,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         ]
     })
     commands?.create({
-        name: 'image',
-        description: 'Searches the Google API and returns the first five results',
-        options: [
-            {
-                name: 'query',
-                description: 'The parameters for the search',
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                required: true
-            }
-        ]
-    })
-    commands?.create({
-        name: 'ytsearch',
-        description: 'Searches the YouTube API and returns the first five results',
-        options: [
-            {
-                name: 'query',
-                description: 'The parameters for the search',
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                required: true
-            }
-        ]
-    })
-    commands?.create({
         name: 'math',
         description: 'Solves a simple math problem',
         options: [
@@ -374,76 +350,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         //channelTypes: ['GuildText']
 
     })
-    commands?.create({
-        name: 'voice',
-        description: 'Controls a user\'s voice settings',
-        options: [
-            {
-                name: 'user',
-                description: 'The user to control',
-                type: Constants.ApplicationCommandOptionTypes.USER,
-                required: true,
-            },
-            {
-                name: 'type',
-                description: 'The type of voice control to perform',
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                required: true,
-                choices: [
-                    { name: 'Mute', value: 'mute' },
-                    { name: 'Deafen', value: 'deafen' },
-                    { name: 'Move to another channel', value: 'move' },
-                    { name: 'Disconnect', value: 'disconnect' }
-                ]
-            },
-            {
-                name: 'channel',
-                description: 'The channel to move the user to',
-                type: Constants.ApplicationCommandOptionTypes.CHANNEL,
-                required: false,
-            }
-        ],
-        //channelTypes: ['GuildText']
-    })
-    commands?.create({
-        name: 'find',
-        description: 'Returns the name of something from the id given',
-        options: [
-            {
-                name: 'type',
-                description: 'The type of thing to find',
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                required: true,
-                choices: [
-                    { name: 'User', value: 'user' },
-                    { name: 'Channel', value: 'channel' },
-                    { name: 'Guild', value: 'guild' },
-                    { name: 'Role', value: 'role' },
-                    { name: 'Emoji', value: 'emoji' },
-                ]
-            },
-            {
-                name: 'id',
-                description: 'The id of the thing to find',
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                required: true,
-                minValue: 1
-            }
-        ]
-    })
-    commands?.create({
-        name: 'log',
-        description: 'Displays the log of a server',
-        options: [
-            {
-                name: 'guildid',
-                description: 'The guild to display the log of',
-                type: Constants.ApplicationCommandOptionTypes.STRING,
-                required: false,
-                minValue: 1
-            },
-        ]
-    })
 
     client.on('interactionCreate', async (interaction) => {
         if (!interaction.isCommand()) return;
@@ -462,12 +368,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'gif':
                 client.commands.get('gif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
-                break;
-            case 'image':
-                client.commands.get('image').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'ytsearch':
-                client.commands.get('ytsearch').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'math':
                 client.commands.get('math').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
@@ -517,29 +417,14 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
 
             //admin 
-
-
-
-            case 'checkperms':
-                client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
-                break;
             case 'servers':
                 client.admincmds.get('servers').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'leaveguild':
                 client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
-            case 'voice':
-                client.admincmds.get('voice').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'find':
-                client.admincmds.get('find').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'log':
-                client.admincmds.get('log').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
             default:
-                interaction.reply({ content: 'Command not found - no longer exists or is currently being rewritten', ephemeral: true })
+                interaction.reply({ content: 'Command not found - no longer exists or is currently WIP', ephemeral: true })
                 break;
         }
     })

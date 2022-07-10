@@ -8,8 +8,6 @@ const fetch = require('node-fetch');
 const commandHandler = require('./commandHandler.js');
 const linkHandler = require('./linkHandler.js');
 const slashcommandHandler = require('./slashcommandHandler.js');
-const checker = require('./checker.js');
-const musichandler = require('./musicHandler.js');
 
 const config = require('./configs/config.json');
 
@@ -36,7 +34,6 @@ client.commands = new Discord.Collection();
 client.links = new Discord.Collection();
 client.osucmds = new Discord.Collection();
 client.admincmds = new Discord.Collection();
-client.musiccmds = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -60,12 +57,6 @@ const admincommandFiles = fs.readdirSync('./commands-admin').filter(file => file
 for (const file of admincommandFiles) {
     const admincommand = require(`./commands-admin/${file}`);
     client.admincmds.set(admincommand.name, admincommand);
-}
-
-const musicCommandFiles = fs.readdirSync('./commands-music').filter(file => file.endsWith('js'));
-for (const file of musicCommandFiles) {
-    const musiccommand = require(`./commands-music/${file}`)
-    client.musiccmds.set(musiccommand.name, musiccommand)
 }
 
 const sequelize = new Sequelize('database', 'username', 'password', {
@@ -93,8 +84,6 @@ client.once('ready', () => {
     commandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     linkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     slashcommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    checker(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    musichandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
     //make a function that for every guild log the id
     client.guilds.cache.forEach(guild => {

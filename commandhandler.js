@@ -17,7 +17,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         }
         if (message.author.bot && !message.author.id == '755220989494951997') return;
         if (oncooldown.has(message.author.id)) {
-            return message.channel.send(`You're on cooldown\nTime left: ${getTimeLeft(timeouttime)}ms (this is definitely the wrong number)`)
+            return message.channel.send(`You're on cooldown\nTime left: ${getTimeLeft(timeouttime)}ms`)
         };
 
         if (!oncooldown.has(message.author.id)) {
@@ -28,7 +28,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             timeouttime = setTimeout(() => { }, 3000)
         }
         function getTimeLeft(timeout) {
-            return Math.ceil((timeout._idleStart + timeout._idleTimeout) / 1000);
+            return Math.ceil(timeout._idleStart - timeout._idleTimeout)
+
         }
         let interaction = null;
         switch (command) {
@@ -40,12 +41,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'gif':
                 client.commands.get('gif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'image': case 'imagesearch':
-                client.commands.get('image').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'ytsearch': case 'yt':
-                client.commands.get('ytsearch').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'math':
                 client.commands.get('math').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
@@ -67,12 +62,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'poll': case 'vote':
                 client.commands.get('poll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'time':
-                client.commands.get('time').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'emojify':
-                client.commands.get('emojify').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
 
             //osu commands below
@@ -97,9 +86,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
 
             //admincmds below
-            case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
-                client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
             case 'leaveguild': case 'leave':
                 client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
@@ -109,24 +95,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'debug':
                 client.admincmds.get('debug').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'voice':
-                client.admincmds.get('voice').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
             case 'crash':
                 client.admincmds.get('crash').execute(message, args, userdata, client, Discord);
-                break;
-            case 'log':
-                client.admincmds.get('log').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'find':
-                client.admincmds.get('find').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-
-
-            // music
-
-            case 'sfx':
-                client.musiccmds.get('sfx').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
         }
 
