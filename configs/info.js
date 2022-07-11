@@ -297,6 +297,10 @@ let osucmds = [
                 name: 'mode',
                 description: '`string, optional`. Which mode to fetch top plays from. If omitted, the database will searched for the user\'s gamemode'
             },
+            {
+                name: 'list',
+                description: '`boolean, optional`. Shows the most 20 recent scores'
+            }
         ],
         aliases: 'recent'
     },
