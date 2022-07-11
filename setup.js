@@ -1,7 +1,7 @@
 const fs = require('fs')
 const prompt = require("prompt-sync")();
 
-let config = 
+let config =
 {
     "token": "null",
     "prefix": "sbr-",
@@ -14,10 +14,10 @@ let config =
     "googlekey": "null", //https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4 to get it
     "fileblockedusers": [] // add user id here to auto-delete any audio, videos or images they send
 }
-if (fs.existsSync('./configs/config.json')){
+if (fs.existsSync('./configs/config.json')) {
     try {
         let configtest = JSON.parse(fs.readFileSync('./configs/config.json', 'utf-8'))
-        configtoken = configtest.token 
+        configtoken = configtest.token
         configprefix = configtest.prefix
         configosuid = configtest.osuClientID
         configosusecret = configtest.osuClientSecret
@@ -29,7 +29,7 @@ if (fs.existsSync('./configs/config.json')){
         configfileblockedusers = configtest.fileblockedusers
         console.log('Config file already exists')
         return;
-    } catch (error){
+    } catch (error) {
         console.log(error)
         console.log('Config file exists but is invalid')
     }
@@ -37,17 +37,21 @@ if (fs.existsSync('./configs/config.json')){
 fs.writeFileSync('./configs/config.json', JSON.stringify(config, null, 2), 'utf-8')
 fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: 32345 }), null, 2), 'utf-8');
 fs.writeFileSync('./files/replay.osr', '', 'utf-8');
-fs.mkdirSync('./debug')
-fs.mkdirSync('./debugosu')
-if(fs.existsSync('./debug/timesince.txt')){
+if (!fs.existsSync('./debug')) {
+    fs.mkdirSync('./debug')
+}
+if (!fs.existsSync('./debugosu')) {
+    fs.mkdirSync('./debugosu')
+}
+if (fs.existsSync('./debug/timesince.txt')) {
 
 } else {
     fs.writeFileSync('./debug/timesince.txt', (new Date()).toString())
 }
-console.log('If you don\'t want to set an option, just press enter' )
+console.log('If you don\'t want to set an option, just press enter')
 let bottoken = prompt('Bot Token: ', "null")
 let botprefix = prompt('Bot Prefix: ', "sbr-")
-let botosuid = prompt('osu! Client ID: ', "null")   
+let botosuid = prompt('osu! Client ID: ', "null")
 let botosusecret = prompt('osu! Client Secret: ', "null")
 let botosuapikey = prompt('osu! API Key: ', "null")
 let bottestguild = prompt('Test Guild ID: ', "null")
@@ -69,3 +73,4 @@ let configg = {
     "fileblockedusers": botfileblockedusers
 }
 fs.writeFileSync('./configs/config.json', JSON.stringify(configg, null, 2), 'utf-8')
+fs.writeFileSync('./configs/osuauth.json', JSON.stringify({"amongus": 3}), 'utf-8')
