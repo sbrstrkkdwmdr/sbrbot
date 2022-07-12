@@ -48,7 +48,11 @@ module.exports = {
                     .setDescription(`${permissions}`)
                     .setColor('#C9FF93')
                     ;
-                interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+                if (commandchecks.isOwner(interaction.member.user.id)) {
+                    interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false }, ephemeral: true })
+                } else {
+                    interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+                }
                 fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user} AKA ${user.tag}`)
             }
             else {
