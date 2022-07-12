@@ -246,7 +246,7 @@ module.exports = {
                     ${isonline}
                     `)
                         if (interaction.options.getBoolean('detailed') == true) {
-                            let mode = osudata.playmode 
+                            let mode = osudata.playmode
                             //chart creation
                             data = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
 
@@ -275,34 +275,55 @@ module.exports = {
                                     }
                                 }).then(res => res.json())
                                     .then(osutopdata => {
-                                        let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                        let maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
-                                        let minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
-                                        let avgpp;
-                                        let totalpp = 0;
-                                        for (i2 = 0; i2 < osutopdata.length; i2++) {
-                                            totalpp += osutopdata[i2].pp
-                                        }
-                                        avgpp = (totalpp / osutopdata.length).toFixed(2)
-                                        Embed.addField(
-                                            '-', `
-                                    **Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
-                                    **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
-                                    **Gamemode:** ${mode}
-                                    **Highest combo:** ${highestcombo}
-                                `, true)
-                                        Embed.addField(
-                                            '-', `
-                                    **Highest pp:** ${maxpp}
-                                    **Lowest pp:** ${minpp}
-                                    **Average pp:** ${avgpp}
-                                    **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
-                                    **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
-                                `, true)
+                                        let mostplayedurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/beatmapsets/most_played`
+                                        fetch(mostplayedurl, {
+                                            headers: {
+                                                Authorization: `Bearer ${access_token}`
+                                            }
+                                        }).then(res => res.json())
+                                            .then(mostplayeddata => {
+                                                let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                let maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
+                                                let minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
+                                                let avgpp;
+                                                let totalpp = 0;
+                                                for (i2 = 0; i2 < osutopdata.length; i2++) {
+                                                    totalpp += osutopdata[i2].pp
+                                                }
+                                                avgpp = (totalpp / osutopdata.length).toFixed(2)
 
-                                        interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, files: ['./debugosu/playergraph.jpg'] })
+                                                mostplaytxt = ``
+                                                for(i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
+                                                    bmpc = mostplayeddata[i2]
+                                                    mostplaytxt += `[${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id}) | ${bmpc.count} plays\n`
+                                                }
+                                                if(mostplaytxt != ``) {
+                                                    Embed.addField(
+                                                        'Most Played Beatmaps',
+                                                        mostplaytxt,
+                                                        false
+                                                    )
+                                                }
 
+                                                Embed.addField(
+                                                    'TOP PLAY', `
+                                                    **Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
+                                                    **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
+                                                    **Gamemode:** ${mode}
+                                                    **Highest combo:** ${highestcombo}
+                                                `, true)
+                                                Embed.addField(
+                                                    'INFO', `
+                                                    **Highest pp:** ${maxpp}
+                                                    **Lowest pp:** ${minpp}
+                                                    **Average pp:** ${avgpp}
+                                                    **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
+                                                    **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
+                                                `, true)
 
+                                                interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, files: ['./debugosu/playergraph.jpg'] })
+
+                                            })
 
 
 
