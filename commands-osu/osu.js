@@ -233,6 +233,11 @@ module.exports = {
                             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
                             .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
                         if (interaction.options.getBoolean('detailed') == true) {
+                            let fe = new Discord.MessageEmbed()
+                                .setColor('#0099ff')
+                                .setTitle(`${osudata.username}'s osu! profile`)
+                                .setDescription('loading...')
+                            interaction.reply({embeds: [fe]})
                             Embed.addField(`-`, `
                             **Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)
                             **pp:** ${osustats.pp}
@@ -322,7 +327,7 @@ module.exports = {
                                                     **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
                                                 `, true)
 
-                                                interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, files: ['./debugosu/playergraph.jpg'] })
+                                                interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, files: ['./debugosu/playergraph.jpg'] })
 
                                             })
 
