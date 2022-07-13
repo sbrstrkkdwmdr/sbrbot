@@ -61,8 +61,8 @@ module.exports = {
             'https://tenor.com/view/among-us-amongla-speech-bubble-meme-saraiva-gif-25059294', // among us speaking 
             'https://tenor.com/view/speech-bubble-chad-handsome-discord-gif-25759083', //
             'https://media.discordapp.net/attachments/975869969336238100/989335327351119892/unknown.gif', //peter griffin buff
-            'https://media.discordapp.net/attachments/929807268994744340/987061740665700372/ThisWillBeAngryBirdsPigIn2014.gif' //bad piggies
-            
+            'https://media.discordapp.net/attachments/929807268994744340/987061740665700372/ThisWillBeAngryBirdsPigIn2014.gif', //bad piggies
+            'https://media.discordapp.net/attachments/975869865258795078/993928228932698172/crcoer.gif' //crocodile vs man
 
         ]
         let reaction = [
