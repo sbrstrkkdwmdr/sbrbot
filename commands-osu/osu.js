@@ -232,20 +232,21 @@ module.exports = {
                             .setTitle(`${osudata.username}'s osu! profile`)
                             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
                             .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
-                            .setDescription(`
-                    **Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)\n
-                    **pp:** ${osustats.pp}
-                    **Accuracy:** ${(osustats.hit_accuracy).toFixed(2)}%
-                    **Play Count:** ${playcount}
-                    **Level:** ${osustats.level.current}.${osustats.level.progress}
-                    ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
-                    
-                    **Player joined on** ${osudata.join_date.toString().slice(0, 10)}
-                    **Followers:** ${osudata.follower_count}
-                    ${prevnameslist}
-                    ${isonline}
-                    `)
                         if (interaction.options.getBoolean('detailed') == true) {
+                            Embed.addField(`-`, `
+                            **Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)
+                            **pp:** ${osustats.pp}
+                            **Accuracy:** ${(osustats.hit_accuracy).toFixed(2)}%
+                            **Play Count:** ${playcount}
+                            **Level:** ${osustats.level.current}.${osustats.level.progress}
+                            `, true)
+                            Embed.addField(`-`, `                    
+                            **Player joined on** ${osudata.join_date.toString().slice(0, 10)}
+                            ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
+                            **Followers:** ${osudata.follower_count}
+                            ${prevnameslist}
+                            ${isonline}
+                            `, true)
                             let mode = osudata.playmode
                             //chart creation
                             data = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
@@ -293,11 +294,11 @@ module.exports = {
                                                 avgpp = (totalpp / osutopdata.length).toFixed(2)
 
                                                 mostplaytxt = ``
-                                                for(i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
+                                                for (i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
                                                     bmpc = mostplayeddata[i2]
                                                     mostplaytxt += `[${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id}) | ${bmpc.count} plays\n`
                                                 }
-                                                if(mostplaytxt != ``) {
+                                                if (mostplaytxt != ``) {
                                                     Embed.addField(
                                                         'Most Played Beatmaps',
                                                         mostplaytxt,
@@ -331,6 +332,19 @@ module.exports = {
                                     })
                             })
                         } else {
+                            Embed.setDescription(`
+                    **Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)\n
+                    **pp:** ${osustats.pp}
+                    **Accuracy:** ${(osustats.hit_accuracy).toFixed(2)}%
+                    **Play Count:** ${playcount}
+                    **Level:** ${osustats.level.current}.${osustats.level.progress}
+                    ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
+                    
+                    **Player joined on** ${osudata.join_date.toString().slice(0, 10)}
+                    **Followers:** ${osudata.follower_count}
+                    ${prevnameslist}
+                    ${isonline}
+                    `)
                             interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                         }
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
