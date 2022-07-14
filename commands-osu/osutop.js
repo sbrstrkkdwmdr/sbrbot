@@ -84,6 +84,11 @@ module.exports = {
                                 for (let i = 0; i < 5 && i < osutopdata.length; i++) {
                                     let scoreoffset = page * 5 + i
 
+                                    let tstscore = osutopdata[scoreoffset]
+                                    if (!tstscore) {
+                                        break;
+                                    }
+
                                     let score = osutopdata[scoreoffset].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                     let hitgeki = osutopdata[scoreoffset].statistics.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                     let hit300 = osutopdata[scoreoffset].statistics.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -266,7 +271,7 @@ module.exports = {
                                     osutopdata = filtereddata.sort((a, b) => Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
                                     filterinfo += `\nsorted by recent`
                                 }
-                                if (interaction.options.getBoolean('compact') == true){
+                                if (interaction.options.getBoolean('compact') == true) {
                                     filterinfo += `\ncompact mode`
                                 }
                                 try {
@@ -285,6 +290,11 @@ module.exports = {
                                     for (let i = 0; i < 5 && i < osutopdata.length; i++) {
 
                                         let scoreoffset = page * 5 + i
+
+                                        let tstscore = osutopdata[scoreoffset]
+                                        if (!tstscore) {
+                                            break;
+                                        }
 
                                         let score = osutopdata[scoreoffset].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                         let hitgeki = osutopdata[scoreoffset].statistics.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -359,10 +369,13 @@ module.exports = {
 
                                     }
                                 } else {
-                                    topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 10)}`)
-                                    for (let i = 0; i < 10 && i < osutopdata.length; i++) {
-                                        let scoreoffset = page * 10 + i
+                                    topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 9)}`)
+                                    for (let i = 0; i < 9 && i < osutopdata.length; i++) {
+                                        let scoreoffset = page * 9 + i
                                         let score = osutopdata[scoreoffset]
+                                        if (!score) {
+                                            break;
+                                        }
                                         if (!score.mods || score.mods == '' || score.mods == 'undefined' || score.mods == null || score.mods == undefined) {
                                             ifmods = ''
                                         } else {
