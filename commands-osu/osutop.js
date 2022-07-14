@@ -279,7 +279,7 @@ module.exports = {
                                     .setColor(0x462B71)
                                     .setTitle(`Top plays of ${osutopdata[0].user.username}`)
                                     .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
-                                if (interaction.options.getBoolean('compact') == false) {
+                                if (interaction.options.getBoolean('compact') != true) {
                                     topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 5)}`)
 
                                     for (let i = 0; i < 5 && i < osutopdata.length; i++) {
