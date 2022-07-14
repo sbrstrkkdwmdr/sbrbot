@@ -339,7 +339,59 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
         ]
     })
+    commands?.create({
+        name: 'osumodcalc',
+        description: 'Calculates the values for a map based on the values given',
+        options: [
+            {
+                name: 'mods',
+                description: 'The mods to calculate the values for',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.STRING
+            },
+            {
+                name: 'cs',
+                description: 'The circle size to calculate the values for',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                minValue: 0,
+                maxValue: 11
+            },
+            {
+                name: 'ar',
+                description: 'The approach rate to calculate the values for',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                minValue: 0,
+                maxValue: 11
+            },
+            {
+                name: 'od',
+                description: 'The overall difficulty to calculate the values for',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                minValue: 0,
+                maxValue: 11
+            },
+            {
+                name: 'hp',
+                description: 'The HP to calculate the values for',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                minValue: 0,
+                maxValue: 11
+            },
+            {
+                name: 'bpm',
+                description: 'The BPM to calculate the values for',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                minValue: 1
 
+            }
+        ]
+
+    })
 
     //below are admin related commands
     commands?.create({
@@ -514,7 +566,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'leaderboard':
                 client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
-
+            case 'osumodcalc':
+                client.osucmds.get('osumodcalc').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                break;
 
             //admin 
 
