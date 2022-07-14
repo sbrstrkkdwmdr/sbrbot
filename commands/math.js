@@ -47,7 +47,8 @@ module.exports = {
             let num2 = interaction.options.getNumber('num2')
 
             let equation = 'null'
-
+            interaction.reply({ content: 'calculating... ', allowedMentions: { repliedUser: false } })
+            setTimeout(() => {
             switch (type) {
                 case 'sqrt':
                     equation = (`${Math.sqrt(num1)}`)
@@ -113,7 +114,8 @@ module.exports = {
                     equation = ('Error - invalid type')
                     break;
             }
-            interaction.reply({ content: equation, allowedMentions: { repliedUser: false } })
+            interaction.editReply({ content: equation, allowedMentions: { repliedUser: false } })
+            }, 500)
             fs.appendFileSync('commands.log', `\nCommand Information\ntype: ${type}\nnum1: ${num1}\nnum2: ${num2}`)
         }
     }
