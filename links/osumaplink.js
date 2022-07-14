@@ -236,8 +236,8 @@ module.exports = {
                         score: "6795149",
                         maxcombo: json.max_combo,
                         count50: "0",
-                        count100: "266",
-                        count300: "3740",
+                        count100: "5281700",
+                        count300: "65140967",
                         countmiss: "0",
                         countkatu: "0",
                         countgeki: "0",
@@ -281,6 +281,8 @@ module.exports = {
                         ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
                         pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
                         ppissue = ''
+                        fs.writeFileSync('./debugosu/mapppcalc.json', JSON.stringify(ppComputed, null, 2))
+                        fs.writeFileSync('./debugosu/mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
                     } catch (error) {
                         ppComputed = NaN
                         ppComputedString = NaN
