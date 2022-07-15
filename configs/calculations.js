@@ -64,6 +64,20 @@ function sigfig(a, b) {
     let c = s + ' x 10^' + (a.toString().length - 1)
     return c;
 }
+
+function sigfigalt(a, b) {
+    if (isNaN(a)) return NaN;
+    aAsArr = a.toString().replaceAll('.', '').split('')
+    if (isNaN(b)) b = aAsArr.length;
+    let sigfig = aAsArr.slice(1, b).join('')
+    let mult = a / aAsArr.join('')
+    if (mult < 1 && mult != 0) { mult = mult.toString().length - 1 }
+    let answer = aAsArr[0] + '.' + sigfig + '*10^' + mult
+    return answer
+
+}
+console.log(sigfigalt(10231))
+
 /**
  *
  * @param {number} number
