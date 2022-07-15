@@ -95,7 +95,7 @@ module.exports = {
                                 } else if (mode == 'mania') {
                                     accgrade = osucalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, 0)
                                 }
-                                let fcacc = accgrade.accuracy.toFixed(2)
+                                let fcacc = accgrade.accuracy.toFixed(2) + "%"
                                 let grade = (rsdata[0].rank).toUpperCase();
                                 let rspassinfo = ''
                                 switch (grade) {
@@ -378,7 +378,7 @@ module.exports = {
                                     } else if (mode == 'mania') {
                                         accgrade = osucalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, 0)
                                     }
-                                    let fcacc = accgrade.accuracy.toFixed(2)
+                                    let fcacc = accgrade.accuracy.toFixed(2)+ "%"
                                     let grade = (rsdata[0+page].rank).toUpperCase();
                                     let rspassinfo = ''
                                     switch (grade) {
