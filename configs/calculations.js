@@ -55,7 +55,7 @@ function pythag(a, b) {
  * @param {number} b number of significant figiures
  * @result converts the number to a significant figure
  */
-function sigfig(a, b) {
+function sigfigold(a, b) {
     if (isNaN(a)) return NaN;
     let s = a / (10 ** (a.toString().length - 1)).toFixed(a.toString().length - 1)
     if (parseInt(b)) {
@@ -65,18 +65,18 @@ function sigfig(a, b) {
     return c;
 }
 
-function sigfigalt(a, b) {
+function sigfig(a, b) {
     if (isNaN(a)) return NaN;
     aAsArr = a.toString().replaceAll('.', '').split('')
     if (isNaN(b)) b = aAsArr.length;
     let sigfig = aAsArr.slice(1, b).join('')
-    let mult = a / aAsArr.join('')
+    let mult = (a/(aAsArr[0]+ '.' + sigfig)).toString().length - 1
     if (mult < 1 && mult != 0) { mult = mult.toString().length - 1 }
     let answer = aAsArr[0] + '.' + sigfig + '*10^' + mult
+    console.log(mult)
     return answer
 
 }
-console.log(sigfigalt(10231))
 
 /**
  *
