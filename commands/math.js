@@ -79,9 +79,12 @@ module.exports = {
                     break;
                 case 'sigfig':
                     if (!num2) {
+                        num2 = null
+                    }
+                    if(num2 < 2 && num2 != null){
                         num2 = 2
                     }
-                    equation = (`${calculations.sigfig(num1, num2)}`)
+                    equation = (`${calculations.sigfig(num1, num2).number}\nTo ${calculations.sigfig(num1, num2).sigfig} significant figures`)
                     break;
                 case 'ardt':
                     equation = (`AR${osucalc.DoubleTimeAR(num1).ar}, ${osucalc.DoubleTimeAR(num1).ms}ms`)

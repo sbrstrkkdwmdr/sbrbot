@@ -64,18 +64,29 @@ function sigfigold(a, b) {
     let c = s + ' x 10^' + (a.toString().length - 1)
     return c;
 }
-
+/**
+ * 
+ * @param {number} a first number
+ * @param {number} b number of significant figiures
+ * @result converts the number to a significant figure
+ */
 function sigfig(a, b) {
-    if (isNaN(a)) return NaN;
+    if (isNaN(a)) return {
+
+        number: a,
+        sigfig: NaN,
+
+    };
     aAsArr = a.toString().replaceAll('.', '').split('')
-    if (isNaN(b)) b = aAsArr.length;
+    if (b < 2 || b == null) { b = aAsArr.length };
     let sigfig = aAsArr.slice(1, b).join('')
-    let mult = Math.floor(a/(aAsArr[0]+ '.' + sigfig)).toString().length - 1
+    let mult = Math.floor(a / (aAsArr[0] + '.' + sigfig)).toString().length - 1
     if (mult < 1 && mult != 0) { mult = mult.toString().length - 1 }
     let answer = aAsArr[0] + '.' + sigfig + '*10^' + mult
-    console.log(mult)
-    return answer
-
+    return {
+        number: answer,
+        sigfig: sigfig.length + 1,
+    }
 }
 
 /**
