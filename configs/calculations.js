@@ -70,7 +70,7 @@ function sigfig(a, b) {
     aAsArr = a.toString().replaceAll('.', '').split('')
     if (isNaN(b)) b = aAsArr.length;
     let sigfig = aAsArr.slice(1, b).join('')
-    let mult = (a/(aAsArr[0]+ '.' + sigfig)).toString().length - 1
+    let mult = Math.floor(a/(aAsArr[0]+ '.' + sigfig)).toString().length - 1
     if (mult < 1 && mult != 0) { mult = mult.toString().length - 1 }
     let answer = aAsArr[0] + '.' + sigfig + '*10^' + mult
     console.log(mult)
