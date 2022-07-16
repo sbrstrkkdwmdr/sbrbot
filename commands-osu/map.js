@@ -934,7 +934,11 @@ module.exports = {
 
                     }
                     ;
-
+                    if (interaction.options.getBoolean("detailed") == true) {
+                        cs += ` (${osucalc.csToRadius(cs).toFixed(2)}r)\n`
+                        ar += ` (${osucalc.ARtoms(ar)}ms)\n`
+                        od += ` \n**300**:${osucalc.ODtoms(od).range300.toFixed(2)}ms\n**100**:${osucalc.ODtoms(od).range100.toFixed(2)}ms\n**50**:${osucalc.ODtoms(od).range50.toFixed(2)}ms\n`
+                    }
                     (async () => {
                         let score = {
                             beatmap_id: mapid,
@@ -1004,11 +1008,15 @@ module.exports = {
                             let ppComputed = await pp.compute();
                             let pp95Computed = await pp95.compute();
 
-                            ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
-                            pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
+                            ppComputedString = (Math.abs(ppComputed.total)).toFixed(2) + "pp"
+                            pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2) + "pp"
                             ppissue = ''
                             fs.writeFileSync('./debugosu/mapppcalc.json', JSON.stringify(ppComputed, null, 2))
                             fs.writeFileSync('./debugosu/mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
+                            if (interaction.options.getBoolean("detailed") == true) {
+                                ppComputedString += ` \naim: ${ppComputed.aim.toFixed(2)}pp, \nspeed: ${ppComputed.speed.toFixed(2)}pp, \nacc: ${ppComputed.acc.toFixed(2)}pp\n`
+                                pp95ComputedString += ` \naim: ${pp95Computed.aim.toFixed(2)}pp, \nspeed: ${pp95Computed.speed.toFixed(2)}pp, \nacc: ${pp95Computed.acc.toFixed(2)}pp\n`
+                            }
                         } catch (error) {
                             ppComputedString = NaN
                             pp95ComputedString = NaN
@@ -1064,7 +1072,7 @@ module.exports = {
                                     )
                                     .addField(
                                         "**PP**",
-                                        `SS: ${ppComputedString}pp \n 95: ${pp95ComputedString}pp \n` +
+                                        `**SS**: ${ppComputedString} \n **95**: ${pp95ComputedString} \n` +
                                         `${modissue}\n${ppissue}`,
                                         true
                                     )

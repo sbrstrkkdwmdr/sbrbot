@@ -305,7 +305,14 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The mods to display the map info of',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: false,
-            }]
+            },
+            {
+                name: 'detailed',
+                description: 'Show all details',
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+                required: false,
+            }
+        ]
     })
     commands?.create({
         name: 'rs',
