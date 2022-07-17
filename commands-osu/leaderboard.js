@@ -305,7 +305,7 @@ module.exports = {
                             })
                     }
                     else {
-                        let oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${mapid}&mods=${osucalc.ModStringToInt(mods)}&limit=5`
+                        let oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${mapid}&mods=${osucalc.ModStringToInt(osucalc.shortModName(mods))}&limit=5`
                         fetch(oldmsu, {})
                             .then(res => res.json())
                             .then(lbdata => {
