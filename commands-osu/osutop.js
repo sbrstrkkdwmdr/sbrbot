@@ -390,7 +390,7 @@ module.exports = {
                                             ifmods = '+' + topmods.toString().replaceAll(",", '')
                                         }
                                         let scorenum;
-                                        if(interaction.options.getBoolean('reverse') == true){
+                                        if(interaction.options.getBoolean('reverse') == true && interaction.options.getString('sort') == 'pp'){
                                             scorenum = osutopdata.length - scoreoffset
                                         } else {
                                             scorenum = scoreoffset + 1
