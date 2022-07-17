@@ -389,7 +389,14 @@ module.exports = {
                                         } else {
                                             ifmods = '+' + topmods.toString().replaceAll(",", '')
                                         }
-                                        topEmbed.addField(`#${scoreoffset + 1}`,
+                                        let scorenum;
+                                        if(interaction.options.getBoolean('reverse') == true){
+                                            scorenum = osutopdata.length - scoreoffset
+                                        } else {
+                                            scorenum = scoreoffset + 1
+                                        }
+
+                                        topEmbed.addField(`#${scorenum}`,
                                             `
                                             [**${osutopdata[scoreoffset].beatmapset.title} [${osutopdata[scoreoffset].beatmap.version}]**](https://osu.ppy.sh/b/${osutopdata[scoreoffset].beatmap.id}) ${ifmods}
                                             **Score set on** ${maptimeset}
