@@ -283,7 +283,7 @@ module.exports = {
                                         }
 
                                         scoretxt += `
-                                   **#${i + page + 1} | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
+                                   **[#${i + page + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id}) | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
                                    Score set on ${score.created_at}
                                    ${(score.accuracy * 100).toFixed(2)}% | ${score.rank} | ${score.pp}pp
                                    ${ifmods} | ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
@@ -305,7 +305,7 @@ module.exports = {
                             })
                     }
                     else {
-                        let oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${mapid}&mods=${osucalc.ModStringToInt(osucalc.shortModName(mods))}&limit=5`
+                        let oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${mapid}&mods=${osucalc.ModStringToInt(osucalc.shortModName(mods))}&limit=100`
                         fetch(oldmsu, {})
                             .then(res => res.json())
                             .then(lbdata => {
@@ -345,7 +345,7 @@ module.exports = {
                                             break;
                                     }
                                     scoretxt += `
-                                    **#${i + page + 1} | [${score.username}](https://osu.ppy.sh/u/${score.user_id})**
+                                    **[#${i + page + 1}](https://scores/${mode}/${score.score_id}) | [${score.username}](https://osu.ppy.sh/u/${score.user_id})**
                                     Score set on ${score.date}
                                     ${(acc).toFixed(2)}% | ${score.rank} | ${score.pp}
                                     ${score.score} | ${score.maxcombo}x/**${mapdata.max_combo}x**
