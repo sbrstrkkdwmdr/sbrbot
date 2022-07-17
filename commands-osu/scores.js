@@ -259,7 +259,7 @@ module.exports = {
                                         sortdata = 'Sorted by: highest combo'
                                     }
                                     if (sort == 'miss') {
-                                        scoredata = scoredataPreSort.scores.sort((a, b) => a.count_miss - b.count_miss)
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
                                         sortdata = 'Sorted by: least misses'
                                     }
                                 } else {
@@ -286,7 +286,7 @@ module.exports = {
                                         sortdata = 'Sorted by: lowest combo'
                                     }
                                     if (sort == 'miss') {
-                                        scoredata = scoredataPreSort.scores.sort((a, b) => b.count_miss - a.count_miss)
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => b.statistics.count_miss - a.statistics.count_miss)
                                         sortdata = 'Sorted by: highest misses'
                                     }
                                 }
