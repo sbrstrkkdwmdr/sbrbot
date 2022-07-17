@@ -235,23 +235,60 @@ module.exports = {
                             scoredata = scoredataPreSort
                             let sortdata = ''
                             try {
-                                if (sort == 'score') {
-                                    scoredata = scoredataPreSort.scores.sort((a, b) => b.score - a.score)
-                                    sortdata = 'Sorted by: score'
-                                }
-                                if (sort == 'acc') {
-                                    scoredata = scoredataPreSort.scores.sort((a, b) => b.accuracy - a.accuracy)
-                                    sortdata = 'Sorted by: accuracy'
-                                }
-                                if (sort == 'pp') {
-                                    scoredata = scoredataPreSort.scores.sort((a, b) => b.pp - a.pp)
-                                    sortdata = 'Sorted by: pp'
-                                }
-                                if (sort == 'recent') {
-                                    scoredata = scoredataPreSort.scores.sort((a, b) =>
-                                        Math.abs(b.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")) -
-                                        Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
-                                    sortdata = 'Sorted by: Most recent'
+                                if (interaction.options.getBoolean("reverse") != true) {
+                                    if (sort == 'score') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => b.score - a.score)
+                                        sortdata = 'Sorted by: score'
+                                    }
+                                    if (sort == 'acc') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => b.accuracy - a.accuracy)
+                                        sortdata = 'Sorted by: accuracy'
+                                    }
+                                    if (sort == 'pp') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => b.pp - a.pp)
+                                        sortdata = 'Sorted by: pp'
+                                    }
+                                    if (sort == 'recent') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) =>
+                                            Math.abs(b.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")) -
+                                            Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
+                                        sortdata = 'Sorted by: Most recent'
+                                    }
+                                    if (sort == 'combo') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => b.max_combo - a.max_combo)
+                                        sortdata = 'Sorted by: highest combo'
+                                    }
+                                    if (sort == 'miss') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => a.count_miss - b.count_miss)
+                                        sortdata = 'Sorted by: least misses'
+                                    }
+                                } else {
+                                    if (sort == 'score') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => a.score - b.score)
+                                        sortdata = 'Sorted by: lowest score'
+                                    }
+                                    if (sort == 'acc') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => a.accuracy - b.accuracy)
+                                        sortdata = 'Sorted by: lowest accuracy'
+                                    }
+                                    if (sort == 'pp') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => a.pp - b.pp)
+                                        sortdata = 'Sorted by: lowest pp'
+                                    }
+                                    if (sort == 'recent') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) =>
+                                            Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")) -
+                                            Math.abs(b.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
+                                        sortdata = 'Sorted by: oldest'
+                                    }
+                                    if (sort == 'combo') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => a.max_combo - b.max_combo)
+                                        sortdata = 'Sorted by: lowest combo'
+                                    }
+                                    if (sort == 'miss') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => b.count_miss - a.count_miss)
+                                        sortdata = 'Sorted by: highest misses'
+                                    }
                                 }
                                 if (interaction.options.getBoolean('compact') == true) {
                                     filterinfo += `\ncompact mode`

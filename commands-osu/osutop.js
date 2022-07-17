@@ -251,25 +251,56 @@ module.exports = {
                                     filterinfo += `\nmods: ${mods}`
                                 }
                                 osutopdata = filtereddata
-                                if (sort == 'score') {
-                                    osutopdata = filtereddata.sort((a, b) => b.score - a.score)
-                                    filterinfo += `\nsorted by score`
-                                }
-                                if (sort == 'acc') {
-                                    osutopdata = filtereddata.sort((a, b) => b.accuracy - a.accuracy)
-                                    filterinfo += `\nsorted by accuracy`
-                                }
-                                if (sort == 'combo') {
-                                    osutopdata = filtereddata.sort((a, b) => b.max_combo - a.max_combo)
-                                    filterinfo += `\nsorted by combo`
-                                }
-                                if (sort == 'pp' || sort == null) {
-                                    osutopdata = filtereddata.sort((a, b) => b.pp - a.pp)
-                                    filterinfo += `\nsorted by pp`
-                                }
-                                if (sort == 'recent') {
-                                    osutopdata = filtereddata.sort((a, b) => Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
-                                    filterinfo += `\nsorted by recent`
+                                if (interaction.options.getBoolean("reverse") != true) {
+                                    if (sort == 'score') {
+                                        osutopdata = filtereddata.sort((a, b) => b.score - a.score)
+                                        filterinfo += `\nsorted by score`
+                                    }
+                                    if (sort == 'acc') {
+                                        osutopdata = filtereddata.sort((a, b) => b.accuracy - a.accuracy)
+                                        filterinfo += `\nsorted by highest accuracy`
+                                    }
+                                    if (sort == 'pp' || sort == null) {
+                                        osutopdata = filtereddata.sort((a, b) => b.pp - a.pp)
+                                        filterinfo += `\nsorted by highest pp`
+                                    }
+                                    if (sort == 'recent') {
+                                        osutopdata = filtereddata.sort((a, b) => Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
+                                        filterinfo += `\nsorted by most recent`
+                                    }
+                                    if (sort == 'combo') {
+                                        osutopdata = filtereddata.sort((a, b) => b.max_combo - a.max_combo)
+                                        filterinfo += `\nsorted by highest combo`
+                                    }
+                                    if (sort == 'miss') {
+                                        osutopdata = filtereddata.sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
+                                        filterinfo += `\nsorted by least misses`
+                                    }
+                                } else {
+                                    if (sort == 'score') {
+                                        osutopdata = filtereddata.sort((a, b) => a.score - b.score)
+                                        filterinfo += `\nsorted by lowest score`
+                                    }
+                                    if (sort == 'acc') {
+                                        osutopdata = filtereddata.sort((a, b) => a.accuracy - b.accuracy)
+                                        filterinfo += `\nsorted by lowest accuracy`
+                                    }
+                                    if (sort == 'pp' || sort == null) {
+                                        osutopdata = filtereddata.sort((a, b) => a.pp - b.pp)
+                                        filterinfo += `\nsorted by lowest pp`
+                                    }
+                                    if (sort == 'recent') {
+                                        osutopdata = filtereddata.sort((a, b) => Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
+                                        filterinfo += `\nsorted by oldest`
+                                    }
+                                    if (sort == 'combo') {
+                                        osutopdata = filtereddata.sort((a, b) => a.max_combo - b.max_combo)
+                                        filterinfo += `\nsorted by lowest combo`
+                                    }
+                                    if (sort == 'miss') {
+                                        osutopdata = filtereddata.sort((a, b) => b.statistics.count_miss - a.statistics.count_miss)
+                                        filterinfo += `\nsorted by most misses`
+                                    }
                                 }
                                 if (interaction.options.getBoolean('compact') == true) {
                                     filterinfo += `\ncompact mode`
