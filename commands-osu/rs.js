@@ -350,7 +350,7 @@ module.exports = {
                         .then(rsdata => {
                             try {
                                 fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata, null, 2))
-                                if (interaction.options.getBoolean("list") == false) {
+                                if (interaction.options.getBoolean("list") != true) {
                                     let hittime = rsdata[0+page].beatmap.hit_length
                                     let hitseconds = (hittime % 60)
                                     let hitminutes = Math.floor(hittime / 60)

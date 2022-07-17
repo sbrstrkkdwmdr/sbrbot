@@ -211,6 +211,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'Displays extra information',
                 type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
                 required: false,
+                default: false
             }
         ]
     })
@@ -258,10 +259,19 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 choices: cmdconfig.playsortopts
             },
             {
+                name: 'reverse',
+                description: 'If true, the top plays will be displayed in reverse',
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+                required: false,
+            },
+            {
                 name: 'page',
                 description: 'The page to display the top plays of',
                 type: Constants.ApplicationCommandOptionTypes.INTEGER,
                 required: false,
+                default: 1,
+                minValue: 1,
+                maxValue: 20
             },
             {
                 name: 'mapper',
@@ -280,12 +290,14 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'Show all details',
                 type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
                 required: false,
+                default: false
             },
             {
                 name: 'compact',
                 description: 'Whether or not to show the compact version of the top plays',
                 type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
                 required: false,
+                default: false
             }
         ]
     })
@@ -311,6 +323,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'Show all details',
                 type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
                 required: false,
+                default: false
             }
         ]
     })
@@ -338,7 +351,10 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'page',
                 description: 'Which page to display',
                 required: false,
-                type: Constants.ApplicationCommandOptionTypes.INTEGER
+                type: Constants.ApplicationCommandOptionTypes.INTEGER,
+                default: 1,
+                minValue: 1,
+                maxValue: 20
             },
             {
                 name: 'mods',
