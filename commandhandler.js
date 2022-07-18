@@ -71,9 +71,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'time':
                 client.commands.get('time').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+
             case 'emojify':
                 client.commands.get('emojify').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+
 
             //osu commands below
 
@@ -121,6 +123,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'find':
                 client.admincmds.get('find').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
+
 
 
             // music

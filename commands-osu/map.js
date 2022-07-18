@@ -337,6 +337,7 @@ module.exports = {
                                         fs.writeFileSync('./debugosu/mapppcalc.json', JSON.stringify(ppComputed, null, 2))
                                         fs.writeFileSync('./debugosu/mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
 
+
                                     } catch (error) {
                                         ppComputedString = NaN
                                         pp95ComputedString = NaN

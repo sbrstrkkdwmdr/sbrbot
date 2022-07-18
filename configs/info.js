@@ -161,6 +161,7 @@ let cmds = [
                 name: 'message',
                 description: '`string, required`. The message to send'
             },
+
             {
                 name: 'channel',
                 description: '`channel, optional`. The channel to send the message to. <#ChannelId>. If omited, sends the message to the current channel'

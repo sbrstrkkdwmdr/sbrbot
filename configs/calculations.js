@@ -163,10 +163,12 @@ function relto12htime(date) { //relative version of above
     }
     if (seconds < 10) {
         seconds = '0' + seconds
+
     }
     var strTime = hours + ':' + minutes + ':' + seconds + amorpm;
     return strTime;
 }
+
 /**
  * 
  * @param {int} weekdaynum 

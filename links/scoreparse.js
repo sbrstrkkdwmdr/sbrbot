@@ -66,6 +66,7 @@ module.exports = {
                             break;
                         case 'XH':
                             scoregrade = emojis.grades.XH
+
                             break;
                     };
                     let gamehits = scoredata.statistics
@@ -90,6 +91,7 @@ module.exports = {
                         user_id: scoredata.user_id,
                         date: '2022-02-08 05:24:54',
                         rank: ranking,
+
                         score_id: '4057765057'
                     }
 
@@ -131,6 +133,7 @@ module.exports = {
                     if (isNaN(scorepp)) {
                         scorepp = 'N/A'
                     }
+
                     let artist = scoredata.beatmapset.artist
                     let artistuni = scoredata.beatmapset.artist_unicode
                     let title = scoredata.beatmapset.title
@@ -152,12 +155,14 @@ module.exports = {
                         .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`)
                         .setDescription(`
                         ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade}
+
                         \`${hitlist}\`
                         ${scoredata.max_combo}x
                         ${scorepp}pp | ${ppiffc}pp if ${fcacc} FC\n${ppissue}
                         `)
                     message.reply({ embeds: [scoreembed], allowedMentions: { repliedUser: false } })
                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
+
                 })();
             })
     }

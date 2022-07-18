@@ -355,6 +355,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 default: 1,
                 minValue: 1,
                 maxValue: 20
+
             },
             {
                 name: 'mods',
@@ -415,6 +416,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
             }
         ]
+
 
     })
 
@@ -594,6 +596,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'osumodcalc':
                 client.osucmds.get('osumodcalc').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
+
 
             //admin 
 

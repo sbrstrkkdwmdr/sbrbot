@@ -18,9 +18,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 message.delete()
                 message.channel.send('🤢🤮🤮🤢')
                 message.channel.send(`File sent from <@${message.author.id}> spoilered: ||${message.attachments.first().url}||`)
+
                 let guild = client.guilds.cache.get(message.guild.id)
                 fs.appendFileSync(`./logs/${guild.id}.log`, `\nmessageCreate event\n${currentDate} | ${currentDateISO}\n `);
                 fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member${message.author.username}#${message.author.discriminator} sent a file:\n ${message.attachments.first().url}\n`)
+
             }
         }
         //MESSAGE LOGGER

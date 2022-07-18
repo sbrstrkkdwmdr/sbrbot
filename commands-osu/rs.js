@@ -422,6 +422,7 @@ module.exports = {
                                         if (mods) {
                                             modint = osucalc.ModStringToInt(mods)
                                             modstr = `+${mods}`
+
                                         } else {
                                             modint = 0
                                         }

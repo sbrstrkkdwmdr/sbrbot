@@ -352,6 +352,7 @@ module.exports = {
                     `)
                             interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                         }
+
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
 
