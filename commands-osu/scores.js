@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const fs = require('fs');
 const { access_token } = require('../configs/osuauth.json')
+const emojis = require('../configs/emojis.js')
 
 module.exports = {
     name: 'scores',
@@ -134,36 +135,39 @@ module.exports = {
                                             }
                                             let ranking = score.rank
                                             switch (ranking) {
+                                                case 'F':
+                                                    grade = emojis.grades.F
+                                                    break;
                                                 case 'D':
-                                                    grade = '<:rankingD:927797179534438421>'
+                                                    grade = emojis.grades.D
                                                     break;
                                                 case 'C':
-                                                    grade = '<:rankingC:927797179584757842>'
+                                                    grade = emojis.grades.C
                                                     break;
                                                 case 'B':
-                                                    grade = '<:rankingB:927797179697991700>'
+                                                    grade = emojis.grades.B
                                                     break;
                                                 case 'A':
-                                                    grade = '<:rankingA:927797179739930634>'
+                                                    grade = emojis.grades.A
                                                     break;
                                                 case 'S':
-                                                    grade = '<:rankingS:927797179618295838>'
+                                                    grade = emojis.grades.S
                                                     break;
                                                 case 'SH':
-                                                    grade = '<:rankingSH:927797179710570568>'
+                                                    grade = emojis.grades.SH
                                                     break;
                                                 case 'X':
-                                                    grade = '<:rankingX:927797179832229948>'
+                                                    grade = emojis.grades.X
                                                     break;
                                                 case 'XH':
-                                                    grade = '<:rankingxh:927797179597357076>'
+                                                    grade = emojis.grades.XH
                                                     break;
                                             };
 
 
                                             scoretxt +=
                                                 `-
-                                                **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.id})** ${ifmods} | ${score.created_at.toString()}
+                                                **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id})** ${ifmods} | ${score.created_at.toString()}
                                                 ${(score.accuracy * 100).toFixed(2)} | ${grade} | ${score.pp.toFixed(2)}pp
                                                 \`${hitlist}\` | ${score.max_combo}x/**${mapdata.max_combo}x**\n`
 
@@ -231,23 +235,63 @@ module.exports = {
                             scoredata = scoredataPreSort
                             let sortdata = ''
                             try {
-                                if (sort == 'score') {
-                                    scoredata = scoredataPreSort.scores.sort((a, b) => b.score - a.score)
-                                    sortdata = 'Sorted by: score'
+                                if (interaction.options.getBoolean("reverse") != true) {
+                                    if (sort == 'score') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => b.score - a.score)
+                                        sortdata = 'Sorted by: score'
+                                    }
+                                    if (sort == 'acc') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => b.accuracy - a.accuracy)
+                                        sortdata = 'Sorted by: accuracy'
+                                    }
+                                    if (sort == 'pp') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => b.pp - a.pp)
+                                        sortdata = 'Sorted by: pp'
+                                    }
+                                    if (sort == 'recent') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) =>
+                                            Math.abs(b.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")) -
+                                            Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
+                                        sortdata = 'Sorted by: Most recent'
+                                    }
+                                    if (sort == 'combo') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => b.max_combo - a.max_combo)
+                                        sortdata = 'Sorted by: highest combo'
+                                    }
+                                    if (sort == 'miss') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
+                                        sortdata = 'Sorted by: least misses'
+                                    }
+                                } else {
+                                    if (sort == 'score') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => a.score - b.score)
+                                        sortdata = 'Sorted by: lowest score'
+                                    }
+                                    if (sort == 'acc') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => a.accuracy - b.accuracy)
+                                        sortdata = 'Sorted by: lowest accuracy'
+                                    }
+                                    if (sort == 'pp') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => a.pp - b.pp)
+                                        sortdata = 'Sorted by: lowest pp'
+                                    }
+                                    if (sort == 'recent') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) =>
+                                            Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")) -
+                                            Math.abs(b.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
+                                        sortdata = 'Sorted by: oldest'
+                                    }
+                                    if (sort == 'combo') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => a.max_combo - b.max_combo)
+                                        sortdata = 'Sorted by: lowest combo'
+                                    }
+                                    if (sort == 'miss') {
+                                        scoredata = scoredataPreSort.scores.sort((a, b) => b.statistics.count_miss - a.statistics.count_miss)
+                                        sortdata = 'Sorted by: highest misses'
+                                    }
                                 }
-                                if (sort == 'acc') {
-                                    scoredata = scoredataPreSort.scores.sort((a, b) => b.accuracy - a.accuracy)
-                                    sortdata = 'Sorted by: accuracy'
-                                }
-                                if (sort == 'pp') {
-                                    scoredata = scoredataPreSort.scores.sort((a, b) => b.pp - a.pp)
-                                    sortdata = 'Sorted by: pp'
-                                }
-                                if (sort == 'recent') {
-                                    scoredata = scoredataPreSort.scores.sort((a, b) =>
-                                        Math.abs(b.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")) -
-                                        Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
-                                    sortdata = 'Sorted by: Most recent'
+                                if (interaction.options.getBoolean('compact') == true) {
+                                    filterinfo += `\ncompact mode`
                                 }
                             } catch (error) {
                                 return interaction.reply({ content: 'Error - no scores found', allowedMentions: { repliedUser: false } })
@@ -309,39 +353,47 @@ module.exports = {
                                             }
                                             let ranking = score.rank
                                             switch (ranking) {
+                                                case 'F':
+                                                    grade = emojis.grades.F
+                                                    break;
                                                 case 'D':
-                                                    grade = '<:rankingD:927797179534438421>'
+                                                    grade = emojis.grades.D
                                                     break;
                                                 case 'C':
-                                                    grade = '<:rankingC:927797179584757842>'
+                                                    grade = emojis.grades.C
                                                     break;
                                                 case 'B':
-                                                    grade = '<:rankingB:927797179697991700>'
+                                                    grade = emojis.grades.B
                                                     break;
                                                 case 'A':
-                                                    grade = '<:rankingA:927797179739930634>'
+                                                    grade = emojis.grades.A
                                                     break;
                                                 case 'S':
-                                                    grade = '<:rankingS:927797179618295838>'
+                                                    grade = emojis.grades.S
                                                     break;
                                                 case 'SH':
-                                                    grade = '<:rankingSH:927797179710570568>'
+                                                    grade = emojis.grades.SH
                                                     break;
                                                 case 'X':
-                                                    grade = '<:rankingX:927797179832229948>'
+                                                    grade = emojis.grades.X
                                                     break;
                                                 case 'XH':
-                                                    grade = '<:rankingxh:927797179597357076>'
+                                                    grade = emojis.grades.XH
                                                     break;
                                             };
 
-
-                                            scoretxt +=
-                                                `-
-                                                **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.id})** ${ifmods} | ${score.created_at.toString()}
-                                                ${(score.accuracy * 100).toFixed(2)} | ${grade} | ${score.pp.toFixed(2)}pp
+                                            if (interaction.options.getBoolean('compact') == true) {
+                                                scoretxt += `
+                                            **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id})**
+                                            ${(score.accuracy * 100).toFixed(2)}% | ${score.pp}pp | ${ifmods}`
+                                            }
+                                            else {
+                                                scoretxt +=
+                                                    `-
+                                                **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id})** ${ifmods} | ${score.created_at.toString()}
+                                                ${(score.accuracy * 100).toFixed(2)}% | ${grade} | ${score.pp}pp
                                                 \`${hitlist}\` | ${score.max_combo}x/**${mapdata.max_combo}x**\n`
-
+                                            }
                                         }
                                     }
                                     Embed.setDescription(scoretxt)

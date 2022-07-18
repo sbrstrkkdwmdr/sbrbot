@@ -1,0 +1,25 @@
+const fs = require('fs');
+const emojisarr = require('../configs/emojiarray.js')
+module.exports = {
+    name: 'emojify',
+    description: 'Emojify a string',
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+        if (args.length < 1) {
+            message.reply({ content: 'Please provide a string to emojify.', allowedMentions: { repliedUser: false } });
+            return;
+        }
+        let emojified = '';
+        for (let i = 0; i < args.length; i++) {
+            emojified += args[i];
+            if (i < args.length - 1) {
+                let rdm = Math.floor(Math.random() * emojisarr.emojiarray.length - 1) + 1;
+                //console.log(rdm);
+                if(emojisarr.emojiarray[rdm] == null || emojisarr.emojiarray[rdm].length < 1){
+                    console.log('nullchar')
+                }
+                emojified += `${emojisarr.emojiarray[rdm]}` + ' ';
+            }
+        }
+        message.reply({ content: emojified, allowedMentions: { repliedUser: false } });
+    }
+}

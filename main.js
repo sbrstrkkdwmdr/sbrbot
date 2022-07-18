@@ -85,7 +85,7 @@ const userdata = sequelize.define('userdata', {
         type: Sequelize.STRING,
         defaultValue: 'osu',
     }
-    
+
 })
 client.once('ready', () => {
     userdata.sync()
@@ -96,14 +96,27 @@ client.once('ready', () => {
     checker(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     musichandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
+    //make a function that for every guild log the id
+    client.guilds.cache.forEach(guild => {
+        //check if a .log file with the guild id as the name exists
+        if (!fs.existsSync(`./logs/${guild.id}.log`)) {
+            //if not create a new file with the guild id as the name
+            fs.writeFileSync(`./logs/${guild.id}.log`, ''
+            )
+        }
+
+    }
+    )
+
+
     client.user.setPresence({
         activities: [{
             name: "you | sbr-help",
             type: 'WATCHING',
             url: 'https://youtube.com/saberstrkkdwmdr',
         }],
-        status: `dnd`,
-        afk: 'false'
+        status: 'dnd',
+        afk: false
     });
 
 })
@@ -111,8 +124,9 @@ client.login(token)
 fetch('https://osu.ppy.sh/oauth/token', {
     method: 'POST',
     headers: {
-        'Content-Type': 'application/json'}
-        ,
+        'Content-Type': 'application/json'
+    }
+    ,
     body: JSON.stringify({
         grant_type: 'client_credentials',
         client_id: osuClientID,
@@ -121,7 +135,7 @@ fetch('https://osu.ppy.sh/oauth/token', {
     })
 
 }).then(res => res.json())
-.then(res => {
-    fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
-}
-)
+    .then(res => {
+        fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
+    }
+    )

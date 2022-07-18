@@ -1,6 +1,9 @@
 const { access_token } = require('../configs/osuauth.json');
 const fs = require('fs')
 const fetch = require('node-fetch');
+const emojis = require('../configs/emojis.js');
+const chartjsimg = require('chartjs-to-image');
+const osufunc = require('../configs/osufunc.js')
 
 module.exports = {
     name: 'osu',
@@ -75,13 +78,13 @@ module.exports = {
 
                         let online = osudata.is_online;
 
-                        let isonline = '`**<:osu_offline:927800829153513472> Offline**'
+                        let isonline = `**${emojis.onlinestatus.offline} Offline**`
 
                         if (online == true) {
-                            isonline = '**<:osu_online:927800818445455421> Online**'
+                            isonline = `**${emojis.onlinestatus.online} Online**`
                         }
                         else {
-                            isonline = `**<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago`
+                            isonline = `**${emojis.onlinestatus.offline} Offline** | Last online ${minlastvisredo} ago`
                         }
 
                         let prevnames = osudata.previous_usernames;
@@ -111,7 +114,7 @@ module.exports = {
                     **Accuracy:** ${(osustats.hit_accuracy).toFixed(2)}%
                     **Play Count:** ${playcount}
                     **Level:** ${osustats.level.current}.${osustats.level.progress}
-                    <:rankingxh:927797179597357076>${grades.ssh} <:rankingX:927797179832229948>${grades.ss} <:rankingSH:927797179710570568>${grades.sh} <:rankingS:927797179618295838> ${grades.s} <:rankingA:927797179739930634>${grades.a}
+                    ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
                     
                     **Player joined on** ${osudata.join_date.toString().slice(0, 10)}
                     **Followers:** ${osudata.follower_count}
@@ -199,13 +202,13 @@ module.exports = {
 
                         let online = osudata.is_online;
 
-                        let isonline = '`**<:osu_offline:927800829153513472> Offline**'
+                        let isonline = `**${emojis.onlinestatus.offline} Offline**`
 
                         if (online == true) {
-                            isonline = '**<:osu_online:927800818445455421> Online**'
+                            isonline = `**${emojis.onlinestatus.online} Online**`
                         }
                         else {
-                            isonline = `**<:osu_offline:927800829153513472> Offline** | Last online ${minlastvisredo} ago`
+                            isonline = `**${emojis.onlinestatus.offline} Offline** | Last online ${minlastvisredo} ago`
                         }
 
                         let prevnames = osudata.previous_usernames;
@@ -229,21 +232,127 @@ module.exports = {
                             .setTitle(`${osudata.username}'s osu! profile`)
                             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
                             .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
-                            .setDescription(`
+                        if (interaction.options.getBoolean('detailed') == true) {
+                            let fe = new Discord.MessageEmbed()
+                                .setColor('#0099ff')
+                                .setTitle(`${osudata.username}'s osu! profile`)
+                                .setDescription('loading...')
+                            interaction.reply({embeds: [fe]})
+                            Embed.addField(`-`, `
+                            **Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)
+                            **pp:** ${osustats.pp}
+                            **Accuracy:** ${(osustats.hit_accuracy).toFixed(2)}%
+                            **Play Count:** ${playcount}
+                            **Level:** ${osustats.level.current}.${osustats.level.progress}
+                            `, true)
+                            Embed.addField(`-`, `                    
+                            **Player joined on** ${osudata.join_date.toString().slice(0, 10)}
+                            ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
+                            **Followers:** ${osudata.follower_count}
+                            ${prevnameslist}
+                            ${isonline}
+                            `, true)
+                            let mode = osudata.playmode
+                            //chart creation
+                            data = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
+
+                            const chart = new chartjsimg()
+                                .setConfig({
+                                    type: 'line',
+                                    data: {
+                                        labels: data,
+                                        datasets: [{
+                                            label: 'Monthly Playcount',
+                                            data: osudata.monthly_playcounts.map(x => x.count),
+                                            fill: false,
+                                            borderColor: 'rgb(75, 192, 192)',
+                                            borderWidth: 1,
+                                            pointRadius: 0
+                                        }]
+                                    }
+                                })
+                            chart.setBackgroundColor('color: rgb(0,0,0)')
+                            chart.toFile('./debugosu/playergraph.jpg').then(() => {
+
+                                let usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
+                                fetch(usertopurl, {
+                                    headers: {
+                                        Authorization: `Bearer ${access_token}`
+                                    }
+                                }).then(res => res.json())
+                                    .then(osutopdata => {
+                                        let mostplayedurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/beatmapsets/most_played`
+                                        fetch(mostplayedurl, {
+                                            headers: {
+                                                Authorization: `Bearer ${access_token}`
+                                            }
+                                        }).then(res => res.json())
+                                            .then(mostplayeddata => {
+                                                let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                let maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
+                                                let minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
+                                                let avgpp;
+                                                let totalpp = 0;
+                                                for (i2 = 0; i2 < osutopdata.length; i2++) {
+                                                    totalpp += osutopdata[i2].pp
+                                                }
+                                                avgpp = (totalpp / osutopdata.length).toFixed(2)
+
+                                                mostplaytxt = ``
+                                                for (i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
+                                                    bmpc = mostplayeddata[i2]
+                                                    mostplaytxt += `[${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id}) | ${bmpc.count} plays\n`
+                                                }
+                                                if (mostplaytxt != ``) {
+                                                    Embed.addField(
+                                                        'Most Played Beatmaps',
+                                                        mostplaytxt,
+                                                        false
+                                                    )
+                                                }
+
+                                                Embed.addField(
+                                                    'TOP PLAY', `
+                                                    **Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
+                                                    **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
+                                                    **Gamemode:** ${mode}
+                                                    **Highest combo:** ${highestcombo}
+                                                `, true)
+                                                Embed.addField(
+                                                    'INFO', `
+                                                    **Highest pp:** ${maxpp}
+                                                    **Lowest pp:** ${minpp}
+                                                    **Average pp:** ${avgpp}
+                                                    **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
+                                                    **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
+                                                `, true)
+
+                                                interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, files: ['./debugosu/playergraph.jpg'] })
+
+                                            })
+
+
+
+
+                                    })
+                            })
+                        } else {
+                            Embed.setDescription(`
                     **Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)\n
                     **pp:** ${osustats.pp}
                     **Accuracy:** ${(osustats.hit_accuracy).toFixed(2)}%
                     **Play Count:** ${playcount}
                     **Level:** ${osustats.level.current}.${osustats.level.progress}
-                    <:rankingxh:927797179597357076>${grades.ssh} <:rankingX:927797179832229948>${grades.ss} <:rankingSH:927797179710570568>${grades.sh} <:rankingS:927797179618295838> ${grades.s} <:rankingA:927797179739930634>${grades.a}
+                    ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
                     
                     **Player joined on** ${osudata.join_date.toString().slice(0, 10)}
                     **Followers:** ${osudata.follower_count}
                     ${prevnameslist}
                     ${isonline}
                     `)
+                            interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
+                        }
 
-                        interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
 

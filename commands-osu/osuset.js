@@ -1,3 +1,4 @@
+const fs = require('fs')
 module.exports = {
     name: 'osuset',
     description: 'Sets the osu! username of the user\n' +

@@ -85,7 +85,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'num2',
                 description: 'The second number',
                 type: Constants.ApplicationCommandOptionTypes.NUMBER,
-                required: false
+                required: false,
+                minValue: 1,
+                maxValue: 100
             }
         ]
     })
@@ -203,6 +205,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The user to display the profile of',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: false,
+            },
+            {
+                name: 'detailed',
+                description: 'Displays extra information',
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+                required: false,
+                default: false
             }
         ]
     })
@@ -250,10 +259,19 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 choices: cmdconfig.playsortopts
             },
             {
+                name: 'reverse',
+                description: 'If true, the top plays will be displayed in reverse',
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+                required: false,
+            },
+            {
                 name: 'page',
                 description: 'The page to display the top plays of',
                 type: Constants.ApplicationCommandOptionTypes.INTEGER,
                 required: false,
+                default: 1,
+                minValue: 1,
+                maxValue: 20
             },
             {
                 name: 'mapper',
@@ -272,6 +290,14 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'Show all details',
                 type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
                 required: false,
+                default: false
+            },
+            {
+                name: 'compact',
+                description: 'Whether or not to show the compact version of the top plays',
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+                required: false,
+                default: false
             }
         ]
     })
@@ -291,12 +317,20 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The mods to display the map info of',
                 type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: false,
-            }]
+            },
+            {
+                name: 'detailed',
+                description: 'Show all details',
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+                required: false,
+                default: false
+            }
+        ]
     })
     commands?.create({
         name: 'rs',
         description: 'Displays the user\'s most recent score',
-        options: cmdconfig.useroffsetmodeopts
+        options: cmdconfig.rsopts
     })
     commands?.create({
         name: 'scores',
@@ -317,7 +351,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'page',
                 description: 'Which page to display',
                 required: false,
-                type: Constants.ApplicationCommandOptionTypes.INTEGER
+                type: Constants.ApplicationCommandOptionTypes.INTEGER,
+                default: 1,
+                minValue: 1,
+                maxValue: 20
+
             },
             {
                 name: 'mods',
@@ -327,7 +365,60 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
         ]
     })
+    commands?.create({
+        name: 'osumodcalc',
+        description: 'Calculates the values for a map based on the values given',
+        options: [
+            {
+                name: 'mods',
+                description: 'The mods to calculate the values for',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.STRING
+            },
+            {
+                name: 'cs',
+                description: 'The circle size to calculate the values for',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                minValue: 0,
+                maxValue: 11
+            },
+            {
+                name: 'ar',
+                description: 'The approach rate to calculate the values for',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                minValue: 0,
+                maxValue: 11
+            },
+            {
+                name: 'od',
+                description: 'The overall difficulty to calculate the values for',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                minValue: 0,
+                maxValue: 11
+            },
+            {
+                name: 'hp',
+                description: 'The HP to calculate the values for',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                minValue: 0,
+                maxValue: 11
+            },
+            {
+                name: 'bpm',
+                description: 'The BPM to calculate the values for',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.NUMBER,
+                minValue: 1
 
+            }
+        ]
+
+
+    })
 
     //below are admin related commands
     commands?.create({
@@ -354,12 +445,83 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'guild',
                 description: 'The server to leave',
-                type: Constants.ApplicationCommandOptionTypes.INTEGER,
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+                minValue: 1
+            }
+        ],
+        //channelTypes: ['GuildText']
+
+    })
+    commands?.create({
+        name: 'voice',
+        description: 'Controls a user\'s voice settings',
+        options: [
+            {
+                name: 'user',
+                description: 'The user to control',
+                type: Constants.ApplicationCommandOptionTypes.USER,
+                required: true,
+            },
+            {
+                name: 'type',
+                description: 'The type of voice control to perform',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+                choices: [
+                    { name: 'Mute', value: 'mute' },
+                    { name: 'Deafen', value: 'deafen' },
+                    { name: 'Move to another channel', value: 'move' },
+                    { name: 'Disconnect', value: 'disconnect' }
+                ]
+            },
+            {
+                name: 'channel',
+                description: 'The channel to move the user to',
+                type: Constants.ApplicationCommandOptionTypes.CHANNEL,
+                required: false,
+            }
+        ],
+        //channelTypes: ['GuildText']
+    })
+    commands?.create({
+        name: 'find',
+        description: 'Returns the name of something from the id given',
+        options: [
+            {
+                name: 'type',
+                description: 'The type of thing to find',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: true,
+                choices: [
+                    { name: 'User', value: 'user' },
+                    { name: 'Channel', value: 'channel' },
+                    { name: 'Guild', value: 'guild' },
+                    { name: 'Role', value: 'role' },
+                    { name: 'Emoji', value: 'emoji' },
+                ]
+            },
+            {
+                name: 'id',
+                description: 'The id of the thing to find',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
                 required: true,
                 minValue: 1
             }
         ]
-
+    })
+    commands?.create({
+        name: 'log',
+        description: 'Displays the log of a server',
+        options: [
+            {
+                name: 'guildid',
+                description: 'The guild to display the log of',
+                type: Constants.ApplicationCommandOptionTypes.STRING,
+                required: false,
+                minValue: 1
+            },
+        ]
     })
 
     client.on('interactionCreate', async (interaction) => {
@@ -370,8 +532,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let message = null;
         let args = null
 
-        const { commandName, options } = interaction
-        switch (commandName) {
+        switch (interaction.commandName) {
             case 'ping':
                 client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
@@ -432,6 +593,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'leaderboard':
                 client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
+            case 'osumodcalc':
+                client.osucmds.get('osumodcalc').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                break;
 
 
             //admin 
@@ -446,6 +610,15 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'leaveguild':
                 client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                break;
+            case 'voice':
+                client.admincmds.get('voice').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'find':
+                client.admincmds.get('find').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'log':
+                client.admincmds.get('log').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             default:
                 interaction.reply({ content: 'Command not found - no longer exists or is currently being rewritten', ephemeral: true })

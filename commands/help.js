@@ -32,6 +32,8 @@ module.exports = {
             .addField('Admin commands',
                 '**checkperms** \`[user (required)]\` - checks the permissions of a given user\n' +
                 '**leaveguild** \`[guild (required)]\` - leaves a given server\n' +
+                '**servers** - displays all servers the bot is in\n' +
+                '**voice** \`[user(required)] [type(required)] [channel (optional)]\` - alters a user in a voice channel', false)
                 '**servers** - displays all servers the bot is in', false)
             .addField('General commands',
                 '**gif** \`[type (required)]\` - displays a gif of a given type\n' +
@@ -149,9 +151,57 @@ module.exports = {
 
                 } else if (client.links.get(command)) {
 
-                    commandInfo.setTitle(client.links.get(command).name)
-                    commandInfo.setDescription(client.links.get(command).description)
-                } else {
+                    let commandname = client.links.get(command).name
+                    let res = commandhelp.links.find(obj => obj.name == commandname)
+
+                    let desc = ''
+                    desc += res.description + "\n"
+                    if (res.usage) {
+                        desc += `\nUsage: ${res.usage}`
+                    }
+
+                    let opts = res.options
+                    let opttxt = '';
+                    for (i = 0; i < opts.length; i++) {
+                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+
+                    }
+                    desc += "\n\n" + opttxt
+
+                    if (res.aliases) {
+                        desc += `\n\nAliases: ${res.aliases}`
+                    }
+
+                    commandInfo.setTitle("Command info for: " + commandname)
+                    commandInfo.setDescription(desc)
+                } else if (client.musiccmds.get(command)){
+                    let commandname = client.musiccmds.get(command).name
+                    let res = commandhelp.musiccmds.find(obj => obj.name == commandname)
+
+                    let desc = ''
+                    desc += res.description + "\n"
+                    if (res.usage) {
+                        desc += `\nCommand: \`${res.usage}\``
+                    }
+                    if (res.slashusage) {
+                        desc += `\nSlash Command: \`${res.slashusage}\``
+                    }
+
+                    let opts = res.options
+                    let opttxt = '';
+                    for (i = 0; i < opts.length; i++) {
+                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+
+                    }
+                    desc += "\n\n" + opttxt
+
+                    if (res.aliases) {
+                        desc += `\n\nAliases: ${res.aliases}`
+                    }
+
+                    commandInfo.setTitle("Command info for: " + commandname)
+                    commandInfo.setDescription(desc)
+                }else {
                     fullCommandList
                         .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
 

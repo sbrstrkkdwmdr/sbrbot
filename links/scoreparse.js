@@ -3,6 +3,7 @@ const fetch = require('node-fetch')
 const ppcalc = require('booba')
 const osucalc = require('osumodcalculator')
 const { access_token } = require('../configs/osuauth.json')
+const emojis = require('../configs/emojis.js')
 
 module.exports = {
     name: 'scoreparse',
@@ -30,36 +31,42 @@ module.exports = {
                 fs.appendFileSync('link.log', `LINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\n`, 'utf-8')
                     ;
                 (async () => {
+                    try {
+                        let ranking = scoredata.rank.toUpperCase()
+                    } catch (error) {
+                        return message.reply({ content: 'This score is unsubmitted/failed and cannot be parsed', allowedMentions: { repliedUser: false } })
 
-                    let ranking = scoredata.rank
-
-                    switch (ranking) {
+                    }
+                    let ranking = scoredata.rank ? scoredata.rank : 'f'
+                    let scoregrade = emojis.grades.F
+                    switch (ranking.toUpperCase()) {
                         case 'F':
-                            grade = 'F'
+                            scoregrade = emojis.grades.F
                             break;
                         case 'D':
-                            grade = '<:rankingD:927797179534438421>'
+                            scoregrade = emojis.grades.D
                             break;
                         case 'C':
-                            grade = '<:rankingC:927797179584757842>'
+                            scoregrade = emojis.grades.C
                             break;
                         case 'B':
-                            grade = '<:rankingB:927797179697991700>'
+                            scoregrade = emojis.grades.B
                             break;
                         case 'A':
-                            grade = '<:rankingA:927797179739930634>'
+                            scoregrade = emojis.grades.A
                             break;
                         case 'S':
-                            grade = '<:rankingS:927797179618295838>'
+                            scoregrade = emojis.grades.S
                             break;
                         case 'SH':
-                            grade = '<:rankingSH:927797179710570568>'
+                            scoregrade = emojis.grades.SH
                             break;
                         case 'X':
-                            grade = '<:rankingX:927797179832229948>'
+                            scoregrade = emojis.grades.X
                             break;
                         case 'XH':
-                            grade = '<:rankingxh:927797179597357076>'
+                            scoregrade = emojis.grades.XH
+
                             break;
                     };
                     let gamehits = scoredata.statistics
@@ -83,7 +90,8 @@ module.exports = {
                         enabled_mods: modint,
                         user_id: scoredata.user_id,
                         date: '2022-02-08 05:24:54',
-                        rank: 'S',
+                        rank: ranking,
+
                         score_id: '4057765057'
                     }
 
@@ -121,6 +129,11 @@ module.exports = {
 
                     }
 
+                    let scorepp = scoredata.pp
+                    if (isNaN(scorepp)) {
+                        scorepp = 'N/A'
+                    }
+
                     let artist = scoredata.beatmapset.artist
                     let artistuni = scoredata.beatmapset.artist_unicode
                     let title = scoredata.beatmapset.title
@@ -141,12 +154,15 @@ module.exports = {
                         .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.beatmap_id}`)
                         .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`)
                         .setDescription(`
-                        ${(scoredata.accuracy * 100).toFixed(2)}% | ${grade}
+                        ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade}
+
                         \`${hitlist}\`
                         ${scoredata.max_combo}x
-                        ${scoredata.pp.toFixed(2)}pp | ${ppiffc}pp if ${fcacc} FC\n${ppissue}
+                        ${scorepp}pp | ${ppiffc}pp if ${fcacc} FC\n${ppissue}
                         `)
                     message.reply({ embeds: [scoreembed], allowedMentions: { repliedUser: false } })
+                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
+
                 })();
             })
     }

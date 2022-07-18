@@ -3,6 +3,7 @@ const fs = require('fs');
 const osucalc = require('osumodcalculator');
 const fetch = require('node-fetch')
 const ppcalc = require('booba')
+const emojis = require('../configs/emojis.js')
 
 module.exports = {
     name: 'map',
@@ -67,7 +68,7 @@ module.exports = {
                     }
                 }).then(res => res.json())
                     .then(mapidtest => {
-                        fs.appendFileSync('commands.log', `fetched title - ${maptitle}`)
+                        fs.appendFileSync('commands.log', `\nfetched title - ${maptitle}`)
                         fs.writeFileSync('debugosu/maptxt.json', JSON.stringify(mapidtest, null, 2))
                         try {
                             sortbyhigh = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)
@@ -120,16 +121,16 @@ module.exports = {
                                 let maphitstr = `${maphitmins}:${maphitseconds}`
                                 let mapstatus = (json.status)
                                 if (mapstatus == "ranked") {
-                                    statusimg = "<:statusranked:944512775579926609>";
+                                    statusimg = emojis.rankedstatus.ranked;
                                 }
                                 if (mapstatus == "approved" || mapstatus == "qualified") {
-                                    statusimg = "<:statusapproved:944512764913811467>";
+                                    statusimg = emojis.rankedstatus.approved;
                                 }
                                 if (mapstatus == "loved") {
-                                    statusimg = "<:statusloved:944512775810588733>";
+                                    statusimg = emojis.rankedstatus.loved;
                                 }
                                 if (mapstatus == "graveyard" || mapstatus == "pending") {
-                                    statusimg = "<:statusgraveyard:944512765282897940>";
+                                    statusimg = emojis.rankedstatus.graveyard;
                                 }
                                 fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapid }), null, 2));
 
@@ -285,8 +286,10 @@ module.exports = {
                                         score: "6795149",
                                         maxcombo: json.max_combo,
                                         count50: "0",
-                                        count100: "266",
-                                        count300: "3740",
+                                        //count100: "5281700",
+                                        //count300: "65140967",
+                                        count100: "810811 ",
+                                        count300: "10000000",
                                         countmiss: "0",
                                         countkatu: "0",
                                         countgeki: "0",
@@ -305,21 +308,21 @@ module.exports = {
 
                                     let pp = new ppcalc.std_ppv2().setPerformance(score).setMods(fixedmods);
                                     let pp95 = new ppcalc.std_ppv2().setPerformance(score95).setMods(fixedmods);
-                                    let mapimg = "<:modeosu:944181096868884481>";
+                                    let mapimg = emojis.gamemodes.standard;
 
-                                    let mapmode = json.module
+                                    let mapmode = json.mode
                                     if (mapmode == "taiko") {
-                                        mapimg = "<:modetaiko:944181097053442068>";
+                                        mapimg = emojis.gamemodes.taiko;
                                         pp = new ppcalc.taiko_ppv2().setPerformance(score).setMods(fixedmods);
                                         pp95 = new ppcalc.taiko_ppv2().setPerformance(score95).setMods(fixedmods);
                                     }
                                     if (mapmode == "fruits") {
-                                        mapimg = "<:modefruits:944181096206176326>";
+                                        mapimg = emojis.gamemodes.fruits;
                                         pp = new ppcalc.catch_ppv2().setPerformance(score).setMods(fixedmods);
                                         pp95 = new ppcalc.catch_ppv2().setPerformance(score95).setMods(fixedmods);
                                     }
                                     if (mapmode == "mania") {
-                                        mapimg = "<:modemania:944181095874834453>";
+                                        mapimg = emojis.gamemodes.mania;
                                         pp = new ppcalc.mania_ppv2().setPerformance(score).setMods(fixedmods);
                                         pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                                     }
@@ -331,6 +334,9 @@ module.exports = {
                                         ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
                                         pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
                                         ppissue = ''
+                                        fs.writeFileSync('./debugosu/mapppcalc.json', JSON.stringify(ppComputed, null, 2))
+                                        fs.writeFileSync('./debugosu/mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
+
 
                                     } catch (error) {
                                         ppComputedString = NaN
@@ -380,9 +386,9 @@ module.exports = {
                                                     "**MAP DETAILS**",
                                                     `${statusimg} | ${mapimg} \n` +
                                                     `CS${cs} AR${ar} OD${od} HP${hp} \n` +
-                                                    `${json.difficulty_rating}⭐ | ${bpm}BPM\n` +
-                                                    `<:circle:927478586028474398>${json.count_circles} | <:slider:927478585701330976>${json.count_sliders} | 🔁${json.count_spinners} \n` +
-                                                    `${moddedlength}`,
+                                                    `${json.difficulty_rating}⭐ | ${bpm}BPM⏱\n` +
+                                                    `${emojis.mapobjs.circle}${json.count_circles} | ${emojis.mapobjs.slider}${json.count_sliders} | ${emojis.mapobjs.spinner}${json.count_spinners}\n` +
+                                                    `${moddedlength}🕐`,
                                                     true
                                                 )
                                                 .addField(
@@ -449,16 +455,16 @@ module.exports = {
                     let maphitstr = `${maphitmins}:${maphitseconds}`
                     let mapstatus = (json.status)
                     if (mapstatus == "ranked") {
-                        statusimg = "<:statusranked:944512775579926609>";
+                        statusimg = emojis.rankedstatus.ranked;
                     }
                     if (mapstatus == "approved" || mapstatus == "qualified") {
-                        statusimg = "<:statusapproved:944512764913811467>";
+                        statusimg = emojis.rankedstatus.approved;
                     }
                     if (mapstatus == "loved") {
-                        statusimg = "<:statusloved:944512775810588733>";
+                        statusimg = emojis.rankedstatus.loved;
                     }
                     if (mapstatus == "graveyard" || mapstatus == "pending") {
-                        statusimg = "<:statusgraveyard:944512765282897940>";
+                        statusimg = emojis.rankedstatus.graveyard;
                     }
                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapid }), null, 2));
 
@@ -615,8 +621,10 @@ module.exports = {
                             score: "6795149",
                             maxcombo: json.max_combo,
                             count50: "0",
-                            count100: "266",
-                            count300: "3740",
+                            //count100: "5281700",
+                            //count300: "65140967",
+                            count100: "810811 ",
+                            count300: "10000000",
                             countmiss: "0",
                             countkatu: "0",
                             countgeki: "0",
@@ -635,21 +643,21 @@ module.exports = {
 
                         let pp = new ppcalc.std_ppv2().setPerformance(score).setMods(fixedmods);
                         let pp95 = new ppcalc.std_ppv2().setPerformance(score95).setMods(fixedmods);
-                        let mapimg = "<:modeosu:944181096868884481>";
+                        let mapimg = emojis.gamemodes.standard;
 
-                        let mapmode = json.module
+                        let mapmode = json.mode
                         if (mapmode == "taiko") {
-                            mapimg = "<:modetaiko:944181097053442068>";
+                            mapimg = emojis.gamemodes.taiko;
                             pp = new ppcalc.taiko_ppv2().setPerformance(score).setMods(fixedmods);
                             pp95 = new ppcalc.taiko_ppv2().setPerformance(score95).setMods(fixedmods);
                         }
                         if (mapmode == "fruits") {
-                            mapimg = "<:modefruits:944181096206176326>";
+                            mapimg = emojis.gamemodes.fruits;
                             pp = new ppcalc.catch_ppv2().setPerformance(score).setMods(fixedmods);
                             pp95 = new ppcalc.catch_ppv2().setPerformance(score95).setMods(fixedmods);
                         }
                         if (mapmode == "mania") {
-                            mapimg = "<:modemania:944181095874834453>";
+                            mapimg = emojis.gamemodes.mania;
                             pp = new ppcalc.mania_ppv2().setPerformance(score).setMods(fixedmods);
                             pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                         }
@@ -661,6 +669,8 @@ module.exports = {
                             ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
                             pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
                             ppissue = ''
+                            fs.writeFileSync('./debugosu/mapppcalc.json', JSON.stringify(ppComputed, null, 2))
+                            fs.writeFileSync('./debugosu/mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
 
                         } catch (error) {
                             ppComputedString = NaN
@@ -710,9 +720,9 @@ module.exports = {
                                         "**MAP DETAILS**",
                                         `${statusimg} | ${mapimg} \n` +
                                         `CS${cs} AR${ar} OD${od} HP${hp} \n` +
-                                        `${json.difficulty_rating}⭐ | ${bpm}BPM\n` +
-                                        `<:circle:927478586028474398>${json.count_circles} | <:slider:927478585701330976>${json.count_sliders} | 🔁${json.count_spinners} \n` +
-                                        `${moddedlength}`,
+                                        `${json.difficulty_rating}⭐ | ${bpm}BPM⏱\n` +
+                                        `${emojis.mapobjs.circle}${json.count_circles} | ${emojis.mapobjs.slider}${json.count_sliders} | ${emojis.mapobjs.spinner}${json.count_spinners} \n` +
+                                        `${moddedlength}🕐`,
                                         true
                                     )
                                     .addField(
@@ -784,16 +794,16 @@ module.exports = {
                     let maphitstr = `${maphitmins}:${maphitseconds}`
                     let mapstatus = (json.status)
                     if (mapstatus == "ranked") {
-                        statusimg = "<:statusranked:944512775579926609>";
+                        statusimg = emojis.rankedstatus.ranked;
                     }
                     if (mapstatus == "approved" || mapstatus == "qualified") {
-                        statusimg = "<:statusapproved:944512764913811467>";
+                        statusimg = emojis.rankedstatus.approved;
                     }
                     if (mapstatus == "loved") {
-                        statusimg = "<:statusloved:944512775810588733>";
+                        statusimg = emojis.rankedstatus.loved;
                     }
                     if (mapstatus == "graveyard" || mapstatus == "pending") {
-                        statusimg = "<:statusgraveyard:944512765282897940>";
+                        statusimg = emojis.rankedstatus.graveyard;
                     }
                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapid }), null, 2));
 
@@ -925,7 +935,11 @@ module.exports = {
 
                     }
                     ;
-
+                    if (interaction.options.getBoolean("detailed") == true) {
+                        cs += ` (${osucalc.csToRadius(cs).toFixed(2)}r)\n`
+                        ar += ` (${osucalc.ARtoms(ar)}ms)\n`
+                        od += ` \n**300**:${osucalc.ODtoms(od).range300.toFixed(2)}ms\n**100**:${osucalc.ODtoms(od).range100.toFixed(2)}ms\n**50**:${osucalc.ODtoms(od).range50.toFixed(2)}ms\n`
+                    }
                     (async () => {
                         let score = {
                             beatmap_id: mapid,
@@ -950,8 +964,10 @@ module.exports = {
                             score: "6795149",
                             maxcombo: json.max_combo,
                             count50: "0",
-                            count100: "266",
-                            count300: "3740",
+                            //count100: "5281700",
+                            //count300: "65140967",
+                            count100: "810811 ",
+                            count300: "10000000",
                             countmiss: "0",
                             countkatu: "0",
                             countgeki: "0",
@@ -970,21 +986,21 @@ module.exports = {
 
                         let pp = new ppcalc.std_ppv2().setPerformance(score).setMods(fixedmods);
                         let pp95 = new ppcalc.std_ppv2().setPerformance(score95).setMods(fixedmods);
-                        let mapimg = "<:modeosu:944181096868884481>";
+                        let mapimg = emojis.gamemodes.standard;
 
-                        let mapmode = json.module
+                        let mapmode = json.mode
                         if (mapmode == "taiko") {
-                            mapimg = "<:modetaiko:944181097053442068>";
+                            mapimg = emojis.gamemodes.taiko;
                             pp = new ppcalc.taiko_ppv2().setPerformance(score).setMods(fixedmods);
                             pp95 = new ppcalc.taiko_ppv2().setPerformance(score95).setMods(fixedmods);
                         }
                         if (mapmode == "fruits") {
-                            mapimg = "<:modefruits:944181096206176326>";
+                            mapimg = emojis.gamemodes.fruits;
                             pp = new ppcalc.catch_ppv2().setPerformance(score).setMods(fixedmods);
                             pp95 = new ppcalc.catch_ppv2().setPerformance(score95).setMods(fixedmods);
                         }
                         if (mapmode == "mania") {
-                            mapimg = "<:modemania:944181095874834453>";
+                            mapimg = emojis.gamemodes.mania;
                             pp = new ppcalc.mania_ppv2().setPerformance(score).setMods(fixedmods);
                             pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                         }
@@ -993,10 +1009,15 @@ module.exports = {
                             let ppComputed = await pp.compute();
                             let pp95Computed = await pp95.compute();
 
-                            ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
-                            pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
+                            ppComputedString = (Math.abs(ppComputed.total)).toFixed(2) + "pp"
+                            pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2) + "pp"
                             ppissue = ''
-
+                            fs.writeFileSync('./debugosu/mapppcalc.json', JSON.stringify(ppComputed, null, 2))
+                            fs.writeFileSync('./debugosu/mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
+                            if (interaction.options.getBoolean("detailed") == true) {
+                                ppComputedString += ` \naim: ${ppComputed.aim.toFixed(2)}pp, \nspeed: ${ppComputed.speed.toFixed(2)}pp, \nacc: ${ppComputed.acc.toFixed(2)}pp\n`
+                                pp95ComputedString += ` \naim: ${pp95Computed.aim.toFixed(2)}pp, \nspeed: ${pp95Computed.speed.toFixed(2)}pp, \nacc: ${pp95Computed.acc.toFixed(2)}pp\n`
+                            }
                         } catch (error) {
                             ppComputedString = NaN
                             pp95ComputedString = NaN
@@ -1045,14 +1066,14 @@ module.exports = {
                                         "**MAP DETAILS**",
                                         `${statusimg} | ${mapimg} \n` +
                                         `CS${cs} AR${ar} OD${od} HP${hp} \n` +
-                                        `${json.difficulty_rating}⭐ | ${bpm}BPM\n` +
-                                        `<:circle:927478586028474398>${json.count_circles} | <:slider:927478585701330976>${json.count_sliders} | 🔁${json.count_spinners} \n` +
-                                        `${moddedlength}`,
+                                        `${json.difficulty_rating}⭐ | ${bpm}BPM⏱\n` +
+                                        `${emojis.mapobjs.circle}${json.count_circles} | ${emojis.mapobjs.slider}${json.count_sliders} | ${emojis.mapobjs.spinner}${json.count_spinners} \n` +
+                                        `${moddedlength}🕐`,
                                         true
                                     )
                                     .addField(
                                         "**PP**",
-                                        `SS: ${ppComputedString}pp \n 95: ${pp95ComputedString}pp \n` +
+                                        `**SS**: ${ppComputedString} \n **95**: ${pp95ComputedString} \n` +
                                         `${modissue}\n${ppissue}`,
                                         true
                                     )

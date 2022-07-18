@@ -47,6 +47,8 @@ module.exports = {
             let num2 = interaction.options.getNumber('num2')
 
             let equation = 'null'
+            interaction.reply({ content: 'calculating... ', allowedMentions: { repliedUser: false } })
+            setTimeout(() => {
 
             switch (type) {
                 case 'sqrt':
@@ -78,9 +80,13 @@ module.exports = {
                     break;
                 case 'sigfig':
                     if (!num2) {
+                        num2 = null
+                    }
+                    if(num2 < 2 && num2 != null){
                         num2 = 2
                     }
-                    equation = (`${calculations.sigfig(num1, num2)}`)
+                    equation = (`${calculations.sigfig(num1, num2).number}\nTo ${calculations.sigfig(num1, num2).sigfig} significant figures`)
+
                     break;
                 case 'ardt':
                     equation = (`AR${osucalc.DoubleTimeAR(num1).ar}, ${osucalc.DoubleTimeAR(num1).ms}ms`)
@@ -113,7 +119,10 @@ module.exports = {
                     equation = ('Error - invalid type')
                     break;
             }
+            interaction.editReply({ content: equation, allowedMentions: { repliedUser: false } })
+            }, 500)
             interaction.reply({ content: equation, allowedMentions: { repliedUser: false } })
+
             fs.appendFileSync('commands.log', `\nCommand Information\ntype: ${type}\nnum1: ${num1}\nnum2: ${num2}`)
         }
     }

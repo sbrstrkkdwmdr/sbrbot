@@ -16,7 +16,9 @@ let playsortopts = [
     { name: 'Performance points', value: 'pp' },
     { name: 'Score', value: 'score' },
     { name: 'Most recent', value: 'recent' },
-    { name: 'Accuracy', value: 'acc' }
+    { name: 'Accuracy', value: 'acc' },
+    { name: 'Combo', value: 'combo' },
+    { name: 'Misses', value: 'miss' },
 ]
 let skincmdopts = [
     { name: 'SaberStrikeCustom', value: '1' },
@@ -525,10 +527,24 @@ let useridsortopts = [
     },
     {
         name: 'sort',
-        description: 'what to sort plays by. defaults to score',
+        description: 'what to sort plays by. defaults to most recent',
         required: false,
         type: Constants.ApplicationCommandOptionTypes.STRING,
         choices: playsortopts
+    },
+    {
+        name: 'reverse',
+        description: 'If true, the plays will be displayed in reverse',
+        type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+        required: false,
+        default: false
+    },
+    {
+        name: 'compact',
+        description: 'Whether or not to show the compact version of the scores',
+        type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+        required: false,
+        default: false
     }
 ]
 
@@ -543,7 +559,8 @@ let useroffsetmodeopts = [
         name: 'page',
         description: 'the page to show',
         required: false,
-        type: Constants.ApplicationCommandOptionTypes.NUMBER
+        type: Constants.ApplicationCommandOptionTypes.NUMBER,
+        default: 1
     },
     {
         name: 'mode',
@@ -553,6 +570,35 @@ let useroffsetmodeopts = [
         choices: modeopts
     }
 ]
+let rsopts = [
+    {
+        name: 'user',
+        description: 'the username or id',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.STRING
+    },
+    {
+        name: 'page',
+        description: 'the page to show',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.NUMBER,
+        default: 1
+    },
+    {
+        name: 'mode',
+        description: 'what mode to show',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.STRING,
+        choices: modeopts
+    },
+    {
+        name: 'list',
+        description: 'Enables list mode',
+        required: false,
+        type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+        default: false
+    }
+]
 
 
-module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts }
+module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts }
