@@ -15,18 +15,25 @@ const config = require('./configs/config.json');
 
 const client = new Client({
     intents: [
-        GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildBans,
         GatewayIntentBits.GuildEmojisAndStickers,
         GatewayIntentBits.GuildIntegrations,
         GatewayIntentBits.GuildInvites,
         GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMessageTyping,
         GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildScheduledEvents,
         GatewayIntentBits.GuildVoiceStates,
         GatewayIntentBits.GuildWebhooks,
+        GatewayIntentBits.MessageContent,
+    ],
+    partials: [
+        Partials.Message,
+        Partials.Channel,
+        Partials.User
     ]
 })
 
