@@ -40,6 +40,7 @@ module.exports = {
             'https://media.discordapp.net/attachments/861689222586171393/953156001320812564/LOChMeR.gif', //hitcircle default skin 
             'https://media.discordapp.net/attachments/877077345054380052/946909426432999474/screenshot2324_-_Copy.gif', //that one section of the big black
             /* 'https://media.discordapp.net/attachments/878855036992622652/960730586903887902/sph.gif', //felix nsfw\ */
+
             'https://media.discordapp.net/attachments/885710706350116915/946818088857370696/yes.gif', // bunny girl + mask
             'https://media.discordapp.net/attachments/894054954661204009/956769254269648917/lil-nas-x-pregnant.gif', //lil nas x pregnant
             'https://media.discordapp.net/attachments/960980200613625896/967546422155182130/Untitled2.gif', //touhou1?!?!?
@@ -63,6 +64,7 @@ module.exports = {
             'https://media.discordapp.net/attachments/975869969336238100/989335327351119892/unknown.gif', //peter griffin buff
             'https://media.discordapp.net/attachments/929807268994744340/987061740665700372/ThisWillBeAngryBirdsPigIn2014.gif', //bad piggies
             'https://media.discordapp.net/attachments/975869865258795078/993928228932698172/crcoer.gif' //crocodile vs man
+
 
         ]
         let reaction = [

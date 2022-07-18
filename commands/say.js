@@ -18,6 +18,7 @@ module.exports = {
                     message.channel.send(defaulttext.substring(defaulttext.length / 2, defaulttext.length))
                     return
                 }
+
                 message.channel.send(args.join(' '))
             } else {
                 message.reply({ content: 'L + ratio + no + you do not have permissions + no bitches + L', allowedMentions: { repliedUser: false } })

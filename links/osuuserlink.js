@@ -3,6 +3,7 @@ const fetch = require('node-fetch')
 const { access_token } = require('../configs/osuauth.json')
 const emojis = require('../configs/emojis.js')
 
+
 module.exports = {
     name: 'osuuserlink',
     description: 'osuuserlink',

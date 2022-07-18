@@ -45,6 +45,7 @@ if (!fs.existsSync('./debugosu')) {
 }
 if (fs.existsSync('./debug/timesince.txt')) {
 
+
 } else {
     fs.writeFileSync('./debug/timesince.txt', (new Date()).toString())
 }
@@ -74,3 +75,4 @@ let configg = {
 }
 fs.writeFileSync('./configs/config.json', JSON.stringify(configg, null, 2), 'utf-8')
 fs.writeFileSync('./configs/osuauth.json', JSON.stringify({"amongus": 3}), 'utf-8')
+

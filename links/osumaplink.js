@@ -39,9 +39,11 @@ module.exports = {
                     id = idfirst
                 }
 
+
             } catch (error) {
                 console.log(error)
                 return message.reply({ content: 'Please enter a valid beatmap link.', allowedMentions: { repliedUser: false } })
+
             }
             fs.appendFileSync('link.log', `LINK DETECT EVENT - osumaplink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!map link: ${message.content}\n`, 'utf-8')
 
@@ -49,6 +51,7 @@ module.exports = {
             fetch(mapurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
+
                 }
             }).then(res => res.json()).then(json => {
                 try {
@@ -209,6 +212,7 @@ module.exports = {
                     }
                     moddedlength = `${maphitmins}:${maphitseconds} (${maphitstr})`
 
+
                 }
                 ;
 
@@ -311,7 +315,6 @@ module.exports = {
                     else {
                         maptitle = `${a} - ${mapname} [${json.version}] + ${mapmods}`
                     }
-
                     let mapsetlink = json.beatmapset_id
 
                     let mapperurl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`;
@@ -319,6 +322,7 @@ module.exports = {
                         headers: {
                             'Authorization': `Bearer ${access_token}`
                         }
+
                     })
                         .then(res => res.json())
                         .then(json2 => {

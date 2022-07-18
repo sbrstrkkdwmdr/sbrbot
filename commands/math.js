@@ -49,6 +49,7 @@ module.exports = {
             let equation = 'null'
             interaction.reply({ content: 'calculating... ', allowedMentions: { repliedUser: false } })
             setTimeout(() => {
+
             switch (type) {
                 case 'sqrt':
                     equation = (`${Math.sqrt(num1)}`)
@@ -85,6 +86,7 @@ module.exports = {
                         num2 = 2
                     }
                     equation = (`${calculations.sigfig(num1, num2).number}\nTo ${calculations.sigfig(num1, num2).sigfig} significant figures`)
+
                     break;
                 case 'ardt':
                     equation = (`AR${osucalc.DoubleTimeAR(num1).ar}, ${osucalc.DoubleTimeAR(num1).ms}ms`)
@@ -119,6 +121,8 @@ module.exports = {
             }
             interaction.editReply({ content: equation, allowedMentions: { repliedUser: false } })
             }, 500)
+            interaction.reply({ content: equation, allowedMentions: { repliedUser: false } })
+
             fs.appendFileSync('commands.log', `\nCommand Information\ntype: ${type}\nnum1: ${num1}\nnum2: ${num2}`)
         }
     }

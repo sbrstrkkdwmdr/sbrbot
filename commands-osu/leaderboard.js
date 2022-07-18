@@ -71,6 +71,7 @@ module.exports = {
                     }).then(res => res.json())
                         .then(lbdatapresort => {
                             let lbdata = lbdatapresort.scores
+
                             sctxt = ''
                             for (i = 0; i < lbdata.length; i++) {
                                 sctxt += `\nhttps://osu.ppy.sh/scores/${lbdata[i].mode}/${lbdata[i].id}`
@@ -80,6 +81,7 @@ module.exports = {
                                 message.reply({ files: ['debugosu/maplbscores.txt'], allowedMentions: { repliedUser: false } })
                                 return;
                             }
+
                             fs.writeFileSync('debugosu/maplb.json', JSON.stringify(lbdata, null, 2))
 
                             let lbEmbed = new Discord.MessageEmbed()
@@ -135,6 +137,7 @@ module.exports = {
                                 scoretxt = 'Error - no scores found'
                             }
                             if (mapdata.status == 'graveyard' || mapdata.status == 'pending') {
+
                                 scoretxt = 'Error - map is unranked'
                             }
                             lbEmbed.setDescription(`${scoretxt}`)
@@ -366,6 +369,107 @@ module.exports = {
                                 console.log(err)
                             })
                     }
+                    let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}/scores`
+                    fs.writeFileSync('debugosu/maplbmap.json', JSON.stringify(mapdata, null, 2))
+                    fetch(mapscoresurl, {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Bearer ${access_token}`,
+                            "Content-Type": "application/json",
+                            Accept: "application/json"
+                        }
+                    }).then(res => res.json())
+                        .then(lbdatapresort => {
+                            let lbdatatoarr = lbdatapresort.scores
+                            let filtereddata = lbdatatoarr
+                            let lbdata = lbdatatoarr
+                            let filterinfo = ''
+
+
+                            let filtermods = mods
+                            if (mods == '') {
+                                filtermods = 'NM'
+                            }
+
+                            if (mods1 != null && !mods1.includes('any')) {
+                                filtereddata = lbdatatoarr.filter(array => array.mods.toString().replaceAll(',', '') == mods)
+
+                                filterinfo += `\nmods: ${filtermods} only`
+                            }
+                            if (mods1 != null && mods1.includes('any')) {
+                                filtereddata = lbdatatoarr.filter(array => array.mods.toString().replaceAll(',', '').includes(mods))
+                                filterinfo += `\nmods: has ${filtermods}`
+                            }
+                            lbdata = filtereddata
+
+                            fs.writeFileSync('debugosu/maplb.json', JSON.stringify(lbdata, null, 2))
+
+                            let lbEmbed = new Discord.MessageEmbed()
+                                .setTitle(`TOP 5 SCORES FOR ${fulltitle}`)
+                                .setURL(`https://osu.ppy.sh/b/${mapid}`)
+                                .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`)
+                                ;
+                            if (filterinfo != '') {
+                                lbEmbed.setFooter({ text: `filtered by:\n${filterinfo}` })
+                            }
+
+                            let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`
+
+                            for (i = 0; i < lbdata.length && i < 5; i++) {
+                                try {
+                                    let score = lbdata[i + (page * 5)]
+
+                                    let gamestats = score.statistics
+
+                                    let hitgeki = gamestats.count_geki
+                                    let hit300 = gamestats.count_300
+                                    let hitkatu = gamestats.count_katu
+                                    let hit100 = gamestats.count_100
+                                    let hit50 = gamestats.count_50
+                                    let miss = gamestats.count_miss
+                                    let mode = score.mode_int
+                                    let hitlist;
+                                    switch (mode) {
+                                        case 0: //std
+                                            hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
+                                            break;
+                                        case 1: //taiko
+                                            hitlist = `${hit300}/${hit100}/${miss}`
+                                            break;
+                                        case 2: //catch/fruits
+                                            hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
+                                            break;
+                                        case 3: //mania
+                                            hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
+                                            break;
+                                    }
+                                    if (score.mods) {
+                                        ifmods = `+${score.mods.join('')}`
+                                    } else {
+                                        ifmods = ''
+                                    }
+
+                                    scoretxt += `
+                                   **#${i + page + 1} | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
+                                   Score set on ${score.created_at}
+                                   ${(score.accuracy * 100).toFixed(2)}% | ${score.rank} | ${score.pp}pp
+                                   ${ifmods} | ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
+                                   ${hitlist}
+                                `} catch (error) {
+
+                                }
+                            }
+                            if (lbdata.length < 1 || scoretxt.length < 10) {
+                                scoretxt = 'Error - no scores found '
+                            }
+                            if (mapdata.status == 'graveyard' || mapdata.status == 'pending'){
+                                scoretxt = 'Error - map is unranked'
+                            }
+                            lbEmbed.setDescription(`${scoretxt}`)
+                            interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
+                            fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
+
+                        })
 
                 })
 
