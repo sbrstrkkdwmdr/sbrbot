@@ -33,7 +33,7 @@ module.exports = {
                 '**checkperms** \`[user (required)]\` - checks the permissions of a given user\n' +
                 '**leaveguild** \`[guild (required)]\` - leaves a given server\n' +
                 '**servers** - displays all servers the bot is in\n' +
-                '**voice** \`[user(required)] [type(required)] [channel (optional)]\` - alters a user in a voice channel', false)
+                '**voice** \`[user(required)] [type(required)] [channel (optional)]\` - alters a user in a voice channel\n' +
                 '**servers** - displays all servers the bot is in', false)
             .addField('General commands',
                 '**gif** \`[type (required)]\` - displays a gif of a given type\n' +
