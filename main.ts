@@ -146,4 +146,3 @@ fetch('https://osu.ppy.sh/oauth/token', {
         fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
     }
     )
-export {};
