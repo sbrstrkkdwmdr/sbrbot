@@ -147,7 +147,7 @@ module.exports = {
                         title = `${title} (${titleuni})`
                     }
 
-                    let scoreembed = new Discord.MessageEmbed()
+                    let scoreembed = new Discord.EmbedBuilder()
                         .setColor('#0099ff')
                         .setAuthor({ name: `${scoredata.user.username}`, iconURL: `https://a.ppy.sh/${scoredata.user.id}`, url: `https://osu.ppy.sh/users/${scoredata.user.id}` })
                         .setTitle(`${artist} - ${title}`)
@@ -158,7 +158,7 @@ module.exports = {
 
                         \`${hitlist}\`
                         ${scoredata.max_combo}x
-                        ${scorepp}pp | ${ppiffc}pp if ${fcacc} FC\n${ppissue}
+                        ${scorepp}pp | ${ppiffc}pp if ${fcacc.toFixed(2)}% FC\n${ppissue}
                         `)
                     message.reply({ embeds: [scoreembed], allowedMentions: { repliedUser: false } })
                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
