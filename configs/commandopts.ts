@@ -1,6 +1,5 @@
 //const { Constants } = require('discord.js');
-//import * as Discord from "discord.js";
-const Discord = require('discord.js');
+import * as disc from "discord.js";
 /**
  * @type {Array}
  */
@@ -530,20 +529,20 @@ let useridsortopts = [
         name: 'sort',
         description: 'what to sort plays by. defaults to most recent',
         required: false,
-        type: Discord.ApplicationCommandOptionType.STRING,
+        type: Constants.ApplicationCommandOptionType.STRING,
         choices: playsortopts
     },
     {
         name: 'reverse',
         description: 'If true, the plays will be displayed in reverse',
-        type: Discord.ApplicationCommandOptionType.BOOLEAN,
+        type: Constants.ApplicationCommandOptionType.BOOLEAN,
         required: false,
         default: false
     },
     {
         name: 'compact',
         description: 'Whether or not to show the compact version of the scores',
-        type: Discord.ApplicationCommandOptionType.BOOLEAN,
+        type: Constants.ApplicationCommandOptionType.BOOLEAN,
         required: false,
         default: false
     }
@@ -554,20 +553,20 @@ let useroffsetmodeopts = [
         name: 'user',
         description: 'the username or id',
         required: false,
-        type: Discord.ApplicationCommandOptionType.STRING
+        type: Constants.ApplicationCommandOptionType.STRING
     },
     {
         name: 'page',
         description: 'the page to show',
         required: false,
-        type: Discord.ApplicationCommandOptionType.NUMBER,
+        type: Constants.ApplicationCommandOptionType.NUMBER,
         default: 1
     },
     {
         name: 'mode',
         description: 'what mode to show',
         required: false,
-        type: Discord.ApplicationCommandOptionType.STRING,
+        type: Constants.ApplicationCommandOptionType.STRING,
         choices: modeopts
     }
 ]
@@ -576,27 +575,27 @@ let rsopts = [
         name: 'user',
         description: 'the username or id',
         required: false,
-        type: Discord.ApplicationCommandOptionType.STRING
+        type: Constants.ApplicationCommandOptionType.STRING
     },
     {
         name: 'page',
         description: 'the page to show',
         required: false,
-        type: Discord.ApplicationCommandOptionType.NUMBER,
+        type: Constants.ApplicationCommandOptionType.NUMBER,
         default: 1
     },
     {
         name: 'mode',
         description: 'what mode to show',
         required: false,
-        type: Discord.ApplicationCommandOptionType.STRING,
+        type: Constants.ApplicationCommandOptionType.STRING,
         choices: modeopts
     },
     {
         name: 'list',
         description: 'Enables list mode',
         required: false,
-        type: Discord.ApplicationCommandOptionType.BOOLEAN,
+        type: Constants.ApplicationCommandOptionType.BOOLEAN,
         default: false
     }
 ]
