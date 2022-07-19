@@ -25,7 +25,7 @@ module.exports = {
 
 
 
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setTitle(`Permissions for \`${user.username}\``)
                 .setDescription(`${permissions}`)
                 .setColor('#C9FF93')
@@ -43,7 +43,7 @@ module.exports = {
 
 
 
-                let embed = new Discord.MessageEmbed()
+                let embed = new Discord.EmbedBuilder()
                     .setTitle(`Permissions for \`${user.username}\``)
                     .setDescription(`${permissions}`)
                     .setColor('#C9FF93')
