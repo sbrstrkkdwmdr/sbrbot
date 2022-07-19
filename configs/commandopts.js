@@ -1,4 +1,4 @@
-//const { Constants } = require('discord.js');
+const { ApplicationCommandOptionType } = require('discord.js');
 const Discord = require('discord.js');
 /**
  * @type {Array}
@@ -529,20 +529,20 @@ let useridsortopts = [
         name: 'sort',
         description: 'what to sort plays by. defaults to most recent',
         required: false,
-        type: Constants.ApplicationCommandOptionType.STRING,
+        type: ApplicationCommandOptionType.String,
         choices: playsortopts
     },
     {
         name: 'reverse',
         description: 'If true, the plays will be displayed in reverse',
-        type: Constants.ApplicationCommandOptionType.BOOLEAN,
+        type: ApplicationCommandOptionType.Boolean,
         required: false,
         default: false
     },
     {
         name: 'compact',
         description: 'Whether or not to show the compact version of the scores',
-        type: Constants.ApplicationCommandOptionType.BOOLEAN,
+        type: ApplicationCommandOptionType.Boolean,
         required: false,
         default: false
     }
@@ -553,20 +553,20 @@ let useroffsetmodeopts = [
         name: 'user',
         description: 'the username or id',
         required: false,
-        type: Constants.ApplicationCommandOptionType.STRING
+        type: ApplicationCommandOptionType.String
     },
     {
         name: 'page',
         description: 'the page to show',
         required: false,
-        type: Constants.ApplicationCommandOptionType.NUMBER,
+        type: ApplicationCommandOptionType.Number,
         default: 1
     },
     {
         name: 'mode',
         description: 'what mode to show',
         required: false,
-        type: Constants.ApplicationCommandOptionType.STRING,
+        type: ApplicationCommandOptionType.String,
         choices: modeopts
     }
 ]
@@ -575,27 +575,27 @@ let rsopts = [
         name: 'user',
         description: 'the username or id',
         required: false,
-        type: Constants.ApplicationCommandOptionType.STRING
+        type: ApplicationCommandOptionType.String
     },
     {
         name: 'page',
         description: 'the page to show',
         required: false,
-        type: Constants.ApplicationCommandOptionType.NUMBER,
+        type: ApplicationCommandOptionType.Number,
         default: 1
     },
     {
         name: 'mode',
         description: 'what mode to show',
         required: false,
-        type: Constants.ApplicationCommandOptionType.STRING,
+        type: ApplicationCommandOptionType.String,
         choices: modeopts
     },
     {
         name: 'list',
         description: 'Enables list mode',
         required: false,
-        type: Constants.ApplicationCommandOptionType.BOOLEAN,
+        type: ApplicationCommandOptionType.Boolean,
         default: false
     }
 ]
