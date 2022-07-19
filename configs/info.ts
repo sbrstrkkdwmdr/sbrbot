@@ -471,7 +471,7 @@ let links = [
             {
                 name: 'gamemode',
                 description: '`string, required`. The gamemode of the score. Valid types are: "osu", "taiko", "fruits", "mania"'
-            }                           
+            }
         ],
         aliases: '`'
     }
@@ -532,4 +532,5 @@ let musiccmds = [
 ]
 
 
-module.exports = { cmds, osucmds, admincmds, links, musiccmds }
+//module.exports = { cmds, osucmds, admincmds, links, musiccmds }
+export { cmds, osucmds, admincmds, links, musiccmds }

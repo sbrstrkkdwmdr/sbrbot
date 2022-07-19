@@ -1,4 +1,4 @@
-const fs = require('fs')
+import * as fs from 'fs';
 const config = require('./config.json')
 
 /**
@@ -23,7 +23,7 @@ function isOwner(userid) {
  * @returns exec('console input')
  * @info use it to put input into the console
  */
-function exec(cmd, handler = function (error, stdout, stderr) { console.log(stdout); if (error !== null) { console.log(stderr) } }) {
+function exec(cmd:string, handler = function (error, stdout, stderr) { console.log(stdout); if (error !== null) { console.log(stderr) } }) {
     const childfork = require('child_process');
     return childfork.exec(cmd, handler);
 }
@@ -32,35 +32,38 @@ function exec(cmd, handler = function (error, stdout, stderr) { console.log(stdo
  * @param {string} txt 
  * @returns shortens to under 65 characters
  */
-function shorten(txt) {
+function shorten(txt:string) {
+    let newtxt:string;
     if (txt.length > 65) {
         newtxt = txt.substring(0, 64) + '...'
     } else {
         newtxt = txt
     }
 
-    return newtxt
+    return newtxt;
 }
 /**
  * 
  * @param {string} txt 
  * @returns shorten to under 150 characters
  */
-function lengthshorten(txt) {
+function lengthshorten(txt:string) {
+    let newtxt:string;
     if (txt.length > 150) {
         newtxt = txt.substring(0, 149) + '...'
     } else {
         newtxt = txt
     }
 
-    return newtxt
+    return newtxt;
 }
 /**
  * 
  * @param {string} txt 
  * @returns shortened string to under 4000 characters to avoid discord message errors
  */
-function discshort(txt) {
+function discshort(txt:string) {
+    let newtxt:string;
     if (txt.length > 4000) {
         newtxt = txt.substring(0, 3999)
     } else {
@@ -70,7 +73,7 @@ function discshort(txt) {
     return newtxt
 }
 //file extensions for videos
-let vidfiletypes = [
+let vidfiletypes:string[] = [
     "3g2",
     "3gp",
     "amv",
@@ -116,7 +119,7 @@ let vidfiletypes = [
 ]
 
 //file types of images
-let imgfiletype = [
+let imgfiletype:string[] = [
     'apng',
     'gif',
     'jpeg',
@@ -125,7 +128,7 @@ let imgfiletype = [
     'png'
 ]
 
-let audiofiletype = [
+let audiofiletype:string[] = [
     'aac',
     'flac',
     'mp3',
@@ -135,10 +138,10 @@ let audiofiletype = [
 
 /**
  * 
- * @param {string} filename the name of the file (including extension)
+ * @param {string} filename the name of the file as a discord attachment (including extension)
  * @returns whether or not a file is a video
  */
-function checkisvideo(filename) {
+function checkisvideo(filename:any) {
     for (let i = 0; i < vidfiletypes.length; i++) {
         if (filename.url.indexOf(vidfiletypes[i], filename.url.length - vidfiletypes.length) !== -1) {
             return true;
@@ -150,10 +153,10 @@ function checkisvideo(filename) {
 }
 /**
  * 
- * @param {string} filename the name of the file (including extension)
+ * @param {string} filename the name of the file as a discord attachment (including extension) 
  * @returns whether or not a file is a video
  */
-function checkisimage(filename) {
+function checkisimage(filename:any) {
     for (let i = 0; i < imgfiletype.length; i++) {
         if (filename.url.indexOf(imgfiletype[i], filename.url.length - imgfiletype.length) !== -1) {
             return true;
@@ -165,10 +168,10 @@ function checkisimage(filename) {
 }
 /**
  * 
- * @param {string} filename the name of the file (including extension)
+ * @param {string} filename the name of the file as a discord attachement (including extension)
  * @returns whether or not a file is a video
  */
-function checkisaudio(filename) {
+function checkisaudio(filename:any) {
     for (let i = 0; i < audiofiletype.length; i++) {
         if (filename.url.indexOf(audiofiletype[i], filename.url.length - audiofiletype.length) !== -1) {
             return true;
@@ -183,7 +186,7 @@ function checkisaudio(filename) {
  * @param {int} userid 
  * @returns check if user is banned from sending videos
  */
-function checkisfileblocked(userid) {
+function checkisfileblocked(userid:number) {
     for (let i = 0; i < config.fileblockedusers.length; i++) {
         if (config.fileblockedusers[i] == userid) {
             return true
@@ -198,7 +201,7 @@ function checkisfileblocked(userid) {
  * @param {number} n the nth time to check for as in 2 = second time it appears
  * @returns the index of the nth time a substring appears in a string
  */
-function nthIndex(str, pat, n){
+function nthIndex(str:string, pat:string, n:number){
     var L= str.length, i= -1;
     while(n-- && i++<L){
         i= str.indexOf(pat, i);
@@ -214,7 +217,7 @@ function nthIndex(str, pat, n){
  * @param {number} n the nth time to check for as in 2 = second time it appears
  * @returns the index of the nth time a substring appears in a string but from the end
  */
- function nthIndexLast(str, pat, n){
+ function nthIndexLast(str:string, pat:string, n:number){
     var L= str.length, i= -1;
     while(n-- && i++<L){
         i= str.lastIndexOf(pat, i);
@@ -223,7 +226,23 @@ function nthIndex(str, pat, n){
     return i;
 }
 
-module.exports = {
+/* module.exports = {
+    audiofiletype,
+    checkisfileblocked,
+    checkisaudio,
+    checkisimage,
+    checkisvideo,
+    discshort,
+    exec,
+    imgfiletype,
+    isOwner,
+    lengthshorten,
+    shorten,
+    vidfiletypes,
+    nthIndex,
+    nthIndexLast
+} */
+export {
     audiofiletype,
     checkisfileblocked,
     checkisaudio,

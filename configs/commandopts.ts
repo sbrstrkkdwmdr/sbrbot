@@ -1,6 +1,5 @@
 //const { Constants } = require('discord.js');
-const Constants = require('discord.js');
-
+import * as disc from "discord.js";
 /**
  * @type {Array}
  */
@@ -518,13 +517,13 @@ let useridsortopts = [
         name: 'username',
         description: 'username or ID works (mode name if set to mode)',
         required: false,
-        type: Constants.ApplicationCommandOptionType.STRING
+        type: String,
     },
     {
         name: 'id',
         description: 'the map id',
         required: false,
-        type: Constants.ApplicationCommandOptionType.NUMBER
+        type: Number,
     },
     {
         name: 'sort',
@@ -602,4 +601,5 @@ let rsopts = [
 ]
 
 
-module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts }
+//module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts }
+export { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts }
