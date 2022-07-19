@@ -73,39 +73,41 @@ module.exports = {
             let reltruedate = `${relyear}/${relmonthnum}/${reldaynum}`
 
 
-            let Embed = new Discord.MessageEmbed()
+            let Embed = new Discord.EmbedBuilder()
                 .setTitle('Current Time')
-                .addField(
-                    'UTC/GMT+00:00',
-                    `\n**Date**: ${truedate}` +
-                    `\n**Full Date**: ${datenow12h}` +
-                    `\n**Full Date(24h)**: ${Datenow}` +
-                    `\n\n**Full Date ISO8601**: ${currentDateISO}` +
-                    `\n**EPOCH(ms)**: ${epoch}` +
-                    `\n**Days since Jan 1st 2022**: [${thedaysthingyiuseonmydiscordstatus}]`
+                .addFields([{
+                    name: 'UTC/GMT+00:00',
+                    value: `\n**Date**: ${truedate}` +
+                        `\n**Full Date**: ${datenow12h}` +
+                        `\n**Full Date(24h)**: ${Datenow}` +
+                        `\n\n**Full Date ISO8601**: ${currentDateISO}` +
+                        `\n**EPOCH(ms)**: ${epoch}` +
+                        `\n**Days since Jan 1st 2022**: [${thedaysthingyiuseonmydiscordstatus}]`
                     ,
-                    false
+                    inline: false
+                }]
                 )
-                .addField(
-                    `UTC/GMT${offset} (Host's Local Time)`,
-                    `\n**Date**: ${reltruedate}` +
-                    `\n**Full Date**: ${reldatenow12h}` +
-                    `\n**Full Date(24h)**: ${currentDate}` +
-                    `\n**Time since command was last used**: ${minlastvisw} `
+                .addFields([{
+                    name: `UTC/GMT${offset} (Host's Local Time)`,
+                    value: `\n**Date**: ${reltruedate}` +
+                        `\n**Full Date**: ${reldatenow12h}` +
+                        `\n**Full Date(24h)**: ${currentDate}` +
+                        `\n**Time since command was last used**: ${minlastvisw} `
                     ,
-                    false
+                    inline: false
+                }]
                 )
             if (args[0]) {
                 if (!args[0].includes('/')) {
-                    Embed.addField(
-                        `UTC/GMT +??:?? (Requested Time)`,
-                        `\nRecived invalid timezone!` +
-                        `\nBoth Country and City must be specified` +
-                        `\ni.e **Australia/Melbourne**` +
-                        `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
+                    Embed.addFields([{
+                        name: `UTC/GMT +??:?? (Requested Time)`,
+                        value: `\nRecived invalid timezone!` +
+                            `\nBoth Country and City must be specified` +
+                            `\ni.e **Australia/Melbourne**` +
+                            `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
                         ,
-                        false
-                    )
+                        inline: false
+                    }])
                 }
                 else {
                     let timezone = args.splice(0, 1000).join(" ");
@@ -123,14 +125,15 @@ module.exports = {
                     } catch (error) {
                         fs.appendFileSync(otherlogdir, "\n" + error)
                         fs.appendFileSync(otherlogdir, "\n" + getStackTrace(error))
-                        Embed.addField(
-                            `UTC/GMT +??:?? (Requested Time)`,
-                            `\nRecived invalid timezone!` +
-                            `\nBoth Country and City must be specified` +
-                            `\ni.e **Australia/Melbourne**` +
-                            `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
+                        Embed.addFields([{
+                            name: `UTC/GMT +??:?? (Requested Time)`,
+                            value: `\nRecived invalid timezone!` +
+                                `\nBoth Country and City must be specified` +
+                                `\ni.e **Australia/Melbourne**` +
+                                `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
                             ,
-                            false
+                            inline: false
+                        }]
                         )
                         message.reply({ embeds: [Embed] })
                         return;
@@ -158,14 +161,14 @@ module.exports = {
 
 
                     Embed
-                        .addField(
-                            `UTC/GMT ${optionaldateoffsetNEW} (Requested Time)`,
-                            `\n**Date**: ${optionaldateDate}` +
-                            `\n**Full Date**: ${optionaldate12h}` +
-                            `\n**Full Date(24h)**: ${optionaldate}` +
-                            `\n**Full Date ISO8601**: ${optionaldateISO}`,
-                            false
-                        )
+                        .addFields([{
+                            name: `UTC/GMT ${optionaldateoffsetNEW} (Requested Time)`,
+                            value: `\n**Date**: ${optionaldateDate}` +
+                                `\n**Full Date**: ${optionaldate12h}` +
+                                `\n**Full Date(24h)**: ${optionaldate}` +
+                                `\n**Full Date ISO8601**: ${optionaldateISO}`,
+                            inline: false
+                        }])
                 }
             }
             //message.channel.send(`${currentDateISO} | ${currentDate}`) 

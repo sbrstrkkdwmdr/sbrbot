@@ -25,8 +25,8 @@ module.exports = {
             for (i = 0; i < 5 && i < response.items.length; i++) {
                 resimg += `\n\n<${response.items[i].link}>`
             }
-            let imageEmbed = new Discord.MessageEmbed()
-                .setTitle(`IMAGE RESULTS FOR ${args.join(' ')}`)
+            let imageEmbed = new Discord.EmbedBuilder()
+                .setTitle(`IMAGE RESULTS FOR ${args.join(' ')} (NOTE - URLs may be unsafe)`)
                 .setDescription(`${resimg}`)
             message.reply({ embeds: [imageEmbed], allowedMentions: { repliedUser: false } })
             fs.appendFileSync('commands.log', `\nCommand Information\nQuery: ${args.join(' ')}`)
@@ -55,8 +55,8 @@ module.exports = {
                 resimg += `\n\n<${response.items[i].link}>`
             }
 
-            let imageEmbed = new Discord.MessageEmbed()
-                .setTitle(`IMAGE RESULTS FOR ${query}`)
+            let imageEmbed = new Discord.EmbedBuilder()
+                .setTitle(`IMAGE RESULTS FOR ${query} (NOTE - URLs may be unsafe)`)
                 .setDescription(`${resimg}`)
 
             interaction.reply({ embeds: [imageEmbed], allowedMentions: { repliedUser: false } })

@@ -17,17 +17,20 @@ module.exports = {
                 return message.reply({ content: 'No results found', allowedMentions: { repliedUser: false } })
             }
             let vids = searching.videos
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setTitle(`Results for ${args.join(' ')}`)
                 ;
             for (i = 0; i < 5 && i < vids.length; i++) {
-                embed.addField(`#${i + 1}`,
-                    `[${cmdchecks.shorten(vids[i].title)}](${vids[i].url})
+                embed.addFields([{
+                    name: `#${i + 1}`,
+                    value: `[${cmdchecks.shorten(vids[i].title)}](${vids[i].url})
                 Published by [${vids[i].author.name}](${vids[i].author.url})
                 ${vids[i].ago}
                 Duration: ${vids[i].timestamp} (${vids[i].seconds}s)
                 Description: \`${vids[i].description}\`
-                `, false)
+                `,
+                    inline: false
+                }])
             }
             fs.writeFileSync('debug/ytsearch.json', JSON.stringify(searching, null, 2))
             message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
@@ -44,17 +47,20 @@ module.exports = {
                 return interaction.reply({ content: 'No results found', allowedMentions: { repliedUser: false } })
             }
             let vids = searching.videos
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setTitle(`Results for ${query}`)
                 ;
             for (i = 0; i < 5 && i < vids.length; i++) {
-                embed.addField(`#${i + 1}`,
-                    `[${cmdchecks.shorten(vids[i].title)}](${vids[i].url})
+                embed.addFields([{
+                    name: `#${i + 1}`,
+                    value: `[${cmdchecks.shorten(vids[i].title)}](${vids[i].url})
                 Published by [${vids[i].author.name}](${vids[i].author.url})
                 ${vids[i].ago}
                 Duration: ${vids[i].timestamp} (${vids[i].seconds}s)
                 Description: \`${vids[i].description}\`
-                `, false)
+                `,
+                    inline: false
+                }])
             }
             fs.writeFileSync('debug/ytsearch.json', JSON.stringify(searching, null, 2))
             interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })

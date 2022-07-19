@@ -6,7 +6,7 @@ module.exports = {
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
-        let pollEmbedDefault = new Discord.MessageEmbed()
+        let pollEmbedDefault = new Discord.EmbedBuilder()
             .setDescription('✅ for yes\n❌ for no')
             ;
 
