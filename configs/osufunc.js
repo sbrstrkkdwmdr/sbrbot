@@ -20,9 +20,6 @@ function modemappers(arr) {
         - arr.filter(v => v.beatmapset.creator === b.beatmapset.creator).length
     ).pop();
 }
-/* module.exports = {
+module.exports = {
     modemods, modemappers
-} */
-export {
-    modemods, modemappers
-}
+} 

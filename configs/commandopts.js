@@ -1,5 +1,5 @@
 //const { Constants } = require('discord.js');
-import * as disc from "discord.js";
+const Discord = require('discord.js');
 /**
  * @type {Array}
  */
@@ -601,5 +601,4 @@ let rsopts = [
 ]
 
 
-//module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts }
-export { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts }
+module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts }

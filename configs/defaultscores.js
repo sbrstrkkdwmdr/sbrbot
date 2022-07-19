@@ -34,5 +34,4 @@ let score95 = {
     score_id: "4057765057",
 };
 
-//module.exports = { score, score95 };
-export { score, score95 };
+module.exports = { score, score95 };

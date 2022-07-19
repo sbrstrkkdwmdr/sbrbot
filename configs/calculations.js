@@ -4,7 +4,7 @@
  * @param {number} y second number
  * @returns the highest common factor between two numbers
  */
-function findHCF(x:number, y:number) {
+function findHCF(x, y) {
     if (isNaN(x)||isNaN(y)) return NaN;
 
     while (Math.max(x, y) % Math.min(x, y) != 0) {
@@ -23,7 +23,7 @@ function findHCF(x:number, y:number) {
  * @param {number} n2 second number
  * @returns the lowest common multiple between two numbers
  */
-function findLCM(n1:number, n2:number) {
+function findLCM(n1, n2) {
     if (isNaN(n1) || isNaN(n2)) return NaN;
     let lar = Math.max(n1, n2);
     let small = Math.min(n1, n2);
@@ -43,10 +43,10 @@ function findLCM(n1:number, n2:number) {
  * @param {number} b second number
  * @returns the length of the hypotenuse (longest side) on a right-angle triange
  */
-function pythag(a:number, b:number) {
+function pythag(a, b) {
     if (isNaN(a) || isNaN(b)) return NaN;
     let cp = (a ** 2) + (b ** 2);
-    let c:number = Math.sqrt(cp)
+    let c = Math.sqrt(cp)
     return (c)
 }
 /**
@@ -55,9 +55,9 @@ function pythag(a:number, b:number) {
  * @param {number} b number of significant figiures
  * @result converts the number to a significant figure
  */
-function sigfigold(a:number, b:number) {
+function sigfigold(a, b) {
     if (isNaN(a)) return NaN;
-    let s:number = parseFloat((a / Math.abs(10 ** (a.toString().length - 1))).toFixed(a.toString().length - 1));
+    let s = parseFloat((a / Math.abs(10 ** (a.toString().length - 1))).toFixed(a.toString().length - 1));
     if (b) {
         s = parseFloat((a / (10 ** (a.toString().length - 1))).toFixed(b))
     }
@@ -70,7 +70,7 @@ function sigfigold(a:number, b:number) {
  * @param {number} b number of significant figiures
  * @result converts the number to a significant figure
  */
-function sigfig(a:number, b:number) {
+function sigfig(a, b) {
     if (isNaN(a)) return {
 
         number: a,
@@ -80,7 +80,7 @@ function sigfig(a:number, b:number) {
     let aAsArr = a.toString().replaceAll('.', '').split('')
     if (b < 2 || b == null) { b = aAsArr.length };
     let sigfig = aAsArr.slice(1, b).join('')
-    let mult:number = Math.floor(a / parseFloat(aAsArr[0] + '.' + sigfig))//.toString().length - 1
+    let mult = Math.floor(a / parseFloat(aAsArr[0] + '.' + sigfig))//.toString().length - 1
     if (mult < 1 && mult != 0) { mult = mult.toString().length - 1 }
     let answer = aAsArr[0] + '.' + sigfig + '*10^' + mult
     return {
@@ -94,7 +94,7 @@ function sigfig(a:number, b:number) {
  * @param {number} number
  * @returns checks if number is under two decimals, then will return the number with two decimals or less
  */
-function fixtoundertwo(number:number) {
+function fixtoundertwo(number) {
     let truenum = number * 100;
     if (!isNaN(truenum)) return number;
     else return number.toFixed(2);
@@ -104,7 +104,7 @@ function fixtoundertwo(number:number) {
  * @param {*} part1 the number to calculate
  * @returns the factorial of the number. ie 1*2*3...*x
  */
-function factorial(part1:number) {
+function factorial(part1) {
     if (part1 == 0 || part1 == 1) {
         return 1;
     } else {
@@ -173,8 +173,8 @@ function relto12htime(date) { //relative version of above
  * @param {int} weekdaynum 
  * @returns weekdays to shorthand name i.e 1 -> Mon
  */
-function dayhuman(weekdaynum:number) { //date.getUTCDay returns an int so this is to convert to its name
-    let str:string;
+function dayhuman(weekdaynum) { //date.getUTCDay returns an int so this is to convert to its name
+    let str;
     switch (weekdaynum.toString()) {
         case '0':
             str = 'Sun'
@@ -208,8 +208,8 @@ function dayhuman(weekdaynum:number) { //date.getUTCDay returns an int so this i
  * @param {int} monthnum 
  * @returns name of the month in shorthand i.e 1 -> Feb
  */
-function tomonthname(monthnum:number) {//date.getUTCMonth returns an int so this is to convert to its name
-    let str:string;
+function tomonthname(monthnum) {//date.getUTCMonth returns an int so this is to convert to its name
+    let str;
     switch (monthnum.toString()) {
         case '0':
             str = 'Jan'
@@ -259,7 +259,7 @@ function tomonthname(monthnum:number) {//date.getUTCMonth returns an int so this
  * @param {date} time 
  * @returns fixes offset i.e. +11:00 being returned as -660.
  */
-function fixoffset(time:number) {
+function fixoffset(time) {
     let offsettype;
     if (time.toString().includes('-')) {
         offsettype = '+'
@@ -273,5 +273,4 @@ function fixoffset(time:number) {
     return actualoffset;
 }
 
-//module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
-export { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
+module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };

@@ -531,6 +531,4 @@ let musiccmds = [
     }
 ]
 
-
-//module.exports = { cmds, osucmds, admincmds, links, musiccmds }
-export { cmds, osucmds, admincmds, links, musiccmds }
+module.exports = { cmds, osucmds, admincmds, links, musiccmds }

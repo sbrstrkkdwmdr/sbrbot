@@ -35,5 +35,4 @@ let onlinestatus = {
     offline: '<:osu_offline:927800829153513472>'
 }
 
-//module.exports = { mapobjs, gamemodes, rankedstatus, grades, onlinestatus }
-export { mapobjs, gamemodes, rankedstatus, grades, onlinestatus }
+module.exports = { mapobjs, gamemodes, rankedstatus, grades, onlinestatus }
