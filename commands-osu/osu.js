@@ -103,7 +103,7 @@ module.exports = {
                             playcount = playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
 
-                        const Embed = new Discord.MessageEmbed()
+                        const Embed = new Discord.EmbedBuilder()
                             .setColor('#0099ff')
                             .setTitle(`${osudata.username}'s osu! profile`)
                             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
@@ -227,31 +227,40 @@ module.exports = {
                             playcount = playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
 
-                        const Embed = new Discord.MessageEmbed()
+                        const Embed = new Discord.EmbedBuilder()
                             .setColor('#0099ff')
                             .setTitle(`${osudata.username}'s osu! profile`)
                             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
                             .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
                         if (interaction.options.getBoolean('detailed') == true) {
-                            let fe = new Discord.MessageEmbed()
+                            let fe = new Discord.EmbedBuilder()
                                 .setColor('#0099ff')
                                 .setTitle(`${osudata.username}'s osu! profile`)
                                 .setDescription('loading...')
-                            interaction.reply({embeds: [fe]})
-                            Embed.addField(`-`, `
-                            **Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)
-                            **pp:** ${osustats.pp}
-                            **Accuracy:** ${(osustats.hit_accuracy).toFixed(2)}%
-                            **Play Count:** ${playcount}
-                            **Level:** ${osustats.level.current}.${osustats.level.progress}
-                            `, true)
-                            Embed.addField(`-`, `                    
-                            **Player joined on** ${osudata.join_date.toString().slice(0, 10)}
-                            ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
-                            **Followers:** ${osudata.follower_count}
-                            ${prevnameslist}
-                            ${isonline}
-                            `, true)
+                            interaction.reply({ embeds: [fe] })
+                            Embed.addFields([
+                                {
+                                    name: `-`,
+                                    value:
+                                        `**Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)
+                                        **pp:** ${osustats.pp}
+                                        **Accuracy:** ${(osustats.hit_accuracy).toFixed(2)}%
+                                        **Play Count:** ${playcount}
+                                        **Level:** ${osustats.level.current}.${osustats.level.progress}
+                                        `,
+                                    inline: true
+                                },
+                                {
+                                    name: `-`,
+                                    value:
+                                        `**Player joined on** ${osudata.join_date.toString().slice(0, 10)}
+                                        ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
+                                        **Followers:** ${osudata.follower_count}
+                                        ${prevnameslist}
+                                        ${isonline}
+                                        `,
+                                    inline: true
+                                }])
                             let mode = osudata.playmode
                             //chart creation
                             data = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
@@ -304,28 +313,33 @@ module.exports = {
                                                     mostplaytxt += `[${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id}) | ${bmpc.count} plays\n`
                                                 }
                                                 if (mostplaytxt != ``) {
-                                                    Embed.addField(
-                                                        'Most Played Beatmaps',
-                                                        mostplaytxt,
-                                                        false
+                                                    Embed.addFields([{
+                                                        name: 'Most Played Beatmaps',
+                                                        value: mostplaytxt,
+                                                        inline: false
+                                                    }]
                                                     )
                                                 }
 
-                                                Embed.addField(
-                                                    'TOP PLAY', `
-                                                    **Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
+                                                Embed.addFields([
+                                                    {
+                                                        name: 'TOP PLAY',
+                                                        value:
+                                                            `**Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
                                                     **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
                                                     **Gamemode:** ${mode}
-                                                    **Highest combo:** ${highestcombo}
-                                                `, true)
-                                                Embed.addField(
-                                                    'INFO', `
-                                                    **Highest pp:** ${maxpp}
+                                                    **Highest combo:** ${highestcombo}`,
+                                                        inline: true
+                                                    },
+                                                    {
+                                                        name: 'INFO',
+                                                        value: `**Highest pp:** ${maxpp}
                                                     **Lowest pp:** ${minpp}
                                                     **Average pp:** ${avgpp}
                                                     **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
-                                                    **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
-                                                `, true)
+                                                    **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%`,
+                                                        inline: true
+                                                    }])
 
                                                 interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, files: ['./debugosu/playergraph.jpg'] })
 

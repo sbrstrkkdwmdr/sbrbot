@@ -98,7 +98,7 @@ module.exports = {
                                         maptitle = `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})`
                                     }
 
-                                    let Embed = new Discord.MessageEmbed()
+                                    let Embed = new Discord.EmbedBuilder()
                                         .setColor('#0099ff')
                                         .setTitle(`${maptitle} [${mapdata.version}]`)
                                         .setThumbnail(`${mapdata.beatmapset.covers['list@2x']}`)
@@ -316,7 +316,7 @@ module.exports = {
                                         maptitle = `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})`
                                     }
 
-                                    let Embed = new Discord.MessageEmbed()
+                                    let Embed = new Discord.EmbedBuilder()
                                         .setColor('#0099ff')
                                         .setTitle(`${maptitle} [${mapdata.version}]`)
                                         .setThumbnail(`${mapdata.beatmapset.covers['list@2x']}`)

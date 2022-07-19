@@ -77,7 +77,7 @@ module.exports = {
                                 } catch (error) {
                                     return message.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false } })
                                 }
-                                let topEmbed = new Discord.MessageEmbed()
+                                let topEmbed = new Discord.EmbedBuilder()
                                     .setColor(0x462B71)
                                     .setTitle(`Top plays of ${osutopdata[0].user.username}`)
                                     .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
@@ -151,14 +151,17 @@ module.exports = {
                                     } else {
                                         ifmods = '+' + topmods.toString().replaceAll(",", '')
                                     }
-                                    topEmbed.addField(`#${scoreoffset + 1}`,
-                                        `
+                                    topEmbed.addFields([{
+                                        name: `#${scoreoffset + 1}`,
+                                        value: `
                                 [**${osutopdata[scoreoffset].beatmapset.title} [${osutopdata[scoreoffset].beatmap.version}]**](https://osu.ppy.sh/b/${osutopdata[scoreoffset].beatmap.id}) ${ifmods}
                                 **Score set on** ${maptimeset}
                                 **SCORE:** ${score} | x${combo} | ${Math.abs(osutopdata[scoreoffset].accuracy * 100).toFixed(2)}% | ${grade}
                                 \`${hitlist}\`
                                 ${(osutopdata[scoreoffset].pp).toFixed(2)}pp | ${(osutopdata[scoreoffset].weight.pp).toFixed(2)}pp (Weighted at **${(osutopdata[scoreoffset].weight.percentage).toFixed(2)}%**)
-                                `, false)
+                                `,
+                                        inline: false
+                                    }])
                                 }
                                 message.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false } })
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
@@ -311,7 +314,7 @@ module.exports = {
                                 } catch (error) {
                                     return interaction.reply({ content: 'no plays found for the options given', allowedMentions: { repliedUser: false } })
                                 }
-                                let topEmbed = new Discord.MessageEmbed()
+                                let topEmbed = new Discord.EmbedBuilder()
                                     .setColor(0x462B71)
                                     .setTitle(`Top plays of ${osutopdata[0].user.username}`)
                                     .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
@@ -390,20 +393,23 @@ module.exports = {
                                             ifmods = '+' + topmods.toString().replaceAll(",", '')
                                         }
                                         let scorenum;
-                                        if(interaction.options.getBoolean('reverse') == true && interaction.options.getString('sort') == 'pp'){
+                                        if (interaction.options.getBoolean('reverse') == true && interaction.options.getString('sort') == 'pp') {
                                             scorenum = osutopdata.length - scoreoffset
                                         } else {
                                             scorenum = scoreoffset + 1
                                         }
 
-                                        topEmbed.addField(`#${scorenum}`,
-                                            `
+                                        topEmbed.addFields([{
+                                            name: `#${scorenum}`,
+                                            value: `
                                             [**${osutopdata[scoreoffset].beatmapset.title} [${osutopdata[scoreoffset].beatmap.version}]**](https://osu.ppy.sh/b/${osutopdata[scoreoffset].beatmap.id}) ${ifmods}
                                             **Score set on** ${maptimeset}
                                             **SCORE:** ${score} | x${combo} | ${Math.abs(osutopdata[scoreoffset].accuracy * 100).toFixed(2)}% | ${grade}
                                             \`${hitlist}\`
                                             ${(osutopdata[scoreoffset].pp).toFixed(2)}pp | ${(osutopdata[scoreoffset].weight.pp).toFixed(2)}pp (Weighted at **${(osutopdata[scoreoffset].weight.percentage).toFixed(2)}%**)
-                                            `, false)
+                                            `,
+                                            inline: false
+                                        }])
 
                                     }
                                 } else {
@@ -419,10 +425,14 @@ module.exports = {
                                         } else {
                                             ifmods = '+' + score.mods.join('').toString()
                                         }
-                                        topEmbed.addField(`#${scoreoffset + 1}`,
-                                            ` 
+                                        topEmbed.addFields([{
+                                            name: `#${scoreoffset + 1}`,
+                                            value: ` 
                                         [**${score.beatmapset.title} [${score.beatmap.version}]**](https://osu.ppy.sh/b/${score.beatmap.id}) ${ifmods} | ${Math.abs(score.accuracy * 100).toFixed(2)}% | ${(score.pp).toFixed(2)}pp
-                                        `, true)
+                                        `,
+                                            inline: true
+                                        }
+                                        ])
                                     }
                                 }
                                 if (detailed == true) {
@@ -447,22 +457,27 @@ module.exports = {
                                     if (gamemode == 'mania') {
                                         hitlist = `300+(geki)/300/200(katu)/100/50/miss`
                                     }
-                                    topEmbed.addField(
-                                        '-', `
+                                    topEmbed.addFields([{
+                                        name: '-',
+                                        value: `
                                     **Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
                                     **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
                                     **Gamemode:** ${gamemode}
                                     **Hits:** ${hittype}
                                     **Highest combo:** ${highestcombo}
-                                `, true)
-                                    topEmbed.addField(
-                                        '-', `
+                                `,
+                                        inline: true
+                                    },
+                                        {
+                                        name: '-',
+                                        value: `
                                     **Highest pp:** ${maxpp}
                                     **Lowest pp:** ${minpp}
                                     **Average pp:** ${avgpp}
                                     **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
                                     **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
-                                `, true)
+                                `, inline: true
+                                    }])
                                 } else {
 
                                 }
