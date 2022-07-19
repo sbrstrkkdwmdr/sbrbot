@@ -517,13 +517,13 @@ let useridsortopts = [
         name: 'username',
         description: 'username or ID works (mode name if set to mode)',
         required: false,
-        type: String,
+        type: ApplicationCommandOptionType.String,
     },
     {
         name: 'id',
         description: 'the map id',
         required: false,
-        type: Number,
+        type: ApplicationCommandOptionType.Number,
     },
     {
         name: 'sort',

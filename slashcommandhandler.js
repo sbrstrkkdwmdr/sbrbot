@@ -170,7 +170,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'channel',
                 description: 'The channel to send the message to',
-                type: ApplicationCommandOptionType.CHANNEL,
+                type: ApplicationCommandOptionType.Channel,
                 required: false
             }
         ]
@@ -267,7 +267,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'page',
                 description: 'The page to display the top plays of',
-                type: ApplicationCommandOptionType.INTEGER,
+                type: ApplicationCommandOptionType.Integer,
                 required: false,
                 default: 1,
                 minValue: 1,
@@ -308,7 +308,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'id',
                 description: 'The id of the map to display',
-                type: ApplicationCommandOptionType.INTEGER,
+                type: ApplicationCommandOptionType.Integer,
                 required: false,
                 minValue: 1
             },
@@ -345,13 +345,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'id',
                 description: 'The id of the map to display',
                 required: false,
-                type: ApplicationCommandOptionType.INTEGER
+                type: ApplicationCommandOptionType.Integer
             },
             {
                 name: 'page',
                 description: 'Which page to display',
                 required: false,
-                type: ApplicationCommandOptionType.INTEGER,
+                type: ApplicationCommandOptionType.Integer,
                 default: 1,
                 minValue: 1,
                 maxValue: 20
@@ -428,7 +428,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'user',
                 description: 'The user to check the permissions of',
-                type: ApplicationCommandOptionType.USER,
+                type: ApplicationCommandOptionType.User,
                 required: true,
             }
         ]
@@ -460,7 +460,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'user',
                 description: 'The user to control',
-                type: ApplicationCommandOptionType.USER,
+                type: ApplicationCommandOptionType.User,
                 required: true,
             },
             {
@@ -478,7 +478,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'channel',
                 description: 'The channel to move the user to',
-                type: ApplicationCommandOptionType.CHANNEL,
+                type: ApplicationCommandOptionType.Channel,
                 required: false,
             }
         ],
