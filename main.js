@@ -117,10 +117,12 @@ client.once('ready', () => {
 
 
     client.user.setPresence({
-        activities: [{
-            name: "you | sbr-help",
-            type: 'WATCHING',
-            url: 'https://youtube.com/saberstrkkdwmdr',
+        activities: [
+            {
+            name: "240BPM | sbr-help",
+            type: 1,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+            //url: 'https://youtube.com/c/Saberstrkkdwmdr'
         }],
         status: 'dnd',
         afk: false
