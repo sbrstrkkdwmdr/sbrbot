@@ -2,7 +2,7 @@ import Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
 import fs = require('fs');
 const Sequelize = require('sequelize');
-import fetch = require('node-fetch');
+import fetch from 'node-fetch'
 
 
 const commandHandler = require('./commandHandler.ts');
@@ -141,7 +141,7 @@ fetch('https://osu.ppy.sh/oauth/token', {
         scope: 'public'
     })
 
-}).then(res => res.json())
+}).then(res => res.json() as any)
     .then(res => {
         fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
     }

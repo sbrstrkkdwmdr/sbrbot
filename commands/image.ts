@@ -1,5 +1,5 @@
 import fs = require('fs')
-import fetch = require('node-fetch')
+import fetch from 'node-fetch'
 
 module.exports = {
     name: 'image',
@@ -17,7 +17,7 @@ module.exports = {
             if (!res) return message.reply({ content: 'Unable to fetch the requested image.', allowedMentions: { repliedUser: false } })
             if (res.status >= 400) return message.reply({ content: `Error ${res.status}`, allowedMentions: { repliedUser: false } })
 
-            let response = await res.json();
+            let response = await res.json() as any;
             fs.writeFileSync('debug/image.json', JSON.stringify(response, null, 2))
             if (response.items.length < 1) return message.reply({ content: 'Error - no results found', allowedMentions: { repliedUser: false } })
 
@@ -47,7 +47,7 @@ module.exports = {
             if (!res) return interaction.reply({ content: 'Unable to fetch the requested image.', allowedMentions: { repliedUser: false } })
             if (res.status >= 400) return interaction.reply({ content: `Error ${res.status}`, allowedMentions: { repliedUser: false } })
 
-            let response = await res.json();
+            let response = await res.json() as any;
             fs.writeFileSync('debug/image.json', JSON.stringify(response, null, 2))
             if (response.items.length < 1) return interaction.reply({ content: 'Error - no results found', allowedMentions: { repliedUser: false } })
 
