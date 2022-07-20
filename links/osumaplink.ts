@@ -333,33 +333,38 @@ module.exports = {
                         .then(res => res.json() as any)
                         .then(json2 => {
                             let mapperid = json2.id;
-                            let Embed = new Discord.MessageEmbed()
+                            let Embed = new Discord.EmbedBuilder()
                                 .setColor(0x91ff9a)
                                 .setTitle(maptitle)
                                 .setURL(`https://osu.ppy.sh/b/${id}`)
                                 .setAuthor({ name: `${json.beatmapset.creator}`, url: `https://osu.ppy.sh/u/${mapperid}`, iconURL: `https://a.ppy.sh/${mapperid}` })
                                 .setThumbnail(`https://b.ppy.sh/thumb/${mapsetlink}l.jpg`)
-                                .addField(
-                                    "**MAP DETAILS**",
-                                    `${statusimg} | ${mapimg} \n` +
-                                    `CS${cs} AR${ar} OD${od} HP${hp} \n` +
-                                    `${json.difficulty_rating}⭐ | ${bpm}BPM⏱\n` +
-                                    `${emojis.mapobjs.circle}${json.count_circles} | ${emojis.mapobjs.slider}${json.count_sliders} | ${emojis.mapobjs.spinner}${json.count_spinners} \n` +
-                                    `${moddedlength}🕐`,
-                                    true
-                                )
-                                .addField(
-                                    "**PP**",
-                                    `SS: ${ppComputedString}pp \n 95: ${pp95ComputedString}pp \n` +
-                                    `${modissue}`,
-                                    true
-                                )
-                                .addField(
-                                    "**DOWNLOAD**",
-                                    `[osu!](https://osu.ppy.sh/b/${id}) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.io/d/${mapsetlink})\n\n` +
-                                    `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${id})`,
-                                    true
-                                )
+                                .addFields([
+                                    {
+                                        name: "**MAP DETAILS**",
+                                        value:
+                                            `${statusimg} | ${mapimg} \n` +
+                                            `CS${cs} AR${ar} OD${od} HP${hp} \n` +
+                                            `${json.difficulty_rating}⭐ | ${bpm}BPM⏱\n` +
+                                            `${emojis.mapobjs.circle}${json.count_circles} | ${emojis.mapobjs.slider}${json.count_sliders} | ${emojis.mapobjs.spinner}${json.count_spinners}\n` +
+                                            `${moddedlength}🕐`,
+                                        inline: true
+                                    },
+                                    {
+                                        name: "**PP**",
+                                        value:
+                                            `SS: ${ppComputedString}pp \n 95: ${pp95ComputedString}pp \n` +
+                                            `${modissue}\n${ppissue}`,
+                                        inline: true
+                                    },
+                                    {
+                                        name: "**DOWNLOAD**",
+                                        value:
+                                            `[osu!](https://osu.ppy.sh/b/${id}) | [Chimu](https://api.chimu.moe/v1/download/${mapsetlink}) | [Beatconnect](https://beatconnect.io/b/${mapsetlink}) | [Kitsu](https://kitsu.io/d/${mapsetlink})\n\n` +
+                                            `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${id})`,
+                                        inline: true
+                                    }
+                                ])
                             //console.log('true')
                             message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
                             fs.appendFileSync('link.log', '\nsuccess\n\n', 'utf-8')
@@ -430,7 +435,7 @@ module.exports = {
                     }
 
 
-                    let Embed = new Discord.MessageEmbed()
+                    let Embed = new Discord.EmbedBuilder()
                         .setColor(0x91ff9a)
                         .setTitle(title)
                         .setURL(`https://osu.ppy.sh/s/${setid}`)

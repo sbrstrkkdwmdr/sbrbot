@@ -153,7 +153,7 @@ module.exports = {
                         title = `${title} (${titleuni})`
                     }
 
-                    let scoreembed = new Discord.MessageEmbed()
+                    let scoreembed = new Discord.EmbedBuilder()
                         .setColor('#0099ff')
                         .setAuthor({ name: `${scoredata.user.username}`, iconURL: `https://a.ppy.sh/${scoredata.user.id}`, url: `https://osu.ppy.sh/users/${scoredata.user.id}` })
                         .setTitle(`${artist} - ${title}`)

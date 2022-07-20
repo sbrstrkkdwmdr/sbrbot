@@ -8,10 +8,12 @@ module.exports = {
             let type = args[0];
             let id = args[1];
             if (!args[0]) {
-                message.reply({ content: 'Please specify a type of id to find', allowedMentions: { repliedUser: false } });
+                message.reply({ content: 'Please specify a type of id to find (user/guild/channel/role/emoji)', allowedMentions: { repliedUser: false } });
+                return;
             }
             if (!args[1] || isNaN(args[1])) {
                 message.reply({ content: 'Please specify an id to find', allowedMentions: { repliedUser: false } });
+                return;
             }
             switch (type) {
                 case 'user':

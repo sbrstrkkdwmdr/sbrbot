@@ -100,7 +100,7 @@ client.once('ready', () => {
     commandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     linkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     slashcommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    checker(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    //checker(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     musichandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
     //make a function that for every guild log the id

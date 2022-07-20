@@ -3,7 +3,7 @@ import fs = require('fs');
 import osucalc = require('osumodcalculator');
 import fetch from 'node-fetch'
 import ppcalc = require('booba')
-import emojis = require('../configs/emojis.js')
+import emojis = require('../configs/emojis')
 
 module.exports = {
     name: 'map',

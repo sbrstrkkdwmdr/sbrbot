@@ -125,7 +125,7 @@ module.exports = {
             }
             interaction.editReply({ content: equation, allowedMentions: { repliedUser: false } })
             }, 500)
-            interaction.reply({ content: equation, allowedMentions: { repliedUser: false } })
+            //interaction.reply({ content: equation, allowedMentions: { repliedUser: false } })
 
             fs.appendFileSync('commands.log', `\nCommand Information\ntype: ${type}\nnum1: ${num1}\nnum2: ${num2}`)
         }

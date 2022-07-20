@@ -526,7 +526,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     })
 
     client.on('interactionCreate', async (interaction) => {
-        if (!interaction.isCommand()) return;
+        if (!(interaction.type === InteractionType.ApplicationCommand)) return;
         //make a variable that is the current date
         let currentDate = new Date()
         let currentDateISO = new Date().toISOString()

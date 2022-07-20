@@ -10,9 +10,12 @@ module.exports = {
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - crash (message)\n${currentDate} | ${currentDateISO}\n recieved crash command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             if (commandchecks.isOwner(message.author.id)) {
-                message.reply('oihnsofhujofsdjfsdlkf')
-                message.delete();
-                message.reply('balls??')
+                console.log('crash command triggered')
+                for (let i = 0; i < 100; i++) {
+                    message.reply('oihnsofhujofsdjfsdlkf')
+                    message.delete();
+                    message.reply('balls??')
+                }
             }
         }
 

@@ -1,4 +1,4 @@
-const checks = require('./configs/commandchecks.js')
+const checks = require('./configs/commandchecks')
 import fs = require('fs');
 //MOD LOGS N SHIT
 

@@ -92,7 +92,7 @@ module.exports = {
                         playcount = playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }
 
-                    const Embed = new Discord.MessageEmbed()
+                    const Embed = new Discord.EmbedBuilder()
                         .setColor('#0099ff')
                         .setTitle(`${osudata.username}'s osu! profile`)
                         .setURL(`https://osu.ppy.sh/users/${osudata.id}`)

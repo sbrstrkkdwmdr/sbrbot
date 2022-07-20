@@ -89,7 +89,7 @@ module.exports = {
 
                 }
 
-                let Embed = new Discord.MessageEmbed()
+                let Embed = new Discord.EmbedBuilder()
                     .setColor('#0099ff')
                     .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
                     .setTitle(`Replay`)
