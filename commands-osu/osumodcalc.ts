@@ -23,7 +23,7 @@ module.exports = {
             let baseHP = interaction.options.getNumber('hp')
             let baseBPM = interaction.options.getNumber('bpm')
 
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
 
             if ((mods.includes("HR") && mods.includes("EZ")) || (mods.includes("HT") && (mods.includes("DT") || mods.includes("NC")))) {
                 embed.setTitle("Error") 

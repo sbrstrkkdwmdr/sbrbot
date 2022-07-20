@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
       "module": "commonjs",
-      "lib": ["ES2021"]
+      "lib": ["ES2021"],
+      "resolveJsonModule": true
     },
     "files": [
         "main.ts",
@@ -9,6 +10,7 @@
         "commandhandler.ts",
         "linkhandler.ts",
         "slashcommandhandler.ts",
+
         "configs/calculations.ts",
         "configs/commandchecks.ts",
         "configs/commandopts.ts",
@@ -18,6 +20,11 @@
         "configs/info.ts",
         "configs/osufunc.ts",
         "configs/w.ts",
+
+        "configs/config.json",
+        "configs/osuauth.json",
+        "configs/prevmap.json",
+
         "commands/8ball.ts",
         "commands/convert.ts",
         "commands/emojify.ts",

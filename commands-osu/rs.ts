@@ -1,4 +1,4 @@
-const { access_token } = require('../configs/osuauth.json');
+import { access_token } from '../configs/osuauth.json';
 const fs = require('fs');
 const osucalc = require('osumodcalculator')
 const ppcalc = require('booba')
@@ -258,19 +258,29 @@ module.exports = {
 
 
 
-                                    let Embed = new Discord.MessageEmbed()
+                                    let Embed = new Discord.EmbedBuilder()
                                         .setColor(0x9AAAC0)
                                         .setTitle(`Most recent play for ${rsdata[0].user.username}`)
                                         .setURL(`https://osu.ppy.sh/scores/${rsdata[0].mode}/${rsdata[0].id}`)
                                         .setAuthor({ name: `${timeago} Ago on ${rsdata[0].created_at} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
                                         .setThumbnail(`${rsdata[0].beatmapset.covers.list}`)
-                                        .addField('MAP DETAILS',
-                                            `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${rsdata[0].beatmap.difficulty_rating}⭐`, false)
-                                        .addField('SCORE DETAILS',
-                                            `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
-                                            `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`, true)
-                                        .addField('PP',
-                                            `**${rspp}**pp \n${fcflag}\n${ppissue}`, true);
+                                        .addFields([
+                                            {
+                                                name: 'MAP DETAILS',
+                                                value: `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${rsdata[0].beatmap.difficulty_rating}⭐`,
+                                                inline: false
+                                            },
+                                            {
+                                                name: 'SCORE DETAILS',
+                                                value: `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
+                                                    `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: 'PP',
+                                                value: `**${rspp}**pp \n${fcflag}\n${ppissue}`,
+                                                inline: true
+                                            }]);
                                     message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
 
@@ -351,7 +361,7 @@ module.exports = {
                             try {
                                 fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata, null, 2))
                                 if (interaction.options.getBoolean("list") != true) {
-                                    let hittime = rsdata[0+page].beatmap.hit_length
+                                    let hittime = rsdata[0 + page].beatmap.hit_length
                                     let hitseconds = (hittime % 60)
                                     let hitminutes = Math.floor(hittime / 60)
                                     if (hitseconds < 10) {
@@ -359,7 +369,7 @@ module.exports = {
                                     }
                                     let hitstr = `${hitminutes}:${hitseconds}`
 
-                                    let totaltime = rsdata[0+page].beatmap.total_length
+                                    let totaltime = rsdata[0 + page].beatmap.total_length
                                     let totalseconds = totaltime % 60
                                     let totalminutes = Math.floor(totaltime / 60)
                                     if (totalseconds < 10) {
@@ -367,7 +377,7 @@ module.exports = {
                                     }
                                     let totalstr = `${totalminutes}:${totalseconds}`
 
-                                    let gamehits = rsdata[0+page].statistics
+                                    let gamehits = rsdata[0 + page].statistics
 
                                     if (mode == 'osu') {
                                         accgrade = osucalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, 0)
@@ -378,8 +388,8 @@ module.exports = {
                                     } else if (mode == 'mania') {
                                         accgrade = osucalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, 0)
                                     }
-                                    let fcacc = accgrade.accuracy.toFixed(2)+ "%"
-                                    let grade = (rsdata[0+page].rank).toUpperCase();
+                                    let fcacc = accgrade.accuracy.toFixed(2) + "%"
+                                    let grade = (rsdata[0 + page].rank).toUpperCase();
                                     let rspassinfo = ''
                                     switch (grade) {
                                         case 'F':
@@ -414,7 +424,7 @@ module.exports = {
 
                                     (async () => {
 
-                                        let mods = rsdata[0+page].mods.toString().replaceAll(',', '').replace('[', '').replace(']', '')
+                                        let mods = rsdata[0 + page].mods.toString().replaceAll(',', '').replace('[', '').replace(']', '')
                                         //let modint = osucalc.ModStringToInt(mods)
 
                                         let modstr = ''
@@ -428,7 +438,7 @@ module.exports = {
                                         }
 
                                         const score = {
-                                            beatmap_id: rsdata[0+page].beatmap.id,
+                                            beatmap_id: rsdata[0 + page].beatmap.id,
                                             score: '6795149',
                                             maxcombo: '630',
                                             count50: gamehits.count_50,
@@ -445,7 +455,7 @@ module.exports = {
                                             score_id: '4057765057'
                                         }
                                         const scorenofc = {
-                                            beatmap_id: rsdata[0+page].beatmap.id,
+                                            beatmap_id: rsdata[0 + page].beatmap.id,
                                             score: '6795149',
                                             maxcombo: '630',
                                             count50: gamehits.count_50,
@@ -483,7 +493,7 @@ module.exports = {
                                             hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
                                         }
 
-                                        let rspp = rsdata[0+page].pp
+                                        let rspp = rsdata[0 + page].pp
                                         try {
                                             let ppc = await pp.compute()
                                             let ppfcd = await ppfc.compute()
@@ -507,14 +517,14 @@ module.exports = {
                                             fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
                                         }
 
-                                        if (rsdata[0+page].perfect == true) {
+                                        if (rsdata[0 + page].perfect == true) {
                                             fcflag = '**FC**'
-                                        } else if (rsdata[0+page].perfect == false) {
+                                        } else if (rsdata[0 + page].perfect == false) {
                                             fcflag = `**${ppiffc}**pp IF **${fcacc}** FC`
                                         }
-                                        let title = rsdata[0+page].beatmapset.title
-                                        let titleunicode = rsdata[0+page].beatmapset.title_unicode
-                                        let titlediff = rsdata[0+page].beatmap.version
+                                        let title = rsdata[0 + page].beatmapset.title
+                                        let titleunicode = rsdata[0 + page].beatmapset.title_unicode
+                                        let titlediff = rsdata[0 + page].beatmap.version
                                         if (title != titleunicode) {
                                             titlestring = `${title} (${titleunicode}) [${titlediff}]`
                                         }
@@ -523,7 +533,7 @@ module.exports = {
                                         }
                                         let trycount = 0
                                         for (i = 0; i < rsdata.length; i++) {
-                                            if (rsdata[i].beatmap.id == rsdata[0+page].beatmap.id) {
+                                            if (rsdata[i].beatmap.id == rsdata[0 + page].beatmap.id) {
                                                 trycount++
                                             }
                                         }
@@ -532,7 +542,7 @@ module.exports = {
                                             trycountstr = `try #${trycount}`
                                         }
 
-                                        let scoretimestampdate = new Date((rsdata[0+page].created_at).toString().slice(0, -6) + "Z")
+                                        let scoretimestampdate = new Date((rsdata[0 + page].created_at).toString().slice(0, -6) + "Z")
                                         let curtime = new Date()
                                         let minsincelastvis = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
                                         let lastvismin = minsincelastvis % 60
@@ -541,41 +551,51 @@ module.exports = {
 
 
 
-                                        let Embed = new Discord.MessageEmbed()
+                                        let Embed = new Discord.EmbedBuilder()
                                             .setColor(0x9AAAC0)
-                                            .setTitle(`Most recent play for ${rsdata[0+page].user.username}`)
-                                            .setURL(`https://osu.ppy.sh/scores/${rsdata[0+page].mode}/${rsdata[0+page].id}`)
-                                            .setAuthor({ name: `${timeago} Ago on ${rsdata[0+page].created_at} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
-                                            .setThumbnail(`${rsdata[0+page].beatmapset.covers.list}`)
-                                            .addField('MAP DETAILS',
-                                                `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0+page].beatmap.id}) ${modstr} ${rsdata[0+page].beatmap.difficulty_rating}⭐`, false)
-                                            .addField('SCORE DETAILS',
-                                                `${(rsdata[0+page].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
-                                                `${rspassinfo}\n${hitlist}\n${rsdata[0+page].max_combo}x combo`, true)
-                                            .addField('PP',
-                                                `**${rspp}**pp \n${fcflag}\n${ppissue}`, true);
+                                            .setTitle(`Most recent play for ${rsdata[0 + page].user.username}`)
+                                            .setURL(`https://osu.ppy.sh/scores/${rsdata[0 + page].mode}/${rsdata[0 + page].id}`)
+                                            .setAuthor({ name: `${timeago} Ago on ${rsdata[0 + page].created_at} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
+                                            .setThumbnail(`${rsdata[0 + page].beatmapset.covers.list}`)
+                                            .addFields([
+                                                {
+                                                    name: 'MAP DETAILS',
+                                                    value: `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${rsdata[0].beatmap.difficulty_rating}⭐`,
+                                                    inline: false
+                                                },
+                                                {
+                                                    name: 'SCORE DETAILS',
+                                                    value: `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
+                                                        `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`,
+                                                    inline: true
+                                                },
+                                                {
+                                                    name: 'PP',
+                                                    value: `**${rspp}**pp \n${fcflag}\n${ppissue}`,
+                                                    inline: true
+                                                }]);
                                         interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                         fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
 
-                                        fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0+page].beatmap.id }), null, 2));
+                                        fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0 + page].beatmap.id }), null, 2));
 
                                     })();
                                 } else {
-                                    let Embed = new Discord.MessageEmbed()
+                                    let Embed = new Discord.EmbedBuilder()
                                         .setColor(0x9AAAC0)
-                                        .setTitle(`All recent plays for ${rsdata[0+page].user.username}`)
+                                        .setTitle(`All recent plays for ${rsdata[0 + page].user.username}`)
                                     let txt = ''
-                                    for (let i = 0; i < (rsdata.length - (page*20)) && i < 20; i++) {
+                                    for (let i = 0; i < (rsdata.length - (page * 20)) && i < 20; i++) {
                                         //fetch pp, accuracy, score, score id
                                         let score = rsdata[i + (page * 20)]
                                         txt += `${i + (page * 20) + 1} | [${score.beatmapset.title}](${score.beatmap.url}) | [score](https://osu.ppy.sh/scores/${score.mode}/${score.id})\n${(score.accuracy * 100).toFixed(2)}% | ${score.rank}\n`
                                     }
-                                    if(txt == ''){
+                                    if (txt == '') {
                                         txt = 'No recent plays'
                                     }
-                                    if(txt.length > 4000){
-                                        txt = txt.substring(0, 4000) 
+                                    if (txt.length > 4000) {
+                                        txt = txt.substring(0, 4000)
                                         //txt = txt.substring(0, checks.nthIndexLast(txt, '\n', txt.match(/\n/g).length - 3))
                                         /* while(txt.length > 4000){
                                             txt = txt.substring(0, checks.nthIndexLast(txt, '\n', txt.match(/\n/g).length - 3))
