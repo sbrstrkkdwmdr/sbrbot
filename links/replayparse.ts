@@ -1,7 +1,7 @@
 import fs = require('fs')
 import osucalc = require('osumodcalculator')
 import replayparse = require('osureplayparser')
-import fetch = require('node-fetch')
+import fetch from 'node-fetch';
 import { access_token } from '../configs/osuauth.json';
 import ppcalc = require('booba')
 
@@ -11,7 +11,7 @@ module.exports = {
     execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO) {
         //console.log('true')
         fs.appendFileSync('link.log', `LINK DETECT EVENT - replayparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\n`, 'utf-8')
-
+        let replay:any;
         try {
             replay = replayparse.parseReplay('./files/replay.osr')
         } catch (err) {
