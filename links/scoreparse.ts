@@ -10,7 +10,9 @@ module.exports = {
     description: 'scoreparse',
     execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO) {
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
-
+        let scorelink:any;
+        let scoremode:any;
+        let scoreid:any;
         try {
             scorelink = messagenohttp.split('/scores/')[1]
             scoremode = scorelink.split('/')[0]
@@ -25,7 +27,7 @@ module.exports = {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(res => res.json())
+        }).then(res => res.json() as any)
             .then(scoredata => {
                 fs.writeFileSync('debugosu/scoreparse.json', JSON.stringify(scoredata, null, 2));
                 fs.appendFileSync('link.log', `LINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\n`, 'utf-8')
@@ -96,7 +98,11 @@ module.exports = {
                     }
 
                     let mode = scoredata.mode
-
+                    let ppfc:any;
+                    let hitlist:any;
+                    let fcacc:any;
+                    let ppiffc:any;
+                    let ppissue:any;
                     if (mode == 'osu') {
                         ppfc = new ppcalc.std_ppv2().setPerformance(score)
                         hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`

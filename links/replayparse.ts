@@ -25,7 +25,7 @@ module.exports = {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(res => res.json()).then(mapdata => {
+        }).then(res => res.json() as any).then(mapdata => {
             fs.writeFileSync('debugosu/replaymap.json', JSON.stringify(mapdata, null, 2))
             fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
 
@@ -35,10 +35,10 @@ module.exports = {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json()).then(userdata => {
+            }).then(res => res.json() as any).then(userdata => {
 
                 fs.writeFileSync('debugosu/replayuser.json', JSON.stringify(userdata, null, 2))
-
+                let userid:any;
                 try {
                     userid = userdata.id
                 } catch (err) {
@@ -60,12 +60,15 @@ module.exports = {
                 }
 
                 let mods = replay.mods
+                let ifmods:any;
                 if (mods != 0) {
                     ifmods = `+${osucalc.ModIntToString(mods)}`
                 } else {
                     ifmods = ''
                 }
                 let gameMode = replay.gameMode
+                let hitlist:any;
+                let accuracy:any;
                 switch (gameMode) {
                     case 0:
                         hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`

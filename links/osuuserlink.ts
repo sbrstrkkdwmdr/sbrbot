@@ -17,7 +17,7 @@ module.exports = {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(res => res.json())
+        }).then(res => res.json() as any)
             .then(osudata => {
                 fs.writeFileSync('debugosu/osu.json', JSON.stringify(osudata, null, 2))
                 try {
@@ -38,12 +38,12 @@ module.exports = {
                         countryrank = countryrank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }
 
-                    let playerlasttoint = new Date(osudata.last_visit)
+                    let playerlasttoint:any = new Date(osudata.last_visit)
 
-                    let currenttime = new Date()
+                    let currenttime:any = new Date()
 
                     let minsincelastvis = (playerlasttoint - currenttime) / (1000 * 60);
-                    let minlastvis = Math.abs(minsincelastvis).toFixed(0);
+                    let minlastvis:any = Math.abs(minsincelastvis).toFixed(0);
 
                     let lastvishours = (Math.trunc(minlastvis / 60)) % 24;
                     let lastvisminutes = minlastvis % 60;
@@ -76,6 +76,7 @@ module.exports = {
                     }
 
                     let prevnames = osudata.previous_usernames;
+                    let prevnameslist:any
                     if (prevnames.length > 0) {
                         prevnameslist = '**Previous Usernames:** ' + prevnames.join(', ');
                     }

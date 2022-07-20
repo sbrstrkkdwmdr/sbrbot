@@ -13,7 +13,9 @@ module.exports = {
 
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         //let mods = message.content.split('+')[1]
-
+        let mapmods:string;
+        let idfirst;
+        let id;
         if (
             (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmapsets/') && messagenohttp.includes('#'))) ||
             (!messagenohttp.includes('/s/') && (messagenohttp.includes('/b/'))) ||
@@ -53,7 +55,7 @@ module.exports = {
                     'Authorization': `Bearer ${access_token}`
 
                 }
-            }).then(res => res.json()).then(json => {
+            }).then(res => res.json() as any).then(json => {
                 try {
                     let mapper = json.beatmapset.creator
                 } catch (error) {
@@ -66,12 +68,13 @@ module.exports = {
                 let mapperlink = (`${json.beatmapset.creator}`).replaceAll(' ', '%20');
                 let maphitonly = json.hit_length
                 let maphitmins = Math.floor(maphitonly / 60)
-                let maphitseconds = Math.floor(maphitonly % 60)
+                let maphitseconds:any = Math.floor(maphitonly % 60)
                 if (maphitseconds < 10) {
-                    let maphitseconds = '0' + maphitseconds;
+                    maphitseconds = '0' + maphitseconds;
                 }
                 let maphitstr = `${maphitmins}:${maphitseconds}`
                 let mapstatus = (json.status)
+                let statusimg;
                 if (mapstatus == "ranked") {
                     statusimg = emojis.rankedstatus.ranked;
                 }
@@ -111,7 +114,7 @@ module.exports = {
                     maphitmins = Math.floor((maphitonly / 1.5) / 60)
                     maphitseconds = Math.floor((maphitonly / 1.5) % 60)
                     if (maphitseconds < 10) {
-                        let maphitseconds = '0' + maphitseconds;
+                        maphitseconds = '0' + maphitseconds;
                     }
                     moddedlength = `${maphitmins}:${maphitseconds} (${maphitstr})`
 
@@ -125,7 +128,7 @@ module.exports = {
                     maphitmins = Math.floor((maphitonly / 0.75) / 60)
                     maphitseconds = Math.floor((maphitonly / 0.75) % 60)
                     if (maphitseconds < 10) {
-                        let maphitseconds = '0' + maphitseconds;
+                        maphitseconds = '0' + maphitseconds;
                     }
                     moddedlength = `${maphitmins}:${maphitseconds} (${maphitstr})`
                 }
@@ -157,7 +160,7 @@ module.exports = {
                     maphitmins = Math.floor((maphitonly / 1.5) / 60)
                     maphitseconds = Math.floor((maphitonly / 1.5) % 60)
                     if (maphitseconds < 10) {
-                        let maphitseconds = '0' + maphitseconds;
+                        maphitseconds = '0' + maphitseconds;
                     }
                     moddedlength = `${maphitmins}:${maphitseconds} (${maphitstr})`
                 }
@@ -173,7 +176,7 @@ module.exports = {
                     maphitmins = Math.floor((maphitonly / 0.75) / 60)
                     maphitseconds = Math.floor((maphitonly / 0.75) % 60)
                     if (maphitseconds < 10) {
-                        let maphitseconds = '0' + maphitseconds;
+                        maphitseconds = '0' + maphitseconds;
                     }
                     moddedlength = `${maphitmins}:${maphitseconds} (${maphitstr})`
 
@@ -191,7 +194,7 @@ module.exports = {
                     maphitmins = Math.floor((maphitonly / 1.5) / 60)
                     maphitseconds = Math.floor((maphitonly / 1.5) % 60)
                     if (maphitseconds < 10) {
-                        let maphitseconds = '0' + maphitseconds;
+                        maphitseconds = '0' + maphitseconds;
                     }
                     moddedlength = `${maphitmins}:${maphitseconds} (${maphitstr})`
                 }
@@ -208,7 +211,7 @@ module.exports = {
                     maphitmins = Math.floor((maphitonly / 0.75) / 60)
                     maphitseconds = Math.floor((maphitonly / 0.75) % 60)
                     if (maphitseconds < 10) {
-                        let maphitseconds = '0' + maphitseconds;
+                        maphitseconds = '0' + maphitseconds;
                     }
                     moddedlength = `${maphitmins}:${maphitseconds} (${maphitstr})`
 
@@ -280,6 +283,9 @@ module.exports = {
                         pp = new ppcalc.mania_ppv2().setPerformance(score).setMods(fixedmods);
                         pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                     }
+                    let ppComputedString:any;
+                    let pp95ComputedString:any;
+                    let ppissue:any;
                     try {
                         let ppComputed = await pp.compute();
                         let pp95Computed = await pp95.compute();
@@ -290,8 +296,8 @@ module.exports = {
                         fs.writeFileSync('./debugosu/mapppcalc.json', JSON.stringify(ppComputed, null, 2))
                         fs.writeFileSync('./debugosu/mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
                     } catch (error) {
-                        ppComputed = NaN
                         ppComputedString = NaN
+                        pp95ComputedString = NaN
                         ppissue = 'Error - pp calculator could not fetch beatmap'
                         fs.appendFileSync('link.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
                     }
@@ -308,7 +314,7 @@ module.exports = {
                     if (a != auni) {
                         a = `${a} (${auni})`
                     }
-
+                    let maptitle;
                     if (mapmods == null || mapmods == '' || mapmods == 'NM') {
                         maptitle = `${a} - ${mapname} [${json.version}]`
                     }
@@ -324,7 +330,7 @@ module.exports = {
                         }
 
                     })
-                        .then(res => res.json())
+                        .then(res => res.json() as any)
                         .then(json2 => {
                             let mapperid = json2.id;
                             let Embed = new Discord.MessageEmbed()
@@ -388,12 +394,13 @@ module.exports = {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json())
+            }).then(res => res.json() as any)
                 .then(setdata => {
                     fs.writeFileSync('debugosu/setdata.json', JSON.stringify(setdata, null, 2))
                     let bid = setdata.beatmaps[0].beatmap_id;
 
                     let mapstatus = (setdata.status)
+                    let statusimg:any;
                     if (mapstatus == "ranked") {
                         statusimg = "<:statusranked:944512775579926609>";
                     }
@@ -438,7 +445,7 @@ module.exports = {
 
                     let beatmaps = setdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
 
-                    for (i = 0; i < setdata.beatmaps.length; i++) {
+                    for (let i = 0; i < setdata.beatmaps.length; i++) {
                         let curbm = beatmaps[i];
                         let mapmode = curbm.mode
                         if (mapmode == "taiko") {
@@ -453,7 +460,7 @@ module.exports = {
                         //seconds to time
                         let length = curbm.total_length;
                         let minutes = Math.floor(length / 60);
-                        let seconds = length % 60;
+                        let seconds:any = length % 60;
                         if (seconds < 10) {
                             seconds = `0${seconds}`
                         }
