@@ -1,9 +1,9 @@
-const fs = require('fs');
-const osucalc = require('osumodcalculator')
+import fs = require('fs');
+import osucalc = require('osumodcalculator')
 import { access_token } from '../configs/osuauth.json';
-const fetch = require('node-fetch')
-const emojis = require('../configs/emojis.js')
-const osufunc = require('../configs/osufunc.js')
+import fetch from 'node-fetch';
+import emojis = require('../configs/emojis.js')
+import osufunc = require('../configs/osufunc.js')
 
 module.exports = {
     name: 'osutop',
@@ -25,7 +25,7 @@ module.exports = {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (message)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             if (user.length < 1) {
-                findname = await userdata.findOne({ where: { userid: message.author.id } })
+                let findname = await userdata.findOne({ where: { userid: message.author.id } })
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
@@ -35,7 +35,7 @@ module.exports = {
 
             let gamemode = null
             if (gamemode == null) {
-                findname = await userdata.findOne({ where: { userid: message.author.id } })
+                let findname = await userdata.findOne({ where: { userid: message.author.id } })
                 if (findname != null) {
                     gamemode = findname.get('mode');
                 } else {
@@ -59,7 +59,7 @@ module.exports = {
                 headers: {
                     Authorization: `Bearer ${access_token}`
                 }
-            }).then(res => res.json())
+            }).then(res => res.json() as any)
                 .then(osudata => {
                     fs.writeFileSync('debugosu/osutopname.json', JSON.stringify(osudata, null, 2))
                     try {
@@ -69,7 +69,7 @@ module.exports = {
                             headers: {
                                 Authorization: `Bearer ${access_token}`
                             }
-                        }).then(res => res.json())
+                        }).then(res => res.json() as any)
                             .then(osutopdata => {
                                 fs.writeFileSync('debugosu/osutop.json', JSON.stringify(osutopdata, null, 2))
                                 try {
@@ -100,6 +100,7 @@ module.exports = {
                                     let maptimeset = osutopdata[scoreoffset].created_at.toString().slice(0, 19).replace("T", " ")
 
                                     let ranking = osutopdata[scoreoffset].rank.toUpperCase()
+                                    let grade: any;
                                     switch (ranking) {
                                         case 'F':
                                             grade = emojis.grades.F
@@ -144,8 +145,8 @@ module.exports = {
                                     if (gamemode == 'mania') {
                                         hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
                                     }
-                                    topmods = osutopdata[scoreoffset].mods
-
+                                    let topmods: any = osutopdata[scoreoffset].mods
+                                    let ifmods: any;
                                     if (!topmods || topmods == '' || topmods == 'undefined' || topmods == null || topmods == undefined) {
                                         ifmods = ''
                                     } else {
@@ -181,7 +182,7 @@ module.exports = {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let user = interaction.options.getString('user')
             if (user == null) {
-                findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
+                let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
@@ -190,7 +191,7 @@ module.exports = {
             }
             let gamemode = interaction.options.getString('mode')
             if (gamemode == null) {
-                findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
+                let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
                 if (findname != null) {
                     gamemode = findname.get('mode');
                 } else {
@@ -214,7 +215,7 @@ module.exports = {
                 headers: {
                     Authorization: `Bearer ${access_token}`
                 }
-            }).then(res => res.json())
+            }).then(res => res.json() as any)
                 .then(osudata => {
                     fs.writeFileSync('debugosu/osutopname.json', JSON.stringify(osudata, null, 2))
                     try {
@@ -225,7 +226,7 @@ module.exports = {
                             headers: {
                                 Authorization: `Bearer ${access_token}`
                             }
-                        }).then(res => res.json())
+                        }).then(res => res.json() as any)
                             .then(osutopdataPreSort => {
                                 fs.writeFileSync('debugosu/osutop.json', JSON.stringify(osutopdataPreSort, null, 2))
                                 try {
@@ -233,14 +234,14 @@ module.exports = {
                                 } catch (error) {
                                     return interaction.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false } })
                                 }
-                                filtereddata = osutopdataPreSort
-                                filterinfo = ''
+                                let filtereddata = osutopdataPreSort
+                                let filterinfo = ''
                                 if (mapper != null) {
                                     //filter by mapper
                                     filtereddata = osutopdataPreSort.filter(array => array.beatmapset.creator.toLowerCase() == mapper.toLowerCase())
                                     filterinfo += `\nmapper: ${mapper}`
                                 }
-                                calcmods = osucalc.OrderMods(mods + '')
+                                let calcmods = osucalc.OrderMods(mods + '')
                                 if (calcmods.length < 1) {
                                     calcmods = 'NM'
                                     mods == null
@@ -253,7 +254,7 @@ module.exports = {
                                     filtereddata = osutopdataPreSort.filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods))
                                     filterinfo += `\nmods: ${mods}`
                                 }
-                                osutopdata = filtereddata
+                                let osutopdata = filtereddata
                                 if (interaction.options.getBoolean("reverse") != true) {
                                     if (sort == 'score') {
                                         osutopdata = filtereddata.sort((a, b) => b.score - a.score)
@@ -341,6 +342,7 @@ module.exports = {
                                         let maptimeset = osutopdata[scoreoffset].created_at.toString().slice(0, 19).replace("T", " ")
 
                                         let ranking = osutopdata[scoreoffset].rank.toUpperCase()
+                                        let grade: any;
                                         switch (ranking) {
                                             case 'F':
                                                 grade = 'F'
@@ -385,7 +387,8 @@ module.exports = {
                                         if (gamemode == 'mania') {
                                             hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
                                         }
-                                        topmods = osutopdata[scoreoffset].mods
+                                        let topmods = osutopdata[scoreoffset].mods
+                                        let ifmods: any;
 
                                         if (!topmods || topmods == '' || topmods == 'undefined' || topmods == null || topmods == undefined) {
                                             ifmods = ''
@@ -420,6 +423,7 @@ module.exports = {
                                         if (!score) {
                                             break;
                                         }
+                                        let ifmods;
                                         if (!score.mods || score.mods == '' || score.mods == 'undefined' || score.mods == null || score.mods == undefined) {
                                             ifmods = ''
                                         } else {
@@ -441,21 +445,22 @@ module.exports = {
                                     let minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
                                     let avgpp;
                                     let totalpp = 0;
-                                    for (i2 = 0; i2 < osutopdata.length; i2++) {
+                                    for (let i2 = 0; i2 < osutopdata.length; i2++) {
                                         totalpp += osutopdata[i2].pp
                                     }
                                     avgpp = (totalpp / osutopdata.length).toFixed(2)
+                                    let hittype:string;
                                     if (gamemode == 'osu') {
                                         hittype = `hit300/hit100/hit50/miss`
                                     }
                                     if (gamemode == 'taiko') {
-                                        hitlist = `Great(300)/Good(100)/miss`
+                                        hittype = `Great(300)/Good(100)/miss`
                                     }
                                     if (gamemode == 'fruits' || gamemode == 'catch') {
-                                        hitlist = `Fruit(300)/Drops(100)/Droplets(50)/miss`
+                                        hittype = `Fruit(300)/Drops(100)/Droplets(50)/miss`
                                     }
                                     if (gamemode == 'mania') {
-                                        hitlist = `300+(geki)/300/200(katu)/100/50/miss`
+                                        hittype = `300+(geki)/300/200(katu)/100/50/miss`
                                     }
                                     topEmbed.addFields([{
                                         name: '-',
@@ -468,7 +473,7 @@ module.exports = {
                                 `,
                                         inline: true
                                     },
-                                        {
+                                    {
                                         name: '-',
                                         value: `
                                     **Highest pp:** ${maxpp}

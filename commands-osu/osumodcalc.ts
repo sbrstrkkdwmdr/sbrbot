@@ -1,5 +1,5 @@
-const fs = require('fs')
-const osumodcalc = require('osumodcalculator')
+import fs = require('fs')
+import osumodcalc = require('osumodcalculator')
 module.exports = {
     name: 'osumodcalc',
     description: 'template text\n' +

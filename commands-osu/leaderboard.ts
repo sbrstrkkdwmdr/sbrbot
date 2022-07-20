@@ -1,6 +1,6 @@
 import fs = require('fs')
 import osucalc = require('osumodcalculator');
-import fetch = require('node-fetch')
+import fetch from 'node-fetch'
 import { access_token } from '../configs/osuauth.json';
 
 
@@ -44,8 +44,9 @@ module.exports = {
                     "Content-Type": "application/json",
                     Accept: "application/json"
                 }
-            }).then(res => res.json())
-                .then(mapdata => {
+            }).then(res => res.json() as any)
+                .then(mpdata => {
+                    let mapdata = mpdata as any
                     let title = mapdata.beatmapset.title
                     let titleuni = mapdata.beatmapset.title_unicode
 
@@ -70,9 +71,9 @@ module.exports = {
                             "Content-Type": "application/json",
                             Accept: "application/json"
                         }
-                    }).then(res => res.json())
+                    }).then(res => res.json() as any)
                         .then(lbdatapresort => {
-                            let lbdata = lbdatapresort.scores
+                            let lbdata = (lbdatapresort as any).scores
 
                             let sctxt = ''
                             for (i = 0; i < lbdata.length; i++) {
@@ -183,8 +184,9 @@ module.exports = {
                     "Content-Type": "application/json",
                     Accept: "application/json"
                 }
-            }).then(res => res.json())
-                .then(mapdata => {
+            }).then(res => res.json() as any)
+                .then(mpdata => {
+                    let mapdata = (mpdata as any)
                     let title = mapdata.beatmapset.title
                     let titleuni = mapdata.beatmapset.title_unicode
 
@@ -211,9 +213,9 @@ module.exports = {
                                 "Content-Type": "application/json",
                                 Accept: "application/json"
                             }
-                        }).then(res => res.json())
+                        }).then(res => res.json() as any)
                             .then(lbdatapresort => {
-                                let lbdatatoarr = lbdatapresort.scores
+                                let lbdatatoarr = (lbdatapresort as any).scores
                                 let filtereddata = lbdatatoarr
                                 let lbdata = lbdatatoarr
                                 let filterinfo = ''
@@ -310,7 +312,7 @@ module.exports = {
                     else {
                         let oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${mapid}&mods=${osucalc.ModStringToInt(osucalc.shortModName(mods))}&limit=100`
                         fetch(oldmsu, {})
-                            .then(res => res.json())
+                            .then(res => res.json() as any)
                             .then(lbdata => {
 
                                 fs.writeFileSync('debugosu/maplbapiv1.json', JSON.stringify(lbdata, null, 2))
@@ -322,11 +324,11 @@ module.exports = {
                                     .setFooter({ text: `mods: ${mods}` })
                                     ;
 
-                                let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`
+                                let scoretxt = `Page: ${page + 1}/${Math.ceil((lbdata as any).length / 5)}`
 
 
 
-                                for (i = 0; i < lbdata.length && i < 5; i++) {
+                                for (i = 0; i < (lbdata as any).length && i < 5; i++) {
                                     let hitlist;
                                     let acc;
                                     let score = lbdata[i + (page * 5)]
@@ -357,7 +359,7 @@ module.exports = {
                                     ${hitlist}
                                     `
                                 }
-                                if (lbdata.length < 1 || scoretxt.length < 10) {
+                                if ((lbdata as any).length < 1 || scoretxt.length < 10) {
                                     scoretxt = 'Error - no scores found '
                                 }
                                 if (mapdata.status == 'graveyard' || mapdata.status == 'pending') {

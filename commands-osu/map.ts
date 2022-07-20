@@ -1,7 +1,7 @@
 import { access_token } from '../configs/osuauth.json';
 import fs = require('fs');
 import osucalc = require('osumodcalculator');
-import fetch = require('node-fetch')
+import fetch from 'node-fetch'
 import ppcalc = require('booba')
 import emojis = require('../configs/emojis.js')
 
@@ -69,14 +69,14 @@ module.exports = {
                         "Content-Type": "application/json",
                         Accept: "application/json"
                     }
-                }).then(res => res.json())
+                }).then(res => res.json() as any)
                     .then(mapidtest => {
                         fs.appendFileSync('commands.log', `\nfetched title - ${maptitle}`)
                         fs.writeFileSync('debugosu/maptxt.json', JSON.stringify(mapidtest, null, 2))
                         let sortbyhigh;
                         try {
-                            sortbyhigh = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)
-                            mapid = mapidtest.beatmapsets[0].beatmaps[0].id
+                            sortbyhigh = (mapidtest as any).beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)
+                            mapid = (mapidtest as any).beatmapsets[0].beatmaps[0].id
                             //message.channel.send("Information for \"" + maptitle + '"')
                         } catch (error) {
                             console.log(error)
@@ -94,8 +94,8 @@ module.exports = {
                                 Accept: "application/json"
                             }
                         })
-                            .then(res => res.json())
-                            .then(json => {
+                            .then(res => res.json() as any)
+                            .then((json) => {
                                 fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
 
                                 try {
@@ -118,13 +118,13 @@ module.exports = {
                                 let mapperlink = (`${json.beatmapset.creator}`).replaceAll(' ', '%20');
                                 let maphitonly = json.hit_length
                                 let maphitmins = Math.floor(maphitonly / 60)
-                                let maphitseconds:any = Math.floor(maphitonly % 60)
+                                let maphitseconds: any = Math.floor(maphitonly % 60)
                                 if (maphitseconds < 10) {
                                     maphitseconds = '0' + maphitseconds;
                                 }
                                 let maphitstr = `${maphitmins}:${maphitseconds}`
                                 let mapstatus = (json.status)
-                                let statusimg:string;
+                                let statusimg: string;
                                 if (mapstatus == "ranked") {
                                     statusimg = emojis.rankedstatus.ranked;
                                 }
@@ -331,9 +331,9 @@ module.exports = {
                                         pp = new ppcalc.mania_ppv2().setPerformance(score).setMods(fixedmods);
                                         pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                                     }
-                                    let ppComputedString:any;
-                                    let pp95ComputedString:any;
-                                    let ppissue:string;
+                                    let ppComputedString: any;
+                                    let pp95ComputedString: any;
+                                    let ppissue: string;
                                     try {
                                         let ppComputed = await pp.compute();
                                         let pp95Computed = await pp95.compute();
@@ -380,7 +380,7 @@ module.exports = {
                                             'Authorization': `Bearer ${access_token}`
                                         }
                                     })
-                                        .then(res => res.json())
+                                        .then(res => res.json() as any)
                                         .then(json2 => {
                                             let mapperid = json2.id;
                                             let Embed = new Discord.EmbedBuilder()
@@ -438,7 +438,7 @@ module.exports = {
                     Accept: "application/json"
                 }
             })
-                .then(res => res.json())
+                .then(res => res.json() as any)
                 .then(json => {
                     fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
 
@@ -460,13 +460,13 @@ module.exports = {
                     let mapperlink = (`${json.beatmapset.creator}`).replaceAll(' ', '%20');
                     let maphitonly = json.hit_length
                     let maphitmins = Math.floor(maphitonly / 60)
-                    let maphitseconds:any = Math.floor(maphitonly % 60)
+                    let maphitseconds: any = Math.floor(maphitonly % 60)
                     if (maphitseconds < 10) {
                         maphitseconds = '0' + maphitseconds;
                     }
                     let maphitstr = `${maphitmins}:${maphitseconds}`
                     let mapstatus = (json.status)
-                    let statusimg:string;
+                    let statusimg: string;
                     if (mapstatus == "ranked") {
                         statusimg = emojis.rankedstatus.ranked;
                     }
@@ -674,9 +674,9 @@ module.exports = {
                             pp = new ppcalc.mania_ppv2().setPerformance(score).setMods(fixedmods);
                             pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                         }
-                        let ppComputedString:any;
-                        let pp95ComputedString:any;
-                        let ppissue:string;
+                        let ppComputedString: any;
+                        let pp95ComputedString: any;
+                        let ppissue: string;
                         try {
                             let ppComputed = await pp.compute();
                             let pp95Computed = await pp95.compute();
@@ -722,7 +722,7 @@ module.exports = {
                                 'Authorization': `Bearer ${access_token}`
                             }
                         })
-                            .then(res => res.json())
+                            .then(res => res.json() as any)
                             .then(json2 => {
                                 let mapperid = json2.id;
                                 let Embed = new Discord.EmbedBuilder()
@@ -791,7 +791,7 @@ module.exports = {
                     Accept: "application/json"
                 }
             })
-                .then(res => res.json())
+                .then(res => res.json() as any)
                 .then(json => {
                     fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
 
@@ -807,14 +807,14 @@ module.exports = {
                     let mapperlink = (`${json.beatmapset.creator}`).replaceAll(' ', '%20');
                     let maphitonly = json.hit_length
                     let maphitmins = Math.floor(maphitonly / 60)
-                    let maphitseconds:any = Math.floor(maphitonly % 60)
-                    
+                    let maphitseconds: any = Math.floor(maphitonly % 60)
+
                     if (maphitseconds < 10) {
                         maphitseconds = '0' + maphitseconds;
                     }
                     let maphitstr = `${maphitmins}:${maphitseconds}`
                     let mapstatus = (json.status)
-                    let statusimg:string;
+                    let statusimg: string;
                     if (mapstatus == "ranked") {
                         statusimg = emojis.rankedstatus.ranked;
                     }
@@ -1026,9 +1026,9 @@ module.exports = {
                             pp = new ppcalc.mania_ppv2().setPerformance(score).setMods(fixedmods);
                             pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                         }
-                        let ppComputedString:any;
-                        let pp95ComputedString:any;
-                        let ppissue:string;
+                        let ppComputedString: any;
+                        let pp95ComputedString: any;
+                        let ppissue: string;
                         try {
                             let ppComputed = await pp.compute();
                             let pp95Computed = await pp95.compute();
@@ -1061,7 +1061,7 @@ module.exports = {
                         if (a != auni) {
                             a = `${a} (${auni})`
                         }
-                        let maptitle:string;
+                        let maptitle: string;
                         if (mapmods == null || mapmods == '' || mapmods == 'NM') {
                             maptitle = `${a} - ${mapname} [${json.version}]`
                         }
@@ -1077,7 +1077,7 @@ module.exports = {
                                 'Authorization': `Bearer ${access_token}`
                             }
                         })
-                            .then(res => res.json())
+                            .then(res => res.json() as any)
                             .then(json2 => {
                                 let mapperid = json2.id;
                                 let Embed = new Discord.EmbedBuilder()

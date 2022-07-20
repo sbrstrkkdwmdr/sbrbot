@@ -1,7 +1,7 @@
-const fetch = require('node-fetch');
-const fs = require('fs');
-const { access_token } = require('../configs/osuauth.json')
-const emojis = require('../configs/emojis.js')
+import fetch from 'node-fetch';
+import fs = require('fs');
+import { access_token } from '../configs/osuauth.json';
+import emojis = require('../configs/emojis.js')
 
 module.exports = {
     name: 'scores',
@@ -13,6 +13,7 @@ module.exports = {
         '⠀⠀`id`: integer, optional. The id of the beatmap to display the scores of. If omitted, the last requested map will be used\n' +
         '⠀⠀`sort`: string, optional. The sort to display the top plays of. Valid values: `score`, `accuracy`, `pp`, `recent`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+        let prevmap:any;
         if (fs.existsSync('./configs/prevmap.json')) {
             //console.log('hello there')
             try {
@@ -31,7 +32,7 @@ module.exports = {
             let user = args.join(' ')
             let id = null
             if (user == null || user.length == 0) {
-                findname = await userdata.findOne({ where: { userid: message.author.id } })
+                let findname = await userdata.findOne({ where: { userid: message.author.id } })
                 if (findname == null) {
                     return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                 } else {
@@ -50,7 +51,7 @@ module.exports = {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json())
+            }).then(res => res.json() as any)
                 .then(userdata => {
                     if (userdata.length < 1) {
                         return message.reply({ content: 'Error - no user found', allowedMentions: { repliedUser: false } })
@@ -62,11 +63,11 @@ module.exports = {
                         headers: {
                             Authorization: `Bearer ${access_token}`
                         }
-                    }).then(res => res.json())
+                    }).then(res => res.json() as any)
                         .then(scoredataPreSort => {
                             fs.writeFileSync('debugosu/scorespresort.json', JSON.stringify(scoredataPreSort, null, 2));
                             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}`
-                            scoredata = scoredataPreSort
+                            let scoredata = scoredataPreSort
                             let sortdata
 
                             try {
@@ -86,14 +87,14 @@ module.exports = {
                                 headers: {
                                     'Authorization': `Bearer ${access_token}`
                                 }
-                            }).then(res => res.json())
+                            }).then(res => res.json() as any)
                                 .then(mapdata => {
                                     fs.writeFileSync('debugosu/scoresmap.json', JSON.stringify(mapdata, null, 2));
                                     fs.writeFileSync('debugosu/scores.json', JSON.stringify(scoredata, null, 2));
                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
 
 
-                                    maptitle = mapdata.beatmapset.title
+                                    let maptitle = mapdata.beatmapset.title
                                     if (mapdata.beatmapset.title != mapdata.beatmapset.title_unicode) {
                                         maptitle = `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})`
                                     }
@@ -113,6 +114,7 @@ module.exports = {
                                             let scorestats = score.statistics
                                             let scoremode = score.mode_int
                                             let mods = score.mods
+                                            let ifmods:any;
                                             if (mods.toString().length != 0) {
                                                 ifmods = '**+' + mods.toString().replaceAll(',', '') + '**'
                                             } else {
@@ -134,6 +136,7 @@ module.exports = {
                                                     break;
                                             }
                                             let ranking = score.rank
+                                            let grade:any;
                                             switch (ranking) {
                                                 case 'F':
                                                     grade = emojis.grades.F
@@ -194,7 +197,7 @@ module.exports = {
             let sort = interaction.options.getString('sort')
 
             if (user == null || user.length == 0) {
-                findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
+                let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
                 if (findname == null) {
                     return interaction.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                 } else {
@@ -216,7 +219,7 @@ module.exports = {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json())
+            }).then(res => res.json() as any)
                 .then(userdata => {
                     if (userdata.length < 1) {
                         return interaction.reply({ content: 'Error - no user found', allowedMentions: { repliedUser: false } })
@@ -228,11 +231,11 @@ module.exports = {
                         headers: {
                             Authorization: `Bearer ${access_token}`
                         }
-                    }).then(res => res.json())
+                    }).then(res => res.json() as any)
                         .then(scoredataPreSort => {
                             fs.writeFileSync('debugosu/scorespresort.json', JSON.stringify(scoredataPreSort, null, 2));
                             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}`
-                            scoredata = scoredataPreSort
+                            let scoredata = scoredataPreSort
                             let sortdata = ''
                             try {
                                 if (interaction.options.getBoolean("reverse") != true) {
@@ -291,7 +294,7 @@ module.exports = {
                                     }
                                 }
                                 if (interaction.options.getBoolean('compact') == true) {
-                                    filterinfo += `\ncompact mode`
+                                    sortdata += `\ncompact mode`
                                 }
                             } catch (error) {
                                 return interaction.reply({ content: 'Error - no scores found', allowedMentions: { repliedUser: false } })
@@ -304,14 +307,14 @@ module.exports = {
                                 headers: {
                                     'Authorization': `Bearer ${access_token}`
                                 }
-                            }).then(res => res.json())
+                            }).then(res => res.json() as any)
                                 .then(mapdata => {
                                     fs.writeFileSync('debugosu/scoresmap.json', JSON.stringify(mapdata, null, 2));
                                     fs.writeFileSync('debugosu/scores.json', JSON.stringify(scoredata, null, 2));
                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
 
 
-                                    maptitle = mapdata.beatmapset.title
+                                    let maptitle = mapdata.beatmapset.title
                                     if (mapdata.beatmapset.title != mapdata.beatmapset.title_unicode) {
                                         maptitle = `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})`
                                     }
@@ -331,6 +334,7 @@ module.exports = {
                                             let scorestats = score.statistics
                                             let scoremode = score.mode_int
                                             let mods = score.mods
+                                            let ifmods:any;
                                             if (mods.toString().length != 0) {
                                                 ifmods = '**+' + mods.toString().replaceAll(',', '') + '**'
                                             } else {
@@ -352,6 +356,7 @@ module.exports = {
                                                     break;
                                             }
                                             let ranking = score.rank
+                                            let grade:any;
                                             switch (ranking) {
                                                 case 'F':
                                                     grade = emojis.grades.F

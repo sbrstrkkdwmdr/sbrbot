@@ -1,10 +1,10 @@
 import { access_token } from '../configs/osuauth.json';
-const fs = require('fs');
-const osucalc = require('osumodcalculator')
-const ppcalc = require('booba')
-const fetch = require('node-fetch')
-const emojis = require('../configs/emojis.js')
-const checks = require('../configs/commandchecks.js')
+import fs = require('fs');
+import osucalc = require('osumodcalculator')
+import ppcalc = require('booba')
+import fetch from 'node-fetch'
+import emojis = require('../configs/emojis.js')
+import checks = require('../configs/commandchecks.js')
 
 module.exports = {
     name: 'rs',
@@ -24,7 +24,7 @@ module.exports = {
             let mode = null
 
             if (user == null || user.length == 0) {
-                findname = await userdata.findOne({ where: { userid: message.author.id } })
+                let findname = await userdata.findOne({ where: { userid: message.author.id } })
                 if (findname == null) {
                     return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                 } else {
@@ -35,7 +35,7 @@ module.exports = {
                 }
             }
             if (mode == null) {
-                findname = await userdata.findOne({ where: { userid: message.author.id } })
+                let findname = await userdata.findOne({ where: { userid: message.author.id } })
                 if (findname == null) {
                     mode = 'osu'
                 } else {
@@ -52,7 +52,7 @@ module.exports = {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json())
+            }).then(res => res.json() as any)
                 .then(osudata => {
                     let userid = osudata.id
                     if (!userid) {
@@ -63,13 +63,13 @@ module.exports = {
                         headers: {
                             'Authorization': `Bearer ${access_token}`
                         }
-                    }).then(res => res.json())
+                    }).then(res => res.json() as any)
                         .then(rsdata => {
                             try {
                                 fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata, null, 2))
 
                                 let hittime = rsdata[0].beatmap.hit_length
-                                let hitseconds = (hittime % 60)
+                                let hitseconds:any = (hittime % 60)
                                 let hitminutes = Math.floor(hittime / 60)
                                 if (hitseconds < 10) {
                                     hitseconds = '0' + hitseconds
@@ -77,7 +77,7 @@ module.exports = {
                                 let hitstr = `${hitminutes}:${hitseconds}`
 
                                 let totaltime = rsdata[0].beatmap.total_length
-                                let totalseconds = totaltime % 60
+                                let totalseconds:any = totaltime % 60
                                 let totalminutes = Math.floor(totaltime / 60)
                                 if (totalseconds < 10) {
                                     totalseconds = '0' + totalseconds
@@ -85,7 +85,7 @@ module.exports = {
                                 let totalstr = `${totalminutes}:${totalseconds}`
 
                                 let gamehits = rsdata[0].statistics
-
+                                let accgrade;
                                 if (mode == 'osu') {
                                     accgrade = osucalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, 0)
                                 } else if (mode == 'taiko') {
@@ -98,6 +98,7 @@ module.exports = {
                                 let fcacc = accgrade.accuracy.toFixed(2) + "%"
                                 let grade = (rsdata[0].rank).toUpperCase();
                                 let rspassinfo = ''
+                                let rsgrade;
                                 switch (grade) {
                                     case 'F':
                                         rspassinfo = `\n${hitstr}/${totalstr} (${(hittime / totaltime * 100).toFixed(2)}% completed)`
@@ -135,7 +136,7 @@ module.exports = {
                                     //let modint = osucalc.ModStringToInt(mods)
 
                                     let modstr = ''
-
+                                    let modint:number;
                                     if (mods) {
                                         modint = osucalc.ModStringToInt(mods)
                                         modstr = `+${mods}`
@@ -177,6 +178,9 @@ module.exports = {
                                         rank: 'S',
                                         score_id: '4057765057'
                                     }
+                                    let pp:any;
+                                    let ppfc:any;
+                                    let hitlist:any;
 
                                     if (mode == 'osu') {
                                         pp = new ppcalc.std_ppv2().setPerformance(scorenofc)
@@ -200,6 +204,8 @@ module.exports = {
                                     }
 
                                     let rspp = rsdata[0].pp
+                                    let ppiffc:any;
+                                    let ppissue:string;
                                     try {
                                         let ppc = await pp.compute()
                                         let ppfcd = await ppfc.compute()
@@ -223,7 +229,7 @@ module.exports = {
                                         ppissue = 'Error - pp calculator could not fetch beatmap'
                                         fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
                                     }
-
+                                    let fcflag;
                                     if (rsdata[0].perfect == true) {
                                         fcflag = '**FC**'
                                     } else if (rsdata[0].perfect == false) {
@@ -232,6 +238,7 @@ module.exports = {
                                     let title = rsdata[0].beatmapset.title
                                     let titleunicode = rsdata[0].beatmapset.title_unicode
                                     let titlediff = rsdata[0].beatmap.version
+                                    let titlestring;
                                     if (title != titleunicode) {
                                         titlestring = `${title} (${titleunicode}) [${titlediff}]`
                                     }
@@ -239,19 +246,20 @@ module.exports = {
                                         titlestring = `${title} [${titlediff}]`
                                     }
                                     let trycount = 0
-                                    for (i = 0; i < rsdata.length; i++) {
+                                    for (let i = 0; i < rsdata.length; i++) {
                                         if (rsdata[i].beatmap.id == rsdata[0].beatmap.id) {
                                             trycount++
                                         }
                                     }
+                                    let trycountstr:string;
                                     trycountstr = ''
                                     if (trycount > 1) {
                                         trycountstr = `try #${trycount}`
                                     }
 
-                                    let scoretimestampdate = new Date((rsdata[0].created_at).toString().slice(0, -6) + "Z")
-                                    let curtime = new Date()
-                                    let minsincelastvis = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
+                                    let scoretimestampdate:any = new Date((rsdata[0].created_at).toString().slice(0, -6) + "Z")
+                                    let curtime:any = new Date()
+                                    let minsincelastvis:any = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
                                     let lastvismin = minsincelastvis % 60
                                     let lastvishour = Math.trunc(minsincelastvis / 60) % 24
                                     let timeago = `${lastvishour}h ${lastvismin}m`
@@ -306,7 +314,7 @@ module.exports = {
             let mode = interaction.options.getString('mode')
 
             if (user == null) {
-                findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
+                let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
                 if (findname == null) {
                     return interaction.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                 } else {
@@ -317,7 +325,7 @@ module.exports = {
                 }
             }
             if (mode == null) {
-                findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
+                let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
                 if (findname == null) {
                     mode = 'osu'
                 } else {
@@ -345,7 +353,7 @@ module.exports = {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json())
+            }).then(res => res.json() as any)
                 .then(osudata => {
                     let userid = osudata.id
                     if (!userid) {
@@ -356,13 +364,13 @@ module.exports = {
                         headers: {
                             'Authorization': `Bearer ${access_token}`
                         }
-                    }).then(res => res.json())
+                    }).then(res => res.json() as any)
                         .then(rsdata => {
                             try {
                                 fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata, null, 2))
                                 if (interaction.options.getBoolean("list") != true) {
                                     let hittime = rsdata[0 + page].beatmap.hit_length
-                                    let hitseconds = (hittime % 60)
+                                    let hitseconds:any = (hittime % 60)
                                     let hitminutes = Math.floor(hittime / 60)
                                     if (hitseconds < 10) {
                                         hitseconds = '0' + hitseconds
@@ -370,7 +378,7 @@ module.exports = {
                                     let hitstr = `${hitminutes}:${hitseconds}`
 
                                     let totaltime = rsdata[0 + page].beatmap.total_length
-                                    let totalseconds = totaltime % 60
+                                    let totalseconds:any = totaltime % 60
                                     let totalminutes = Math.floor(totaltime / 60)
                                     if (totalseconds < 10) {
                                         totalseconds = '0' + totalseconds
@@ -378,6 +386,7 @@ module.exports = {
                                     let totalstr = `${totalminutes}:${totalseconds}`
 
                                     let gamehits = rsdata[0 + page].statistics
+                                    let accgrade:any;
 
                                     if (mode == 'osu') {
                                         accgrade = osucalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, 0)
@@ -391,6 +400,7 @@ module.exports = {
                                     let fcacc = accgrade.accuracy.toFixed(2) + "%"
                                     let grade = (rsdata[0 + page].rank).toUpperCase();
                                     let rspassinfo = ''
+                                    let rsgrade:any;
                                     switch (grade) {
                                         case 'F':
                                             rspassinfo = `\n${hitstr}/${totalstr} (${(hittime / totaltime * 100).toFixed(2)}% completed)`
@@ -428,7 +438,7 @@ module.exports = {
                                         //let modint = osucalc.ModStringToInt(mods)
 
                                         let modstr = ''
-
+                                        let modint:any;
                                         if (mods) {
                                             modint = osucalc.ModStringToInt(mods)
                                             modstr = `+${mods}`
@@ -471,7 +481,9 @@ module.exports = {
                                             rank: 'S',
                                             score_id: '4057765057'
                                         }
-
+                                        let pp:any;
+                                        let ppfc:any;
+                                        let hitlist:any;
                                         if (mode == 'osu') {
                                             pp = new ppcalc.std_ppv2().setPerformance(scorenofc)
                                             ppfc = new ppcalc.std_ppv2().setPerformance(score)
@@ -494,6 +506,8 @@ module.exports = {
                                         }
 
                                         let rspp = rsdata[0 + page].pp
+                                        let ppiffc:any;
+                                        let ppissue:any;
                                         try {
                                             let ppc = await pp.compute()
                                             let ppfcd = await ppfc.compute()
@@ -516,7 +530,7 @@ module.exports = {
                                             ppissue = 'Error - pp calculator could not fetch beatmap'
                                             fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
                                         }
-
+                                        let fcflag:any;
                                         if (rsdata[0 + page].perfect == true) {
                                             fcflag = '**FC**'
                                         } else if (rsdata[0 + page].perfect == false) {
@@ -525,6 +539,7 @@ module.exports = {
                                         let title = rsdata[0 + page].beatmapset.title
                                         let titleunicode = rsdata[0 + page].beatmapset.title_unicode
                                         let titlediff = rsdata[0 + page].beatmap.version
+                                        let titlestring:any;
                                         if (title != titleunicode) {
                                             titlestring = `${title} (${titleunicode}) [${titlediff}]`
                                         }
@@ -532,19 +547,19 @@ module.exports = {
                                             titlestring = `${title} [${titlediff}]`
                                         }
                                         let trycount = 0
-                                        for (i = 0; i < rsdata.length; i++) {
+                                        for (let i = 0; i < rsdata.length; i++) {
                                             if (rsdata[i].beatmap.id == rsdata[0 + page].beatmap.id) {
                                                 trycount++
                                             }
                                         }
-                                        trycountstr = ''
+                                        let trycountstr = ''
                                         if (trycount > 1) {
                                             trycountstr = `try #${trycount}`
                                         }
 
-                                        let scoretimestampdate = new Date((rsdata[0 + page].created_at).toString().slice(0, -6) + "Z")
-                                        let curtime = new Date()
-                                        let minsincelastvis = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
+                                        let scoretimestampdate:any = new Date((rsdata[0 + page].created_at).toString().slice(0, -6) + "Z")
+                                        let curtime:any = new Date()
+                                        let minsincelastvis:any = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
                                         let lastvismin = minsincelastvis % 60
                                         let lastvishour = Math.trunc(minsincelastvis / 60) % 24
                                         let timeago = `${lastvishour}h ${lastvismin}m`

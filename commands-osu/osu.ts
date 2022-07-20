@@ -1,9 +1,9 @@
 import { access_token } from '../configs/osuauth.json';
-const fs = require('fs')
-const fetch = require('node-fetch');
-const emojis = require('../configs/emojis.js');
-const chartjsimg = require('chartjs-to-image');
-const osufunc = require('../configs/osufunc.js')
+import fs = require('fs')
+import fetch from 'node-fetch'
+import emojis = require('../configs/emojis.js');
+import chartjsimg = require('chartjs-to-image');
+import osufunc = require('../configs/osufunc.js')
 
 module.exports = {
     name: 'osu',
@@ -17,6 +17,7 @@ module.exports = {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (message)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             if (user.length < 1) {
+                let findname
                 findname = await userdata.findOne({ where: { userid: message.author.id } })
                 if (findname != null) {
                     user = findname.get('osuname');
@@ -29,7 +30,7 @@ module.exports = {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json())
+            }).then(res => res.json() as any)
                 .then(osudata => {
                     fs.writeFileSync('debugosu/osu.json', JSON.stringify(osudata, null, 2))
                     try {
@@ -50,12 +51,12 @@ module.exports = {
                             countryrank = countryrank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
 
-                        let playerlasttoint = new Date(osudata.last_visit)
+                        let playerlasttoint:any = new Date(osudata.last_visit)
 
-                        let currenttime = new Date()
+                        let currenttime:any = new Date()
 
-                        let minsincelastvis = (playerlasttoint - currenttime) / (1000 * 60);
-                        let minlastvis = Math.abs(minsincelastvis).toFixed(0);
+                        let minsincelastvis:any = (playerlasttoint - currenttime) / (1000 * 60);
+                        let minlastvis:any = Math.abs(minsincelastvis).toFixed(0);
 
                         let lastvishours = (Math.trunc(minlastvis / 60)) % 24;
                         let lastvisminutes = minlastvis % 60;
@@ -87,7 +88,8 @@ module.exports = {
                             isonline = `**${emojis.onlinestatus.offline} Offline** | Last online ${minlastvisredo} ago`
                         }
 
-                        let prevnames = osudata.previous_usernames;
+                        let prevnames:any = osudata.previous_usernames;
+                        let prevnameslist;
                         if (prevnames.length > 0) {
                             prevnameslist = '**Previous Usernames:** ' + prevnames.join(', ');
                         }
@@ -140,7 +142,7 @@ module.exports = {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let user = interaction.options.getString('user')
             if (user == null) {
-                findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
+                let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
@@ -153,7 +155,7 @@ module.exports = {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json())
+            }).then(res => res.json() as any)
                 .then(osudata => {
                     fs.writeFileSync('debugosu/osu.json', JSON.stringify(osudata, null, 2))
                     try {
@@ -174,12 +176,12 @@ module.exports = {
                             countryrank = countryrank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
 
-                        let playerlasttoint = new Date(osudata.last_visit)
+                        let playerlasttoint:any = new Date(osudata.last_visit)
 
-                        let currenttime = new Date()
+                        let currenttime:any = new Date()
 
                         let minsincelastvis = (playerlasttoint - currenttime) / (1000 * 60);
-                        let minlastvis = Math.abs(minsincelastvis).toFixed(0);
+                        let minlastvis:any = Math.abs(minsincelastvis).toFixed(0);
 
                         let lastvishours = (Math.trunc(minlastvis / 60)) % 24;
                         let lastvisminutes = minlastvis % 60;
@@ -212,6 +214,7 @@ module.exports = {
                         }
 
                         let prevnames = osudata.previous_usernames;
+                        let prevnameslist:any;
                         if (prevnames.length > 0) {
                             prevnameslist = '**Previous Usernames:** ' + prevnames.join(', ');
                         }
@@ -263,7 +266,7 @@ module.exports = {
                                 }])
                             let mode = osudata.playmode
                             //chart creation
-                            data = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
+                            let data = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
 
                             const chart = new chartjsimg()
                                 .setConfig({
@@ -288,28 +291,28 @@ module.exports = {
                                     headers: {
                                         Authorization: `Bearer ${access_token}`
                                     }
-                                }).then(res => res.json())
+                                }).then(res => res.json() as any)
                                     .then(osutopdata => {
                                         let mostplayedurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/beatmapsets/most_played`
                                         fetch(mostplayedurl, {
                                             headers: {
                                                 Authorization: `Bearer ${access_token}`
                                             }
-                                        }).then(res => res.json())
+                                        }).then(res => res.json() as any)
                                             .then(mostplayeddata => {
                                                 let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                                 let maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
                                                 let minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
                                                 let avgpp;
                                                 let totalpp = 0;
-                                                for (i2 = 0; i2 < osutopdata.length; i2++) {
+                                                for (let i2 = 0; i2 < osutopdata.length; i2++) {
                                                     totalpp += osutopdata[i2].pp
                                                 }
                                                 avgpp = (totalpp / osutopdata.length).toFixed(2)
 
-                                                mostplaytxt = ``
-                                                for (i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
-                                                    bmpc = mostplayeddata[i2]
+                                                let mostplaytxt = ``
+                                                for (let i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
+                                                    let bmpc = mostplayeddata[i2]
                                                     mostplaytxt += `[${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id}) | ${bmpc.count} plays\n`
                                                 }
                                                 if (mostplaytxt != ``) {

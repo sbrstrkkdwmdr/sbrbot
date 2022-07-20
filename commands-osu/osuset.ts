@@ -1,4 +1,4 @@
-const fs = require('fs')
+import fs = require('fs')
 module.exports = {
     name: 'osuset',
     description: 'Sets the osu! username of the user\n' +
@@ -30,7 +30,7 @@ module.exports = {
 
 
                 } catch (error) {
-                    affectedRows = await userdata.update({
+                    let affectedRows = await userdata.update({
                         osuname: username,
                         mode: 'osu',
                     }, { where: { userid: interaction.member.user.id } })
@@ -56,7 +56,7 @@ module.exports = {
 
 
                 } catch (error) {
-                    affectedRows = await userdata.update({
+                    let affectedRows = await userdata.update({
                         osuname: username,
                         mode: mode,
                     }, { where: { userid: interaction.member.user.id } })
