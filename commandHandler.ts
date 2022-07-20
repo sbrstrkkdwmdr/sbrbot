@@ -15,11 +15,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 message.delete();
             }, 1)
         }
-        if (message.author.bot && !message.author.id == '755220989494951997') return;
+        let timeouttime;
+        if (message.author.bot && message.author.id != '755220989494951997') return;
         if (oncooldown.has(message.author.id)) {
             return message.channel.send(`You're on cooldown\nTime left: ${getTimeLeft(timeouttime)}ms`);
         };
-
         if (!oncooldown.has(message.author.id)) {
             oncooldown.add(message.author.id);
             setTimeout(() => {

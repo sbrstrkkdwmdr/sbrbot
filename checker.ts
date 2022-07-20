@@ -1,5 +1,5 @@
 const checks = require('./configs/commandchecks.js')
-const fs = require('fs')
+import fs = require('fs');
 //MOD LOGS N SHIT
 
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {

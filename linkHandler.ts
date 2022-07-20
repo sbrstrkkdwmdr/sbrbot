@@ -1,4 +1,4 @@
-const fs = require('fs')
+import fs = require('fs');
 const https = require('https')
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
     client.on('messageCreate', async (message) => {
@@ -15,7 +15,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         }
 
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osr'))) {
-            attachosr = message.attachments.first().url
+            let attachosr = message.attachments.first().url
             let osrdlfile = fs.createWriteStream('./files/replay.osr')
             let requestw = https.get(`${attachosr}`, function (response) {
                 response.pipe(osrdlfile);

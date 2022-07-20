@@ -1,7 +1,7 @@
 import Discord = require('discord.js');
-import { Client, GatewayIntentBits, partials } from 'discord.js';
+const { Client, GatewayIntentBits, Partials } = require('discord.js');
 import fs = require('fs');
-import Sequelize = require('sequelize');
+const Sequelize = require('sequelize');
 import fetch = require('node-fetch');
 
 
@@ -37,7 +37,7 @@ const client = new Client({
     ]
 })
 
-import { prefix, token, osuApiKey, osuClientID, osuClientSecret } from './configs/config.json';
+const { prefix, token, osuApiKey, osuClientID, osuClientSecret } = require('./configs/config.json');
 
 client.commands = new Discord.Collection();
 client.links = new Discord.Collection();
