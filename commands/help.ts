@@ -13,7 +13,34 @@ module.exports = {
             .setColor('#0099ff')
             .setTitle('Command List')
             .setDescription('use `/help <command>` to get more info on a command')
-            .addFields([{
+            .addFields([
+                {
+                    name: 'Main commands',
+                    value: "`ping`, `help`, `remind`, `math`, `convert`",
+                    inline: false
+                },
+                {
+                    name: 'osu! comands',
+                    value: "`osu`, `osuset`, `osutop`, `map`, `rs`, `scores`, `leaderboard`",
+                    inline: false
+                },
+                {
+                    name: 'Admin commands',
+                    value: "`checkperms`, `leaveguild`, `servers`, `voice`",
+                    inline: false
+                },
+                {
+                    name: 'Other/misc commands',
+                    value: "`roll`, `8ball`, `image`, `ytsearch`, `gif`, `poll`",
+                    inline: false
+                },
+                {
+                    name: 'WIP',
+                    value: "`play`, `np`, `skip`, `pause`, `queue`, `resume`",
+                    inline: false
+                }
+                
+                /* {
                 name: 'Main commands',
                 value: `**ping** - Displays the bot's ping\n` +
                     `**help** - Displays this message\n` +
@@ -62,7 +89,7 @@ module.exports = {
                     '**queue** - displays the current queue\n' +
                     '**np** - displays the current song\n'
                 , inline: false
-            }
+            } */
             ])
 
 
