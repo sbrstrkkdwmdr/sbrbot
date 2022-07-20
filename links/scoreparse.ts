@@ -1,9 +1,9 @@
-const fs = require('fs')
-const fetch = require('node-fetch')
-const ppcalc = require('booba')
-const osucalc = require('osumodcalculator')
-const { access_token } = require('../configs/osuauth.json')
-const emojis = require('../configs/emojis.js')
+import fs = require('fs')
+import fetch = require('node-fetch')
+import ppcalc = require('booba')
+import osucalc = require('osumodcalculator')
+import { access_token } from '../configs/osuauth.json';
+import emojis = require('../configs/emojis.js')
 
 module.exports = {
     name: 'scoreparse',

@@ -1,5 +1,5 @@
 import fs = require('fs')
-import commandchecks = require('../configs/commandchecks.js');
+import commandchecks = require('../configs/commandchecks');
 const defaulttext = require('../configs/w').chocomint
 
 module.exports = {

@@ -1,5 +1,5 @@
 import fs = require('fs')
-import checks = require('../configs/commandchecks.js')
+import checks = require('../configs/commandchecks')
 module.exports = {
     name: 'log',
     description: 'returns the logs of the guild',

@@ -1,4 +1,4 @@
-import commandchecks = require('../configs/commandchecks.js');
+import commandchecks = require('../configs/commandchecks');
 import fs = require('fs')
 module.exports = {
     name: 'servers',

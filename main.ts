@@ -5,11 +5,11 @@ const Sequelize = require('sequelize');
 import fetch from 'node-fetch'
 
 
-const commandHandler = require('./commandHandler.ts');
+const commandHandler = require('./commandHandler');
 const linkHandler = require('./linkHandler.ts');
-const slashcommandHandler = require('./slashcommandHandler.ts');
-const checker = require('./checker.ts');
-const musichandler = require('./musicHandler.ts');
+const slashcommandHandler = require('./slashcommandHandler');
+const checker = require('./checker');
+const musichandler = require('./musicHandler');
 
 const config = require('./configs/config.json');
 

@@ -1,9 +1,9 @@
-const fs = require('fs')
-const osucalc = require('osumodcalculator')
-const replayparse = require('osureplayparser')
-const fetch = require('node-fetch')
-const { access_token } = require('../configs/osuauth.json')
-const ppcalc = require('booba')
+import fs = require('fs')
+import osucalc = require('osumodcalculator')
+import replayparse = require('osureplayparser')
+import fetch = require('node-fetch')
+import { access_token } from '../configs/osuauth.json';
+import ppcalc = require('booba')
 
 module.exports = {
     name: 'replayparse',

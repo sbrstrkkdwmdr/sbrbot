@@ -1,9 +1,9 @@
 import { access_token } from '../configs/osuauth.json';
 import fs = require('fs')
 import fetch from 'node-fetch'
-import emojis = require('../configs/emojis.js');
+import emojis = require('../configs/emojis');
 import chartjsimg = require('chartjs-to-image');
-import osufunc = require('../configs/osufunc.js')
+import osufunc = require('../configs/osufunc')
 
 module.exports = {
     name: 'osu',
