@@ -17,40 +17,44 @@ module.exports = {
                 name: 'Main commands',
                 value: `**ping** - Displays the bot's ping\n` +
                     `**help** - Displays this message\n` +
-                    '**remind** \`[time (required)] [reminder (required)]\` - creates a reminder\n' +
-                    '**math** \`[expression (required)]\` - evaluates a math expression\n' +
-                    '**convert** \`[from (required)] [to (required)] [value (required)]\` - converts a value from one unit to another\n'
+                    '**remind** \`[time] [reminder] [sendinchannel]\` - creates a reminder\n' +
+                    '**math** \`[expression]\` - evaluates a math expression\n' +
+                    '**convert** \`[from] [to] [value]\` - converts a value from one unit to another\n'
                 , inline: false
             },
             {
                 name: 'osu! commands',
-                value: `**leaderboard** \`[id (optional)] [page (optional)] [mods (optional)]\` - displays the top five plays of a map \n` +
-                    `**osu** \`[user (optional)]\`- displays a user's profile\n` +
-                    `**osuset** \`[user (required)] [mode (optional)]\` - sets your osu! username\n` +
-                    `**osutop** \`[user (optional)] [mode (optional)] [sort (optional)] [page (optional)] [mapper (optional)] [detailed (booleanoptional)]\` - displays the user's top plays\n` +
-                    `**map** \`[id (optional)] [mods (optional)]\` - displays the map info for a beatmap\n` +
-                    `**rs** \`[user (optional)] [mode (optional)] [offset (optional)]\`  - displays the most recent score for the user\n` +
-                    `**scores** \`[user (optional)] [id (optional)] [sort (optional)]\` - displays the users scores for a given beatmap`
+                value: `**leaderboard** \`[id] [page] [mods]\` - displays the top five plays of a map \n` +
+                    `**osu** \`[user] [detailed]\`- displays a user's profile\n` +
+                    `**osuset** \`[user] [mode]\` - sets your osu! username\n` +
+                    `**osutop** \`[user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [compact]\` - displays the user's top plays\n` +
+                    `**map** \`[id] [mods] [detailed]\` - displays the map info for a beatmap\n` +
+                    `**rs** \`[user] [page] [mode] [list]\`  - displays the most recent score for the user\n` +
+                    `**scores** \`[user] [id] [sort] [reverse] [compact]\` - displays the users scores for a given beatmap`
                 , inline: false
             }, {
                 name: 'Admin commands',
-                value: '**checkperms** \`[user (required)]\` - checks the permissions of a given user\n' +
-                    '**leaveguild** \`[guild (required)]\` - leaves a given server\n' +
+                value: '**checkperms** \`[user]\` - checks the permissions of a given user\n' +
+                    '**leaveguild** \`[guild]\` - leaves a given server\n' +
                     '**servers** - displays all servers the bot is in\n' +
-                    '**voice** \`[user(required)] [type(required)] [channel (optional)]\` - alters a user in a voice channel\n' +
+                    '**voice** \`[user(required)] [type(required)] [channel]\` - alters a user in a voice channel\n' +
                     '**servers** - displays all servers the bot is in', inline: false
             },
             {
                 name: 'General commands',
-                value: '**gif** \`[type (required)]\` - displays a gif of a given type\n' +
-                    '**ytsearch** \`[query (required)]\` - searches youtube for a given query\n' +
-                    '**image** \`[query (required)]\` - searches google images for a given query\n' +
+                value: '**gif** \`[type]\` - displays a gif of a given type\n' +
+                    '**ytsearch** \`[query]\` - searches youtube for a given query\n' +
+                    '**image** \`[query]\` - searches google images for a given query\n' +
                     '**8ball** - responds with a yes/no/maybe/??? answer  \n' +
-                    '**roll** \`[number (optional)]\` - returns a number between 1-100 (or the given number)\n', inline: false
+                    '**roll** \`[number]\` - returns a number between 1-100 (or the given number)\n' +
+                    '**poll** \`[question] [options]\` - creates a poll\n' +
+                    ''
+                    , 
+                    inline: false
             },
             {
                 name: 'Music commands (WIP)',
-                value: '**play** \`[query (required)]\` - plays a song from youtube\n' +
+                value: '**play** \`[query]\` - plays a song from youtube\n' +
                     '**skip** - skips the current song\n' +
                     '**stop** - stops the current song\n' +
                     '**pause** - pauses the current song\n' +
@@ -354,24 +358,24 @@ module.exports = {
                 `**help** - Displays this message\n`
                 , false)
             .addField('osu! commands',
-                `**osu** \`[user (optional)]\`- displays a user's profile\n` +
-                `**osuset** \`[user (required)] [mode (optional)]\` - sets your osu! username\n` +
-                `**osutop** \`[user (optional)] [mode (optional)] [sort (optional)] [page (optional)] [mapper (optional)] [detailed (booleanoptional)]\` - displays the user's top plays\n` +
-                `**map** \`[id (optional)] [mods (optional)]\` - displays the map info for a beatmap\n` +
-                `**rs** \`[user (optional)] [mode (optional)] [offset (optional)]\`  - displays the most recent score for the user\n` +
-                `[WIP]**scores** \`[user (optional)] [id (optional)] [sort (optional)]\` - displays the users scores for a given beatmap`
+                `**osu** \`[user]\`- displays a user's profile\n` +
+                `**osuset** \`[user] [mode]\` - sets your osu! username\n` +
+                `**osutop** \`[user] [mode] [sort] [page] [mapper] [detailed (booleanoptional)]\` - displays the user's top plays\n` +
+                `**map** \`[id] [mods]\` - displays the map info for a beatmap\n` +
+                `**rs** \`[user] [mode] [offset]\`  - displays the most recent score for the user\n` +
+                `[WIP]**scores** \`[user] [id] [sort]\` - displays the users scores for a given beatmap`
                 , false)
             .addField('admin commands',
-                '[WIP]**checkperms** \`[user (required)]\` - checks the permissions of a given user\n' +
-                '[WIP]**leaveguild** \`[guild (required)]\` - leaves a given server\n' +
+                '[WIP]**checkperms** \`[user]\` - checks the permissions of a given user\n' +
+                '[WIP]**leaveguild** \`[guild]\` - leaves a given server\n' +
                 '[WIP]**servers** - displays all servers the bot is in', false)
             .addField('other commands',
-                '[WIP]**gif** \`[type (required)]\` - displays a gif of a given type\n' +
-                '[WIP]**ytsearch** \`[query (required)]\` - searches youtube for a given query\n' +
-                '[WIP]**imagesearch** \`[query (required)]\` - searches google images for a given query\n' +
-                '[WIP]**remind** \`[reminder (required)] [time (required)]\` - creates a reminder\n' +
-                '[WIP]**math** \`[expression (required)]\` - evaluates a math expression\n' +
-                '[WIP]**convert** \`[value (required)] [from (required)] [to (required)]\` - converts a value from one unit to another\n', false
+                '[WIP]**gif** \`[type]\` - displays a gif of a given type\n' +
+                '[WIP]**ytsearch** \`[query]\` - searches youtube for a given query\n' +
+                '[WIP]**imagesearch** \`[query]\` - searches google images for a given query\n' +
+                '[WIP]**remind** \`[reminder] [time]\` - creates a reminder\n' +
+                '[WIP]**math** \`[expression]\` - evaluates a math expression\n' +
+                '[WIP]**convert** \`[value] [from] [to]\` - converts a value from one unit to another\n', false
             )
 
 

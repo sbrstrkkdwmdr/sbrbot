@@ -78,19 +78,19 @@ let cmds = [
         options: [
             {
                 name: 'problem',
-                description: '`string, required, message command only`. The math equation to solve i.e `sbr-math 1-2+3/4`'
+                description: '`string, required`. The math equation to solve i.e `sbr-math 1-2+3/4`'
             },
             {
                 name: 'type',
-                description: '`string, required, / command only`. The type of equation to solve '
+                description: '`string, required`. The type of equation to solve '
             },
             {
                 name: 'num1',
-                description: '`number, required, / command only`. The first number to use in the equation'
+                description: '`number, required`. The first number to use in the equation'
             },
             {
                 name: 'num2',
-                description: '`number, optional, / command only`. The second number to use in the equation'
+                description: '`number, optional`. The second number to use in the equation'
             }
         ],
         aliases: 'solve'
@@ -147,7 +147,11 @@ let cmds = [
             },
             {
                 name: 'reminder',
-                description: '`string, optional (only in msg command)`. The reminder to set'
+                description: '`string, optional`. The reminder to set'
+            },
+            {
+                name: 'sendinchannel',
+                description: '`boolean, optional`. Whether to send the reminder in the channel or in the DM'
             }
         ]
     },
@@ -190,6 +194,27 @@ let cmds = [
 
 let osucmds = [
     {
+        name: 'leaderboard',
+        description: 'Retrieves the top 5 plays on a beatmap',
+        usage: 'sbr-leaderboard <id>',
+        slashusage: '/leaderboard [id] [page] [mods]',
+        options: [
+            {
+                name: 'id',
+                description: '`integer, optional`. The id of the beatmap. If omitted, the previous map used will be used instead'
+            },
+            {
+                name: 'page',
+                description: '`integer, optional`. What page to show. 1-20'
+            },
+            {
+                name: 'mods',
+                description: '`string, optional`. Only show plays with these mods. Uses APIv1 so some values may be incorrect'
+            }
+        ],
+        aliases: 'lb'
+    },
+    {
         name: 'map',
         description: 'Retrieves the information of a map',
         usage: 'sbr-map "title" <id> +<mods>',
@@ -206,6 +231,10 @@ let osucmds = [
             {
                 name: 'mods',
                 description: '`string, optional`. The mods to apply on top of the map'
+            },
+            {
+                name: 'detailed',
+                description: '`boolean, optional`. Whether to show the detailed information of the map (milliseconds, object radius)'
             }
         ],
         aliases: 'm'
@@ -219,9 +248,13 @@ let osucmds = [
             {
                 name: 'username',
                 description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will searched for the user\'s name'
+            },
+            {
+                name: 'detailed',
+                description: '`boolean, optional`. Whether to show the detailed information of the user (graph, avg pp, etc)'
             }
         ],
-        aliases: 'profile'
+        aliases: 'profile, o'
     },
     {
         name: 'osuset',
@@ -256,6 +289,10 @@ let osucmds = [
             {
                 name: 'sort',
                 description: '`string, optional`. How to sort the plays by. If omitted, plays will be sorted by pp'
+            },
+            {
+                name: 'reverse',
+                description: '`boolean, optional`. Whether to reverse the order of the plays'
             },
             {
                 name: 'page',
@@ -303,7 +340,7 @@ let osucmds = [
                 description: '`boolean, optional`. Shows the most 20 recent scores'
             }
         ],
-        aliases: 'recent'
+        aliases: 'recent, r'
     },
     {
         name: 'scores',
@@ -322,6 +359,10 @@ let osucmds = [
             {
                 name: 'sort',
                 description: '`string, optional`. How to sort the plays by. If omitted, plays will be sorted by most recent'
+            },
+            {
+                name: 'reverse',
+                description: '`boolean, optional`. Whether to reverse the order of the plays'
             },
             {
                 name: 'compact',
