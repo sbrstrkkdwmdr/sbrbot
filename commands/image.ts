@@ -1,5 +1,5 @@
-const fs = require('fs')
-const fetch = require('node-fetch')
+import fs = require('fs')
+import fetch = require('node-fetch')
 
 module.exports = {
     name: 'image',
@@ -12,21 +12,22 @@ module.exports = {
                 return message.reply({ content: 'Please specify the name of the image you want to search.', allowedMentions: { repliedUser: false } })
             }
             let res =
-                await fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${args.join(' ')}&cx=${config.googlecx}&key=${config.googlekey}&searchType=image`).catch(error => fs.appendFileSync(otherlogdir, "\n" + e));
+                await fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${args.join(' ')}&cx=${config.googlecx}&key=${config.googlekey}&searchType=image`).catch(error => fs.appendFileSync('commands.log', "\n" + error));
 
             if (!res) return message.reply({ content: 'Unable to fetch the requested image.', allowedMentions: { repliedUser: false } })
             if (res.status >= 400) return message.reply({ content: `Error ${res.status}`, allowedMentions: { repliedUser: false } })
 
-            response = await res.json();
+            let response = await res.json();
             fs.writeFileSync('debug/image.json', JSON.stringify(response, null, 2))
             if (response.items.length < 1) return message.reply({ content: 'Error - no results found', allowedMentions: { repliedUser: false } })
 
             let resimg = ''
+            let i:number;
             for (i = 0; i < 5 && i < response.items.length; i++) {
                 resimg += `\n\n<${response.items[i].link}>`
             }
-            let imageEmbed = new Discord.MessageEmbed()
-                .setTitle(`IMAGE RESULTS FOR ${args.join(' ')}`)
+            let imageEmbed = new Discord.EmbedBuilder()
+                .setTitle(`IMAGE RESULTS FOR ${args.join(' ')} (NOTE - URLs may be unsafe)`)
                 .setDescription(`${resimg}`)
             message.reply({ embeds: [imageEmbed], allowedMentions: { repliedUser: false } })
             fs.appendFileSync('commands.log', `\nCommand Information\nQuery: ${args.join(' ')}`)
@@ -46,17 +47,18 @@ module.exports = {
             if (!res) return interaction.reply({ content: 'Unable to fetch the requested image.', allowedMentions: { repliedUser: false } })
             if (res.status >= 400) return interaction.reply({ content: `Error ${res.status}`, allowedMentions: { repliedUser: false } })
 
-            response = await res.json();
+            let response = await res.json();
             fs.writeFileSync('debug/image.json', JSON.stringify(response, null, 2))
             if (response.items.length < 1) return interaction.reply({ content: 'Error - no results found', allowedMentions: { repliedUser: false } })
 
             let resimg = ''
+            let i:number;
             for (i = 0; i < 5 && i < response.items.length; i++) {
                 resimg += `\n\n<${response.items[i].link}>`
             }
 
-            let imageEmbed = new Discord.MessageEmbed()
-                .setTitle(`IMAGE RESULTS FOR ${query}`)
+            let imageEmbed = new Discord.EmbedBuilder()
+                .setTitle(`IMAGE RESULTS FOR ${query} (NOTE - URLs may be unsafe)`)
                 .setDescription(`${resimg}`)
 
             interaction.reply({ embeds: [imageEmbed], allowedMentions: { repliedUser: false } })

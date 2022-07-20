@@ -1,4 +1,4 @@
-const fs = require('fs')
+import fs = require('fs')
 module.exports = {
     name: 'poll',
     description: 'template text\n' +
@@ -6,7 +6,7 @@ module.exports = {
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
-        let pollEmbedDefault = new Discord.MessageEmbed()
+        let pollEmbedDefault = new Discord.EmbedBuilder()
             .setDescription('✅ for yes\n❌ for no')
             ;
 
@@ -63,7 +63,8 @@ module.exports = {
             let optstxt = ''
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - poll (interaction)\n${currentDate} | ${currentDateISO}\n recieved poll command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\ntitle: ${title}\noptions: ${options}`, 'utf-8')
 
-
+            let i:number;
+            let curtxt:string;
             for (i = 0; i < optsarr.length && i < 20; i++) {
                 if (optsarr[i].length > 150) {
                     curtxt = optsarr[i].substring(0, 149) + '...'

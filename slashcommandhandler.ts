@@ -1,4 +1,5 @@
 //const { Constants } = require('discord.js');
+const { ApplicationCommandOptionType, InteractionType } = require('discord.js');
 const cmdconfig = require('./configs/commandopts')
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
     const guildID = config.testGuildID;
@@ -22,7 +23,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'command',
                 description: 'Displays help for a specific command',
-                type: Discord.ApplicationCommandOptionType.String,
+                type: ApplicationCommandOptionType.String,
                 required: false,
             }
         ]
@@ -34,7 +35,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'type',
                 description: 'The type of gif to send',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true,
                 choices: cmdconfig.gifopts
             }
@@ -47,7 +48,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'query',
                 description: 'The parameters for the search',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true
             }
         ]
@@ -59,7 +60,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'query',
                 description: 'The parameters for the search',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true
             }
         ]
@@ -71,20 +72,20 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'type',
                 description: 'The parameters for the search',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true,
                 choices: cmdconfig.mathcmdopts
             },
             {
                 name: 'num1',
                 description: 'The first number',
-                type: Discord.ApplicationCommandOptionType.NUMBER,
+                type: ApplicationCommandOptionType.Number,
                 required: true
             },
             {
                 name: 'num2',
                 description: 'The second number',
-                type: Discord.ApplicationCommandOptionType.NUMBER,
+                type: ApplicationCommandOptionType.Number,
                 required: false,
                 minValue: 1,
                 maxValue: 100
@@ -98,21 +99,21 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'type1',
                 description: 'What to convert the value from',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true,
                 choices: cmdconfig.conversionopts
             },
             {
                 name: 'type2',
                 description: 'What to convert the value to',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true,
                 choices: cmdconfig.conversionopts
             },
             {
                 name: 'number',
                 description: 'The value to convert',
-                type: Discord.ApplicationCommandOptionType.NUMBER,
+                type: ApplicationCommandOptionType.Number,
                 required: true
             }
         ]
@@ -128,7 +129,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'number',
                 description: 'The maximum number to get',
-                type: Discord.ApplicationCommandOptionType.NUMBER,
+                type: ApplicationCommandOptionType.Number,
                 required: false
             }
         ]
@@ -140,19 +141,19 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'time',
                 description: 'How long to wait before sending the reminder. Must end in d, h, m, or s',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true
             },
             {
                 name: 'reminder',
                 description: 'The reminder',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true
             },
             {
                 name: 'sendinchannel',
                 description: 'If true, the reminder will be sent into the channel',
-                type: Discord.ApplicationCommandOptionType.BOOLEAN,
+                type: ApplicationCommandOptionType.Boolean,
                 required: false
             }
         ]
@@ -164,13 +165,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'message',
                 description: 'The message to send',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true
             },
             {
                 name: 'channel',
                 description: 'The channel to send the message to',
-                type: Discord.ApplicationCommandOptionType.CHANNEL,
+                type: ApplicationCommandOptionType.Channel,
                 required: false
             }
         ]
@@ -182,13 +183,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'title',
                 description: 'The title of the poll',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true,
             },
             {
                 name: 'options',
                 description: 'The options. SEPARATE WITH +',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true,
             }
 
@@ -203,13 +204,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'user',
                 description: 'The user to display the profile of',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: false,
             },
             {
                 name: 'detailed',
                 description: 'Displays extra information',
-                type: Discord.ApplicationCommandOptionType.BOOLEAN,
+                type: ApplicationCommandOptionType.Boolean,
                 required: false,
                 default: false
             }
@@ -222,13 +223,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'user',
                 description: 'The user to set the profile of',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true,
             },
             {
                 name: 'mode',
                 description: 'The mode to set the profile to',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true,
                 choices: cmdconfig.modeopts
             }
@@ -241,33 +242,33 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'user',
                 description: 'The user to display the top plays of',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: false,
             },
             {
                 name: 'mode',
                 description: 'The mode to display the top plays of',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: false,
                 choices: cmdconfig.modeopts
             },
             {
                 name: 'sort',
                 description: 'The sort to display the top plays of',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: false,
                 choices: cmdconfig.playsortopts
             },
             {
                 name: 'reverse',
                 description: 'If true, the top plays will be displayed in reverse',
-                type: Discord.ApplicationCommandOptionType.BOOLEAN,
+                type: ApplicationCommandOptionType.Boolean,
                 required: false,
             },
             {
                 name: 'page',
                 description: 'The page to display the top plays of',
-                type: Discord.ApplicationCommandOptionType.INTEGER,
+                type: ApplicationCommandOptionType.Integer,
                 required: false,
                 default: 1,
                 minValue: 1,
@@ -276,26 +277,26 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'mapper',
                 description: 'Filter the top plays to show maps from this mapper',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: false,
             },
             {
                 name: 'mods',
                 description: 'Filter the top plays to show only plays with these mods',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: false,
             },
             {
                 name: 'detailed',
                 description: 'Show all details',
-                type: Discord.ApplicationCommandOptionType.BOOLEAN,
+                type: ApplicationCommandOptionType.Boolean,
                 required: false,
                 default: false
             },
             {
                 name: 'compact',
                 description: 'Whether or not to show the compact version of the top plays',
-                type: Discord.ApplicationCommandOptionType.BOOLEAN,
+                type: ApplicationCommandOptionType.Boolean,
                 required: false,
                 default: false
             }
@@ -308,20 +309,20 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'id',
                 description: 'The id of the map to display',
-                type: Discord.ApplicationCommandOptionType.INTEGER,
+                type: ApplicationCommandOptionType.Integer,
                 required: false,
                 minValue: 1
             },
             {
                 name: 'mods',
                 description: 'The mods to display the map info of',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: false,
             },
             {
                 name: 'detailed',
                 description: 'Show all details',
-                type: Discord.ApplicationCommandOptionType.BOOLEAN,
+                type: ApplicationCommandOptionType.Boolean,
                 required: false,
                 default: false
             }
@@ -345,13 +346,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'id',
                 description: 'The id of the map to display',
                 required: false,
-                type: Discord.ApplicationCommandOptionType.INTEGER
+                type: ApplicationCommandOptionType.Integer
             },
             {
                 name: 'page',
                 description: 'Which page to display',
                 required: false,
-                type: Discord.ApplicationCommandOptionType.INTEGER,
+                type: ApplicationCommandOptionType.Integer,
                 default: 1,
                 minValue: 1,
                 maxValue: 20
@@ -361,7 +362,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'mods',
                 description: 'What mods to sort',
                 required: false,
-                type: Discord.ApplicationCommandOptionType.STRING
+                type: ApplicationCommandOptionType.String
             }
         ]
     })
@@ -373,13 +374,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'mods',
                 description: 'The mods to calculate the values for',
                 required: true,
-                type: Discord.ApplicationCommandOptionType.STRING
+                type: ApplicationCommandOptionType.String
             },
             {
                 name: 'cs',
                 description: 'The circle size to calculate the values for',
                 required: true,
-                type: Discord.ApplicationCommandOptionType.NUMBER,
+                type: ApplicationCommandOptionType.Number,
                 minValue: 0,
                 maxValue: 11
             },
@@ -387,7 +388,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'ar',
                 description: 'The approach rate to calculate the values for',
                 required: true,
-                type: Discord.ApplicationCommandOptionType.NUMBER,
+                type: ApplicationCommandOptionType.Number,
                 minValue: 0,
                 maxValue: 11
             },
@@ -395,7 +396,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'od',
                 description: 'The overall difficulty to calculate the values for',
                 required: true,
-                type: Discord.ApplicationCommandOptionType.NUMBER,
+                type: ApplicationCommandOptionType.Number,
                 minValue: 0,
                 maxValue: 11
             },
@@ -403,7 +404,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'hp',
                 description: 'The HP to calculate the values for',
                 required: true,
-                type: Discord.ApplicationCommandOptionType.NUMBER,
+                type: ApplicationCommandOptionType.Number,
                 minValue: 0,
                 maxValue: 11
             },
@@ -411,7 +412,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'bpm',
                 description: 'The BPM to calculate the values for',
                 required: true,
-                type: Discord.ApplicationCommandOptionType.NUMBER,
+                type: ApplicationCommandOptionType.Number,
                 minValue: 1
 
             }
@@ -428,7 +429,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'user',
                 description: 'The user to check the permissions of',
-                type: Discord.ApplicationCommandOptionType.USER,
+                type: ApplicationCommandOptionType.User,
                 required: true,
             }
         ]
@@ -445,7 +446,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'guild',
                 description: 'The server to leave',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true,
                 minValue: 1
             }
@@ -460,13 +461,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'user',
                 description: 'The user to control',
-                type: Discord.ApplicationCommandOptionType.USER,
+                type: ApplicationCommandOptionType.User,
                 required: true,
             },
             {
                 name: 'type',
                 description: 'The type of voice control to perform',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true,
                 choices: [
                     { name: 'Mute', value: 'mute' },
@@ -478,7 +479,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'channel',
                 description: 'The channel to move the user to',
-                type: Discord.ApplicationCommandOptionType.CHANNEL,
+                type: ApplicationCommandOptionType.Channel,
                 required: false,
             }
         ],
@@ -491,7 +492,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'type',
                 description: 'The type of thing to find',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true,
                 choices: [
                     { name: 'User', value: 'user' },
@@ -504,7 +505,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'id',
                 description: 'The id of the thing to find',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: true,
                 minValue: 1
             }
@@ -517,7 +518,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             {
                 name: 'guildid',
                 description: 'The guild to display the log of',
-                type: Discord.ApplicationCommandOptionType.STRING,
+                type: ApplicationCommandOptionType.String,
                 required: false,
                 minValue: 1
             },

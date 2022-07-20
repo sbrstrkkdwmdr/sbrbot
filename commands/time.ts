@@ -1,5 +1,5 @@
-const fs = require('fs')
-const calc = require('../configs/calculations.js')
+import fs = require('fs')
+import calc = require('../configs/calculations.js')
 module.exports = {
     name: 'time',
     description: 'template text\n' +
@@ -12,7 +12,7 @@ module.exports = {
             let epoch = new Date().getTime()
             let Datenow = new Date(currentDate).toUTCString()
 
-            let msepochsince = parseInt(epoch) - 1640995200000
+            let msepochsince = (epoch) - 1640995200000
             let thedaysthingyiuseonmydiscordstatus = (msepochsince / 1000 / 60 / 60 / 24).toFixed(2)
 
             let rn = new Date()
@@ -26,7 +26,7 @@ module.exports = {
             let lasttime = (fs.readFileSync('debug/timesince.txt')).toString()
 
             let lasttimetodateobj = new Date(lasttime)
-            let timetonum = (rn - lasttimetodateobj) / (1000 * 60)
+            let timetonum = (rn.getTime() - lasttimetodateobj.getTime()) / (1000 * 60)
 
             let lasvisdays = (Math.trunc(timetonum / 60 / 24));
             let lastvishours = (Math.trunc(timetonum / 60)) % 24;
@@ -49,8 +49,8 @@ module.exports = {
 
             fs.writeFileSync('debug/timesince.txt', rn.toString())
 
-            let monthnum = rn.getUTCMonth()
-            let daynum = rn.getUTCDate()
+            let monthnum: any = rn.getUTCMonth()
+            let daynum: any = rn.getUTCDate()
             if (monthnum < 10) { monthnum = '0' + monthnum }
             if (daynum < 10) { daynum = '0' + daynum }
             let truedate = `${year}/${monthnum}/${daynum}`
@@ -66,46 +66,48 @@ module.exports = {
             let relyear = rn.getFullYear()
             let reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`
 
-            let relmonthnum = rn.getMonth()
-            let reldaynum = rn.getDate()
+            let relmonthnum: any = rn.getMonth()
+            let reldaynum: any = rn.getDate()
             if (relmonthnum < 10) { relmonthnum = '0' + relmonthnum }
             if (reldaynum < 10) { reldaynum = '0' + reldaynum }
             let reltruedate = `${relyear}/${relmonthnum}/${reldaynum}`
 
 
-            let Embed = new Discord.MessageEmbed()
+            let Embed = new Discord.EmbedBuilder()
                 .setTitle('Current Time')
-                .addField(
-                    'UTC/GMT+00:00',
-                    `\n**Date**: ${truedate}` +
-                    `\n**Full Date**: ${datenow12h}` +
-                    `\n**Full Date(24h)**: ${Datenow}` +
-                    `\n\n**Full Date ISO8601**: ${currentDateISO}` +
-                    `\n**EPOCH(ms)**: ${epoch}` +
-                    `\n**Days since Jan 1st 2022**: [${thedaysthingyiuseonmydiscordstatus}]`
+                .addFields([{
+                    name: 'UTC/GMT+00:00',
+                    value: `\n**Date**: ${truedate}` +
+                        `\n**Full Date**: ${datenow12h}` +
+                        `\n**Full Date(24h)**: ${Datenow}` +
+                        `\n\n**Full Date ISO8601**: ${currentDateISO}` +
+                        `\n**EPOCH(ms)**: ${epoch}` +
+                        `\n**Days since Jan 1st 2022**: [${thedaysthingyiuseonmydiscordstatus}]`
                     ,
-                    false
+                    inline: false
+                }]
                 )
-                .addField(
-                    `UTC/GMT${offset} (Host's Local Time)`,
-                    `\n**Date**: ${reltruedate}` +
-                    `\n**Full Date**: ${reldatenow12h}` +
-                    `\n**Full Date(24h)**: ${currentDate}` +
-                    `\n**Time since command was last used**: ${minlastvisw} `
+                .addFields([{
+                    name: `UTC/GMT${offset} (Host's Local Time)`,
+                    value: `\n**Date**: ${reltruedate}` +
+                        `\n**Full Date**: ${reldatenow12h}` +
+                        `\n**Full Date(24h)**: ${currentDate}` +
+                        `\n**Time since command was last used**: ${minlastvisw} `
                     ,
-                    false
+                    inline: false
+                }]
                 )
             if (args[0]) {
                 if (!args[0].includes('/')) {
-                    Embed.addField(
-                        `UTC/GMT +??:?? (Requested Time)`,
-                        `\nRecived invalid timezone!` +
-                        `\nBoth Country and City must be specified` +
-                        `\ni.e **Australia/Melbourne**` +
-                        `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
+                    Embed.addFields([{
+                        name: `UTC/GMT +??:?? (Requested Time)`,
+                        value: `\nRecived invalid timezone!` +
+                            `\nBoth Country and City must be specified` +
+                            `\ni.e **Australia/Melbourne**` +
+                            `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
                         ,
-                        false
-                    )
+                        inline: false
+                    }])
                 }
                 else {
                     let timezone = args.splice(0, 1000).join(" ");
@@ -121,16 +123,15 @@ module.exports = {
                     try {
                         let optionaldatefirst = new Date(new Date().toLocaleString('en-US', timeopts));
                     } catch (error) {
-                        fs.appendFileSync(otherlogdir, "\n" + error)
-                        fs.appendFileSync(otherlogdir, "\n" + getStackTrace(error))
-                        Embed.addField(
-                            `UTC/GMT +??:?? (Requested Time)`,
-                            `\nRecived invalid timezone!` +
-                            `\nBoth Country and City must be specified` +
-                            `\ni.e **Australia/Melbourne**` +
-                            `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
+                        Embed.addFields([{
+                            name: `UTC/GMT +??:?? (Requested Time)`,
+                            value: `\nRecived invalid timezone!` +
+                                `\nBoth Country and City must be specified` +
+                                `\ni.e **Australia/Melbourne**` +
+                                `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
                             ,
-                            false
+                            inline: false
+                        }]
                         )
                         message.reply({ embeds: [Embed] })
                         return;
@@ -148,24 +149,24 @@ module.exports = {
                     let optionaldatetime = calc.relto12htime(new Date(optionaldate12hfirst))
                     let optionaldate12h = `${optionaldate2} ${optionaldatetime}`
 
-                    optionaldatehours = parseInt(optionaldate.getHours())
-                    optionaldateutchours = parseInt(new Date().getUTCHours())
+                    let optionaldatehours = (optionaldate.getHours())
+                    let optionaldateutchours = (new Date().getUTCHours())
                     /* console.log(optionaldatehours)
                     console.log(optionaldateutchours) */
-                    optionaldateoffsetNEW = calc.fixoffset((optionaldateutchours - optionaldatehours) * 60) //had to remake another version of offset 
+                    let optionaldateoffsetNEW = calc.fixoffset((optionaldateutchours - optionaldatehours) * 60) //had to remake another version of offset 
 
                     //
 
 
                     Embed
-                        .addField(
-                            `UTC/GMT ${optionaldateoffsetNEW} (Requested Time)`,
-                            `\n**Date**: ${optionaldateDate}` +
-                            `\n**Full Date**: ${optionaldate12h}` +
-                            `\n**Full Date(24h)**: ${optionaldate}` +
-                            `\n**Full Date ISO8601**: ${optionaldateISO}`,
-                            false
-                        )
+                        .addFields([{
+                            name: `UTC/GMT ${optionaldateoffsetNEW} (Requested Time)`,
+                            value: `\n**Date**: ${optionaldateDate}` +
+                                `\n**Full Date**: ${optionaldate12h}` +
+                                `\n**Full Date(24h)**: ${optionaldate}` +
+                                `\n**Full Date ISO8601**: ${optionaldateISO}`,
+                            inline: false
+                        }])
                 }
             }
             //message.channel.send(`${currentDateISO} | ${currentDate}`) 

@@ -1,5 +1,5 @@
-const fs = require('fs');
-const emojisarr = require('../configs/emojiarray.js')
+import fs = require('fs');
+import emojisarr = require('../configs/emojiarray.js')
 module.exports = {
     name: 'emojify',
     description: 'Emojify a string',

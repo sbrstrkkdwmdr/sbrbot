@@ -1,4 +1,4 @@
-const fs = require('fs')
+import fs = require('fs');
 
 module.exports = {
     name: '8ball',

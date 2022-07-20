@@ -1,12 +1,30 @@
-const ms = require('ms')
-const fetch = require('node-fetch')
-const notxt = require('../configs/w.js')
-const fs = require('fs')
+import ms = require('ms')
+import fetch = require('node-fetch')
+import notxt = require('../configs/w.js')
+import fs = require('fs')
 module.exports = {
     name: 'remind',
     description: 'null',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         let timetype = ['s', 'm', 'h', 'd']
+
+        async function sendremind(reminder, time, obj, sendchannel, remindertxt) {
+            try {
+                if(sendchannel == true){
+                setTimeout(() => {
+                    obj.channel.send({ embeds: [reminder] })
+                }, ms(`${time}`));
+            }
+            else {
+                setTimeout(() => {
+                    interaction.member.user.send({ embeds: [reminder] })
+                }, ms(`${time}`));
+            }
+            } catch (error) {
+                console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
+            }
+        }
+
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
@@ -27,16 +45,8 @@ module.exports = {
                 .setTitle('REMINDER')
                 .setDescription(`${remindertxt}`)
 
-            async function sendremind() {
-                try {
-                    setTimeout(() => {
-                        message.channel.send({ embeds: [reminder] })
-                    }, ms(`${time}`));
-                } catch (error) {
-                    console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
-                }
-            }
-            sendremind();
+
+            sendremind(reminder, time, message, true, remindertxt);
             fs.appendFileSync('commands.log', `\nCommand Information\nMessage Content: ${message.content}`)
 
         }
@@ -59,28 +69,11 @@ module.exports = {
 
             let sendtochannel = interaction.options.getBoolean('sendinchannel')
             if (sendtochannel == true) {
-                async function sendremind() {
-                    try {
-                        setTimeout(() => {
-                            interaction.channel.send({ embeds: [reminder] })
-                        }, ms(`${time}`));
-                    } catch (error) {
-                        console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
-                    }
-                }
-                sendremind();
+
+                sendremind(reminder, time, interaction, true, remindertxt);
 
             } else {
-                async function sendremind() {
-                    try {
-                        setTimeout(() => {
-                            interaction.member.user.send({ embeds: [reminder] })
-                        }, ms(`${time}`));
-                    } catch (error) {
-                        console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
-                    }
-                }
-                sendremind();
+                sendremind(reminder, time, interaction, false, remindertxt);
             }
             fs.appendFileSync('commands.log', `\nCommand Information\nreminder:${remindertxt}\ntime:${time}\nSendInChannel:${sendtochannel}`)
         }

@@ -1,4 +1,4 @@
-const fs = require('fs')
+import fs = require('fs')
 
 module.exports = {
     name: 'gif',
@@ -9,6 +9,7 @@ module.exports = {
         '⠀⠀`type`: string, required. The type of gif to send.'
     ,
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+        let thelink:string;
         let cryabtit = [
             'https://media.discordapp.net/attachments/858364068024156171/858364114183520266/cry_about_about_it.gif', //zitron map
             'https://tenor.com/view/cry-about-it-jtoh-get-real-gif-20687952', // imperfect circle

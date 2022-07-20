@@ -1,9 +1,10 @@
-const fs = require('fs')
+import fs = require('fs')
 
 module.exports = {
     name: 'roll',
     description: 'w',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+        let roll:string;
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - roll (message)\n${currentDate} | ${currentDateISO}\n recieved roll command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             if (!args[0] || parseInt(args[0]) < 1) {

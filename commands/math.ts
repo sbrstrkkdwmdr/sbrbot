@@ -1,10 +1,11 @@
-const fs = require('fs')
-const calculations = require('../configs/calculations')
-const osucalc = require('osumodcalculator')
+import fs = require('fs')
+import calculations = require('../configs/calculations')
+import osucalc = require('osumodcalculator')
 module.exports = {
     name: 'math',
     description: 'null',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+        let odcalc;
         if (message != null) {
             if (args[0] == 'help') {
                 return message.reply({
@@ -32,7 +33,7 @@ module.exports = {
             let isvalid = letterstoavoid.find(v => (string.includes(v)))
             if (isvalid) return message.channel.send('Invalid string - letters or unallowed characters found')
             try {
-                evalstr = eval(string.replaceAll('^', '**').replaceAll('pi', 'Math.PI')).toString()
+                let evalstr = eval(string.replaceAll('^', '**').replaceAll('pi', 'Math.PI')).toString()
                 message.reply({ content: evalstr, allowedMentions: { repliedUser: false } })
             } catch (error) {
                 message.reply({ content: `${error}`, allowedMentions: { repliedUser: false } })
@@ -76,7 +77,10 @@ module.exports = {
                     equation = (`${calculations.findLCM(num1, num2)}`)
                     break;
                 case 'pythag':
-                    equation = (`${calculations.pythag(num1)}`)
+                    if(!num2){
+                        equation = 'Missing second number.'
+                    }
+                    equation = (`${calculations.pythag(num1, num2)}`)
                     break;
                 case 'sigfig':
                     if (!num2) {
