@@ -1,4 +1,4 @@
-const commandhelp = require('../configs/info.js')
+const commandhelp = require('../configs/info')
 import fs = require('fs')
 module.exports = {
     name: 'help',

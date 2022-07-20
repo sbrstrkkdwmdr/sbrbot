@@ -1,5 +1,4 @@
-//const { Constants } = require('discord.js');
-//import * as Discord from "discord.js";
+import { ApplicationCommandOptionType } from 'discord.js';
 const Discord = require('discord.js');
 /**
  * @type {Array}
@@ -518,32 +517,32 @@ let useridsortopts = [
         name: 'username',
         description: 'username or ID works (mode name if set to mode)',
         required: false,
-        type: String,
+        type: ApplicationCommandOptionType.String,
     },
     {
         name: 'id',
         description: 'the map id',
         required: false,
-        type: Number,
+        type: ApplicationCommandOptionType.Number,
     },
     {
         name: 'sort',
         description: 'what to sort plays by. defaults to most recent',
         required: false,
-        type: Discord.ApplicationCommandOptionType.STRING,
+        type: ApplicationCommandOptionType.String,
         choices: playsortopts
     },
     {
         name: 'reverse',
         description: 'If true, the plays will be displayed in reverse',
-        type: Discord.ApplicationCommandOptionType.BOOLEAN,
+        type: ApplicationCommandOptionType.Boolean,
         required: false,
         default: false
     },
     {
         name: 'compact',
         description: 'Whether or not to show the compact version of the scores',
-        type: Discord.ApplicationCommandOptionType.BOOLEAN,
+        type: ApplicationCommandOptionType.Boolean,
         required: false,
         default: false
     }
@@ -554,20 +553,20 @@ let useroffsetmodeopts = [
         name: 'user',
         description: 'the username or id',
         required: false,
-        type: Discord.ApplicationCommandOptionType.STRING
+        type: ApplicationCommandOptionType.String
     },
     {
         name: 'page',
         description: 'the page to show',
         required: false,
-        type: Discord.ApplicationCommandOptionType.NUMBER,
+        type: ApplicationCommandOptionType.Number,
         default: 1
     },
     {
         name: 'mode',
         description: 'what mode to show',
         required: false,
-        type: Discord.ApplicationCommandOptionType.STRING,
+        type: ApplicationCommandOptionType.String,
         choices: modeopts
     }
 ]
@@ -576,31 +575,30 @@ let rsopts = [
         name: 'user',
         description: 'the username or id',
         required: false,
-        type: Discord.ApplicationCommandOptionType.STRING
+        type: ApplicationCommandOptionType.String
     },
     {
         name: 'page',
         description: 'the page to show',
         required: false,
-        type: Discord.ApplicationCommandOptionType.NUMBER,
+        type: ApplicationCommandOptionType.Number,
         default: 1
     },
     {
         name: 'mode',
         description: 'what mode to show',
         required: false,
-        type: Discord.ApplicationCommandOptionType.STRING,
+        type: ApplicationCommandOptionType.String,
         choices: modeopts
     },
     {
         name: 'list',
         description: 'Enables list mode',
         required: false,
-        type: Discord.ApplicationCommandOptionType.BOOLEAN,
+        type: ApplicationCommandOptionType.Boolean,
         default: false
     }
 ]
 
 
-//module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts }
-export { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts }
+module.exports = { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts }

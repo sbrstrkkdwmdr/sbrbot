@@ -2,7 +2,7 @@
   "name": "sbrbot",
   "version": "1.0.1",
   "description": "ww",
-  "main": "main.js",
+  "main": "main.ts",
   "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -31,6 +31,8 @@
     "yt-search": "^2.10.3"
   },
   "devDependencies": {
-    "discord.js": "^14.0.2"
+    "@types/node": "^18.0.6",
+    "discord.js": "^14.0.2",
+    "tslib": "^2.4.0"
   }
 }

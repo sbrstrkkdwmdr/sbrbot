@@ -5,11 +5,11 @@ const Sequelize = require('sequelize');
 import fetch = require('node-fetch');
 
 
-const commandHandler = require('./commandHandler.js');
-const linkHandler = require('./linkHandler.js');
-const slashcommandHandler = require('./slashcommandHandler.js');
-const checker = require('./checker.js');
-const musichandler = require('./musicHandler.js');
+const commandHandler = require('./commandHandler.ts');
+const linkHandler = require('./linkHandler.ts');
+const slashcommandHandler = require('./slashcommandHandler.ts');
+const checker = require('./checker.ts');
+const musichandler = require('./musicHandler.ts');
 
 const config = require('./configs/config.json');
 
@@ -45,31 +45,31 @@ client.osucmds = new Discord.Collection();
 client.admincmds = new Discord.Collection();
 client.musiccmds = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
 }
 
-const linkFiles = fs.readdirSync('./links').filter(file => file.endsWith('.js'));
+const linkFiles = fs.readdirSync('./links').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of linkFiles) {
     const link = require(`./links/${file}`);
     client.links.set(link.name, link);
 }
 
-const osuFiles = fs.readdirSync('./commands-osu').filter(file => file.endsWith('.js'));
+const osuFiles = fs.readdirSync('./commands-osu').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of osuFiles) {
     const osu = require(`./commands-osu/${file}`);
     client.osucmds.set(osu.name, osu);
 }
 
-const admincommandFiles = fs.readdirSync('./commands-admin').filter(file => file.endsWith('.js'));
+const admincommandFiles = fs.readdirSync('./commands-admin').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of admincommandFiles) {
     const admincommand = require(`./commands-admin/${file}`);
     client.admincmds.set(admincommand.name, admincommand);
 }
 
-const musicCommandFiles = fs.readdirSync('./commands-music').filter(file => file.endsWith('js'));
+const musicCommandFiles = fs.readdirSync('./commands-music').filter(file => file.endsWith('js') || file.endsWith('.ts'));
 for (const file of musicCommandFiles) {
     const musiccommand = require(`./commands-music/${file}`)
     client.musiccmds.set(musiccommand.name, musiccommand)
