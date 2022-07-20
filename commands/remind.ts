@@ -40,7 +40,7 @@ module.exports = {
             if (!args[0].endsWith('d') && !args[0].endsWith('h') && !args[0].endsWith('m') && !args[0].endsWith('s')) {
                 return message.reply({ content: 'Incorrect time format: please use `d`, `h`, `m`, or `s`', allowedMentions: { repliedUser: false } })
             }
-            let reminder = new Discord.MessageEmbed()
+            let reminder = new Discord.EmbedBuilder()
                 .setColor('#7289DA')
                 .setTitle('REMINDER')
                 .setDescription(`${remindertxt}`)
@@ -60,7 +60,7 @@ module.exports = {
                 return interaction.reply({ content: 'Incorrect time format: please use `d`, `h`, `m`, or `s`', ephemeral: true })
             }
 
-            let reminder = new Discord.MessageEmbed()
+            let reminder = new Discord.EmbedBuilder()
                 .setColor('#7289DA')
                 .setTitle('REMINDER')
                 .setDescription(`${remindertxt}`)
