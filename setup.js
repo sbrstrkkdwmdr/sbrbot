@@ -43,6 +43,9 @@ if (!fs.existsSync('./debug')) {
 if (!fs.existsSync('./debugosu')) {
     fs.mkdirSync('./debugosu')
 }
+if (!fs.existsSync('./logs')) {
+    fs.mkdirSync('./logs')
+}
 if (fs.existsSync('./debug/timesince.txt')) {
 
 
