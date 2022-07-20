@@ -460,12 +460,13 @@ module.exports = {
                     let mapperlink = (`${json.beatmapset.creator}`).replaceAll(' ', '%20');
                     let maphitonly = json.hit_length
                     let maphitmins = Math.floor(maphitonly / 60)
-                    let maphitseconds = Math.floor(maphitonly % 60)
+                    let maphitseconds:any = Math.floor(maphitonly % 60)
                     if (maphitseconds < 10) {
                         maphitseconds = '0' + maphitseconds;
                     }
                     let maphitstr = `${maphitmins}:${maphitseconds}`
                     let mapstatus = (json.status)
+                    let statusimg:string;
                     if (mapstatus == "ranked") {
                         statusimg = emojis.rankedstatus.ranked;
                     }
@@ -673,7 +674,9 @@ module.exports = {
                             pp = new ppcalc.mania_ppv2().setPerformance(score).setMods(fixedmods);
                             pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                         }
-
+                        let ppComputedString:any;
+                        let pp95ComputedString:any;
+                        let ppissue:string;
                         try {
                             let ppComputed = await pp.compute();
                             let pp95Computed = await pp95.compute();
@@ -804,12 +807,14 @@ module.exports = {
                     let mapperlink = (`${json.beatmapset.creator}`).replaceAll(' ', '%20');
                     let maphitonly = json.hit_length
                     let maphitmins = Math.floor(maphitonly / 60)
-                    let maphitseconds = Math.floor(maphitonly % 60)
+                    let maphitseconds:any = Math.floor(maphitonly % 60)
+                    
                     if (maphitseconds < 10) {
                         maphitseconds = '0' + maphitseconds;
                     }
                     let maphitstr = `${maphitmins}:${maphitseconds}`
                     let mapstatus = (json.status)
+                    let statusimg:string;
                     if (mapstatus == "ranked") {
                         statusimg = emojis.rankedstatus.ranked;
                     }
@@ -1021,7 +1026,9 @@ module.exports = {
                             pp = new ppcalc.mania_ppv2().setPerformance(score).setMods(fixedmods);
                             pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                         }
-
+                        let ppComputedString:any;
+                        let pp95ComputedString:any;
+                        let ppissue:string;
                         try {
                             let ppComputed = await pp.compute();
                             let pp95Computed = await pp95.compute();
@@ -1054,7 +1061,7 @@ module.exports = {
                         if (a != auni) {
                             a = `${a} (${auni})`
                         }
-
+                        let maptitle:string;
                         if (mapmods == null || mapmods == '' || mapmods == 'NM') {
                             maptitle = `${a} - ${mapname} [${json.version}]`
                         }
