@@ -27,7 +27,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         }
         //MESSAGE LOGGER
     })
-    client.on('messageDelete', message => {
+/*     client.on('messageDelete', message => {
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(message.guild.id)
@@ -119,17 +119,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
         })
     })
-    /*     client.on('presenceUpdate', (oldPresence, newPresence) => {
-        let guild = client.guilds.cache.get(oldPresence.guild.id)
-        fs.appendFileSync(`./logs/${guild.id}.log`, `\nUser ${oldPresence.user.username}#${oldPresence.user.discriminator} (${oldPresence.user.id}) has been updated:\n`)
-        if (oldPresence.activities != newPresence.activities) {
-            fs.appendFileSync(`./logs/${guild.id}.log`, `activities changed: ${oldPresence.activities.map(a => a.name).join(', ')} => ${newPresence.activities.map(a => a.name).join(', ')}\n`)
-        }
-        if (oldPresence.status != newPresence.status) {
-            fs.appendFileSync(`./logs/${guild.id}.log`, `status changed: ${oldPresence.status} => ${newPresence.status}\n`)
-        }
-        }) */ //commented out bcs its unneccessary  
-
 
     //GENERAL GUILD UPDATE LOGGER
     client.on('channelCreate', (channel) => {
@@ -151,24 +140,10 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case channel.type == 5 || channel.type.toString() == 'GUILD_NEWS':
                 fs.appendFileSync(`./logs/${guild.id}.log`, ` News Channel ${channel.name} (${channel.id}) was created\n`)
                 break;
-            /*             case channel.type == 10 || channel.type.toString() == 'GUILD_NEWS_THREAD':
-                            fs.appendFileSync(`./logs/${guild.id}.log`, `\n News Thread ${channel.name} (${channel.id}) was created\n`)
-                            break;
-                        case channel.type == 11 || channel.type.toString() == 'GUILD_PUBLIC_THREAD':
-                            fs.appendFileSync(`./logs/${guild.id}.log`, `\nPublic Thread ${channel.name} (${channel.id}) was created\n`)
-                            break;
-                        case channel.type == 12 || channel.type.toString() == 'GUILD_PRIVATE_THREAD':
-                            fs.appendFileSync(`./logs/${guild.id}.log`, `\nPrivate Thread ${channel.name} (${channel.id}) in channel was created\n`)
-                            break; */
+
             case channel.type == 13 || channel.type.toString() == 'GUILD_STAGE_VOICE':
                 fs.appendFileSync(`./logs/${guild.id}.log`, ` Stage Voice Channel ${channel.name} (${channel.id}) was created\n`)
                 break;
-            /*             case channel.type == 14 || channel.type.toString() == 'GUILD_DIRECTORY':
-                            fs.appendFileSync(`./logs/${guild.id}.log`, `\nDirectory Channel ${channel.name} (${channel.id}) was created\n`)
-                            break;
-                        case channel.type == 15 || channel.type.toString() == 'GUILD_FORUM':
-                            fs.appendFileSync(`./logs/${guild.id}.log`, `\nForum Channel ${channel.name} (${channel.id}) was created\n`)
-                            break; */
             default:
                 fs.appendFileSync(`./logs/${guild.id}.log`, ` Channel ${channel.name} (${channel.id}) was created\n`)
                 break;
@@ -194,24 +169,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case channel.type == 5 || channel.type.toString() == 'GUILD_NEWS':
                 fs.appendFileSync(`./logs/${guild.id}.log`, `  News Channel ${channel.name} (${channel.id}) was deleted\n`)
                 break;
-            /*            case channel.type == 10 || channel.type.toString() == 'GUILD_NEWS_THREAD':
-                            fs.appendFileSync(`./logs/${guild.id}.log`, `\n News Thread ${channel.name} (${channel.id}) was deleted\n`)
-                            break;
-                         case channel.type == 11 || channel.type.toString() == 'GUILD_PUBLIC_THREAD':
-                            fs.appendFileSync(`./logs/${guild.id}.log`, `\nPublic Thread ${channel.name} (${channel.id}) was deleted\n`)
-                            break;
-                        case channel.type == 12 || channel.type.toString() == 'GUILD_PRIVATE_THREAD':
-                            fs.appendFileSync(`./logs/${guild.id}.log`, `\nPrivate Thread ${channel.name} (${channel.id}) in channel was deleted\n`)
-                            break; */
             case channel.type == 13 || channel.type.toString() == 'GUILD_STAGE_VOICE':
                 fs.appendFileSync(`./logs/${guild.id}.log`, ` Stage Voice Channel ${channel.name} (${channel.id}) was deleted\n`)
                 break;
-            /*             case channel.type == 14 || channel.type.toString() == 'GUILD_DIRECTORY':
-                            fs.appendFileSync(`./logs/${guild.id}.log`, `\nDirectory Channel ${channel.name} (${channel.id}) was deleted\n`)
-                            break;
-                        case channel.type == 15 || channel.type.toString() == 'GUILD_FORUM':
-                            fs.appendFileSync(`./logs/${guild.id}.log`, `\nForum Channel ${channel.name} (${channel.id}) was deleted\n`)
-                            break; */
             default:
                 fs.appendFileSync(`./logs/${guild.id}.log`, ` Channel ${channel.name} (${channel.id}) was deleted\n`)
                 break;
@@ -330,7 +290,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         if (oldGuild.name != newGuild.name) {
             fs.appendFileSync(`./logs/${guild.id}.log`, `name changed: ${oldGuild.name} => ${newGuild.name}\n`)
         }
-        /*         if() */
 
     })
     client.on('inviteCreate', (invite) => {
@@ -402,7 +361,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         if (oldStageInstance.guildScheduledEvent != newStageInstance.guildScheduledEvent) {
             fs.appendFileSync(`./logs/${guild.id}.log`, `guild scheduled event changed: ${oldStageInstance.guildScheduledEvent.name} (${oldStageInstance.guildScheduledEvent.id}) => ${newStageInstance.guildScheduledEvent} (${newStageInstance.guildScheduledEvent.id})\n`)
         }
-    })
+    }) */
     //MISC
     client.on('debug', info => {
         let currentDate = new Date();
