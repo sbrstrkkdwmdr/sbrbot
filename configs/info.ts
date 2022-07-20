@@ -247,7 +247,7 @@ let osucmds = [
         options: [
             {
                 name: 'username',
-                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will searched for the user\'s name'
+                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
             },
             {
                 name: 'detailed',
@@ -280,11 +280,11 @@ let osucmds = [
         options: [
             {
                 name: 'user',
-                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will searched for the user\'s name'
+                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
             },
             {
                 name: 'mode',
-                description: '`string, optional`. Which mode to fetch top plays from. If omitted, the database will searched for the user\'s gamemode'
+                description: '`string, optional`. Which mode to fetch top plays from. If omitted, the database will search for the user\'s gamemode'
             },
             {
                 name: 'sort',
@@ -325,7 +325,7 @@ let osucmds = [
         options: [
             {
                 name: 'user',
-                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will searched for the user\'s name'
+                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
             },
             {
                 name: 'page',
@@ -333,7 +333,7 @@ let osucmds = [
             },
             {
                 name: 'mode',
-                description: '`string, optional`. Which mode to fetch top plays from. If omitted, the database will searched for the user\'s gamemode'
+                description: '`string, optional`. Which mode to fetch top plays from. If omitted, the database will search for the user\'s gamemode'
             },
             {
                 name: 'list',
@@ -350,7 +350,7 @@ let osucmds = [
         options: [
             {
                 name: 'user',
-                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will searched for the user\'s name'
+                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
             },
             {
                 name: 'id',
