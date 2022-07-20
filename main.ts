@@ -100,7 +100,7 @@ client.once('ready', () => {
     commandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     linkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     slashcommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    //checker(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    checker(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     musichandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
     //make a function that for every guild log the id
@@ -117,10 +117,12 @@ client.once('ready', () => {
 
 
     client.user.setPresence({
-        activities: [{
-            name: "you | sbr-help",
-            type: 'WATCHING',
-            url: 'https://youtube.com/saberstrkkdwmdr',
+        activities: [
+            {
+            name: "240BPM | sbr-help",
+            type: 1,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+            //url: 'https://youtube.com/c/Saberstrkkdwmdr'
         }],
         status: 'dnd',
         afk: false

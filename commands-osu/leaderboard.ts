@@ -288,7 +288,7 @@ module.exports = {
                                         }
 
                                         scoretxt += `
-                                   **[#${i + page + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id}) | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
+                                   **Score [#${i + (page*5) + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id}) | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
                                    Score set on ${score.created_at}
                                    ${(score.accuracy * 100).toFixed(2)}% | ${score.rank} | ${score.pp}pp
                                    ${ifmods} | ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
@@ -336,7 +336,7 @@ module.exports = {
                                     switch (mode) {
                                         case 'osu':
                                             hitlist = `${score.count300}/${score.count100}/${score.count50}/${score.countmiss}`
-                                            acc = osucalc.calcgrade(score.count300, score.count100, score.count50, score.countmiss).accuracy
+                                            acc = osucalc.calcgrade(score.count300, score.count100, score.count50, score.countmiss).accuracy * 100
                                             break;
                                         case 'taiko':
                                             hitlist = `${score.count300}/${score.count100}/${score.countmiss}`
@@ -352,11 +352,12 @@ module.exports = {
                                             break;
                                     }
                                     scoretxt += `
-                                    **[#${i + page + 1}](https://scores/${mode}/${score.score_id}) | [${score.username}](https://osu.ppy.sh/u/${score.user_id})**
+                                    **Score [#${i + (page*5) + 1}](https://osu.ppy.sh/scores/${mode}/${score.score_id}) | [${score.username}](https://osu.ppy.sh/u/${score.user_id})**
                                     Score set on ${score.date}
                                     ${(acc).toFixed(2)}% | ${score.rank} | ${score.pp}
                                     ${score.score} | ${score.maxcombo}x/**${mapdata.max_combo}x**
                                     ${hitlist}
+                                    Has replay: ${score.replay_available == 1 ? '✅' : '❌'}
                                     `
                                 }
                                 if ((lbdata as any).length < 1 || scoretxt.length < 10) {
