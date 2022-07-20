@@ -1,5 +1,5 @@
-const fs = require('fs')
-const commandchecks = require('../configs/commandchecks.js')
+import fs = require('fs')
+import commandchecks = require('../configs/commandchecks.js')
 module.exports = {
     name: 'voice',
     description: 'changes voice state settings for a user',

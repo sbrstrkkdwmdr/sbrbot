@@ -1,5 +1,5 @@
-const fs = require('fs')
-const checks = require('../configs/commandchecks.js')
+import fs = require('fs')
+import checks = require('../configs/commandchecks.js')
 module.exports = {
     name: 'log',
     description: 'returns the logs of the guild',
@@ -24,8 +24,8 @@ module.exports = {
                     interaction.reply({ content: 'please enter a valid guild id', allowedMentions: { repliedUser: false } })
                 }
                 else if (fs.existsSync(`./logs/${guildidA}.log`)) {
-                    let guildname = client.guilds.cache.has(guildidA) ? client.guilds.cache.get(guildid).name : 'unknown name';
-                    let guildid = client.guilds.cache.has(guildidA) ? client.guilds.cache.get(guildid).id : 'unknown id'
+                    let guildname = client.guilds.cache.has(guildidA) ? client.guilds.cache.get(guildidA).name : 'unknown name';
+                    let guildid = client.guilds.cache.has(guildidA) ? client.guilds.cache.get(guildidA).id : 'unknown id'
 
                     interaction.reply({ content: `Logs for **${guildname}** \`${guildid}\``, files: [`./logs/${guildid}.log`], allowedMentions: { repliedUser: false } });
                 } else {

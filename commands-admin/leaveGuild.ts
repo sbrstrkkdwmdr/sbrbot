@@ -1,5 +1,5 @@
-const commandchecks = require('../configs/commandchecks.js');
-const fs = require('fs')
+import commandchecks = require('../configs/commandchecks.js');
+import fs = require('fs')
 module.exports = {
     name: 'leaveguild',
     description: 'Leaves the guild\n' +
@@ -10,6 +10,7 @@ module.exports = {
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         //config.ownerusers
         if (message != null) {
+            let guild;
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - LEAVEGUILD (message)\n${currentDate} | ${currentDateISO}\n recieved LEAVEGUILD command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             if (args[0]) {
                 guild = client.guilds.cache.get(args[0])

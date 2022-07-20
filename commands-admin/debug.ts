@@ -1,4 +1,4 @@
-const fs = require('fs')
+import fs = require('fs')
 module.exports = {
     name: 'debug',
     description: 'Returns debug files of certain commands',
@@ -10,6 +10,7 @@ module.exports = {
             if (!args[0]) {
                 return message.channel.send('Please specify a command to return debug files for.')
             }
+            let debugfiles;
             switch (command) {
                 case 'leaderboard': case 'lb':
                     /*

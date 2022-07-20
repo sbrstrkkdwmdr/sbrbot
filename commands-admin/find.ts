@@ -1,4 +1,4 @@
-const fs = require('fs')
+import fs = require('fs')
 module.exports = {
     name: 'find',
     description: 'returns name from the id given',
@@ -78,7 +78,7 @@ module.exports = {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - find (interaction)\n${currentDate} | ${currentDateISO}\n recieved find by id command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let type = interaction.options.getString('type');
             let id = interaction.options.getString('id');
-            if (parseInt(id) == NaN || parseInt(id) == 'NaN') {
+            if (parseInt(id) == NaN) {
                 return interaction.reply({ content: 'IDs must be integers', allowedMentions: { repliedUser: false } });
             }
             switch (type) {

@@ -1,5 +1,5 @@
-const commandchecks = require('../configs/commandchecks.js');
-const fs = require('fs')
+import commandchecks = require('../configs/commandchecks.js');
+import fs = require('fs')
 module.exports = {
     name: 'checkperms',
     description: 'Checks the permissions of a user\n' +
@@ -9,6 +9,7 @@ module.exports = {
         '⠀⠀`user`: user/mention, optional. The user to check permissions of',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
+            let user;
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - checkperms (message)\n${currentDate} | ${currentDateISO}\n recieved checkperms command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             if (args[0]) {
                 user = message.mentions.users.first() || message.guild.members.cache.get(args.join(' '))
@@ -25,7 +26,7 @@ module.exports = {
 
 
 
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setTitle(`Permissions for \`${user.username}\``)
                 .setDescription(`${permissions}`)
                 .setColor('#C9FF93')
@@ -43,7 +44,7 @@ module.exports = {
 
 
 
-                let embed = new Discord.MessageEmbed()
+                let embed = new Discord.EmbedBuilder()
                     .setTitle(`Permissions for \`${user.username}\``)
                     .setDescription(`${permissions}`)
                     .setColor('#C9FF93')

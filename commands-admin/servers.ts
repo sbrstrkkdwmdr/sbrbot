@@ -1,5 +1,5 @@
-const commandchecks = require('../configs/commandchecks.js');
-const fs = require('fs')
+import commandchecks = require('../configs/commandchecks.js');
+import fs = require('fs')
 module.exports = {
     name: 'servers',
     description: 'Lists all servers the bot is in\n' +
