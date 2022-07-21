@@ -18,7 +18,7 @@ let cmds = [
     {
         name: 'help',
         description: 'Returns all commands or information of a specific command',
-        usage: 'sbr-help',
+        usage: 'sbr-help <command>',
         slashusage: '/help [command]',
         options: [
             {
