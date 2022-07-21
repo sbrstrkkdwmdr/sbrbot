@@ -22,9 +22,13 @@ module.exports = {
             let user = args.join(' ');
             let page = 0
             let mode = null
-
-            if (user == null || user.length == 0) {
-                let findname = await userdata.findOne({ where: { userid: message.author.id } })
+            let searchid = message.author.id
+            if(message.mentions.users.size > 0) {
+                searchid = message.mentions.users.first().id
+            }
+            if (user.length < 1 || message.mentions.users.size > 0 ) {
+                let findname;
+                findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname == null) {
                     return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                 } else {

@@ -24,8 +24,13 @@ module.exports = {
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (message)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
-            if (user.length < 1) {
-                let findname = await userdata.findOne({ where: { userid: message.author.id } })
+            let searchid = message.author.id
+            if(message.mentions.users.size > 0) {
+                searchid = message.mentions.users.first().id
+            }
+            if (user.length < 1 || message.mentions.users.size > 0 ) {
+                let findname;
+                findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
