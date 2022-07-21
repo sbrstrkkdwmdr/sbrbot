@@ -16,7 +16,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }, 1)
         }
         let timeouttime;
-        if (message.author.bot && message.author.id != '755220989494951997') return;
+        if (message.author.bot && !(message.author.id == '755220989494951997' || message.author.id == '777125560869978132')) return;
         if (oncooldown.has(message.author.id)) {
             return message.channel.send(`You're on cooldown\nTime left: ${getTimeLeft(timeouttime)}ms`);
         };
