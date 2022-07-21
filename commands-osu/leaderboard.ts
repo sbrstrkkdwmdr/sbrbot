@@ -123,15 +123,15 @@ module.exports = {
                                         break;
                                 }
                                 let ifmods:string = '';
-                                if (score.mods) {
-                                    ifmods = `+${score.mods.join('')}`
+                                if (score.mods.length > 0) {
+                                    ifmods = `+${score.mods.join('')} |`
                                 }
 
                                 scoretxt += `
-                                   **#${i + 1} | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
+                                   **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id}) | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
                                    Score set on ${score.created_at}
                                    ${(score.accuracy * 100).toFixed(2)}% | ${score.rank} | ${score.pp}pp
-                                   ${ifmods} | ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
+                                   ${ifmods} ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
                                    ${hitlist}
                                 `
                             }
@@ -283,15 +283,15 @@ module.exports = {
                                                 break;
                                         }
                                         let ifmods:string = ''
-                                        if (score.mods) {
-                                            ifmods = `+${score.mods.join('')}`
+                                        if (score.mods.length > 0) {
+                                            ifmods = `+${score.mods.join('')} |`
                                         }
 
                                         scoretxt += `
-                                   **Score [#${i + (page*5) + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id}) | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
+                                   **[Score #${i + (page*5) + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id}) | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
                                    Score set on ${score.created_at}
                                    ${(score.accuracy * 100).toFixed(2)}% | ${score.rank} | ${score.pp}pp
-                                   ${ifmods} | ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
+                                   ${ifmods} ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
                                    ${hitlist}
                                 `} catch (error) {
 
@@ -336,26 +336,26 @@ module.exports = {
                                     switch (mode) {
                                         case 'osu':
                                             hitlist = `${score.count300}/${score.count100}/${score.count50}/${score.countmiss}`
-                                            acc = osucalc.calcgrade(score.count300, score.count100, score.count50, score.countmiss).accuracy * 100
+                                            acc = osucalc.calcgrade(parseInt(score.count300), parseInt(score.count100), parseInt(score.count50), parseInt(score.countmiss)).accuracy
                                             break;
                                         case 'taiko':
                                             hitlist = `${score.count300}/${score.count100}/${score.countmiss}`
-                                            acc = osucalc.calcgradeTaiko(score.count300, score.count100, score.countmiss).accuracy
+                                            acc = osucalc.calcgradeTaiko(parseInt(score.count300), parseInt(score.count100), parseInt(score.countmiss)).accuracy
                                             break;
                                         case 'fruits':
                                             hitlist = `${score.count300}/${score.count100}/${score.count50}/${score.countkatu}/${score.countmiss}`
-                                            acc = osucalc.calcgradeCatch(score.count300, score.count100, score.count50, score.countkatu, score.countmiss).accuracy
+                                            acc = osucalc.calcgradeCatch(parseInt(score.count300), parseInt(score.count100), parseInt(score.count50), parseInt(score.countkatu), parseInt(score.countmiss)).accuracy
                                             break;
                                         case 'mania':
                                             hitlist = `${score.countgeki}/${score.count300}/${score.countkatu}/${score.count100}/${score.count50}/${score.countmiss}`
-                                            acc = osucalc.calcgradeMania(score.countgeki, score.count300, score.countkatu, score.count100, score.count50, score.countmiss).accuracy
+                                            acc = osucalc.calcgradeMania(parseInt(score.countgeki), parseInt(score.count300), parseInt(score.countkatu), parseInt(score.count100), parseInt(score.count50), parseInt(score.countmiss)).accuracy
                                             break;
                                     }
                                     scoretxt += `
-                                    **Score [#${i + (page*5) + 1}](https://osu.ppy.sh/scores/${mode}/${score.score_id}) | [${score.username}](https://osu.ppy.sh/u/${score.user_id})**
+                                    **[Score #${i + (page*5) + 1}](https://osu.ppy.sh/scores/${mode}/${score.score_id}) | [${score.username}](https://osu.ppy.sh/u/${score.user_id})**
                                     Score set on ${score.date}
                                     ${(acc).toFixed(2)}% | ${score.rank} | ${score.pp}
-                                    ${score.score} | ${score.maxcombo}x/**${mapdata.max_combo}x**
+                                    ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.maxcombo}x/**${mapdata.max_combo}x**
                                     ${hitlist}
                                     Has replay: ${score.replay_available == 1 ? '✅' : '❌'}
                                     `
