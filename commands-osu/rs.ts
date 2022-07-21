@@ -270,7 +270,7 @@ module.exports = {
                                         .setColor(0x9AAAC0)
                                         .setTitle(`Most recent play for ${rsdata[0].user.username}`)
                                         .setURL(`https://osu.ppy.sh/scores/${rsdata[0].mode}/${rsdata[0].id}`)
-                                        .setAuthor({ name: `${timeago} Ago on ${rsdata[0].created_at} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
+                                        .setAuthor({ name: `${timeago} Ago on ${rsdata[0].created_at.substring(0, rsdata[0].created_at.length - 6)} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
                                         .setThumbnail(`${rsdata[0].beatmapset.covers.list}`)
                                         .addFields([
                                             {
@@ -570,7 +570,7 @@ module.exports = {
                                             .setColor(0x9AAAC0)
                                             .setTitle(`Most recent play for ${rsdata[0 + page].user.username}`)
                                             .setURL(`https://osu.ppy.sh/scores/${rsdata[0 + page].mode}/${rsdata[0 + page].id}`)
-                                            .setAuthor({ name: `${timeago} Ago on ${rsdata[0 + page].created_at} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
+                                            .setAuthor({ name: `${timeago} Ago on ${rsdata[0 + page].created_at.substring(0, rsdata[0 + page].created_at.length - 6)} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
                                             .setThumbnail(`${rsdata[0 + page].beatmapset.covers.list}`)
                                             .addFields([
                                                 {
