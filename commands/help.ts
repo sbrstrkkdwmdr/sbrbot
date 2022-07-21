@@ -91,6 +91,9 @@ module.exports = {
                 , inline: false
             } */
             ])
+            .setFooter({
+                text: 'Website: https://sbrstrkkdwmdr.github.io/sbr-web/ | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
+            })
 
 
         if (message != null) {
