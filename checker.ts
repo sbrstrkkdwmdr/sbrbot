@@ -35,6 +35,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${message.author.username}#${message.author.discriminator}'s message has been deleted:\n ${message.content}\n`)
     })
     client.on('messageUpdate', (oldMessage, newMessage) => {
+        if(oldMessage == newMessage) return;
+
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldMessage.guild.id)
@@ -46,8 +48,14 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             fs.appendFileSync(`./logs/${guild.id}.log`, `\n New Message: ${newMessage.content}`)
         }
         if (oldMessage.embeds != newMessage.embeds) {
-            fs.appendFileSync(`./logs/${guild.id}.log`, `\n Old Message: ${oldMessage.embeds}`)
-            fs.appendFileSync(`./logs/${guild.id}.log`, `\n New Message: ${newMessage.embeds}`)
+            fs.appendFileSync(`./logs/${guild.id}.log`, `\n Old Message (embeds):`)
+            for(let i = 0; i < oldMessage.embeds.length; i++) {
+                fs.appendFileSync(`./logs/${guild.id}.log`, `\n ${JSON.stringify(oldMessage.embeds[i].toJSON(), null, 2)}`)
+            }
+            fs.appendFileSync(`./logs/${guild.id}.log`, `\n New Message (embeds):`)
+            for(let i = 0; i < newMessage.embeds.length; i++) {
+                fs.appendFileSync(`./logs/${guild.id}.log`, `\n ${JSON.stringify(newMessage.embeds[i].toJSON(), null, 2)}`)
+            }
         }
     })
 
@@ -76,6 +84,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${member.user.username}#${member.user.discriminator} (${member.user.id}) left the server or was kicked\n`)
     })
     client.on('guildMemberUpdate', (oldMember, newMember) => {
+        if (oldMember == newMember) return;
+
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldMember.guild.id)
@@ -100,6 +110,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     //USER LOGGER
     client.on('userUpdate', (oldUser, newUser) => {
+        if(oldUser == newUser) return;
+
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         client.guilds.cache.forEach(guild => {
@@ -219,6 +231,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     client.on('channelUpdate', (oldChannel, newChannel) => {
+        if(oldChannel == newChannel) return;
+
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldChannel.guild.id)
@@ -232,7 +246,10 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             fs.appendFileSync(`./logs/${guild.id}.log`, `parent changed: ${oldChannel.parent.name} => ${newChannel.parent.name}\n`)
         }
         if (oldChannel.permissionOverwrites != newChannel.permissionOverwrites) {
-            fs.appendFileSync(`./logs/${guild.id}.log`, `permission overwrites changed: ${oldChannel.permissionOverwrites.cache.map(p => JSON.stringify(p)).join(', ')} => ${newChannel.permissionOverwrites.cache.map(p => JSON.stringify(p)).join(', ')}\n`)
+            fs.appendFileSync(`./logs/${guild.id}.log`, `permission overwrites changed: \nALLOW: ${oldChannel.permissionOverwrites.cache.map(p => p.allow.toArray().join(', '))} \n DENY: ${oldChannel.permissionOverwrites.cache.map(p => p.deny.toArray().join(', '))} \n=> \nALLOW: ${newChannel.permissionOverwrites.cache.map(p => p.allow.toArray().join(', '))} \n DENY: ${newChannel.permissionOverwrites.cache.map(p => p.deny.toArray().join(', '))}\n`)
+        }
+        if (oldChannel.topic != newChannel.topic) {
+            fs.appendFileSync(`./logs/${guild.id}.log`, `topic changed: ${oldChannel.topic} => ${newChannel.topic}\n`)
         }
 
     })
@@ -241,21 +258,23 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(emoji.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nemojiCreate event\n${currentDate} | ${currentDateISO}\n `);
-        fs.appendFileSync(`./logs/${guild.id}.log`, `Emoji ${emoji.name} (${emoji.id}) was created\n`)
+        fs.appendFileSync(`./logs/${guild.id}.log`, `Emoji ${emoji.name} (${emoji.id}) was created => ${emoji.url}\n`)
     })
     client.on('emojiDelete', (emoji) => {
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(emoji.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nemojiDelete event\n${currentDate} | ${currentDateISO}\n `);
-        fs.appendFileSync(`./logs/${guild.id}.log`, `\nEmoji ${emoji.name} (${emoji.id}) was deleted\n`)
+        fs.appendFileSync(`./logs/${guild.id}.log`, `\nEmoji ${emoji.name} (${emoji.id}) was deleted => ${emoji.url}\n`)
     })
     client.on('emojiUpdate', (oldEmoji, newEmoji) => {
+        if(oldEmoji == newEmoji) return;
+
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldEmoji.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nemojiUpdate event\n${currentDate} | ${currentDateISO}\n `);
-        fs.appendFileSync(`./logs/${guild.id}.log`, `\nEmoji ${oldEmoji.name} (${oldEmoji.id}) was updated\n`)
+        fs.appendFileSync(`./logs/${guild.id}.log`, `\nEmoji ${oldEmoji.name} (${oldEmoji.id}) was updated => ${oldEmoji.url}\n`)
         if (oldEmoji.name != newEmoji.name) {
             fs.appendFileSync(`./logs/${guild.id}.log`, `name changed: ${oldEmoji.name} => ${newEmoji.name}\n`)
         }
@@ -280,6 +299,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/${guild.id}.log`, `Scheduled Event ${guildScheduledEvent.name} (${guildScheduledEvent.id}) was deleted\n`)
     })
     client.on('guildScheduledEventUpdate', (oldGuildScheduledEvent, newGuildScheduledEvent) => {
+        if(oldGuildScheduledEvent == newGuildScheduledEvent) return;
+        
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldGuildScheduledEvent.guild.id)
@@ -322,6 +343,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/${guildlog.id}.log`, `Guild ${guild.name} (${guild.id}) was unavailable\n`)
     })
     client.on('guildUpdate', (oldGuild, newGuild) => {
+        if(oldGuild == newGuild) return;
+
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldGuild.id)
@@ -363,11 +386,22 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/${guild.id}.log`, `Role ${role.name} (${role.id}) was deleted\n`)
     })
     client.on('roleUpdate', (oldRole, newRole) => {
+        if(oldRole == newRole) return;
+
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldRole.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nroleUpdate event\n${currentDate} | ${currentDateISO}\n `);
-        fs.appendFileSync(`./logs/${guild.id}.log`, `Role ${oldRole.name} (${oldRole.id}) was updated to ${newRole.name}\nColour: ${oldRole.color} => ${newRole.color}\nPermissions: ${oldRole.permissions} => ${newRole.permissions}\n`)
+        fs.appendFileSync(`./logs/${guild.id}.log`, `Role ${oldRole.name} (${oldRole.id}) was updated to ${newRole.name}\n`)
+        if(oldRole.name != newRole.name) {
+            fs.appendFileSync(`./logs/${guild.id}.log`, `name changed: ${oldRole.name} => ${newRole.name}\n`)
+        }
+        if(oldRole.color != newRole.color) {
+            fs.appendFileSync(`./logs/${guild.id}.log`, `colour changed: ${oldRole.color} => ${newRole.color}\n`)
+        }
+        if(oldRole.permissions != newRole.permissions) {
+            fs.appendFileSync(`./logs/${guild.id}.log`, `permissions changed: ${oldRole.permissions.toArray().join(', ')} => ${newRole.permissions.toArray().join(', ')}\n`)
+        }
     })
     client.on('stageInstanceCreate', (stageInstance) => {
         let currentDate = new Date();
@@ -384,9 +418,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/${guild.id}.log`, `Stage Instance ${stageInstance.topic} (${stageInstance.id}) was deleted in ${stageInstance.channel} (${stageInstance.channel.id})\n`)
     })
     client.on('stageInstanceUpdate', (oldStageInstance, newStageInstance) => {
+        if(oldStageInstance == newStageInstance) return;
+
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldStageInstance.guild.id)
+        if(oldStageInstance == newStageInstance) return;
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nstageInstanceUpdate event\n${currentDate} | ${currentDateISO}\n `);
 
         fs.appendFileSync(`./logs/${guild.id}.log`, `Stage Instance ${oldStageInstance.topic} (${oldStageInstance.id}) was updated in ${oldStageInstance.channel} (${oldStageInstance.channel.id})\n`)
