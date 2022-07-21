@@ -218,7 +218,7 @@ let osucmds = [
         name: 'map',
         description: 'Retrieves the information of a map',
         usage: 'sbr-map "title" <id> +<mods>',
-        slashusage: '/map [id] [mods]',
+        slashusage: '/map [id] [mods] [detailed]',
         options: [
             {
                 name: 'title',
@@ -243,7 +243,7 @@ let osucmds = [
         name: 'osu',
         description: 'Retrieves the information of an osu! profile',
         usage: 'sbr-osu <username>',
-        slashusage: '/osu [username]',
+        slashusage: '/osu [username] [detailed]',
         options: [
             {
                 name: 'username',
@@ -276,7 +276,7 @@ let osucmds = [
         name: 'osutop',
         description: 'Retrieves the top 5 plays for the user',
         usage: 'sbr-osutop <user>',
-        slashusage: '/osutop [user] [mode] [sort] [page] [mapper] [mods] [detailed] [compact]',
+        slashusage: '/osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [compact]',
         options: [
             {
                 name: 'user',
@@ -321,7 +321,7 @@ let osucmds = [
         name: 'rs',
         description: 'Retrieves the most recent score for the user',
         usage: 'sbr-rs <user>',
-        slashusage: '/rs [user] [page] [mode]',
+        slashusage: '/rs [user] [page] [mode] [list]',
         options: [
             {
                 name: 'user',
@@ -346,7 +346,7 @@ let osucmds = [
         name: 'scores',
         description: 'Retrieves the user\'s score for a set map',
         usage: 'sbr-scores <user> <id>',
-        slashusage: '/scores [user] [id] [sort] [compact]',
+        slashusage: '/scores [user] [id] [sort] [reverse] [compact]',
         options: [
             {
                 name: 'user',
