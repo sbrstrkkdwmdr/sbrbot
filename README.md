@@ -1,11 +1,31 @@
 # sbrbot
-just a discord bot for personal use
+just an osu-centred discord bot
+
+### Invite link
+Join [my server](https://discord.gg/EthtfeM) to use the bot 
 
 ### features
 osu! map/map leaderboard/profile/scores commands</br>
 Map link, osr, profile link, score link parsing</br>
 Mod logging (user, role, channel, guild, etc. updates)</br>
+Google image/youtube search </br>
 Rest of the commands can be found using `sbr-help` or `/help [command]`</br>
+
+### to do list
+in order of most likely to happen first </br>
+top play tracking</br>
+output mod logs to channels</br>
+whatif x pp score/score simulation</br>
+twitch/yt notifications</br>
+server leaderboard</br>
+support for other servers like gatari, ez-pp farm etc.</br>
+music player </br>
+
+### Things
+Performance calculation: [booba](https://www.npmjs.com/package/booba)</br>
+Difficulty calculation: [osumodcalc](https://www.npmjs.com/package/osumodcalculator)</br>
+Database: [Sequelize](https://www.npmjs.com/package/sequelize)</br>
+Server: </br>
 
 ## setup
 ### pre requisites
