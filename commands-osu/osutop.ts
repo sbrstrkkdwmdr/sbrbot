@@ -116,6 +116,8 @@ module.exports = {
                                     .setColor(0x462B71)
                                     .setTitle(`Top plays of ${osutopdata[0].user.username}`)
                                     .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
+                                    .setURL(`https://osu.ppy.sh/users/${osutopdata[0].user.id}`)
+
                                 for (let i = 0; i < 5 && i < osutopdata.length; i++) {
                                     let scoreoffset = page * 5 + i
 
@@ -429,6 +431,7 @@ module.exports = {
                                     .setColor(0x462B71)
                                     .setTitle(`Top plays of ${osutopdata[0].user.username}`)
                                     .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
+                                    .setURL(`https://osu.ppy.sh/users/${osutopdata[0].user.id}`)
                                 if (compact != true) {
                                     topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 5)}`)
 
