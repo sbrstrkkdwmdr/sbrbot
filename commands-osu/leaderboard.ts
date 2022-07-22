@@ -10,9 +10,9 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
         let prevmap;
-        let i:number;
+        let i: number;
         if (fs.existsSync('./configs/prevmap.json')) {
             //console.log('hello there')
             try {
@@ -25,9 +25,36 @@ module.exports = {
             return console.log('Error - missing prevmap.json in configs folder');
         }
 
+        let buttons = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId('BigLeftArrow-leaderboard')
+                .setStyle('Primary')
+                .setEmoji('⬅')
+                .setLabel('Start'),
+            new Discord.ButtonBuilder()
+                .setCustomId('LeftArrow-leaderboard')
+                .setStyle('Primary')
+                .setEmoji('◀')
+                .setLabel('Previous'),
+/*             new Discord.TextInputBuilder()
+                .setCustomId('Middle-leaderboard')
+                .setStyle('2')
+                //.setEmoji('🔍')
+                .setLabel('Search'), */
+            new Discord.ButtonBuilder()
+                .setCustomId('RightArrow-leaderboard')
+                .setStyle('Primary')
+                .setEmoji('▶')
+                .setLabel('Next'),
+            new Discord.ButtonBuilder()
+                .setCustomId('BigRightArrow-leaderboard')
+                .setStyle('Primary')
+                .setEmoji('➡')
+                .setLabel('Final'),
+        );
 
-
-        if (message != null) {
+        if (message != null && button == null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - leaderboard (message)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let mapid = args[0]
 
@@ -122,7 +149,7 @@ module.exports = {
                                         hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
                                         break;
                                 }
-                                let ifmods:string = '';
+                                let ifmods: string = '';
                                 if (score.mods.length > 0) {
                                     ifmods = `+${score.mods.join('')} |`
                                 }
@@ -155,9 +182,32 @@ module.exports = {
 
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - leaderboard (interaction)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-            let mapid = interaction.options.getInteger('id')
-            let page = interaction.options.getInteger('page')
-            let mods1 = interaction.options.getString('mods')
+            let mapid: any;
+            let page: any;
+            let mods1: any;
+
+
+            if (interaction.type != Discord.InteractionType.MessageComponent) {
+                mapid = interaction.options.getInteger('id')
+                page = interaction.options.getInteger('page')
+                mods1 = interaction.options.getString('mods')
+            } else {
+                mapid = message.embeds[0].url.split('/b/')[1]
+                if (message.embeds[0].footer) {
+                    mods1 = message.embeds[0].footer.text
+                }
+                page = 0
+                if (button == 'BigLeftArrow') {
+                    page = 0
+                } else if (button == 'LeftArrow') {
+                    page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
+                } else if (button == 'RightArrow') {
+                    page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
+                } else if (button == 'BigRightArrow') {
+                    page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
+                }
+            }
+
             let mods = null
             if (mods1) {
                 mods = osucalc.OrderMods(mods1) + ''
@@ -282,13 +332,13 @@ module.exports = {
                                                 hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
                                                 break;
                                         }
-                                        let ifmods:string = ''
+                                        let ifmods: string = ''
                                         if (score.mods.length > 0) {
                                             ifmods = `+${score.mods.join('')} |`
                                         }
 
                                         scoretxt += `
-                                   **[Score #${i + (page*5) + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id}) | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
+                                   **[Score #${i + (page * 5) + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id}) | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
                                    Score set on ${score.created_at}
                                    ${(score.accuracy * 100).toFixed(2)}% | ${score.rank} | ${score.pp}pp
                                    ${ifmods} ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
@@ -304,8 +354,13 @@ module.exports = {
                                     scoretxt = 'Error - map is unranked'
                                 }
                                 lbEmbed.setDescription(`${scoretxt}`)
-                                interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
-                                fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
+                                if (interaction.type != Discord.InteractionType.MessageComponent) {
+                                    interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
+                                } else {
+                                    message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                    //message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
+                                }
 
                             })
                     }
@@ -352,7 +407,7 @@ module.exports = {
                                             break;
                                     }
                                     scoretxt += `
-                                    **[Score #${i + (page*5) + 1}](https://osu.ppy.sh/scores/${mode}/${score.score_id}) | [${score.username}](https://osu.ppy.sh/u/${score.user_id})**
+                                    **[Score #${i + (page * 5) + 1}](https://osu.ppy.sh/scores/${mode}/${score.score_id}) | [${score.username}](https://osu.ppy.sh/u/${score.user_id})**
                                     Score set on ${score.date}
                                     ${(acc).toFixed(2)}% | ${score.rank} | ${score.pp}
                                     ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.maxcombo}x/**${mapdata.max_combo}x**
@@ -367,8 +422,13 @@ module.exports = {
                                     scoretxt = 'Error - map is unranked'
                                 }
                                 lbEmbed.setDescription(`${scoretxt}`)
-                                interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
-                                fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
+                                if (interaction.type != Discord.InteractionType.MessageComponent) {
+                                    interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
+                                } else {
+                                    message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                    //message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
+                                }
 
                             }).catch(err => {
                                 console.log(err)
