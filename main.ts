@@ -71,12 +71,12 @@ for (const file of admincommandFiles) {
     client.admincmds.set(admincommand.name, admincommand);
 }
 
-const musicCommandFiles = fs.readdirSync('./commands-music').filter(file => file.endsWith('js') || file.endsWith('.ts'));
+const musicCommandFiles = fs.readdirSync('./commands-music').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of musicCommandFiles) {
     const musiccommand = require(`./commands-music/${file}`)
     client.musiccmds.set(musiccommand.name, musiccommand)
 }
-const testCommandFiles = fs.readdirSync('./test').filter(file => file.endsWith('js') || file.endsWith('.ts'));
+const testCommandFiles = fs.readdirSync('./test').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of testCommandFiles) {
     const testcommand = require(`./test/${file}`)
     client.tstcmds.set(testcommand.name, testcommand)
