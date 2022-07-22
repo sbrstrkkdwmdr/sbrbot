@@ -26,33 +26,32 @@ module.exports = {
         }
 
         let buttons = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId('BigLeftArrow-leaderboard')
-                .setStyle('Primary')
-                .setEmoji('⬅')
-                .setLabel('Start'),
-            new Discord.ButtonBuilder()
-                .setCustomId('LeftArrow-leaderboard')
-                .setStyle('Primary')
-                .setEmoji('◀')
-                .setLabel('Previous'),
-/*             new Discord.TextInputBuilder()
-                .setCustomId('Middle-leaderboard')
-                .setStyle('2')
-                //.setEmoji('🔍')
-                .setLabel('Search'), */
-            new Discord.ButtonBuilder()
-                .setCustomId('RightArrow-leaderboard')
-                .setStyle('Primary')
-                .setEmoji('▶')
-                .setLabel('Next'),
-            new Discord.ButtonBuilder()
-                .setCustomId('BigRightArrow-leaderboard')
-                .setStyle('Primary')
-                .setEmoji('➡')
-                .setLabel('Final'),
-        );
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId('BigLeftArrow-leaderboard')
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                    .setLabel('Start'),
+                new Discord.ButtonBuilder()
+                    .setCustomId('LeftArrow-leaderboard')
+                    .setStyle('Primary')
+                    .setEmoji('◀')
+                    .setLabel('Previous'),
+/*                 new Discord.ButtonBuilder()
+                    .setCustomId('Middle-osutop')
+                    .setStyle('Primary')
+                    .setLabel('🔍'), */
+                new Discord.ButtonBuilder()
+                    .setCustomId('RightArrow-leaderboard')
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                    .setLabel('Next'),
+                new Discord.ButtonBuilder()
+                    .setCustomId('BigRightArrow-leaderboard')
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                    .setLabel('Final'),
+            );
 
         if (message != null && button == null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - leaderboard (message)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
@@ -205,6 +204,8 @@ module.exports = {
                     page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
                 } else if (button == 'BigRightArrow') {
                     page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
+                } else if (button == 'Middle') {
+
                 }
             }
 

@@ -34,11 +34,11 @@ module.exports = {
                     .setStyle('Primary')
                     .setEmoji('◀')
                     .setLabel('Previous'),
-                /*             new Discord.TextInputBuilder()
-                                .setCustomId('Middle-osutop')
-                                .setStyle('2')
-                                //.setEmoji('🔍')
-                                .setLabel('Search'), */
+/*                 new Discord.ButtonBuilder()
+                    .setCustomId('Middle-osutop')
+                    .setStyle('Primary')
+                    .setLabel('🔍')
+                , */
                 new Discord.ButtonBuilder()
                     .setCustomId('RightArrow-osutop')
                     .setStyle('Primary')
@@ -242,10 +242,11 @@ module.exports = {
                 user = message.embeds[0].title.split('Top plays of ')[1]
 
                 if (message.embeds[0].description) {
-                    if(message.embeds[0].description.includes('mapper')){
-                    mapper = message.embeds[0].description.split('mapper: ')[1].split('\n')[0];}
-                    if(message.embeds[0].description.includes('mods')){
-                    mods = message.embeds[0].description.split('mods: ')[1].split('\n')[0];;
+                    if (message.embeds[0].description.includes('mapper')) {
+                        mapper = message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
+                    }
+                    if (message.embeds[0].description.includes('mods')) {
+                        mods = message.embeds[0].description.split('mods: ')[1].split('\n')[0];;
                     }
                     let sort1 = message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                     switch (true) {
@@ -258,7 +259,7 @@ module.exports = {
                         case sort1.includes('pp'):
                             sort = 'pp'
                             break;
-                        case sort1.includes('old'):case sort1.includes('recent'):
+                        case sort1.includes('old'): case sort1.includes('recent'):
                             sort = 'recent'
                             break;
                         case sort1.includes('combo'):
@@ -293,7 +294,7 @@ module.exports = {
                     } else if (button == 'BigRightArrow') {
                         page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
                     }
-                    if (message.embeds[0].fields.length > 8){
+                    if (message.embeds[0].fields.length > 8) {
                         compact = true
                     } else {
                         compact = false
