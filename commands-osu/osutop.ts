@@ -20,15 +20,45 @@ module.exports = {
         '⠀⠀`detailed`: boolean, optional. Whether to display extra details\n'
     ,
 
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
-        if (message != null) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
+
+        let buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId('BigLeftArrow-osutop')
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                    .setLabel('Start'),
+                new Discord.ButtonBuilder()
+                    .setCustomId('LeftArrow-osutop')
+                    .setStyle('Primary')
+                    .setEmoji('◀')
+                    .setLabel('Previous'),
+                /*             new Discord.TextInputBuilder()
+                                .setCustomId('Middle-osutop')
+                                .setStyle('2')
+                                //.setEmoji('🔍')
+                                .setLabel('Search'), */
+                new Discord.ButtonBuilder()
+                    .setCustomId('RightArrow-osutop')
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                    .setLabel('Next'),
+                new Discord.ButtonBuilder()
+                    .setCustomId('BigRightArrow-osutop')
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                    .setLabel('Final'),
+            );
+
+        if (message != null && button == null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (message)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             let searchid = message.author.id
-            if(message.mentions.users.size > 0) {
+            if (message.mentions.users.size > 0) {
                 searchid = message.mentions.users.first().id
             }
-            if (user.length < 1 || message.mentions.users.size > 0 ) {
+            if (user.length < 1 || message.mentions.users.size > 0) {
                 let findname;
                 findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname != null) {
@@ -185,7 +215,90 @@ module.exports = {
 
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-            let user = interaction.options.getString('user')
+            let user;
+            let gamemode;
+            let mapper;
+            let mods;
+            let sort;
+            let page;
+            let detailed;
+            let reverse;
+            let compact;
+
+            if (interaction.type != Discord.InteractionType.MessageComponent) {
+
+                user = interaction.options.getString('user')
+                gamemode = interaction.options.getString('mode')
+                mapper = interaction.options.getString('mapper')
+                mods = interaction.options.getString('mods')
+                sort = interaction.options.getString('sort')
+                page = interaction.options.getInteger('page')
+                detailed = interaction.options.getBoolean('detailed')
+                reverse = interaction.options.getBoolean('reverse')
+                compact = interaction.options.getBoolean('compact')
+            } else {
+                user = message.embeds[0].title.split('Top plays of ')[1]
+
+                if (message.embeds[0].description) {
+                    if(message.embeds[0].description.includes('mapper')){
+                    mapper = message.embeds[0].description.split('mapper: ')[1].split('\n')[0];}
+                    if(message.embeds[0].description.includes('mods')){
+                    mods = message.embeds[0].description.split('mods: ')[1].split('\n')[0];;
+                    }
+                    let sort1 = message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                    switch (true) {
+                        case sort1.includes('score'):
+                            sort = 'score'
+                            break;
+                        case sort1.includes('acc'):
+                            sort = 'acc'
+                            break;
+                        case sort1.includes('pp'):
+                            sort = 'pp'
+                            break;
+                        case sort1.includes('old'):case sort1.includes('recent'):
+                            sort = 'recent'
+                            break;
+                        case sort1.includes('combo'):
+                            sort = 'combo'
+                            break;
+                        case sort1.includes('miss'):
+                            sort = 'miss'
+                            break;
+
+                    }
+
+
+                    let reverse1 = message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                    if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
+                        reverse = true
+                    } else {
+                        reverse = false
+                    }
+
+                    if (message.embeds[0].fields.length == 7 || message.embeds[0].fields.length == 11) {
+                        detailed = true
+                    } else {
+                        detailed = false
+                    }
+                    page = 0
+                    if (button == 'BigLeftArrow') {
+                        page = 0
+                    } else if (button == 'LeftArrow') {
+                        page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
+                    } else if (button == 'RightArrow') {
+                        page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
+                    } else if (button == 'BigRightArrow') {
+                        page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
+                    }
+                    if (message.embeds[0].fields.length > 8){
+                        compact = true
+                    } else {
+                        compact = false
+                    }
+                }
+
+            }
             if (user == null) {
                 let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
                 if (findname != null) {
@@ -194,7 +307,6 @@ module.exports = {
                     return interaction.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                 }
             }
-            let gamemode = interaction.options.getString('mode')
             if (gamemode == null) {
                 let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
                 if (findname != null) {
@@ -203,18 +315,11 @@ module.exports = {
                     gamemode = 'osu'
                 }
             }
-
-            let sort = interaction.options.getString('sort')
-            let page = interaction.options.getInteger('page')
             if (page == null || page < 1) {
                 page = 0
             } else {
                 page = page - 1
             }
-            let mapper = interaction.options.getString('mapper')
-            let mods = interaction.options.getString('mods')
-            let detailed = interaction.options.getBoolean('detailed')
-
             let userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
             fetch(userurl, {
                 headers: {
@@ -260,7 +365,7 @@ module.exports = {
                                     filterinfo += `\nmods: ${mods}`
                                 }
                                 let osutopdata = filtereddata
-                                if (interaction.options.getBoolean("reverse") != true) {
+                                if (reverse != true) {
                                     if (sort == 'score') {
                                         osutopdata = filtereddata.sort((a, b) => b.score - a.score)
                                         filterinfo += `\nsorted by score`
@@ -311,7 +416,7 @@ module.exports = {
                                         filterinfo += `\nsorted by most misses`
                                     }
                                 }
-                                if (interaction.options.getBoolean('compact') == true) {
+                                if (compact == true) {
                                     filterinfo += `\ncompact mode`
                                 }
                                 try {
@@ -324,7 +429,7 @@ module.exports = {
                                     .setColor(0x462B71)
                                     .setTitle(`Top plays of ${osutopdata[0].user.username}`)
                                     .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
-                                if (interaction.options.getBoolean('compact') != true) {
+                                if (compact != true) {
                                     topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 5)}`)
 
                                     for (let i = 0; i < 5 && i < osutopdata.length; i++) {
@@ -401,7 +506,7 @@ module.exports = {
                                             ifmods = '+' + topmods.toString().replaceAll(",", '')
                                         }
                                         let scorenum;
-                                        if (interaction.options.getBoolean('reverse') == true && interaction.options.getString('sort') == 'pp') {
+                                        if (reverse == true && sort == 'pp') {
                                             scorenum = osutopdata.length - scoreoffset
                                         } else {
                                             scorenum = scoreoffset + 1
@@ -454,7 +559,7 @@ module.exports = {
                                         totalpp += osutopdata[i2].pp
                                     }
                                     avgpp = (totalpp / osutopdata.length).toFixed(2)
-                                    let hittype:string;
+                                    let hittype: string;
                                     if (gamemode == 'osu') {
                                         hittype = `hit300/hit100/hit50/miss`
                                     }
@@ -491,9 +596,14 @@ module.exports = {
                                 } else {
 
                                 }
-                                interaction.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false } })
-                                fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
-                                fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
+                                if (interaction.type != Discord.InteractionType.MessageComponent) {
+                                    interaction.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                    fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
+                                }
+                                else {
+                                    message.edit({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                }
                             })
                     } catch (error) {
                         interaction.reply({ content: 'user ' + user + ' not found', allowedMentions: { repliedUser: false } })

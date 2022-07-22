@@ -45,7 +45,10 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 interaction.deferUpdate();
                 break;
-
+            case command == 'osutop':
+                client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                interaction.deferUpdate();
+                break;
         }
 
 
