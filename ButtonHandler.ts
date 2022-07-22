@@ -3,9 +3,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     client.on('interactionCreate', interaction => {
         if (interaction.type != InteractionType.MessageComponent) return;
         if (interaction.applicationId != client.application.id) return;
-        console.log('received')
-        console.log(interaction.message.id)
-        console.log(interaction.customId)
+        //console.log('received')
+        //console.log(interaction.message.id)
+        //console.log(interaction.customId)
 
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
@@ -16,7 +16,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let command = interaction.customId.split('-')[1]
         let button = interaction.customId.split('-')[0]
         switch (true) {
-            case command == 'test':
+/*             case command == 'test':
                 if (button == 'BigLeftArrow') {
                     //message.edit({content: 'Left'})
                     client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
@@ -40,7 +40,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 interaction.reply({ content: '👍' }).then(
                     setTimeout(() => interaction.deleteReply(), 100)
                 )
-                break;
+                break; */
             case command == 'leaderboard':
                 client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 interaction.deferUpdate();
