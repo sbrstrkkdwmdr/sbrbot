@@ -28,12 +28,12 @@ module.exports = {
                     .setCustomId('BigLeftArrow-osutop')
                     .setStyle('Primary')
                     .setEmoji('⬅')
-                    .setLabel('Start'),
+                    /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
                     .setCustomId('LeftArrow-osutop')
                     .setStyle('Primary')
                     .setEmoji('◀')
-                    .setLabel('Previous'),
+                    /* .setLabel('Previous') */,
                 /*                 new Discord.ButtonBuilder()
                                     .setCustomId('Middle-osutop')
                                     .setStyle('Primary')
@@ -43,12 +43,12 @@ module.exports = {
                     .setCustomId('RightArrow-osutop')
                     .setStyle('Primary')
                     .setEmoji('▶')
-                    .setLabel('Next'),
+                    /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
                     .setCustomId('BigRightArrow-osutop')
                     .setStyle('Primary')
                     .setEmoji('➡')
-                    .setLabel('Final'),
+                    /* .setLabel('End') */,
             );
 
         if (message != null && button == null) {

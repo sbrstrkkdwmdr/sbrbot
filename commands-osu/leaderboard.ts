@@ -28,29 +28,30 @@ module.exports = {
         let buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId('BigLeftArrow-leaderboard')
+                    .setCustomId('BigLeftArrow-osutop')
                     .setStyle('Primary')
                     .setEmoji('⬅')
-                    .setLabel('Start'),
+                    /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId('LeftArrow-leaderboard')
+                    .setCustomId('LeftArrow-osutop')
                     .setStyle('Primary')
                     .setEmoji('◀')
-                    .setLabel('Previous'),
-/*                 new Discord.ButtonBuilder()
-                    .setCustomId('Middle-osutop')
-                    .setStyle('Primary')
-                    .setLabel('🔍'), */
+                    /* .setLabel('Previous') */,
+                /*                 new Discord.ButtonBuilder()
+                                    .setCustomId('Middle-osutop')
+                                    .setStyle('Primary')
+                                    .setLabel('🔍')
+                                , */
                 new Discord.ButtonBuilder()
-                    .setCustomId('RightArrow-leaderboard')
+                    .setCustomId('RightArrow-osutop')
                     .setStyle('Primary')
                     .setEmoji('▶')
-                    .setLabel('Next'),
+                    /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId('BigRightArrow-leaderboard')
+                    .setCustomId('BigRightArrow-osutop')
                     .setStyle('Primary')
                     .setEmoji('➡')
-                    .setLabel('Final'),
+                    /* .setLabel('End') */,
             );
 
         if (message != null && button == null) {
