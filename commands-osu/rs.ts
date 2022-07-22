@@ -15,18 +15,48 @@ module.exports = {
         '⠀⠀`user`: The user to display the most recent score of\n' +
         '⠀⠀`page`: The page to display the most recent score of\n' +
         '⠀⠀`mode`: The mode to display the most recent score of\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
-        if (message != null) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
+
+        let buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId('BigLeftArrow-osutop')
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                    /* .setLabel('Start') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId('LeftArrow-osutop')
+                    .setStyle('Primary')
+                    .setEmoji('◀')
+                    /* .setLabel('Previous') */,
+                /*                 new Discord.ButtonBuilder()
+                                    .setCustomId('Middle-osutop')
+                                    .setStyle('Primary')
+                                    .setLabel('🔍')
+                                , */
+                new Discord.ButtonBuilder()
+                    .setCustomId('RightArrow-osutop')
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                    /* .setLabel('Next') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId('BigRightArrow-osutop')
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                    /* .setLabel('End') */,
+            );
+
+        if (message != null && button == null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (message)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
             let user = args.join(' ');
             let page = 0
             let mode = null
             let searchid = message.author.id
-            if(message.mentions.users.size > 0) {
+            if (message.mentions.users.size > 0) {
                 searchid = message.mentions.users.first().id
             }
-            if (user.length < 1 || message.mentions.users.size > 0 ) {
+            if (user.length < 1 || message.mentions.users.size > 0) {
                 let findname;
                 findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname == null) {
@@ -73,7 +103,7 @@ module.exports = {
                                 fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata, null, 2))
 
                                 let hittime = rsdata[0].beatmap.hit_length
-                                let hitseconds:any = (hittime % 60)
+                                let hitseconds: any = (hittime % 60)
                                 let hitminutes = Math.floor(hittime / 60)
                                 if (hitseconds < 10) {
                                     hitseconds = '0' + hitseconds
@@ -81,7 +111,7 @@ module.exports = {
                                 let hitstr = `${hitminutes}:${hitseconds}`
 
                                 let totaltime = rsdata[0].beatmap.total_length
-                                let totalseconds:any = totaltime % 60
+                                let totalseconds: any = totaltime % 60
                                 let totalminutes = Math.floor(totaltime / 60)
                                 if (totalseconds < 10) {
                                     totalseconds = '0' + totalseconds
@@ -140,7 +170,7 @@ module.exports = {
                                     //let modint = osucalc.ModStringToInt(mods)
 
                                     let modstr = ''
-                                    let modint:number;
+                                    let modint: number;
                                     if (mods) {
                                         modint = osucalc.ModStringToInt(mods)
                                         modstr = `+${mods}`
@@ -182,9 +212,9 @@ module.exports = {
                                         rank: 'S',
                                         score_id: '4057765057'
                                     }
-                                    let pp:any;
-                                    let ppfc:any;
-                                    let hitlist:any;
+                                    let pp: any;
+                                    let ppfc: any;
+                                    let hitlist: any;
 
                                     if (mode == 'osu') {
                                         pp = new ppcalc.std_ppv2().setPerformance(scorenofc)
@@ -208,8 +238,8 @@ module.exports = {
                                     }
 
                                     let rspp = rsdata[0].pp
-                                    let ppiffc:any;
-                                    let ppissue:string;
+                                    let ppiffc: any;
+                                    let ppissue: string;
                                     try {
                                         let ppc = await pp.compute()
                                         let ppfcd = await ppfc.compute()
@@ -255,15 +285,15 @@ module.exports = {
                                             trycount++
                                         }
                                     }
-                                    let trycountstr:string;
+                                    let trycountstr: string;
                                     trycountstr = ''
                                     if (trycount > 1) {
                                         trycountstr = `try #${trycount}`
                                     }
 
-                                    let scoretimestampdate:any = new Date((rsdata[0].created_at).toString().slice(0, -6) + "Z")
-                                    let curtime:any = new Date()
-                                    let minsincelastvis:any = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
+                                    let scoretimestampdate: any = new Date((rsdata[0].created_at).toString().slice(0, -6) + "Z")
+                                    let curtime: any = new Date()
+                                    let minsincelastvis: any = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
                                     let lastvismin = minsincelastvis % 60
                                     let lastvishour = Math.trunc(minsincelastvis / 60) % 24
                                     let timeago = `${lastvishour}h ${lastvismin}m`
@@ -272,7 +302,7 @@ module.exports = {
 
                                     let Embed = new Discord.EmbedBuilder()
                                         .setColor(0x9AAAC0)
-                                        .setTitle(`Most recent play for ${rsdata[0].user.username}`)
+                                        .setTitle(`#1 most recent play for ${rsdata[0].user.username}`)
                                         .setURL(`https://osu.ppy.sh/scores/${rsdata[0].mode}/${rsdata[0].id}`)
                                         .setAuthor({ name: `${timeago} Ago on ${rsdata[0].created_at.substring(0, rsdata[0].created_at.length - 6).replace('T', ' ')} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
                                         .setThumbnail(`${rsdata[0].beatmapset.covers.list}`)
@@ -293,7 +323,7 @@ module.exports = {
                                                 value: `**${rspp}**pp \n${fcflag}\n${ppissue}`,
                                                 inline: true
                                             }]);
-                                    message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
+                                    message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
 
                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0].beatmap.id }), null, 2));
@@ -313,10 +343,42 @@ module.exports = {
         }
 
         if (interaction != null) {
-            let user = interaction.options.getString('user')
-            let page = interaction.options.getNumber('page')
-            let mode = interaction.options.getString('mode')
+            let user;
+            let page;
+            let mode;
+            let list = false;
+            if (interaction.type != Discord.InteractionType.MessageComponent) {
+                user = interaction.options.getString('user')
+                page = interaction.options.getNumber('page')
+                mode = interaction.options.getString('mode')
+                list = interaction.options.getBoolean("list")
+            } else {
+                user = message.embeds[0].title.split('Most recent play for ')[1]
+                mode == null;
+                page = 0
+                if (button == 'BigLeftArrow') {
+                    page = 0
+                }
+                if (message.embeds[0].title.includes('plays')) {
+                    if (button == 'LeftArrow') {
+                        page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1
+                    } else if (button == 'RightArrow') {
+                        page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1
+                    }
+                    list = true
+                    if (((message.embeds[0].description).split('Page: ')[1].split('/')[0]) == NaN || ((message.embeds[0].description).split('Page: ')[1].split('/')[0]) == 'NaN') {
+                        page = 1
+                    }
 
+                } else {
+                    if (button == 'LeftArrow') {
+                        page = parseInt((message.embeds[0].title).split(' ')[0].split('#')[1]) - 1
+                    } else if (button == 'RightArrow') {
+                        page = parseInt((message.embeds[0].title).split(' ')[0].split('#')[1]) + 1
+                    }
+                }
+
+            }
             if (user == null) {
                 let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
                 if (findname == null) {
@@ -339,6 +401,7 @@ module.exports = {
                     }
                 }
             }
+
             if (page == null) {
                 page = 0
             } else {
@@ -347,8 +410,9 @@ module.exports = {
                     page = 0
                 }
             }
-
-            interaction.reply({ content: 'Fetching data...' })
+            if (button == null) {
+                interaction.reply({ content: 'Fetching data...' })
+            }
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
 
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
@@ -372,9 +436,14 @@ module.exports = {
                         .then(rsdata => {
                             try {
                                 fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata, null, 2))
-                                if (interaction.options.getBoolean("list") != true) {
+                                if (list != true) {
+                                    if (interaction.type == Discord.InteractionType.MessageComponent && button == 'BigRightArrow') {
+                                        page = rsdata.length
+                                    }
+
+
                                     let hittime = rsdata[0 + page].beatmap.hit_length
-                                    let hitseconds:any = (hittime % 60)
+                                    let hitseconds: any = (hittime % 60)
                                     let hitminutes = Math.floor(hittime / 60)
                                     if (hitseconds < 10) {
                                         hitseconds = '0' + hitseconds
@@ -382,7 +451,7 @@ module.exports = {
                                     let hitstr = `${hitminutes}:${hitseconds}`
 
                                     let totaltime = rsdata[0 + page].beatmap.total_length
-                                    let totalseconds:any = totaltime % 60
+                                    let totalseconds: any = totaltime % 60
                                     let totalminutes = Math.floor(totaltime / 60)
                                     if (totalseconds < 10) {
                                         totalseconds = '0' + totalseconds
@@ -390,7 +459,7 @@ module.exports = {
                                     let totalstr = `${totalminutes}:${totalseconds}`
 
                                     let gamehits = rsdata[0 + page].statistics
-                                    let accgrade:any;
+                                    let accgrade: any;
 
                                     if (mode == 'osu') {
                                         accgrade = osucalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, 0)
@@ -404,7 +473,7 @@ module.exports = {
                                     let fcacc = accgrade.accuracy.toFixed(2) + "%"
                                     let grade = (rsdata[0 + page].rank).toUpperCase();
                                     let rspassinfo = ''
-                                    let rsgrade:any;
+                                    let rsgrade: any;
                                     switch (grade) {
                                         case 'F':
                                             rspassinfo = `\n${hitstr}/${totalstr} (${(hittime / totaltime * 100).toFixed(2)}% completed)`
@@ -442,7 +511,7 @@ module.exports = {
                                         //let modint = osucalc.ModStringToInt(mods)
 
                                         let modstr = ''
-                                        let modint:any;
+                                        let modint: any;
                                         if (mods) {
                                             modint = osucalc.ModStringToInt(mods)
                                             modstr = `+${mods}`
@@ -485,9 +554,9 @@ module.exports = {
                                             rank: 'S',
                                             score_id: '4057765057'
                                         }
-                                        let pp:any;
-                                        let ppfc:any;
-                                        let hitlist:any;
+                                        let pp: any;
+                                        let ppfc: any;
+                                        let hitlist: any;
                                         if (mode == 'osu') {
                                             pp = new ppcalc.std_ppv2().setPerformance(scorenofc)
                                             ppfc = new ppcalc.std_ppv2().setPerformance(score)
@@ -510,8 +579,8 @@ module.exports = {
                                         }
 
                                         let rspp = rsdata[0 + page].pp
-                                        let ppiffc:any;
-                                        let ppissue:any;
+                                        let ppiffc: any;
+                                        let ppissue: any;
                                         try {
                                             let ppc = await pp.compute()
                                             let ppfcd = await ppfc.compute()
@@ -534,7 +603,7 @@ module.exports = {
                                             ppissue = 'Error - pp calculator could not fetch beatmap'
                                             fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
                                         }
-                                        let fcflag:any;
+                                        let fcflag: any;
                                         if (rsdata[0 + page].perfect == true) {
                                             fcflag = '**FC**'
                                         } else if (rsdata[0 + page].perfect == false) {
@@ -543,7 +612,7 @@ module.exports = {
                                         let title = rsdata[0 + page].beatmapset.title
                                         let titleunicode = rsdata[0 + page].beatmapset.title_unicode
                                         let titlediff = rsdata[0 + page].beatmap.version
-                                        let titlestring:any;
+                                        let titlestring: any;
                                         if (title != titleunicode) {
                                             titlestring = `${title} (${titleunicode}) [${titlediff}]`
                                         }
@@ -561,9 +630,9 @@ module.exports = {
                                             trycountstr = `try #${trycount}`
                                         }
 
-                                        let scoretimestampdate:any = new Date((rsdata[0 + page].created_at).toString().slice(0, -6) + "Z")
-                                        let curtime:any = new Date()
-                                        let minsincelastvis:any = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
+                                        let scoretimestampdate: any = new Date((rsdata[0 + page].created_at).toString().slice(0, -6) + "Z")
+                                        let curtime: any = new Date()
+                                        let minsincelastvis: any = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
                                         let lastvismin = minsincelastvis % 60
                                         let lastvishour = Math.trunc(minsincelastvis / 60) % 24
                                         let timeago = `${lastvishour}h ${lastvismin}m`
@@ -572,7 +641,7 @@ module.exports = {
 
                                         let Embed = new Discord.EmbedBuilder()
                                             .setColor(0x9AAAC0)
-                                            .setTitle(`Most recent play for ${rsdata[0 + page].user.username}`)
+                                            .setTitle(`#${page + 1} most recent play for ${rsdata[0 + page].user.username}`)
                                             .setURL(`https://osu.ppy.sh/scores/${rsdata[0 + page].mode}/${rsdata[0 + page].id}`)
                                             .setAuthor({ name: `${timeago} Ago on ${rsdata[0 + page].created_at.substring(0, rsdata[0 + page].created_at.length - 6).replace('T', ' ')} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
                                             .setThumbnail(`${rsdata[0 + page].beatmapset.covers.list}`)
@@ -593,20 +662,23 @@ module.exports = {
                                                     value: `**${rspp}**pp \n${fcflag}\n${ppissue}`,
                                                     inline: true
                                                 }]);
-                                        interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
-                                        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
-                                        fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
+                                        if (interaction.type != Discord.InteractionType.MessageComponent) {
 
-                                        fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0 + page].beatmap.id }), null, 2));
+                                            interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                            fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                            fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
 
+                                            fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0 + page].beatmap.id }), null, 2));
+                                        } else {
+                                            message.edit({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                        }
                                     })();
                                 } else {
                                     let Embed = new Discord.EmbedBuilder()
                                         .setColor(0x9AAAC0)
-                                        .setTitle(`All recent plays for ${rsdata[0 + page].user.username}`)
+                                        .setTitle(`Recent plays for ${rsdata[0].user.username}`)
                                     let txt = ''
                                     for (let i = 0; i < (rsdata.length - (page * 20)) && i < 20; i++) {
-                                        //fetch pp, accuracy, score, score id
                                         let score = rsdata[i + (page * 20)]
                                         txt += `${i + (page * 20) + 1} | [${score.beatmapset.title}](${score.beatmap.url}) | [score](https://osu.ppy.sh/scores/${score.mode}/${score.id})\n${(score.accuracy * 100).toFixed(2)}% | ${score.rank}\n`
                                     }
@@ -620,11 +692,11 @@ module.exports = {
                                             txt = txt.substring(0, checks.nthIndexLast(txt, '\n', txt.match(/\n/g).length - 3))
                                         } */
                                     }
-                                    Embed.setDescription(txt)
-                                    interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
+                                    Embed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 20)}\n` + txt)
+                                    interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                 }
                             } catch (error) {
-                                fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
+                                fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nPage: ${page}\nmode: ${mode}`)
                                 return interaction.editReply({ content: 'Error - no score found', allowedMentions: { repliedUser: false } })
                             }
 
