@@ -43,8 +43,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(oldMessage.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nmessageUpdate event\n${currentDate} | ${currentDateISO}\n `);
-
+        if(oldMessage.author){
         fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${oldMessage.author.username}#${oldMessage.author.discriminator}'s message has been updated:`)
+        }
         if (oldMessage.content != newMessage.content) {
             fs.appendFileSync(`./logs/${guild.id}.log`, `\n Old Message: ${oldMessage.content}`)
             fs.appendFileSync(`./logs/${guild.id}.log`, `\n New Message: ${newMessage.content}`)
