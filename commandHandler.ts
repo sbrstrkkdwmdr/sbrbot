@@ -28,7 +28,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             timeouttime = setTimeout(() => { }, 3000)
         }
         function getTimeLeft(timeout) {
-            return Math.ceil(timeout._idleStart - timeout._idleTimeout)
+            return '???' //Math.ceil(timeout._idleStart - timeout._idleTimeout)
         }
         let interaction = null;
         let button = null;
