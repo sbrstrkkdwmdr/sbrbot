@@ -119,7 +119,7 @@ module.exports = {
                                 .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`)
                                 ;
 
-                            let scoretxt = ''
+                            let scoretxt = `Page: 1/${Math.ceil((lbdata as any).length / 5)}`
 
                             for (i = 0; i < lbdata.length && i < 5; i++) {
                                 let score = lbdata[i]
@@ -169,7 +169,7 @@ module.exports = {
                                 scoretxt = 'Error - map is unranked'
                             }
                             lbEmbed.setDescription(`${scoretxt}`)
-                            message.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
+                            message.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                             fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
                         })
 

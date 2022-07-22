@@ -34,11 +34,11 @@ module.exports = {
                     .setStyle('Primary')
                     .setEmoji('◀')
                     .setLabel('Previous'),
-/*                 new Discord.ButtonBuilder()
-                    .setCustomId('Middle-osutop')
-                    .setStyle('Primary')
-                    .setLabel('🔍')
-                , */
+                /*                 new Discord.ButtonBuilder()
+                                    .setCustomId('Middle-osutop')
+                                    .setStyle('Primary')
+                                    .setLabel('🔍')
+                                , */
                 new Discord.ButtonBuilder()
                     .setCustomId('RightArrow-osutop')
                     .setStyle('Primary')
@@ -117,7 +117,7 @@ module.exports = {
                                     .setTitle(`Top plays of ${osutopdata[0].user.username}`)
                                     .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
                                     .setURL(`https://osu.ppy.sh/users/${osutopdata[0].user.id}`)
-
+                                    .setDescription(`sorted by highest pp\nPage: 1/${Math.ceil(osutopdata.length / 5)}`)
                                 for (let i = 0; i < 5 && i < osutopdata.length; i++) {
                                     let scoreoffset = page * 5 + i
 
@@ -201,7 +201,7 @@ module.exports = {
                                         inline: false
                                     }])
                                 }
-                                message.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false } })
+                                message.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                 fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
