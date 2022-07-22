@@ -16,37 +16,41 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let command = interaction.customId.split('-')[1]
         let button = interaction.customId.split('-')[0]
         switch (true) {
-/*             case command == 'test':
-                if (button == 'BigLeftArrow') {
-                    //message.edit({content: 'Left'})
-                    client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                }
-                if (button == 'LeftArrow') {
-                    message.edit({ content: 'LeftS' })
-                    client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                }
-                if (button == 'BigRightArrow') {
-                    //message.edit({content: 'Right'})
-                    client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                }
-                if (button == 'RightArrow') {
-                    //message.edit({content: 'RightS'})
-                    client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                }
-                if (button == 'Middle') {
-                    //message.edit({content: 'Middle'})
-                    client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                }
-                interaction.reply({ content: '👍' }).then(
-                    setTimeout(() => interaction.deleteReply(), 100)
-                )
-                break; */
+            /*             case command == 'test':
+                            if (button == 'BigLeftArrow') {
+                                //message.edit({content: 'Left'})
+                                client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                            }
+                            if (button == 'LeftArrow') {
+                                message.edit({ content: 'LeftS' })
+                                client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                            }
+                            if (button == 'BigRightArrow') {
+                                //message.edit({content: 'Right'})
+                                client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                            }
+                            if (button == 'RightArrow') {
+                                //message.edit({content: 'RightS'})
+                                client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                            }
+                            if (button == 'Middle') {
+                                //message.edit({content: 'Middle'})
+                                client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                            }
+                            interaction.reply({ content: '👍' }).then(
+                                setTimeout(() => interaction.deleteReply(), 100)
+                            )
+                            break; */
             case command == 'leaderboard':
                 client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 interaction.deferUpdate();
                 break;
             case command == 'osutop':
                 client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                interaction.deferUpdate();
+                break;
+            case command == 'rs':
+                client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 interaction.deferUpdate();
                 break;
         }
