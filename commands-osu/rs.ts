@@ -20,27 +20,27 @@ module.exports = {
         let buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId('BigLeftArrow-osutop')
+                    .setCustomId('BigLeftArrow-rs')
                     .setStyle('Primary')
                     .setEmoji('⬅')
                     /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId('LeftArrow-osutop')
+                    .setCustomId('LeftArrow-rs')
                     .setStyle('Primary')
                     .setEmoji('◀')
                     /* .setLabel('Previous') */,
                 /*                 new Discord.ButtonBuilder()
-                                    .setCustomId('Middle-osutop')
+                                    .setCustomId('Middle-rs')
                                     .setStyle('Primary')
                                     .setLabel('🔍')
                                 , */
                 new Discord.ButtonBuilder()
-                    .setCustomId('RightArrow-osutop')
+                    .setCustomId('RightArrow-rs')
                     .setStyle('Primary')
                     .setEmoji('▶')
                     /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId('BigRightArrow-osutop')
+                    .setCustomId('BigRightArrow-rs')
                     .setStyle('Primary')
                     .setEmoji('➡')
                     /* .setLabel('End') */,
@@ -163,173 +163,204 @@ module.exports = {
                                         rsgrade = emojis.grades.XH
                                         break;
                                 };
+                                let mods = rsdata[0].mods.toString().replaceAll(',', '').replace('[', '').replace(']', '')
 
-                                (async () => {
+                                let iftherearemodsasint = JSON.stringify({
+                                    "ruleset": mode
+                                });
+                                if (mods != 'NM') {
+                                    iftherearemodsasint =
+                                        JSON.stringify({
+                                            "ruleset": mode,
+                                            "mods": osucalc.ModStringToInt(mods)
+                                        })
+                                }
+                                let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${rsdata[0].beatmap.id}/attributes`;
+                                fetch(beatattrurl, {
+                                    method: 'POST',
+                                    headers: {
+                                        Authorization: `Bearer ${access_token}`,
+                                        "Content-Type": "application/json",
+                                        Accept: "application/json"
+                                    },
+                                    body: iftherearemodsasint,
 
-                                    let mods = rsdata[0].mods.toString().replaceAll(',', '').replace('[', '').replace(']', '')
-                                    //let modint = osucalc.ModStringToInt(mods)
-
-                                    let modstr = ''
-                                    let modint: number;
-                                    if (mods) {
-                                        modint = osucalc.ModStringToInt(mods)
-                                        modstr = `+${mods}`
-                                    } else {
-                                        modint = 0
-                                    }
-
-                                    const score = {
-                                        beatmap_id: rsdata[0].beatmap.id,
-                                        score: '6795149',
-                                        maxcombo: '630',
-                                        count50: gamehits.count_50,
-                                        count100: gamehits.count_100,
-                                        count300: gamehits.count_300,
-                                        countmiss: '0',
-                                        countkatu: gamehits.count_katu,
-                                        countgeki: gamehits.count_geki,
-                                        perfect: '1',
-                                        enabled_mods: modint,
-                                        user_id: userid,
-                                        date: '2022-02-08 05:24:54',
-                                        rank: 'S',
-                                        score_id: '4057765057'
-                                    }
-                                    const scorenofc = {
-                                        beatmap_id: rsdata[0].beatmap.id,
-                                        score: '6795149',
-                                        maxcombo: '630',
-                                        count50: gamehits.count_50,
-                                        count100: gamehits.count_100,
-                                        count300: gamehits.count_300,
-                                        countmiss: gamehits.count_miss,
-                                        countkatu: gamehits.count_katu,
-                                        countgeki: gamehits.count_geki,
-                                        perfect: '0',
-                                        enabled_mods: modint,
-                                        user_id: userid,
-                                        date: '2022-02-08 05:24:54',
-                                        rank: 'S',
-                                        score_id: '4057765057'
-                                    }
-                                    let pp: any;
-                                    let ppfc: any;
-                                    let hitlist: any;
-
-                                    if (mode == 'osu') {
-                                        pp = new ppcalc.std_ppv2().setPerformance(scorenofc)
-                                        ppfc = new ppcalc.std_ppv2().setPerformance(score)
-                                        hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
-                                    }
-                                    if (mode == 'taiko') {
-                                        pp = new ppcalc.taiko_ppv2().setPerformance(scorenofc)
-                                        ppfc = new ppcalc.taiko_ppv2().setPerformance(score)
-                                        hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`
-                                    }
-                                    if (mode == 'fruits') {
-                                        pp = new ppcalc.catch_ppv2().setPerformance(scorenofc)
-                                        ppfc = new ppcalc.catch_ppv2().setPerformance(score)
-                                        hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
-                                    }
-                                    if (mode == 'mania') {
-                                        pp = new ppcalc.mania_ppv2().setPerformance(scorenofc)
-                                        ppfc = new ppcalc.mania_ppv2().setPerformance(score)
-                                        hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
-                                    }
-
-                                    let rspp = rsdata[0].pp
-                                    let ppiffc: any;
-                                    let ppissue: string;
-                                    try {
-                                        let ppc = await pp.compute()
-                                        let ppfcd = await ppfc.compute()
-
-                                        ppiffc = ppfcd.total.toFixed(2)
-                                        fs.writeFileSync(`debugosu/rspp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
-
-                                        if (rspp == null) {
-                                            rspp = ppc.total.toFixed(2)
+                                }).then(res => res.json() as any)
+                                    .then(mapattrdata => {
+                                        fs.writeFileSync('debugosu/rsattrdata.json', JSON.stringify(mapattrdata, null, 2));
+                                        let totaldiff = mapattrdata.attributes.star_rating
+                                        if (totaldiff == null || totaldiff == undefined || totaldiff == NaN) {
+                                            totaldiff = rsdata[0].beatmap.difficulty_rating;
                                         } else {
-                                            rspp = rspp.toFixed(2)
+                                            totaldiff = mapattrdata.attributes.star_rating.toFixed(2);
                                         }
 
-                                        ppissue = ''
 
-                                    } catch (error) {
-                                        if (rspp == null) {
-                                            rspp = NaN
-                                        }
-                                        ppiffc = NaN
-                                        ppissue = 'Error - pp calculator could not fetch beatmap'
-                                        fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
-                                    }
-                                    let fcflag;
-                                    if (rsdata[0].perfect == true) {
-                                        fcflag = '**FC**'
-                                    } else if (rsdata[0].perfect == false) {
-                                        fcflag = `**${ppiffc}**pp IF **${fcacc}** FC`
-                                    }
-                                    let title = rsdata[0].beatmapset.title
-                                    let titleunicode = rsdata[0].beatmapset.title_unicode
-                                    let titlediff = rsdata[0].beatmap.version
-                                    let titlestring;
-                                    if (title != titleunicode) {
-                                        titlestring = `${title} (${titleunicode}) [${titlediff}]`
-                                    }
-                                    else {
-                                        titlestring = `${title} [${titlediff}]`
-                                    }
-                                    let trycount = 0
-                                    for (let i = 0; i < rsdata.length; i++) {
-                                        if (rsdata[i].beatmap.id == rsdata[0].beatmap.id) {
-                                            trycount++
-                                        }
-                                    }
-                                    let trycountstr: string;
-                                    trycountstr = ''
-                                    if (trycount > 1) {
-                                        trycountstr = `try #${trycount}`
-                                    }
+                                        (async () => {
+                                            //let modint = osucalc.ModStringToInt(mods)
 
-                                    let scoretimestampdate: any = new Date((rsdata[0].created_at).toString().slice(0, -6) + "Z")
-                                    let curtime: any = new Date()
-                                    let minsincelastvis: any = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
-                                    let lastvismin = minsincelastvis % 60
-                                    let lastvishour = Math.trunc(minsincelastvis / 60) % 24
-                                    let timeago = `${lastvishour}h ${lastvismin}m`
+                                            let modstr = ''
+                                            let modint: number;
+                                            if (mods) {
+                                                modint = osucalc.ModStringToInt(mods)
+                                                modstr = `+${mods}`
+                                            } else {
+                                                modint = 0
+                                            }
+
+                                            const score = {
+                                                beatmap_id: rsdata[0].beatmap.id,
+                                                score: '6795149',
+                                                maxcombo: '630',
+                                                count50: gamehits.count_50,
+                                                count100: gamehits.count_100,
+                                                count300: gamehits.count_300,
+                                                countmiss: '0',
+                                                countkatu: gamehits.count_katu,
+                                                countgeki: gamehits.count_geki,
+                                                perfect: '1',
+                                                enabled_mods: modint,
+                                                user_id: userid,
+                                                date: '2022-02-08 05:24:54',
+                                                rank: 'S',
+                                                score_id: '4057765057'
+                                            }
+                                            const scorenofc = {
+                                                beatmap_id: rsdata[0].beatmap.id,
+                                                score: '6795149',
+                                                maxcombo: '630',
+                                                count50: gamehits.count_50,
+                                                count100: gamehits.count_100,
+                                                count300: gamehits.count_300,
+                                                countmiss: gamehits.count_miss,
+                                                countkatu: gamehits.count_katu,
+                                                countgeki: gamehits.count_geki,
+                                                perfect: '0',
+                                                enabled_mods: modint,
+                                                user_id: userid,
+                                                date: '2022-02-08 05:24:54',
+                                                rank: 'S',
+                                                score_id: '4057765057'
+                                            }
+                                            let pp: any;
+                                            let ppfc: any;
+                                            let hitlist: any;
+
+                                            if (mode == 'osu') {
+                                                pp = new ppcalc.std_ppv2().setPerformance(scorenofc)
+                                                ppfc = new ppcalc.std_ppv2().setPerformance(score)
+                                                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
+                                            }
+                                            if (mode == 'taiko') {
+                                                pp = new ppcalc.taiko_ppv2().setPerformance(scorenofc)
+                                                ppfc = new ppcalc.taiko_ppv2().setPerformance(score)
+                                                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`
+                                            }
+                                            if (mode == 'fruits') {
+                                                pp = new ppcalc.catch_ppv2().setPerformance(scorenofc)
+                                                ppfc = new ppcalc.catch_ppv2().setPerformance(score)
+                                                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
+                                            }
+                                            if (mode == 'mania') {
+                                                pp = new ppcalc.mania_ppv2().setPerformance(scorenofc)
+                                                ppfc = new ppcalc.mania_ppv2().setPerformance(score)
+                                                hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
+                                            }
+
+                                            let rspp = rsdata[0].pp
+                                            let ppiffc: any;
+                                            let ppissue: string;
+                                            try {
+                                                let ppc = await pp.compute()
+                                                let ppfcd = await ppfc.compute()
+
+                                                ppiffc = ppfcd.total.toFixed(2)
+                                                fs.writeFileSync(`debugosu/rspp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
+
+                                                if (rspp == null) {
+                                                    rspp = ppc.total.toFixed(2)
+                                                } else {
+                                                    rspp = rspp.toFixed(2)
+                                                }
+
+                                                ppissue = ''
+
+                                            } catch (error) {
+                                                if (rspp == null) {
+                                                    rspp = NaN
+                                                }
+                                                ppiffc = NaN
+                                                ppissue = 'Error - pp calculator could not fetch beatmap'
+                                                fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
+                                            }
+                                            let fcflag;
+                                            if (rsdata[0].perfect == true) {
+                                                fcflag = '**FC**'
+                                            } else if (rsdata[0].perfect == false) {
+                                                fcflag = `**${ppiffc}**pp IF **${fcacc}** FC`
+                                            }
+                                            let title = rsdata[0].beatmapset.title
+                                            let titleunicode = rsdata[0].beatmapset.title_unicode
+                                            let titlediff = rsdata[0].beatmap.version
+                                            let titlestring;
+                                            if (title != titleunicode) {
+                                                titlestring = `${title} (${titleunicode}) [${titlediff}]`
+                                            }
+                                            else {
+                                                titlestring = `${title} [${titlediff}]`
+                                            }
+                                            let trycount = 0
+                                            for (let i = 0; i < rsdata.length; i++) {
+                                                if (rsdata[i].beatmap.id == rsdata[0].beatmap.id) {
+                                                    trycount++
+                                                }
+                                            }
+                                            let trycountstr: string;
+                                            trycountstr = ''
+                                            if (trycount > 1) {
+                                                trycountstr = `try #${trycount}`
+                                            }
+
+                                            let scoretimestampdate: any = new Date((rsdata[0].created_at).toString().slice(0, -6) + "Z")
+                                            let curtime: any = new Date()
+                                            let minsincelastvis: any = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
+                                            let lastvismin = minsincelastvis % 60
+                                            let lastvishour = Math.trunc(minsincelastvis / 60) % 24
+                                            let timeago = `${lastvishour}h ${lastvismin}m`
 
 
 
-                                    let Embed = new Discord.EmbedBuilder()
-                                        .setColor(0x9AAAC0)
-                                        .setTitle(`#1 most recent play for ${rsdata[0].user.username}`)
-                                        .setURL(`https://osu.ppy.sh/scores/${rsdata[0].mode}/${rsdata[0].id}`)
-                                        .setAuthor({ name: `${timeago} Ago on ${rsdata[0].created_at.substring(0, rsdata[0].created_at.length - 6).replace('T', ' ')} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
-                                        .setThumbnail(`${rsdata[0].beatmapset.covers.list}`)
-                                        .addFields([
-                                            {
-                                                name: 'MAP DETAILS',
-                                                value: `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${rsdata[0].beatmap.difficulty_rating}⭐`,
-                                                inline: false
-                                            },
-                                            {
-                                                name: 'SCORE DETAILS',
-                                                value: `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
-                                                    `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`,
-                                                inline: true
-                                            },
-                                            {
-                                                name: 'PP',
-                                                value: `**${rspp}**pp \n${fcflag}\n${ppissue}`,
-                                                inline: true
-                                            }]);
-                                    message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                            let Embed = new Discord.EmbedBuilder()
+                                                .setColor(0x9AAAC0)
+                                                .setTitle(`#1 most recent play for ${rsdata[0].user.username}`)
+                                                .setURL(`https://osu.ppy.sh/scores/${rsdata[0].mode}/${rsdata[0].id}`)
+                                                .setAuthor({ name: `${timeago} Ago on ${rsdata[0].created_at.substring(0, rsdata[0].created_at.length - 6).replace('T', ' ')} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
+                                                .setThumbnail(`${rsdata[0].beatmapset.covers.list}`)
+                                                .addFields([
+                                                    {
+                                                        name: 'MAP DETAILS',
+                                                        value: `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${totaldiff}⭐`,
+                                                        inline: false
+                                                    },
+                                                    {
+                                                        name: 'SCORE DETAILS',
+                                                        value: `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
+                                                            `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`,
+                                                        inline: true
+                                                    },
+                                                    {
+                                                        name: 'PP',
+                                                        value: `**${rspp}**pp \n${fcflag}\n${ppissue}`,
+                                                        inline: true
+                                                    }]);
+                                            message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                            fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
 
-                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0].beatmap.id }), null, 2));
-                                    fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                                            fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0].beatmap.id }), null, 2));
+                                            fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
-                                })();
+                                        })();
+                                    })
                             } catch (error) {
                                 message.reply({ content: 'Error - no score found', allowedMentions: { repliedUser: false } })
                                 fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
@@ -504,175 +535,203 @@ module.exports = {
                                             rsgrade = emojis.grades.XH
                                             break;
                                     };
+                                    let mods = rsdata[0 + page].mods.toString().replaceAll(',', '').replace('[', '').replace(']', '')
+                                    let iftherearemodsasint = JSON.stringify({
+                                        "ruleset": mode
+                                    });
+                                    if (mods != 'NM') {
+                                        iftherearemodsasint =
+                                            JSON.stringify({
+                                                "ruleset": mode,
+                                                "mods": osucalc.ModStringToInt(mods)
+                                            })
+                                    }
+                                    let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${rsdata[0 + page].beatmap.id}/attributes`;
+                                    fetch(beatattrurl, {
+                                        method: 'POST',
+                                        headers: {
+                                            Authorization: `Bearer ${access_token}`,
+                                            "Content-Type": "application/json",
+                                            Accept: "application/json"
+                                        },
+                                        body: iftherearemodsasint,
 
-                                    (async () => {
-
-                                        let mods = rsdata[0 + page].mods.toString().replaceAll(',', '').replace('[', '').replace(']', '')
-                                        //let modint = osucalc.ModStringToInt(mods)
-
-                                        let modstr = ''
-                                        let modint: any;
-                                        if (mods) {
-                                            modint = osucalc.ModStringToInt(mods)
-                                            modstr = `+${mods}`
-
-                                        } else {
-                                            modint = 0
-                                        }
-
-                                        const score = {
-                                            beatmap_id: rsdata[0 + page].beatmap.id,
-                                            score: '6795149',
-                                            maxcombo: '630',
-                                            count50: gamehits.count_50,
-                                            count100: gamehits.count_100,
-                                            count300: gamehits.count_300,
-                                            countmiss: '0',
-                                            countkatu: gamehits.count_katu,
-                                            countgeki: gamehits.count_geki,
-                                            perfect: '1',
-                                            enabled_mods: modint,
-                                            user_id: userid,
-                                            date: '2022-02-08 05:24:54',
-                                            rank: 'S',
-                                            score_id: '4057765057'
-                                        }
-                                        const scorenofc = {
-                                            beatmap_id: rsdata[0 + page].beatmap.id,
-                                            score: '6795149',
-                                            maxcombo: '630',
-                                            count50: gamehits.count_50,
-                                            count100: gamehits.count_100,
-                                            count300: gamehits.count_300,
-                                            countmiss: gamehits.count_miss,
-                                            countkatu: gamehits.count_katu,
-                                            countgeki: gamehits.count_geki,
-                                            perfect: '0',
-                                            enabled_mods: modint,
-                                            user_id: userid,
-                                            date: '2022-02-08 05:24:54',
-                                            rank: 'S',
-                                            score_id: '4057765057'
-                                        }
-                                        let pp: any;
-                                        let ppfc: any;
-                                        let hitlist: any;
-                                        if (mode == 'osu') {
-                                            pp = new ppcalc.std_ppv2().setPerformance(scorenofc)
-                                            ppfc = new ppcalc.std_ppv2().setPerformance(score)
-                                            hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
-                                        }
-                                        if (mode == 'taiko') {
-                                            pp = new ppcalc.taiko_ppv2().setPerformance(scorenofc)
-                                            ppfc = new ppcalc.taiko_ppv2().setPerformance(score)
-                                            hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`
-                                        }
-                                        if (mode == 'fruits') {
-                                            pp = new ppcalc.catch_ppv2().setPerformance(scorenofc)
-                                            ppfc = new ppcalc.catch_ppv2().setPerformance(score)
-                                            hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
-                                        }
-                                        if (mode == 'mania') {
-                                            pp = new ppcalc.mania_ppv2().setPerformance(scorenofc)
-                                            ppfc = new ppcalc.mania_ppv2().setPerformance(score)
-                                            hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
-                                        }
-
-                                        let rspp = rsdata[0 + page].pp
-                                        let ppiffc: any;
-                                        let ppissue: any;
-                                        try {
-                                            let ppc = await pp.compute()
-                                            let ppfcd = await ppfc.compute()
-
-                                            ppiffc = ppfcd.total.toFixed(2)
-                                            fs.writeFileSync(`debugosu/rspp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
-                                            if (rspp == null) {
-                                                rspp = ppc.total.toFixed(2)
+                                    }).then(res => res.json() as any)
+                                        .then(mapattrdata => {
+                                            fs.writeFileSync('debugosu/rsattrdata.json', JSON.stringify(mapattrdata, null, 2));
+                                            let totaldiff = mapattrdata.attributes.star_rating
+                                            if (totaldiff == null || totaldiff == undefined || totaldiff == NaN) {
+                                                totaldiff = rsdata[0 + page].beatmap.difficulty_rating;
                                             } else {
-                                                rspp = rspp.toFixed(2)
+                                                totaldiff = mapattrdata.attributes.star_rating.toFixed(2);
                                             }
+                                            (async () => {
+                                                //let modint = osucalc.ModStringToInt(mods)
 
-                                            ppissue = ''
+                                                let modstr = ''
+                                                let modint: any;
+                                                if (mods) {
+                                                    modint = osucalc.ModStringToInt(mods)
+                                                    modstr = `+${mods}`
 
-                                        } catch (error) {
-                                            if (rspp == null) {
-                                                rspp = NaN
-                                            }
-                                            ppiffc = NaN
-                                            ppissue = 'Error - pp calculator could not fetch beatmap'
-                                            fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
-                                        }
-                                        let fcflag: any;
-                                        if (rsdata[0 + page].perfect == true) {
-                                            fcflag = '**FC**'
-                                        } else if (rsdata[0 + page].perfect == false) {
-                                            fcflag = `**${ppiffc}**pp IF **${fcacc}** FC`
-                                        }
-                                        let title = rsdata[0 + page].beatmapset.title
-                                        let titleunicode = rsdata[0 + page].beatmapset.title_unicode
-                                        let titlediff = rsdata[0 + page].beatmap.version
-                                        let titlestring: any;
-                                        if (title != titleunicode) {
-                                            titlestring = `${title} (${titleunicode}) [${titlediff}]`
-                                        }
-                                        else {
-                                            titlestring = `${title} [${titlediff}]`
-                                        }
-                                        let trycount = 0
-                                        for (let i = 0; i < rsdata.length; i++) {
-                                            if (rsdata[i].beatmap.id == rsdata[0 + page].beatmap.id) {
-                                                trycount++
-                                            }
-                                        }
-                                        let trycountstr = ''
-                                        if (trycount > 1) {
-                                            trycountstr = `try #${trycount}`
-                                        }
+                                                } else {
+                                                    modint = 0
+                                                }
 
-                                        let scoretimestampdate: any = new Date((rsdata[0 + page].created_at).toString().slice(0, -6) + "Z")
-                                        let curtime: any = new Date()
-                                        let minsincelastvis: any = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
-                                        let lastvismin = minsincelastvis % 60
-                                        let lastvishour = Math.trunc(minsincelastvis / 60) % 24
-                                        let timeago = `${lastvishour}h ${lastvismin}m`
+                                                const score = {
+                                                    beatmap_id: rsdata[0 + page].beatmap.id,
+                                                    score: '6795149',
+                                                    maxcombo: '630',
+                                                    count50: gamehits.count_50,
+                                                    count100: gamehits.count_100,
+                                                    count300: gamehits.count_300,
+                                                    countmiss: '0',
+                                                    countkatu: gamehits.count_katu,
+                                                    countgeki: gamehits.count_geki,
+                                                    perfect: '1',
+                                                    enabled_mods: modint,
+                                                    user_id: userid,
+                                                    date: '2022-02-08 05:24:54',
+                                                    rank: 'S',
+                                                    score_id: '4057765057'
+                                                }
+                                                const scorenofc = {
+                                                    beatmap_id: rsdata[0 + page].beatmap.id,
+                                                    score: '6795149',
+                                                    maxcombo: '630',
+                                                    count50: gamehits.count_50,
+                                                    count100: gamehits.count_100,
+                                                    count300: gamehits.count_300,
+                                                    countmiss: gamehits.count_miss,
+                                                    countkatu: gamehits.count_katu,
+                                                    countgeki: gamehits.count_geki,
+                                                    perfect: '0',
+                                                    enabled_mods: modint,
+                                                    user_id: userid,
+                                                    date: '2022-02-08 05:24:54',
+                                                    rank: 'S',
+                                                    score_id: '4057765057'
+                                                }
+                                                let pp: any;
+                                                let ppfc: any;
+                                                let hitlist: any;
+                                                if (mode == 'osu') {
+                                                    pp = new ppcalc.std_ppv2().setPerformance(scorenofc)
+                                                    ppfc = new ppcalc.std_ppv2().setPerformance(score)
+                                                    hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
+                                                }
+                                                if (mode == 'taiko') {
+                                                    pp = new ppcalc.taiko_ppv2().setPerformance(scorenofc)
+                                                    ppfc = new ppcalc.taiko_ppv2().setPerformance(score)
+                                                    hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`
+                                                }
+                                                if (mode == 'fruits') {
+                                                    pp = new ppcalc.catch_ppv2().setPerformance(scorenofc)
+                                                    ppfc = new ppcalc.catch_ppv2().setPerformance(score)
+                                                    hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
+                                                }
+                                                if (mode == 'mania') {
+                                                    pp = new ppcalc.mania_ppv2().setPerformance(scorenofc)
+                                                    ppfc = new ppcalc.mania_ppv2().setPerformance(score)
+                                                    hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
+                                                }
+
+                                                let rspp = rsdata[0 + page].pp
+                                                let ppiffc: any;
+                                                let ppissue: any;
+                                                try {
+                                                    let ppc = await pp.compute()
+                                                    let ppfcd = await ppfc.compute()
+
+                                                    ppiffc = ppfcd.total.toFixed(2)
+                                                    fs.writeFileSync(`debugosu/rspp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
+                                                    if (rspp == null) {
+                                                        rspp = ppc.total.toFixed(2)
+                                                    } else {
+                                                        rspp = rspp.toFixed(2)
+                                                    }
+
+                                                    ppissue = ''
+
+                                                } catch (error) {
+                                                    if (rspp == null) {
+                                                        rspp = NaN
+                                                    }
+                                                    ppiffc = NaN
+                                                    ppissue = 'Error - pp calculator could not fetch beatmap'
+                                                    fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
+                                                }
+                                                let fcflag: any;
+                                                if (rsdata[0 + page].perfect == true) {
+                                                    fcflag = '**FC**'
+                                                } else if (rsdata[0 + page].perfect == false) {
+                                                    fcflag = `**${ppiffc}**pp IF **${fcacc}** FC`
+                                                }
+                                                let title = rsdata[0 + page].beatmapset.title
+                                                let titleunicode = rsdata[0 + page].beatmapset.title_unicode
+                                                let titlediff = rsdata[0 + page].beatmap.version
+                                                let titlestring: any;
+                                                if (title != titleunicode) {
+                                                    titlestring = `${title} (${titleunicode}) [${titlediff}]`
+                                                }
+                                                else {
+                                                    titlestring = `${title} [${titlediff}]`
+                                                }
+                                                let trycount = 0
+                                                for (let i = 0; i < rsdata.length; i++) {
+                                                    if (rsdata[i].beatmap.id == rsdata[0 + page].beatmap.id) {
+                                                        trycount++
+                                                    }
+                                                }
+                                                let trycountstr = ''
+                                                if (trycount > 1) {
+                                                    trycountstr = `try #${trycount}`
+                                                }
+
+                                                let scoretimestampdate: any = new Date((rsdata[0 + page].created_at).toString().slice(0, -6) + "Z")
+                                                let curtime: any = new Date()
+                                                let minsincelastvis: any = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
+                                                let lastvismin = minsincelastvis % 60
+                                                let lastvishour = Math.trunc(minsincelastvis / 60) % 24
+                                                let timeago = `${lastvishour}h ${lastvismin}m`
 
 
 
-                                        let Embed = new Discord.EmbedBuilder()
-                                            .setColor(0x9AAAC0)
-                                            .setTitle(`#${page + 1} most recent play for ${rsdata[0 + page].user.username}`)
-                                            .setURL(`https://osu.ppy.sh/scores/${rsdata[0 + page].mode}/${rsdata[0 + page].id}`)
-                                            .setAuthor({ name: `${timeago} Ago on ${rsdata[0 + page].created_at.substring(0, rsdata[0 + page].created_at.length - 6).replace('T', ' ')} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
-                                            .setThumbnail(`${rsdata[0 + page].beatmapset.covers.list}`)
-                                            .addFields([
-                                                {
-                                                    name: 'MAP DETAILS',
-                                                    value: `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${rsdata[0].beatmap.difficulty_rating}⭐`,
-                                                    inline: false
-                                                },
-                                                {
-                                                    name: 'SCORE DETAILS',
-                                                    value: `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
-                                                        `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: 'PP',
-                                                    value: `**${rspp}**pp \n${fcflag}\n${ppissue}`,
-                                                    inline: true
-                                                }]);
-                                        if (interaction.type != Discord.InteractionType.MessageComponent) {
+                                                let Embed = new Discord.EmbedBuilder()
+                                                    .setColor(0x9AAAC0)
+                                                    .setTitle(`#${page + 1} most recent play for ${rsdata[0 + page].user.username}`)
+                                                    .setURL(`https://osu.ppy.sh/scores/${rsdata[0 + page].mode}/${rsdata[0 + page].id}`)
+                                                    .setAuthor({ name: `${timeago} Ago on ${rsdata[0 + page].created_at.substring(0, rsdata[0 + page].created_at.length - 6).replace('T', ' ')} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
+                                                    .setThumbnail(`${rsdata[0 + page].beatmapset.covers.list}`)
+                                                    .addFields([
+                                                        {
+                                                            name: 'MAP DETAILS',
+                                                            value: `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${totaldiff}⭐`,
+                                                            inline: false
+                                                        },
+                                                        {
+                                                            name: 'SCORE DETAILS',
+                                                            value: `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
+                                                                `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`,
+                                                            inline: true
+                                                        },
+                                                        {
+                                                            name: 'PP',
+                                                            value: `**${rspp}**pp \n${fcflag}\n${ppissue}`,
+                                                            inline: true
+                                                        }]);
+                                                if (interaction.type != Discord.InteractionType.MessageComponent) {
 
-                                            interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                                            fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
-                                            fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
+                                                    interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                                    fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
 
-                                            fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0 + page].beatmap.id }), null, 2));
-                                        } else {
-                                            message.edit({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                                        }
-                                    })();
+                                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0 + page].beatmap.id }), null, 2));
+                                                } else {
+                                                    message.edit({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                                }
+                                            })();
+                                        })
                                 } else {
                                     let Embed = new Discord.EmbedBuilder()
                                         .setColor(0x9AAAC0)

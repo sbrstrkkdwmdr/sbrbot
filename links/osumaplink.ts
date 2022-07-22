@@ -90,6 +90,35 @@ module.exports = {
                 fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: id }), null, 2));
 
                 //CALCULATE MODS DETAILES
+                let iftherearemodsasint = JSON.stringify({
+                    "ruleset": json.mode
+                });
+                if (mapmods != 'NM') {
+                    iftherearemodsasint =
+                        JSON.stringify({
+                            "ruleset": json.mode,
+                            "mods": osucalc.ModStringToInt(mapmods)
+                        })
+                }
+                let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}/attributes`;
+                fetch(beatattrurl, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                        "Content-Type": "application/json",
+                        Accept: "application/json"
+                    },
+                    body: iftherearemodsasint,
+
+                }).then(res => res.json() as any)
+                    .then(mapattrdata => {
+                        let totaldiff = mapattrdata.attributes.star_rating
+                        if (totaldiff == null || totaldiff == undefined || totaldiff == NaN) {
+                            totaldiff = json.difficulty_rating;
+                        } else {
+                            totaldiff = mapattrdata.attributes.star_rating.toFixed(2);
+                        }
+                        fs.writeFileSync('debugosu/mapattrdata.json', JSON.stringify(mapattrdata, null, 2));
 
                 let cs = json.cs
                 let ar = json.ar
@@ -345,7 +374,7 @@ module.exports = {
                                         value:
                                             `${statusimg} | ${mapimg} \n` +
                                             `CS${cs} AR${ar} OD${od} HP${hp} \n` +
-                                            `${json.difficulty_rating}⭐ | ${bpm}BPM⏱\n` +
+                                            `${totaldiff}⭐ | ${bpm}BPM⏱\n` +
                                             `${emojis.mapobjs.circle}${json.count_circles} | ${emojis.mapobjs.slider}${json.count_sliders} | ${emojis.mapobjs.spinner}${json.count_spinners}\n` +
                                             `${moddedlength}🕐`,
                                         inline: true
@@ -370,7 +399,7 @@ module.exports = {
                             fs.appendFileSync('link.log', '\nsuccess\n\n', 'utf-8')
                         })
                 })();
-
+            })
             })
         }
 
