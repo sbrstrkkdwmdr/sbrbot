@@ -531,7 +531,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let currentDate = new Date()
         let currentDateISO = new Date().toISOString()
         let message = null;
-        let args = null
+        let args = null;
+        let button = null;
 
         switch (interaction.commandName) {
             case 'ping':
@@ -580,7 +581,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.osucmds.get('osuset').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'osutop':
-                client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button)
                 break;
             case 'map':
                 client.osucmds.get('map').execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config)
@@ -589,7 +590,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
                 break;
             case 'scores':
-                client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+                client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button)
                 break;
             case 'leaderboard':
                 client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)

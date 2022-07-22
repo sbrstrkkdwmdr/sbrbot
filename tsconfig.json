@@ -41,6 +41,8 @@
         "commands/time.ts",
         "commands/ytsearch.ts",
 
+        "test/testcmd.ts",
+
         "commands-admin/checkperms.ts",
         "commands-admin/crash.ts",
         "commands-admin/debug.ts",

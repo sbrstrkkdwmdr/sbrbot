@@ -31,6 +31,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             return Math.ceil(timeout._idleStart - timeout._idleTimeout)
         }
         let interaction = null;
+        let button = null;
         switch (command) {
             case 'ping':
                 client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
@@ -82,20 +83,20 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'map': case 'm':
                 client.osucmds.get('map').execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config);
                 break;
-            case 'rs': case 'recent':case 'r':
+            case 'rs': case 'recent': case 'r':
                 client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'osu': case 'profile': case 'o':
                 client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'osutop': case 'top':
-                client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 break;
             case 'scores': case 'c':
                 client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'leaderboard': case 'lb': case 'maplb': case 'mapleaderboard':
-                client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 break;
 
             //admincmds below
@@ -130,6 +131,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
             case 'sfx':
                 client.musiccmds.get('sfx').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+
+            //test
+            case 'test':
+                client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 break;
         }
 

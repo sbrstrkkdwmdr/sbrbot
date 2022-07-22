@@ -28,6 +28,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         //MESSAGE LOGGER
     })
     client.on('messageDelete', message => {
+        //check if property exists
+        if (message.author == null || message.author.username == null) return;
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(message.guild.id)
