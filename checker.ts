@@ -11,7 +11,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         if (checks.checkisfileblocked(message.author.id)) {
             let currentDate = new Date();
             let currentDateISO = new Date().toISOString();
-
             if (message.attachments.size > 0 && (message.attachments.every(a => checks.checkisvideo(a)) || message.attachments.every(a => checks.checkisimage(a)) || message.attachments.every(a => checks.checkisaudio(a)))) {
                 //console.log('ee')
                 //message.reply('balls')
