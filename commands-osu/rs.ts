@@ -100,7 +100,7 @@ module.exports = {
                     }).then(res => res.json() as any)
                         .then(rsdata => {
                             try {
-                                fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata, null, 2))
+                                fs.writeFileSync('debugosu/command-rs.json', JSON.stringify(rsdata, null, 2))
 
                                 let hittime = rsdata[0].beatmap.hit_length
                                 let hitseconds: any = (hittime % 60)
@@ -187,7 +187,7 @@ module.exports = {
 
                                 }).then(res => res.json() as any)
                                     .then(mapattrdata => {
-                                        fs.writeFileSync('debugosu/rsattrdata.json', JSON.stringify(mapattrdata, null, 2));
+                                        fs.writeFileSync('debugosu/command-rsattrdata.json', JSON.stringify(mapattrdata, null, 2));
                                         let totaldiff = mapattrdata.attributes.star_rating
                                         if (totaldiff == null || totaldiff == undefined || totaldiff == NaN) {
                                             totaldiff = rsdata[0].beatmap.difficulty_rating;
@@ -275,7 +275,7 @@ module.exports = {
                                                 let ppfcd = await ppfc.compute()
 
                                                 ppiffc = ppfcd.total.toFixed(2)
-                                                fs.writeFileSync(`debugosu/rspp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
+                                                fs.writeFileSync(`debugosu/command-rspp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
 
                                                 if (rspp == null) {
                                                     rspp = ppc.total.toFixed(2)
@@ -466,7 +466,7 @@ module.exports = {
                     }).then(res => res.json() as any)
                         .then(rsdata => {
                             try {
-                                fs.writeFileSync('debugosu/rs.json', JSON.stringify(rsdata, null, 2))
+                                fs.writeFileSync('debugosu/command-rs.json', JSON.stringify(rsdata, null, 2))
                                 if (list != true) {
                                     if (interaction.type == Discord.InteractionType.MessageComponent && button == 'BigRightArrow') {
                                         page = rsdata.length
@@ -558,7 +558,7 @@ module.exports = {
 
                                     }).then(res => res.json() as any)
                                         .then(mapattrdata => {
-                                            fs.writeFileSync('debugosu/rsattrdata.json', JSON.stringify(mapattrdata, null, 2));
+                                            fs.writeFileSync('debugosu/command-rsattrdata.json', JSON.stringify(mapattrdata, null, 2));
                                             let totaldiff = mapattrdata.attributes.star_rating
                                             if (totaldiff == null || totaldiff == undefined || totaldiff == NaN) {
                                                 totaldiff = rsdata[0 + page].beatmap.difficulty_rating;
@@ -644,7 +644,7 @@ module.exports = {
                                                     let ppfcd = await ppfc.compute()
 
                                                     ppiffc = ppfcd.total.toFixed(2)
-                                                    fs.writeFileSync(`debugosu/rspp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
+                                                    fs.writeFileSync(`debugosu/command-rspp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
                                                     if (rspp == null) {
                                                         rspp = ppc.total.toFixed(2)
                                                     } else {

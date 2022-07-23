@@ -18,7 +18,7 @@ module.exports = {
             console.log(err)
             return
         }
-        fs.writeFileSync('debugosu/replay.json', JSON.stringify(replay, null, 2))
+        fs.writeFileSync('debugosu/link-replay.json', JSON.stringify(replay, null, 2))
 
         let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/lookup?checksum=${replay.beatmapMD5}`
         fetch(mapurl, {
@@ -26,7 +26,7 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any).then(mapdata => {
-            fs.writeFileSync('debugosu/replaymap.json', JSON.stringify(mapdata, null, 2))
+            fs.writeFileSync('debugosu/link-replaymap.json', JSON.stringify(mapdata, null, 2))
             fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
 
             const userurl = `https://osu.ppy.sh/api/v2/users/${replay.playerName}`
@@ -37,7 +37,7 @@ module.exports = {
                 }
             }).then(res => res.json() as any).then(userdata => {
 
-                fs.writeFileSync('debugosu/replayuser.json', JSON.stringify(userdata, null, 2))
+                fs.writeFileSync('debugosu/link-replayuser.json', JSON.stringify(userdata, null, 2))
                 let userid:any;
                 try {
                     userid = userdata.id

@@ -72,7 +72,7 @@ module.exports = {
                 }).then(res => res.json() as any)
                     .then(mapidtest => {
                         fs.appendFileSync('commands.log', `\nfetched title - ${maptitle}`)
-                        fs.writeFileSync('debugosu/maptxt.json', JSON.stringify(mapidtest, null, 2))
+                        fs.writeFileSync('debugosu/command-maptxt.json', JSON.stringify(mapidtest, null, 2))
                         let sortbyhigh;
                         try {
                             sortbyhigh = (mapidtest as any).beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)
@@ -96,7 +96,7 @@ module.exports = {
                         })
                             .then(res => res.json() as any)
                             .then((json) => {
-                                fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
+                                fs.writeFileSync('debugosu/command-map.json', JSON.stringify(json, null, 2));
 
                                 try {
                                     let mapper = json.beatmapset.creator
@@ -168,7 +168,7 @@ module.exports = {
                                         } else {
                                             totaldiff = mapattrdata.attributes.star_rating.toFixed(2);
                                         }
-                                        fs.writeFileSync('debugosu/mapattrdata.json', JSON.stringify(mapattrdata, null, 2));
+                                        fs.writeFileSync('debugosu/command-mapattrdata.json', JSON.stringify(mapattrdata, null, 2));
 
                                         let cs = json.cs
                                         let ar = json.ar
@@ -370,8 +370,8 @@ module.exports = {
                                                 ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
                                                 pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
                                                 ppissue = ''
-                                                fs.writeFileSync('./debugosu/mapppcalc.json', JSON.stringify(ppComputed, null, 2))
-                                                fs.writeFileSync('./debugosu/mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
+                                                fs.writeFileSync('./debugosu/command-mapppcalc.json', JSON.stringify(ppComputed, null, 2))
+                                                fs.writeFileSync('./debugosu/command-mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
 
 
                                             } catch (error) {
@@ -469,7 +469,7 @@ module.exports = {
             })
                 .then(res => res.json() as any)
                 .then(json => {
-                    fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
+                    fs.writeFileSync('debugosu/command-map.json', JSON.stringify(json, null, 2));
 
                     try {
                         let mapper = json.beatmapset.creator
@@ -539,7 +539,7 @@ module.exports = {
                             } else {
                                 totaldiff = mapattrdata.attributes.star_rating.toFixed(2);
                             }
-                            fs.writeFileSync('debugosu/mapattrdata.json', JSON.stringify(mapattrdata, null, 2));
+                            fs.writeFileSync('debugosu/command-mapattrdata.json', JSON.stringify(mapattrdata, null, 2));
 
                             let cs = json.cs
                             let ar = json.ar
@@ -742,8 +742,8 @@ module.exports = {
                                     ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
                                     pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
                                     ppissue = ''
-                                    fs.writeFileSync('./debugosu/mapppcalc.json', JSON.stringify(ppComputed, null, 2))
-                                    fs.writeFileSync('./debugosu/mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
+                                    fs.writeFileSync('./debugosu/command-mapppcalc.json', JSON.stringify(ppComputed, null, 2))
+                                    fs.writeFileSync('./debugosu/command-mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
 
                                 } catch (error) {
                                     ppComputedString = NaN
@@ -851,7 +851,7 @@ module.exports = {
             })
                 .then(res => res.json() as any)
                 .then(json => {
-                    fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
+                    fs.writeFileSync('debugosu/command-map.json', JSON.stringify(json, null, 2));
 
                     try {
                         let mapper = json.beatmapset.creator
@@ -929,7 +929,7 @@ module.exports = {
                                                                 break;
                                                         } */
 
-                            fs.writeFileSync('debugosu/mapattrdata.json', JSON.stringify(mapattrdata, null, 2));
+                            fs.writeFileSync('debugosu/command-mapattrdata.json', JSON.stringify(mapattrdata, null, 2));
 
                             let cs = json.cs
                             let ar = json.ar
@@ -1136,8 +1136,8 @@ module.exports = {
                                     ppComputedString = (Math.abs(ppComputed.total)).toFixed(2) + "pp"
                                     pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2) + "pp"
                                     ppissue = ''
-                                    fs.writeFileSync('./debugosu/mapppcalc.json', JSON.stringify(ppComputed, null, 2))
-                                    fs.writeFileSync('./debugosu/mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
+                                    fs.writeFileSync('./debugosu/command-mapppcalc.json', JSON.stringify(ppComputed, null, 2))
+                                    fs.writeFileSync('./debugosu/command-mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
                                     if (interaction.options.getBoolean("detailed") == true) {
                                         ppComputedString += ` \naim: ${ppComputed.aim.toFixed(2)}pp, \nspeed: ${ppComputed.speed.toFixed(2)}pp, \nacc: ${ppComputed.acc.toFixed(2)}pp\n`
                                         pp95ComputedString += ` \naim: ${pp95Computed.aim.toFixed(2)}pp, \nspeed: ${pp95Computed.speed.toFixed(2)}pp, \nacc: ${pp95Computed.acc.toFixed(2)}pp\n`

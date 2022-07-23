@@ -19,7 +19,7 @@ module.exports = {
             }
         }).then(res => res.json() as any)
             .then(osudata => {
-                fs.writeFileSync('debugosu/osu.json', JSON.stringify(osudata, null, 2))
+                fs.writeFileSync('debugosu/link-osu.json', JSON.stringify(osudata, null, 2))
                 try {
                     let osustats = osudata.statistics
                     let grades = osustats.grade_counts

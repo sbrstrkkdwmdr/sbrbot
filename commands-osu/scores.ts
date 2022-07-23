@@ -65,7 +65,7 @@ module.exports = {
                         }
                     }).then(res => res.json() as any)
                         .then(scoredataPreSort => {
-                            fs.writeFileSync('debugosu/scorespresort.json', JSON.stringify(scoredataPreSort, null, 2));
+                            fs.writeFileSync('debugosu/command-scorespresort.json', JSON.stringify(scoredataPreSort, null, 2));
                             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}`
                             let scoredata = scoredataPreSort
                             let sortdata
@@ -89,8 +89,8 @@ module.exports = {
                                 }
                             }).then(res => res.json() as any)
                                 .then(mapdata => {
-                                    fs.writeFileSync('debugosu/scoresmap.json', JSON.stringify(mapdata, null, 2));
-                                    fs.writeFileSync('debugosu/scores.json', JSON.stringify(scoredata, null, 2));
+                                    fs.writeFileSync('debugosu/command-scoresmap.json', JSON.stringify(mapdata, null, 2));
+                                    fs.writeFileSync('debugosu/command-scores.json', JSON.stringify(scoredata, null, 2));
                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
 
 
@@ -233,7 +233,7 @@ module.exports = {
                         }
                     }).then(res => res.json() as any)
                         .then(scoredataPreSort => {
-                            fs.writeFileSync('debugosu/scorespresort.json', JSON.stringify(scoredataPreSort, null, 2));
+                            fs.writeFileSync('debugosu/command-scorespresort.json', JSON.stringify(scoredataPreSort, null, 2));
                             const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}`
                             let scoredata = scoredataPreSort
                             let sortdata = ''
@@ -309,8 +309,8 @@ module.exports = {
                                 }
                             }).then(res => res.json() as any)
                                 .then(mapdata => {
-                                    fs.writeFileSync('debugosu/scoresmap.json', JSON.stringify(mapdata, null, 2));
-                                    fs.writeFileSync('debugosu/scores.json', JSON.stringify(scoredata, null, 2));
+                                    fs.writeFileSync('debugosu/command-scoresmap.json', JSON.stringify(mapdata, null, 2));
+                                    fs.writeFileSync('debugosu/command-scores.json', JSON.stringify(scoredata, null, 2));
                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
 
 

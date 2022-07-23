@@ -62,7 +62,7 @@ module.exports = {
                     message.reply({ content: 'Error - map not found', allowedMentions: { repliedUser: false } });
                     return;
                 }
-                fs.writeFileSync('debugosu/map.json', JSON.stringify(json, null, 2));
+                fs.writeFileSync('debugosu/link-map.json', JSON.stringify(json, null, 2));
                 fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: json.id }), null, 2));
 
                 let mapperlink = (`${json.beatmapset.creator}`).replaceAll(' ', '%20');
@@ -118,7 +118,7 @@ module.exports = {
                         } else {
                             totaldiff = mapattrdata.attributes.star_rating.toFixed(2);
                         }
-                        fs.writeFileSync('debugosu/mapattrdata.json', JSON.stringify(mapattrdata, null, 2));
+                        fs.writeFileSync('debugosu/link-mapattrdata.json', JSON.stringify(mapattrdata, null, 2));
 
                 let cs = json.cs
                 let ar = json.ar
@@ -322,8 +322,8 @@ module.exports = {
                         ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
                         pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
                         ppissue = ''
-                        fs.writeFileSync('./debugosu/mapppcalc.json', JSON.stringify(ppComputed, null, 2))
-                        fs.writeFileSync('./debugosu/mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
+                        fs.writeFileSync('./debugosu/link-mapppcalc.json', JSON.stringify(ppComputed, null, 2))
+                        fs.writeFileSync('./debugosu/link-mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
                     } catch (error) {
                         ppComputedString = NaN
                         pp95ComputedString = NaN
@@ -430,7 +430,7 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(setdata => {
-                    fs.writeFileSync('debugosu/setdata.json', JSON.stringify(setdata, null, 2))
+                    fs.writeFileSync('debugosu/link-setdata.json', JSON.stringify(setdata, null, 2))
                     let bid = setdata.beatmaps[0].beatmap_id;
 
                     let mapstatus = (setdata.status)

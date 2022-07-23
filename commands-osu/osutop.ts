@@ -96,7 +96,7 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(osudata => {
-                    fs.writeFileSync('debugosu/osutopname.json', JSON.stringify(osudata, null, 2))
+                    fs.writeFileSync('debugosu/command-osutopname.json', JSON.stringify(osudata, null, 2))
                     try {
                         let userid = osudata.id
                         let usertopurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/best?mode=${gamemode}&limit=100&offset=0`;
@@ -106,7 +106,7 @@ module.exports = {
                             }
                         }).then(res => res.json() as any)
                             .then(osutopdata => {
-                                fs.writeFileSync('debugosu/osutop.json', JSON.stringify(osutopdata, null, 2))
+                                fs.writeFileSync('debugosu/command-osutop.json', JSON.stringify(osutopdata, null, 2))
                                 try {
                                     let usernametesting = osutopdata[0].user.username
                                 } catch (error) {
@@ -330,7 +330,7 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(osudata => {
-                    fs.writeFileSync('debugosu/osutopname.json', JSON.stringify(osudata, null, 2))
+                    fs.writeFileSync('debugosu/command-osutopname.json', JSON.stringify(osudata, null, 2))
                     try {
                         let userid = osudata.id
                         //interaction.reply('Loading...')
@@ -341,7 +341,7 @@ module.exports = {
                             }
                         }).then(res => res.json() as any)
                             .then(osutopdataPreSort => {
-                                fs.writeFileSync('debugosu/osutop.json', JSON.stringify(osutopdataPreSort, null, 2))
+                                fs.writeFileSync('debugosu/command-osutop.json', JSON.stringify(osutopdataPreSort, null, 2))
                                 try {
                                     let usernametesting = osutopdataPreSort[0].user.username
                                 } catch (error) {
