@@ -216,7 +216,6 @@ module.exports = {
         }
 
         if (interaction != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let user;
             let gamemode;
             let mapper;
@@ -228,7 +227,21 @@ module.exports = {
             let compact;
 
             if (interaction.type != Discord.InteractionType.MessageComponent) {
-
+                fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+                fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
+                fs.appendFileSync('commands.log', 
+                `\noptions:
+                user: ${interaction.options.getString('user')}
+                mode: ${interaction.options.getString('mode')}
+                sort: ${interaction.options.getString('sort')}
+                reverse: ${interaction.options.getBoolean('reverse')}
+                page: ${interaction.options.getInteger('page')}
+                mapper: ${interaction.options.getString('mapper')}
+                mods: ${interaction.options.getString('mods')}
+                detailed: ${interaction.options.getBoolean('detailed')}
+                compact: ${interaction.options.getBoolean('compact')}
+                `
+                )
                 user = interaction.options.getString('user')
                 gamemode = interaction.options.getString('mode')
                 mapper = interaction.options.getString('mapper')
@@ -239,6 +252,10 @@ module.exports = {
                 reverse = interaction.options.getBoolean('reverse')
                 compact = interaction.options.getBoolean('compact')
             } else {
+                fs.appendFileSync('commands.log', `\nBUTTON EVENT - osutop (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+                fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
+                fs.appendFileSync('commands.log', `\n${button}`);
+
                 user = message.embeds[0].title.split('Top plays of ')[1]
 
                 if (message.embeds[0].description) {
@@ -246,7 +263,7 @@ module.exports = {
                         mapper = message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
                     }
                     if (message.embeds[0].description.includes('mods')) {
-                        mods = message.embeds[0].description.split('mods: ')[1].split('\n')[0];;
+                        mods = message.embeds[0].description.split('mods: ')[1].split('\n')[0];
                     }
                     let sort1 = message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                     switch (true) {
@@ -300,7 +317,6 @@ module.exports = {
                         compact = false
                     }
                 }
-
             }
             if (user == null) {
                 let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
@@ -324,6 +340,18 @@ module.exports = {
                 page = page - 1
             }
             let userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
+            fs.appendFileSync('commands.log', 
+            `\noptions(2):
+            user: ${user}
+            mode: ${gamemode}
+            sort: ${sort}
+            reverse: ${reverse}
+            page: ${page}
+            mapper: ${mapper}
+            mods: ${mods}
+            detailed: ${detailed}
+            compact: ${compact}
+            `)
             fetch(userurl, {
                 headers: {
                     Authorization: `Bearer ${access_token}`
@@ -602,11 +630,12 @@ module.exports = {
                                 }
                                 if (interaction.type != Discord.InteractionType.MessageComponent) {
                                     interaction.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
                                 }
                                 else {
                                     message.edit({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                 }
                             })
                     } catch (error) {

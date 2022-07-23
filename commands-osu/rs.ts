@@ -379,11 +379,25 @@ module.exports = {
             let mode;
             let list = false;
             if (interaction.type != Discord.InteractionType.MessageComponent) {
+                fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+                fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
+                fs.appendFileSync('commands.log',
+                `\noptions:
+                user: ${interaction.options.getString('user')}
+                page: ${interaction.options.getNumber('page')}
+                mode: ${interaction.options.getString('mode')}
+                list: ${interaction.options.getBoolean('list')}
+                `
+                )
                 user = interaction.options.getString('user')
                 page = interaction.options.getNumber('page')
                 mode = interaction.options.getString('mode')
                 list = interaction.options.getBoolean("list")
             } else {
+                fs.appendFileSync('commands.log', `\nBUTTON EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+                fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
+                fs.appendFileSync('commands.log', `\n${button}`)
+
                 user = message.embeds[0].title.split('Most recent play for ')[1]
                 mode == null;
                 page = 0
@@ -444,8 +458,13 @@ module.exports = {
             if (button == null) {
                 interaction.reply({ content: 'Fetching data...' })
             }
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-
+            fs.appendFileSync('commands.log', 
+            `\noptions(2):
+            user: ${user}
+            page: ${page}
+            mode: ${mode}
+            list: ${list}
+            `)
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
 
             fetch(userinfourl, {
@@ -559,10 +578,11 @@ module.exports = {
                                     }).then(res => res.json() as any)
                                         .then(mapattrdata => {
                                             fs.writeFileSync('debugosu/command-rsattrdata.json', JSON.stringify(mapattrdata, null, 2));
-                                            let totaldiff = mapattrdata.attributes.star_rating
-                                            if (totaldiff == null || totaldiff == undefined || totaldiff == NaN) {
+                                            let totaldiff:string;
+                                            if (mapattrdata.error) {
                                                 totaldiff = rsdata[0 + page].beatmap.difficulty_rating;
-                                            } else {
+                                            } 
+                                            if(mapattrdata.attributes.star_rating){
                                                 totaldiff = mapattrdata.attributes.star_rating.toFixed(2);
                                             }
                                             (async () => {
@@ -723,12 +743,13 @@ module.exports = {
                                                 if (interaction.type != Discord.InteractionType.MessageComponent) {
 
                                                     interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                                                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
 
                                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0 + page].beatmap.id }), null, 2));
                                                 } else {
                                                     message.edit({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                                 }
                                             })();
                                         })

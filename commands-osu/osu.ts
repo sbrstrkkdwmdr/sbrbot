@@ -144,6 +144,13 @@ module.exports = {
 
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
+            fs.appendFileSync('commands.log', 
+            `\noptions:
+            user: ${interaction.options.getString('user')}
+            detailed: ${interaction.options.getBoolean('detailed')}
+            `
+            )
             let user = interaction.options.getString('user')
             if (user == null) {
                 let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
@@ -155,6 +162,11 @@ module.exports = {
             }
             //interaction.reply('Searching for ' + user + '...')
             const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
+            fs.appendFileSync('commands.log', 
+            `\noptions(2):
+            user: ${user}
+            detailed: <N/A>
+            `)
             fetch(userurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -374,7 +386,7 @@ module.exports = {
                             interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                         }
 
-                        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                        fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
 
                     } catch (error) {

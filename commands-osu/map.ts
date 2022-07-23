@@ -827,6 +827,15 @@ module.exports = {
         //==============================================================================================================================================================================================
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (interaction)\n${currentDate} | ${currentDateISO}\n recieved get map command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
+            fs.appendFileSync('commands.log', 
+            `\noptions:
+            id: ${interaction.options.getInteger('id')}
+            mods: ${interaction.options.getString('mods')}
+            detailed: ${interaction.options.getBoolean('detailed')}
+            `
+            )
+            
             interaction.reply({ content: 'Fetching map info...', allowedMentions: { repliedUser: false } });
             let mapid = interaction.options.getInteger('id');
             let mapmods = interaction.options.getString('mods');
@@ -840,7 +849,12 @@ module.exports = {
                 mapmods = osucalc.OrderMods(mapmods.toUpperCase());
             }
             //interaction.reply('Fetching map info...');
-
+            fs.appendFileSync('commands.log', 
+            `\noptions(2):
+            id: ${mapid}
+            mods: ${mapmods}
+            detailed: <N/A>
+            `)
             fetch(`https://osu.ppy.sh/api/v2/beatmaps/${mapid}?`, {
                 method: 'GET',
                 headers: {
@@ -1213,7 +1227,7 @@ module.exports = {
                                                 }
                                             ])
                                         interaction.editReply({ content: "⠀", embeds: [Embed], allowedMentions: { repliedUser: false } });
-                                        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                        fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                         fs.appendFileSync('commands.log', `\nCommand Information\nmap id: ${mapid}\nmap mods: ${mapmods}\nmode: ${mapmode}`)
                                     })
                             })();

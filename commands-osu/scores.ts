@@ -191,6 +191,16 @@ module.exports = {
 
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - scores (interaction)\n${currentDate} | ${currentDateISO}\n recieved map scores command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
+            fs.appendFileSync('commands.log', 
+            `\noptions:
+            username: ${interaction.options.getString('username')}
+            id: ${interaction.options.getNumber('id')}
+            sort: ${interaction.options.getString('sort')}
+            reverse: ${interaction.options.getBoolean('reverse')}
+            compact: ${interaction.options.getBoolean('compact')}
+            `
+            )
             let user = interaction.options.getString('username')
 
             let id = interaction.options.getNumber('id')
@@ -214,7 +224,14 @@ module.exports = {
                 sort = 'recent'
             }
             const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
-
+            fs.appendFileSync('commands.log', 
+            `\noptions(2):
+            username: ${user}
+            id: ${id}
+            sort: ${sort}
+            reverse: <N/A>
+            compact: <N/A>
+            `)
             fetch(userurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -403,7 +420,7 @@ module.exports = {
                                     }
                                     Embed.setDescription(scoretxt)
                                     interaction.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
-                                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nmap id: ${id}\nsort: ${sort}`)
 
                                 })

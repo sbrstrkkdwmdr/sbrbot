@@ -28,27 +28,27 @@ module.exports = {
         let buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId('BigLeftArrow-osutop')
+                    .setCustomId('BigLeftArrow-leaderboard')
                     .setStyle('Primary')
                     .setEmoji('⬅')
                     /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId('LeftArrow-osutop')
+                    .setCustomId('LeftArrow-leaderboard')
                     .setStyle('Primary')
                     .setEmoji('◀')
                     /* .setLabel('Previous') */,
                 /*                 new Discord.ButtonBuilder()
-                                    .setCustomId('Middle-osutop')
+                                    .setCustomId('Middle-leaderboard')
                                     .setStyle('Primary')
                                     .setLabel('🔍')
                                 , */
                 new Discord.ButtonBuilder()
-                    .setCustomId('RightArrow-osutop')
+                    .setCustomId('RightArrow-leaderboard')
                     .setStyle('Primary')
                     .setEmoji('▶')
                     /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId('BigRightArrow-osutop')
+                    .setCustomId('BigRightArrow-leaderboard')
                     .setStyle('Primary')
                     .setEmoji('➡')
                     /* .setLabel('End') */,
@@ -181,17 +181,28 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (interaction != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - leaderboard (interaction)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let mapid: any;
             let page: any;
             let mods1: any;
 
 
             if (interaction.type != Discord.InteractionType.MessageComponent) {
+                fs.appendFileSync('commands.log', `\nCOMMAND EVENT - leaderboard (interaction)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+                fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
+                fs.appendFileSync('commands.log', 
+                `\noptions:
+                id: ${interaction.options.getInteger('id')}
+                page: ${interaction.options.getInteger('page')}
+                mods: ${interaction.options.getString('mods')}
+                `
+                )
                 mapid = interaction.options.getInteger('id')
                 page = interaction.options.getInteger('page')
                 mods1 = interaction.options.getString('mods')
             } else {
+                fs.appendFileSync('commands.log', `\nBUTTON EVENT - leaderboard \n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+                fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
+                fs.appendFileSync('commands.log', `\n${button}`)
                 mapid = message.embeds[0].url.split('/b/')[1]
                 if (message.embeds[0].footer) {
                     mods1 = message.embeds[0].footer.text
@@ -226,7 +237,12 @@ module.exports = {
             if (!mapid) {
                 mapid = prevmap.id
             }
-
+            fs.appendFileSync('commands.log', 
+            `\noptions(2):
+            id: ${mapid}
+            page: ${page}
+            mods: ${mods}
+            `)
             let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}`//?mode=osu`//?mods=${mods}`
 
             fetch(mapurl, {
@@ -359,8 +375,10 @@ module.exports = {
                                 if (interaction.type != Discord.InteractionType.MessageComponent) {
                                     interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
+                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                 } else {
                                     message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     //message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
                                 }
 
@@ -373,7 +391,6 @@ module.exports = {
                             .then(lbdata => {
 
                                 fs.writeFileSync('debugosu/command-maplbapiv1.json', JSON.stringify(lbdata, null, 2))
-                                //interaction.reply({ content: 'a...', allowedMentions: { repliedUser: false } })
                                 let lbEmbed = new Discord.EmbedBuilder()
                                     .setTitle(`TOP 5 SCORES FOR ${fulltitle}`)
                                     .setURL(`https://osu.ppy.sh/b/${mapid}`)
@@ -424,12 +441,16 @@ module.exports = {
                                     scoretxt = 'Error - map is unranked'
                                 }
                                 lbEmbed.setDescription(`${scoretxt}`)
+
                                 if (interaction.type != Discord.InteractionType.MessageComponent) {
                                     interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
+                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+
                                 } else {
                                     message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     //message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
+                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                 }
 
                             }).catch(err => {
@@ -441,6 +462,6 @@ module.exports = {
 
         }
 
-        fs.appendFileSync('commands.log', 'success\n\n', 'utf-8')
+        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
     }
 }

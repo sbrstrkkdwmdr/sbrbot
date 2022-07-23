@@ -16,6 +16,7 @@ module.exports = {
 
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osumodcalc (interaction)\n${currentDate} | ${currentDateISO}\n recieved osumodcalc command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
             let mods = interaction.options.getString('mods').toUpperCase();
             let baseCS = interaction.options.getNumber('cs')
             let baseAR = interaction.options.getNumber('ar')
@@ -56,8 +57,7 @@ module.exports = {
             embed.setTitle(`Modded Details (${mods})`)
             embed.setDescription("**CS:** " + baseCS + "\n**AR:** " + baseAR + "\n**OD:** " + baseOD + "\n**HP:** " + baseHP + "\n**BPM:** " + baseBPM)
             interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+            fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
         }
-
-        fs.appendFileSync('commands.log', 'success\n\n', 'utf-8')
     }
 }

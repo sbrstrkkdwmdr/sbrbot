@@ -14,6 +14,12 @@ module.exports = {
 
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osuset (interaction)\n${currentDate} | ${currentDateISO}\n recieved set osu! username command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
+            fs.appendFileSync('commands.log', 
+            `\noptions:
+            user: ${interaction.options.getString('user')}
+            mode: ${interaction.options.getString('mode')}
+            `)
             let username = interaction.options.getString('user');
             let mode = interaction.options.getString('mode') + '';
 
@@ -25,7 +31,7 @@ module.exports = {
                         mode: 'osu',
                     })
                     interaction.reply({ content: 'added to the database', allowedMentions: { repliedUser: false } })
-                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                     fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
 
@@ -35,7 +41,7 @@ module.exports = {
                         mode: 'osu',
                     }, { where: { userid: interaction.member.user.id } })
                     if (affectedRows > 0) {
-                        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                        fs.appendFileSync('commands.log', `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
                         return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
@@ -51,7 +57,7 @@ module.exports = {
                         mode: mode,
                     })
                     interaction.reply({ content: 'added to the database', allowedMentions: { repliedUser: false } })
-                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                    fs.appendFileSync('commands.log', `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                     fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
 
@@ -61,7 +67,7 @@ module.exports = {
                         mode: mode,
                     }, { where: { userid: interaction.member.user.id } })
                     if (affectedRows > 0) {
-                        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                        fs.appendFileSync('commands.log', `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
                         return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
