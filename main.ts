@@ -104,6 +104,7 @@ const userdata = sequelize.define('userdata', {
 client.once('ready', () => {
     userdata.sync()
     console.log('Ready!');
+    fs.appendFileSync('commands.log', `\n\n\nBOT IS NOW ONLINE\n\n\n`, 'utf-8');
     commandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     linkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     slashcommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
