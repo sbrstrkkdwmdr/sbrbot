@@ -10,9 +10,20 @@ let config =
     "osuApiKey": "null",
     "testGuildID": "null",
     "ownerusers": [], //add your ID to the array to access admin commands
-    "googlecx": "null", //https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4 to get it
-    "googlekey": "null", //https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4 to get it
-    "fileblockedusers": [] // add user id here to auto-delete any audio, videos or images they send
+    "fileblockedusers": [], // add user id here to auto-delete any audio, videos or images they send
+    "ytapikey": "null", //https://developers.google.com/youtube/v3/guides/auth/client-side-web-apps
+    "ytclientid": "null", //https://developers.google.com/youtube/v3/guides/auth/client-side-web-apps
+    "google": {
+        "apiKey": "null",
+        "cx": "null"
+    },     //https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4 to get it
+    "youtube": {
+        "apiKey": "null",
+    },
+    "twitch": {
+        "clientID": "null",
+        "clientSecret": "null"
+    }
 }
 if (fs.existsSync('./configs/config.json')) {
     try {

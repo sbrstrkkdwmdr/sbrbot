@@ -12,7 +12,7 @@ module.exports = {
                 return message.reply({ content: 'Please specify the name of the image you want to search.', allowedMentions: { repliedUser: false } })
             }
             let res =
-                await fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${args.join(' ')}&cx=${config.googlecx}&key=${config.googlekey}&searchType=image`).catch(error => fs.appendFileSync('commands.log', "\n" + error));
+                await fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${args.join(' ')}&cx=${config.google.cs}&key=${config.google.apiKey}&searchType=image`).catch(error => fs.appendFileSync('commands.log', "\n" + error));
 
             if (!res) return message.reply({ content: 'Unable to fetch the requested image.', allowedMentions: { repliedUser: false } })
             if (res.status >= 400) return message.reply({ content: `Error ${res.status}`, allowedMentions: { repliedUser: false } })
