@@ -28,14 +28,47 @@ module.exports = {
                             userfind = guild.members.cache.get(id)//.user.tag
                             let up = 'null or offline status';
                             if (userfind.presence) {
-                                up = `
-                                ${userfind.presence.status}
-                                ${userfind.presence.activities.length > 0 ? userfind.presence.activities[0].name : ''}
-                                ${userfind.presence.activities.length > 0 ? userfind.presence.activities[0].state : ''}
+                                up = '';
+                                for (let i = 0; i < userfind.presence.activities.length; i++) {
+                                    /*                                     up += `
+                                                                    ${userfind.presence.status}
+                                                                    ${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].name : ''}
+                                                                    ${userfind.presence.activities.length > 0 ? 'Activity Type: [' + userfind.presence.activities[i].type + '](https://discord.com/developers/docs/topics/gateway#activity-object-activity-types)': ''}
+                                                                    \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
+                                                                    ` */
+                                    let t
+                                    switch (userfind.presence.activities[i].type) {
+                                        case 0:
+                                            t = 'Playing'
+                                            break;
+                                        case 1:
+                                            t = 'Streaming'
+                                            break;
+                                        case 2:
+                                            t = 'Listening'
+                                            break;
+                                        case 3:
+                                            t = 'Watching'
+                                            break;
+                                        case 4:
+                                            t = 'Custom Status'
+                                            break;
+                                        case 5:
+                                            t = 'Competing in'
+                                            break;
+                                        default:
+                                            t = 'Unknown Activity Type'
+                                            break;
+
+                                    }
+                                    up += `
+                                ${t} ${userfind.presence.activities.length > 0 && t != 'Custom Status' ? `\`${userfind.presence.activities[i].name}\`` : ''}
+                                \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
                                 `
+                                }
                             }
 
-                            Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>': ''}`)
+                            Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`)
                             Embedr.setThumbnail(`${userfind.user.avatarURL()}`);
                             Embedr.setDescription(
                                 `ID: ${userfind.user.id}
@@ -47,7 +80,7 @@ module.exports = {
                             return;
                         }
                     })
-                    message.reply({ content: `${userfind}`, embeds: [Embedr], allowedMentions: { repliedUser: false } });
+                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
 
                     break;
                 case 'guild':
@@ -96,7 +129,7 @@ module.exports = {
 
                     break;
                 case 'role':
-                    let rolefind:any = 'No role found'
+                    let rolefind: any = 'No role found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.roles.cache.has(id)) {
                             rolefind = guild.roles.cache.get(id)
@@ -118,7 +151,7 @@ module.exports = {
 
                     break;
                 case 'emoji':
-                    let emojifind:any = 'No emoji found'
+                    let emojifind: any = 'No emoji found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.emojis.cache.has(id)) {
                             emojifind = guild.emojis.cache.get(id)
@@ -158,20 +191,52 @@ module.exports = {
                             userfind = guild.members.cache.get(id)//.user.tag
                             let up = 'null or offline status';
                             if (userfind.presence) {
-                                up = `
-                                ${userfind.presence.status}
-                                ${userfind.presence.activities.length > 0 ? userfind.presence.activities[0].name : ''}
-                                ${userfind.presence.activities.length > 0 ? userfind.presence.activities[0].state : ''}
+                                up = '';
+                                for (let i = 0; i < userfind.presence.activities.length; i++) {
+                                    /*                                     up += `
+                                                                    ${userfind.presence.status}
+                                                                    ${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].name : ''}
+                                                                    ${userfind.presence.activities.length > 0 ? 'Activity Type: [' + userfind.presence.activities[i].type + '](https://discord.com/developers/docs/topics/gateway#activity-object-activity-types)': ''}
+                                                                    \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
+                                                                    ` */
+                                    let t
+                                    switch (userfind.presence.activities[i].type) {
+                                        case 0:
+                                            t = 'Playing'
+                                            break;
+                                        case 1:
+                                            t = 'Streaming'
+                                            break;
+                                        case 2:
+                                            t = 'Listening'
+                                            break;
+                                        case 3:
+                                            t = 'Watching'
+                                            break;
+                                        case 4:
+                                            t = 'Custom Status'
+                                            break;
+                                        case 5:
+                                            t = 'Competing in'
+                                            break;
+                                        default:
+                                            t = 'Unknown Activity Type'
+                                            break;
+
+                                    }
+                                    up += `
+                                ${t} ${userfind.presence.activities.length > 0 && t != 'Custom Status' ? `\`${userfind.presence.activities[i].name}\`` : ''}
+                                \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
                                 `
+                                }
                             }
 
-                            Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>': ''}`)
+                            Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`)
                             Embedr.setThumbnail(`${userfind.user.avatarURL()}`);
                             Embedr.setDescription(
                                 `ID: ${userfind.user.id}
                                 Status: ${up}
                                 Account creation date: ${userfind.user.createdAt}
-                                ${userfind.user.bot ? '<:bot:958289108147523584>': ''}
                                 Bot: ${userfind.user.bot}
                                 Flags: ${userfind.user.flags.toArray().join(',')}
                                 `);
@@ -181,7 +246,7 @@ module.exports = {
 
 
 
-                    interaction.reply({ content: `${userfind}`, embeds: [Embedr], allowedMentions: { repliedUser: false } });
+                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
 
                     break;
                 case 'guild':
@@ -230,7 +295,7 @@ module.exports = {
 
                     break;
                 case 'role':
-                    let rolefind:any = 'No role found'
+                    let rolefind: any = 'No role found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.roles.cache.has(id)) {
                             rolefind = guild.roles.cache.get(id)
@@ -252,7 +317,7 @@ module.exports = {
 
                     break;
                 case 'emoji':
-                    let emojifind:any = 'No emoji found'
+                    let emojifind: any = 'No emoji found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.emojis.cache.has(id)) {
                             emojifind = guild.emojis.cache.get(id)
