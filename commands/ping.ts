@@ -25,9 +25,9 @@ module.exports = {
             let admininfo:any;
             if(commandchecks.isOwner(interaction.member.user.id)) {
                 let uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
-                let uptimehours = Math.floor(uptime / 3600) > 10 ? Math.floor(uptime / 3600) : '0' + Math.floor(uptime / 3600);
-                let uptimeminutes = Math.floor((uptime % 3600) / 60) > 10 ? Math.floor((uptime % 3600) / 60) : '0' + Math.floor((uptime % 3600) / 60);
-                let uptimeseconds = Math.floor(uptime % 60) > 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
+                let uptimehours = Math.floor(uptime / 3600) >= 10 ? Math.floor(uptime / 3600) : '0' + Math.floor(uptime / 3600);
+                let uptimeminutes = Math.floor((uptime % 3600) / 60) >= 10 ? Math.floor((uptime % 3600) / 60) : '0' + Math.floor((uptime % 3600) / 60);
+                let uptimeseconds = Math.floor(uptime % 60) >= 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
                 admininfo = `Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}`
             }
             interaction.reply({ content: `Pong!\nLatency: ${interaction.client.ws.ping}ms\n${admininfo}`, allowedMentions: { repliedUser: false } });
