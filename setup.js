@@ -59,9 +59,13 @@ if (!fs.existsSync('./logs')) {
 }
 if (fs.existsSync('./debug/timesince.txt')) {
 
-
 } else {
     fs.writeFileSync('./debug/timesince.txt', (new Date()).toString())
+}
+if (fs.existsSync('./debug/starttime.txt')) {
+
+} else {
+    fs.writeFileSync('./debug/starttime.txt', (new Date()).toString())
 }
 console.log('If you don\'t want to set an option, just press enter')
 let bottoken = prompt('Bot Token: ', "null")
