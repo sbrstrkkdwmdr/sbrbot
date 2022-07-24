@@ -33,7 +33,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(message.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nmessageDelete event\n${currentDate} | ${currentDateISO}\n `);
-        fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${message.author.username}#${message.author.discriminator}'s message has been deleted:\n ${message.content}\n`)
+        fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${message.author.username}#${message.author.discriminator}'s message has been deleted:\nID: ${message.id}\n ${message.content}\n`)
     })
     client.on('messageUpdate', (oldMessage, newMessage) => {
         if(oldMessage == newMessage) return;
@@ -43,7 +43,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let guild = client.guilds.cache.get(oldMessage.guild.id)
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nmessageUpdate event\n${currentDate} | ${currentDateISO}\n `);
         if(oldMessage.author){
-        fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${oldMessage.author.username}#${oldMessage.author.discriminator}'s message has been updated:`)
+        fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${oldMessage.author.username}#${oldMessage.author.discriminator}'s message has been updated:\nID: ${oldMessage.id}\n`)
         }
         if (oldMessage.content != newMessage.content) {
             fs.appendFileSync(`./logs/${guild.id}.log`, `\n Old Message: ${oldMessage.content}`)
