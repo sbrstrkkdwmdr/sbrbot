@@ -66,5 +66,7 @@
         "links/replayparse.ts",
         "links/scoreparse.ts",
 
+        "commands/info.ts"
+
     ]
   }
