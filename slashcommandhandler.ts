@@ -554,6 +554,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         name: 'Links',
         type: 2,
     })
+    commands?.create({
+        name: 'Bookmark',
+        type: 3,
+        dmPermission: false,
+    })
 
     client.on('interactionCreate', async (interaction) => {
         if (!(interaction.type === InteractionType.ApplicationCommand)) return;
@@ -654,6 +659,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'Links':
                 client.commands.get('info').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'Bookmark':
+                client.commands.get('bookmark').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             default:
                 interaction.reply({ content: 'Command not found - no longer exists or is currently being rewritten', ephemeral: true })
