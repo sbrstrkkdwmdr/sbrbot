@@ -15,10 +15,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'ping',
         description: 'Pong!',
+        dmPermission: false,
     })
     commands?.create({
         name: 'help',
         description: 'Displays all commands',
+        dmPermission: false,
         options: [
             {
                 name: 'command',
@@ -31,6 +33,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'gif',
         description: 'Sends a random gif',
+        dmPermission: false,
         options: [
             {
                 name: 'type',
@@ -44,6 +47,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'image',
         description: 'Searches the Google API and returns the first five results',
+        dmPermission: false,
         options: [
             {
                 name: 'query',
@@ -56,6 +60,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'ytsearch',
         description: 'Searches the YouTube API and returns the first five results',
+        dmPermission: false,
         options: [
             {
                 name: 'query',
@@ -68,6 +73,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'math',
         description: 'Solves a simple math problem',
+        dmPermission: false,
         options: [
             {
                 name: 'type',
@@ -95,6 +101,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'convert',
         description: 'Converts one value to another',
+        dmPermission: false,
         options: [
             {
                 name: 'type1',
@@ -121,10 +128,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: '8ball',
         description: 'Responds to a question',
+        dmPermission: false,
     })
     commands?.create({
         name: 'roll',
         description: 'Returns a random number',
+        dmPermission: false,
         options: [
             {
                 name: 'number',
@@ -137,6 +146,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'remind',
         description: 'Reminds the user of something',
+        dmPermission: false,
         options: [
             {
                 name: 'time',
@@ -161,6 +171,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'say',
         description: 'Send a message to a channel',
+        dmPermission: false,
         options: [
             {
                 name: 'message',
@@ -179,6 +190,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'poll',
         description: 'Creates a poll',
+        dmPermission: false,
         options: [
             {
                 name: 'title',
@@ -200,6 +212,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'osu',
         description: 'Displays the user\'s osu! profile',
+        dmPermission: false,
         options: [
             {
                 name: 'user',
@@ -219,6 +232,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'osuset',
         description: 'Sets the user\'s osu! profile',
+        dmPermission: false,
         options: [
             {
                 name: 'user',
@@ -238,6 +252,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'osutop',
         description: 'Displays the top plays of the user',
+        dmPermission: false,
         options: [
             {
                 name: 'user',
@@ -305,6 +320,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'map',
         description: 'Displays the map info of the map',
+        dmPermission: false,
         options: [
             {
                 name: 'id',
@@ -331,16 +347,19 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'rs',
         description: 'Displays the user\'s most recent score',
+        dmPermission: false,
         options: cmdconfig.rsopts
     })
     commands?.create({
         name: 'scores',
         description: 'Displays the user\'s scores for a set map',
+        dmPermission: false,
         options: cmdconfig.useridsortopts
     })
     commands?.create({
         name: 'leaderboard',
         description: 'Displays the top five plays on a specific map',
+        dmPermission: false,
         options: [
             {
                 name: 'id',
@@ -369,6 +388,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'osumodcalc',
         description: 'Calculates the values for a map based on the values given',
+        dmPermission: false,
         options: [
             {
                 name: 'mods',
@@ -425,6 +445,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'checkperms',
         description: 'Checks the permissions of a user',
+        dmPermission: false,
         options: [
             {
                 name: 'user',
@@ -437,11 +458,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'servers',
         description: 'Displays all servers the bot is in',
+        dmPermission: false,
 
     })
     commands?.create({
         name: 'leaveguild',
         description: 'Leaves a server',
+        dmPermission: false,
         options: [
             {
                 name: 'guild',
@@ -457,6 +480,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'voice',
         description: 'Controls a user\'s voice settings',
+        dmPermission: false,
         options: [
             {
                 name: 'user',
@@ -488,6 +512,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'find',
         description: 'Returns the name of something from the id given',
+        dmPermission: false,
         options: [
             {
                 name: 'type',
@@ -514,6 +539,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     commands?.create({
         name: 'log',
         description: 'Displays the log of a server',
+        dmPermission: false,
         options: [
             {
                 name: 'guildid',
@@ -523,6 +549,10 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 minValue: 1
             },
         ]
+    })
+    commands?.create({
+        name: 'Links',
+        type: 2,
     })
 
     client.on('interactionCreate', async (interaction) => {
@@ -621,6 +651,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'log':
                 client.admincmds.get('log').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'Links':
+                client.commands.get('info').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             default:
                 interaction.reply({ content: 'Command not found - no longer exists or is currently being rewritten', ephemeral: true })
