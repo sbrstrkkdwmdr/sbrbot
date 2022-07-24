@@ -3,6 +3,11 @@ module.exports = {
     name: 'find',
     description: 'returns name from the id given',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+        let Embedr = new Discord.EmbedBuilder()
+            .setTitle('Could not find the id')
+            .setDescription('Does not exist or bot is not in the same guild')
+
+            ;
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - find (message)\n${currentDate} | ${currentDateISO}\n recieved find by id command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let type = args[0];
@@ -17,57 +22,119 @@ module.exports = {
             }
             switch (type) {
                 case 'user':
-                    let userfind = 'User not found'
+                    let userfind: any = 'User not found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.members.cache.has(id)) {
-                            userfind = guild.members.cache.get(id).user.tag
+                            userfind = guild.members.cache.get(id)//.user.tag
+                            let up = 'null or offline status';
+                            if (userfind.presence) {
+                                up = `
+                                ${userfind.presence.status}
+                                ${userfind.presence.activities.length > 0 ? userfind.presence.activities[0].name : ''}
+                                ${userfind.presence.activities.length > 0 ? userfind.presence.activities[0].state : ''}
+                                `
+                            }
+
+                            Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>': ''}`)
+                            Embedr.setThumbnail(`${userfind.user.avatarURL()}`);
+                            Embedr.setDescription(
+                                `ID: ${userfind.user.id}
+                                Status: ${up}
+                                Account creation date: ${userfind.user.createdAt}
+                                Bot: ${userfind.user.bot}
+                                Flags: ${userfind.user.flags.toArray().join(',')}
+                                `);
                             return;
                         }
                     })
-                    message.reply({ content: `${userfind}`, allowedMentions: { repliedUser: false } });
+                    message.reply({ content: `${userfind}`, embeds: [Embedr], allowedMentions: { repliedUser: false } });
 
                     break;
                 case 'guild':
-                    let guildfind = 'No guild found'
+                    let guildfind: any = 'No guild found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.id == id) {
-                            guildfind = guild.name
+                            guildfind = guild
+                            Embedr.setTitle(`${guildfind.name}`);
+                            if (guildfind.iconURL()) {
+                                Embedr.setThumbnail(`${guildfind.iconURL()}`);
+                            }
+                            if (guildfind.bannerURL()) {
+                                Embedr.setImage(`${guildfind.bannerURL()}`);
+                            }
+                            Embedr.setDescription(`
+                            ID: ${guildfind.id}
+                            Total user count: ${guildfind.members.cache.size}
+                            Total channel count: ${guildfind.channels.cache.size}
+                            Creation date: ${guildfind.createdAt}
+                            `)
                             return;
                         }
                     })
-                    message.reply({ content: `${guildfind}`, allowedMentions: { repliedUser: false } });
+                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
                     break;
                 case 'channel':
-                    let channelfind = 'Channel not found'
+                    let channelfind: any = 'Channel not found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.channels.cache.has(id)) {
-                            channelfind = guild.channels.cache.get(id).name
+                            channelfind = guild.channels.cache.get(id)
+                            Embedr.setTitle(`Channel: #${channelfind.name}`);
+                            if (guild.iconURL()) {
+                                Embedr.setThumbnail(`${guild.iconURL()}`);
+                            }
+                            Embedr.setDescription(`
+                            ID: ${channelfind.id}
+                            Topic: ${channelfind.topic}
+                            [Type: ${channelfind.type}](https://discord-api-types.dev/api/discord-api-types-v10/enum/ChannelType)
+                            Parent: ${channelfind.parent ? channelfind.parent.name : 'No parent'} ${channelfind.parent ? '| ' + channelfind.parent.id + ' | Type ' + channelfind.parent.type : ''}
+                            Guild: ${guild.name} | ${guild.id}
+                            `)
                             return;
                         }
                     })
-                    message.reply({ content: `${channelfind}`, allowedMentions: { repliedUser: false } });
+                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
 
                     break;
                 case 'role':
-                    let rolefind = 'No role found'
+                    let rolefind:any = 'No role found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.roles.cache.has(id)) {
-                            rolefind = guild.roles.cache.get(id).name
+                            rolefind = guild.roles.cache.get(id)
+                            Embedr.setTitle(`Role: ${rolefind.name}`);
+                            if (guild.iconURL()) {
+                                Embedr.setThumbnail(`${guild.iconURL()}`);
+                            }
+                            Embedr.setDescription(`
+                            ID: ${rolefind.id}
+                            Colour: [${rolefind.color ? rolefind.color : 'null'}](https://discord.js.org/#/docs/discord.js/main/class/Role?scrollTo=color)
+                            Emoji: ${rolefind.unicodeEmoji ? rolefind.unicodeEmoji : 'null'}
+                            Guild: ${guild.name} | ${guild.id}
+                            `)
+                            Embedr.setColor(rolefind.color);
                             return;
                         }
                     })
-                    message.reply({ content: `${rolefind}`, allowedMentions: { repliedUser: false } });
+                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
 
                     break;
                 case 'emoji':
-                    let emojifind = 'No emoji found'
+                    let emojifind:any = 'No emoji found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.emojis.cache.has(id)) {
-                            emojifind = guild.emojis.cache.get(id).name + ` <:${guild.emojis.cache.get(id).name}:${id}>`
+                            emojifind = guild.emojis.cache.get(id)
+                            Embedr.setTitle(`Emoji: ${emojifind.name}`);
+                            if (emojifind.url) {
+                                Embedr.setThumbnail(`${emojifind.url}`);
+                            }
+                            Embedr.setDescription(`
+                            ID: ${emojifind.id}
+                            Emoji: \`<:${guild.emojis.cache.get(id).name}:${id}>\`
+                            Guild: ${guild.name} | ${guild.id}
+                            `)
                             return;
                         }
                     })
-                    message.reply({ content: `${emojifind}`, allowedMentions: { repliedUser: false } });
+                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
                     break;
                 default:
                     message.reply({ content: 'Error - invalid search parameters. Valid params are: user, guild, channel, role', allowedMentions: { repliedUser: false } });
@@ -85,57 +152,123 @@ module.exports = {
             }
             switch (type) {
                 case 'user':
-                    let userfind = 'User not found'
+                    let userfind: any = 'User not found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.members.cache.has(id)) {
-                            userfind = guild.members.cache.get(id).user.tag
+                            userfind = guild.members.cache.get(id)//.user.tag
+                            let up = 'null or offline status';
+                            if (userfind.presence) {
+                                up = `
+                                ${userfind.presence.status}
+                                ${userfind.presence.activities.length > 0 ? userfind.presence.activities[0].name : ''}
+                                ${userfind.presence.activities.length > 0 ? userfind.presence.activities[0].state : ''}
+                                `
+                            }
+
+                            Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>': ''}`)
+                            Embedr.setThumbnail(`${userfind.user.avatarURL()}`);
+                            Embedr.setDescription(
+                                `ID: ${userfind.user.id}
+                                Status: ${up}
+                                Account creation date: ${userfind.user.createdAt}
+                                ${userfind.user.bot ? '<:bot:958289108147523584>': ''}
+                                Bot: ${userfind.user.bot}
+                                Flags: ${userfind.user.flags.toArray().join(',')}
+                                `);
                             return;
                         }
                     })
-                    interaction.reply({ content: `${userfind}`, allowedMentions: { repliedUser: false } });
+
+
+
+                    interaction.reply({ content: `${userfind}`, embeds: [Embedr], allowedMentions: { repliedUser: false } });
 
                     break;
                 case 'guild':
-                    let guildfind = 'No guild found'
+                    let guildfind: any = 'No guild found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.id == id) {
-                            guildfind = guild.name
+                            guildfind = guild
+                            Embedr.setTitle(`${guildfind.name}`);
+                            if (guildfind.iconURL()) {
+                                Embedr.setThumbnail(`${guildfind.iconURL()}`);
+                            }
+                            if (guildfind.bannerURL()) {
+                                Embedr.setImage(`${guildfind.bannerURL()}`);
+                            }
+                            Embedr.setDescription(`
+                            ID: ${guildfind.id}
+                            Total user count: ${guildfind.members.cache.size}
+                            Total channel count: ${guildfind.channels.cache.size}
+                            Creation date: ${guildfind.createdAt}
+                            `)
                             return;
                         }
                     })
-                    interaction.reply({ content: `${guildfind}`, allowedMentions: { repliedUser: false } });
+                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
                     break;
                 case 'channel':
-                    let channelfind = 'Channel not found'
+                    let channelfind: any = 'Channel not found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.channels.cache.has(id)) {
-                            channelfind = guild.channels.cache.get(id).name
+                            channelfind = guild.channels.cache.get(id)
+                            Embedr.setTitle(`Channel: #${channelfind.name}`);
+                            if (guild.iconURL()) {
+                                Embedr.setThumbnail(`${guild.iconURL()}`);
+                            }
+                            Embedr.setDescription(`
+                            ID: ${channelfind.id}
+                            Topic: ${channelfind.topic}
+                            [Type: ${channelfind.type}](https://discord-api-types.dev/api/discord-api-types-v10/enum/ChannelType)
+                            Parent: ${channelfind.parent ? channelfind.parent.name : 'No parent'} ${channelfind.parent ? '| ' + channelfind.parent.id + ' | Type ' + channelfind.parent.type : ''}
+                            Guild: ${guild.name} | ${guild.id}
+                            `)
                             return;
                         }
                     })
-                    interaction.reply({ content: `${channelfind}`, allowedMentions: { repliedUser: false } });
+                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
 
                     break;
                 case 'role':
-                    let rolefind = 'No role found'
+                    let rolefind:any = 'No role found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.roles.cache.has(id)) {
-                            rolefind = guild.roles.cache.get(id).name
+                            rolefind = guild.roles.cache.get(id)
+                            Embedr.setTitle(`Role: ${rolefind.name}`);
+                            if (guild.iconURL()) {
+                                Embedr.setThumbnail(`${guild.iconURL()}`);
+                            }
+                            Embedr.setDescription(`
+                            ID: ${rolefind.id}
+                            Colour: [${rolefind.color ? rolefind.color : 'null'}](https://discord.js.org/#/docs/discord.js/main/class/Role?scrollTo=color)
+                            Emoji: ${rolefind.unicodeEmoji ? rolefind.unicodeEmoji : 'null'}
+                            Guild: ${guild.name} | ${guild.id}
+                            `)
+                            Embedr.setColor(rolefind.color);
                             return;
                         }
                     })
-                    interaction.reply({ content: `${rolefind}`, allowedMentions: { repliedUser: false } });
+                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
 
                     break;
                 case 'emoji':
-                    let emojifind = 'No emoji found'
+                    let emojifind:any = 'No emoji found'
                     client.guilds.cache.forEach(guild => {
                         if (guild.emojis.cache.has(id)) {
-                            emojifind = guild.emojis.cache.get(id).name + ` <:${guild.emojis.cache.get(id).name}:${id}>`
+                            emojifind = guild.emojis.cache.get(id)
+                            Embedr.setTitle(`Emoji: ${emojifind.name}`);
+                            if (emojifind.url) {
+                                Embedr.setThumbnail(`${emojifind.url}`);
+                            }
+                            Embedr.setDescription(`
+                            ID: ${emojifind.id}
+                            Emoji: \`<:${guild.emojis.cache.get(id).name}:${id}>\`
+                            Guild: ${guild.name} | ${guild.id}
+                            `)
                             return;
                         }
                     })
-                    interaction.reply({ content: `${emojifind}`, allowedMentions: { repliedUser: false } });
+                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
                     break;
                 default:
                     interaction.reply({ content: 'Error - invalid search parameters. Valid params are: user, guild, channel, role', allowedMentions: { repliedUser: false } });
