@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 let modeopts = [
     { name: 'osu', value: 'osu' },
     { name: 'taiko', value: 'taiko' },
-    { name: 'catch', value: 'catch' },
+    { name: 'catch', value: 'fruits' },
     { name: 'mania', value: 'mania' }
 ]
 /**
