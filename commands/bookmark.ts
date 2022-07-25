@@ -18,7 +18,7 @@ module.exports = {
             //console.log(interaction)
             let link = interaction.guild.id && interaction.channel.id ? `https://discordapp.com/channels/${interaction.guild.id}/${interaction.channel.id}/${interaction.targetId}` : ''
             interaction.member.user.send({content: `Bookmarked message: \n${link}\n${interaction.targetId}\nContent:\`${interaction.targetMessage.content}\``})
-            interaction.reply({content: 'Bookmarked!'})
+            interaction.reply({content: 'Bookmarked!', ephemeral: true})
             fs.appendFileSync('commands.log', `Message ID: ${interaction.targetId}`)
         }
 
