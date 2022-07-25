@@ -6,10 +6,11 @@
     },
     "files": [
         "main.ts",
-        "checker.ts",
-        "commandhandler.ts",
-        "linkhandler.ts",
-        "slashcommandhandler.ts",
+        "Moderator.ts",
+        "CommandHandler.ts",
+        "LinkHandler.ts",
+        "SlashCommandHandler.ts",
+        "CommandInit.ts",
 
         "configs/calculations.ts",
         "configs/commandchecks.ts",
