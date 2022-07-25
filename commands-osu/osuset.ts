@@ -9,7 +9,35 @@ module.exports = {
         '⠀⠀`mode`: string, optional. The mode of the user. If omitted, the default mode \'osu\' will be used.\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
-            message.reply({ content: 'please use the slash command instead', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+            let username = args.join(' ')
+            if (!args[0]) return message.reply({ content: 'Please enter a username or ID', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+            //message.reply({ content: 'please use the slash command instead', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+            try {
+                await userdata.create({
+                    userid: message.author.id,
+                    osuname: username,
+                    mode: 'osu',
+                })
+                message.reply({ content: 'added to the database', allowedMentions: { repliedUser: false } })
+                fs.appendFileSync('commands.log', `\nsuccess\n\n`, 'utf-8')
+                fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\n`)
+
+
+            } catch (error) {
+                let affectedRows = await userdata.update({
+                    osuname: username,
+                    mode: 'osu',
+                }, { where: { userid: message.author.id } })
+                if (affectedRows > 0) {
+                    fs.appendFileSync('commands.log', `\nsuccess\n\n`, 'utf-8')
+                    fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}`)
+
+                    return message.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
+                }
+                return message.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
+
+
+            }
         }
 
         if (interaction != null) {
