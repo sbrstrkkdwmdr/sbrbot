@@ -69,7 +69,7 @@ module.exports = {
                 }
             }
             if (mode == null) {
-                let findname = await userdata.findOne({ where: { userid: message.author.id } })
+                let findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname == null) {
                     mode = 'osu'
                 } else {
@@ -339,7 +339,7 @@ module.exports = {
                                                 .addFields([
                                                     {
                                                         name: 'MAP DETAILS',
-                                                        value: `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${totaldiff}⭐`,
+                                                        value: `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${totaldiff}⭐ | ${rsdata[0].mode}`,
                                                         inline: false
                                                     },
                                                     {
@@ -362,7 +362,12 @@ module.exports = {
                                         })();
                                     })
                             } catch (error) {
+                                if(mode == 'osu'){
                                 message.reply({ content: 'Error - no score found', allowedMentions: { repliedUser: false } })
+                                }
+                                else if (mode != 'osu' && user) {
+                                    message.reply({ content: 'Error - no score found. Maybe try changing your mode with `/osuset` or use `/rs` instead', allowedMentions: { repliedUser: false } })
+                                }
                                 fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
                                 return;
                             }
@@ -399,7 +404,7 @@ module.exports = {
                 fs.appendFileSync('commands.log', `\n${button}`)
 
                 user = message.embeds[0].title.split('Most recent play for ')[1]
-                mode == null;
+                mode = message.embeds[0].fields[0].value.split(' | ')[1];
                 page = 0
                 if (button == 'BigLeftArrow') {
                     page = 0
@@ -726,13 +731,13 @@ module.exports = {
                                                     .addFields([
                                                         {
                                                             name: 'MAP DETAILS',
-                                                            value: `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0].beatmap.id}) ${modstr} ${totaldiff}⭐`,
+                                                            value: `[${titlestring}](https://osu.ppy.sh/b/${rsdata[0+page].beatmap.id}) ${modstr} ${totaldiff}⭐ | ${rsdata[0 + page].mode}`,
                                                             inline: false
                                                         },
                                                         {
                                                             name: 'SCORE DETAILS',
                                                             value: `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
-                                                                `${rspassinfo}\n${hitlist}\n${rsdata[0].max_combo}x combo`,
+                                                                `${rspassinfo}\n${hitlist}\n${rsdata[0 + page].max_combo}x combo`,
                                                             inline: true
                                                         },
                                                         {
@@ -777,7 +782,9 @@ module.exports = {
                                 }
                             } catch (error) {
                                 fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nPage: ${page}\nmode: ${mode}`)
+                                if (interaction.type != Discord.InteractionType.MessageComponent) {
                                 return interaction.editReply({ content: 'Error - no score found', allowedMentions: { repliedUser: false } })
+                                } 
                             }
 
                         })
