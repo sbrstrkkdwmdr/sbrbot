@@ -8,7 +8,7 @@ module.exports = {
         'Options:\n' +
         '⠀⠀`command` - string, optional. The command to get help for. If omitted, all commands will be displayed.\n',
     execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config) {
-        let i:number;
+        let i: number;
         let fullCommandList = new Discord.EmbedBuilder()
             .setColor('#0099ff')
             .setTitle('Command List')
@@ -39,7 +39,7 @@ module.exports = {
                     value: "`play`, `np`, `skip`, `pause`, `queue`, `resume`",
                     inline: false
                 }
-                
+
                 /* {
                 name: 'Main commands',
                 value: `**ping** - Displays the bot's ping\n` +
@@ -105,10 +105,9 @@ module.exports = {
                 let command = args[0].toString()
                 let commandInfo = new Discord.EmbedBuilder()
                     .setColor('#0099ff')
-                if (client.commands.get(command)) {
+                if (commandhelp.cmds.find(obj => obj.name == args[0])) {
 
-                    let commandname = client.commands.get(command).name
-                    let res = commandhelp.cmds.find(obj => obj.name == commandname)
+                    let res = commandhelp.cmds.find(obj => obj.name == args[0])
 
                     let desc = ''
                     desc += res.description + "\n"
@@ -131,12 +130,12 @@ module.exports = {
                         desc += `\n\nAliases: ${res.aliases}`
                     }
 
-                    commandInfo.setTitle("Command info for: " + commandname)
+                    commandInfo.setTitle("Command info for: " + res.name)
                     commandInfo.setDescription(desc)
 
-                } else if (client.osucmds.get(command)) {
-                    let commandname = client.osucmds.get(command).name
-                    let res = commandhelp.osucmds.find(obj => obj.name == commandname)
+                } else if (commandhelp.osucmds.find(obj => obj.name == args[0])) {
+                    let res = commandhelp.osucmds.find(obj => obj.name == args[0])
+
 
                     let desc = ''
                     desc += res.description + "\n"
@@ -159,14 +158,13 @@ module.exports = {
                         desc += `\n\nAliases: ${res.aliases}`
                     }
 
-                    commandInfo.setTitle("Command info for: " + commandname)
+                    commandInfo.setTitle("Command info for: " + res.name)
                     commandInfo.setDescription(desc)
 
                 }
-                else if (client.admincmds.get(command)) {
+                else if (commandhelp.admincmds.find(obj => obj.name == args[0])) {
+                    let res = commandhelp.admincmds.find(obj => obj.name == args[0])
 
-                    let commandname = client.admincmds.get(command).name
-                    let res = commandhelp.admincmds.find(obj => obj.name == commandname)
 
                     let desc = ''
                     desc += res.description + "\n"
@@ -189,13 +187,13 @@ module.exports = {
                         desc += `\n\nAliases: ${res.aliases}`
                     }
 
-                    commandInfo.setTitle("Command info for: " + commandname)
+                    commandInfo.setTitle("Command info for: " + res.name)
                     commandInfo.setDescription(desc)
 
-                } else if (client.links.get(command)) {
+                } else if (commandhelp.links.find(obj => obj.name == args[0])) {
 
-                    let commandname = client.links.get(command).name
-                    let res = commandhelp.links.find(obj => obj.name == commandname)
+                    let res = commandhelp.links.find(obj => obj.name == args[0])
+
 
                     let desc = ''
                     desc += res.description + "\n"
@@ -215,11 +213,11 @@ module.exports = {
                         desc += `\n\nAliases: ${res.aliases}`
                     }
 
-                    commandInfo.setTitle("Command info for: " + commandname)
+                    commandInfo.setTitle("Command info for: " + res.name)
                     commandInfo.setDescription(desc)
-                } else if (client.musiccmds.get(command)){
-                    let commandname = client.musiccmds.get(command).name
-                    let res = commandhelp.musiccmds.find(obj => obj.name == commandname)
+                } else if (commandhelp.musiccmds.find(obj => obj.name == args[0])) {
+                    let res = commandhelp.musiccmds.find(obj => obj.name == args[0])
+
 
                     let desc = ''
                     desc += res.description + "\n"
@@ -242,9 +240,9 @@ module.exports = {
                         desc += `\n\nAliases: ${res.aliases}`
                     }
 
-                    commandInfo.setTitle("Command info for: " + commandname)
+                    commandInfo.setTitle("Command info for: " + res.name)
                     commandInfo.setDescription(desc)
-                }else {
+                } else {
                     fullCommandList
                         .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
 
@@ -265,98 +263,144 @@ module.exports = {
             let command = interaction.options.getString('command')
             let commandInfo = new Discord.EmbedBuilder()
                 .setColor('#0099ff')
-            if (client.commands.get(command)) {
+                if (commandhelp.cmds.find(obj => obj.name == command)) {
 
-                let commandname = client.commands.get(command).name
-                let res = commandhelp.cmds.find(obj => obj.name == commandname)
+                    let res = commandhelp.cmds.find(obj => obj.name == command)
 
-                let desc = ''
-                desc += res.description + "\n"
-                if (res.usage) {
-                    desc += `\nCommand: \`${res.usage}\``
-                }
-                if (res.slashusage) {
-                    desc += `\nSlash Command: \`${res.slashusage}\``
-                }
+                    let desc = ''
+                    desc += res.description + "\n"
+                    if (res.usage) {
+                        desc += `\nCommand: \`${res.usage}\``
+                    }
+                    if (res.slashusage) {
+                        desc += `\nSlash Command: \`${res.slashusage}\``
+                    }
 
-                let opts = res.options
-                let opttxt = '';
-                for (i = 0; i < opts.length; i++) {
-                    opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                    let opts = res.options
+                    let opttxt = '';
+                    for (i = 0; i < opts.length; i++) {
+                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
 
-                }
-                desc += "\n\n" + opttxt
+                    }
+                    desc += "\n\n" + opttxt
 
-                if (res.aliases) {
-                    desc += `\n\nAliases: ${res.aliases}`
-                }
+                    if (res.aliases) {
+                        desc += `\n\nAliases: ${res.aliases}`
+                    }
 
-                commandInfo.setTitle("Command info for: " + commandname)
-                commandInfo.setDescription(desc)
+                    commandInfo.setTitle("Command info for: " + res.name)
+                    commandInfo.setDescription(desc)
 
-            } else if (client.osucmds.get(command)) {
-                let commandname = client.osucmds.get(command).name
-                let res = commandhelp.osucmds.find(obj => obj.name == commandname)
+                } else if (commandhelp.osucmds.find(obj => obj.name == command)) {
+                    let res = commandhelp.osucmds.find(obj => obj.name == command)
 
-                let desc = ''
-                desc += res.description + "\n"
-                if (res.usage) {
-                    desc += `\nCommand: \`${res.usage}\``
-                }
-                if (res.slashusage) {
-                    desc += `\nSlash Command: \`${res.slashusage}\``
-                }
 
-                let opts = res.options
-                let opttxt = '';
-                for (i = 0; i < opts.length; i++) {
-                    opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                    let desc = ''
+                    desc += res.description + "\n"
+                    if (res.usage) {
+                        desc += `\nCommand: \`${res.usage}\``
+                    }
+                    if (res.slashusage) {
+                        desc += `\nSlash Command: \`${res.slashusage}\``
+                    }
 
-                }
-                desc += "\n\n" + opttxt
+                    let opts = res.options
+                    let opttxt = '';
+                    for (i = 0; i < opts.length; i++) {
+                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
 
-                if (res.aliases) {
-                    desc += `\n\nAliases: ${res.aliases}`
-                }
+                    }
+                    desc += "\n\n" + opttxt
 
-                commandInfo.setTitle("Command info for: " + commandname)
-                commandInfo.setDescription(desc)
+                    if (res.aliases) {
+                        desc += `\n\nAliases: ${res.aliases}`
+                    }
 
-            }
-            else if (client.admincmds.get(command)) {
-
-                let commandname = client.admincmds.get(command).name
-                let res = commandhelp.admincmds.find(obj => obj.name == commandname)
-
-                let desc = ''
-                desc += res.description + "\n"
-                if (res.usage) {
-                    desc += `\nCommand: \`${res.usage}\``
-                }
-                if (res.slashusage) {
-                    desc += `\nSlash Command: \`${res.slashusage}\``
-                }
-
-                let opts = res.options
-                let opttxt = '';
-                for (i = 0; i < opts.length; i++) {
-                    opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                    commandInfo.setTitle("Command info for: " + res.name)
+                    commandInfo.setDescription(desc)
 
                 }
-                desc += "\n\n" + opttxt
+                else if (commandhelp.admincmds.find(obj => obj.name == command)) {
+                    let res = commandhelp.admincmds.find(obj => obj.name == command)
 
-                if (res.aliases) {
-                    desc += `\n\nAliases: ${res.aliases}`
+
+                    let desc = ''
+                    desc += res.description + "\n"
+                    if (res.usage) {
+                        desc += `\nCommand: \`${res.usage}\``
+                    }
+                    if (res.slashusage) {
+                        desc += `\nSlash Command: \`${res.slashusage}\``
+                    }
+
+                    let opts = res.options
+                    let opttxt = '';
+                    for (i = 0; i < opts.length; i++) {
+                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+
+                    }
+                    desc += "\n\n" + opttxt
+
+                    if (res.aliases) {
+                        desc += `\n\nAliases: ${res.aliases}`
+                    }
+
+                    commandInfo.setTitle("Command info for: " + res.name)
+                    commandInfo.setDescription(desc)
+
+                } else if (commandhelp.links.find(obj => obj.name == command)) {
+
+                    let res = commandhelp.links.find(obj => obj.name == command)
+
+
+                    let desc = ''
+                    desc += res.description + "\n"
+                    if (res.usage) {
+                        desc += `\nUsage: ${res.usage}`
+                    }
+
+                    let opts = res.options
+                    let opttxt = '';
+                    for (i = 0; i < opts.length; i++) {
+                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+
+                    }
+                    desc += "\n\n" + opttxt
+
+                    if (res.aliases) {
+                        desc += `\n\nAliases: ${res.aliases}`
+                    }
+
+                    commandInfo.setTitle("Command info for: " + res.name)
+                    commandInfo.setDescription(desc)
+                } else if (commandhelp.musiccmds.find(obj => obj.name == command)) {
+                    let res = commandhelp.musiccmds.find(obj => obj.name == command)
+
+
+                    let desc = ''
+                    desc += res.description + "\n"
+                    if (res.usage) {
+                        desc += `\nCommand: \`${res.usage}\``
+                    }
+                    if (res.slashusage) {
+                        desc += `\nSlash Command: \`${res.slashusage}\``
+                    }
+
+                    let opts = res.options
+                    let opttxt = '';
+                    for (i = 0; i < opts.length; i++) {
+                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+
+                    }
+                    desc += "\n\n" + opttxt
+
+                    if (res.aliases) {
+                        desc += `\n\nAliases: ${res.aliases}`
+                    }
+
+                    commandInfo.setTitle("Command info for: " + res.name)
+                    commandInfo.setDescription(desc)
                 }
-
-                commandInfo.setTitle("Command info for: " + commandname)
-                commandInfo.setDescription(desc)
-
-            } else if (client.links.get(command)) {
-
-                commandInfo.setTitle(client.links.get(command).name)
-                commandInfo.setDescription(client.links.get(command).description)
-            }
             else {
                 fullCommandList
                     .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
