@@ -5,12 +5,13 @@ const Sequelize = require('sequelize');
 import fetch from 'node-fetch'
 
 
-const commandHandler = require('./commandHandler');
-const linkHandler = require('./linkHandler.ts');
-const slashcommandHandler = require('./slashcommandHandler');
-const checker = require('./checker');
-const musichandler = require('./musicHandler');
-const buttonhandler = require('./ButtonHandler')
+const CommandHandler = require('./commandHandler');
+const LinkHandler = require('./linkHandler.ts');
+const SlashCommandHandler = require('./slashcommandHandler');
+const Moderator = require('./Moderator');
+const MusicHandler = require('./musicHandler');
+const ButtonHandler = require('./ButtonHandler');
+const CommandInit = require('./CommandInit');
 
 const config = require('./configs/config.json');
 
@@ -105,12 +106,13 @@ client.once('ready', () => {
     userdata.sync()
     console.log('Ready!');
     fs.appendFileSync('commands.log', `\n\n\nBOT IS NOW ONLINE\n${new Date()} | ${new Date().toISOString()}\n\n\n`, 'utf-8');
-    commandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    linkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    slashcommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    checker(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    musichandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    buttonhandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    CommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    LinkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    SlashCommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    Moderator(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    MusicHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    ButtonHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    CommandInit(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
     //make a function that for every guild log the id
     client.guilds.cache.forEach(guild => {
