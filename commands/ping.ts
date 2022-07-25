@@ -29,7 +29,7 @@ module.exports = {
                 let uptimeseconds = Math.floor(uptime % 60) >= 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
                 admininfo = `Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}`
             }
-            interaction.reply({ content: `Pong!\nClient latency: ${client.ws.ping}ms\nInteraction Latency:${trueping}\n${admininfo}`, allowedMentions: { repliedUser: false } });
+            interaction.reply({ content: `Pong!\nClient latency: ${client.ws.ping}ms\nInteraction Latency: ${trueping}\n${admininfo}`, allowedMentions: { repliedUser: false } });
         }
 
     },
