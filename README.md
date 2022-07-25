@@ -2,7 +2,7 @@
 just an osu-centred discord bot
 
 ### Invite link
-Join [my server](https://discord.gg/EthtfeM) to use the bot 
+Will be added once i finish this 
 
 ### features
 osu! map/map leaderboard/profile/scores commands</br>
