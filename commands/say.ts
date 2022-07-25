@@ -14,8 +14,10 @@ module.exports = {
             if (commandchecks.isOwner(message.author.id)) {
                 message.delete();
                 if(!args[0]){
-                    message.channel.send(defaulttext.substring(0, defaulttext.length / 2))
-                    message.channel.send(defaulttext.substring(defaulttext.length / 2, defaulttext.length))
+                    let Embed = new Discord.EmbedBuilder()
+                    .setTitle('Message')
+                    .setDescription(defaulttext)
+                    message.channel.send({ embeds: [Embed]})
                     return
                 }
 
