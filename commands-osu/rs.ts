@@ -68,7 +68,7 @@ module.exports = {
                     }
                 }
             }
-            if (mode == null) {
+            if (mode == null && (!args[0] || message.mentions.users.size > 0)) {
                 let findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname == null) {
                     mode = 'osu'
@@ -78,6 +78,8 @@ module.exports = {
                         mode = 'osu'
                     }
                 }
+            } else {
+                mode = 'osu'
             }
 
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
