@@ -13,7 +13,7 @@ module.exports = {
         '⠀⠀`id`: integer, optional. The id of the beatmap to display the scores of. If omitted, the last requested map will be used\n' +
         '⠀⠀`sort`: string, optional. The sort to display the top plays of. Valid values: `score`, `accuracy`, `pp`, `recent`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
-        let prevmap:any;
+        let prevmap: any;
         if (fs.existsSync('./configs/prevmap.json')) {
             //console.log('hello there')
             try {
@@ -34,11 +34,11 @@ module.exports = {
             if (user == null || user.length == 0) {
                 let findname = await userdata.findOne({ where: { userid: message.author.id } })
                 if (findname == null) {
-                    return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
+                    return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 } else {
                     user = findname.get('osuname')
                     if (user.length < 1) {
-                        return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
+                        return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                     }
                 }
             }
@@ -54,7 +54,7 @@ module.exports = {
             }).then(res => res.json() as any)
                 .then(userdata => {
                     if (userdata.length < 1) {
-                        return message.reply({ content: 'Error - no user found', allowedMentions: { repliedUser: false } })
+                        return message.reply({ content: 'Error - no user found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                     }
                     let userid = userdata.id
 
@@ -76,7 +76,7 @@ module.exports = {
                                     Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
                                 sortdata = 'Sorted by: Most recent'
                             } catch (error) {
-                                return message.reply({ content: 'Error - no scores found', allowedMentions: { repliedUser: false } })
+                                return message.reply({ content: 'Error - no scores found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                             }
 
 
@@ -114,7 +114,7 @@ module.exports = {
                                             let scorestats = score.statistics
                                             let scoremode = score.mode_int
                                             let mods = score.mods
-                                            let ifmods:any;
+                                            let ifmods: any;
                                             if (mods.toString().length != 0) {
                                                 ifmods = '**+' + mods.toString().replaceAll(',', '') + '**'
                                             } else {
@@ -136,7 +136,7 @@ module.exports = {
                                                     break;
                                             }
                                             let ranking = score.rank
-                                            let grade:any;
+                                            let grade: any;
                                             switch (ranking) {
                                                 case 'F':
                                                     grade = emojis.grades.F
@@ -177,7 +177,7 @@ module.exports = {
                                         }
                                     }
                                     Embed.setDescription(scoretxt)
-                                    message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
+                                    message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false }, failIfNotExists: true })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                     fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
@@ -192,8 +192,8 @@ module.exports = {
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - scores (interaction)\n${currentDate} | ${currentDateISO}\n recieved map scores command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-            fs.appendFileSync('commands.log', 
-            `\noptions:
+            fs.appendFileSync('commands.log',
+                `\noptions:
             username: ${interaction.options.getString('username')}
             id: ${interaction.options.getNumber('id')}
             sort: ${interaction.options.getString('sort')}
@@ -224,8 +224,8 @@ module.exports = {
                 sort = 'recent'
             }
             const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
-            fs.appendFileSync('commands.log', 
-            `\noptions(2):
+            fs.appendFileSync('commands.log',
+                `\noptions(2):
             username: ${user}
             id: ${id}
             sort: ${sort}
@@ -351,7 +351,7 @@ module.exports = {
                                             let scorestats = score.statistics
                                             let scoremode = score.mode_int
                                             let mods = score.mods
-                                            let ifmods:any;
+                                            let ifmods: any;
                                             if (mods.toString().length != 0) {
                                                 ifmods = '**+' + mods.toString().replaceAll(',', '') + '**'
                                             } else {
@@ -373,7 +373,7 @@ module.exports = {
                                                     break;
                                             }
                                             let ranking = score.rank
-                                            let grade:any;
+                                            let grade: any;
                                             switch (ranking) {
                                                 case 'F':
                                                     grade = emojis.grades.F

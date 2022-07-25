@@ -80,7 +80,7 @@ module.exports = {
                             //message.channel.send("Information for \"" + maptitle + '"')
                         } catch (error) {
                             console.log(error)
-                            message.reply({ content: "No maps found for the parameters: \"" + maptitle + '"', allowedMentions: { repliedUser: false } })
+                            message.reply({ content: "No maps found for the parameters: \"" + maptitle + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                             return;
                         }
                         let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}`
@@ -106,7 +106,7 @@ module.exports = {
                                         ifid = `Found map id = ${mapid}`
                                     }
 
-                                    message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false } });
+                                    message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
                                     return;
                                 }
                                 fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: json.id }), null, 2));
@@ -179,7 +179,7 @@ module.exports = {
                                         let moddedlength = maphitstr
 
                                         if (((mapmods.includes('DT') || mapmods.includes('NC')) && mapmods.includes('HT') || (mapmods.includes('HR') && mapmods.includes('EZ')))) {
-                                            message.reply({ content: `${mapmods} is an invalid mod combination`, allowedMentions: { repliedUser: false } })
+                                            message.reply({ content: `${mapmods} is an invalid mod combination`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
 
                                             return
                                         }
@@ -444,7 +444,7 @@ module.exports = {
                                                                 inline: true
                                                             }
                                                         ])
-                                                    message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
+                                                    message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false }, failIfNotExists: true });
                                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                                 })
                                         })();
@@ -479,7 +479,7 @@ module.exports = {
                             ifid = `Found map id = ${mapid}`
                         }
 
-                        message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false } });
+                        message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
                         return;
                     }
                     fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: json.id }), null, 2));
@@ -551,7 +551,7 @@ module.exports = {
 
                             if (((mapmods.includes('DT') || mapmods.includes('NC')) && mapmods.includes('HT') || (mapmods.includes('HR') && mapmods.includes('EZ')))) {
                                 setTimeout(() => {
-                                    message.reply({ content: `${mapmods} is an invalid combination`, allowedMentions: { repliedUser: false } })
+                                    message.reply({ content: `${mapmods} is an invalid combination`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
                                 }, 500)
                                 return
                             }
@@ -815,7 +815,7 @@ module.exports = {
                                                     inline: true
                                                 }
                                             ])
-                                        message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
+                                        message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false }, failIfNotExists: true });
                                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                         fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
                                     })
@@ -828,14 +828,14 @@ module.exports = {
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (interaction)\n${currentDate} | ${currentDateISO}\n recieved get map command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-            fs.appendFileSync('commands.log', 
-            `\noptions:
+            fs.appendFileSync('commands.log',
+                `\noptions:
             id: ${interaction.options.getInteger('id')}
             mods: ${interaction.options.getString('mods')}
             detailed: ${interaction.options.getBoolean('detailed')}
             `
             )
-            
+
             interaction.reply({ content: 'Fetching map info...', allowedMentions: { repliedUser: false } });
             let mapid = interaction.options.getInteger('id');
             let mapmods = interaction.options.getString('mods');
@@ -849,8 +849,8 @@ module.exports = {
                 mapmods = osucalc.OrderMods(mapmods.toUpperCase());
             }
             //interaction.reply('Fetching map info...');
-            fs.appendFileSync('commands.log', 
-            `\noptions(2):
+            fs.appendFileSync('commands.log',
+                `\noptions(2):
             id: ${mapid}
             mods: ${mapmods}
             detailed: <N/A>

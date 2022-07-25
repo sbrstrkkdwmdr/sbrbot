@@ -17,16 +17,16 @@ module.exports = {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (message)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             let searchid = message.author.id
-            if(message.mentions.users.size > 0) {
+            if (message.mentions.users.size > 0) {
                 searchid = message.mentions.users.first().id
             }
-            if (user.length < 1 || message.mentions.users.size > 0 ) {
+            if (user.length < 1 || message.mentions.users.size > 0) {
                 let findname;
                 findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
-                    return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
+                    return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 }
             }
             const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
@@ -55,12 +55,12 @@ module.exports = {
                             countryrank = countryrank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
 
-                        let playerlasttoint:any = new Date(osudata.last_visit)
+                        let playerlasttoint: any = new Date(osudata.last_visit)
 
-                        let currenttime:any = new Date()
+                        let currenttime: any = new Date()
 
-                        let minsincelastvis:any = (playerlasttoint - currenttime) / (1000 * 60);
-                        let minlastvis:any = Math.abs(minsincelastvis).toFixed(0);
+                        let minsincelastvis: any = (playerlasttoint - currenttime) / (1000 * 60);
+                        let minlastvis: any = Math.abs(minsincelastvis).toFixed(0);
 
                         let lastvishours = (Math.trunc(minlastvis / 60)) % 24;
                         let lastvisminutes = minlastvis % 60;
@@ -92,7 +92,7 @@ module.exports = {
                             isonline = `**${emojis.onlinestatus.offline} Offline** | Last online ${minlastvisredo} ago`
                         }
 
-                        let prevnames:any = osudata.previous_usernames;
+                        let prevnames: any = osudata.previous_usernames;
                         let prevnameslist;
                         if (prevnames.length > 0) {
                             prevnameslist = '**Previous Usernames:** ' + prevnames.join(', ');
@@ -128,12 +128,12 @@ module.exports = {
                     ${isonline}
                     `)
 
-                        message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
+                        message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, failIfNotExists: true })
                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
                     } catch (error) {
-                        message.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false } })
+                        message.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                         fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
                     }
@@ -145,8 +145,8 @@ module.exports = {
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-            fs.appendFileSync('commands.log', 
-            `\noptions:
+            fs.appendFileSync('commands.log',
+                `\noptions:
             user: ${interaction.options.getString('user')}
             detailed: ${interaction.options.getBoolean('detailed')}
             `
@@ -162,8 +162,8 @@ module.exports = {
             }
             //interaction.reply('Searching for ' + user + '...')
             const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
-            fs.appendFileSync('commands.log', 
-            `\noptions(2):
+            fs.appendFileSync('commands.log',
+                `\noptions(2):
             user: ${user}
             detailed: <N/A>
             `)
@@ -192,12 +192,12 @@ module.exports = {
                             countryrank = countryrank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
 
-                        let playerlasttoint:any = new Date(osudata.last_visit)
+                        let playerlasttoint: any = new Date(osudata.last_visit)
 
-                        let currenttime:any = new Date()
+                        let currenttime: any = new Date()
 
                         let minsincelastvis = (playerlasttoint - currenttime) / (1000 * 60);
-                        let minlastvis:any = Math.abs(minsincelastvis).toFixed(0);
+                        let minlastvis: any = Math.abs(minsincelastvis).toFixed(0);
 
                         let lastvishours = (Math.trunc(minlastvis / 60)) % 24;
                         let lastvisminutes = minlastvis % 60;
@@ -230,7 +230,7 @@ module.exports = {
                         }
 
                         let prevnames = osudata.previous_usernames;
-                        let prevnameslist:any;
+                        let prevnameslist: any;
                         if (prevnames.length > 0) {
                             prevnameslist = '**Previous Usernames:** ' + prevnames.join(', ');
                         }

@@ -108,7 +108,7 @@ module.exports = {
                             }
                             fs.writeFileSync('debugosu/command-maplbscores.txt', sctxt)
                             if (args[1] && args[1] == 'links' && lbdata.length > 0) {
-                                message.reply({ files: ['debugosu/command-maplbscores.txt'], allowedMentions: { repliedUser: false } })
+                                message.reply({ files: ['debugosu/command-maplbscores.txt'], allowedMentions: { repliedUser: false }, failIfNotExists: true })
                                 return;
                             }
 
@@ -170,7 +170,7 @@ module.exports = {
                                 scoretxt = 'Error - map is unranked'
                             }
                             lbEmbed.setDescription(`${scoretxt}`)
-                            message.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                            message.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons], failIfNotExists: true })
                             fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
                         })
 
@@ -189,8 +189,8 @@ module.exports = {
             if (interaction.type != Discord.InteractionType.MessageComponent) {
                 fs.appendFileSync('commands.log', `\nCOMMAND EVENT - leaderboard (interaction)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
                 fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-                fs.appendFileSync('commands.log', 
-                `\noptions:
+                fs.appendFileSync('commands.log',
+                    `\noptions:
                 id: ${interaction.options.getInteger('id')}
                 page: ${interaction.options.getInteger('page')}
                 mods: ${interaction.options.getString('mods')}
@@ -237,8 +237,8 @@ module.exports = {
             if (!mapid) {
                 mapid = prevmap.id
             }
-            fs.appendFileSync('commands.log', 
-            `\noptions(2):
+            fs.appendFileSync('commands.log',
+                `\noptions(2):
             id: ${mapid}
             page: ${page}
             mods: ${mods}

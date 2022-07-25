@@ -64,7 +64,7 @@ module.exports = {
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
-                    return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
+                    return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 }
             }
 
@@ -110,7 +110,7 @@ module.exports = {
                                 try {
                                     let usernametesting = osutopdata[0].user.username
                                 } catch (error) {
-                                    return message.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false } })
+                                    return message.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                                 }
                                 let topEmbed = new Discord.EmbedBuilder()
                                     .setColor(0x462B71)
@@ -201,13 +201,13 @@ module.exports = {
                                         inline: false
                                     }])
                                 }
-                                message.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                                message.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons], failIfNotExists: true })
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                 fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
                             })
                     } catch (error) {
-                        message.reply('user ' + user + ' not found')
+                        message.reply({ content: 'user ' + user + ' not found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                         fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
                     }
@@ -229,8 +229,8 @@ module.exports = {
             if (interaction.type != Discord.InteractionType.MessageComponent) {
                 fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
                 fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-                fs.appendFileSync('commands.log', 
-                `\noptions:
+                fs.appendFileSync('commands.log',
+                    `\noptions:
                 user: ${interaction.options.getString('user')}
                 mode: ${interaction.options.getString('mode')}
                 sort: ${interaction.options.getString('sort')}
@@ -340,8 +340,8 @@ module.exports = {
                 page = page - 1
             }
             let userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
-            fs.appendFileSync('commands.log', 
-            `\noptions(2):
+            fs.appendFileSync('commands.log',
+                `\noptions(2):
             user: ${user}
             mode: ${gamemode}
             sort: ${sort}

@@ -9,14 +9,14 @@ module.exports = {
         '⠀⠀`mode`: string, optional. The mode of the user. If omitted, the default mode \'osu\' will be used.\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
-            message.reply({ content: 'please use the slash command instead', allowedMentions: { repliedUser: false } })
+            message.reply({ content: 'please use the slash command instead', allowedMentions: { repliedUser: false }, failIfNotExists: true })
         }
 
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osuset (interaction)\n${currentDate} | ${currentDateISO}\n recieved set osu! username command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-            fs.appendFileSync('commands.log', 
-            `\noptions:
+            fs.appendFileSync('commands.log',
+                `\noptions:
             user: ${interaction.options.getString('user')}
             mode: ${interaction.options.getString('mode')}
             `)
