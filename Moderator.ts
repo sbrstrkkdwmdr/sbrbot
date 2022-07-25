@@ -6,7 +6,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     client.on('messageCreate', message => {
 
-
         //FILE BLOCKING FUNCTION
         if (checks.checkisfileblocked(message.author.id)) {
             let currentDate = new Date();
@@ -27,13 +26,20 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         //MESSAGE LOGGER
     })
     client.on('messageDelete', message => {
-        //check if property exists
-        if (message.author == null || message.author.username == null) return;
+        if (message.author == null || message.author.username == null) return; 
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let guild = client.guilds.cache.get(message.guild.id)
+
+        let msgref:any = '';
+
+        if (message.reference){
+            msgref += `
+            Referenced Message URL: https://discord.com/channels/${message.reference.guildId}/${message.reference.channelId}/${message.reference.messageId}
+            `
+        }
         fs.appendFileSync(`./logs/${guild.id}.log`, `\nmessageDelete event\n${currentDate} | ${currentDateISO}\n `);
-        fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${message.author.username}#${message.author.discriminator}'s message has been deleted:\nID: ${message.id}\n ${message.content}\n`)
+        fs.appendFileSync(`./logs/${guild.id}.log`, `Guild Member ${message.author.username}#${message.author.discriminator}'s message has been deleted:\nID: ${message.id}\nURL: https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}\n Content:${message.content}\nMessage Type: ${message.type}\n${msgref}`)
     })
     client.on('messageUpdate', (oldMessage, newMessage) => {
         if(oldMessage == newMessage) return;
