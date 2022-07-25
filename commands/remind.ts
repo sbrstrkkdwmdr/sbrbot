@@ -8,11 +8,11 @@ module.exports = {
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         let timetype = ['s', 'm', 'h', 'd']
 
-        async function sendremind(reminder, time, obj, sendchannel, remindertxt) {
+        async function sendremind(reminder, time, obj, sendchannel, remindertxt, usersent) {
             try {
                 if(sendchannel == true){
                 setTimeout(() => {
-                    obj.channel.send({ embeds: [reminder] })
+                    obj.channel.send({ content: `${remindertxt}` })
                 }, ms(`${time}`));
             }
             else {
@@ -35,7 +35,7 @@ module.exports = {
                 return message.reply({ content: 'Please specify a time', allowedMentions: { repliedUser: false } })
             }
             if (!args[1]) {
-                remindertxt = notxt.chocomintshort
+                remindertxt = 'null'
             }
             if (!args[0].endsWith('d') && !args[0].endsWith('h') && !args[0].endsWith('m') && !args[0].endsWith('s')) {
                 return message.reply({ content: 'Incorrect time format: please use `d`, `h`, `m`, or `s`', allowedMentions: { repliedUser: false } })
@@ -46,7 +46,7 @@ module.exports = {
                 .setDescription(`${remindertxt}`)
 
 
-            sendremind(reminder, time, message, true, remindertxt);
+            sendremind(reminder, time, message, true, remindertxt, message.author);
             fs.appendFileSync('commands.log', `\nCommand Information\nMessage Content: ${message.content}`)
 
         }
@@ -70,10 +70,10 @@ module.exports = {
             let sendtochannel = interaction.options.getBoolean('sendinchannel')
             if (sendtochannel == true) {
 
-                sendremind(reminder, time, interaction, true, remindertxt);
+                sendremind(reminder, time, interaction, true, remindertxt, interaction.member.user);
 
             } else {
-                sendremind(reminder, time, interaction, false, remindertxt);
+                sendremind(reminder, time, interaction, false, remindertxt, interaction.member.user);
             }
             fs.appendFileSync('commands.log', `\nCommand Information\nreminder:${remindertxt}\ntime:${time}\nSendInChannel:${sendtochannel}`)
         }
