@@ -25,15 +25,17 @@ module.exports = {
             return console.log('Error - missing prevmap.json in configs folder');
         } */
 
-        let buttons = new Discord.ActionRowBuilder()
+        if (message != null && button == null) {
+
+            let buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId('BigLeftArrow-leaderboard')
+                    .setCustomId(`BigLeftArrow-leaderboard-${message.author.id}`)
                     .setStyle('Primary')
                     .setEmoji('⬅')
                     /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId('LeftArrow-leaderboard')
+                    .setCustomId(`LeftArrow-leaderboard-${message.author.id}`)
                     .setStyle('Primary')
                     .setEmoji('◀')
                     /* .setLabel('Previous') */,
@@ -43,18 +45,17 @@ module.exports = {
                                     .setLabel('🔍')
                                 , */
                 new Discord.ButtonBuilder()
-                    .setCustomId('RightArrow-leaderboard')
+                    .setCustomId(`RightArrow-leaderboard-${message.author.id}`)
                     .setStyle('Primary')
                     .setEmoji('▶')
                     /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId('BigRightArrow-leaderboard')
+                    .setCustomId(`BigRightArrow-leaderboard-${message.author.id}`)
                     .setStyle('Primary')
                     .setEmoji('➡')
                     /* .setLabel('End') */,
             );
 
-        if (message != null && button == null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - leaderboard (message)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let mapid = args[0]
 
@@ -194,6 +195,36 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (interaction != null) {
+
+            let buttons = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigLeftArrow-leaderboard-${interaction.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('⬅')
+                    /* .setLabel('Start') */,
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`LeftArrow-leaderboard-${interaction.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('◀')
+                    /* .setLabel('Previous') */,
+                    /*                 new Discord.ButtonBuilder()
+                                        .setCustomId('Middle-rs')
+                                        .setStyle('Primary')
+                                        .setLabel('🔍')
+                                    , */
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`RightArrow-leaderboard-${interaction.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('▶')
+                    /* .setLabel('Next') */,
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigRightArrow-leaderboard-${interaction.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('➡')
+                    /* .setLabel('End') */,
+                );
+
             let mapid: any;
             let page: any;
             let mods1: any;

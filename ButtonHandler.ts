@@ -15,6 +15,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
         let command = interaction.customId.split('-')[1]
         let button = interaction.customId.split('-')[0]
+        let specid = interaction.customId.split('-')[2]
+        if (specid && specid != interaction.user.id) {
+            interaction.deferUpdate();
+            return;
+        };
         switch (true) {
             /*             case command == 'test':
                             if (button == 'BigLeftArrow') {

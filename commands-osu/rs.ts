@@ -17,15 +17,19 @@ module.exports = {
         '⠀⠀`mode`: The mode to display the most recent score of\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
 
-        let buttons = new Discord.ActionRowBuilder()
+
+        if (message != null && button == null) {
+            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (message)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+
+            let buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId('BigLeftArrow-rs')
+                    .setCustomId(`BigLeftArrow-rs-${message.author.id}`)
                     .setStyle('Primary')
                     .setEmoji('⬅')
                     /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId('LeftArrow-rs')
+                    .setCustomId(`LeftArrow-rs-${message.author.id}`)
                     .setStyle('Primary')
                     .setEmoji('◀')
                     /* .setLabel('Previous') */,
@@ -35,19 +39,16 @@ module.exports = {
                                     .setLabel('🔍')
                                 , */
                 new Discord.ButtonBuilder()
-                    .setCustomId('RightArrow-rs')
+                    .setCustomId(`RightArrow-rs-${message.author.id}`)
                     .setStyle('Primary')
                     .setEmoji('▶')
                     /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId('BigRightArrow-rs')
+                    .setCustomId(`BigRightArrow-rs-${message.author.id}`)
                     .setStyle('Primary')
                     .setEmoji('➡')
                     /* .setLabel('End') */,
             );
-
-        if (message != null && button == null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (message)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
             let user = args.join(' ');
             let page = 0
@@ -443,10 +444,41 @@ module.exports = {
         }
 
         if (interaction != null) {
+            
+            let buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-rs-${interaction.user.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                    /* .setLabel('Start') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-rs-${interaction.user.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('◀')
+                    /* .setLabel('Previous') */,
+                /*                 new Discord.ButtonBuilder()
+                                    .setCustomId('Middle-rs')
+                                    .setStyle('Primary')
+                                    .setLabel('🔍')
+                                , */
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-rs-${interaction.user.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                    /* .setLabel('Next') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-rs-${interaction.user.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                    /* .setLabel('End') */,
+            );
+            
             let user;
             let page;
             let mode;
             let list = false;
+            
             if (interaction.type != Discord.InteractionType.MessageComponent) {
                 fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
                 fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)

@@ -22,15 +22,17 @@ module.exports = {
 
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
 
-        let buttons = new Discord.ActionRowBuilder()
+        if (message != null && button == null) {
+
+            let buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId('BigLeftArrow-osutop')
+                    .setCustomId(`BigLeftArrow-osutop-${message.author.id}`)
                     .setStyle('Primary')
                     .setEmoji('⬅')
                     /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId('LeftArrow-osutop')
+                    .setCustomId(`LeftArrow-osutop-${message.author.id}`)
                     .setStyle('Primary')
                     .setEmoji('◀')
                     /* .setLabel('Previous') */,
@@ -40,18 +42,18 @@ module.exports = {
                                     .setLabel('🔍')
                                 , */
                 new Discord.ButtonBuilder()
-                    .setCustomId('RightArrow-osutop')
+                    .setCustomId(`RightArrow-osutop-${message.author.id}`)
                     .setStyle('Primary')
                     .setEmoji('▶')
                     /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId('BigRightArrow-osutop')
+                    .setCustomId(`BigRightArrow-osutop-${message.author.id}`)
                     .setStyle('Primary')
                     .setEmoji('➡')
                     /* .setLabel('End') */,
             );
 
-        if (message != null && button == null) {
+
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (message)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             let searchid = message.author.id
@@ -231,6 +233,36 @@ module.exports = {
         }
 
         if (interaction != null) {
+
+            let buttons = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigLeftArrow-osutop-${interaction.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('⬅')
+                    /* .setLabel('Start') */,
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`LeftArrow-osutop-${interaction.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('◀')
+                    /* .setLabel('Previous') */,
+                    /*                 new Discord.ButtonBuilder()
+                                        .setCustomId('Middle-osutop')
+                                        .setStyle('Primary')
+                                        .setLabel('🔍')
+                                    , */
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`RightArrow-osutop-${interaction.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('▶')
+                    /* .setLabel('Next') */,
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigRightArrow-osutop-${interaction.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('➡')
+                    /* .setLabel('End') */,
+                );
+
             let user;
             let gamemode;
             let mapper;
