@@ -164,7 +164,7 @@ module.exports = {
 
                         \`${hitlist}\`
                         ${scoredata.max_combo}x
-                        ${scorepp}pp | ${ppiffc}pp if ${fcacc} FC\n${ppissue}
+                        ${scorepp}pp | ${ppiffc}pp if ${fcacc.toFixed(2)} FC\n${ppissue}
                         `)
                     message.reply({ embeds: [scoreembed], allowedMentions: { repliedUser: false } })
                     fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));

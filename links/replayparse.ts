@@ -96,7 +96,7 @@ module.exports = {
                     .setThumbnail(mapdata.beatmapset.covers['list@2x'])
                     .setDescription(
                         `[${artist} - ${title} [${mapdata.version}]](https://osu.ppy.sh/b/${mapdata.id}) ${ifmods}
-                    ${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapdata.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x** | ${accuracy}
+                    ${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapdata.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x** | ${accuracy.toFixed(2)}
                     \`${hitlist}\`
                     `
                     )
