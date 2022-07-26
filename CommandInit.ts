@@ -232,6 +232,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The mode to display the profile in',
                 type: Discord.ApplicationCommandOptionType.String,
                 required: false,
+                choices: cmdconfig.modeopts
             }
         ]
     },

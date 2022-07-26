@@ -227,7 +227,7 @@ module.exports = {
                 }
             }
             let mode = interaction.options.getString('mode');
-            if (mode == null && (!args[0] || message.mentions.users.size > 0)) {
+            if (mode == null) {
                 let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
                 if (findname == null) {
                     mode = 'osu'

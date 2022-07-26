@@ -100,9 +100,18 @@ const userdata = sequelize.define('userdata', {
         type: Sequelize.STRING,
         defaultValue: 'osu',
     },
+    osuacc: Sequelize.FLOAT,
     osupp: Sequelize.INTEGER,
     osurank: Sequelize.INTEGER,
-    osuacc: Sequelize.FLOAT,
+    taikoacc: Sequelize.FLOAT,
+    taikopp: Sequelize.INTEGER,
+    taikorank: Sequelize.INTEGER,
+    fruitsacc: Sequelize.FLOAT,
+    fruitspp: Sequelize.INTEGER,
+    fruitsrank: Sequelize.INTEGER,
+    maniaacc: Sequelize.FLOAT,
+    maniapp: Sequelize.INTEGER,
+    maniarank: Sequelize.INTEGER,
 })
 client.once('ready', () => {
     userdata.sync()
