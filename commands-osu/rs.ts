@@ -358,7 +358,7 @@ module.exports = {
                                             message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons], failIfNotExists: true })
                                             fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
 
-                                            fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0].beatmap.id }), null, 2));
+                                            fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: rsdata[0].beatmap.id }), null, 2));
                                             fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
 
                                         })();
@@ -753,7 +753,7 @@ module.exports = {
                                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
 
-                                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: rsdata[0 + page].beatmap.id }), null, 2));
+                                                    fs.writeFileSync(`./debugosu/prevmap.json`, JSON.stringify(({ id: rsdata[0 + page].beatmap.id }), null, 2));
                                                 } else {
                                                     message.edit({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')

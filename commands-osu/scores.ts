@@ -14,17 +14,17 @@ module.exports = {
         '⠀⠀`sort`: string, optional. The sort to display the top plays of. Valid values: `score`, `accuracy`, `pp`, `recent`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         let prevmap: any;
-        if (fs.existsSync('./configs/prevmap.json')) {
+/*         if (fs.existsSync(`./debugosu/prevmap.json`)) {
             //console.log('hello there')
             try {
-                prevmap = JSON.parse(fs.readFileSync('./configs/prevmap.json', 'utf8'));
+                prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap.json`, 'utf8'));
             } catch {
-                console.log('no map in prevmap.json\nCreating default file...')
-                fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: 32345 }), null, 2));
+                console.log(`no prevmap.json file for server ${message.guildId}\nCreating default file...`)
+                fs.writeFileSync(`./debugosu/prevmap.json`, JSON.stringify(({ id: 32345 }), null, 2));
             }
         } else {
             return console.log('Error - missing prevmap.json in configs folder');
-        }
+        } */
 
 
         if (message != null) {
@@ -43,6 +43,19 @@ module.exports = {
                 }
             }
             if (id == null) {
+                if (fs.existsSync(`./debugosu/prevmap${message.guildId}.json`)) {
+                    try {
+                        prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap${message.guildId}.json`, 'utf8'));
+                    } catch {
+                        console.log(`no prevmap.json id found for server ${message.guildId}\nCreating default file...`)
+                        fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
+                        prevmap = { id: 32345 }
+                    }
+                } else {
+                    console.log(`no prevmap.json file for server ${message.guildId}\nCreating default file...`)
+                    fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
+                    prevmap = { id: 32345 }
+                }
                 id = prevmap.id
             }
             const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
@@ -91,7 +104,7 @@ module.exports = {
                                 .then(mapdata => {
                                     fs.writeFileSync('debugosu/command-scoresmap.json', JSON.stringify(mapdata, null, 2));
                                     fs.writeFileSync('debugosu/command-scores.json', JSON.stringify(scoredata, null, 2));
-                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
+                                    fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
 
 
                                     let maptitle = mapdata.beatmapset.title
@@ -218,6 +231,19 @@ module.exports = {
                 }
             }
             if (id == null) {
+                if (fs.existsSync(`./debugosu/prevmap${interaction.guildId}.json`)) {
+                    try {
+                        prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap${interaction.guildId}.json`, 'utf8'));
+                    } catch {
+                        console.log(`no prevmap.json id found for server ${interaction.guildId}\nCreating default file...`)
+                        fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
+                        prevmap = { id: 32345 }
+                    }
+                } else {
+                    console.log(`no prevmap.json file for server ${interaction.guildId}\nCreating default file...`)
+                    fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
+                    prevmap = { id: 32345 }
+                }
                 id = prevmap.id
             }
             if (sort == null) {
@@ -328,7 +354,7 @@ module.exports = {
                                 .then(mapdata => {
                                     fs.writeFileSync('debugosu/command-scoresmap.json', JSON.stringify(mapdata, null, 2));
                                     fs.writeFileSync('debugosu/command-scores.json', JSON.stringify(scoredata, null, 2));
-                                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapdata.id }), null, 2));
+                                    fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
 
 
                                     let maptitle = mapdata.beatmapset.title

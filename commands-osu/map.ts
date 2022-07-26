@@ -17,20 +17,20 @@ module.exports = {
         'If no map id is provided, the most recent map will be used'
     ,
     execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config) {
-        //check if file configs/prevmap.json exists
+        //check if file debugosu/prevmap.json exists
         let prevmap;
         let i;
-        if (fs.existsSync('./configs/prevmap.json')) {
+/*         if (fs.existsSync(`./debugosu/prevmap.json`)) {
             //console.log('hello there')
             try {
-                prevmap = JSON.parse(fs.readFileSync('./configs/prevmap.json', 'utf8'));
+                prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap.json`, 'utf8'));
             } catch {
-                console.log('no map in prevmap.json\nCreating default file...')
-                fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: 32345 }), null, 2));
+                console.log(`no prevmap.json file for server ${message.guildId}\nCreating default file...`)
+                fs.writeFileSync(`./debugosu/prevmap.json`, JSON.stringify(({ id: 32345 }), null, 2));
             }
         } else {
             return console.log('Error - missing prevmap.json in configs folder');
-        }
+        } */
 
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (message)\n${currentDate} | ${currentDateISO}\n recieved get map info command\nrequested by ${message.author.id} AKA ${message.author.tag}]\nMessage content: ${message.content}`, 'utf-8')
@@ -48,6 +48,19 @@ module.exports = {
             }
 
             if (mapid == null || mapid == '') {
+                if (fs.existsSync(`./debugosu/prevmap${message.guildId}.json`)) {
+                    try {
+                        prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap${message.guildId}.json`, 'utf8'));
+                    } catch {
+                        console.log(`no prevmap.json id found for server ${message.guildId}\nCreating default file...`)
+                        fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
+                        prevmap = { id: 32345 }
+                    }
+                } else {
+                    console.log(`no prevmap.json file for server ${message.guildId}\nCreating default file...`)
+                    fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
+                    prevmap = { id: 32345 }
+                }
                 mapid = prevmap.id;
             }
             if (mapmods == null || mapmods == '') {
@@ -109,7 +122,7 @@ module.exports = {
                                     message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
                                     return;
                                 }
-                                fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: json.id }), null, 2));
+                                fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: json.id }), null, 2));
                                 mapid = json.id
 
 
@@ -137,7 +150,7 @@ module.exports = {
                                 if (mapstatus == "graveyard" || mapstatus == "pending") {
                                     statusimg = emojis.rankedstatus.graveyard;
                                 }
-                                fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapid }), null, 2));
+                                fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: mapid }), null, 2));
 
                                 //CALCULATE MODS DETAILES
                                 let iftherearemodsasint = JSON.stringify({
@@ -482,7 +495,7 @@ module.exports = {
                         message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
                         return;
                     }
-                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: json.id }), null, 2));
+                    fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: json.id }), null, 2));
                     mapid = json.id
 
 
@@ -508,7 +521,7 @@ module.exports = {
                     if (mapstatus == "graveyard" || mapstatus == "pending") {
                         statusimg = emojis.rankedstatus.graveyard;
                     }
-                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapid }), null, 2));
+                    fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: mapid }), null, 2));
 
                     //CALCULATE MODS DETAILES
                     let iftherearemodsasint = JSON.stringify({
@@ -840,6 +853,19 @@ module.exports = {
             let mapid = interaction.options.getInteger('id');
             let mapmods = interaction.options.getString('mods');
             if (mapid == null || mapid == '') {
+                if (fs.existsSync(`./debugosu/prevmap${interaction.guildId}.json`)) {
+                    try {
+                        prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap${interaction.guildId}.json`, 'utf8'));
+                    } catch {
+                        console.log(`no prevmap.json id found for server ${interaction.guildId}\nCreating default file...`)
+                        fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
+                        prevmap = { id: 32345 }
+                    }
+                } else {
+                    console.log(`no prevmap.json file for server ${interaction.guildId}\nCreating default file...`)
+                    fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
+                    prevmap = { id: 32345 }
+                }
                 mapid = prevmap.id;
             }
             if (mapmods == null || mapmods == '') {
@@ -873,7 +899,7 @@ module.exports = {
                         interaction.reply({ content: 'Error - map not found', allowedMentions: { repliedUser: false } });
                         return;
                     }
-                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: json.id }), null, 2));
+                    fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: json.id }), null, 2));
 
 
                     let mapperlink = (`${json.beatmapset.creator}`).replaceAll(' ', '%20');
@@ -899,7 +925,7 @@ module.exports = {
                     if (mapstatus == "graveyard" || mapstatus == "pending") {
                         statusimg = emojis.rankedstatus.graveyard;
                     }
-                    fs.writeFileSync('./configs/prevmap.json', JSON.stringify(({ id: mapid }), null, 2));
+                    fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: mapid }), null, 2));
 
                     //CALCULATE MODS DETAILS
                     let iftherearemodsasint = JSON.stringify({
