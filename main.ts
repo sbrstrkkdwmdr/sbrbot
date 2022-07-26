@@ -99,8 +99,10 @@ const userdata = sequelize.define('userdata', {
     mode: {
         type: Sequelize.STRING,
         defaultValue: 'osu',
-    }
-
+    },
+    osupp: Sequelize.INTEGER,
+    osurank: Sequelize.INTEGER,
+    osuacc: Sequelize.FLOAT,
 })
 client.once('ready', () => {
     userdata.sync()
