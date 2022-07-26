@@ -112,6 +112,10 @@ const userdata = sequelize.define('userdata', {
     maniaacc: Sequelize.FLOAT,
     maniapp: Sequelize.INTEGER,
     maniarank: Sequelize.INTEGER,
+    skin: {
+        type: Sequelize.STRING,
+        defaultValue: 'https://osu.ppy.sh/community/forums/topics/129191',
+    }
 })
 client.once('ready', () => {
     userdata.sync()

@@ -251,8 +251,16 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'mode',
                 description: 'The mode to set the profile to',
                 type: Discord.ApplicationCommandOptionType.String,
-                required: true,
-                choices: cmdconfig.modeopts
+                required: false,
+                choices: cmdconfig.modeopts,
+                default: 'osu'
+            },
+            {
+                name: 'skin',
+                description: 'The player\'s skin',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+
             }
         ]
     },

@@ -50,8 +50,8 @@ module.exports = {
             `)
             let username = interaction.options.getString('user');
             let mode = interaction.options.getString('mode') + '';
-
-            if (mode.length < 1) {
+            let skin = interaction.options.getString('skin');
+            if (mode.length < 1 && !skin) {
                 try {
                     await userdata.create({
                         userid: interaction.member.user.id,
@@ -77,7 +77,7 @@ module.exports = {
                     return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
                 }
             }
-            else {
+            else if (!skin) {
                 try {
                     await userdata.create({
                         userid: interaction.member.user.id,
@@ -93,6 +93,36 @@ module.exports = {
                     let affectedRows = await userdata.update({
                         osuname: username,
                         mode: mode,
+                    }, { where: { userid: interaction.member.user.id } })
+                    if (affectedRows > 0) {
+                        fs.appendFileSync('commands.log', `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
+                        fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
+
+                        return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
+                    }
+                    return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
+
+
+                }
+            }
+            else if(skin){
+                try {
+                    await userdata.create({
+                        userid: interaction.member.user.id,
+                        osuname: username,
+                        mode: mode,
+                        skin: skin
+                    })
+                    interaction.reply({ content: 'added skin to the database', allowedMentions: { repliedUser: false } })
+                    fs.appendFileSync('commands.log', `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
+                    fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
+
+
+                } catch (error) {
+                    let affectedRows = await userdata.update({
+                        osuname: username,
+                        mode: mode,
+                        skin: skin
                     }, { where: { userid: interaction.member.user.id } })
                     if (affectedRows > 0) {
                         fs.appendFileSync('commands.log', `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
