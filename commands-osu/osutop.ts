@@ -98,6 +98,21 @@ module.exports = {
                 .then(osudata => {
                     fs.writeFileSync('debugosu/command-osutopname.json', JSON.stringify(osudata, null, 2))
                     try {
+                        (async () => {
+                            let findname;
+                            findname = await userdata.findOne({ where: { osuname: user } })
+                            if (findname != null) {
+                                await userdata.update({
+                                    osupp: osudata.statistics.pp,
+                                    osurank: osudata.statistics.global_rank,
+                                    osuacc: osudata.statistics.hit_accuracy
+                                }, {
+                                    where: { osuname: user }
+                                })
+                            } else {
+                            }
+                        })();
+
                         let userid = osudata.id
                         let usertopurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/best?mode=${gamemode}&limit=100&offset=0`;
                         fetch(usertopurl, {
@@ -360,6 +375,20 @@ module.exports = {
                 .then(osudata => {
                     fs.writeFileSync('debugosu/command-osutopname.json', JSON.stringify(osudata, null, 2))
                     try {
+                        (async () => {
+                            let findname;
+                            findname = await userdata.findOne({ where: { osuname: user } })
+                            if (findname != null) {
+                                await userdata.update({
+                                    osupp: osudata.statistics.pp,
+                                    osurank: osudata.statistics.global_rank,
+                                    osuacc: osudata.statistics.hit_accuracy
+                                }, {
+                                    where: { osuname: user }
+                                })
+                            } else {
+                            }
+                        })();
                         let userid = osudata.id
                         //interaction.reply('Loading...')
                         let usertopurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/best?mode=${gamemode}&limit=100&offset=0`;

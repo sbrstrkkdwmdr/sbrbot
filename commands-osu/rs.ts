@@ -102,6 +102,20 @@ module.exports = {
                     }).then(res => res.json() as any)
                         .then(rsdata => {
                             try {
+                                (async () => {
+                                    let findname;
+                                    findname = await userdata.findOne({ where: { osuname: user } })
+                                    if (findname != null) {
+                                        await userdata.update({
+                                            osupp: osudata.statistics.pp,
+                                            osurank: osudata.statistics.global_rank,
+                                            osuacc: osudata.statistics.hit_accuracy
+                                        }, {
+                                            where: { osuname: user }
+                                        })
+                                    } else {
+                                    }
+                                })();
                                 fs.writeFileSync('debugosu/command-rs.json', JSON.stringify(rsdata, null, 2))
 
                                 let hittime = rsdata[0].beatmap.hit_length
@@ -497,7 +511,20 @@ module.exports = {
                                     if (interaction.type == Discord.InteractionType.MessageComponent && button == 'BigRightArrow') {
                                         page = rsdata.length
                                     }
-
+                                    (async () => {
+                                        let findname;
+                                        findname = await userdata.findOne({ where: { osuname: user } })
+                                        if (findname != null) {
+                                            await userdata.update({
+                                                osupp: osudata.statistics.pp,
+                                                osurank: osudata.statistics.global_rank,
+                                                osuacc: osudata.statistics.hit_accuracy
+                                            }, {
+                                                where: { osuname: user }
+                                            })
+                                        } else {
+                                        }
+                                    })();
 
                                     let hittime = rsdata[0 + page].beatmap.hit_length
                                     let hitseconds: any = (hittime % 60)
