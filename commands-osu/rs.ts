@@ -467,7 +467,7 @@ module.exports = {
                 fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
                 fs.appendFileSync('commands.log', `\n${button}`)
 
-                user = message.embeds[0].title.split('Most recent play for ')[1]
+                user = message.embeds[0].title.split('most recent play for ')[1]
                 mode = message.embeds[0].fields[0].value.split(' | ')[1];
                 page = 0
                 if (button == 'BigLeftArrow') {
