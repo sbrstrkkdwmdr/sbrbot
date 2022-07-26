@@ -17,6 +17,7 @@ module.exports = {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (message)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             let searchid = message.author.id
+            let mode = null
             if (message.mentions.users.size > 0) {
                 searchid = message.mentions.users.first().id
             }
@@ -29,7 +30,20 @@ module.exports = {
                     return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 }
             }
-            const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
+            if (mode == null && (!args[0] || message.mentions.users.size > 0)) {
+                let findname = await userdata.findOne({ where: { userid: searchid } })
+                if (findname == null) {
+                    mode = 'osu'
+                } else {
+                    mode = findname.get('mode')
+                    if (mode.length < 1) {
+                        mode = 'osu'
+                    }
+                }
+            } else {
+                mode = 'osu'
+            }
+            const userurl = `https://osu.ppy.sh/api/v2/users/${user}/${mode}`
             fetch(userurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -43,13 +57,45 @@ module.exports = {
                             let findname;
                             findname = await userdata.findOne({ where: { osuname: user } })
                             if (findname != null) {
-                                await userdata.update({
-                                    osupp: osudata.statistics.pp,
-                                    osurank: osudata.statistics.global_rank,
-                                    osuacc: osudata.statistics.hit_accuracy
-                                }, {
-                                    where: { osuname: user }
-                                })
+                                switch (mode) {
+                                    case 'osu':
+                                    default:
+                                        await userdata.update({
+                                            osupp: osudata.statistics.pp,
+                                            osurank: osudata.statistics.global_rank,
+                                            osuacc: osudata.statistics.hit_accuracy
+                                        }, {
+                                            where: { osuname: user }
+                                        })
+                                        break;
+                                    case 'taiko':
+                                        await userdata.update({
+                                            taikopp: osudata.statistics.pp,
+                                            taikorank: osudata.statistics.global_rank,
+                                            taikoacc: osudata.statistics.hit_accuracy
+                                        }, {
+                                            where: { osuname: user }
+                                        })
+                                        break;
+                                    case 'fruits':
+                                        await userdata.update({
+                                            fruitspp: osudata.statistics.pp,
+                                            fruitsrank: osudata.statistics.global_rank,
+                                            fruitsacc: osudata.statistics.hit_accuracy
+                                        }, {
+                                            where: { osuname: user }
+                                        })
+                                        break;
+                                    case 'mania':
+                                        await userdata.update({
+                                            maniapp: osudata.statistics.pp,
+                                            maniarank: osudata.statistics.global_rank,
+                                            maniaacc: osudata.statistics.hit_accuracy
+                                        }, {
+                                            where: { osuname: user }
+                                        })
+                                        break;
+                                }
                             } else {
                             }
                         })();
@@ -168,6 +214,7 @@ module.exports = {
                 `\noptions:
             user: ${interaction.options.getString('user')}
             detailed: ${interaction.options.getBoolean('detailed')}
+            mode: ${interaction.options.getString('mode')}
             `
             )
             let user = interaction.options.getString('user')
@@ -179,8 +226,22 @@ module.exports = {
                     return interaction.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                 }
             }
+            let mode = interaction.options.getString('mode');
+            if (mode == null && (!args[0] || message.mentions.users.size > 0)) {
+                let findname = await userdata.findOne({ where: { userid: interaction.member.user.id } })
+                if (findname == null) {
+                    mode = 'osu'
+                } else {
+                    mode = findname.get('mode')
+                    if (mode.length < 1) {
+                        mode = 'osu'
+                    }
+                }
+            } else {
+                mode = 'osu'
+            }
             //interaction.reply('Searching for ' + user + '...')
-            const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
+            const userurl = `https://osu.ppy.sh/api/v2/users/${user}/${mode}`
             fs.appendFileSync('commands.log',
                 `\noptions(2):
             user: ${user}
@@ -192,7 +253,54 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(osudata => {
-                    fs.writeFileSync('debugosu/command-osu.json', JSON.stringify(osudata, null, 2))
+                    fs.writeFileSync('debugosu/command-osu.json', JSON.stringify(osudata, null, 2));
+                    (async () => {
+                        let findname;
+                        findname = await userdata.findOne({ where: { osuname: user } })
+                        if (findname != null) {
+                            switch (mode) {
+                                case 'osu':
+                                default:
+                                    await userdata.update({
+                                        osupp: osudata.statistics.pp,
+                                        osurank: osudata.statistics.global_rank,
+                                        osuacc: osudata.statistics.hit_accuracy
+                                    }, {
+                                        where: { osuname: user }
+                                    })
+                                    break;
+                                case 'taiko':
+                                    await userdata.update({
+                                        taikopp: osudata.statistics.pp,
+                                        taikorank: osudata.statistics.global_rank,
+                                        taikoacc: osudata.statistics.hit_accuracy
+                                    }, {
+                                        where: { osuname: user }
+                                    })
+                                    break;
+                                case 'fruits':
+                                    await userdata.update({
+                                        fruitspp: osudata.statistics.pp,
+                                        fruitsrank: osudata.statistics.global_rank,
+                                        fruitsacc: osudata.statistics.hit_accuracy
+                                    }, {
+                                        where: { osuname: user }
+                                    })
+                                    break;
+                                case 'mania':
+                                    await userdata.update({
+                                        maniapp: osudata.statistics.pp,
+                                        maniarank: osudata.statistics.global_rank,
+                                        maniaacc: osudata.statistics.hit_accuracy
+                                    }, {
+                                        where: { osuname: user }
+                                    })
+                                    break;
+                            }
+                        } else {
+                        }
+                    })();
+
                     try {
                         ;
                         (async () => {

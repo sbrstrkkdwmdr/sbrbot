@@ -98,8 +98,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'scores': case 'c':
                 client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'leaderboard': case 'lb': case 'maplb': case 'mapleaderboard':
+            case 'leaderboard': case 'maplb': case 'mapleaderboard':
                 client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                break;
+            case 'lb':
+                client.osucmds.get('lb').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 break;
 
             //admincmds below

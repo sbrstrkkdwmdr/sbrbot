@@ -93,7 +93,55 @@ module.exports = {
                     let userid = osudata.id
                     if (!userid) {
                         return message.channel.send('Error - no user found')
-                    }
+                    };
+                    (async () => {
+                        let findname;
+                        findname = await userdata.findOne({ where: { osuname: user } })
+                        if (findname != null) {
+                            switch (mode) {
+                                case 'osu':
+                                default:
+                                    await userdata.update({
+                                        osupp: osudata.statistics.pp,
+                                        osurank: osudata.statistics.global_rank,
+                                        osuacc: osudata.statistics.hit_accuracy
+                                    }, {
+                                        where: { osuname: user }
+                                    })
+                                    break;
+                                case 'taiko':
+                                    await userdata.update({
+                                        taikopp: osudata.statistics.pp,
+                                        taikorank: osudata.statistics.global_rank,
+                                        taikoacc: osudata.statistics.hit_accuracy
+                                    }, {
+                                        where: { osuname: user }
+                                    })
+                                    break;
+                                case 'fruits':
+                                    await userdata.update({
+                                        fruitspp: osudata.statistics.pp,
+                                        fruitsrank: osudata.statistics.global_rank,
+                                        fruitsacc: osudata.statistics.hit_accuracy
+                                    }, {
+                                        where: { osuname: user }
+                                    })
+                                    break;
+                                case 'mania':
+                                    await userdata.update({
+                                        maniapp: osudata.statistics.pp,
+                                        maniarank: osudata.statistics.global_rank,
+                                        maniaacc: osudata.statistics.hit_accuracy
+                                    }, {
+                                        where: { osuname: user }
+                                    })
+                                    break;
+                            }
+                        } else {
+                        }
+                    })();
+                    fs.writeFileSync('debugosu/command-rsname.json', JSON.stringify(osudata, null, 2))
+
                     const recentplayurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/recent?include_fails=1&mode=${mode}&limit=100&offset=${page}`
                     fetch(recentplayurl, {
                         headers: {
@@ -497,7 +545,55 @@ module.exports = {
                     let userid = osudata.id
                     if (!userid) {
                         return interaction.channel.send('Error - no user found')
-                    }
+                    };
+                    (async () => {
+                        let findname;
+                        findname = await userdata.findOne({ where: { osuname: user } })
+                        if (findname != null) {
+                            switch (mode) {
+                                case 'osu':
+                                default:
+                                    await userdata.update({
+                                        osupp: osudata.statistics.pp,
+                                        osurank: osudata.statistics.global_rank,
+                                        osuacc: osudata.statistics.hit_accuracy
+                                    }, {
+                                        where: { osuname: user }
+                                    })
+                                    break;
+                                case 'taiko':
+                                    await userdata.update({
+                                        taikopp: osudata.statistics.pp,
+                                        taikorank: osudata.statistics.global_rank,
+                                        taikoacc: osudata.statistics.hit_accuracy
+                                    }, {
+                                        where: { osuname: user }
+                                    })
+                                    break;
+                                case 'fruits':
+                                    await userdata.update({
+                                        fruitspp: osudata.statistics.pp,
+                                        fruitsrank: osudata.statistics.global_rank,
+                                        fruitsacc: osudata.statistics.hit_accuracy
+                                    }, {
+                                        where: { osuname: user }
+                                    })
+                                    break;
+                                case 'mania':
+                                    await userdata.update({
+                                        maniapp: osudata.statistics.pp,
+                                        maniarank: osudata.statistics.global_rank,
+                                        maniaacc: osudata.statistics.hit_accuracy
+                                    }, {
+                                        where: { osuname: user }
+                                    })
+                                    break;
+                            }
+                        } else {
+                        }
+                    })();
+                    fs.writeFileSync('debugosu/command-rsname.json', JSON.stringify(osudata, null, 2))
+
                     const recentplayurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/recent?include_fails=1&mode=${mode}&limit=100&offset=${page}`
                     fetch(recentplayurl, {
                         headers: {

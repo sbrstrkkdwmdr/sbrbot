@@ -61,6 +61,7 @@
         "commands-osu/osutop.ts",
         "commands-osu/rs.ts",
         "commands-osu/scores.ts",
+        "commands-osu/lb.ts",
 
         "links/osumaplink.ts",
         "links/osuuserlink.ts",
