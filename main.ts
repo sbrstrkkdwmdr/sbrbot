@@ -5,11 +5,11 @@ const Sequelize = require('sequelize');
 import fetch from 'node-fetch'
 
 
-const CommandHandler = require('./commandHandler');
-const LinkHandler = require('./linkHandler.ts');
-const SlashCommandHandler = require('./slashcommandHandler');
+const CommandHandler = require('./CommandHandler');
+const LinkHandler = require('./LinkHandler.ts');
+const SlashCommandHandler = require('./SlashCommandHandler');
 const Moderator = require('./Moderator');
-const MusicHandler = require('./musicHandler');
+const MusicHandler = require('./MusicHandler');
 const ButtonHandler = require('./ButtonHandler');
 const CommandInit = require('./CommandInit');
 
@@ -129,11 +129,8 @@ client.once('ready', () => {
     ButtonHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     CommandInit(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
-    //make a function that for every guild log the id
     client.guilds.cache.forEach(guild => {
-        //check if a .log file with the guild id as the name exists
         if (!fs.existsSync(`./logs/${guild.id}.log`)) {
-            //if not create a new file with the guild id as the name
             fs.writeFileSync(`./logs/${guild.id}.log`, ''
             )
         }
