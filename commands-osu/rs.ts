@@ -481,7 +481,7 @@ module.exports = {
             let mode;
             let list = false;
             
-            if (interaction.type != Discord.InteractionType.MessageComponent) {
+            if (interaction.type == Discord.InteractionType.ApplicationCommand) {
                 fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
                 fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
                 fs.appendFileSync('commands.log',
@@ -907,14 +907,14 @@ module.exports = {
                                                             value: `**${rspp}**pp \n${fcflag}\n${ppissue}`,
                                                             inline: true
                                                         }]);
-                                                if (interaction.type != Discord.InteractionType.MessageComponent) {
+                                                if (interaction.type == Discord.InteractionType.ApplicationCommand) {
 
                                                     interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
 
                                                     fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: rsdata[0 + page].beatmap.id }), null, 2));
-                                                } else {
+                                                } else if (interaction.type == Discord.InteractionType.MessageComponent) {
                                                     message.edit({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                                 }
@@ -944,7 +944,7 @@ module.exports = {
                                 }
                             } catch (error) {
                                 fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nPage: ${page}\nmode: ${mode}`)
-                                if (interaction.type != Discord.InteractionType.MessageComponent) {
+                                if (interaction.type == Discord.InteractionType.ApplicationCommand) {
                                     return interaction.editReply({ content: 'Error - no score found', allowedMentions: { repliedUser: false } })
                                 }
                             }

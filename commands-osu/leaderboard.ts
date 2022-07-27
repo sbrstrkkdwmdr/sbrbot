@@ -230,7 +230,7 @@ module.exports = {
             let mods1: any;
 
 
-            if (interaction.type != Discord.InteractionType.MessageComponent) {
+            if (interaction.type == Discord.InteractionType.ApplicationCommand) {
                 fs.appendFileSync('commands.log', `\nCOMMAND EVENT - leaderboard (interaction)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
                 fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
                 fs.appendFileSync('commands.log',
@@ -429,7 +429,7 @@ module.exports = {
                                     scoretxt = 'Error - map is unranked'
                                 }
                                 lbEmbed.setDescription(`${scoretxt}`)
-                                if (interaction.type != Discord.InteractionType.MessageComponent) {
+                                if (interaction.type == Discord.InteractionType.ApplicationCommand) {
                                     interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
@@ -499,12 +499,12 @@ module.exports = {
                                 }
                                 lbEmbed.setDescription(`${scoretxt}`)
 
-                                if (interaction.type != Discord.InteractionType.MessageComponent) {
+                                if (interaction.type == Discord.InteractionType.ApplicationCommand) {
                                     interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
 
-                                } else {
+                                } else if (interaction.type == Discord.InteractionType.MessageComponent) {
                                     message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     //message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
