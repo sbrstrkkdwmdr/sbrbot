@@ -138,7 +138,7 @@ module.exports = {
                                     .setTitle(`Top plays of ${osutopdata[0].user.username}`)
                                     .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
                                     .setURL(`https://osu.ppy.sh/users/${osutopdata[0].user.id}`)
-                                    .setDescription(`sorted by highest pp\nPage: 1/${Math.ceil(osutopdata.length / 5)}`)
+                                    .setDescription(`sorted by highest pp\nPage: 1/${Math.ceil(osutopdata.length / 5)}\nmode: ${gamemode}\n`)
                                 for (let i = 0; i < 5 && i < osutopdata.length; i++) {
                                     let scoreoffset = page * 5 + i
 
@@ -277,7 +277,7 @@ module.exports = {
             let reverse;
             let compact;
 
-            if (interaction.type != Discord.InteractionType.MessageComponent) {
+            if (interaction.type == Discord.InteractionType.ApplicationCommand) {
                 fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
                 fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
                 fs.appendFileSync('commands.log',
@@ -367,6 +367,7 @@ module.exports = {
                     } else {
                         compact = false
                     }
+                    gamemode = message.embeds[0].description.split('mode: ')[1].split('\n')[0]
                 }
             }
             if (user == null) {
@@ -532,7 +533,7 @@ module.exports = {
                                     .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
                                     .setURL(`https://osu.ppy.sh/users/${osutopdata[0].user.id}`)
                                 if (compact != true) {
-                                    topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 5)}`)
+                                    topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 5)}\nmode: ${gamemode}\n`)
 
                                     for (let i = 0; i < 5 && i < osutopdata.length; i++) {
 
@@ -628,7 +629,7 @@ module.exports = {
 
                                     }
                                 } else {
-                                    topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 9)}`)
+                                    topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 9)}\nmode: ${gamemode}\n`)
                                     for (let i = 0; i < 9 && i < osutopdata.length; i++) {
                                         let scoreoffset = page * 9 + i
                                         let score = osutopdata[scoreoffset]
@@ -698,12 +699,12 @@ module.exports = {
                                 } else {
 
                                 }
-                                if (interaction.type != Discord.InteractionType.MessageComponent) {
+                                if (interaction.type == Discord.InteractionType.ApplicationCommand) {
                                     interaction.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
                                 }
-                                else {
+                                else if (interaction.type == Discord.InteractionType.MessageComponent) {
                                     message.edit({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                 }
