@@ -10,8 +10,8 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
-        if (message != null) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
+        if (message != null && button == null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
 
             let buttons = new Discord.ActionRowBuilder()
@@ -83,6 +83,8 @@ module.exports = {
                     if (!userid) {
                         return message.channel.send('Error - no user found')
                     };
+                    fs.writeFileSync('debugosu/command-firstscoreusername.json', JSON.stringify(osudata, null, 2), 'utf-8')
+
                     let userfirstsurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/firsts?mode=${mode}&limit=100`
                     fetch(userfirstsurl, {
                         headers: {
@@ -90,18 +92,23 @@ module.exports = {
                         }
                     }).then(res => res.json() as any)
                         .then(firstscoresdata => {
+                            fs.writeFileSync('debugosu/command-firstscores.json', JSON.stringify(firstscoresdata, null, 2), 'utf-8')
 
                             let firstsEmbed = new Discord.EmbedBuilder()
                                 .setTitle(`#1 Scores for ${osudata.username}`)
-                                .setURL(`https://osu.ppy.sh/u/${userid}`);
+                                .setURL(`https://osu.ppy.sh/u/${userid}`)
+                                .setThumbnail(`https://a.ppy.sh/${userid}`);
+                                ;
 
                             if (firstscoresdata.length < 1) {
                                 firstsEmbed.setDescription('Error - no scores found')
                                 message.reply({ embeds: [firstsEmbed], allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                                return;
                             }
 
                             firstsEmbed.setDescription(
                                 `Page 1/${Math.ceil(firstscoresdata.length / 5)}
+                                ${mode}
                                 `);
                             for (let i = 0; i < firstscoresdata.length && i < 5; i++) {
                                 let curscore = firstscoresdata[i]
@@ -169,7 +176,7 @@ module.exports = {
                                     **Score set on** ${curscore.created_at.toString().slice(0, 19).replace('T', ' ')}
                                     ${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${(curscore.accuracy * 100).toFixed(2)} | ${grade}
                                     \`${hitlist}\`
-                                    ${curscore.pp.toFixed(2)}pp
+                                    ${curscore.pp}pp
                                     `,
                                     inline: false
                                 }])
@@ -177,7 +184,8 @@ module.exports = {
                             }
                             message.reply({
                                 embeds: [firstsEmbed],
-                                allowedMentions: { repliedUser: false }
+                                allowedMentions: { repliedUser: false }, 
+                                components: [buttons]
                             })
                         })
                 })
@@ -218,14 +226,25 @@ module.exports = {
             let user:any;
             let searchid = interaction.member.user.id
             let mode:any;
-            if (interaction.type != Discord.InteractionType.MessageComponent) {
+            let page:any;
+            if (interaction.type == Discord.InteractionType.ApplicationCommand) {
 
                 user = interaction.options.getString('user')
                 mode = interaction.options.getString('mode')
             } else {
-                user
-                mode = null 
-                page
+                user = message.embeds[0].title.split('for ')[1]
+                mode = message.embeds[0].description.split('\n')[1] 
+                page = 0;
+                (message.embeds[0].description).split('/')[0].replace('Page ', '')
+                if (button == 'BigLeftArrow') {
+                    page = 0
+                } else if (button == 'LeftArrow') {
+                    page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', '')) - 1
+                } else if (button == 'RightArrow') {
+                    page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', '')) + 1
+                } else if (button == 'BigRightArrow') {
+                    page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
+                }
             }
 
             if (user.length < 1) {
@@ -237,7 +256,7 @@ module.exports = {
                     return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 }
             }
-            if (mode == null && (!args[0] || message.mentions.users.size > 0)) {
+            if (mode == null) {
                 let findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname == null) {
                     mode = 'osu'
@@ -250,8 +269,22 @@ module.exports = {
             } else {
                 mode = 'osu'
             }
+            fs.appendFileSync('commands.log',
+            `\noptions(2):
+            user: ${user}
+            mode: ${mode}
+            page: ${page}
+            `)
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
+            if (page < 2) {
+                page = 0
+            } else if (!page) {
+                page = 0
+            }
 
+            else {
+                page--
+            }
             fetch(userinfourl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -262,6 +295,7 @@ module.exports = {
                     if (!userid) {
                         return message.channel.send('Error - no user found')
                     };
+                    fs.writeFileSync('debugosu/command-firstscoresusername.json', JSON.stringify(osudata, null, 2), 'utf-8')
                     let userfirstsurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/firsts?mode=${mode}&limit=100`
                     fetch(userfirstsurl, {
                         headers: {
@@ -269,23 +303,26 @@ module.exports = {
                         }
                     }).then(res => res.json() as any)
                         .then(firstscoresdata => {
-
+                            fs.writeFileSync('debugosu/command-firstscores.json', JSON.stringify(firstscoresdata, null, 2), 'utf-8')
                             let firstsEmbed = new Discord.EmbedBuilder()
                                 .setTitle(`#1 Scores for ${osudata.username}`)
-                                .setURL(`https://osu.ppy.sh/u/${userid}`);
+                                .setURL(`https://osu.ppy.sh/u/${userid}`)
+                                .setThumbnail(`https://a.ppy.sh/${userid}`);
 
                             if (firstscoresdata.length < 1) {
                                 firstsEmbed.setDescription('Error - no scores found')
                                 message.reply({ embeds: [firstsEmbed], allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                                return;
                             }
 
                             firstsEmbed.setDescription(
-                                `Page 1/${Math.ceil(firstscoresdata.length / 5)}
+                                `Page ${page + 1}/${Math.ceil(firstscoresdata.length / 5)}
+                                ${mode}
                                 `);
                             for (let i = 0; i < firstscoresdata.length && i < 5; i++) {
-                                let curscore = firstscoresdata[i]
+                                let curscore = firstscoresdata[i + (page * 5)]
                                 if (!curscore) break;
-                                let ranking = firstscoresdata[i].rank.toUpperCase()
+                                let ranking = curscore.rank.toUpperCase()
                                 let grade: any;
                                 switch (ranking) {
                                     case 'F':
@@ -342,26 +379,31 @@ module.exports = {
                                     ifmods = '+' + fmods.join('').toUpperCase()
                                 }
                                 firstsEmbed.addFields([{
-                                    name: `#${i + 1}`,
+                                    name: `#${i + 1 + (page * 5)}`,
                                     value: `
                                     [${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id})
                                     **Score set on** ${curscore.created_at.toString().slice(0, 19).replace('T', ' ')}
-                                    ${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${(curscore.accuracy * 100).toFixed(2)} | ${grade}
+                                    ${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
                                     \`${hitlist}\`
-                                    ${curscore.pp.toFixed(2)}pp
+                                    ${curscore.pp}pp
                                     `,
                                     inline: false
                                 }])
 
                             }
-                            message.reply({
+                            if(interaction.type == Discord.InteractionType.ApplicationCommand){
+
+                            } else if (interaction.type == Discord.InteractionType.MessageComponent) {
+                            message.edit({
                                 embeds: [firstsEmbed],
-                                allowedMentions: { repliedUser: false }
+                                allowedMentions: { repliedUser: false }, 
+                                components: [buttons]
                             })
+                        }
                         })
                 })
         }
 
-        fs.appendFileSync('commands.log', 'success\n\n', 'utf-8')
+        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
     }
 }
