@@ -166,7 +166,7 @@ module.exports = {
                                             osuname:
                                                 (user.get('osuname').padEnd(17 - 2, ' ')).length > 15 ? user.get('osuname').substring(0, 12) + '...' : user.get('osuname').padEnd(17 - 2, ' '),
                                             rank:
-                                                rank.toString().padEnd(10 - 2, ' ').substring(0, 8),
+                                                rank,
                                             acc:
                                                 acc.toString(),
                                             pp:
@@ -181,22 +181,18 @@ module.exports = {
                 })
 
             }
-            (() => {
-                let playerarr = rarr.sort((a, b) => parseInt(b.rank.replaceAll(' ', '')) - parseInt(a.rank.replaceAll(' ', '')) ); //WHY ISN'T THIS SORTING WTF 
-                let another:any[];
-                another = playerarr.sort((a,b) => b.rank.replaceAll(' ', '') - a.rank.replaceAll(' ', ''))
+                // let another = rarr.sort((b, a) => b.rank - a.rank) //for some reason this doesn't sort even tho it does in testing
                 setTimeout(() => {
-                rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `
-                for (let i = 0; i < playerarr.length && i < 10; i++) {
-                    rtxt +=
-                        `\n#${i + 1 + ')'.padEnd(5, ' ')} ${another[i].discname}   ${another[i].osuname}   ${another[i].rank}   ${another[i].acc}%   ${another[i].pp}  `
-                }
+                    rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `
+                    for (let i = 0; i < rarr.length && i < 10; i++) {
+                        rtxt +=
+                            `\n#${i + 1 + ')'.padEnd(5, ' ')} ${rarr.sort((b, a) => b.rank - a.rank)[i].discname}   ${rarr.sort((b, a) => b.rank - a.rank)[i].osuname}   ${rarr.sort((b, a) => b.rank - a.rank)[i].rank.toString().padEnd(10 - 2, ' ').substring(0, 8)}   ${rarr.sort((b, a) => b.rank - a.rank)[i].acc}%   ${rarr.sort((b, a) => b.rank - a.rank)[i].pp}  `
+                    }
 
-                rtxt += `\n\``
-                serverlb.setDescription(rtxt);
-                message.reply({ content: '⠀', embeds: [serverlb], allowedMentions: { repliedUser: false }, failIfNotExists: true })
-            }, 2000)
-            })();
+                    rtxt += `\n\``
+                    serverlb.setDescription(rtxt);
+                    message.reply({ content: '⠀', embeds: [serverlb], allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                }, 2000) //setting the timeout alllows enough time for the array to be sorted
         }
 
         //==============================================================================================================================================================================================
