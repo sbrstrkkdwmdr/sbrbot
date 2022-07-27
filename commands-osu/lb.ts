@@ -183,11 +183,13 @@ module.exports = {
             }
             (() => {
                 let playerarr = rarr.sort((a, b) => parseInt(b.rank.replaceAll(' ', '')) - parseInt(a.rank.replaceAll(' ', '')) ); //WHY ISN'T THIS SORTING WTF 
+                let another:any[];
+                another = playerarr.sort((a,b) => b.rank.replaceAll(' ', '') - a.rank.replaceAll(' ', ''))
                 setTimeout(() => {
                 rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `
                 for (let i = 0; i < playerarr.length && i < 10; i++) {
                     rtxt +=
-                        `\n#${i + 1 + ')'.padEnd(5, ' ')} ${playerarr[i].discname}   ${playerarr[i].osuname}   ${playerarr[i].rank}   ${playerarr[i].acc}%   ${playerarr[i].pp}  `
+                        `\n#${i + 1 + ')'.padEnd(5, ' ')} ${another[i].discname}   ${another[i].osuname}   ${another[i].rank}   ${another[i].acc}%   ${another[i].pp}  `
                 }
 
                 rtxt += `\n\``
