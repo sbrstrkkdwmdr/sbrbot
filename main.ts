@@ -149,7 +149,13 @@ client.once('ready', () => {
         "小さな恋のうた (Synth Rock Cover) [Together]",
         "C18H27NO3(extend) [Pure Darkness]",
         "BLUE DRAGON [Blue Dragon]",
-        "-ERROR [Drowning]"
+        "-ERROR [Drowning]",
+        "Remote Control [Insane] +HDDT",
+        "Usatei 2011 [Ozzy's Extra]",
+        "Chocomint's made of fire hddt 98.54 full combo",
+        "Ascension to Heaven [Death] +HDDTHR",
+        "Can't Defeat Airman [Holy Shit! It's Airman!!!]",
+        "The Big Black [WHO'S AFRAID OF THE BIG BLACK]"
     ]
 
     let activityarr = [
