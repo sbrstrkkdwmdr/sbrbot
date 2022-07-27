@@ -202,6 +202,6 @@ module.exports = {
 
         }
 
-        fs.appendFileSync('commands.log', 'success\n\n', 'utf-8')
+        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
     }
 }
