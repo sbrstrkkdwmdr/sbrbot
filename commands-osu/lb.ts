@@ -130,7 +130,11 @@ module.exports = {
                                     rarr.push(
                                         {
                                             discname:
-                                                ((member.displayName.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.displayName.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.displayName.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
+                                                member.user ? 
+                                                ((member.user.username.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.user.username.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.user.username.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' ')
+                                                : 
+                                                ((member.displayName.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.displayName.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.displayName.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' ')
+                                                ,
                                             osuname:
                                                 (user.get('osuname').padEnd(17 - 2, ' ')).length > 15 ? user.get('osuname').substring(0, 12) + '...' : user.get('osuname').padEnd(17 - 2, ' '),
                                             rank:
