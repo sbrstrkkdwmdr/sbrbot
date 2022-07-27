@@ -43,6 +43,9 @@ module.exports = {
             } else {
                 mode = 'osu'
             }
+            if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')){
+                mode = 'osu'
+            }
             const userurl = `https://osu.ppy.sh/api/v2/users/${user}/${mode}`
             fetch(userurl, {
                 headers: {
@@ -238,6 +241,9 @@ module.exports = {
                     }
                 }
             } else {
+                mode = 'osu'
+            }
+            if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')){
                 mode = 'osu'
             }
             //interaction.reply('Searching for ' + user + '...')

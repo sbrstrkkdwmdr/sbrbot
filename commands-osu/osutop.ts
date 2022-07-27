@@ -79,7 +79,9 @@ module.exports = {
                     gamemode = 'osu'
                 }
             }
-
+            if (!(gamemode == 'osu' || gamemode == 'taiko' || gamemode == 'fruits' || gamemode == 'mania')){
+                gamemode = 'osu'
+            }
             let sort = null
             let page = null
             if (page == null || page < 1) {
@@ -127,6 +129,8 @@ module.exports = {
                                 try {
                                     let usernametesting = osutopdata[0].user.username
                                 } catch (error) {
+                                    console.log(error)
+                                    fs.writeFileSync('commands.log', JSON.stringify(error, null, 2))
                                     return message.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                                 }
                                 let topEmbed = new Discord.EmbedBuilder()
@@ -381,6 +385,9 @@ module.exports = {
                     gamemode = 'osu'
                 }
             }
+            if (!(gamemode == 'osu' || gamemode == 'taiko' || gamemode == 'fruits' || gamemode == 'mania')){
+                gamemode = 'osu'
+            }
             if (page == null || page < 1) {
                 page = 0
             } else {
@@ -434,6 +441,8 @@ module.exports = {
                                 try {
                                     let usernametesting = osutopdataPreSort[0].user.username
                                 } catch (error) {
+                                    console.log(error)
+                                    fs.writeFileSync('commands.log', JSON.stringify(error, null, 2))
                                     return interaction.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false } })
                                 }
                                 let filtereddata = osutopdataPreSort

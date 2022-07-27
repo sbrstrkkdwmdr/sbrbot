@@ -82,7 +82,9 @@ module.exports = {
             } else {
                 mode = 'osu'
             }
-
+            if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')){
+                mode = 'osu'
+            }
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
 
             fetch(userinfourl, {
@@ -546,6 +548,9 @@ module.exports = {
                         mode = 'osu'
                     }
                 }
+            }
+            if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')){
+                mode = 'osu'
             }
 
             if (page == null) {
