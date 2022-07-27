@@ -112,7 +112,7 @@ module.exports = {
 
                 }).then(res => res.json() as any)
                     .then(mapattrdata => {
-                        let totaldiff = mapattrdata.attributes.star_rating
+                        let totaldiff = mapattrdata.attributes
                         if (totaldiff == null || totaldiff == undefined || totaldiff == NaN) {
                             totaldiff = json.difficulty_rating;
                         } else {

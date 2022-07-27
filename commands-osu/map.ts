@@ -20,17 +20,17 @@ module.exports = {
         //check if file debugosu/prevmap.json exists
         let prevmap;
         let i;
-/*         if (fs.existsSync(`./debugosu/prevmap.json`)) {
-            //console.log('hello there')
-            try {
-                prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap.json`, 'utf8'));
-            } catch {
-                console.log(`no prevmap.json file for server ${message.guildId}\nCreating default file...`)
-                fs.writeFileSync(`./debugosu/prevmap.json`, JSON.stringify(({ id: 32345 }), null, 2));
-            }
-        } else {
-            return console.log('Error - missing prevmap.json in configs folder');
-        } */
+        /*         if (fs.existsSync(`./debugosu/prevmap.json`)) {
+                    //console.log('hello there')
+                    try {
+                        prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap.json`, 'utf8'));
+                    } catch {
+                        console.log(`no prevmap.json file for server ${message.guildId}\nCreating default file...`)
+                        fs.writeFileSync(`./debugosu/prevmap.json`, JSON.stringify(({ id: 32345 }), null, 2));
+                    }
+                } else {
+                    return console.log('Error - missing prevmap.json in configs folder');
+                } */
 
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (message)\n${currentDate} | ${currentDateISO}\n recieved get map info command\nrequested by ${message.author.id} AKA ${message.author.tag}]\nMessage content: ${message.content}`, 'utf-8')
@@ -175,7 +175,7 @@ module.exports = {
 
                                 }).then(res => res.json() as any)
                                     .then(mapattrdata => {
-                                        let totaldiff = mapattrdata.attributes.star_rating
+                                        let totaldiff = mapattrdata.attributes
                                         if (totaldiff == null || totaldiff == undefined || totaldiff == NaN) {
                                             totaldiff = json.difficulty_rating;
                                         } else {
@@ -546,7 +546,7 @@ module.exports = {
 
                     }).then(res => res.json() as any)
                         .then(mapattrdata => {
-                            let totaldiff = mapattrdata.attributes.star_rating
+                            let totaldiff = mapattrdata.attributes
                             if (totaldiff == null || totaldiff == undefined || totaldiff == NaN) {
                                 totaldiff = json.difficulty_rating;
                             } else {
@@ -950,7 +950,7 @@ module.exports = {
 
                     }).then(res => res.json() as any)
                         .then(mapattrdata => {
-                            let totaldiff = mapattrdata.attributes.star_rating
+                            let totaldiff = mapattrdata.attributes
                             if (totaldiff == null || totaldiff == undefined || totaldiff == NaN) {
                                 totaldiff = json.difficulty_rating;
                             } else {
