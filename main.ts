@@ -49,33 +49,33 @@ client.admincmds = new Discord.Collection();
 client.musiccmds = new Discord.Collection();
 client.tstcmds = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
+const commandFiles = fs.readdirSync('./commands/general').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
+    const command = require(`./commands/general/${file}`);
     client.commands.set(command.name, command);
 }
 
-const linkFiles = fs.readdirSync('./links').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
+const linkFiles = fs.readdirSync('./commands/links').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of linkFiles) {
-    const link = require(`./links/${file}`);
+    const link = require(`./commands/links/${file}`);
     client.links.set(link.name, link);
 }
 
-const osuFiles = fs.readdirSync('./commands-osu').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
+const osuFiles = fs.readdirSync('./commands/osu').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of osuFiles) {
-    const osu = require(`./commands-osu/${file}`);
+    const osu = require(`./commands/osu/${file}`);
     client.osucmds.set(osu.name, osu);
 }
 
-const admincommandFiles = fs.readdirSync('./commands-admin').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
+const admincommandFiles = fs.readdirSync('./commands/admin').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of admincommandFiles) {
-    const admincommand = require(`./commands-admin/${file}`);
+    const admincommand = require(`./commands/admin/${file}`);
     client.admincmds.set(admincommand.name, admincommand);
 }
 
-const musicCommandFiles = fs.readdirSync('./commands-music').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
+const musicCommandFiles = fs.readdirSync('./commands/music').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of musicCommandFiles) {
-    const musiccommand = require(`./commands-music/${file}`)
+    const musiccommand = require(`./commands/music/${file}`)
     client.musiccmds.set(musiccommand.name, musiccommand)
 }
 const testCommandFiles = fs.readdirSync('./test').filter(file => file.endsWith('.js') || file.endsWith('.ts'));

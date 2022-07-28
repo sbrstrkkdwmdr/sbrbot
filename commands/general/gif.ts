@@ -26,7 +26,7 @@ module.exports = {
             'https://media.discordapp.net/attachments/716812353034780703/855178667420024863/ezgif.com-gif-maker_1.gif', //zitron map og
         ]
         let speechbubble = [
-            'https://cdn.discordapp.com/attachments/724514625005158403/979287600852500490/amogus_speak.png', // among ASS speaking
+            //'https://cdn.discordapp.com/attachments/724514625005158403/979287600852500490/amogus_speak.png', // among ASS speaking
             'https://cdn.discordapp.com/attachments/724514625005158403/979287601443926032/guardian_speak.png', //minecraft guardian inside glass inside a stone box surrounding my guardian farm
             'https://cdn.discordapp.com/attachments/724514625005158403/989314110250451004/zanei.png', //zan'ei jumps
             'https://cdn.discordapp.com/attachments/796366644653719592/963160984057425999/poland.gif', // poland
@@ -43,7 +43,7 @@ module.exports = {
             /* 'https://media.discordapp.net/attachments/878855036992622652/960730586903887902/sph.gif', //felix nsfw\ */
 
             'https://media.discordapp.net/attachments/885710706350116915/946818088857370696/yes.gif', // bunny girl + mask
-            'https://media.discordapp.net/attachments/894054954661204009/956769254269648917/lil-nas-x-pregnant.gif', //lil nas x pregnant
+            //'https://media.discordapp.net/attachments/894054954661204009/956769254269648917/lil-nas-x-pregnant.gif', //lil nas x pregnant
             'https://media.discordapp.net/attachments/960980200613625896/967546422155182130/Untitled2.gif', //touhou1?!?!?
             'https://media.discordapp.net/attachments/965669674492764160/969044374107336734/yuuka.gif', // yuuka
             'https://media.discordapp.net/attachments/98226572468690944/977994968461365298/chokeplay-1.gif', //fubuki getting choked and enjoying it
@@ -51,7 +51,6 @@ module.exports = {
             'https://media.discordapp.net/attachments/843627338839490560/977578032946626621/deranker.gif', //osu rank graph going down (bad)
             'https://cdn.discordapp.com/attachments/903512449469267991/992776650565627986/373E2B63-77FA-4916-8902-1EC50B4B6F26.gif', //dog
             'https://cdn.discordapp.com/attachments/903512449469267991/992776826940305439/8806F06C-0A48-4141-AD08-434D2578D199.gif', //upside down boot
-            'https://media.discordapp.net/attachments/923571142801915964/993500133096439828/unknown.png', //horny guy suck cock finland flag
             'https://cdn.discordapp.com/attachments/903512449469267991/993503753837740032/961460810859835463.png', // crying glasses wojak
             'https://cdn.discordapp.com/attachments/903512449469267991/993515597709189130/received_568368178206882.jpg', // malding gluttony wojak
             'https://cdn.discordapp.com/attachments/653760219708391445/992520290309505074/unknown.png', //cat
