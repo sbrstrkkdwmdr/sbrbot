@@ -1,9 +1,9 @@
 import fs = require('fs');
 import osucalc = require('osumodcalculator')
-import { access_token } from '../configs/osuauth.json';
+import { access_token } from '../../configs/osuauth.json';
 import fetch from 'node-fetch';
-import emojis = require('../configs/emojis')
-import osufunc = require('../configs/osufunc')
+import emojis = require('../../configs/emojis')
+import osufunc = require('../../configs/osufunc')
 
 module.exports = {
     name: 'osutop',

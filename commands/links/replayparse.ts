@@ -2,7 +2,7 @@ import fs = require('fs')
 import osucalc = require('osumodcalculator')
 import replayparse = require('osureplayparser')
 import fetch from 'node-fetch';
-import { access_token } from '../configs/osuauth.json';
+import { access_token } from '../../configs/osuauth.json';
 import ppcalc = require('booba')
 import chartjsimg = require('chartjs-to-image');
 
