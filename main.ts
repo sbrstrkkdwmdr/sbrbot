@@ -2,7 +2,7 @@ import Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
 import fs = require('fs');
 const Sequelize = require('sequelize');
-import fetch from 'node-fetch'
+import fetch from 'node-fetch';
 
 
 const CommandHandler = require('./CommandHandler');
