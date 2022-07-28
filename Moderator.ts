@@ -6,11 +6,20 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     client.on('messageCreate', message => {
 
+        if((message.author.id == '777125560869978132' || message.author.id == '755220989494951997') && message.content.startsWith('LL⠀⠀⠀')){
+            setTimeout(() => {
+                message.delete();
+            }, 1000)
+        }
+
         //FILE BLOCKING FUNCTION
         if (checks.checkisfileblocked(message.author.id)) {
             let currentDate = new Date();
             let currentDateISO = new Date().toISOString();
-            if (message.attachments.size > 0 && (message.attachments.every(a => checks.checkisvideo(a)) || message.attachments.every(a => checks.checkisimage(a)) || message.attachments.every(a => checks.checkisaudio(a)))) {
+
+            message.channel.send(`LL⠀⠀⠀<@${message.author.id}>`)
+
+            if (message.attachments.size > 0 && (message.attachments.every(a => checks.checkisvideo(a)) || message.attachments.every(a => checks.checkisimage(a)) || message.attachments.every(a => checks.checkisaudio(a) || message.content.has('http')))) {
                 //console.log('ee')
                 //message.reply('balls')
                 message.delete()
