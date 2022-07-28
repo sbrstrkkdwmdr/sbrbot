@@ -2,6 +2,7 @@ const checks = require('./configs/commandchecks')
 import fs = require('fs');
 import osuapiext = require('osu-api-extended');
 import osumodcalc = require('osumodcalculator');
+import fetch from 'node-fetch';
 
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
 
