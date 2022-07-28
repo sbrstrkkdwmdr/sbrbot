@@ -20,8 +20,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             interaction.deferUpdate();
             return;
         };
-        switch (true) {
-            /*             case command == 'test':
+        switch (command) {
+            /*             case 'test':
                             if (button == 'BigLeftArrow') {
                                 //message.edit({content: 'Left'})
                                 client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
@@ -46,20 +46,39 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                                 setTimeout(() => interaction.deleteReply(), 100)
                             )
                             break; */
-            case command == 'leaderboard':
+            case 'leaderboard':
                 client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 interaction.deferUpdate();
                 break;
-            case command == 'osutop':
+            case 'osutop':
                 client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 interaction.deferUpdate();
                 break;
-            case command == 'rs':
+            case 'rs':
                 client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 interaction.deferUpdate();
                 break;
-            case command == 'first':
+            case 'first':
                 client.osucmds.get('firsts').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                interaction.deferUpdate();
+                break;
+            case 'pinned':
+                client.osucmds.get('pinned').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                interaction.deferUpdate();
+                break;
+            case 'ifpprank':
+                client.osucmds.get('ifpprank').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                interaction.deferUpdate();
+            case 'compare':
+                client.osucmds.get('compare').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                interaction.deferUpdate();
+                break;
+            case 'simplay':
+                client.osucmds.get('simplay').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                interaction.deferUpdate();
+                break;
+            case 'whatif':
+                client.osucmds.get('whatif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 interaction.deferUpdate();
                 break;
         }

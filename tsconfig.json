@@ -65,6 +65,12 @@
         "commands-osu/lb.ts",
         "commands-osu/skin.ts",
         "commands-osu/firsts.ts",
+        "commands-osu/pinned.ts",
+        "commands-osu/whatif.ts",
+        "commands-osu/ifpprank.ts",
+        "commands-osu/compare.ts",
+        "commands-osu/simplay.ts",
+
 
         "links/osumaplink.ts",
         "links/osuuserlink.ts",
