@@ -3,6 +3,10 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     client.on('messageCreate', async (message) => {
 
+        if(message.mentions.users.first().id == '777125560869978132' || message.mentions.users.first().id == '755220989494951997'){
+            return message.reply('Prefix is ' + config.prefix)
+        }
+
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
 
