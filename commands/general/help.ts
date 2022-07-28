@@ -21,7 +21,7 @@ module.exports = {
                 },
                 {
                     name: 'osu! comands',
-                    value: "`osu`, `osuset`, `osutop`, `map`, `rs`, `scores`, `leaderboard`",
+                    value: "`compare`, `firsts`, `lb`, `leaderboard`(map), `map`, `osu`, `osuset`, `osutop`, `pinned`, `rs`, `scores`, `simulate`,`skin`, `whatif`",
                     inline: false
                 },
                 {

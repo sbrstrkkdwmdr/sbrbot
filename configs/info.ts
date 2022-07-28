@@ -194,6 +194,38 @@ let cmds = [
 
 let osucmds = [
     {
+        name: 'compare',
+        description: 'Compares two scores. If options are omitted, then the most recent score will be compared with the user\'s best score on that map',
+        usage: 'sbr-compare',
+        slashusage: '/compare [score_id_1] [score_id_2]',
+        options: [
+            {
+                name: 'score_id_1',
+                description: 'The id of the first score to compare'
+            },
+            {
+                name: 'score_id_2',
+                description: 'The id of the second score to compare'
+            }
+        ]
+
+    },
+    {
+        name: 'firsts',
+        description: 'Retrieves all #1 scores for a player',
+        usage: 'sbr-firsts <user>',
+        options: [
+            {
+                name: 'user',
+                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
+            }
+        ]
+    },
+    {
+        name: 'lb',
+        description: 'Retrieves the osu! leaderboard for the server',
+    },
+    {
         name: 'leaderboard',
         description: 'Retrieves the top 5 plays on a beatmap',
         usage: 'sbr-leaderboard <id>',
@@ -318,6 +350,17 @@ let osucmds = [
         aliases: 'top'
     },
     {
+        name: 'pinned',
+        description: 'Retrieves a user\'s pinned scores',
+        usage: 'sbr-pinned <user>',
+        options: [
+            {
+                name: 'user',
+                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
+            }
+        ]
+    },
+    {
         name: 'rs',
         description: 'Retrieves the most recent score for the user',
         usage: 'sbr-rs <user>',
@@ -370,7 +413,49 @@ let osucmds = [
             }
         ],
         aliases: 'c'
+    },
+    {
+        name: 'simulate',
+        description: '',
+        usage: 'sbr-simplay <mods> <misses> <accuracy>',
+        slashusage: '/simplay [id] [mods] [misses] [accuracy]',
+        options: [
+            {
+                name: 'id',
+                description: '`integer, optional`. The id of the beatmap. If omitted, the previous map used will be used instead'
+            },
+            {
+                name: 'mods',
+                description: '`string, optional`. The mods to apply on top of the map. Defaults to NM'
+            },
+            {
+                name: 'misses',
+                description: '`integer, optional`. The amount of misses for the play. Defaults to 0'
+            },
+            {
+                name: 'accuracy',
+                description: '`float, optional`. The accuracy for the play. Defaults to 100'
+            }
+        ],
+        aliases: 'simplay'
+    },
+    {
+        name: 'whatif',
+        description: 'Returns the pp if x rank or rank if x pp',
+        usage: 'sbr-whatif <value> <type>',
+        slashusage: '/whatif [value] [type]',
+        options: [
+            {
+                name: 'value',
+                description: '`float, required`. The value to set'
+            },
+            {
+                name: 'type',
+                description: '`string, optional`. The type of the value. Can be either pp or rank. Defaults to pp'
+            }
+        ]
     }
+
 ]
 
 let admincmds = [
