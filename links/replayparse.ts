@@ -48,22 +48,22 @@ module.exports = {
                     console.log(err)
                     return
                 }
-                let title:any;
-                let artist:any;
-                let version:any;
                 let mapbg:any;
                 let mapcombo:string|number;
+                let fulltitle:string;
+                let mapdataid:string;
                 try {
-                    title = mapdata.beatmapset.title != mapdata.beatmapset.title_unicode ? `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})` : mapdata.beatmapset.title
-                    artist = mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist
-                    version = mapdata.version
                     mapbg = mapdata.beatmapset.covers['list@2x']
+                    fulltitle = `${mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist}`
+                    fulltitle +=` - ${mapdata.beatmapset.title != mapdata.beatmapset.title_unicode ? `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})` : mapdata.beatmapset.title}`
+                    + ` [${mapdata.version}]`
                     mapcombo = mapdata.max_combo ? mapdata.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : NaN
+                    mapdataid = 'https://osu.ppy.sh/b/' + mapdata.id
                 } catch (error){
-                    title = 'Unknown title'
-                    artist = 'Unknown artist'
-                    version = 'Unknown version'
+                    fulltitle = 'Unknown/unavailable map'
                     mapbg = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
+                    mapcombo = NaN
+                    mapdataid = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png'
                 }
 
                 let mods = replay.mods
@@ -134,8 +134,8 @@ module.exports = {
                         .setTitle(`Replay`)
                         .setThumbnail(mapbg)
                         .setDescription(
-                            `[${artist} - ${title} [${version}]](https://osu.ppy.sh/b/${mapdata.id}) ${ifmods}
-                    ${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapcombo}x** | ${accuracy.toFixed(2)}
+                            `[${fulltitle}](${mapdataid}) ${ifmods}
+                    ${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapcombo}x** | ${accuracy.toFixed(2)}%
                     \`${hitlist}\`
                     `
                         )
