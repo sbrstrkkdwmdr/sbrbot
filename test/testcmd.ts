@@ -1,4 +1,4 @@
-import fs = require('fs');
+/* import fs = require('fs');
 import osucalc = require('osumodcalculator')
 import { access_token } from '../configs/osuauth.json';
 import fetch from 'node-fetch';
@@ -503,4 +503,4 @@ module.exports = {
                 })
         }
     }
-}
+} */
