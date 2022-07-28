@@ -12,6 +12,7 @@ const Moderator = require('./Moderator');
 const MusicHandler = require('./MusicHandler');
 const ButtonHandler = require('./ButtonHandler');
 const CommandInit = require('./CommandInit');
+const ExEvents = require('./ExEvents');
 
 const config = require('./configs/config.json');
 
@@ -128,6 +129,7 @@ client.once('ready', () => {
     MusicHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     ButtonHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     CommandInit(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    ExEvents(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
     client.guilds.cache.forEach(guild => {
         if (!fs.existsSync(`./logs/${guild.id}.log`)) {

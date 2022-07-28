@@ -11,6 +11,7 @@
         "LinkHandler.ts",
         "SlashCommandHandler.ts",
         "CommandInit.ts",
+        "ExEvents.ts",
 
         "configs/calculations.ts",
         "configs/commandchecks.ts",
@@ -73,5 +74,6 @@
         "commands/info.ts",
         "commands/bookmark.ts",
 
+        "test/else.ts"
     ]
   }
