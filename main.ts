@@ -43,6 +43,7 @@ const client = new Client({
 const { prefix, token, osuApiKey, osuClientID, osuClientSecret } = require('./configs/config.json');
 
 client.commands = new Discord.Collection();
+client.misccmds = new Discord.Collection();
 client.links = new Discord.Collection();
 client.osucmds = new Discord.Collection();
 client.admincmds = new Discord.Collection();
@@ -53,6 +54,11 @@ const commandFiles = fs.readdirSync('./commands/general').filter(file => file.en
 for (const file of commandFiles) {
     const command = require(`./commands/general/${file}`);
     client.commands.set(command.name, command);
+}
+const miscCommandFiles = fs.readdirSync('./commands/misc').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
+for (const file of miscCommandFiles) {
+    const command = require(`./commands/misc/${file}`);
+    client.misccmds.set(command.name, command);
 }
 
 const linkFiles = fs.readdirSync('./commands/links').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
