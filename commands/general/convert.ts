@@ -52,6 +52,44 @@ module.exports = {
 
             ])
             ;
+        let siEmbed = new Discord.EmbedBuilder()
+            .setTitle('List of SI prefixes')
+            .addFields([
+                {
+                    name: 'Increments',
+                    value:
+`\`
+Y  | yotta | 10^24 | Septillion  | 1,000,000,000,000,000,000,000,000
+Z  | zetta | 10^21 | Sextillion  | 1,000,000,000,000,000,000,000
+E  | exa   | 10^18 | Quintillion | 1,000,000,000,000,000,000
+P  | peta  | 10^15 | Quadrillion | 1,000,000,000,000,000
+T  | tera  | 10^12 | Trillion    | 1,000,000,000,000
+G  | giga  | 10^9  | Billion     | 1,000,000,000
+M  | mega  | 10^6  | Million     | 1,000,000
+k  | kilo  | 10^3  | Thousand    | 1,000
+h  | hecto | 10^2  | Hundred     | 100
+da | deca  | 10^1  | Ten         | 10
+\``,
+                    inline: false
+                },
+                {
+                    name: 'Decrements',
+                    value:
+`\`
+d | deci  | 10^-1  | Tenth         | 0.1
+c | centi | 10^-2  | Hundredth     | 0.01
+m | milli | 10^-3  | Thousandth    | 0.001
+μ | micro | 10^-6  | Millionth     | 0.000 001
+n | nano  | 10^-9  | Billionth     | 0.000 000 001 
+p | pico  | 10^-12 | Trillionth    | 0.000 000 000 001
+f | femto | 10^-15 | Quadrillionth | 0.000 000 000 000 001
+a | atto  | 10^-18 | Quintillionth | 0.000 000 000 000 000 001
+z | zepto | 10^-21 | Sextillionth  | 0.000 000 000 000 000 000 001
+y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
+\``,
+                    inline: false
+                }
+            ]);
         let embedres = new Discord.EmbedBuilder()
             .setDescription('⠀');
         if (message != null) {
@@ -74,6 +112,16 @@ module.exports = {
             let convtype = `${cat1} to ${cat2}` //x => y
             let eq = `??? type => ??? type`//'num type => num type'
             let formula = 'x'
+
+            if(cat1 == 'help' || cat2 == 'help'){
+                interaction.reply({ embeds: [EmbedList], allowedMentions: { repliedUser: false } })
+                return;
+            }
+            if(cat1 == 'metricprefixes' || cat2 == 'metricprefixes'){
+                interaction.reply({ embeds: [siEmbed], allowedMentions: { repliedUser: false } })
+                return;
+            }
+
 
             switch (true) {
                 case (cat1 == cat2):
