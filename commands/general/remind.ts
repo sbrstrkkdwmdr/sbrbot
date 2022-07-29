@@ -1,6 +1,6 @@
 import ms = require('ms')
 import fetch = require('node-fetch')
-import notxt = require('../configs/w')
+import notxt = require('../../configs/w')
 import fs = require('fs')
 module.exports = {
     name: 'remind',

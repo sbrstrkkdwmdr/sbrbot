@@ -1,5 +1,5 @@
 import fs = require('fs');
-import commandchecks = require('../configs/commandchecks');
+import commandchecks = require('../../configs/commandchecks');
 
 module.exports = {
     name: 'ping',

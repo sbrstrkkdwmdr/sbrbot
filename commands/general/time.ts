@@ -1,5 +1,5 @@
 import fs = require('fs')
-import calc = require('../configs/calculations')
+import calc = require('../../configs/calculations')
 module.exports = {
     name: 'time',
     description: 'template text\n' +

@@ -1,5 +1,5 @@
 import fs = require('fs')
-import calculations = require('../configs/calculations')
+import calculations = require('../../configs/calculations')
 import osucalc = require('osumodcalculator')
 module.exports = {
     name: 'math',
