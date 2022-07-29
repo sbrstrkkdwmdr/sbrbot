@@ -16,6 +16,26 @@ let template = [
 
 let cmds = [
     {
+        name: 'convert',
+        description: 'Converts one value to another',
+        usage: 'sbr-convert <type1> <type2> <number>',
+        slashusage: '/convert [type1] [type2] [number]',
+        options: [
+            {
+                name: 'type1',
+                description: '`string, required`. What to convert the value from (ie km)'
+            },
+            {
+                name: 'type2',
+                description: '`string, required`. What to convert the value to (ie miles)'
+            },
+            {
+                name: 'number',
+                description: '`number, required`. The value to convert'
+            }
+        ]
+    },
+    {
         name: 'help',
         description: 'Returns all commands or information of a specific command',
         usage: 'sbr-help <command>',
@@ -24,49 +44,6 @@ let cmds = [
             {
                 name: 'command',
                 description: '`string, optional`. Which command to return the information of'
-            }
-        ]
-    },
-    {
-        name: 'gif',
-        description: 'Sends a random gif based on the type given',
-        usage: 'sbr-gif <type>',
-        slashusage: '/gif [type]',
-        options: [
-            {
-                name: 'type',
-                description: '`string, optional`. What type to send'
-            }
-        ]
-    },
-    {
-        name: 'ping',
-        description: 'Pings the bot and returns the latency',
-        usage: 'sbr-ping',
-        slashusage: '/ping',
-        options: []
-    },
-    {
-        name: 'image',
-        description: 'Searches the Google API and returns the first five results',
-        usage: 'sbr-image <query>',
-        slashusage: '/image [query]',
-        options: [
-            {
-                name: 'query',
-                description: '`string, required`. The parameters for the search'
-            }
-        ]
-    },
-    {
-        name: 'ytsearch',
-        description: 'Searches the YouTube API and returns the first five results',
-        usage: 'sbr-ytsearch <query>',
-        slashusage: '/ytsearch [query]',
-        options: [
-            {
-                name: 'query',
-                description: '`string, required`. The parameters for the search'
             }
         ]
     },
@@ -96,44 +73,11 @@ let cmds = [
         aliases: 'solve'
     },
     {
-        name: 'convert',
-        description: 'Converts one value to another',
-        usage: 'sbr-convert <type1> <type2> <number>',
-        slashusage: '/convert [type1] [type2] [number]',
-        options: [
-            {
-                name: 'type1',
-                description: '`string, required`. What to convert the value from (ie km)'
-            },
-            {
-                name: 'type2',
-                description: '`string, required`. What to convert the value to (ie miles)'
-            },
-            {
-                name: 'number',
-                description: '`number, required`. The value to convert'
-            }
-        ]
-    },
-    {
-        name: '8ball',
-        description: 'Responds with a yes or no or maybe answer',
-        usage: 'sbr-8ball',
-        slashusage: '/8ball',
-        options: [],
-        aliases: 'ask'
-    },
-    {
-        name: 'roll',
-        description: 'Returns between 1-100 or the given number',
-        usage: 'sbr-roll <number>',
-        slashusage: '/roll [number]',
-        options: [
-            {
-                name: 'number',
-                description: '`integer, optional`. The maximum number. If omitted, the max will be 100'
-            }
-        ]
+        name: 'ping',
+        description: 'Pings the bot and returns the latency',
+        usage: 'sbr-ping',
+        slashusage: '/ping',
+        options: []
     },
     {
         name: 'remind',
@@ -173,6 +117,46 @@ let cmds = [
         ]
     },
     {
+        name: 'stats',
+        description: 'Returns the bot statistics',
+        usage: 'sbr-stats'
+    }
+]
+
+let othercmds = [
+    {
+        name: '8ball',
+        description: 'Responds with a yes or no or maybe answer',
+        usage: 'sbr-8ball',
+        slashusage: '/8ball',
+        options: [],
+        aliases: 'ask'
+    },
+    {
+        name: 'gif',
+        description: 'Sends a random gif based on the type given',
+        usage: 'sbr-gif <type>',
+        slashusage: '/gif [type]',
+        options: [
+            {
+                name: 'type',
+                description: '`string, optional`. What type to send'
+            }
+        ]
+    },
+    {
+        name: 'image',
+        description: 'Searches the Google API and returns the first five results',
+        usage: 'sbr-image <query>',
+        slashusage: '/image [query]',
+        options: [
+            {
+                name: 'query',
+                description: '`string, required`. The parameters for the search'
+            }
+        ]
+    },
+    {
         name: 'poll',
         description: 'Creates a poll',
         usage: 'sbr-poll title',
@@ -187,7 +171,30 @@ let cmds = [
                 description: '`string, required`. The options of the poll. Each option should be separated with a `+`. Max limit of 26'
             }
         ]
-
+    },
+    {
+        name: 'roll',
+        description: 'Returns between 1-100 or the given number',
+        usage: 'sbr-roll <number>',
+        slashusage: '/roll [number]',
+        options: [
+            {
+                name: 'number',
+                description: '`integer, optional`. The maximum number. If omitted, the max will be 100'
+            }
+        ]
+    },
+    {
+        name: 'ytsearch',
+        description: 'Searches the YouTube API and returns the first five results',
+        usage: 'sbr-ytsearch <query>',
+        slashusage: '/ytsearch [query]',
+        options: [
+            {
+                name: 'query',
+                description: '`string, required`. The parameters for the search'
+            }
+        ]
     }
 ]
 
@@ -473,6 +480,22 @@ let admincmds = [
         aliases: 'fetch perms, checkpermissions, permissions, perms'
     },
     {
+        name: 'find',
+        description: 'Returns name from the id given',
+        usage: 'sbr-find <type> <id>',
+        slashusage: '/find [type] [id]',
+        options: [
+            {
+                name: 'type',
+                description: '`string, required`. The type of id to find. Valid types are: "user", "guild", "channel", "role", "emoji"'
+            },
+            {
+                name: 'id',
+                description: '`integer, required`. The id of the object to find'
+            }
+        ]
+    },
+    {
         name: 'leaveguild',
         description: 'Leaves the guild. Requires permissions',
         usage: 'sbr-leaveguild <id>',
@@ -484,6 +507,18 @@ let admincmds = [
             }
         ],
         aliases: 'leave'
+    },
+    {
+        name: 'log',
+        description: 'Returns the logs for the current guild',
+        usage: 'sbr-log',
+        slashusage: '/log [guildid]',
+        options: [
+            {
+                name: 'guildid',
+                description: '`integer, optional`. The id of the guild to retrieve the logs of. If omitted, the logs of the guild the message is sent in will be returned'
+            }
+        ]
     },
     {
         name: 'servers',
@@ -511,40 +546,12 @@ let admincmds = [
                 description: '`integer/channel, optional`. The channel to move the user to.'
             }
         ]
-    },
-    {
-        name: 'log',
-        description: 'Returns the logs for the current guild',
-        usage: 'sbr-log',
-        slashusage: '/log [guildid]',
-        options: [
-            {
-                name: 'guildid',
-                description: '`integer, optional`. The id of the guild to retrieve the logs of. If omitted, the logs of the guild the message is sent in will be returned'
-            }
-        ]
-    },
-    {
-        name: 'find',
-        description: 'Returns name from the id given',
-        usage: 'sbr-find <type> <id>',
-        slashusage: '/find [type] [id]',
-        options: [
-            {
-                name: 'type',
-                description: '`string, required`. The type of id to find. Valid types are: "user", "guild", "channel", "role", "emoji"'
-            },
-            {
-                name: 'id',
-                description: '`integer, required`. The id of the object to find'
-            }
-        ]
     }
 ]
 
 let links = [
     {
-        name: 'osumaplink',
+        name: 'maplink',
         description: 'Returns information from a map link',
         usage: '`https://osu.ppy.sh/b/<id>` or `https://osu.ppy.sh/s/<setid>#<gamemode>/<id>`',
         params: [
@@ -564,7 +571,7 @@ let links = [
         aliases: 'osu.ppy.sh/beatmaps/<id>, osu.ppy.sh/beatmapsets/<setid>#<gamemode>/<id>, osu.ppy.sh/s/<setid>, osu.ppy.sh/beatmapsets/<setid>'
     },
     {
-        name: 'osuuserlink',
+        name: 'userlink',
         description: 'Returns information from a user link',
         usage: '`https://osu.ppy.sh/u/<id/name>` or `https://osu.ppy.sh/users/<id/name>`',
         params: [
@@ -577,7 +584,7 @@ let links = [
     {
         name: 'replayparse',
         description: 'Returns information from a replay file',
-        usage: '`<file>`',
+        usage: '`<replay.osr>`',
         params: [
             {
                 name: 'file',
@@ -605,6 +612,14 @@ let links = [
 ]
 let musiccmds = [
     {
+        name: 'np',
+        description: 'Retrieves the current song',
+        usage: 'sbr-np',
+        slashusage: '/np',
+        options: [],
+        aliases: 'nowplaying'
+    },
+    {
         name: 'play',
         description: 'Plays a song',
         usage: 'sbr-play <url>',
@@ -615,6 +630,22 @@ let musiccmds = [
                 description: '`string, required`. The url of the song to play'
             }
         ]
+    },
+    {
+        name: 'queue',
+        description: 'Retrieves the current queue',
+        usage: 'sbr-queue',
+        slashusage: '/queue',
+        options: [],
+        aliases: 'q'
+    },
+    {
+        name: 'resume',
+        description: 'Resumes the current song',
+        usage: 'sbr-resume',
+        slashusage: '/resume',
+        options: [],
+        aliases: 'unpause'
     },
     {
         name: 'skip',
@@ -630,30 +661,6 @@ let musiccmds = [
         slashusage: '/stop',
         options: [],
         aliases: 'pause'
-    },
-    {
-        name: 'resume',
-        description: 'Resumes the current song',
-        usage: 'sbr-resume',
-        slashusage: '/resume',
-        options: [],
-        aliases: 'unpause'
-    },
-    {
-        name: 'np',
-        description: 'Retrieves the current song',
-        usage: 'sbr-np',
-        slashusage: '/np',
-        options: [],
-        aliases: 'nowplaying'
-    },
-    {
-        name: 'queue',
-        description: 'Retrieves the current queue',
-        usage: 'sbr-queue',
-        slashusage: '/queue',
-        options: [],
-        aliases: 'q'
     }
 ]
 
