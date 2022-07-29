@@ -507,11 +507,11 @@ module.exports = {
                 message.embeds[0].title.includes('play for') ?
                 message.embeds[0].title.split('most recent play for ')[1] : 
                 message.embeds[0].title.split('plays for ')[1]
-                
-                mode = 
-                message.embeds[0].fields[0] ?
-                message.embeds[0].fields[0].value.split(' | ')[1] : 
-                message.embeds[0].footer.text.split('gamemode: ')[1]
+                try{
+                    mode = message.embeds[0].fields[0].value.split(' | ')[1]
+                } catch(error){
+                    message.embeds[0].footer.text.split('gamemode: ')[1]
+                }
                 ;
                 page = 0
                 if (button == 'BigLeftArrow') {
