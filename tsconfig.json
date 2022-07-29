@@ -4,14 +4,15 @@
       "lib": ["ES2021"],
       "resolveJsonModule": true
     },
-    "include": ["commands/**/*", "configs/**/*", "other/**/*", "test/*"],
-    "files": [
+    "include": ["commands/**/*", "configs/**/*", "other/**/*", "test/*", "*.ts"],
+/*     "files": [
         "main.ts",
         "Moderator.ts",
         "CommandHandler.ts",
         "LinkHandler.ts",
         "SlashCommandHandler.ts",
+        "ButtonHandler.ts",
         "CommandInit.ts",
         "ExEvents.ts",
-    ]
+    ] */
   }

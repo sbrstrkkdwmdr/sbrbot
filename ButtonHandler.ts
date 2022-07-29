@@ -1,3 +1,4 @@
+import fs = require('fs');
 import { ApplicationCommandOptionType, InteractionType } from 'discord.js';
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
     client.on('interactionCreate', interaction => {
@@ -82,6 +83,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 interaction.deferUpdate();
                 break;
         }
+        fs.appendFileSync('logs/totalcommands.txt', 'x')
+
 
 
     })

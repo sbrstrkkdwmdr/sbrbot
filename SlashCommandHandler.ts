@@ -1,3 +1,4 @@
+import fs = require('fs');
 //const { Constants } = require('discord.js');
 const { ApplicationCommandOptionType, InteractionType } = require('discord.js');
 const cmdconfig = require('./configs/commandopts')
@@ -110,6 +111,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 interaction.reply({ content: 'Command not found - no longer exists or is currently being rewritten', ephemeral: true })
                 break;
         }
+        fs.appendFileSync('logs/totalcommands.txt', 'x')
+
     })
 
 }

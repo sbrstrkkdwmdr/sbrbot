@@ -20,16 +20,16 @@ module.exports = {
             let totalusers:any = client.users.cache.size;
             let totalusersnobots:any;
             let totalguilds:any = client.guilds.cache.size;
-            let commandssent:number;
+            let commandssent:any = fs.existsSync('logs/totalcommands.txt') ? fs.readFileSync('logs/totalcommands.txt').length : '0';
 
             message.channel.send({ content: 
-                `Client latency: ${Math.round(client.ws.ping)}ms
-                Message Latency: ${trueping}
-                ${upandtime}
-                Guilds: ${totalguilds}
-                Users: ${totalusers}
-                Commands sent: ${commandssent}
-                `,
+`Client latency: ${Math.round(client.ws.ping)}ms
+Message Latency: ${trueping}
+${upandtime}
+Guilds: ${totalguilds}
+Users: ${totalusers}
+Commands sent: ${commandssent}
+`,
                 allowedMentions: { repliedUser: false } });
 
         }

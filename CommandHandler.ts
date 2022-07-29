@@ -1,3 +1,4 @@
+import fs = require('fs');
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
     const oncooldown = new Set();
 
@@ -155,6 +156,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 break;
         }
+        fs.appendFileSync('logs/totalcommands.txt', 'x')
 
 
     })
