@@ -100,26 +100,11 @@ let cmds = [
         ]
     },
     {
-        name: 'say',
-        description: 'Sends a message',
-        usage: 'sbr-say <message>',
-        slashusage: '/say [channel] [message]',
-        options: [
-            {
-                name: 'message',
-                description: '`string, required`. The message to send'
-            },
-
-            {
-                name: 'channel',
-                description: '`channel, optional`. The channel to send the message to. <#ChannelId>. If omited, sends the message to the current channel'
-            }
-        ]
-    },
-    {
         name: 'stats',
         description: 'Returns the bot statistics',
-        usage: 'sbr-stats'
+        usage: 'sbr-stats',
+        options: []
+
     }
 ]
 
@@ -185,6 +170,23 @@ let othercmds = [
         ]
     },
     {
+        name: 'say',
+        description: 'Sends a message',
+        usage: 'sbr-say <message>',
+        slashusage: '/say [channel] [message]',
+        options: [
+            {
+                name: 'message',
+                description: '`string, required`. The message to send'
+            },
+
+            {
+                name: 'channel',
+                description: '`channel, optional`. The channel to send the message to. <#ChannelId>. If omited, sends the message to the current channel'
+            }
+        ]
+    },
+    {
         name: 'ytsearch',
         description: 'Searches the YouTube API and returns the first five results',
         usage: 'sbr-ytsearch <query>',
@@ -231,6 +233,7 @@ let osucmds = [
     {
         name: 'lb',
         description: 'Retrieves the osu! leaderboard for the server',
+        options: []
     },
     {
         name: 'leaderboard',
@@ -666,4 +669,4 @@ let musiccmds = [
 
 
 //module.exports = { cmds, osucmds, admincmds, links, musiccmds }
-export { cmds, osucmds, admincmds, links, musiccmds }
+export { cmds, othercmds, osucmds, admincmds, links, musiccmds }

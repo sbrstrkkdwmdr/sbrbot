@@ -317,8 +317,8 @@ module.exports = {
                 commandInfo.setTitle("Command info for: " + res.name)
                 commandInfo.setDescription(desc)
 
-            } else if (commandhelp.othercmds.find(obj => obj.name == args[0])) {
-                let res = commandhelp.othercmds.find(obj => obj.name == args[0])
+            } else if (commandhelp.othercmds.find(obj => obj.name == command)) {
+                let res = commandhelp.othercmds.find(obj => obj.name == command)
 
                 let desc = ''
                 desc += res.description + "\n"
