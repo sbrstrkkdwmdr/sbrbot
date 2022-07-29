@@ -63,7 +63,7 @@ module.exports = {
                     return;
                 }
                 fs.writeFileSync('debugosu/link-map.json', JSON.stringify(json, null, 2));
-                fs.writeFileSync(`./configs/prevmap${message.guildId}.json`, JSON.stringify(({ id: json.id }), null, 2));
+                fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: json.id }), null, 2));
 
                 let mapperlink = (`${json.beatmapset.creator}`).replaceAll(' ', '%20');
                 let maphitonly = json.hit_length
@@ -87,7 +87,7 @@ module.exports = {
                 if (mapstatus == "graveyard" || mapstatus == "pending") {
                     statusimg = emojis.rankedstatus.graveyard;
                 }
-                fs.writeFileSync(`./configs/prevmap${message.guildId}.json`, JSON.stringify(({ id: id }), null, 2));
+                fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: id }), null, 2));
 
                 //CALCULATE MODS DETAILES
                 let iftherearemodsasint = JSON.stringify({
@@ -507,7 +507,7 @@ module.exports = {
                     }
                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
 
-                    fs.writeFileSync(`./configs/prevmap.json${message.guildId}`, JSON.stringify(({ id: setdata.beatmaps[setdata.beatmaps.length - 1].id }), null, 2));
+                    fs.writeFileSync(`./debugosu/prevmap.json${message.guildId}`, JSON.stringify(({ id: setdata.beatmaps[setdata.beatmaps.length - 1].id }), null, 2));
 
 
                 }
