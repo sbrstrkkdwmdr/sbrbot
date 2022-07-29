@@ -8,6 +8,34 @@ module.exports = {
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
         if (message != null) {
+            let buttons = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigLeftArrow-lb-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('⬅')
+                    /* .setLabel('Start') */,
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`LeftArrow-lb-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('◀')
+                    /* .setLabel('Previous') */,
+                    /*                 new Discord.ButtonBuilder()
+                                        .setCustomId('Middle-lb')
+                                        .setStyle('Primary')
+                                        .setLabel('🔍')
+                                    , */
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`RightArrow-lb-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('▶')
+                    /* .setLabel('Next') */,
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigRightArrow-lb-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('➡')
+                    /* .setLabel('End') */,
+                );
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - lb (message)\n${currentDate} | ${currentDateISO}\n recieved server leaderboard command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let gamemode = args[0];
             let mode: string = '';
@@ -203,7 +231,34 @@ module.exports = {
 
         if (interaction != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-
+            let buttons = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigLeftArrow-lb-${interaction.member.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('⬅')
+                    /* .setLabel('Start') */,
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`LeftArrow-lb-${interaction.member.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('◀')
+                    /* .setLabel('Previous') */,
+                    /*                 new Discord.ButtonBuilder()
+                                        .setCustomId('Middle-lb')
+                                        .setStyle('Primary')
+                                        .setLabel('🔍')
+                                    , */
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`RightArrow-lb-${interaction.member.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('▶')
+                    /* .setLabel('Next') */,
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigRightArrow-lb-${interaction.member.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('➡')
+                    /* .setLabel('End') */,
+                );
         }
 
         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
