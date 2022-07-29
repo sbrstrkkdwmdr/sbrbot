@@ -2,11 +2,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     const oncooldown = new Set();
 
     client.on('messageCreate', async (message) => {
-
-        if (message.mentions.users.first().id == '777125560869978132' || message.mentions.users.first().id == '755220989494951997') {
-            return message.reply('Prefix is ' + config.prefix)
+        if (message.mentions.users.size > 0) {
+            if (message.mentions.users.first().id == '777125560869978132' || message.mentions.users.first().id == '755220989494951997') {
+                return message.reply({ content: 'Prefix is ' + config.prefix, allowedMentions: { repliedUser: false } })
+            }
         }
-
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
 
@@ -37,54 +37,52 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let interaction = null;
         let button = null;
         switch (command) {
-            case 'ping':
-                client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+            case 'convert':
+                client.commands.get('convert').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'help':
                 client.commands.get('help').execute(message, args, client, Discord, interaction, currentDate, currentDateISO);
                 break;
-            case 'gif':
-                client.commands.get('gif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'image': case 'imagesearch':
-                client.commands.get('image').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'ytsearch': case 'yt':
-                client.commands.get('ytsearch').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
             case 'math':
                 client.commands.get('math').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'convert':
-                client.commands.get('convert').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case '8ball': case 'ask':
-                client.commands.get('8ball').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'roll':
-                client.commands.get('roll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+            case 'ping':
+                client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'remind':
                 client.commands.get('remind').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'say':
-                client.commands.get('say').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'poll': case 'vote':
-                client.commands.get('poll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+            case 'stats':
+                client.commands.get('stats').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'time':
                 client.commands.get('time').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
 
+            case '8ball': case 'ask':
+                client.misccmds.get('8ball').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
             case 'emojify':
-                client.commands.get('emojify').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                client.misccmds.get('emojify').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break
+            case 'gif':
+                client.misccmds.get('gif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'stats':
-                client.commands.get('stats').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+            case 'image': case 'imagesearch':
+                client.misccmds.get('image').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-
-
+            case 'poll': case 'vote':
+                client.misccmds.get('poll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'roll':
+                client.misccmds.get('roll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'say':
+                client.misccmds.get('say').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'ytsearch': case 'yt':
+                client.misccmds.get('ytsearch').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
             //osu commands below
 
             case 'map': case 'm':
