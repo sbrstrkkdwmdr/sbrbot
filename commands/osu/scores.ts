@@ -31,8 +31,11 @@ module.exports = {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - scores (message)\n${currentDate} | ${currentDateISO}\n recieved map scores command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             let id = null
-            if (user == null || user.length == 0) {
-                let findname = await userdata.findOne({ where: { userid: message.author.id } })
+            let searchid = message.author.id
+            if (message.mentions.users.size > 0) {
+                searchid = message.mentions.users.first().id
+            }            if (user.length < 1 || message.mentions.users.size > 0) {
+                let findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname == null) {
                     return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 } else {

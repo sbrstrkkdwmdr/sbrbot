@@ -72,7 +72,7 @@ module.exports = {
 
             let gamemode = null
             if (gamemode == null) {
-                let findname = await userdata.findOne({ where: { userid: message.author.id } })
+                let findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname != null) {
                     gamemode = findname.get('mode');
                 } else {
