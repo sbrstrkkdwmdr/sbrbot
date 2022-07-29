@@ -21,7 +21,9 @@ module.exports = {
                 message.reply({ content: 'added to the database', allowedMentions: { repliedUser: false } })
                 fs.appendFileSync('commands.log', `\nsuccess\n\n`, 'utf-8')
                 fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\n`)
-
+                let endofcommand = new Date().getTime();
+                let timeelapsed = endofcommand - currentDate.getTime();
+                fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
 
             } catch (error) {
                 let affectedRows = await userdata.update({
@@ -31,9 +33,14 @@ module.exports = {
                 if (affectedRows > 0) {
                     fs.appendFileSync('commands.log', `\nsuccess\n\n`, 'utf-8')
                     fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}`)
-
+                    let endofcommand = new Date().getTime();
+                    let timeelapsed = endofcommand - currentDate.getTime();
+                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                     return message.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
                 }
+                let endofcommand = new Date().getTime();
+                let timeelapsed = endofcommand - currentDate.getTime();
+                fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                 return message.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
 
 
@@ -62,7 +69,9 @@ module.exports = {
                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                     fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
-
+                    let endofcommand = new Date().getTime();
+                    let timeelapsed = endofcommand - currentDate.getTime();
+                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                 } catch (error) {
                     let affectedRows = await userdata.update({
                         osuname: username,
@@ -71,9 +80,14 @@ module.exports = {
                     if (affectedRows > 0) {
                         fs.appendFileSync('commands.log', `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
-
+                        let endofcommand = new Date().getTime();
+                        let timeelapsed = endofcommand - currentDate.getTime();
+                        fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                         return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
                     }
+                    let endofcommand = new Date().getTime();
+                    let timeelapsed = endofcommand - currentDate.getTime();
+                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                     return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
                 }
             }
@@ -87,7 +101,9 @@ module.exports = {
                     interaction.reply({ content: 'added to the database', allowedMentions: { repliedUser: false } })
                     fs.appendFileSync('commands.log', `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                     fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
-
+                    let endofcommand = new Date().getTime();
+                    let timeelapsed = endofcommand - currentDate.getTime();
+                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
 
                 } catch (error) {
                     let affectedRows = await userdata.update({
@@ -97,15 +113,20 @@ module.exports = {
                     if (affectedRows > 0) {
                         fs.appendFileSync('commands.log', `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
-
+                        let endofcommand = new Date().getTime();
+                        let timeelapsed = endofcommand - currentDate.getTime();
+                        fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                         return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
                     }
+                    let endofcommand = new Date().getTime();
+                    let timeelapsed = endofcommand - currentDate.getTime();
+                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                     return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
 
 
                 }
             }
-            else if(skin){
+            else if (skin) {
                 try {
                     await userdata.create({
                         userid: interaction.member.user.id,
@@ -116,7 +137,9 @@ module.exports = {
                     interaction.reply({ content: 'added skin to the database', allowedMentions: { repliedUser: false } })
                     fs.appendFileSync('commands.log', `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                     fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
-
+                    let endofcommand = new Date().getTime();
+                    let timeelapsed = endofcommand - currentDate.getTime();
+                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
 
                 } catch (error) {
                     let affectedRows = await userdata.update({
@@ -127,9 +150,14 @@ module.exports = {
                     if (affectedRows > 0) {
                         fs.appendFileSync('commands.log', `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                         fs.appendFileSync('commands.log', `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
-
+                        let endofcommand = new Date().getTime();
+                        let timeelapsed = endofcommand - currentDate.getTime();
+                        fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                         return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
                     }
+                    let endofcommand = new Date().getTime();
+                    let timeelapsed = endofcommand - currentDate.getTime();
+                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                     return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
 
 

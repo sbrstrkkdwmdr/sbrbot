@@ -224,6 +224,9 @@ module.exports = {
                     rtxt += `\n\``
                     serverlb.setDescription(rtxt);
                     message.reply({ content: '⠀', embeds: [serverlb], allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                    let endofcommand = new Date().getTime();
+                    let timeelapsed = endofcommand - currentDate.getTime();
+                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                 }, 2000) //setting the timeout alllows enough time for the array to be sorted
         }
 

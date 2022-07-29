@@ -10,9 +10,9 @@ module.exports = {
     description: 'scoreparse',
     execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO) {
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
-        let scorelink:any;
-        let scoremode:any;
-        let scoreid:any;
+        let scorelink: any;
+        let scoremode: any;
+        let scoreid: any;
         try {
             scorelink = messagenohttp.split('/scores/')[1]
             scoremode = scorelink.split('/')[0]
@@ -98,11 +98,11 @@ module.exports = {
                     }
 
                     let mode = scoredata.mode
-                    let ppfc:any;
-                    let hitlist:any;
-                    let fcacc:any;
-                    let ppiffc:any;
-                    let ppissue:any;
+                    let ppfc: any;
+                    let hitlist: any;
+                    let fcacc: any;
+                    let ppiffc: any;
+                    let ppissue: any;
                     if (mode == 'osu') {
                         ppfc = new ppcalc.std_ppv2().setPerformance(score)
                         hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
@@ -168,7 +168,9 @@ module.exports = {
                         `)
                     message.reply({ embeds: [scoreembed], allowedMentions: { repliedUser: false } })
                     fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
-
+                    let endofcommand = new Date().getTime();
+                    let timeelapsed = endofcommand - currentDate.getTime();
+                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                 })();
             })
     }

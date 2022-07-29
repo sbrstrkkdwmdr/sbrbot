@@ -187,6 +187,9 @@ module.exports = {
                                 allowedMentions: { repliedUser: false }, 
                                 components: [buttons]
                             })
+                            let endofcommand = new Date().getTime();
+                            let timeelapsed = endofcommand - currentDate.getTime();
+                            fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                         })
                 })
         }
@@ -399,6 +402,9 @@ module.exports = {
                                 allowedMentions: { repliedUser: false }, 
                                 components: [buttons]
                             })
+                            let endofcommand = new Date().getTime();
+                            let timeelapsed = endofcommand - currentDate.getTime();
+                            fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                         }
                         })
                 })

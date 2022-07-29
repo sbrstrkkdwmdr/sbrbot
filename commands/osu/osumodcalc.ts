@@ -58,6 +58,9 @@ module.exports = {
             embed.setDescription("**CS:** " + baseCS + "\n**AR:** " + baseAR + "\n**OD:** " + baseOD + "\n**HP:** " + baseHP + "\n**BPM:** " + baseBPM)
             interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
             fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+            let endofcommand = new Date().getTime();
+            let timeelapsed = endofcommand - currentDate.getTime();
+            fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
         }
     }
 }

@@ -17,38 +17,37 @@ module.exports = {
         '⠀⠀`mode`: The mode to display the most recent score of\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
 
-
         if (message != null && button == null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (message)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
             let buttons = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-rs-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('⬅')
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigLeftArrow-rs-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('⬅')
                     /* .setLabel('Start') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-rs-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('◀')
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`LeftArrow-rs-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('◀')
                     /* .setLabel('Previous') */,
-                /*                 new Discord.ButtonBuilder()
-                                    .setCustomId('Middle-rs')
-                                    .setStyle('Primary')
-                                    .setLabel('🔍')
-                                , */
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-rs-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('▶')
+                    /*                 new Discord.ButtonBuilder()
+                                        .setCustomId('Middle-rs')
+                                        .setStyle('Primary')
+                                        .setLabel('🔍')
+                                    , */
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`RightArrow-rs-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('▶')
                     /* .setLabel('Next') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-rs-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('➡')
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigRightArrow-rs-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('➡')
                     /* .setLabel('End') */,
-            );
+                );
 
             let user = args.join(' ');
             let page = 0
@@ -82,7 +81,7 @@ module.exports = {
             } else {
                 mode = 'osu'
             }
-            if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')){
+            if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')) {
                 mode = 'osu'
             }
             const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
@@ -422,6 +421,9 @@ module.exports = {
                                                     }]);
                                             message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons], failIfNotExists: true })
                                             fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                            let endofcommand = new Date().getTime();
+                                            let timeelapsed = endofcommand - currentDate.getTime();
+                                            fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
 
                                             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: rsdata[0].beatmap.id }), null, 2));
                                             fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
@@ -446,41 +448,41 @@ module.exports = {
         }
 
         if (interaction != null) {
-            
+
             let buttons = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-rs-${interaction.user.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('⬅')
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigLeftArrow-rs-${interaction.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('⬅')
                     /* .setLabel('Start') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-rs-${interaction.user.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('◀')
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`LeftArrow-rs-${interaction.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('◀')
                     /* .setLabel('Previous') */,
-                /*                 new Discord.ButtonBuilder()
-                                    .setCustomId('Middle-rs')
-                                    .setStyle('Primary')
-                                    .setLabel('🔍')
-                                , */
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-rs-${interaction.user.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('▶')
+                    /*                 new Discord.ButtonBuilder()
+                                        .setCustomId('Middle-rs')
+                                        .setStyle('Primary')
+                                        .setLabel('🔍')
+                                    , */
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`RightArrow-rs-${interaction.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('▶')
                     /* .setLabel('Next') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-rs-${interaction.user.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('➡')
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigRightArrow-rs-${interaction.user.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('➡')
                     /* .setLabel('End') */,
-            );
-            
+                );
+
             let user;
             let page;
             let mode;
             let list = false;
-            
+
             if (interaction.type == Discord.InteractionType.ApplicationCommand) {
                 fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
                 fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
@@ -549,7 +551,7 @@ module.exports = {
                     }
                 }
             }
-            if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')){
+            if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')) {
                 mode = 'osu'
             }
 
@@ -912,11 +914,17 @@ module.exports = {
                                                     interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
+                                                    let endofcommand = new Date().getTime();
+                                                    let timeelapsed = endofcommand - currentDate.getTime();
+                                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
 
                                                     fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: rsdata[0 + page].beatmap.id }), null, 2));
                                                 } else if (interaction.type == Discord.InteractionType.MessageComponent) {
                                                     message.edit({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                                    let endofcommand = new Date().getTime();
+                                                    let timeelapsed = endofcommand - currentDate.getTime();
+                                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                                                 }
                                             })();
                                         })

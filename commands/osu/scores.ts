@@ -14,17 +14,17 @@ module.exports = {
         '⠀⠀`sort`: string, optional. The sort to display the top plays of. Valid values: `score`, `accuracy`, `pp`, `recent`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         let prevmap: any;
-/*         if (fs.existsSync(`./debugosu/prevmap.json`)) {
-            //console.log('hello there')
-            try {
-                prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap.json`, 'utf8'));
-            } catch {
-                console.log(`no prevmap.json file for server ${message.guildId}\nCreating default file...`)
-                fs.writeFileSync(`./debugosu/prevmap.json`, JSON.stringify(({ id: 32345 }), null, 2));
-            }
-        } else {
-            return console.log('Error - missing prevmap.json in configs folder');
-        } */
+        /*         if (fs.existsSync(`./debugosu/prevmap.json`)) {
+                    //console.log('hello there')
+                    try {
+                        prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap.json`, 'utf8'));
+                    } catch {
+                        console.log(`no prevmap.json file for server ${message.guildId}\nCreating default file...`)
+                        fs.writeFileSync(`./debugosu/prevmap.json`, JSON.stringify(({ id: 32345 }), null, 2));
+                    }
+                } else {
+                    return console.log('Error - missing prevmap.json in configs folder');
+                } */
 
 
         if (message != null) {
@@ -193,6 +193,9 @@ module.exports = {
                                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false }, failIfNotExists: true })
                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                     fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                                    let endofcommand = new Date().getTime();
+                                    let timeelapsed = endofcommand - currentDate.getTime();
+                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
 
                                 })
                         })
@@ -448,6 +451,9 @@ module.exports = {
                                     interaction.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nmap id: ${id}\nsort: ${sort}`)
+                                    let endofcommand = new Date().getTime();
+                                    let timeelapsed = endofcommand - currentDate.getTime();
+                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
 
                                 })
                         })

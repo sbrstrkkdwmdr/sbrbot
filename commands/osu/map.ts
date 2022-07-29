@@ -459,6 +459,9 @@ module.exports = {
                                                         ])
                                                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false }, failIfNotExists: true });
                                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                                    let endofcommand = new Date().getTime();
+                                                    let timeelapsed = endofcommand - currentDate.getTime();
+                                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                                                 })
                                         })();
                                     })
@@ -831,6 +834,9 @@ module.exports = {
                                         message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false }, failIfNotExists: true });
                                         fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                         fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                                        let endofcommand = new Date().getTime();
+                                        let timeelapsed = endofcommand - currentDate.getTime();
+                                        fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                                     })
                             })();
                         })
@@ -1255,6 +1261,9 @@ module.exports = {
                                         interaction.editReply({ content: "⠀", embeds: [Embed], allowedMentions: { repliedUser: false } });
                                         fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                         fs.appendFileSync('commands.log', `\nCommand Information\nmap id: ${mapid}\nmap mods: ${mapmods}\nmode: ${mapmode}`)
+                                        let endofcommand = new Date().getTime();
+                                        let timeelapsed = endofcommand - currentDate.getTime();
+                                        fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                                     })
                             })();
                         })

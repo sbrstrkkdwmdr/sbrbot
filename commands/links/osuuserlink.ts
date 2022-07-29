@@ -113,6 +113,9 @@ module.exports = {
 
                     message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                    let endofcommand = new Date().getTime();
+                    let timeelapsed = endofcommand - currentDate.getTime();
+                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
 
                 } catch (error) {
                     message.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false } })

@@ -28,33 +28,33 @@ module.exports = {
         if (message != null && button == null) {
 
             let buttons = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-leaderboard-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('⬅')
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigLeftArrow-leaderboard-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('⬅')
                     /* .setLabel('Start') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-leaderboard-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('◀')
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`LeftArrow-leaderboard-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('◀')
                     /* .setLabel('Previous') */,
-                /*                 new Discord.ButtonBuilder()
-                                    .setCustomId('Middle-leaderboard')
-                                    .setStyle('Primary')
-                                    .setLabel('🔍')
-                                , */
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-leaderboard-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('▶')
+                    /*                 new Discord.ButtonBuilder()
+                                        .setCustomId('Middle-leaderboard')
+                                        .setStyle('Primary')
+                                        .setLabel('🔍')
+                                    , */
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`RightArrow-leaderboard-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('▶')
                     /* .setLabel('Next') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-leaderboard-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('➡')
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigRightArrow-leaderboard-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('➡')
                     /* .setLabel('End') */,
-            );
+                );
 
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - leaderboard (message)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let mapid = args[0]
@@ -185,6 +185,9 @@ module.exports = {
                             }
                             lbEmbed.setDescription(`${scoretxt}`)
                             message.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons], failIfNotExists: true })
+                            let endofcommand = new Date().getTime();
+                            let timeelapsed = endofcommand - currentDate.getTime();
+                            fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
                         })
 
@@ -503,11 +506,16 @@ module.exports = {
                                     interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
-
+                                    let endofcommand = new Date().getTime();
+                                    let timeelapsed = endofcommand - currentDate.getTime();
+                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                                 } else if (interaction.type == Discord.InteractionType.MessageComponent) {
                                     message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     //message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                    let endofcommand = new Date().getTime();
+                                    let timeelapsed = endofcommand - currentDate.getTime();
+                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                                 }
 
                             }).catch(err => {

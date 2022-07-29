@@ -141,6 +141,9 @@ module.exports = {
                         )
 
                     message.reply({ embeds: [Embed], files: ['./debugosu/replaygraph.jpg'], allowedMentions: { repliedUser: false } })
+                    let endofcommand = new Date().getTime();
+                    let timeelapsed = endofcommand - currentDate.getTime();
+                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                 })
             })
 

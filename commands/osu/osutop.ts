@@ -25,33 +25,33 @@ module.exports = {
         if (message != null && button == null) {
 
             let buttons = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-osutop-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('⬅')
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigLeftArrow-osutop-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('⬅')
                     /* .setLabel('Start') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-osutop-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('◀')
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`LeftArrow-osutop-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('◀')
                     /* .setLabel('Previous') */,
-                /*                 new Discord.ButtonBuilder()
-                                    .setCustomId('Middle-osutop')
-                                    .setStyle('Primary')
-                                    .setLabel('🔍')
-                                , */
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-osutop-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('▶')
+                    /*                 new Discord.ButtonBuilder()
+                                        .setCustomId('Middle-osutop')
+                                        .setStyle('Primary')
+                                        .setLabel('🔍')
+                                    , */
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`RightArrow-osutop-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('▶')
                     /* .setLabel('Next') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-osutop-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('➡')
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigRightArrow-osutop-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('➡')
                     /* .setLabel('End') */,
-            );
+                );
 
 
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (message)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
@@ -79,7 +79,7 @@ module.exports = {
                     gamemode = 'osu'
                 }
             }
-            if (!(gamemode == 'osu' || gamemode == 'taiko' || gamemode == 'fruits' || gamemode == 'mania')){
+            if (!(gamemode == 'osu' || gamemode == 'taiko' || gamemode == 'fruits' || gamemode == 'mania')) {
                 gamemode = 'osu'
             }
             let sort = null
@@ -225,6 +225,9 @@ module.exports = {
                                 message.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons], failIfNotExists: true })
                                 fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                 fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                                let endofcommand = new Date().getTime();
+                                let timeelapsed = endofcommand - currentDate.getTime();
+                                fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
 
                             })
                     } catch (error) {
@@ -386,7 +389,7 @@ module.exports = {
                     gamemode = 'osu'
                 }
             }
-            if (!(gamemode == 'osu' || gamemode == 'taiko' || gamemode == 'fruits' || gamemode == 'mania')){
+            if (!(gamemode == 'osu' || gamemode == 'taiko' || gamemode == 'fruits' || gamemode == 'mania')) {
                 gamemode = 'osu'
             }
             if (page == null || page < 1) {
@@ -703,10 +706,16 @@ module.exports = {
                                     interaction.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
+                                    let endofcommand = new Date().getTime();
+                                    let timeelapsed = endofcommand - currentDate.getTime();
+                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                                 }
                                 else if (interaction.type == Discord.InteractionType.MessageComponent) {
                                     message.edit({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                    let endofcommand = new Date().getTime();
+                                    let timeelapsed = endofcommand - currentDate.getTime();
+                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
                                 }
                             })
                     } catch (error) {
