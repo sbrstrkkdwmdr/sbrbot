@@ -503,8 +503,16 @@ module.exports = {
                 fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
                 fs.appendFileSync('commands.log', `\n${button}`)
 
-                user = message.embeds[0].title.split('most recent play for ')[1]
-                mode = message.embeds[0].fields[0].value.split(' | ')[1];
+                user = 
+                message.embeds[0].title.includes('play for') ?
+                message.embeds[0].title.split('most recent play for ')[1] : 
+                message.embeds[0].title.split('plays for ')[1]
+                
+                mode = 
+                message.embeds[0].fields[0] ?
+                message.embeds[0].fields[0].value.split(' | ')[1] : 
+                message.embeds[0].footer.text.split('gamemode: ')[1]
+                ;
                 page = 0
                 if (button == 'BigLeftArrow') {
                     page = 0
@@ -948,6 +956,7 @@ module.exports = {
                                         } */
                                     }
                                     Embed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 20)}\n` + txt)
+                                    Embed.setFooter({ text: `gamemode: ${rsdata[0].mode}` })
                                     interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                 }
                             } catch (error) {
