@@ -58,7 +58,7 @@ module.exports = {
                 {
                     name: 'Increments',
                     value:
-`\`
+                        `\`
 Y  | yotta | 10^24 | Septillion  | 1,000,000,000,000,000,000,000,000
 Z  | zetta | 10^21 | Sextillion  | 1,000,000,000,000,000,000,000
 E  | exa   | 10^18 | Quintillion | 1,000,000,000,000,000,000
@@ -75,7 +75,7 @@ da | deca  | 10^1  | Ten         | 10
                 {
                     name: 'Decrements',
                     value:
-`\`
+                        `\`
 d | deci  | 10^-1  | Tenth         | 0.1
 c | centi | 10^-2  | Hundredth     | 0.01
 m | milli | 10^-3  | Thousandth    | 0.001
@@ -113,11 +113,11 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
             let eq = `??? type => ??? type`//'num type => num type'
             let formula = 'x'
 
-            if(cat1 == 'help' || cat2 == 'help'){
+            if (cat1 == 'help' || cat2 == 'help') {
                 interaction.reply({ embeds: [EmbedList], allowedMentions: { repliedUser: false } })
                 return;
             }
-            if(cat1 == 'metricprefixes' || cat2 == 'metricprefixes'){
+            if (cat1 == 'metricprefixes' || cat2 == 'metricprefixes') {
                 interaction.reply({ embeds: [siEmbed], allowedMentions: { repliedUser: false } })
                 return;
             }
