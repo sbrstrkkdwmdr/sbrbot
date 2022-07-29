@@ -3,7 +3,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     client.on('messageCreate', async (message) => {
 
-        if(message.mentions.users.first().id == '777125560869978132' || message.mentions.users.first().id == '755220989494951997'){
+        if (message.mentions.users.first().id == '777125560869978132' || message.mentions.users.first().id == '755220989494951997') {
             return message.reply('Prefix is ' + config.prefix)
         }
 
@@ -79,6 +79,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
             case 'emojify':
                 client.commands.get('emojify').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'stats':
+                client.commands.get('stats').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
 
 
