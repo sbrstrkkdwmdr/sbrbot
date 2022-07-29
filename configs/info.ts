@@ -18,7 +18,7 @@ let cmds = [
     {
         name: 'convert',
         description: 'Converts one value to another',
-        usage: 'sbr-convert <type1> <type2> <number>',
+        usage: 'convert <type1> <type2> <number>',
         slashusage: '/convert [type1] [type2] [number]',
         options: [
             {
@@ -38,7 +38,7 @@ let cmds = [
     {
         name: 'help',
         description: 'Returns all commands or information of a specific command',
-        usage: 'sbr-help <command>',
+        usage: 'help <command>',
         slashusage: '/help [command]',
         options: [
             {
@@ -50,12 +50,12 @@ let cmds = [
     {
         name: 'math',
         description: 'Solves a simple math problem',
-        usage: 'sbr-math <problem>',
+        usage: 'math <problem>',
         slashusage: '/math [type] [num1] [num2]',
         options: [
             {
                 name: 'problem',
-                description: '`string, required`. The math equation to solve i.e `sbr-math 1-2+3/4`'
+                description: '`string, required`. The math equation to solve i.e `math 1-2+3/4`'
             },
             {
                 name: 'type',
@@ -75,14 +75,14 @@ let cmds = [
     {
         name: 'ping',
         description: 'Pings the bot and returns the latency',
-        usage: 'sbr-ping',
+        usage: 'ping',
         slashusage: '/ping',
         options: []
     },
     {
         name: 'remind',
         description: 'Sends a reminder to the user',
-        usage: 'sbr-remind <time> <reminder>',
+        usage: 'remind <time> <reminder>',
         slashusage: '/remind [reminder] [time]',
         options: [
             {
@@ -102,7 +102,7 @@ let cmds = [
     {
         name: 'stats',
         description: 'Returns the bot statistics',
-        usage: 'sbr-stats',
+        usage: 'stats',
         options: []
 
     }
@@ -112,7 +112,7 @@ let othercmds = [
     {
         name: '8ball',
         description: 'Responds with a yes or no or maybe answer',
-        usage: 'sbr-8ball',
+        usage: '8ball',
         slashusage: '/8ball',
         options: [],
         aliases: 'ask'
@@ -120,7 +120,7 @@ let othercmds = [
     {
         name: 'gif',
         description: 'Sends a random gif based on the type given',
-        usage: 'sbr-gif <type>',
+        usage: 'gif <type>',
         slashusage: '/gif [type]',
         options: [
             {
@@ -132,7 +132,7 @@ let othercmds = [
     {
         name: 'image',
         description: 'Searches the Google API and returns the first five results',
-        usage: 'sbr-image <query>',
+        usage: 'image <query>',
         slashusage: '/image [query]',
         options: [
             {
@@ -144,7 +144,7 @@ let othercmds = [
     {
         name: 'poll',
         description: 'Creates a poll',
-        usage: 'sbr-poll title',
+        usage: 'poll title',
         slashusage: '/poll [title] [options]',
         options: [
             {
@@ -160,7 +160,7 @@ let othercmds = [
     {
         name: 'roll',
         description: 'Returns between 1-100 or the given number',
-        usage: 'sbr-roll <number>',
+        usage: 'roll <number>',
         slashusage: '/roll [number]',
         options: [
             {
@@ -172,7 +172,7 @@ let othercmds = [
     {
         name: 'say',
         description: 'Sends a message',
-        usage: 'sbr-say <message>',
+        usage: 'say <message>',
         slashusage: '/say [channel] [message]',
         options: [
             {
@@ -189,7 +189,7 @@ let othercmds = [
     {
         name: 'ytsearch',
         description: 'Searches the YouTube API and returns the first five results',
-        usage: 'sbr-ytsearch <query>',
+        usage: 'ytsearch <query>',
         slashusage: '/ytsearch [query]',
         options: [
             {
@@ -205,7 +205,7 @@ let osucmds = [
     {
         name: 'compare',
         description: 'Compares two scores. If options are omitted, then the most recent score will be compared with the user\'s best score on that map',
-        usage: 'sbr-compare',
+        usage: 'compare',
         slashusage: '/compare [score_id_1] [score_id_2]',
         options: [
             {
@@ -222,10 +222,10 @@ let osucmds = [
     {
         name: 'firsts',
         description: 'Retrieves all #1 scores for a player',
-        usage: 'sbr-firsts <user>',
+        usage: 'firsts <user>',
         options: [
             {
-                name: 'user',
+                name: 'user/mention',
                 description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
             }
         ]
@@ -238,7 +238,7 @@ let osucmds = [
     {
         name: 'leaderboard',
         description: 'Retrieves the top 5 plays on a beatmap',
-        usage: 'sbr-leaderboard <id>',
+        usage: 'leaderboard <id>',
         slashusage: '/leaderboard [id] [page] [mods]',
         options: [
             {
@@ -254,12 +254,12 @@ let osucmds = [
                 description: '`string, optional`. Only show plays with these mods. Uses APIv1 so some values may be incorrect'
             }
         ],
-        aliases: 'lb'
+        aliases: 'maplb ,mapleaderboard'
     },
     {
         name: 'map',
         description: 'Retrieves the information of a map',
-        usage: 'sbr-map "title" <id> +<mods>',
+        usage: 'map "title" <id> +<mods>',
         slashusage: '/map [id] [mods] [detailed]',
         options: [
             {
@@ -284,12 +284,12 @@ let osucmds = [
     {
         name: 'osu',
         description: 'Retrieves the information of an osu! profile',
-        usage: 'sbr-osu <username>',
+        usage: 'osu <username>',
         slashusage: '/osu [username] [detailed]',
         options: [
             {
                 name: 'username',
-                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
+                description: '`string/integer/mention, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
             },
             {
                 name: 'detailed',
@@ -301,7 +301,7 @@ let osucmds = [
     {
         name: 'osuset',
         description: 'Sets the user\'s name for osu! commands (bancho only)',
-        /*         usage: 'sbr-osuset <username>', */
+        /*         usage: 'osuset <username>', */
         slashusage: '/osuset [username] [mode]',
         options: [
             {
@@ -317,12 +317,12 @@ let osucmds = [
     {
         name: 'osutop',
         description: 'Retrieves the top 5 plays for the user',
-        usage: 'sbr-osutop <user>',
+        usage: 'osutop <user>',
         slashusage: '/osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [compact]',
         options: [
             {
                 name: 'user',
-                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
+                description: '`string/integer/mention, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
             },
             {
                 name: 'mode',
@@ -362,23 +362,23 @@ let osucmds = [
     {
         name: 'pinned',
         description: 'Retrieves a user\'s pinned scores',
-        usage: 'sbr-pinned <user>',
+        usage: 'pinned <user>',
         options: [
             {
                 name: 'user',
-                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
+                description: '`string/integer/mention, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
             }
         ]
     },
     {
         name: 'rs',
         description: 'Retrieves the most recent score for the user',
-        usage: 'sbr-rs <user>',
+        usage: 'rs <user>',
         slashusage: '/rs [user] [page] [mode] [list]',
         options: [
             {
                 name: 'user',
-                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
+                description: '`string/integer/mention, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
             },
             {
                 name: 'page',
@@ -398,12 +398,12 @@ let osucmds = [
     {
         name: 'scores',
         description: 'Retrieves the user\'s score for a set map',
-        usage: 'sbr-scores <user> <id>',
+        usage: 'scores <user> <id>',
         slashusage: '/scores [user] [id] [sort] [reverse] [compact]',
         options: [
             {
                 name: 'user',
-                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
+                description: '`string/integer/mention, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
             },
             {
                 name: 'id',
@@ -427,7 +427,7 @@ let osucmds = [
     {
         name: 'simulate',
         description: '',
-        usage: 'sbr-simplay <mods> <misses> <accuracy>',
+        usage: 'simplay <mods> <misses> <accuracy>',
         slashusage: '/simplay [id] [mods] [misses] [accuracy]',
         options: [
             {
@@ -452,7 +452,7 @@ let osucmds = [
     {
         name: 'whatif',
         description: 'Returns the pp if x rank or rank if x pp',
-        usage: 'sbr-whatif <value> <type>',
+        usage: 'whatif <value> <type>',
         slashusage: '/whatif [value] [type]',
         options: [
             {
@@ -472,7 +472,7 @@ let admincmds = [
     {
         name: 'checkperms',
         description: 'Retrieves all permissions of the requested user',
-        usage: 'sbr-checkperms <user>',
+        usage: 'checkperms <user>',
         slashusage: '/checkperms [user]',
         options: [
             {
@@ -485,7 +485,7 @@ let admincmds = [
     {
         name: 'find',
         description: 'Returns name from the id given',
-        usage: 'sbr-find <type> <id>',
+        usage: 'find <type> <id>',
         slashusage: '/find [type] [id]',
         options: [
             {
@@ -501,7 +501,7 @@ let admincmds = [
     {
         name: 'leaveguild',
         description: 'Leaves the guild. Requires permissions',
-        usage: 'sbr-leaveguild <id>',
+        usage: 'leaveguild <id>',
         slashusage: '/leaveguild [id]',
         options: [
             {
@@ -514,7 +514,7 @@ let admincmds = [
     {
         name: 'log',
         description: 'Returns the logs for the current guild',
-        usage: 'sbr-log',
+        usage: 'log',
         slashusage: '/log [guildid]',
         options: [
             {
@@ -526,14 +526,14 @@ let admincmds = [
     {
         name: 'servers',
         description: 'Retrieves a list of all servers the bot is in',
-        usage: 'sbr-servers',
+        usage: 'servers',
         slashusage: '/servers',
         options: []
     },
     {
         name: 'voice',
         description: 'Changes voice settings for a user',
-        usage: 'sbr-voice <user> <type> <channel>',
+        usage: 'voice <user> <type> <channel>',
         slashusage: '/voice [user] [type] [channel]',
         options: [
             {
@@ -617,7 +617,7 @@ let musiccmds = [
     {
         name: 'np',
         description: 'Retrieves the current song',
-        usage: 'sbr-np',
+        usage: 'np',
         slashusage: '/np',
         options: [],
         aliases: 'nowplaying'
@@ -625,7 +625,7 @@ let musiccmds = [
     {
         name: 'play',
         description: 'Plays a song',
-        usage: 'sbr-play <url>',
+        usage: 'play <url>',
         slashusage: '/play [url]',
         options: [
             {
@@ -637,7 +637,7 @@ let musiccmds = [
     {
         name: 'queue',
         description: 'Retrieves the current queue',
-        usage: 'sbr-queue',
+        usage: 'queue',
         slashusage: '/queue',
         options: [],
         aliases: 'q'
@@ -645,7 +645,7 @@ let musiccmds = [
     {
         name: 'resume',
         description: 'Resumes the current song',
-        usage: 'sbr-resume',
+        usage: 'resume',
         slashusage: '/resume',
         options: [],
         aliases: 'unpause'
@@ -653,14 +653,14 @@ let musiccmds = [
     {
         name: 'skip',
         description: 'Skips the current song',
-        usage: 'sbr-skip',
+        usage: 'skip',
         slashusage: '/skip',
         options: []
     },
     {
         name: 'stop',
         description: 'Stops the current song',
-        usage: 'sbr-stop',
+        usage: 'stop',
         slashusage: '/stop',
         options: [],
         aliases: 'pause'

@@ -6,8 +6,8 @@ module.exports = {
         'Command: `sbr-help`\n' +
         'Slash command: `/help [command]`\n' +
         'Options:\n' +
-        '⠀⠀`command` - string, optional. The command to get help for. If omitted, all commands will be displayed.\n',
-    execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config) {
+        '`command` - string, optional. The command to get help for. If omitted, all commands will be displayed.\n',
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         let i: number;
         let fullCommandList = new Discord.EmbedBuilder()
             .setColor('#0099ff')
@@ -112,7 +112,7 @@ module.exports = {
                     let desc = ''
                     desc += res.description + "\n"
                     if (res.usage) {
-                        desc += `\nCommand: \`${res.usage}\``
+                        desc += `\nCommand: \`${config.prefix}${res.usage}\``
                     }
                     if (res.slashusage) {
                         desc += `\nSlash Command: \`${res.slashusage}\``
@@ -121,7 +121,7 @@ module.exports = {
                     let opts = res.options
                     let opttxt = '';
                     for (i = 0; i < opts.length; i++) {
-                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                        opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
 
                     }
                     desc += "\n\n" + opttxt
@@ -139,7 +139,7 @@ module.exports = {
                     let desc = ''
                     desc += res.description + "\n"
                     if (res.usage) {
-                        desc += `\nCommand: \`${res.usage}\``
+                        desc += `\nCommand: \`${config.prefix}${res.usage}\``
                     }
                     if (res.slashusage) {
                         desc += `\nSlash Command: \`${res.slashusage}\``
@@ -148,7 +148,7 @@ module.exports = {
                     let opts = res.options
                     let opttxt = '';
                     for (i = 0; i < opts.length; i++) {
-                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                        opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
 
                     }
                     desc += "\n\n" + opttxt
@@ -166,7 +166,7 @@ module.exports = {
                     let desc = ''
                     desc += res.description + "\n"
                     if (res.usage) {
-                        desc += `\nCommand: \`${res.usage}\``
+                        desc += `\nCommand: \`${config.prefix}${res.usage}\``
                     }
                     if (res.slashusage) {
                         desc += `\nSlash Command: \`${res.slashusage}\``
@@ -175,7 +175,7 @@ module.exports = {
                     let opts = res.options
                     let opttxt = '';
                     for (i = 0; i < opts.length; i++) {
-                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                        opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
 
                     }
                     desc += "\n\n" + opttxt
@@ -195,7 +195,7 @@ module.exports = {
                     let desc = ''
                     desc += res.description + "\n"
                     if (res.usage) {
-                        desc += `\nCommand: \`${res.usage}\``
+                        desc += `\nCommand: \`${config.prefix}${res.usage}\``
                     }
                     if (res.slashusage) {
                         desc += `\nSlash Command: \`${res.slashusage}\``
@@ -204,7 +204,7 @@ module.exports = {
                     let opts = res.options
                     let opttxt = '';
                     for (i = 0; i < opts.length; i++) {
-                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                        opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
 
                     }
                     desc += "\n\n" + opttxt
@@ -230,7 +230,7 @@ module.exports = {
                     let opts = res.options
                     let opttxt = '';
                     for (i = 0; i < opts.length; i++) {
-                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                        opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
 
                     }
                     desc += "\n\n" + opttxt
@@ -248,7 +248,7 @@ module.exports = {
                     let desc = ''
                     desc += res.description + "\n"
                     if (res.usage) {
-                        desc += `\nCommand: \`${res.usage}\``
+                        desc += `\nCommand: \`${config.prefix}${res.usage}\``
                     }
                     if (res.slashusage) {
                         desc += `\nSlash Command: \`${res.slashusage}\``
@@ -257,7 +257,7 @@ module.exports = {
                     let opts = res.options
                     let opttxt = '';
                     for (i = 0; i < opts.length; i++) {
-                        opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                        opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
 
                     }
                     desc += "\n\n" + opttxt
@@ -296,7 +296,7 @@ module.exports = {
                 let desc = ''
                 desc += res.description + "\n"
                 if (res.usage) {
-                    desc += `\nCommand: \`${res.usage}\``
+                    desc += `\nCommand: \`${config.prefix}${res.usage}\``
                 }
                 if (res.slashusage) {
                     desc += `\nSlash Command: \`${res.slashusage}\``
@@ -305,7 +305,7 @@ module.exports = {
                 let opts = res.options
                 let opttxt = '';
                 for (i = 0; i < opts.length; i++) {
-                    opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                    opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
 
                 }
                 desc += "\n\n" + opttxt
@@ -323,7 +323,7 @@ module.exports = {
                 let desc = ''
                 desc += res.description + "\n"
                 if (res.usage) {
-                    desc += `\nCommand: \`${res.usage}\``
+                    desc += `\nCommand: \`${config.prefix}${res.usage}\``
                 }
                 if (res.slashusage) {
                     desc += `\nSlash Command: \`${res.slashusage}\``
@@ -332,7 +332,7 @@ module.exports = {
                 let opts = res.options
                 let opttxt = '';
                 for (i = 0; i < opts.length; i++) {
-                    opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                    opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
 
                 }
                 desc += "\n\n" + opttxt
@@ -350,7 +350,7 @@ module.exports = {
                 let desc = ''
                 desc += res.description + "\n"
                 if (res.usage) {
-                    desc += `\nCommand: \`${res.usage}\``
+                    desc += `\nCommand: \`${config.prefix}${res.usage}\``
                 }
                 if (res.slashusage) {
                     desc += `\nSlash Command: \`${res.slashusage}\``
@@ -359,7 +359,7 @@ module.exports = {
                 let opts = res.options
                 let opttxt = '';
                 for (i = 0; i < opts.length; i++) {
-                    opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                    opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
 
                 }
                 desc += "\n\n" + opttxt
@@ -379,7 +379,7 @@ module.exports = {
                 let desc = ''
                 desc += res.description + "\n"
                 if (res.usage) {
-                    desc += `\nCommand: \`${res.usage}\``
+                    desc += `\nCommand: \`${config.prefix}${res.usage}\``
                 }
                 if (res.slashusage) {
                     desc += `\nSlash Command: \`${res.slashusage}\``
@@ -388,7 +388,7 @@ module.exports = {
                 let opts = res.options
                 let opttxt = '';
                 for (i = 0; i < opts.length; i++) {
-                    opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                    opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
 
                 }
                 desc += "\n\n" + opttxt
@@ -414,7 +414,7 @@ module.exports = {
                 let opts = res.options
                 let opttxt = '';
                 for (i = 0; i < opts.length; i++) {
-                    opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                    opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
 
                 }
                 desc += "\n\n" + opttxt
@@ -432,7 +432,7 @@ module.exports = {
                 let desc = ''
                 desc += res.description + "\n"
                 if (res.usage) {
-                    desc += `\nCommand: \`${res.usage}\``
+                    desc += `\nCommand: \`${config.prefix}${res.usage}\``
                 }
                 if (res.slashusage) {
                     desc += `\nSlash Command: \`${res.slashusage}\``
@@ -441,7 +441,7 @@ module.exports = {
                 let opts = res.options
                 let opttxt = '';
                 for (i = 0; i < opts.length; i++) {
-                    opttxt += `\n⠀⠀\`${opts[i].name}\`: ${opts[i].description}`
+                    opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
 
                 }
                 desc += "\n\n" + opttxt
@@ -472,7 +472,7 @@ module.exports = {
         'Command: `sbr-help`\n' +
         'Slash command: `/help [command]`\n' +
         'Options:\n' +
-        '⠀⠀`command` - string, optional. The command to get help for. If omitted, all commands will be displayed.\n',
+        '`command` - string, optional. The command to get help for. If omitted, all commands will be displayed.\n',
     execute(message, client, Discord, interaction, currentDate, currentDateISO, config) {
 
         let fullCommandList = new Discord.EmbedBuilder()
