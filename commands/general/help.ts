@@ -31,7 +31,7 @@ module.exports = {
                 },
                 {
                     name: 'Other/misc commands',
-                    value: "`8ball`,  `gif`, `image`, `poll`, `roll`, `ytsearch`,",
+                    value: "`8ball`,  `gif`, `image`, `poll`, `roll`, `ytsearch`",
                     inline: false
                 },
                 {
