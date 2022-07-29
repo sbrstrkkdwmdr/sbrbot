@@ -92,7 +92,7 @@ module.exports = {
                                     Math.abs(a.created_at.slice(0, 19).replaceAll("-", "").replaceAll("T", "").replaceAll(":", "").replaceAll("+", "")))
                                 sortdata = 'Sorted by: Most recent'
                             } catch (error) {
-                                return message.reply({ content: 'Error - no scores found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                                return message.reply({ content: 'Error - no scores found (map might be unranked)', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                             }
 
 
