@@ -17,7 +17,7 @@ top play tracking</br>
 output mod logs to channels</br>
 whatif x pp score/score simulation</br>
 twitch/yt notifications</br>
-server leaderboard</br>
+[x] server leaderboard</br>
 support for other servers like gatari, ez-pp farm etc.</br>
 music player </br>
 

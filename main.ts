@@ -124,6 +124,7 @@ const userdata = sequelize.define('userdata', {
         defaultValue: 'https://osu.ppy.sh/community/forums/topics/129191',
     }
 })
+
 client.once('ready', () => {
     userdata.sync()
     console.log('Ready!');
