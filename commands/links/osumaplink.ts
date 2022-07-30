@@ -119,7 +119,7 @@ module.exports = {
                         } else {
                             totaldiff = mapattrdata.attributes.star_rating.toFixed(2);
                         }
-                        fs.writeFileSync('debugosu/link-mapattrdata.json', JSON.stringify(mapattrdata, null, 2));
+                        fs.writeFileSync('debugosu/link-map=attr_data.json', JSON.stringify(mapattrdata, null, 2));
 
                         let cs = json.cs
                         let ar = json.ar
@@ -325,8 +325,8 @@ module.exports = {
                                 ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
                                 pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
                                 ppissue = ''
-                                fs.writeFileSync('./debugosu/link-mapppcalc.json', JSON.stringify(ppComputed, null, 2))
-                                fs.writeFileSync('./debugosu/link-mapppcalc95.json', JSON.stringify(pp95Computed, null, 2))
+                                fs.writeFileSync('./debugosu/link-map=pp_calc.json', JSON.stringify(ppComputed, null, 2))
+                                fs.writeFileSync('./debugosu/link-map=pp_calc_95.json', JSON.stringify(pp95Computed, null, 2))
                             } catch (error) {
                                 ppComputedString = NaN
                                 pp95ComputedString = NaN
@@ -436,7 +436,7 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(setdata => {
-                    fs.writeFileSync('debugosu/link-setdata.json', JSON.stringify(setdata, null, 2))
+                    fs.writeFileSync('debugosu/link-map=set_data.json', JSON.stringify(setdata, null, 2))
                     let bid = setdata.beatmaps[0].beatmap_id;
 
                     let mapstatus = (setdata.status)
@@ -505,11 +505,14 @@ module.exports = {
                             seconds = `0${seconds}`
                         }
                         let moddedlength = `${minutes}:${seconds}`
-                        Embed.addField(`${curbm.version}`,
-                            `${mapimg} | ${curbm.difficulty_rating}⭐ \n` +
-                            `CS${curbm.cs} AR${curbm.ar} OD${curbm.accuracy} HP${curbm.drain} \n` +
-                            `${moddedlength}🕐 ${curbm.bpm}BPM⏱ | ${emojis.mapobjs.circle}${curbm.count_circles} ${emojis.mapobjs.slider}${curbm.count_sliders} ${emojis.mapobjs.spinner}${curbm.count_spinners}`,
-                            false)
+                        Embed.addFields([{
+                            name: `${curbm.version}`,
+                            value:
+                                `${mapimg} | ${curbm.difficulty_rating}⭐ \n` +
+                                `CS${curbm.cs} AR${curbm.ar} OD${curbm.accuracy} HP${curbm.drain} \n` +
+                                `${moddedlength}🕐 ${curbm.bpm}BPM⏱ | ${emojis.mapobjs.circle}${curbm.count_circles} ${emojis.mapobjs.slider}${curbm.count_sliders} ${emojis.mapobjs.spinner}${curbm.count_spinners}`,
+                            inline: false
+                        }])
                     }
                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
                     let endofcommand = new Date().getTime();
