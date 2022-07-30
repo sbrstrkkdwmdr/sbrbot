@@ -35,7 +35,6 @@ module.exports = {
                 }
                 mapid = prevmap.id;
             }
-            console.log(mapid)
             let mods = x.includes('+') ? osumodcalc.ModStringToInt(x.split('+')[1].split(' ')[0]) : 0;
             let miss = x.includes('miss') ? x.split('miss=')[1].split(' ')[0] : 0;
             let acc = x.includes('acc') ? x.split('acc=')[1].split(' ')[0] : 100.00;
