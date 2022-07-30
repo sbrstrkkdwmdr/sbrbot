@@ -10,3 +10,5 @@ files/replay.osr
 debug/
 *.bat
 logs/
+files/music/
+files/ffmpegbin

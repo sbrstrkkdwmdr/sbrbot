@@ -67,6 +67,11 @@ if (fs.existsSync('./debug/starttime.txt')) {
 } else {
     fs.writeFileSync('./debug/starttime.txt', (new Date()).toString())
 }
+if (fs.existsSync('./files/ffmpegbin')){
+
+} else {
+    fs.mkdirSync('./files/ffmpegbin')
+}
 console.log('If you don\'t want to set an option, just press enter')
 let bottoken = prompt('Bot Token: ', "null")
 let botprefix = prompt('Bot Prefix: ', "sbr-")
