@@ -27,6 +27,9 @@ Difficulty calculation: [osumodcalc](https://www.npmjs.com/package/osumodcalcula
 Database: [Sequelize](https://www.npmjs.com/package/sequelize)</br>
 Server: </br>
 
+### Issues
+
+
 ## setup
 ### pre requisites
 [Node js v16](https://nodejs.org/en/blog/release/v16.13.0/)</br>
