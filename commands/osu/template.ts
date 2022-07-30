@@ -1,4 +1,8 @@
 import fs = require('fs');
+import osumodcalc = require('osumodcalculator');
+import osuapiext = require('osu-api-extended');
+import { access_token } from '../../configs/osuauth.json';
+import fetch from 'node-fetch';
 module.exports = {
     name: 'template',
     description: 'template text\n' +
