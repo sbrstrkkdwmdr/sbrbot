@@ -318,7 +318,6 @@ module.exports = {
                             let ppissue: any;
                             try {
                                 let ppfr = await osuapiext.tools.pp.calculate(id, osucalc.ModStringToInt(mapmods))
-                                console.log(ppfr)
                                 let ppComputed = await pp.compute();
                                 let pp95Computed = await pp95.compute();
 
