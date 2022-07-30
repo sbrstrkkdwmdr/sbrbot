@@ -14,41 +14,50 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let button = null;
 
         switch (interaction.commandName) {
-            case 'ping':
-                client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
+            case 'convert':
+                client.commands.get('convert').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'help':
-                client.commands.get('help').execute(message, args, client, Discord, interaction, currentDate, currentDateISO)
-                break;
-            case 'gif':
-                client.commands.get('gif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction)
-                break;
-            case 'image':
-                client.commands.get('image').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'ytsearch':
-                client.commands.get('ytsearch').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                client.commands.get('help').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'math':
                 client.commands.get('math').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'convert':
-                client.commands.get('convert').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case '8ball':
-                client.commands.get('8ball').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
-                break;
-            case 'roll':
-                client.commands.get('roll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+            case 'ping':
+                client.commands.get('ping').execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             case 'remind':
                 client.commands.get('remind').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'say':
-                client.commands.get('say').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+            case 'stats':
+                client.commands.get('stats').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
-            case 'poll':
-                client.commands.get('poll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+            case 'time':
+                client.commands.get('time').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case '8ball': case 'ask':
+                client.misccmds.get('8ball').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'emojify':
+                client.misccmds.get('emojify').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break
+            case 'gif':
+                client.misccmds.get('gif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'image': case 'imagesearch':
+                client.misccmds.get('image').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'poll': case 'vote':
+                client.misccmds.get('poll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'roll':
+                client.misccmds.get('roll').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'say':
+                client.misccmds.get('say').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+                break;
+            case 'ytsearch': case 'yt':
+                client.misccmds.get('ytsearch').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
 
             //osu below
