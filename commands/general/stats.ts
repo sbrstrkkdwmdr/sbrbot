@@ -29,6 +29,7 @@ ${upandtime}
 Guilds: ${totalguilds}
 Users: ${totalusers}
 Commands sent: ${commandssent}
+Prefix: ${config.prefix}
 `,
                 allowedMentions: { repliedUser: false } });
 
