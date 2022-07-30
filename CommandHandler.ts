@@ -85,7 +85,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.misccmds.get('ytsearch').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
                 break;
             //osu commands below
-
+            case 'firsts':
+                client.osucmds.get('firsts').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                break;
             case 'map': case 'm':
                 client.osucmds.get('map').execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config);
                 break;
@@ -110,14 +112,14 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'lb':
                 client.osucmds.get('lb').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 break;
+            case 'pinned':
+                client.osucmds.get('pinned').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+                break;
             case 'skin':
                 client.osucmds.get('skin').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 break;
-            case 'firsts':
-                client.osucmds.get('firsts').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                break;
-            case 'pinned':
-                client.osucmds.get('pinned').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
+            case 'simplay':
+                client.osucmds.get('simplay').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 break;
 
             //admincmds below

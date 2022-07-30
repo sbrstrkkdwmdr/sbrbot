@@ -71,21 +71,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.osucmds.get('pinned').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
                 interaction.deferUpdate();
                 break;
-            case 'ifpprank':
-                client.osucmds.get('ifpprank').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                interaction.deferUpdate();
-            case 'compare':
-                client.osucmds.get('compare').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                interaction.deferUpdate();
-                break;
-            case 'simplay':
-                client.osucmds.get('simplay').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                interaction.deferUpdate();
-                break;
-            case 'whatif':
-                client.osucmds.get('whatif').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                interaction.deferUpdate();
-                break;
         }
         fs.appendFileSync('logs/totalcommands.txt', 'x')
 

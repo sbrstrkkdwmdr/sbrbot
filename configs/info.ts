@@ -427,8 +427,8 @@ let osucmds = [
     {
         name: 'simulate',
         description: '',
-        usage: 'simplay <mods> <misses> <accuracy>',
-        slashusage: '/simplay [id] [mods] [misses] [accuracy]',
+        usage: 'simulate <id> +<mods> misses=<misses> acc=<accuracy> acc=<combo>',
+        slashusage: '/simulate [id] [mods] [misses] [accuracy] [combo]',
         options: [
             {
                 name: 'id',
