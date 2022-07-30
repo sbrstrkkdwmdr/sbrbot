@@ -103,7 +103,7 @@ module.exports = {
                     let fulltitle = `${artist} - ${title} [${mapdata.version}]`
 
                     let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}/scores`
-                    fs.writeFileSync('debugosu/command-maplbmap.json', JSON.stringify(mapdata, null, 2))
+                    fs.writeFileSync('debugosu/command-leaderboard=map.json', JSON.stringify(mapdata, null, 2))
 
                     fetch(mapscoresurl, {
                         method: 'GET',
@@ -120,13 +120,13 @@ module.exports = {
                             for (i = 0; i < lbdata.length; i++) {
                                 sctxt += `\nhttps://osu.ppy.sh/scores/${lbdata[i].mode}/${lbdata[i].id}`
                             }
-                            fs.writeFileSync('debugosu/command-maplbscores.txt', sctxt)
+                            fs.writeFileSync('debugosu/command-leaderboard=scores.txt', sctxt)
                             if (args[1] && args[1] == 'links' && lbdata.length > 0) {
-                                message.reply({ files: ['debugosu/command-maplbscores.txt'], allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                                message.reply({ files: ['debugosu/command-leaderboard=scores.txt'], allowedMentions: { repliedUser: false }, failIfNotExists: true })
                                 return;
                             }
 
-                            fs.writeFileSync('debugosu/command-maplb.json', JSON.stringify(lbdata, null, 2))
+                            fs.writeFileSync('debugosu/command-leaderboard.json', JSON.stringify(lbdata, null, 2))
 
                             let lbEmbed = new Discord.EmbedBuilder()
                                 .setTitle(`TOP 5 SCORES FOR ${fulltitle}`)
@@ -329,7 +329,7 @@ module.exports = {
                     }
                     let fulltitle = `${artist} - ${title} [${mapdata.version}]`
 
-                    fs.writeFileSync('debugosu/command-maplbmap.json', JSON.stringify(mapdata, null, 2))
+                    fs.writeFileSync('debugosu/command-leaderboard=map.json', JSON.stringify(mapdata, null, 2))
 
                     if (mods == null) {
                         let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}/scores`
@@ -352,7 +352,7 @@ module.exports = {
                                 for (i = 0; i < lbdata.length; i++) {
                                     sctxt += `\nhttps://osu.ppy.sh/scores/${lbdata[i].mode}/${lbdata[i].id}`
                                 }
-                                fs.writeFileSync('debugosu/command-maplbscores.txt', sctxt)
+                                fs.writeFileSync('debugosu/command-leaderboard=scores.txt', sctxt)
                                 let filtermods = mods
                                 if (mods == '') {
                                     filtermods = 'NM'
@@ -369,7 +369,7 @@ module.exports = {
                                 }
                                 lbdata = filtereddata
 
-                                fs.writeFileSync('debugosu/command-maplb.json', JSON.stringify(lbdata, null, 2))
+                                fs.writeFileSync('debugosu/command-leaderboard.json', JSON.stringify(lbdata, null, 2))
 
                                 let lbEmbed = new Discord.EmbedBuilder()
                                     .setTitle(`TOP 5 SCORES FOR ${fulltitle}`)
@@ -450,7 +450,7 @@ module.exports = {
                             .then(res => res.json() as any)
                             .then(lbdata => {
 
-                                fs.writeFileSync('debugosu/command-maplbapiv1.json', JSON.stringify(lbdata, null, 2))
+                                fs.writeFileSync('debugosu/command-leaderboard=api_v1.json', JSON.stringify(lbdata, null, 2))
                                 let lbEmbed = new Discord.EmbedBuilder()
                                     .setTitle(`TOP 5 SCORES FOR ${fulltitle}`)
                                     .setURL(`https://osu.ppy.sh/b/${mapid}`)

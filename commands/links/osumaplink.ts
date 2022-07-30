@@ -4,6 +4,7 @@ import { access_token } from '../../configs/osuauth.json';
 import ppcalc = require('booba')
 import osucalc = require('osumodcalculator')
 import emojis = require('../../configs/emojis')
+import osuapiext = require('osu-api-extended')
 
 
 module.exports = {
@@ -316,6 +317,8 @@ module.exports = {
                             let pp95ComputedString: any;
                             let ppissue: any;
                             try {
+                                let ppfr = await osuapiext.tools.pp.calculate(id, osucalc.ModStringToInt(mapmods))
+                                console.log(ppfr)
                                 let ppComputed = await pp.compute();
                                 let pp95Computed = await pp95.compute();
 

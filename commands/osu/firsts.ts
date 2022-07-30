@@ -83,7 +83,7 @@ module.exports = {
                     if (!userid) {
                         return message.channel.send('Error - no user found')
                     };
-                    fs.writeFileSync('debugosu/command-firstscoreusername.json', JSON.stringify(osudata, null, 2), 'utf-8')
+                    fs.writeFileSync('debugosu/command-firsts=scores_username.json', JSON.stringify(osudata, null, 2), 'utf-8')
 
                     let userfirstsurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/firsts?mode=${mode}&limit=100`
                     fetch(userfirstsurl, {
@@ -92,7 +92,7 @@ module.exports = {
                         }
                     }).then(res => res.json() as any)
                         .then(firstscoresdata => {
-                            fs.writeFileSync('debugosu/command-firstscores.json', JSON.stringify(firstscoresdata, null, 2), 'utf-8')
+                            fs.writeFileSync('debugosu/command-firsts=scores.json', JSON.stringify(firstscoresdata, null, 2), 'utf-8')
 
                             let firstsEmbed = new Discord.EmbedBuilder()
                                 .setTitle(`#1 Scores for ${osudata.username}`)
@@ -298,7 +298,7 @@ module.exports = {
                     if (!userid) {
                         return message.channel.send('Error - no user found')
                     };
-                    fs.writeFileSync('debugosu/command-firstscoresusername.json', JSON.stringify(osudata, null, 2), 'utf-8')
+                    fs.writeFileSync('debugosu/command-firsts=scores_username.json', JSON.stringify(osudata, null, 2), 'utf-8')
                     let userfirstsurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/firsts?mode=${mode}&limit=100`
                     fetch(userfirstsurl, {
                         headers: {
@@ -306,7 +306,7 @@ module.exports = {
                         }
                     }).then(res => res.json() as any)
                         .then(firstscoresdata => {
-                            fs.writeFileSync('debugosu/command-firstscores.json', JSON.stringify(firstscoresdata, null, 2), 'utf-8')
+                            fs.writeFileSync('debugosu/command-firsts=scores.json', JSON.stringify(firstscoresdata, null, 2), 'utf-8')
                             let firstsEmbed = new Discord.EmbedBuilder()
                                 .setTitle(`#1 Scores for ${osudata.username}`)
                                 .setURL(`https://osu.ppy.sh/u/${userid}`)

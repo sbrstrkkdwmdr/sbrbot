@@ -142,7 +142,7 @@ module.exports = {
                         } else {
                         }
                     })();
-                    fs.writeFileSync('debugosu/command-rsname.json', JSON.stringify(osudata, null, 2))
+                    fs.writeFileSync('debugosu/command-rs=name.json', JSON.stringify(osudata, null, 2))
 
                     const recentplayurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/recent?include_fails=1&mode=${mode}&limit=100&offset=${page}`
                     fetch(recentplayurl, {
@@ -253,7 +253,7 @@ module.exports = {
 
                                 }).then(res => res.json() as any)
                                     .then(mapattrdata => {
-                                        fs.writeFileSync('debugosu/command-rsattrdata.json', JSON.stringify(mapattrdata, null, 2));
+                                        fs.writeFileSync('debugosu/command-rs=attr_data.json', JSON.stringify(mapattrdata, null, 2));
                                         let totaldiff = mapattrdata.attributes.star_rating
                                         if (totaldiff == null || totaldiff == undefined || totaldiff == NaN) {
                                             totaldiff = rsdata[0].beatmap.difficulty_rating;
@@ -341,7 +341,7 @@ module.exports = {
                                                 let ppfcd = await ppfc.compute()
 
                                                 ppiffc = ppfcd.total.toFixed(2)
-                                                fs.writeFileSync(`debugosu/command-rspp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
+                                                fs.writeFileSync(`debugosu/command-rs=pp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
 
                                                 if (rspp == null) {
                                                     rspp = ppc.total.toFixed(2)
@@ -639,7 +639,7 @@ module.exports = {
                         } else {
                         }
                     })();
-                    fs.writeFileSync('debugosu/command-rsname.json', JSON.stringify(osudata, null, 2))
+                    fs.writeFileSync('debugosu/command-rs=name.json', JSON.stringify(osudata, null, 2))
 
                     const recentplayurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/recent?include_fails=1&mode=${mode}&limit=100&offset=0`
                     fetch(recentplayurl, {
@@ -754,7 +754,7 @@ module.exports = {
 
                                     }).then(res => res.json() as any)
                                         .then(mapattrdata => {
-                                            fs.writeFileSync('debugosu/command-rsattrdata.json', JSON.stringify(mapattrdata, null, 2));
+                                            fs.writeFileSync('debugosu/command-rs=attr_data.json', JSON.stringify(mapattrdata, null, 2));
                                             let totaldiff: string;
                                             if (mapattrdata.error) {
                                                 totaldiff = rsdata[0 + page].beatmap.difficulty_rating;
@@ -841,7 +841,7 @@ module.exports = {
                                                     let ppfcd = await ppfc.compute()
 
                                                     ppiffc = ppfcd.total.toFixed(2)
-                                                    fs.writeFileSync(`debugosu/command-rspp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
+                                                    fs.writeFileSync(`debugosu/command-rs=pp.json`, `[\n${JSON.stringify(ppc, null, 2)},\n ${JSON.stringify(ppfcd, null, 2)}\n]`)
                                                     if (rspp == null) {
                                                         rspp = ppc.total.toFixed(2)
                                                     } else {

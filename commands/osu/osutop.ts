@@ -100,7 +100,7 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(osudata => {
-                    fs.writeFileSync('debugosu/command-osutopname.json', JSON.stringify(osudata, null, 2))
+                    fs.writeFileSync('debugosu/command-otop=name.json', JSON.stringify(osudata, null, 2))
                     try {
                         (async () => {
                             let findname;
@@ -125,7 +125,7 @@ module.exports = {
                             }
                         }).then(res => res.json() as any)
                             .then(osutopdata => {
-                                fs.writeFileSync('debugosu/command-osutop.json', JSON.stringify(osutopdata, null, 2))
+                                fs.writeFileSync('debugosu/command-otop.json', JSON.stringify(osutopdata, null, 2))
                                 try {
                                     let usernametesting = osutopdata[0].user.username
                                 } catch (error) {
@@ -416,7 +416,7 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(osudata => {
-                    fs.writeFileSync('debugosu/command-osutopname.json', JSON.stringify(osudata, null, 2))
+                    fs.writeFileSync('debugosu/command-otop=name.json', JSON.stringify(osudata, null, 2))
                     try {
                         (async () => {
                             let findname;
@@ -441,7 +441,7 @@ module.exports = {
                             }
                         }).then(res => res.json() as any)
                             .then(osutopdataPreSort => {
-                                fs.writeFileSync('debugosu/command-osutop.json', JSON.stringify(osutopdataPreSort, null, 2))
+                                fs.writeFileSync('debugosu/command-otop.json', JSON.stringify(osutopdataPreSort, null, 2))
                                 try {
                                     let usernametesting = osutopdataPreSort[0].user.username
                                 } catch (error) {
