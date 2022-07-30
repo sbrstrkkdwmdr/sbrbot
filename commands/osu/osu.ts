@@ -43,7 +43,7 @@ module.exports = {
             } else {
                 mode = 'osu'
             }
-            if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')){
+            if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')) {
                 mode = 'osu'
             }
             const userurl = `https://osu.ppy.sh/api/v2/users/${user}/${mode}`
@@ -246,7 +246,7 @@ module.exports = {
             } else {
                 mode = 'osu'
             }
-            if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')){
+            if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')) {
                 mode = 'osu'
             }
             //interaction.reply('Searching for ' + user + '...')
@@ -433,13 +433,15 @@ module.exports = {
                                 }])
                             let mode = osudata.playmode
                             //chart creation
-                            let data = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
+                            let dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
 
-                            const chart = new chartjsimg()
+                            let datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
+
+                            const chartplay = new chartjsimg()
                                 .setConfig({
                                     type: 'line',
                                     data: {
-                                        labels: data,
+                                        labels: dataplay,
                                         datasets: [{
                                             label: 'Monthly Playcount',
                                             data: osudata.monthly_playcounts.map(x => x.count),
@@ -447,80 +449,128 @@ module.exports = {
                                             borderColor: 'rgb(75, 192, 192)',
                                             borderWidth: 1,
                                             pointRadius: 0
-                                        }]
+                                        },
+                                        ]
                                     }
                                 })
-                            chart.setBackgroundColor('color: rgb(0,0,0)')
-                            chart.toFile('./debugosu/playergraph.jpg').then(() => {
-
-                                let usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
-                                fetch(usertopurl, {
-                                    headers: {
-                                        Authorization: `Bearer ${access_token}`
+                            const chartrank = new chartjsimg()
+                                .setConfig({
+                                    type: 'line',
+                                    data: {
+                                        labels: datarank,
+                                        datasets: [{
+                                            label: 'Rank History',
+                                            data: osudata.rank_history.data,
+                                            fill: false,
+                                            borderColor: 'rgb(75, 192, 192)',
+                                            borderWidth: 1,
+                                            pointRadius: 0
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            xAxes: [
+                                                {
+                                                    display: false
+                                                }
+                                            ],
+                                            yAxes: [
+                                                {
+                                                    display: true,
+                                                    type: 'linear',
+                                                    ticks: {
+                                                        reverse: true,
+                                                        beginAtZero: false
+                                                    },
+                                                }
+                                            ]
+                                        }
                                     }
-                                }).then(res => res.json() as any)
-                                    .then(osutopdata => {
-                                        let mostplayedurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/beatmapsets/most_played`
-                                        fetch(mostplayedurl, {
-                                            headers: {
-                                                Authorization: `Bearer ${access_token}`
-                                            }
-                                        }).then(res => res.json() as any)
-                                            .then(mostplayeddata => {
-                                                let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                                let maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
-                                                let minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
-                                                let avgpp;
-                                                let totalpp = 0;
-                                                for (let i2 = 0; i2 < osutopdata.length; i2++) {
-                                                    totalpp += osutopdata[i2].pp
-                                                }
-                                                avgpp = (totalpp / osutopdata.length).toFixed(2)
+                                })
+                                ;
+                            chartplay.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(450)
+                            chartrank.setBackgroundColor('color: rgb(0,0,0)').setWidth(1500).setHeight(600)
+                            chartrank.getShortUrl();
+                            (async () => {
+                                let ChartsEmbedRank = new Discord.EmbedBuilder()
+                                    .setDescription('Click on the image to see the full chart')
+                                    .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
+                                    .setImage(`${await chartrank.getShortUrl()}`);
 
-                                                let mostplaytxt = ``
-                                                for (let i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
-                                                    let bmpc = mostplayeddata[i2]
-                                                    mostplaytxt += `[${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id}) | ${bmpc.count} plays\n`
-                                                }
-                                                if (mostplaytxt != ``) {
-                                                    Embed.addFields([{
-                                                        name: 'Most Played Beatmaps',
-                                                        value: mostplaytxt,
-                                                        inline: false
-                                                    }]
-                                                    )
-                                                }
+                                let ChartsEmbedPlay = new Discord.EmbedBuilder()
+                                    .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
+                                    .setImage(`${await chartplay.getShortUrl()}`);
+                                chartrank.toFile('./debugosu/playerrankgraph.jpg')
+                                chartplay.toFile('./debugosu/playerplaygraph.jpg').then(() => {
 
-                                                Embed.addFields([
-                                                    {
-                                                        name: 'TOP PLAY',
-                                                        value:
-                                                            `**Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
+                                    let usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
+                                    fetch(usertopurl, {
+                                        headers: {
+                                            Authorization: `Bearer ${access_token}`
+                                        }
+                                    }).then(res => res.json() as any)
+                                        .then(osutopdata => {
+                                            let mostplayedurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/beatmapsets/most_played`
+                                            fetch(mostplayedurl, {
+                                                headers: {
+                                                    Authorization: `Bearer ${access_token}`
+                                                }
+                                            }).then(res => res.json() as any)
+                                                .then(mostplayeddata => {
+                                                    let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                    let maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
+                                                    let minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
+                                                    let avgpp;
+                                                    let totalpp = 0;
+                                                    for (let i2 = 0; i2 < osutopdata.length; i2++) {
+                                                        totalpp += osutopdata[i2].pp
+                                                    }
+                                                    avgpp = (totalpp / osutopdata.length).toFixed(2)
+
+                                                    let mostplaytxt = ``
+                                                    for (let i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
+                                                        let bmpc = mostplayeddata[i2]
+                                                        mostplaytxt += `[${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id}) | ${bmpc.count} plays\n`
+                                                    }
+                                                    if (mostplaytxt != ``) {
+                                                        Embed.addFields([{
+                                                            name: 'Most Played Beatmaps',
+                                                            value: mostplaytxt,
+                                                            inline: false
+                                                        }]
+                                                        )
+                                                    }
+
+                                                    Embed.addFields([
+                                                        {
+                                                            name: 'TOP PLAY',
+                                                            value:
+                                                                `**Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
                                                     **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
                                                     **Gamemode:** ${mode}
                                                     **Highest combo:** ${highestcombo}`,
-                                                        inline: true
-                                                    },
-                                                    {
-                                                        name: 'INFO',
-                                                        value: `**Highest pp:** ${maxpp}
+                                                            inline: true
+                                                        },
+                                                        {
+                                                            name: 'INFO',
+                                                            value: `**Highest pp:** ${maxpp}
                                                     **Lowest pp:** ${minpp}
                                                     **Average pp:** ${avgpp}
                                                     **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
                                                     **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%`,
-                                                        inline: true
-                                                    }])
+                                                            inline: true
+                                                        }])
+                                                    interaction.editReply({ content: '⠀', embeds: [Embed, ChartsEmbedRank, ChartsEmbedPlay], allowedMentions: { repliedUser: false }, /* files: ['./debugosu/playerplaygraph.jpg', './debugosu/playerrankgraph.jpg'] */ })
 
-                                                interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, files: ['./debugosu/playergraph.jpg'] })
-
-                                            })
-
+                                                })
 
 
 
-                                    })
-                            })
-                        } else {
+
+                                        })
+                                })
+                            })();
+                        } else { // not detailed
                             Embed.setDescription(`
                     **Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)\n
                     **pp:** ${osustats.pp}
@@ -544,7 +594,8 @@ module.exports = {
                         fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
 
                     } catch (error) {
-                        interaction.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false } })
+                        //console.log(error)
+                        //interaction.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false } })
                         fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
                         let endofcommand = new Date().getTime();
                         let timeelapsed = endofcommand - currentDate.getTime();
