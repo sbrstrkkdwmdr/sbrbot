@@ -40,30 +40,6 @@ module.exports = {
 
                     let playerlasttoint:any = new Date(osudata.last_visit)
 
-                    let currenttime:any = new Date()
-
-                    let minsincelastvis = (playerlasttoint - currenttime) / (1000 * 60);
-                    let minlastvis:any = Math.abs(minsincelastvis).toFixed(0);
-
-                    let lastvishours = (Math.trunc(minlastvis / 60)) % 24;
-                    let lastvisminutes = minlastvis % 60;
-                    let lastvisdays = Math.trunc((minlastvis / 60) / 24) % 30;
-                    let lastvismonths = Math.trunc(minlastvis / 60 / 24 / 30.437) % 12;
-                    let lastvisyears = Math.trunc(minlastvis / 525600); //(60/24/30/12)
-                    let minlastvisredo = (lastvisyears + "y " + lastvismonths + "m " + lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
-                    if (lastvisyears < 1) {
-                        minlastvisredo = (lastvismonths + "m " + lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
-                    } //check if under an year
-                    if (lastvismonths < 1) {
-                        minlastvisredo = (lastvisdays + "d | " + lastvishours + "h " + lastvisminutes + "m");
-                    } //check if under an month
-                    if (lastvisdays < 1) {
-                        minlastvisredo = (lastvishours + "h " + lastvisminutes + "m");
-                    } //check if under an day
-                    if (lastvishours < 1) {
-                        minlastvisredo = (lastvisminutes + "m");
-                    } //check if under an hour
-
                     let online = osudata.is_online;
 
                     let isonline = `**${emojis.onlinestatus.offline} Offline**`
@@ -72,7 +48,7 @@ module.exports = {
                         isonline = `**${emojis.onlinestatus.online} Online**`
                     }
                     else {
-                        isonline = `**${emojis.onlinestatus.offline} Offline** | Last online ${minlastvisredo} ago`
+                        isonline = `**${emojis.onlinestatus.offline} Offline** | Last online <t:${playerlasttoint.getTime() / 1000}:R>`
                     }
 
                     let prevnames = osudata.previous_usernames;
@@ -105,7 +81,7 @@ module.exports = {
                 **Level:** ${osustats.level.current}.${osustats.level.progress}
                 ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
                 
-                **Player joined on** ${osudata.join_date.toString().slice(0, 10)}
+                **Player joined** <t:${new Date(osudata.join_date).getTime() / 1000}:R>
                 **Followers:** ${osudata.follower_count}
                 ${prevnameslist}
                 ${isonline}

@@ -186,8 +186,8 @@ module.exports = {
 
                                             scoretxt +=
                                                 `-
-                                                **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id})** ${ifmods} | ${score.created_at.toString()}
-                                                ${(score.accuracy * 100).toFixed(2)} | ${grade} | ${score.pp.toFixed(2)}pp
+                                                **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id})** ${ifmods} | <t:${new Date(score.created_at).getTime() / 1000}:R>
+                                                ${(score.accuracy * 100).toFixed(2)}% | ${grade} | ${score.pp.toFixed(2)}pp
                                                 \`${hitlist}\` | ${score.max_combo}x/**${mapdata.max_combo}x**\n`
 
                                         }
@@ -444,7 +444,7 @@ module.exports = {
                                             else {
                                                 scoretxt +=
                                                     `-
-                                                **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id})** ${ifmods} | ${score.created_at.toString()}
+                                                **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id})** ${ifmods} | <t:${new Date(score.created_at).getTime() / 1000}:R>
                                                 ${(score.accuracy * 100).toFixed(2)}% | ${grade} | ${score.pp}pp
                                                 \`${hitlist}\` | ${score.max_combo}x/**${mapdata.max_combo}x**\n`
                                             }

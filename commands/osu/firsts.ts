@@ -173,8 +173,8 @@ module.exports = {
                                     name: `#${i + 1}`,
                                     value: `
                                     [${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id})
-                                    **Score set on** ${curscore.created_at.toString().slice(0, 19).replace('T', ' ')}
-                                    ${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${(curscore.accuracy * 100).toFixed(2)} | ${grade}
+                                    **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
+                                    ${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
                                     \`${hitlist}\`
                                     ${curscore.pp}pp
                                     `,
@@ -385,7 +385,7 @@ module.exports = {
                                     name: `#${i + 1 + (page * 5)}`,
                                     value: `
                                     [${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id})
-                                    **Score set on** ${curscore.created_at.toString().slice(0, 19).replace('T', ' ')}
+                                    **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
                                     ${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
                                     \`${hitlist}\`
                                     ${curscore.pp}pp

@@ -170,7 +170,7 @@ module.exports = {
 
                                 scoretxt += `
                                    **[Score #${i + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id}) | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
-                                   Score set on ${score.created_at}
+                                   Score set <t:${new Date(score.created_at).getTime() / 1000}:R>
                                    ${(score.accuracy * 100).toFixed(2)}% | ${score.rank} | ${score.pp}pp
                                    ${ifmods} ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
                                    ${hitlist}
@@ -417,7 +417,7 @@ module.exports = {
 
                                         scoretxt += `
                                    **[Score #${i + (page * 5) + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id}) | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
-                                   Score set on ${score.created_at}
+                                   Score set <t:${new Date(score.created_at).getTime() / 1000}:R>
                                    ${(score.accuracy * 100).toFixed(2)}% | ${score.rank} | ${score.pp}pp
                                    ${ifmods} ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
                                    ${hitlist}

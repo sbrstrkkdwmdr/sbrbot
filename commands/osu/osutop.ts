@@ -155,7 +155,6 @@ module.exports = {
                                     let hit50 = osutopdata[scoreoffset].statistics.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                     let miss = osutopdata[scoreoffset].statistics.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                     let combo = osutopdata[scoreoffset].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                    let maptimeset = osutopdata[scoreoffset].created_at.toString().slice(0, 19).replace("T", " ")
 
                                     let ranking = osutopdata[scoreoffset].rank.toUpperCase()
                                     let grade: any;
@@ -214,7 +213,7 @@ module.exports = {
                                         name: `#${scoreoffset + 1}`,
                                         value: `
                                 [**${osutopdata[scoreoffset].beatmapset.title} [${osutopdata[scoreoffset].beatmap.version}]**](https://osu.ppy.sh/b/${osutopdata[scoreoffset].beatmap.id}) ${ifmods}
-                                **Score set on** ${maptimeset}
+                                **Score set ** <t:${new Date(osutopdata[scoreoffset].created_at).getTime() / 1000}:R>
                                 **SCORE:** ${score} | x${combo} | ${Math.abs(osutopdata[scoreoffset].accuracy * 100).toFixed(2)}% | ${grade}
                                 \`${hitlist}\`
                                 ${(osutopdata[scoreoffset].pp).toFixed(2)}pp | ${(osutopdata[scoreoffset].weight.pp).toFixed(2)}pp (Weighted at **${(osutopdata[scoreoffset].weight.percentage).toFixed(2)}%**)
@@ -555,7 +554,6 @@ module.exports = {
                                         let hit50 = osutopdata[scoreoffset].statistics.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                         let miss = osutopdata[scoreoffset].statistics.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                         let combo = osutopdata[scoreoffset].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                        let maptimeset = osutopdata[scoreoffset].created_at.toString().slice(0, 19).replace("T", " ")
 
                                         let ranking = osutopdata[scoreoffset].rank.toUpperCase()
                                         let grade: any;
@@ -622,7 +620,7 @@ module.exports = {
                                             name: `#${scorenum}`,
                                             value: `
                                             [**${osutopdata[scoreoffset].beatmapset.title} [${osutopdata[scoreoffset].beatmap.version}]**](https://osu.ppy.sh/b/${osutopdata[scoreoffset].beatmap.id}) ${ifmods}
-                                            **Score set on** ${maptimeset}
+                                            **Score set ** <t:${new Date(osutopdata[scoreoffset].created_at).getTime() / 1000}:R>
                                             **SCORE:** ${score} | x${combo} | ${Math.abs(osutopdata[scoreoffset].accuracy * 100).toFixed(2)}% | ${grade}
                                             \`${hitlist}\`
                                             ${(osutopdata[scoreoffset].pp).toFixed(2)}pp | ${(osutopdata[scoreoffset].weight.pp).toFixed(2)}pp (Weighted at **${(osutopdata[scoreoffset].weight.percentage).toFixed(2)}%**)

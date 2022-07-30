@@ -387,20 +387,11 @@ module.exports = {
                                                 trycountstr = `try #${trycount}`
                                             }
 
-                                            let scoretimestampdate: any = new Date((rsdata[0].created_at).toString().slice(0, -6) + "Z")
-                                            let curtime: any = new Date()
-                                            let minsincelastvis: any = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
-                                            let lastvismin = minsincelastvis % 60
-                                            let lastvishour = Math.trunc(minsincelastvis / 60) % 24
-                                            let timeago = `${lastvishour}h ${lastvismin}m`
-
-
-
                                             let Embed = new Discord.EmbedBuilder()
                                                 .setColor(0x9AAAC0)
                                                 .setTitle(`#1 most recent play for ${rsdata[0].user.username}`)
                                                 .setURL(`https://osu.ppy.sh/scores/${rsdata[0].mode}/${rsdata[0].id}`)
-                                                .setAuthor({ name: `${timeago} Ago on ${rsdata[0].created_at.substring(0, rsdata[0].created_at.length - 6).replace('T', ' ')} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
+                                                .setAuthor({ name: `<t:${new Date(rsdata[0 + page].created_at).getTime() / 1000}:R> ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
                                                 .setThumbnail(`${rsdata[0].beatmapset.covers.list}`)
                                                 .addFields([
                                                     {
@@ -503,13 +494,13 @@ module.exports = {
                 fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
                 fs.appendFileSync('commands.log', `\n${button}`)
 
-                user = 
-                message.embeds[0].title.includes('play for') ?
-                message.embeds[0].title.split('most recent play for ')[1] : 
-                message.embeds[0].title.split('plays for ')[1]
-                try{
+                user =
+                    message.embeds[0].title.includes('play for') ?
+                        message.embeds[0].title.split('most recent play for ')[1] :
+                        message.embeds[0].title.split('plays for ')[1]
+                try {
                     mode = message.embeds[0].fields[0].value.split(' | ')[1]
-                } catch(error){
+                } catch (error) {
                     message.embeds[0].footer.text.split('gamemode: ')[1]
                 }
                 ;
@@ -885,20 +876,11 @@ module.exports = {
                                                     trycountstr = `try #${trycount}`
                                                 }
 
-                                                let scoretimestampdate: any = new Date((rsdata[0 + page].created_at).toString().slice(0, -6) + "Z")
-                                                let curtime: any = new Date()
-                                                let minsincelastvis: any = Math.abs((scoretimestampdate - curtime) / (1000 * 60)).toFixed(0)
-                                                let lastvismin = minsincelastvis % 60
-                                                let lastvishour = Math.trunc(minsincelastvis / 60) % 24
-                                                let timeago = `${lastvishour}h ${lastvismin}m`
-
-
-
                                                 let Embed = new Discord.EmbedBuilder()
                                                     .setColor(0x9AAAC0)
                                                     .setTitle(`#${page + 1} most recent play for ${rsdata[0 + page].user.username}`)
                                                     .setURL(`https://osu.ppy.sh/scores/${rsdata[0 + page].mode}/${rsdata[0 + page].id}`)
-                                                    .setAuthor({ name: `${timeago} Ago on ${rsdata[0 + page].created_at.substring(0, rsdata[0 + page].created_at.length - 6).replace('T', ' ')} ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
+                                                    .setAuthor({ name: `<t:${new Date(rsdata[0 + page].created_at).getTime() / 1000}:R> ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
                                                     .setThumbnail(`${rsdata[0 + page].beatmapset.covers.list}`)
                                                     .addFields([
                                                         {
