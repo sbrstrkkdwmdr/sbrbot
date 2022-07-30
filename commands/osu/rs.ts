@@ -641,7 +641,7 @@ module.exports = {
                     })();
                     fs.writeFileSync('debugosu/command-rsname.json', JSON.stringify(osudata, null, 2))
 
-                    const recentplayurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/recent?include_fails=1&mode=${mode}&limit=100&offset=${page}`
+                    const recentplayurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/recent?include_fails=1&mode=${mode}&limit=100&offset=0`
                     fetch(recentplayurl, {
                         headers: {
                             'Authorization': `Bearer ${access_token}`
@@ -908,7 +908,7 @@ module.exports = {
                                                         },
                                                         {
                                                             name: 'SCORE DETAILS',
-                                                            value: `${(rsdata[0].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
+                                                            value: `${(rsdata[0 + page].accuracy * 100).toFixed(2)}% | ${rsgrade}\n` +
                                                                 `${rspassinfo}\n${hitlist}\n${rsdata[0 + page].max_combo}x combo`,
                                                             inline: true
                                                         },
