@@ -48,18 +48,18 @@ module.exports = {
                     console.log(err)
                     return
                 }
-                let mapbg:any;
-                let mapcombo:string|number;
-                let fulltitle:string;
-                let mapdataid:string;
+                let mapbg: any;
+                let mapcombo: string | number;
+                let fulltitle: string;
+                let mapdataid: string;
                 try {
                     mapbg = mapdata.beatmapset.covers['list@2x']
                     fulltitle = `${mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist}`
-                    fulltitle +=` - ${mapdata.beatmapset.title != mapdata.beatmapset.title_unicode ? `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})` : mapdata.beatmapset.title}`
-                    + ` [${mapdata.version}]`
+                    fulltitle += ` - ${mapdata.beatmapset.title != mapdata.beatmapset.title_unicode ? `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})` : mapdata.beatmapset.title}`
+                        + ` [${mapdata.version}]`
                     mapcombo = mapdata.max_combo ? mapdata.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : NaN
                     mapdataid = 'https://osu.ppy.sh/b/' + mapdata.id
-                } catch (error){
+                } catch (error) {
                     fulltitle = 'Unknown/unavailable map'
                     mapbg = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
                     mapcombo = NaN
@@ -124,26 +124,47 @@ module.exports = {
                                 borderWidth: 1,
                                 pointRadius: 0
                             }]
+                        },
+                        options: {
+                            scales: {
+                                xAxes: [
+                                    {
+                                        display: false
+                                    }
+                                ],
+                                yAxes: [
+                                    {
+                                        display: true,
+                                        type: 'linear',
+                                        ticks: {
+                                            beginAtZero: true
+                                        },
+                                    }
+                                ]
+                            }
                         }
                     })
-                chart.setBackgroundColor('color: rgb(0,0,0)')
+                chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250)
                 chart.toFile('./debugosu/replaygraph.jpg').then(() => {
-                    let Embed = new Discord.EmbedBuilder()
-                        .setColor('#0099ff')
-                        .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
-                        .setTitle(`Replay`)
-                        .setThumbnail(mapbg)
-                        .setDescription(
-                            `[${fulltitle}](${mapdataid}) ${ifmods}
+                    (async () => {
+                        let Embed = new Discord.EmbedBuilder()
+                            .setColor('#0099ff')
+                            .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
+                            .setTitle(`Replay`)
+                            .setThumbnail(mapbg)
+                            .setDescription(
+                                `[${fulltitle}](${mapdataid}) ${ifmods}
                     ${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapcombo}x** | ${accuracy.toFixed(2)}%
                     \`${hitlist}\`
                     `
-                        )
+                            )
+                            .setImage(`${await chart.getShortUrl()}`);
 
-                    message.reply({ embeds: [Embed], files: ['./debugosu/replaygraph.jpg'], allowedMentions: { repliedUser: false } })
-                    let endofcommand = new Date().getTime();
-                    let timeelapsed = endofcommand - currentDate.getTime();
-                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                        message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
+                        let endofcommand = new Date().getTime();
+                        let timeelapsed = endofcommand - currentDate.getTime();
+                        fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                    })();
                 })
             })
 
