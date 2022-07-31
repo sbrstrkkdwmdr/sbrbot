@@ -97,6 +97,7 @@ module.exports = {
                             }
                             Embedr.setDescription(`
                             ID: ${guildfind.id}
+                            Owner: <@${guildfind.ownerId}>
                             Total user count: ${guildfind.members.cache.size}
                             Total channel count: ${guildfind.channels.cache.size}
                             Creation date: ${guildfind.createdAt}
@@ -263,6 +264,7 @@ module.exports = {
                             }
                             Embedr.setDescription(`
                             ID: ${guildfind.id}
+                            Owner: <@${guildfind.ownerId}>
                             Total user count: ${guildfind.members.cache.size}
                             Total channel count: ${guildfind.channels.cache.size}
                             Creation date: ${guildfind.createdAt}
