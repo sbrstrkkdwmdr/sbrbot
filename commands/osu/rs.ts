@@ -866,7 +866,7 @@ module.exports = {
                                                     titlestring = `${title} [${titlediff}]`
                                                 }
                                                 let trycount = 0
-                                                for (let i = 0; i < rsdata.length; i++) {
+                                                for (let i = rsdata.length; i > page; i--) {
                                                     if (rsdata[i].beatmap.id == rsdata[0 + page].beatmap.id) {
                                                         trycount++
                                                     }
