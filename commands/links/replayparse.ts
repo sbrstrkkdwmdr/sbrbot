@@ -126,6 +126,9 @@ module.exports = {
                             }]
                         },
                         options: {
+                            legend: {
+                                display: false
+                            },
                             scales: {
                                 xAxes: [
                                     {
