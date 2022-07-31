@@ -133,7 +133,7 @@ client.once('ready', () => {
     LinkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     SlashCommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     Moderator(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    MusicHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    //MusicHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     ButtonHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     CommandInit(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     ExEvents(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
