@@ -588,12 +588,11 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(osudata => {
-                    console.log(osudata)
                     try {
                         if (osudata.authentication) {
                             setTimeout(() => {
                             
-                                 interaction.followUp({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true }) 
+                                 interaction.channel.send({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true }) 
                         }, 100)
                             return;
                         }
@@ -886,7 +885,7 @@ module.exports = {
                                                     titlestring = `${title} [${titlediff}]`
                                                 }
                                                 let trycount = 0
-                                                for (let i = rsdata.length; i > page; i--) {
+                                                for (let i = rsdata.length - 1; i > page; i--) {
                                                     if (rsdata[i].beatmap.id == rsdata[0 + page].beatmap.id) {
                                                         trycount++
                                                     }
