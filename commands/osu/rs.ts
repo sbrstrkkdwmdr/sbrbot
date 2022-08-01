@@ -894,7 +894,6 @@ module.exports = {
                                                 if (trycount > 1) {
                                                     trycountstr = `try #${trycount}`
                                                 }
-                                                console.log(trycountstr)
 
                                                 let Embed = new Discord.EmbedBuilder()
                                                     .setColor(0x9AAAC0)
