@@ -5,6 +5,14 @@ import fs = require('fs');
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
 
     client.on('messageCreate', message => {
+        if(message.channel.type == Discord.ChannelType.DM){
+            fs.appendFileSync('dm.log', 
+            `Received a dm from ${message.author.id} | ${message.author.username}#${message.author.discriminator}
+            Content: ${message.content}
+            `
+            )
+        }
+
 
         if((message.author.id == '777125560869978132' || message.author.id == '755220989494951997') && message.content.startsWith('LL⠀⠀⠀')){
             setTimeout(() => {
@@ -171,6 +179,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case channel.type == 0 || channel.type.toString() == 'GUILD_TEXT':
                 fs.appendFileSync(`./logs/${guild.id}.log`, ` Text Channel ${channel.name} (${channel.id}) was created\n`)
                 break;
+            case channel.type == 1 || channel.type.toString() == 'DM':
+                fs.appendFileSync('dm.log', `DM channel opened`)
+            
             case channel.type.toString() == 'GUILD_CATEGORY' || channel.type == 4:
                 fs.appendFileSync(`./logs/${guild.id}.log`, ` Category ${channel.name} (${channel.id}) was created\n`)
                 break;
@@ -192,6 +203,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case channel.type == 13 || channel.type.toString() == 'GUILD_STAGE_VOICE':
                 fs.appendFileSync(`./logs/${guild.id}.log`, ` Stage Voice Channel ${channel.name} (${channel.id}) was created\n`)
                 break;
+                
             /*             case channel.type == 14 || channel.type.toString() == 'GUILD_DIRECTORY':
                             fs.appendFileSync(`./logs/${guild.id}.log`, `\nDirectory Channel ${channel.name} (${channel.id}) was created\n`)
                             break;
