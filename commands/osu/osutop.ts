@@ -234,7 +234,7 @@ module.exports = {
                                 fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
                                 let endofcommand = new Date().getTime();
                                 let timeelapsed = endofcommand - currentDate.getTime();
-                                fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                fs.appendFileSync('commands.log', `\nCommand Latency (message command => osutop) - ${timeelapsed}ms\n`)
 
                             })
                     } catch (error) {
@@ -722,14 +722,14 @@ module.exports = {
                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => osutop) - ${timeelapsed}ms\n`)
                                 }
                                 else if (interaction.type == Discord.InteractionType.MessageComponent) {
                                     message.edit({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => osutop) - ${timeelapsed}ms\n`)
                                 }
                             })
                     } catch (error) {

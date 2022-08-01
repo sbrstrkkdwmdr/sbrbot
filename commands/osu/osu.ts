@@ -185,7 +185,7 @@ module.exports = {
                         fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
                         let endofcommand = new Date().getTime();
                         let timeelapsed = endofcommand - currentDate.getTime();
-                        fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                        fs.appendFileSync('commands.log', `\nCommand Latency (message command => osu) - ${timeelapsed}ms\n`)
 
                     } catch (error) {
                         message.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false }, failIfNotExists: true })
@@ -559,7 +559,7 @@ module.exports = {
                         fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
                         let endofcommand = new Date().getTime();
                         let timeelapsed = endofcommand - currentDate.getTime();
-                        fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                        fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => osu) - ${timeelapsed}ms\n`)
 
                     } catch (error) {
                         //console.log(error)
@@ -567,7 +567,7 @@ module.exports = {
                         fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
                         let endofcommand = new Date().getTime();
                         let timeelapsed = endofcommand - currentDate.getTime();
-                        fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                        fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => osu) - ${timeelapsed}ms\n`)
 
                     }
 

@@ -32,7 +32,7 @@ module.exports = {
             })
             let endofcommand = new Date().getTime();
             let timeelapsed = endofcommand - currentDate.getTime();
-            fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+            fs.appendFileSync('commands.log', `\nCommand Latency (message command => skin) - ${timeelapsed}ms\n`)
 
         }
 

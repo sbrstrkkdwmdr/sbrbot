@@ -60,7 +60,7 @@ module.exports = {
             fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
             let endofcommand = new Date().getTime();
             let timeelapsed = endofcommand - currentDate.getTime();
-            fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+            fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => osumodcalc) - ${timeelapsed}ms\n`)
         }
     }
 }

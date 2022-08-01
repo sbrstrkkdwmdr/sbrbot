@@ -469,7 +469,7 @@ module.exports = {
                                                     fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                                     let endofcommand = new Date().getTime();
                                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                                    fs.appendFileSync('commands.log', `\nCommand Latency (message command => map) - ${timeelapsed}ms\n`)
                                                 })
                                         })();
                                     })
@@ -852,7 +852,7 @@ module.exports = {
                                         fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
                                         let endofcommand = new Date().getTime();
                                         let timeelapsed = endofcommand - currentDate.getTime();
-                                        fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                        fs.appendFileSync('commands.log', `\nCommand Latency (message command => map) - ${timeelapsed}ms\n`)
                                     })
                             })();
                         })
@@ -1288,7 +1288,7 @@ module.exports = {
                                         fs.appendFileSync('commands.log', `\nCommand Information\nmap id: ${mapid}\nmap mods: ${mapmods}\nmode: ${mapmode}`)
                                         let endofcommand = new Date().getTime();
                                         let timeelapsed = endofcommand - currentDate.getTime();
-                                        fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                        fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => map) - ${timeelapsed}ms\n`)
                                     })
                             })();
                         })

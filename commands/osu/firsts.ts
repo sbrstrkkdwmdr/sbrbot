@@ -201,7 +201,7 @@ module.exports = {
                             })
                             let endofcommand = new Date().getTime();
                             let timeelapsed = endofcommand - currentDate.getTime();
-                            fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                            fs.appendFileSync('commands.log', `\nCommand Latency (message command => firsts) - ${timeelapsed}ms\n`)
                         })
                 })
         }
@@ -416,7 +416,7 @@ module.exports = {
                             })
                             let endofcommand = new Date().getTime();
                             let timeelapsed = endofcommand - currentDate.getTime();
-                            fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                            fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => firsts) - ${timeelapsed}ms\n`)
                         }
                         })
                 })

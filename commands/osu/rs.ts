@@ -422,7 +422,7 @@ module.exports = {
                                             fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
                                             let endofcommand = new Date().getTime();
                                             let timeelapsed = endofcommand - currentDate.getTime();
-                                            fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                            fs.appendFileSync('commands.log', `\nCommand Latency (message command => rs) - ${timeelapsed}ms\n`)
 
                                             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: rsdata[0].beatmap.id }), null, 2));
                                             fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
@@ -925,7 +925,7 @@ module.exports = {
                                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
                                                     let endofcommand = new Date().getTime();
                                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => rs) - ${timeelapsed}ms\n`)
 
                                                     fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: rsdata[0 + page].beatmap.id }), null, 2));
                                                 } else if (interaction.type == Discord.InteractionType.MessageComponent) {
@@ -933,7 +933,7 @@ module.exports = {
                                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                                     let endofcommand = new Date().getTime();
                                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => rs) - ${timeelapsed}ms\n`)
                                                 }
                                             })();
                                         })

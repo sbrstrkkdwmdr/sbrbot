@@ -214,7 +214,7 @@ module.exports = {
                                     fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync('commands.log', `\nCommand Latency (message command => scores) - ${timeelapsed}ms\n`)
 
                                 })
                         })
@@ -488,7 +488,7 @@ module.exports = {
                                     fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nmap id: ${id}\nsort: ${sort}`)
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => scores) - ${timeelapsed}ms\n`)
 
                                 })
                         })

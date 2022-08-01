@@ -401,7 +401,7 @@ module.exports = {
                                     fs.appendFileSync('link.log', '\nsuccess\n\n', 'utf-8')
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync('link.log', `\nCommand Latency (osumaplink) - ${timeelapsed}ms\n`)
                                 })
                         })();
                     })
@@ -516,7 +516,7 @@ module.exports = {
                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
                     let endofcommand = new Date().getTime();
                     let timeelapsed = endofcommand - currentDate.getTime();
-                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                    fs.appendFileSync('link.log', `\nCommand Latency (osumaplink) (set) - ${timeelapsed}ms\n`)
                     fs.writeFileSync(`./debugosu/prevmap.json${message.guildId}`, JSON.stringify(({ id: setdata.beatmaps[setdata.beatmaps.length - 1].id }), null, 2));
 
 

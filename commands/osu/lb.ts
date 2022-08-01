@@ -228,7 +228,7 @@ module.exports = {
                 message.reply({ content: '⠀', embeds: [serverlb], allowedMentions: { repliedUser: false }, failIfNotExists: true, components: [buttons] })
                 let endofcommand = new Date().getTime();
                 let timeelapsed = endofcommand - currentDate.getTime();
-                fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                fs.appendFileSync('commands.log', `\nCommand Latency (message command => lb server) - ${timeelapsed}ms\n`)
             }, 2000) //setting the timeout alllows enough time for the array to be sorted
         }
 
@@ -467,7 +467,7 @@ module.exports = {
                 message.edit({ content: '⠀', embeds: [serverlb], allowedMentions: { repliedUser: false }, failIfNotExists: true, components: [buttons] })
                 let endofcommand = new Date().getTime();
                 let timeelapsed = endofcommand - currentDate.getTime();
-                fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => lb server) - ${timeelapsed}ms\n`)
             }, 2000) //setting the timeout alllows enough time for the array to be sorted
 
         }

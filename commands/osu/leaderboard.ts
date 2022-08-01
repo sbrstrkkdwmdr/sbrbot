@@ -204,7 +204,7 @@ module.exports = {
                             message.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons], failIfNotExists: true })
                             let endofcommand = new Date().getTime();
                             let timeelapsed = endofcommand - currentDate.getTime();
-                            fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                            fs.appendFileSync('commands.log', `\nCommand Latency (message command => leaderboard) - ${timeelapsed}ms\n`)
                             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
                         })
 
@@ -551,14 +551,14 @@ module.exports = {
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => leaderboard) - ${timeelapsed}ms\n`)
                                 } else if (interaction.type == Discord.InteractionType.MessageComponent) {
                                     message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     //message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
                                     fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => leaderboard) - ${timeelapsed}ms\n`)
                                 }
 
                             }).catch(err => {

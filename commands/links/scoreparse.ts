@@ -170,7 +170,7 @@ module.exports = {
                     fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
                     let endofcommand = new Date().getTime();
                     let timeelapsed = endofcommand - currentDate.getTime();
-                    fs.appendFileSync('commands.log', `\nCommand Latency - ${timeelapsed}ms\n`)
+                    fs.appendFileSync('link.log', `\nCommand Latency (score parse) - ${timeelapsed}ms\n`)
                 })();
             })
     }
