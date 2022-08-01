@@ -24,9 +24,10 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         }).then(res => res.json() as any)
             .then(res => {
                 fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
+                fs.writeFileSync('updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
             }
             )
-    }, 10 * 60 * 1000);
+    }, 1 * 60 * 1000);
 
 
 /* 
