@@ -4,7 +4,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     client.on('messageCreate', async (message) => {
         if (message.mentions.users.size > 0) {
-            if (message.mentions.users.first().id == '777125560869978132' || message.mentions.users.first().id == '755220989494951997') {
+            if (message.mentions.users.first().id == client.user.id) {
                 return message.reply({ content: 'Prefix is ' + config.prefix, allowedMentions: { repliedUser: false } })
             }
         }
