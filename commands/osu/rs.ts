@@ -397,9 +397,9 @@ module.exports = {
 
                                             let Embed = new Discord.EmbedBuilder()
                                                 .setColor(0x9AAAC0)
-                                                .setTitle(`#1 most recent play for ${rsdata[0].user.username}`)
+                                                .setTitle(`#1 most recent play for ${rsdata[0].user.username} | <t:${new Date(rsdata[0 + page].created_at).getTime() / 1000}:R>`)
                                                 .setURL(`https://osu.ppy.sh/scores/${rsdata[0].mode}/${rsdata[0].id}`)
-                                                .setAuthor({ name: `<t:${new Date(rsdata[0 + page].created_at).getTime() / 1000}:R> ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
+                                                .setAuthor({ name: `${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
                                                 .setThumbnail(`${rsdata[0].beatmapset.covers.list}`)
                                                 .addFields([
                                                     {
@@ -504,7 +504,7 @@ module.exports = {
 
                 user =
                     message.embeds[0].title.includes('play for') ?
-                        message.embeds[0].title.split('most recent play for ')[1] :
+                        message.embeds[0].title.split('most recent play for ')[1].split(' | ')[0] :
                         message.embeds[0].title.split('plays for ')[1]
                 try {
                     mode = message.embeds[0].fields[0].value.split(' | ')[1]
@@ -884,9 +884,9 @@ module.exports = {
                                                 else {
                                                     titlestring = `${title} [${titlediff}]`
                                                 }
-                                                let trycount = 0
-                                                for (let i = rsdata.length - 1; i > page; i--) {
-                                                    if (rsdata[i].beatmap.id == rsdata[0 + page].beatmap.id) {
+                                                let trycount = 1
+                                                for (let i = rsdata.length - 1; i > (page); i--) {
+                                                    if (rsdata[i].beatmap.id == rsdata[page].beatmap.id) {
                                                         trycount++
                                                     }
                                                 }
@@ -894,12 +894,13 @@ module.exports = {
                                                 if (trycount > 1) {
                                                     trycountstr = `try #${trycount}`
                                                 }
+                                                console.log(trycountstr)
 
                                                 let Embed = new Discord.EmbedBuilder()
                                                     .setColor(0x9AAAC0)
-                                                    .setTitle(`#${page + 1} most recent play for ${rsdata[0 + page].user.username}`)
+                                                    .setTitle(`#${page + 1} most recent play for ${rsdata[0 + page].user.username} | <t:${new Date(rsdata[0 + page].created_at).getTime() / 1000}:R>`)
                                                     .setURL(`https://osu.ppy.sh/scores/${rsdata[0 + page].mode}/${rsdata[0 + page].id}`)
-                                                    .setAuthor({ name: `<t:${new Date(rsdata[0 + page].created_at).getTime() / 1000}:R> ${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
+                                                    .setAuthor({ name: `${trycountstr} `, url: `https://osu.ppy.sh/u/${userid}`, iconURL: `https://a.ppy.sh/${userid}` })
                                                     .setThumbnail(`${rsdata[0 + page].beatmapset.covers.list}`)
                                                     .addFields([
                                                         {
