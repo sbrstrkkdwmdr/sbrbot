@@ -129,7 +129,7 @@ module.exports = {
                                     return;
                                 }
                             } catch (error) {
-        
+
                             }
                             let lbdata = (lbdatapresort as any).scores
 
@@ -331,27 +331,31 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(mapdata => {
+                    let title
+                    let titleuni 
+                    let fulltitle
+                    let artist
+                    let artistuni
                     try {
+                        title = mapdata.beatmapset.title
+                        titleuni = mapdata.beatmapset.title_unicode
+
+                        artist = mapdata.beatmapset.artist
+                        artistuni = mapdata.beatmapset.artist_unicode
+
+                        if (title != titleuni) {
+                            title = `${title} (${titleuni})`
+                        }
+                        if (artist != artistuni) {
+                            artist = `${artist} (${artistuni})`
+                        }
+                        fulltitle = `${artist} - ${title} [${mapdata.version}]`
+                    } catch (error) {
                         if (mapdata.authentication) {
-                            message.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            interaction.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                             return;
                         }
-                    } catch (error) {
-
                     }
-                    let title = mapdata.beatmapset.title
-                    let titleuni = mapdata.beatmapset.title_unicode
-
-                    let artist = mapdata.beatmapset.artist
-                    let artistuni = mapdata.beatmapset.artist_unicode
-
-                    if (title != titleuni) {
-                        title = `${title} (${titleuni})`
-                    }
-                    if (artist != artistuni) {
-                        artist = `${artist} (${artistuni})`
-                    }
-                    let fulltitle = `${artist} - ${title} [${mapdata.version}]`
 
                     fs.writeFileSync('debugosu/command-leaderboard=map.json', JSON.stringify(mapdata, null, 2))
 
@@ -373,7 +377,7 @@ module.exports = {
                                         return;
                                     }
                                 } catch (error) {
-            
+
                                 }
                                 let lbdatatoarr = (lbdatapresort as any).scores
                                 let filtereddata = lbdatatoarr
@@ -487,7 +491,7 @@ module.exports = {
                                         return;
                                     }
                                 } catch (error) {
-            
+
                                 }
                                 fs.writeFileSync('debugosu/command-leaderboard=api_v1.json', JSON.stringify(lbdata, null, 2))
                                 let lbEmbed = new Discord.EmbedBuilder()
