@@ -69,6 +69,14 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(userdata => {
+                    try {
+                        if (userdata.authentication) {
+                            message.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            return;
+                        }
+                    } catch (error) {
+
+                    }
                     if (userdata.length < 1) {
                         return message.reply({ content: 'Error - no user found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                     }
@@ -105,6 +113,14 @@ module.exports = {
                                 }
                             }).then(res => res.json() as any)
                                 .then(mapdata => {
+                                    try {
+                                        if (mapdata.authentication) {
+                                            message.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                                            return;
+                                        }
+                                    } catch (error) {
+                
+                                    }
                                     fs.writeFileSync('debugosu/command-scores=map.json', JSON.stringify(mapdata, null, 2));
                                     fs.writeFileSync('debugosu/command-scores.json', JSON.stringify(scoredata, null, 2));
                                     fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
@@ -270,6 +286,14 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(userdata => {
+                    try {
+                        if (userdata.authentication) {
+                            interaction.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            return;
+                        }
+                    } catch (error) {
+
+                    }
                     if (userdata.length < 1) {
                         return interaction.reply({ content: 'Error - no user found', allowedMentions: { repliedUser: false } })
                     }
@@ -358,6 +382,14 @@ module.exports = {
                                 }
                             }).then(res => res.json() as any)
                                 .then(mapdata => {
+                                    try {
+                                        if (mapdata.authentication) {
+                                            interaction.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                                            return;
+                                        }
+                                    } catch (error) {
+                
+                                    }
                                     fs.writeFileSync('debugosu/command-scores=map.json', JSON.stringify(mapdata, null, 2));
                                     fs.writeFileSync('debugosu/command-scores.json', JSON.stringify(scoredata, null, 2));
                                     fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));

@@ -1,4 +1,3 @@
-import { access_token } from '../../configs/osuauth.json';
 import fs = require('fs');
 import osucalc = require('osumodcalculator');
 import fetch from 'node-fetch'
@@ -20,17 +19,8 @@ module.exports = {
         //check if file debugosu/prevmap.json exists
         let prevmap;
         let i;
-        /*         if (fs.existsSync(`./debugosu/prevmap.json`)) {
-                    //console.log('hello there')
-                    try {
-                        prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap.json`, 'utf8'));
-                    } catch {
-                        console.log(`no prevmap.json file for server ${message.guildId}\nCreating default file...`)
-                        fs.writeFileSync(`./debugosu/prevmap.json`, JSON.stringify(({ id: 32345 }), null, 2));
-                    }
-                } else {
-                    return console.log('Error - missing prevmap.json in configs folder');
-                } */
+        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        let access_token = JSON.parse(accessN).access_token;
 
         if (message != null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (message)\n${currentDate} | ${currentDateISO}\n recieved get map info command\nrequested by ${message.author.id} AKA ${message.author.tag}]\nMessage content: ${message.content}`, 'utf-8')
@@ -87,6 +77,16 @@ module.exports = {
                         fs.appendFileSync('commands.log', `\nfetched title - ${maptitle}`)
                         fs.writeFileSync('debugosu/command-map=txt.json', JSON.stringify(mapidtest, null, 2))
                         let sortbyhigh;
+                        try{
+                            if(mapidtest.authentication){
+                                let ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
+                                message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
+                                return;
+                            }
+                        } catch (error) {
+
+                        }
+
                         try {
                             sortbyhigh = (mapidtest as any).beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)
                             mapid = (mapidtest as any).beatmapsets[0].beatmaps[0].id
@@ -118,6 +118,14 @@ module.exports = {
                                     if (!isNaN(mapid)) {
                                         ifid = `Found map id = ${mapid}`
                                     }
+                                try{
+                                    let au = json.authentication
+                                    if(au == "basic"){
+                                        ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
+                                    }
+                                } catch (error) {
+
+                                }
 
                                     message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
                                     return;
@@ -494,7 +502,15 @@ module.exports = {
                         if (!isNaN(mapid)) {
                             ifid = `Found map id = ${mapid}`
                         }
+                        try{
+                            if(json.authentication){
+                                let ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
+                                message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
+                                return;
+                            }
+                        } catch (error) {
 
+                        }
                         message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
                         return;
                     }
@@ -902,6 +918,15 @@ module.exports = {
                     try {
                         let mapper = json.beatmapset.creator
                     } catch (error) {
+                        try{
+                            if(json.authentication){
+                                let ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
+                                interaction.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
+                                return;
+                            }
+                        } catch (error) {
+
+                        }
                         interaction.reply({ content: 'Error - map not found', allowedMentions: { repliedUser: false } });
                         return;
                     }

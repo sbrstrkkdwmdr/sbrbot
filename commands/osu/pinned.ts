@@ -79,6 +79,14 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(osudata => {
+                    try {
+                        if (osudata.authentication) {
+                            message.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            return;
+                        }
+                    } catch (error) {
+
+                    }
                     let userid = osudata.id
                     if (!userid) {
                         return message.channel.send('Error - no user found')
@@ -294,6 +302,14 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(osudata => {
+                    try {
+                        if (osudata.authentication) {
+                            interaction.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            return;
+                        }
+                    } catch (error) {
+
+                    }
                     let userid = osudata.id
                     if (!userid) {
                         return message.channel.send('Error - no user found')

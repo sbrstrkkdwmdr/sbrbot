@@ -102,6 +102,14 @@ module.exports = {
                 .then(osudata => {
                     fs.writeFileSync('debugosu/command-otop=name.json', JSON.stringify(osudata, null, 2))
                     try {
+                        if (osudata.authentication) {
+                            message.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            return;
+                        }
+                    } catch (error) {
+
+                    }
+                    try {
                         (async () => {
                             let findname;
                             findname = await userdata.findOne({ where: { osuname: user } })
@@ -416,6 +424,14 @@ module.exports = {
             }).then(res => res.json() as any)
                 .then(osudata => {
                     fs.writeFileSync('debugosu/command-otop=name.json', JSON.stringify(osudata, null, 2))
+                    try {
+                        if (osudata.authentication) {
+                            interaction.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            return;
+                        }
+                    } catch (error) {
+
+                    }
                     try {
                         (async () => {
                             let findname;

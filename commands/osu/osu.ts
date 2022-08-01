@@ -55,6 +55,14 @@ module.exports = {
                 .then(osudata => {
                     fs.writeFileSync('debugosu/command-osu.json', JSON.stringify(osudata, null, 2))
                     try {
+                        if (osudata.authentication) {
+                            message.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            return;
+                        }
+                    } catch (error) {
+
+                    }
+                    try {
                         ;
                         (async () => {
                             let findname;
@@ -123,7 +131,7 @@ module.exports = {
                             countryrank = countryrank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
 
-                        let playerlasttoint: any = new Date(osudata.last_visit)    
+                        let playerlasttoint: any = new Date(osudata.last_visit)
 
                         let online = osudata.is_online;
 
@@ -239,6 +247,14 @@ module.exports = {
             }).then(res => res.json() as any)
                 .then(osudata => {
                     fs.writeFileSync('debugosu/command-osu.json', JSON.stringify(osudata, null, 2));
+                    try {
+                        if (osudata.authentication) {
+                            interaction.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            return;
+                        }
+                    } catch (error) {
+
+                    }
                     (async () => {
                         let findname;
                         findname = await userdata.findOne({ where: { osuname: user } })

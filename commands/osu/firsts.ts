@@ -1,6 +1,5 @@
 import fs = require('fs');
 import osucalc = require('osumodcalculator')
-import { access_token } from '../../configs/osuauth.json';
 import fetch from 'node-fetch';
 import emojis = require('../../configs/emojis')
 import osufunc = require('../../configs/osufunc')
@@ -11,6 +10,11 @@ module.exports = {
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
+        //import { access_token } from '../../configs/osuauth.json';
+
+        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        let access_token = JSON.parse(accessN).access_token;
+
         if (message != null && button == null) {
             fs.appendFileSync('commands.log', `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
 
@@ -79,6 +83,14 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(osudata => {
+                    
+                    try {
+                        if(osudata.authentication){
+                            message.reply({ content: 'error - osu auth out of date', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            return;
+                        }
+                    } catch(error){
+                    }
                     let userid = osudata.id
                     if (!userid) {
                         return message.channel.send('Error - no user found')

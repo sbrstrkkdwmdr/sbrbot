@@ -1,7 +1,7 @@
 import fs = require('fs')
 import osucalc = require('osumodcalculator');
 import fetch from 'node-fetch'
-import { access_token } from '../../configs/osuauth.json';
+//import { access_token } from '../../configs/osuauth.json';
 
 
 module.exports = {
@@ -13,6 +13,8 @@ module.exports = {
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
         let prevmap;
         let i: number;
+        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        let access_token = JSON.parse(accessN).access_token;
         /* if (fs.existsSync(`./debugosu/prevmap.json`)) {
             //console.log('hello there')
             try {
@@ -86,8 +88,15 @@ module.exports = {
                     Accept: "application/json"
                 }
             }).then(res => res.json() as any)
-                .then(mpdata => {
-                    let mapdata = mpdata as any
+                .then(mapdata => {
+                    try {
+                        if (mapdata.authentication) {
+                            message.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            return;
+                        }
+                    } catch (error) {
+
+                    }
                     let title = mapdata.beatmapset.title
                     let titleuni = mapdata.beatmapset.title_unicode
 
@@ -114,6 +123,14 @@ module.exports = {
                         }
                     }).then(res => res.json() as any)
                         .then(lbdatapresort => {
+                            try {
+                                if (lbdatapresort.authentication) {
+                                    interaction.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                                    return;
+                                }
+                            } catch (error) {
+        
+                            }
                             let lbdata = (lbdatapresort as any).scores
 
                             let sctxt = ''
@@ -313,8 +330,15 @@ module.exports = {
                     Accept: "application/json"
                 }
             }).then(res => res.json() as any)
-                .then(mpdata => {
-                    let mapdata = (mpdata as any)
+                .then(mapdata => {
+                    try {
+                        if (mapdata.authentication) {
+                            message.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            return;
+                        }
+                    } catch (error) {
+
+                    }
                     let title = mapdata.beatmapset.title
                     let titleuni = mapdata.beatmapset.title_unicode
 
@@ -343,6 +367,14 @@ module.exports = {
                             }
                         }).then(res => res.json() as any)
                             .then(lbdatapresort => {
+                                try {
+                                    if (lbdatapresort.authentication) {
+                                        interaction.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                                        return;
+                                    }
+                                } catch (error) {
+            
+                                }
                                 let lbdatatoarr = (lbdatapresort as any).scores
                                 let filtereddata = lbdatatoarr
                                 let lbdata = lbdatatoarr
@@ -449,7 +481,14 @@ module.exports = {
                         fetch(oldmsu, {})
                             .then(res => res.json() as any)
                             .then(lbdata => {
-
+                                try {
+                                    if (lbdata.authentication) {
+                                        interaction.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                                        return;
+                                    }
+                                } catch (error) {
+            
+                                }
                                 fs.writeFileSync('debugosu/command-leaderboard=api_v1.json', JSON.stringify(lbdata, null, 2))
                                 let lbEmbed = new Discord.EmbedBuilder()
                                     .setTitle(`TOP 5 SCORES FOR ${fulltitle}`)
