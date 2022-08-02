@@ -30,6 +30,7 @@ Guilds: ${totalguilds}
 Users: ${totalusers}
 Commands sent: ${commandssent}
 Prefix: ${config.prefix}
+Commands: https://sbrstrkkdwmdr.github.io/sbrbot/commands
 `,
                 allowedMentions: { repliedUser: false } });
 

@@ -92,7 +92,7 @@ module.exports = {
             } */
             ])
             .setFooter({
-                text: 'Website: https://sbrstrkkdwmdr.github.io/sbr-web/ | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
+                text: 'Website: https://sbrstrkkdwmdr.github.io/sbrbot/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
             })
 
 
