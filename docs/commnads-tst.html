@@ -14,23 +14,23 @@
 </head>
 <!--nav-->
 <aside>
-<div>
-    <ul class="ultitle">
-        <li><a href="index.html" class="titlenav">Home</a></li>
-        <li><a href="commands.html" class="titlenav">Commands</a></li>
-        <li><a href="https://sbrstrkkdwmdr.github.io/sbr-web/" target="_blank" class="titlenav">Contact</a></li>
-    </ul>
-</div>
-<div>
-    <ul class="ulcmdnav">
-        <li><a href="general" class="cmdnav">General Commands</a></li>
-        <li><a href="osu" class="cmdnav">osu! Commands</a></li>
-        <li><a href="misc" class="cmdnav">Misc Commands</a></li>
-        <li><a href="admin" class="cmdnav">Admin Commands</a></li>
-        <li><a href="music" class="cmdnav">Music Commands</a></li>
+    <div>
+        <ul class="ultitle">
+            <li><a href="index.html" class="titlenav">Home</a></li>
+            <li><a href="commands.html" class="titlenav">Commands</a></li>
+            <li><a href="https://sbrstrkkdwmdr.github.io/sbr-web/" target="_blank" class="titlenav">Contact</a></li>
+        </ul>
+    </div>
+    <div>
+        <ul class="ulcmdnav">
+            <li><a href="#general" class="cmdnav">General Commands</a></li>
+            <li><a href="#osu" class="cmdnav">osu! Commands</a></li>
+            <li><a href="#misc" class="cmdnav">Misc Commands</a></li>
+            <li><a href="#admin" class="cmdnav">Admin Commands</a></li>
+            <li><a href="#music" class="cmdnav">Music Commands</a></li>
 
-    </ul>
-</div>
+        </ul>
+    </div>
 </aside>
 
 <body>
@@ -71,6 +71,7 @@
                                 <th>Required</th>
                                 <th>Description</th>
                                 <th>Choices</th>
+                                <th>Defaults</th>
                             </tr>
                             <tr>
                                 <td>Score id 1</td>
@@ -78,6 +79,8 @@
                                 <td>True</td>
                                 <td>The id of the first score to compare</td>
                                 <td>N/A</td>
+                                <td>User's most recent</td>
+
                             </tr>
                             <tr>
                                 <td>Score id 2</td>
@@ -85,6 +88,8 @@
                                 <td>True</td>
                                 <td>The id of the second score to compare</td>
                                 <td>N/A</td>
+                                <td>Most recent score requested</td>
+
                             </tr>
                         </table>
                     </div>
@@ -107,6 +112,26 @@
                         Example: sbr-firsts mrekk
                         Example: sbr-firsts 15222484
                     </pre>
+                        <table>
+                            <tr>
+                                <th>Option</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>User</td>
+                                <td>String/Integer/Mention</td>
+                                <td>False</td>
+                                <td>The username/id of the user. If omitted, the database will search for the user's
+                                    name
+                                </td>
+                                <td>N/A</td>
+                                <td>Database</td>
+                            </tr>
+                        </table>
                     </div>
                 </details>
 
@@ -151,6 +176,7 @@
                                 <th>Required</th>
                                 <th>Description</th>
                                 <th>Choices</th>
+                                <th>Defaults</th>
                             </tr>
                             <tr>
                                 <td>ID</td>
@@ -158,13 +184,16 @@
                                 <td>False</td>
                                 <td>The id of the map. If omitted, the previous map will be used instead</td>
                                 <td>N/A</td>
+                                <td>Previous map</td>
+
                             </tr>
                             <tr>
                                 <td>Page</td>
                                 <td>Integer</td>
                                 <td>False</td>
-                                <td>The page of the scores to show. Defaults to 1</td>
+                                <td>The page of the scores to show.</td>
                                 <td>1-20</td>
+                                <td>1</td>
                             </tr>
                             <tr>
                                 <td>Mods</td>
@@ -172,6 +201,7 @@
                                 <td>False</td>
                                 <td>Filters the leaderboard to show these mods.</td>
                                 <td>N/A</td>
+                                <td>NM</td>
                             </tr>
                         </table>
                     </div>
@@ -201,6 +231,7 @@
                                 <th>Required</th>
                                 <th>Description</th>
                                 <th>Choices</th>
+                                <th>Defaults</th>
                             </tr>
                             <tr>
                                 <td>Search</td>
@@ -209,6 +240,7 @@
                                 <td>The search query for the map. ie artist, title, difficulty, etc. Overrides map ID
                                 </td>
                                 <td>N/A</td>
+                                <td>null</td>
                             </tr>
                             <tr>
                                 <td>ID</td>
@@ -216,6 +248,7 @@
                                 <td>False</td>
                                 <td>The id of the map. If omitted, the previous map will be used instead</td>
                                 <td>N/A</td>
+                                <td>Previous map</td>
                             </tr>
                             <tr>
                                 <td>Mods</td>
@@ -223,6 +256,7 @@
                                 <td>False</td>
                                 <td>Mods to use for difficulty/pp calculations</td>
                                 <td>N/A</td>
+                                <td>NM</td>
                             </tr>
                             <tr>
                                 <td>Detailed</td>
@@ -230,6 +264,7 @@
                                 <td>False</td>
                                 <td>Shows extra map details (ar in ms, od in ms, object radius etc.)</td>
                                 <td>True/False</td>
+                                <td>False</td>
                             </tr>
                         </table>
                     </div>
@@ -259,7 +294,7 @@
                                 <th>Required</th>
                                 <th>Description</th>
                                 <th>Choices</th>
-
+                                <th>Defaults</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -270,6 +305,7 @@
                                     for
                                     the user's name</td>
                                 <td>N/A</td>
+                                <td>Database</td>
                             </tr>
                             <tr>
                                 <td>Details</td>
@@ -277,6 +313,7 @@
                                 <td>False</td>
                                 <td>Whether or not to show extra details</td>
                                 <td>True/False</td>
+                                <td>False</td>
                             </tr>
                         </table>
                 </details>
@@ -302,6 +339,7 @@
                                 <th>Required</th>
                                 <th>Description</th>
                                 <th>Choices</th>
+                                <th>Defaults</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -309,6 +347,7 @@
                                 <td>True</td>
                                 <td>The username of the user</td>
                                 <td>N/A</td>
+                                <td>null</td>
                             </tr>
                             <tr>
                                 <td>Gamemode</td>
@@ -316,6 +355,7 @@
                                 <td>False</td>
                                 <td>The main gamemode of the user. Defaults to osu! standard</td>
                                 <td>osu/taiko/fruits/mania</td>
+                                <td>osu</td>
                             </tr>
                             <tr>
                                 <td>Skin</td>
@@ -323,6 +363,7 @@
                                 <td>False</td>
                                 <td>The main skin of the user</td>
                                 <td>N/A</td>
+                                <td>null</td>
                             </tr>
                         </table>
                     </div>
@@ -352,6 +393,7 @@
                                 <th>Required</th>
                                 <th>Description</th>
                                 <th>Choices</th>
+                                <th>Defaults</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -361,6 +403,7 @@
                                     name
                                 </td>
                                 <td>N/A</td>
+                                <td>Database</td>
                             </tr>
                             <tr>
                                 <td>Mode</td>
@@ -369,6 +412,7 @@
                                 <td>The gamemode. If omitted, the database will search for the user's default gamemode.
                                     Defaults to osu! standard</td>
                                 <td>osu/taiko/fruits/mania</td>
+                                <td>Database/osu</td>
                             </tr>
                             <tr>
                                 <td>Sort</td>
@@ -376,6 +420,7 @@
                                 <td>False</td>
                                 <td>The sorting options for the plays. Defaults to pp.</td>
                                 <td>pp/score/recent/acc/combo/misses</td>
+                                <td>pp</td>
                             </tr>
                             <tr>
                                 <td>Reverse</td>
@@ -383,6 +428,7 @@
                                 <td>False</td>
                                 <td>Whether or not to reverse the order of the plays</td>
                                 <td>True/False</td>
+                                <td>False</td>
                             </tr>
                             <tr>
                                 <td>Page</td>
@@ -390,12 +436,14 @@
                                 <td>False</td>
                                 <td>The page of the plays to retrieve</td>
                                 <td>1-20</td>
+                                <td>1</td>
                             </tr>
                             <tr>
                                 <td>Mapper</td>
                                 <td>String</td>
                                 <td>False</td>
                                 <td>Filter to only show plays set on maps by this mapper</td>
+                                <td>N/A</td>
                                 <td>N/A</td>
                             </tr>
                             <tr>
@@ -405,6 +453,7 @@
                                 <td>Filter to only show plays set with these mods.<br /> Add "any" to the end for mod
                                     combinations (DT = DT, DTany = DT, HDDT, HDDTHR, EZDT)</td>
                                 <td>N/A</td>
+                                <td>NM</td>
                             </tr>
                             <tr>
                                 <td>Detailed</td>
@@ -412,6 +461,7 @@
                                 <td>False</td>
                                 <td>Whether or not to show extra details</td>
                                 <td>True/False</td>
+                                <td>False</td>
                             </tr>
                             <tr>
                                 <td>Compact</td>
@@ -419,6 +469,7 @@
                                 <td>False</td>
                                 <td>Whether or not to use compact mode</td>
                                 <td>True/False</td>
+                                <td>False</td>
                             </tr>
 
                         </table>
@@ -446,6 +497,7 @@
                                 <th>Required</th>
                                 <th>Description</th>
                                 <th>Choices</th>
+                                <th>Defaults</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -455,6 +507,7 @@
                                     name
                                 </td>
                                 <td>N/A</td>
+                                <td>Database</td>
                             </tr>
                         </table>
                     </div>
@@ -484,6 +537,7 @@
                                 <th>Required</th>
                                 <th>Description</th>
                                 <th>Choices</th>
+                                <th>Defaults</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -492,6 +546,7 @@
                                 <td>The username of the user. If omitted, the database will search for the user's name
                                 </td>
                                 <td>N/A</td>
+                                <td>Database</td>
                             </tr>
                             <tr>
                                 <td>Page</td>
@@ -499,6 +554,7 @@
                                 <td>False</td>
                                 <td>Which score to retrieve (lower number = more recent)</td>
                                 <td>1-100</td>
+                                <td>1</td>
                             </tr>
                             <tr>
                                 <td>Mode</td>
@@ -508,6 +564,7 @@
                                     Defaults
                                     to osu! standard</td>
                                 <td>osu/taiko/fruits/mania</td>
+                                <td>osu</td>
                             </tr>
                             <tr>
                                 <td>List</td>
@@ -515,6 +572,7 @@
                                 <td>False</td>
                                 <td>Enables list mode. Only accuracy and ranking is shown</td>
                                 <td>True/False</td>
+                                <td>False</td>
                             </tr>
                         </table>
                     </div>
@@ -544,6 +602,7 @@
                                 <th>Required</th>
                                 <th>Description</th>
                                 <th>Choices</th>
+                                <th>Defaults</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -552,6 +611,7 @@
                                 <td>The username of the user. If omitted, the database will search for the user's name
                                 </td>
                                 <td>N/A</td>
+                                <td>Database</td>
                             </tr>
                             <tr>
                                 <td>ID</td>
@@ -559,6 +619,7 @@
                                 <td>False</td>
                                 <td>The ID of the map. If omitted, the database will search for the map's name</td>
                                 <td>N/A</td>
+                                <td>Previous map</td>
                             </tr>
                             <tr>
                                 <td>Sort</td>
@@ -566,6 +627,7 @@
                                 <td>False</td>
                                 <td>The sort order of the scores. Defaults to most recent</td>
                                 <td>pp/score/recent/acc/combo/misses</td>
+                                <td>Recent</td>
                             </tr>
                             <tr>
                                 <td>Reverse</td>
@@ -573,6 +635,7 @@
                                 <td>False</td>
                                 <td>Whether to reverse the order of the plays</td>
                                 <td>True/False</td>
+                                <td>False</td>
                             </tr>
                             <tr>
                                 <td>Compact</td>
@@ -580,6 +643,7 @@
                                 <td>False</td>
                                 <td>Whether or not to use compact mode</td>
                                 <td>True/False</td>
+                                <td>False</td>
                             </tr>
                         </table>
                     </div>
@@ -608,6 +672,7 @@
                                 <th>Required</th>
                                 <th>Description</th>
                                 <th>Choices</th>
+                                <th>Defaults</th>
                             </tr>
                             <tr>
                                 <td>ID</td>
@@ -615,6 +680,7 @@
                                 <td>False</td>
                                 <td>If omitted, the previous map will be used instead</td>
                                 <td>N/A</td>
+                                <td>Previous map</td>
                             </tr>
                             <tr>
                                 <td>Mods</td>
@@ -622,6 +688,7 @@
                                 <td>False</td>
                                 <td>The mods to use. Defaults to NM</td>
                                 <td>N/A</td>
+                                <td>NM</td>
                             </tr>
                             <tr>
                                 <td>Misses</td>
@@ -629,6 +696,7 @@
                                 <td>False</td>
                                 <td>The amount of misses in the play. Defaults to 0</td>
                                 <td>0+</td>
+                                <td>0</td>
                             </tr>
                             <tr>
                                 <td>Accuracy</td>
@@ -636,6 +704,7 @@
                                 <td>False</td>
                                 <td>The accuracy of the play. Defaults to 100.00</td>
                                 <td>0-100</td>
+                                <td>100</td>
                             </tr>
                             <tr>
                                 <td>Combo</td>
@@ -643,6 +712,7 @@
                                 <td>False</td>
                                 <td>The maximum combo of the play. Defaults to NaN</td>
                                 <td>0+</td>
+                                <td>NaN</td>
                             </tr>
                         </table>
                     </div>
@@ -669,6 +739,7 @@
                                 <th>Required</th>
                                 <th>Description</th>
                                 <th>Choices</th>
+                                <th>Defaults</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -676,6 +747,7 @@
                                 <td>False</td>
                                 <td>The user to search for. If omitted, the author's skin will be returned</td>
                                 <td>N/A</td>
+                                <td>Database</td>
                             </tr>
                         </table>
                     </div>
@@ -703,6 +775,7 @@
                                 <th>Required</th>
                                 <th>Description</th>
                                 <th>Choices</th>
+                                <th>Defaults</th>
                             </tr>
                             <tr>
                                 <td>Value</td>
@@ -710,6 +783,7 @@
                                 <td>True</td>
                                 <td>The value to set</td>
                                 <td>1+</td>
+                                <td>1</td>
                             </tr>
                             <tr>
                                 <td>Type</td>
@@ -717,6 +791,7 @@
                                 <td>False</td>
                                 <td>The type of value</td>
                                 <td>pp/rank</td>
+                                <td>pp</td>
                             </tr>
                         </table>
                     </div>
@@ -742,6 +817,10 @@
         <!-- link parse -->
         <div>
             <h2 class="divSubheading" id="link">Link Parse</h2>
+        </div>
+
+        <div style="margin-top: 900px;">
+
         </div>
 </body>
 
