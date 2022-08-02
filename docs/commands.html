@@ -41,14 +41,289 @@
     </div>
     <div style="margin-left: 25px;">
         <!-- general commands -->
+        <div class="spaceForNav" id="general"></div>
         <div>
-            <h2 class="divSubheading" id="general">General Commands</h2>
+            <h2 class="divSubheading">General Commands</h2>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="general-ping">ping</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns the bot's ping
+                        </p>
+
+                        <pre>
+                        Command: sbr-ping
+                  Slash Command: /ping
+                        </pre>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="general-help">help</summary>
+                    <div class="divCommandDetails">
+                        <p>Details
+                        </p>
+
+                        <pre>
+                        Command: sbr-help [command]
+                  Slash Command: /help [command]
+                        Example: sbr-help osuset
+                        Example: sbr-help
+                    </pre>
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
+                            </tr>
+                            <tr>
+                                <td>command</td>
+                                <td>String</td>
+                                <td>False</td>
+                                <td>The command to return information on</td>
+                                <td>N/A</td>
+                                <td>Lists of commands</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="general-convert">convert</summary>
+                    <div class="divCommandDetails">
+                        <p>Converts one value to another
+                        </p>
+
+                        <pre>
+                        Command: sbr-convert 
+                  Slash Command: /convert [from] [to] [number]
+                        Example: /convert celsius kelvin 273.15
+                        Example: /convert grams ounces 1
+                    </pre>
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
+                            </tr>
+                            <tr>
+                                <td>From</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The type of value to convert from</td>
+                                <td>
+                                    celsius/kelvin/fahrenheit<br>
+                                    inches/feet/metres/miles<br>
+                                    seconds/minutes/hours/days/years<br>
+                                    fluid ounces/cups/pints/litres/gallons/cubic metres<br>
+                                    grams/ounces/pounds/metric tonnes<br>
+                                    help/SI units
+                                </td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>To</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The type of value to convert to</td>
+                                <td>
+                                    celsius/kelvin/fahrenheit<br>
+                                    inches/feet/metres/miles<br>
+                                    seconds/minutes/hours/days/years<br>
+                                    fluid ounces/cups/pints/litres/gallons/cubic metres<br>
+                                    grams/ounces/pounds/metric tonnes<br>
+                                    help/SI units
+                                </td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Number</td>
+                                <td>Float</td>
+                                <td>True</td>
+                                <td>The number to convert</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="general-math">math</summary>
+                    <div class="divCommandDetails">
+                        <p>Solves a simple equation
+                        </p>
+
+                        <pre>
+                        Command: sbr-math [equation]
+                  Slash Command: /math [type] [num1] [num2]
+                        Example: sbr-math 2+2/3
+                        Example: /math type:square root num1:2
+                        Example: /math type:factorial num1:6
+                        </pre>
+
+                        Aliases: solve
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
+                            </tr>
+                            <tr>
+                                <td>Equation</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The equation to solve. Message command only</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Type</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The type of equation to solve</td>
+                                <td>
+                                    square/square root<br>
+                                    factorial<br>
+                                    HCF/LCM<br>
+                                    AR if DT/HT/ms<br>
+                                    circumference/area of a circle<br>
+                                    pythagorus<br>
+                                    convert to sig fig<br>
+                                    OD if DT/HT/ms <br>
+                                    ms to AR/OD<br>
+                                    Mod int to string<br>
+                                </td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Num1</td>
+                                <td>Float</td>
+                                <td>True</td>
+                                <td>The first number in the equation</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Num2</td>
+                                <td>Float</td>
+                                <td>False</td>
+                                <td>The second number in the equation</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+            <div>
+                <details>
+                    <summary class="divCommandName" id="general-remind">remind</summary>
+                    <div class="divCommandDetails">
+                        <p>Sends a reminder to the user
+                        </p>
+
+                        <pre>
+                        Command: sbr-remind [time] [reminder] 
+                  Slash Command: /remind [reminder] [time] [sendinchannel]
+                        Example: sbr-remind 1h30m Hello World
+                        Example: /remind time:1h30m reminder:Hello World sendinchannel:false
+                        </pre>
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
+                            </tr>
+                            <tr>
+                                <td>Time</td>
+                                <td>String</td>
+                                <td>The amount of time to wait before sending the reminder</td>
+                                <td>True</td>
+                                <td>Formatted as ?d?h?m?s ie 1d2h3m4s <br>(1 day 2 hours 3 minutes 4 seconds)</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Reminder</td>
+                                <td>String</td>
+                                <td>The reminder to send</td>
+                                <td>True</td>
+                                <td>N/A</td>
+                                <td>null</td>
+                            </tr>
+                            <tr>
+                                <td>SendInChannel</td>
+                                <td>Boolean</td>
+                                <td>False</td>
+                                <td>Whether to send the reminder in the channel or in the user's DM</td>
+                                <td>True/False</td>
+                                <td>False</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="general-stats">stats</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns the bot's statistics
+                            <br>Returns latency, uptime, timezone, total guilds, total users, commands sent, prefix
+                        </p>
+
+                        <pre>
+                        Command: sbr-stats
+                  Slash Command: /stats
+                        </pre>
+
+                    </div>
+                </details>
+            </div>
+
 
         </div>
 
+
+
+
+
+
+
+
+
+
+
         <!-- osu! commands -->
+        <div class="spaceForNav" id="osu"></div>
+
         <div>
-            <h2 class="divSubheading" id="osu">osu! commands</h2>
+            <h2 class="divSubheading">osu! commands</h2>
 
             <div>
                 <details>
@@ -65,14 +340,15 @@
                   Slash Command: /compare [score id 1] [score id 2]
                         Example: /compare 34242 23424324
                     </pre>
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>Score id 1</td>
@@ -113,14 +389,15 @@
                         Example: sbr-firsts mrekk
                         Example: sbr-firsts 15222484
                     </pre>
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -170,14 +447,15 @@
 
                         Aliases:
                         maplb, mapleaderboard
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>ID</td>
@@ -225,14 +503,15 @@
 
                         Aliases: m
 
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>Search</td>
@@ -288,14 +567,15 @@
 
                         Aliases: o, profile
 
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -333,14 +613,15 @@
                         Example: sbr-osuset SaberStrike
                         Example: /osuset user:15222484 mode:osu skin:sbrv11
                     </pre>
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -387,14 +668,15 @@
 
                         Aliases: top
 
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -491,14 +773,15 @@
                         Example: sbr-pinned mrekk
                     </pre>
 
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -531,14 +814,15 @@
 
                         Aliases: recent, r
 
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -596,14 +880,15 @@
 
                         Aliases: c
 
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -666,14 +951,15 @@
 
                         Aliases: simplay
 
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>ID</td>
@@ -733,14 +1019,15 @@
                         Example: sbr-skin @mrekk
                     </pre>
 
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>User</td>
@@ -757,7 +1044,7 @@
 
             <div>
                 <details>
-                    <summary class="divCommandName" id="template-commandname">template</summary>
+                    <summary class="divCommandName" id="osu-whatif">whatif</summary>
                     <div class="divCommandDetails">
                         <p>Returns the pp needed for a rank or vice versa
                         </p>
@@ -769,14 +1056,15 @@
                         Example: sbr-whatif 23 rank
                     </pre>
 
+                        <br><br>Options:
                         <table>
                             <tr>
-                                <th>Option</th>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Required</th>
                                 <th>Description</th>
-                                <th>Choices</th>
-                                <th>Defaults</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
                             </tr>
                             <tr>
                                 <td>Value</td>
@@ -800,24 +1088,927 @@
             </div>
         </div>
 
+
+
+
+
+
+
+
+
+
+
         <!-- misc commands-->
+        <div class="spaceForNav" id="misc"></div>
+
         <div>
-            <h2 class="divSubheading" id="misc">Misc Commands</h2>
+            <h2 class="divSubheading">Misc Commands</h2>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="misc-8ball">8ball</summary>
+                    <div class="divCommandDetails">
+                        <p>Responds to a yes or no question
+                        </p>
+
+                        <pre>
+                        Command: sbr-8ball
+                  Slash Command: /8ball
+                        Example: sbr-8ball is this a question?
+                        </pre>
+
+                        Aliases: ask
+
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="misc-gif">gif</summary>
+                    <div class="divCommandDetails">
+                        <p>Sends a random gif
+                        </p>
+
+                        <pre>
+                        Command: sbr-gif [type]
+                  Slash Command: /gif [type]
+                        Example: /gif type:cry about it
+                        </pre>
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
+                            </tr>
+                            <tr>
+                                <td>Type</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The type of gif to send</td>
+                                <td>
+                                    Too many to list
+                                </td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="misc-image">image</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns the first five results from google's image API
+                        </p>
+
+                        <pre>
+                        Command: sbr-image [query]
+                  Slash Command: /image [query]
+                        Example: sbr-image "cat"
+                        </pre>
+
+                        Aliases: imagesearch
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
+                            </tr>
+                            <tr>
+                                <td>Query</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The search query</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="misc-poll">poll</summary>
+                    <div class="divCommandDetails">
+                        <p>Creates a poll
+                        </p>
+
+                        <pre>
+                        Command: sbr-poll [title]
+                  Slash Command: /poll [title] [options]
+                        Example: sbr-poll Is this a poll? 
+                        Example: /poll title:Favourite colour? options:red+blue+green+yellow
+                        </pre>
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
+                            </tr>
+                            <tr>
+                                <td>Title</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The title of the poll</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Options</td>
+                                <td>String</td>
+                                <td>False</td>
+                                <td>The options of the poll</td>
+                                <td>Each option must be separated with a +. Maximum of 26</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="template-roll">roll</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns a random number
+                        </p>
+
+                        <pre>
+                        Command: sbr-roll [number]
+                  Slash Command: /roll [number]
+                        Example:
+                        </pre>
+
+                        Aliases:
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
+                            </tr>
+                            <tr>
+                                <td>Number</td>
+                                <td>Integer</td>
+                                <td>False</td>
+                                <td>The maximum number that can be rolled</td>
+                                <td>0+</td>
+                                <td>100</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="misc-ytsearch">ytsearch</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns the first five results from a youtube search
+                        </p>
+
+                        <pre>
+                        Command: sbr-ytsearch [query]
+                  Slash Command: /ytsearch [query]
+                        Example: sbr-ytsearch osugame
+                        </pre>
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices/limits/formatting</th>
+                                <th>Default</th>
+                            </tr>
+                            <tr>
+                                <td>Query</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The query to search for</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+
         </div>
+
+
+
+
+
+
+
+
+
+
 
         <!-- admin commands-->
+        <div class="spaceForNav" id="admin"></div>
+
         <div>
-            <h2 class="divSubheading" id="admin">Admin Commands</h2>
+            <h2 class="divSubheading">Admin Commands</h2>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="admin-checkperms">checkperms</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns the permissions for the given user
+                        </p>
+
+                        <pre>
+                        Command: sbr-checkperms [user]
+                  Slash Command: /checkperms [user]
+                        Example: /checkperms @SSoB
+                        </pre>
+
+                        Aliases: fetchperms, checkpermissions, permissions, perms
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>User</td>
+                                <td>Mention</td>
+                                <td>False</td>
+                                <td>The user to fetch the permissions of</td>
+                                <td>N/A</td>
+                                <td>Command author</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="admin-find">find</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns details for the id given
+                        </p>
+
+                        <pre>
+                        Command: sbr-find [type] [id]
+                  Slash Command: /find [type] [id]
+                        Example: /find type:user id:12345
+                        </pre>
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>Type</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The type to find</td>
+                                <td>user/guild/channel/role/emoji</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>ID</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The ID to find</td>
+                                <td>0+</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="admin-leaveguild">leaveguild</summary>
+                    <div class="divCommandDetails">
+                        <p>Forces the bot to leave a guild (owner only)
+                        </p>
+
+                        <pre>
+                        Command: sbr-leaveguild [id]
+                  Slash Command: /leaveguild [id]
+                        Example: sbr-leaveguild 12345
+                        </pre>
+
+                        Aliases: leave
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>ID</td>
+                                <td>Integer</td>
+                                <td>False</td>
+                                <td>The ID of the guild to leave</td>
+                                <td>0+</td>
+                                <td>Current guild ID</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="admin-log">log</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns the logs of a guild/server. Only owner can get logs of other servers
+                        </p>
+
+                        <pre>
+                        Command: sbr-log
+                  Slash Command: /log [id]
+                        Example: sbr-log
+                        </pre>
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>ID</td>
+                                <td>Integer</td>
+                                <td>False</td>
+                                <td>The ID of the guild to return logs for</td>
+                                <td>0+</td>
+                                <td>Current guild ID</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="admin-servers">servers</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns a list of servers the bot is in
+                        </p>
+
+                        <pre>
+                        Command: sbr-servers
+                  Slash Command: /servers
+                        </pre>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="admin-voice">voice</summary>
+                    <div class="divCommandDetails">
+                        <p>Alters the voice state of a user
+                        </p>
+
+                        <pre>
+                        Command: sbr-voice [user] [type] [channel]
+                  Slash Command: /voice [user] [type] [channel]
+                        Example: sbr-voice @SSoB mute 
+                        Example: /voice @SSoB move #general-vc
+                        </pre>
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>User</td>
+                                <td>Mention</td>
+                                <td>True</td>
+                                <td>The user to apply changes to</td>
+                                <td>N/A</td>
+                                <td>Command Author</td>
+                            </tr>
+                            <tr>
+                                <td>Type</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The type of change to apply</td>
+                                <td>mute/deafen/move/disconnect</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Channel</td>
+                                <td>ID/Channel</td>
+                                <td>False</td>
+                                <td>The channel to move the user to. Only works if type is move</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
         </div>
+
+
+
+
+
+
+
+
+
+
 
         <!-- music commands-->
+        <div class="spaceForNav" id="music"></div>
+
         <div>
-            <h2 class="divSubheading" id="music">Music Commands</h2>
+            <h2 class="divSubheading">Music Commands</h2>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="template-commandname">template</summary>
+                    <div class="divCommandDetails">
+                        <p>Details
+                        </p>
+            
+                        <pre>
+                        Command: 
+                  Slash Command:
+                        Example:
+                        </pre>
+            
+                        Aliases:
+            
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="template-commandname">template</summary>
+                    <div class="divCommandDetails">
+                        <p>Details
+                        </p>
+            
+                        <pre>
+                        Command: 
+                  Slash Command:
+                        Example:
+                        </pre>
+            
+                        Aliases:
+            
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="template-commandname">template</summary>
+                    <div class="divCommandDetails">
+                        <p>Details
+                        </p>
+            
+                        <pre>
+                        Command: 
+                  Slash Command:
+                        Example:
+                        </pre>
+            
+                        Aliases:
+            
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="template-commandname">template</summary>
+                    <div class="divCommandDetails">
+                        <p>Details
+                        </p>
+            
+                        <pre>
+                        Command: 
+                  Slash Command:
+                        Example:
+                        </pre>
+            
+                        Aliases:
+            
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="template-commandname">template</summary>
+                    <div class="divCommandDetails">
+                        <p>Details
+                        </p>
+            
+                        <pre>
+                        Command: 
+                  Slash Command:
+                        Example:
+                        </pre>
+            
+                        Aliases:
+            
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="template-commandname">template</summary>
+                    <div class="divCommandDetails">
+                        <p>Details
+                        </p>
+            
+                        <pre>
+                        Command: 
+                  Slash Command:
+                        Example:
+                        </pre>
+            
+                        Aliases:
+            
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
         </div>
 
+
+
+
+
+
+
+
+
+
+
         <!-- link parse -->
+        <div class="spaceForNav" id="link"></div>
+
         <div>
-            <h2 class="divSubheading" id="link">Link Parse</h2>
+            <h2 class="divSubheading">Link Parse</h2>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="link-osuuserlink">osu user link</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns details for an osu profile. https:// can be omitted
+                        </p>
+            
+                        <pre>
+                        Command: https://osu.ppy.sh/u/[user]
+                        Command: https://osu.ppy.sh/users/[user]
+
+                        Example: https://osu.ppysh/u/15222484
+                        </pre>
+            
+                        Aliases:
+            
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>User</td>
+                                <td>String/Integer</td>
+                                <td>True</td>
+                                <td>The username or ID of the player.</td>
+                                <td>2+</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="link-osumaplink">osu map link</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns the details for a map
+                        </p>
+            
+                        <pre>
+                        Command: https://osu.ppy.sh/b/[ID] +[mods]
+                        Command: https://osu.ppy.sh/beatmaps/[ID] +[mods]
+                        Command: https://osu.ppy.sh/beatmapsets/[SID]#[mode]/[ID] +[mods]
+                        Command: https://osu.ppy.sh/s/[SID]
+                        Command: https://osu.ppy.sh/beatmapsets/[SID]
+
+                        Example: https://osu.ppy.sh/beatmapsets/873811#osu/1846226 +HR
+                        </pre>
+                        
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>ID</td>
+                                <td>Integer</td>
+                                <td>True (if SID is absent)</td>
+                                <td>The ID of the beatmap</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Mods</td>
+                                <td>String</td>
+                                <td>False</td>
+                                <td>Mods to use for difficulty/pp calculations</td>
+                                <td>N/A</td>
+                                <td>NM</td>
+                            </tr>
+                            <tr>
+                                <td>SID</td>
+                                <td>Integer</td>
+                                <td>True (if ID is absent)</td>
+                                <td>The ID of the beatmap set</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Mode</td>
+                                <td>String</td>
+                                <td>False</td>
+                                <td>The mode of the beatmap</td>
+                                <td>osu/taiko/fruits/mania</td>
+                                <td>osu</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="link-replayparse">replayparse</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns the details for a replay file
+                        </p>
+            
+                        <pre>
+                        Command: [file].osr
+                  Slash Command:
+                        Example:
+                        </pre>
+            
+                        Aliases:
+            
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>File</td>
+                                <td>.osr File</td>
+                                <td>True</td>
+                                <td>The osu replay file to use</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="link-scoreparse">scoreparse</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns the details on a score
+                        </p>
+            
+                        <pre>
+                        Command: https://osu.ppy.sh/scores/[mode]/[id]
+                        Example:
+                        </pre>
+                        
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>ID</td>
+                                <td>Integer</td>
+                                <td>True</td>
+                                <td>The ID of the score</td>
+                                <td>0+</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Mode</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The mode of the score</td>
+                                <td>osu/taiko/fruits/mania</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+
         </div>
 
         <div style="margin-top: 900px;">
