@@ -5,11 +5,11 @@ import { access_token } from '../configs/osuauth.json';
 
 /**
  * 
- * @param {integer} userid 
+ * @param {number} userid 
  * @returns boolean
  * @info checks whether or not the user is an owner
  */
-function isOwner(userid) {
+function isOwner(userid: number) {
     for (let i = 0; i < config.ownerusers.length; i++) {
         if (config.ownerusers[i] == userid) {
             return true
