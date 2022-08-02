@@ -566,10 +566,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         ]
     },
     {
-        name: 'Links',
-        type: 2,
-    },
-    {
         name: 'Bookmark',
         type: 3,
         dmPermission: false,
