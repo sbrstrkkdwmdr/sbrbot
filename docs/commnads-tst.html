@@ -168,7 +168,7 @@
                     <div class="divCommandDetails">
                         <p>Solves a simple equation
                         </p>
-            
+
                         <pre>
                         Command: sbr-math [equation]
                   Slash Command: /math [type] [num1] [num2]
@@ -176,9 +176,9 @@
                         Example: /math type:square root num1:2
                         Example: /math type:factorial num1:6
                         </pre>
-            
+
                         Aliases: solve
-            
+
                         <br><br>Options:
                         <table>
                             <tr>
@@ -242,7 +242,7 @@
                     <div class="divCommandDetails">
                         <p>Sends a reminder to the user
                         </p>
-            
+
                         <pre>
                         Command: sbr-remind [time] [reminder] 
                   Slash Command: /remind [reminder] [time] [sendinchannel]
@@ -294,9 +294,9 @@
                     <summary class="divCommandName" id="general-stats">stats</summary>
                     <div class="divCommandDetails">
                         <p>Returns the bot's statistics
-                        <br>Returns latency, uptime, timezone, total guilds, total users, commands sent, prefix
+                            <br>Returns latency, uptime, timezone, total guilds, total users, commands sent, prefix
                         </p>
-            
+
                         <pre>
                         Command: sbr-stats
                   Slash Command: /stats
@@ -1110,15 +1110,15 @@
                     <div class="divCommandDetails">
                         <p>Responds to a yes or no question
                         </p>
-            
+
                         <pre>
                         Command: sbr-8ball
                   Slash Command: /8ball
                         Example: sbr-8ball is this a question?
                         </pre>
-            
+
                         Aliases: ask
-            
+
                     </div>
                 </details>
             </div>
@@ -1129,13 +1129,13 @@
                     <div class="divCommandDetails">
                         <p>Sends a random gif
                         </p>
-            
+
                         <pre>
                         Command: sbr-gif [type]
                   Slash Command: /gif [type]
                         Example: /gif type:cry about it
                         </pre>
-                    
+
                         <br><br>Options:
                         <table>
                             <tr>
@@ -1167,15 +1167,15 @@
                     <div class="divCommandDetails">
                         <p>Returns the first five results from google's image API
                         </p>
-            
+
                         <pre>
                         Command: sbr-image [query]
                   Slash Command: /image [query]
                         Example: sbr-image "cat"
                         </pre>
-            
+
                         Aliases: imagesearch
-            
+
                         <br><br>Options:
                         <table>
                             <tr>
@@ -1205,13 +1205,13 @@
                     <div class="divCommandDetails">
                         <p>Creates a poll
                         </p>
-            
+
                         <pre>
                         Command: sbr-poll [title]
                   Slash Command: /poll [title] [options]
                         Example: sbr-poll Is this a poll? 
                         Example: /poll title:Favourite colour? options:red+blue+green+yellow
-                        </pre>            
+                        </pre>
                         <br><br>Options:
                         <table>
                             <tr>
@@ -1249,15 +1249,15 @@
                     <div class="divCommandDetails">
                         <p>Returns a random number
                         </p>
-            
+
                         <pre>
                         Command: sbr-roll [number]
                   Slash Command: /roll [number]
                         Example:
                         </pre>
-            
+
                         Aliases:
-            
+
                         <br><br>Options:
                         <table>
                             <tr>
@@ -1287,13 +1287,13 @@
                     <div class="divCommandDetails">
                         <p>Returns the first five results from a youtube search
                         </p>
-            
+
                         <pre>
                         Command: sbr-ytsearch [query]
                   Slash Command: /ytsearch [query]
                         Example: sbr-ytsearch osugame
                         </pre>
-                        
+
                         <br><br>Options:
                         <table>
                             <tr>
@@ -1335,6 +1335,231 @@
 
         <div>
             <h2 class="divSubheading">Admin Commands</h2>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="admin-checkperms">checkperms</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns the permissions for the given user
+                        </p>
+
+                        <pre>
+                        Command: sbr-checkperms [user]
+                  Slash Command: /checkperms [user]
+                        Example: /checkperms @SSoB
+                        </pre>
+
+                        Aliases: fetchperms, checkpermissions, permissions, perms
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>User</td>
+                                <td>Mention</td>
+                                <td>False</td>
+                                <td>The user to fetch the permissions of</td>
+                                <td>N/A</td>
+                                <td>Command author</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="admin-find">find</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns details for the id given
+                        </p>
+
+                        <pre>
+                        Command: sbr-find [type] [id]
+                  Slash Command: /find [type] [id]
+                        Example: /find type:user id:12345
+                        </pre>
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>Type</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The type to find</td>
+                                <td>user/guild/channel/role/emoji</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>ID</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The ID to find</td>
+                                <td>0+</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="admin-leaveguild">leaveguild</summary>
+                    <div class="divCommandDetails">
+                        <p>Forces the bot to leave a guild (owner only)
+                        </p>
+
+                        <pre>
+                        Command: sbr-leaveguild [id]
+                  Slash Command: /leaveguild [id]
+                        Example: sbr-leaveguild 12345
+                        </pre>
+
+                        Aliases: leave
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>ID</td>
+                                <td>Integer</td>
+                                <td>False</td>
+                                <td>The ID of the guild to leave</td>
+                                <td>0+</td>
+                                <td>Current guild ID</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="admin-log">log</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns the logs of a guild/server. Only owner can get logs of other servers
+                        </p>
+
+                        <pre>
+                        Command: sbr-log
+                  Slash Command: /log [id]
+                        Example: sbr-log
+                        </pre>
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>ID</td>
+                                <td>Integer</td>
+                                <td>False</td>
+                                <td>The ID of the guild to return logs for</td>
+                                <td>0+</td>
+                                <td>Current guild ID</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="admin-servers">servers</summary>
+                    <div class="divCommandDetails">
+                        <p>Returns a list of servers the bot is in
+                        </p>
+
+                        <pre>
+                        Command: sbr-servers
+                  Slash Command: /servers
+                        </pre>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
+                    <summary class="divCommandName" id="admin-voice">voice</summary>
+                    <div class="divCommandDetails">
+                        <p>Alters the voice state of a user
+                        </p>
+
+                        <pre>
+                        Command: sbr-voice [user] [type] [channel]
+                  Slash Command: /voice [user] [type] [channel]
+                        Example: sbr-voice @SSoB mute 
+                        Example: /voice @SSoB move #general-vc
+                        </pre>
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>User</td>
+                                <td>Mention</td>
+                                <td>True</td>
+                                <td>The user to apply changes to</td>
+                                <td>N/A</td>
+                                <td>Command Author</td>
+                            </tr>
+                            <tr>
+                                <td>Type</td>
+                                <td>String</td>
+                                <td>True</td>
+                                <td>The type of change to apply</td>
+                                <td>mute/deafen/move/disconnect</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Channel</td>
+                                <td>ID/Channel</td>
+                                <td>False</td>
+                                <td>The channel to move the user to. Only works if type is move</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
         </div>
 
 
