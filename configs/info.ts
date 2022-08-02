@@ -18,15 +18,15 @@ let cmds = [
     {
         name: 'convert',
         description: 'Converts one value to another',
-        usage: 'convert <type1> <type2> <number>',
-        slashusage: '/convert [type1] [type2] [number]',
+        usage: 'convert <from> <to> <number>',
+        slashusage: '/convert [from] [to] [number]',
         options: [
             {
-                name: 'type1',
+                name: 'from',
                 description: '`string, required`. What to convert the value from (ie km)'
             },
             {
-                name: 'type2',
+                name: 'to',
                 description: '`string, required`. What to convert the value to (ie miles)'
             },
             {

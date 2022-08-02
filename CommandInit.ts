@@ -104,14 +104,14 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         dmPermission: false,
         options: [
             {
-                name: 'type1',
+                name: 'from',
                 description: 'What to convert the value from',
                 type: Discord.ApplicationCommandOptionType.String,
                 required: true,
                 choices: cmdconfig.conversionopts
             },
             {
-                name: 'type2',
+                name: 'to',
                 description: 'What to convert the value to',
                 type: Discord.ApplicationCommandOptionType.String,
                 required: true,
