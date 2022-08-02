@@ -22,14 +22,30 @@ module.exports = {
             if (response.items.length < 1) return message.reply({ content: 'Error - no results found', allowedMentions: { repliedUser: false } })
 
             let resimg = ''
-            let i:number;
+            let i: number;
             for (i = 0; i < 5 && i < response.items.length; i++) {
                 resimg += `\n\n<${response.items[i].link}>`
             }
             let imageEmbed = new Discord.EmbedBuilder()
                 .setTitle(`IMAGE RESULTS FOR ${args.join(' ')}`)
                 .setDescription(`(NOTE - links may be unsafe)\n${resimg}`)
-            message.reply({ embeds: [imageEmbed], allowedMentions: { repliedUser: false } })
+            let image1 = new Discord.EmbedBuilder()
+                .setURL('https://www.google.com/search?q=' + args.join(' '))
+                .setImage(`${response.items[0].image.thumbnailLink}`)
+            let image2 = new Discord.EmbedBuilder()
+                .setURL('https://www.google.com/search?q=' + args.join(' '))
+                .setImage(`${response.items[1].image.thumbnailLink}`)
+            let image3 = new Discord.EmbedBuilder()
+                .setURL('https://www.google.com/search?q=' + args.join(' '))
+                .setImage(`${response.items[2].image.thumbnailLink}`)
+            let image4 = new Discord.EmbedBuilder()
+                .setURL('https://www.google.com/search?q=' + args.join(' '))
+                .setImage(`${response.items[3].image.thumbnailLink}`)
+            let image5 = new Discord.EmbedBuilder()
+                .setURL('https://www.google.com/search?q=' + args.join(' '))
+                .setImage(`${response.items[4].image.thumbnailLink}`)
+
+            message.reply({ embeds: [imageEmbed, image1, image2, image3, image4, image5], allowedMentions: { repliedUser: false } })
             fs.appendFileSync('commands.log', `\nCommand Information\nQuery: ${args.join(' ')}`)
 
         }
@@ -52,7 +68,7 @@ module.exports = {
             if (response.items.length < 1) return interaction.reply({ content: 'Error - no results found', allowedMentions: { repliedUser: false } })
 
             let resimg = ''
-            let i:number;
+            let i: number;
             for (i = 0; i < 5 && i < response.items.length; i++) {
                 resimg += `\n\n<${response.items[i].link}>`
             }
