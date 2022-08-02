@@ -3,11 +3,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     const oncooldown = new Set();
 
     client.on('messageCreate', async (message) => {
-        if (message.mentions.users.size > 0) {
-            if (message.mentions.users.first().id == client.user.id) {
-                return message.reply({ content: 'Prefix is ' + config.prefix, allowedMentions: { repliedUser: false } })
-            }
-        }
+
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
 

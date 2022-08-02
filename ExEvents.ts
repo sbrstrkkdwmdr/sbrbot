@@ -29,16 +29,24 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             )
     }, 1 * 60 * 1000);
 
+    client.on('messageCreate', async (message) => {
+        if (message.mentions.users.size > 0) {
+            if (message.mentions.users.first().id == client.user.id) {
+                return message.reply({ content: `Prefix is \`${config.prefix}\``, allowedMentions: { repliedUser: false } })
+            }
+        }
+    })
 
-/* 
-    let osupp;
-    (async () => {
-        //await osuapiext.auth.authorize(osuClientID, osuClientSecret, '');
 
-        osupp = osuapiext.tools.pp.calculate(1186443, osumodcalc.ModStringToInt('HDDT'), 412, 0, 96.95)
-            .then(x => {
-                console.log(x)
-            })
-    })(); */
+    /* 
+        let osupp;
+        (async () => {
+            //await osuapiext.auth.authorize(osuClientID, osuClientSecret, '');
+    
+            osupp = osuapiext.tools.pp.calculate(1186443, osumodcalc.ModStringToInt('HDDT'), 412, 0, 96.95)
+                .then(x => {
+                    console.log(x)
+                })
+        })(); */
 
 }
