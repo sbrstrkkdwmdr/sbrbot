@@ -12,7 +12,10 @@ body {
     color: white;
     margin-top: 150px;
     z-index: 1;
+}
 
+.spaceForNav {
+    padding-bottom: 100px;
 }
 
 /* h1 {
