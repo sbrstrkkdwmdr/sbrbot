@@ -4,7 +4,7 @@ import osucalc = require('osumodcalculator')
 import ppcalc = require('booba')
 import fetch from 'node-fetch'
 import emojis = require('../../configs/emojis')
-import checks = require('../../configs/commandchecks')
+import cmdchecks = require('../../configs/commandchecks')
 
 module.exports = {
     name: 'rs',
@@ -84,7 +84,7 @@ module.exports = {
             if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')) {
                 mode = 'osu'
             }
-            const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
+            const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
 
             fetch(userinfourl, {
                 headers: {
@@ -152,7 +152,7 @@ module.exports = {
                     })();
                     fs.writeFileSync('debugosu/command-rs=name.json', JSON.stringify(osudata, null, 2))
 
-                    const recentplayurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/recent?include_fails=1&mode=${mode}&limit=100&offset=${page}`
+                    const recentplayurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(userid)}/scores/recent?include_fails=1&mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=${page}`
                     fetch(recentplayurl, {
                         headers: {
                             'Authorization': `Bearer ${access_token}`
@@ -249,7 +249,7 @@ module.exports = {
                                             "mods": osucalc.ModStringToInt(mods)
                                         })
                                 }
-                                let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${rsdata[0].beatmap.id}/attributes`;
+                                let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(rsdata[0].beatmap.id)}/attributes`;
                                 fetch(beatattrurl, {
                                     method: 'POST',
                                     headers: {
@@ -580,7 +580,7 @@ module.exports = {
             mode: ${mode}
             list: ${list}
             `)
-            const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
+            const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
 
             fetch(userinfourl, {
                 headers: {
@@ -651,7 +651,7 @@ module.exports = {
                     })();
                     fs.writeFileSync('debugosu/command-rs=name.json', JSON.stringify(osudata, null, 2))
 
-                    const recentplayurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/recent?include_fails=1&mode=${mode}&limit=100&offset=0`
+                    const recentplayurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(userid)}/scores/recent?include_fails=1&mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`
                     fetch(recentplayurl, {
                         headers: {
                             'Authorization': `Bearer ${access_token}`
@@ -752,7 +752,7 @@ module.exports = {
                                                 "mods": osucalc.ModStringToInt(mods)
                                             })
                                     }
-                                    let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${rsdata[0 + page].beatmap.id}/attributes`;
+                                    let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(rsdata[0 + page].beatmap.id)}/attributes`;
                                     fetch(beatattrurl, {
                                         method: 'POST',
                                         headers: {

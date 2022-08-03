@@ -3,7 +3,8 @@ import fs = require('fs')
 import fetch from 'node-fetch'
 import emojis = require('../../configs/emojis');
 import chartjsimg = require('chartjs-to-image');
-import osufunc = require('../../configs/osufunc')
+import osufunc = require('../../configs/osufunc');
+import cmdchecks = require('../../configs/commandchecks');
 
 module.exports = {
     name: 'osu',
@@ -46,7 +47,7 @@ module.exports = {
             if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')) {
                 mode = 'osu'
             }
-            const userurl = `https://osu.ppy.sh/api/v2/users/${user}/${mode}`
+            const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/${cmdchecks.toHexadecimal(mode)}`
             fetch(userurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -234,7 +235,7 @@ module.exports = {
                 mode = 'osu'
             }
             //interaction.reply('Searching for ' + user + '...')
-            const userurl = `https://osu.ppy.sh/api/v2/users/${user}/${mode}`
+            const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/${cmdchecks.toHexadecimal(mode)}`
             fs.appendFileSync('commands.log',
                 `\noptions(2):
             user: ${user}
@@ -345,7 +346,7 @@ module.exports = {
                             isonline = `**${emojis.onlinestatus.online} Online**`
                         }
                         else {
-                            isonline = `**${emojis.onlinestatus.offline} Offline** | Last online <t:${playerlasttoint.getTime() / 1000}:R> ago`
+                            isonline = `**${emojis.onlinestatus.offline} Offline** | Last online <t:${playerlasttoint.getTime() / 1000}:R>`
                         }
 
                         let prevnames = osudata.previous_usernames;
@@ -471,14 +472,14 @@ module.exports = {
                                 chartrank.toFile('./debugosu/playerrankgraph.jpg')
                                 chartplay.toFile('./debugosu/playerplaygraph.jpg').then(() => {
 
-                                    let usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
+                                    let usertopurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/best?mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`;
                                     fetch(usertopurl, {
                                         headers: {
                                             Authorization: `Bearer ${access_token}`
                                         }
                                     }).then(res => res.json() as any)
                                         .then(osutopdata => {
-                                            let mostplayedurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/beatmapsets/most_played`
+                                            let mostplayedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/beatmapsets/most_played`
                                             fetch(mostplayedurl, {
                                                 headers: {
                                                     Authorization: `Bearer ${access_token}`

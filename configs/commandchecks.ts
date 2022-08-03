@@ -250,9 +250,9 @@ function trackScore(userid: number, type: string) {
  * @param str input string
  * @returns a string with special characters converted to versions that won't break URLs
  */
- function toHexadecimal(str:string){
+ function toHexadecimal(str:string|number){
     let newstr:string;
-    newstr = str
+    newstr = str.toString()
     .replaceAll('%', '%25')
     .replaceAll('`', '%60')
     .replaceAll('~', '%7E')
@@ -298,9 +298,9 @@ function trackScore(userid: number, type: string) {
  * @param str input string
  * @returns non alpha numeric characters removed
  */
-function toAlphaNum(str:string){
+function toAlphaNum(str:string|number){
     let newstr:string;
-    newstr = str.replace(/([^A-Za-z 0-9])/g, '')
+    newstr = str.toString().replace(/([^A-Za-z 0-9])/g, '')
     return newstr;
 }
 

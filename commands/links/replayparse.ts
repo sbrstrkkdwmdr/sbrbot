@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 import { access_token } from '../../configs/osuauth.json';
 import ppcalc = require('booba')
 import chartjsimg = require('chartjs-to-image');
-
+import cmdchecks = require('../../configs/commandchecks');
 
 module.exports = {
     name: 'replayparse',
@@ -22,7 +22,7 @@ module.exports = {
         }
         fs.writeFileSync('debugosu/link-replay.json', JSON.stringify(replay, null, 2))
 
-        let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/lookup?checksum=${replay.beatmapMD5}`
+        let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/lookup?checksum=${cmdchecks.toHexadecimal(replay.beatmapMD5)}`
         fetch(mapurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
@@ -31,7 +31,7 @@ module.exports = {
             fs.writeFileSync('debugosu/link-replay=map.json', JSON.stringify(mapdata, null, 2))
             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
 
-            const userurl = `https://osu.ppy.sh/api/v2/users/${replay.playerName}`
+            const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(replay.playerName)}`
 
             fetch(userurl, {
                 headers: {
