@@ -250,42 +250,42 @@ function trackScore(userid: number, type: string) {
  * @param str input string
  * @returns a string with special characters converted to versions that won't break URLs
  */
-function toUrlbleChars(str:string){
+ function toHexadecimal(str:string){
     let newstr:string;
     newstr = str
-    .replaceAll('`', '')
-    .replaceAll('~', '')
-    .replaceAll('!', '')
-    .replaceAll('@', '')
-    .replaceAll('#', '')
-    .replaceAll('$', '')
-    .replaceAll('%', '')
-    .replaceAll('^', '')
-    .replaceAll('&', '')
-    .replaceAll('*', '')
-    .replaceAll('(', '')
-    .replaceAll(')', '')
-    .replaceAll('-', '')
-    .replaceAll('_', '')
-    .replaceAll('=', '')
-    .replaceAll('+', '')
-    .replaceAll('[', '')
-    .replaceAll(']', '')
-    .replaceAll('{', '')
-    .replaceAll('}', '')
-    .replaceAll('|', '')
-    .replaceAll('\\', '')
-    .replaceAll(':', '')
-    .replaceAll(';', '')
-    .replaceAll('\'', '')
-    .replaceAll('"', '')
-    .replaceAll(',', '')
-    .replaceAll('.', '')
-    .replaceAll('<', '')
-    .replaceAll('>', '')
-    .replaceAll('?', '')
-    .replaceAll('/', '')
-
+    .replaceAll('%', '%25')
+    .replaceAll('`', '%60')
+    .replaceAll('~', '%7E')
+    .replaceAll('!', '%21')
+    .replaceAll('@', '%40')
+    .replaceAll('#', '%23')
+    .replaceAll('$', '%24')
+    .replaceAll('^', '%5E')
+    .replaceAll('&', '%26')
+    .replaceAll('*', '%2A')
+    .replaceAll('(', '%28')
+    .replaceAll(')', '%29')
+    .replaceAll('-', '%2D')
+    .replaceAll('_', '%5F')
+    .replaceAll('=', '%3D')
+    .replaceAll('+', '%2B')
+    .replaceAll('[', '%5B')
+    .replaceAll(']', '%5D')
+    .replaceAll('{', '%7B')
+    .replaceAll('}', '%7D')
+    .replaceAll('|', '%7C')
+    .replaceAll('\\', '%5C')
+    .replaceAll(':', '%3A')
+    .replaceAll(';', '%3B')
+    .replaceAll('\'', '%27')
+    .replaceAll('"', '%22')
+    .replaceAll(',', '%2C')
+    .replaceAll('.', '%2E')
+    .replaceAll('<', '%3C')
+    .replaceAll('>', '%3E')
+    .replaceAll('?', '%3F')
+    .replaceAll('/', '%2F')
+    .replaceAll(' ', '%20')
 
 
     .replace(/([^A-Za-z0-9 %])/g, '')
@@ -335,5 +335,7 @@ export {
     vidfiletypes,
     nthIndex,
     nthIndexLast,
-    trackScore
+    trackScore,
+    toHexadecimal,
+    toAlphaNum
 }
