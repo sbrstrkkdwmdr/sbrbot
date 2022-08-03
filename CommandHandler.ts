@@ -148,14 +148,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
             // music
 
-            case 'sfx':
-                client.musiccmds.get('sfx').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction);
+            // WIP
+            case 'compare': case 'whatif': case 'play': case 'pause': case 'np': case 'wip': case 'skip': case 'queue': case 'resume':
+                message.reply({ content: 'This command is currently under development. Will be added later.', allowedMentions: { repliedUser: false } });
                 break;
 
-            //test
-            case 'test':
-                client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                break;
         }
         fs.appendFileSync('logs/totalcommands.txt', 'x')
 
