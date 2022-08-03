@@ -29,6 +29,83 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             )
     }, 1 * 60 * 1000);
 
+    let songsarr = [
+        "Yomi Yori kikoyu, Koukoku no hi to Honoo no Shoujo [Kurushimi]",
+        "FREEDOM DiVE [FOUR DiMENSIONS]",
+        "A FOOL MOON NIGHT [Piggey's Destruction]",
+        "Sidetracked Day [Infinity Inside]",
+        "Cirno's Perfect Math Class [TAG4]",
+        "Glorious Crown [FOUR DIMENSIONS]",
+        "Made of Fire [Oni]",
+        "小さな恋のうた (Synth Rock Cover) [Together]",
+        "C18H27NO3(extend) [Pure Darkness]",
+        "BLUE DRAGON [Blue Dragon]",
+        "-ERROR [Drowning]",
+        "Remote Control [Insane] +HDDT",
+        "Usatei 2011 [Ozzy's Extra]",
+        "Chocomint's made of fire hddt 98.54 full combo",
+        "Ascension to Heaven [Death] +HDDTHR",
+        "Can't Defeat Airman [Holy Shit! It's Airman!!!]",
+        "The Big Black [WHO'S AFRAID OF THE BIG BLACK]"
+    ]
+
+    let activityarr = [
+        {
+            name: "240BPM | sbr-help",
+            type: 1,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: songsarr[Math.floor(Math.random() * songsarr.length)] + " | sbr-help",//"Yomi Yori kikoyu, Koukoku no hi to Honoo no Shoujo | sbr-help",
+            type: 2,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: "dt farm maps | sbr-help",
+            type: 0,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: "nothing in particular | sbr-help",
+            type: 3,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: "no mod farm maps | sbr-help",
+            type: 0,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: "hr | sbr-help",
+            type: 0,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: songsarr[Math.floor(Math.random() * songsarr.length)] + " | sbr-help",
+            type: 0,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: "you | sbr-help",
+            type: 3,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        }
+    ]
+
+    client.user.setPresence({
+        activities: [activityarr[0]],
+        status: 'dnd',
+        afk: false
+    });
+    setInterval(() => {
+        client.user.setPresence({
+            activities: [activityarr[Math.floor(Math.random() * activityarr.length)]],
+            status: 'dnd',
+            afk: false
+        });
+    }, 60 * 1000);
+
+
     client.on('messageCreate', async (message) => {
         if (message.mentions.users.size > 0) {
             if (message.mentions.users.first().id == client.user.id) {
