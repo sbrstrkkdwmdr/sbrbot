@@ -351,7 +351,19 @@ function timeToMsDef(str: string) {
 
     return ms;
 }
+/**
+ * 
+ * @param str string to convert
+ * @returns time in milliseconds
+ */
+function timeToMsAll(str:string){
+    if(str.includes(':')){
+        return timeToMsDef(str)
+    } else {
+        return timeToMsStr(str)
+    }
+}
 
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
-export { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset, timeToMsStr, timeToMsDef };
+export { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset, timeToMsStr, timeToMsDef, timeToMsAll };

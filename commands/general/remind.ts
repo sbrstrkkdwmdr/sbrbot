@@ -2,6 +2,7 @@ import ms = require('ms')
 import fetch = require('node-fetch')
 import notxt = require('../../configs/w')
 import fs = require('fs')
+import calc = require('../../configs/calculations');
 module.exports = {
     name: 'remind',
     description: 'null',
@@ -13,12 +14,12 @@ module.exports = {
                 if(sendchannel == true){
                 setTimeout(() => {
                     obj.channel.send({ content: `${remindertxt}` })
-                }, ms(`${time}`));
+                }, calc.timeToMsAll(time));
             }
             else {
                 setTimeout(() => {
                     interaction.member.user.send({ embeds: [reminder] })
-                }, ms(`${time}`));
+                }, calc.timeToMsAll(time));
             }
             } catch (error) {
                 console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
