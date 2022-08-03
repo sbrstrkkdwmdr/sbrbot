@@ -245,6 +245,65 @@ function trackScore(userid: number, type: string) {
         })
 }
 
+/**
+ * 
+ * @param str input string
+ * @returns a string with special characters converted to versions that won't break URLs
+ */
+function toUrlbleChars(str:string){
+    let newstr:string;
+    newstr = str
+    .replaceAll('`', '')
+    .replaceAll('~', '')
+    .replaceAll('!', '')
+    .replaceAll('@', '')
+    .replaceAll('#', '')
+    .replaceAll('$', '')
+    .replaceAll('%', '')
+    .replaceAll('^', '')
+    .replaceAll('&', '')
+    .replaceAll('*', '')
+    .replaceAll('(', '')
+    .replaceAll(')', '')
+    .replaceAll('-', '')
+    .replaceAll('_', '')
+    .replaceAll('=', '')
+    .replaceAll('+', '')
+    .replaceAll('[', '')
+    .replaceAll(']', '')
+    .replaceAll('{', '')
+    .replaceAll('}', '')
+    .replaceAll('|', '')
+    .replaceAll('\\', '')
+    .replaceAll(':', '')
+    .replaceAll(';', '')
+    .replaceAll('\'', '')
+    .replaceAll('"', '')
+    .replaceAll(',', '')
+    .replaceAll('.', '')
+    .replaceAll('<', '')
+    .replaceAll('>', '')
+    .replaceAll('?', '')
+    .replaceAll('/', '')
+
+
+
+    .replace(/([^A-Za-z0-9 %])/g, '')
+
+    return newstr;
+}
+
+/**
+ * 
+ * @param str input string
+ * @returns non alpha numeric characters removed
+ */
+function toAlphaNum(str:string){
+    let newstr:string;
+    newstr = str.replace(/([^A-Za-z 0-9])/g, '')
+    return newstr;
+}
+
 /* module.exports = {
     audiofiletype,
     checkisfileblocked,
