@@ -11,8 +11,10 @@ module.exports = {
     name: 'replayparse',
     description: 'replayparse',
     execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO) {
+        let absoluteID = new Date().getTime()
+
         //console.log('true')
-        fs.appendFileSync(`link${message.guildId}.log`, `LINK DETECT EVENT - replayparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\n`, 'utf-8')
+        fs.appendFileSync(`link${message.guildId}.log`, `LINK DETECT EVENT - replayparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
         let replay: any;
         try {
             replay = replayparse.parseReplay('./files/replay.osr')
@@ -166,7 +168,7 @@ module.exports = {
                         message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
                         let endofcommand = new Date().getTime();
                         let timeelapsed = endofcommand - currentDate.getTime();
-                        fs.appendFileSync(`link${message.guildId}.log`, `\nCommand Latency (replay parse) - ${timeelapsed}ms\n`)
+                        fs.appendFileSync(`link${message.guildId}.log`, `\nCommand Latency (replay parse) - ${timeelapsed}ms\nID:${absoluteID}\n`)
                     })();
                 })
             })

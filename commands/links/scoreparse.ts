@@ -10,6 +10,8 @@ module.exports = {
     name: 'scoreparse',
     description: 'scoreparse',
     execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO) {
+        let absoluteID = new Date().getTime()
+        
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         let scorelink: any;
         let scoremode: any;
@@ -31,7 +33,7 @@ module.exports = {
         }).then(res => res.json() as any)
             .then(scoredata => {
                 fs.writeFileSync('debugosu/link-scoreparse.json', JSON.stringify(scoredata, null, 2));
-                fs.appendFileSync(`link${message.guildId}.log`, `LINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\n`, 'utf-8')
+                fs.appendFileSync(`link${message.guildId}.log`, `LINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
                     ;
                 (async () => {
                     try {
@@ -171,7 +173,7 @@ module.exports = {
                     fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
                     let endofcommand = new Date().getTime();
                     let timeelapsed = endofcommand - currentDate.getTime();
-                    fs.appendFileSync(`link${message.guildId}.log`, `\nCommand Latency (score parse) - ${timeelapsed}ms\n`)
+                    fs.appendFileSync(`link${message.guildId}.log`, `\nCommand Latency (score parse) - ${timeelapsed}ms\nID:${absoluteID}\n`)
                 })();
             })
     }

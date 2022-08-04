@@ -12,6 +12,8 @@ module.exports = {
     name: 'osumaplink',
     description: 'osumaplink',
     execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO) {
+        let absoluteID = new Date().getTime()
+
 
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         //let mods = message.content.split('+')[1]
@@ -49,7 +51,7 @@ module.exports = {
                 return message.reply({ content: 'Please enter a valid beatmap link.', allowedMentions: { repliedUser: false } })
 
             }
-            fs.appendFileSync(`link${message.guildId}.log`, `LINK DETECT EVENT - osumaplink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!map link: ${message.content}\n`, 'utf-8')
+            fs.appendFileSync(`link${message.guildId}.log`, `LINK DETECT EVENT - osumaplink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!map link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
 
             let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}`
             fetch(mapurl, {
@@ -331,7 +333,7 @@ module.exports = {
                                 ppComputedString = NaN
                                 pp95ComputedString = NaN
                                 ppissue = 'Error - pp calculator could not fetch beatmap'
-                                fs.appendFileSync(`link${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
+                                fs.appendFileSync(`link${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error + `\nID:${absoluteID}\n`)
                             }
 
                             let mapname = json.beatmapset.title
@@ -399,10 +401,10 @@ module.exports = {
                                         ])
                                     //console.log('true')
                                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
-                                    fs.appendFileSync(`link${message.guildId}.log`, '\nsuccess\n\n', 'utf-8')
+                                    fs.appendFileSync(`link${message.guildId}.log`, `\nsuccess\n${absoluteID}\n\n`, 'utf-8')
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync(`link${message.guildId}.log`, `\nCommand Latency (osumaplink) - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync(`link${message.guildId}.log`, `\nCommand Latency (osumaplink) - ${timeelapsed}ms\nID:${absoluteID}\n`)
                                 })
                         })();
                     })
