@@ -15,6 +15,8 @@ module.exports = {
         '⠀⠀`sort`: string, optional. The sort to display the top plays of. Valid values: `score`, `accuracy`, `pp`, `recent`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         let prevmap: any;
+        let absoluteID = currentDate.getTime()
+        
         /*         if (fs.existsSync(`./debugosu/prevmap.json`)) {
                     //console.log('hello there')
                     try {

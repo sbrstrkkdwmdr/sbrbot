@@ -16,7 +16,8 @@ module.exports = {
         '⠀⠀`page`: The page to display the most recent score of\n' +
         '⠀⠀`mode`: The mode to display the most recent score of\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
-
+        let absoluteID = currentDate.getTime()
+        
         if (message != null && button == null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - rs (message)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 

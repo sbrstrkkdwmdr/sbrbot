@@ -12,7 +12,8 @@ module.exports = {
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
         //import { access_token } from '../../configs/osuauth.json';
-
+        let absoluteID = currentDate.getTime()
+        
         let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         let access_token = JSON.parse(accessN).access_token;
 

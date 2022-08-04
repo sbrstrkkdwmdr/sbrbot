@@ -10,6 +10,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
+        let absoluteID = currentDate.getTime();
 
         const args = null;
         const message = interaction.message;

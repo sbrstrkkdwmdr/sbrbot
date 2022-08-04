@@ -4,6 +4,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     client.on('messageCreate', async (message) => {
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
+        let absoluteID = currentDate.getTime();
 
 
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')

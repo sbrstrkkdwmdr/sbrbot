@@ -16,6 +16,8 @@ module.exports = {
         let i: number;
         let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         let access_token = JSON.parse(accessN).access_token;
+        let absoluteID = currentDate.getTime()
+        
         /* if (fs.existsSync(`./debugosu/prevmap.json`)) {
             //console.log('hello there')
             try {

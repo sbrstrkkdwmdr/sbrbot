@@ -14,6 +14,8 @@ module.exports = {
         'Options:\n' +
         '⠀⠀`user`: string/integer, optional. The osu! username of the user.',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+        let absoluteID = currentDate.getTime()
+        
         if (message != null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - osu (message)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')

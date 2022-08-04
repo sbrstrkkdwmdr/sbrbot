@@ -26,6 +26,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
+        let absoluteID = currentDate.getTime();
+
 
         const args = message.content.slice(config.prefix.length).split(/ +/);
         const command = args.shift().toLowerCase();

@@ -8,6 +8,8 @@ module.exports = {
         '⠀⠀`username`: string, required. The osu! username of the user\n' +
         '⠀⠀`mode`: string, optional. The mode of the user. If omitted, the default mode \'osu\' will be used.\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+        let absoluteID = currentDate.getTime()
+        
         if (message != null) {
             let username = args.join(' ')
             if (!args[0]) return message.reply({ content: 'Please enter a username or ID', allowedMentions: { repliedUser: false }, failIfNotExists: true })

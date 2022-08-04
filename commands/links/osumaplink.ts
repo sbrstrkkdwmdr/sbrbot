@@ -12,8 +12,7 @@ module.exports = {
     name: 'osumaplink',
     description: 'osumaplink',
     execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO) {
-        let absoluteID = new Date().getTime()
-
+        let absoluteID = currentDate.getTime()
 
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         //let mods = message.content.split('+')[1]

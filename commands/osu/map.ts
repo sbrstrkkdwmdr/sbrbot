@@ -22,7 +22,8 @@ module.exports = {
         let i;
         let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         let access_token = JSON.parse(accessN).access_token;
-
+        let absoluteID = currentDate.getTime()
+        
         if (message != null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - map (message)\n${currentDate} | ${currentDateISO}\n recieved get map info command\nrequested by ${message.author.id} AKA ${message.author.tag}]\nMessage content: ${message.content}`, 'utf-8')
 

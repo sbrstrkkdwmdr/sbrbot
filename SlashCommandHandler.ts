@@ -9,6 +9,8 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         //make a variable that is the current date
         let currentDate = new Date()
         let currentDateISO = new Date().toISOString()
+        let absoluteID = currentDate.getTime();
+
         let message = null;
         let args = null;
         let button = null;

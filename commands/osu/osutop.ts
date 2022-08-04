@@ -21,7 +21,8 @@ module.exports = {
     ,
 
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
-
+        let absoluteID = currentDate.getTime()
+        
         if (message != null && button == null) {
 
             let buttons = new Discord.ActionRowBuilder()
