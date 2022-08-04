@@ -49,7 +49,7 @@ module.exports = {
                 return message.reply({ content: 'Please enter a valid beatmap link.', allowedMentions: { repliedUser: false } })
 
             }
-            fs.appendFileSync(`link.log`, `LINK DETECT EVENT - osumaplink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!map link: ${message.content}\n`, 'utf-8')
+            fs.appendFileSync(`link${message.guildId}.log`, `LINK DETECT EVENT - osumaplink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!map link: ${message.content}\n`, 'utf-8')
 
             let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}`
             fetch(mapurl, {
@@ -331,7 +331,7 @@ module.exports = {
                                 ppComputedString = NaN
                                 pp95ComputedString = NaN
                                 ppissue = 'Error - pp calculator could not fetch beatmap'
-                                fs.appendFileSync(`link.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
+                                fs.appendFileSync(`link${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
                             }
 
                             let mapname = json.beatmapset.title
@@ -399,10 +399,10 @@ module.exports = {
                                         ])
                                     //console.log('true')
                                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
-                                    fs.appendFileSync(`link.log`, '\nsuccess\n\n', 'utf-8')
+                                    fs.appendFileSync(`link${message.guildId}.log`, '\nsuccess\n\n', 'utf-8')
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync(`link.log`, `\nCommand Latency (osumaplink) - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync(`link${message.guildId}.log`, `\nCommand Latency (osumaplink) - ${timeelapsed}ms\n`)
                                 })
                         })();
                     })
@@ -517,7 +517,7 @@ module.exports = {
                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
                     let endofcommand = new Date().getTime();
                     let timeelapsed = endofcommand - currentDate.getTime();
-                    fs.appendFileSync(`link.log`, `\nCommand Latency (osumaplink) (set) - ${timeelapsed}ms\n`)
+                    fs.appendFileSync(`link${message.guildId}.log`, `\nCommand Latency (osumaplink) (set) - ${timeelapsed}ms\n`)
                     fs.writeFileSync(`./debugosu/prevmap.json${message.guildId}`, JSON.stringify(({ id: setdata.beatmaps[setdata.beatmaps.length - 1].id }), null, 2));
 
 
