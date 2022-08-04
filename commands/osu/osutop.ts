@@ -54,7 +54,7 @@ module.exports = {
                 );
 
 
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (message)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - osutop (message)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             let searchid = message.author.id
             if (message.mentions.users.size > 0) {
@@ -138,7 +138,7 @@ module.exports = {
                                     let usernametesting = osutopdata[0].user.username
                                 } catch (error) {
                                     console.log(error)
-                                    fs.writeFileSync('commands.log', JSON.stringify(error, null, 2))
+                                    fs.writeFileSync(`commands.log`, JSON.stringify(error, null, 2))
                                     return message.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                                 }
                                 let topEmbed = new Discord.EmbedBuilder()
@@ -230,16 +230,16 @@ module.exports = {
                                     }])
                                 }
                                 message.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons], failIfNotExists: true })
-                                fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
-                                fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                                fs.appendFileSync(`commands.log`, '\nsuccess\n\n', 'utf-8')
+                                fs.appendFileSync(`commands.log`, `\nCommand Information\nmessage content: ${message.content}`)
                                 let endofcommand = new Date().getTime();
                                 let timeelapsed = endofcommand - currentDate.getTime();
-                                fs.appendFileSync('commands.log', `\nCommand Latency (message command => osutop) - ${timeelapsed}ms\n`)
+                                fs.appendFileSync(`commands.log`, `\nCommand Latency (message command => osutop) - ${timeelapsed}ms\n`)
 
                             })
                     } catch (error) {
                         message.reply({ content: 'user ' + user + ' not found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                        fs.appendFileSync(`commands.log`, `\nCommand Information\nmessage content: ${message.content}`)
 
                     }
                 })
@@ -288,9 +288,9 @@ module.exports = {
             let compact;
 
             if (interaction.type == Discord.InteractionType.ApplicationCommand) {
-                fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osutop (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-                fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-                fs.appendFileSync('commands.log',
+                fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - osutop (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+                fs.appendFileSync(`commands.log`, `\nInteraction ID: ${interaction.id}`)
+                fs.appendFileSync(`commands.log`,
                     `\noptions:
                 user: ${interaction.options.getString('user')}
                 mode: ${interaction.options.getString('mode')}
@@ -313,9 +313,9 @@ module.exports = {
                 reverse = interaction.options.getBoolean('reverse')
                 compact = interaction.options.getBoolean('compact')
             } else {
-                fs.appendFileSync('commands.log', `\nBUTTON EVENT - osutop (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-                fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-                fs.appendFileSync('commands.log', `\n${button}`);
+                fs.appendFileSync(`commands.log`, `\nBUTTON EVENT - osutop (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! top plays command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+                fs.appendFileSync(`commands.log`, `\nInteraction ID: ${interaction.id}`)
+                fs.appendFileSync(`commands.log`, `\n${button}`);
 
                 user = message.embeds[0].title.split('Top plays of ')[1]
 
@@ -405,7 +405,7 @@ module.exports = {
                 page = page - 1
             }
             let userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
-            fs.appendFileSync('commands.log',
+            fs.appendFileSync(`commands.log`,
                 `\noptions(2):
             user: ${user}
             mode: ${gamemode}
@@ -461,7 +461,7 @@ module.exports = {
                                     let usernametesting = osutopdataPreSort[0].user.username
                                 } catch (error) {
                                     console.log(error)
-                                    fs.writeFileSync('commands.log', JSON.stringify(error, null, 2))
+                                    fs.writeFileSync(`commands.log`, JSON.stringify(error, null, 2))
                                     return interaction.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false } })
                                 }
                                 let filtereddata = osutopdataPreSort
@@ -718,23 +718,23 @@ module.exports = {
                                 }
                                 if (interaction.type == Discord.InteractionType.ApplicationCommand) {
                                     interaction.reply({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
-                                    fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
+                                    fs.appendFileSync(`commands.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                    fs.appendFileSync(`commands.log`, `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => osutop) - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => osutop) - ${timeelapsed}ms\n`)
                                 }
                                 else if (interaction.type == Discord.InteractionType.MessageComponent) {
                                     message.edit({ content: '⠀', embeds: [topEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                    fs.appendFileSync(`commands.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => osutop) - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => osutop) - ${timeelapsed}ms\n`)
                                 }
                             })
                     } catch (error) {
                         interaction.reply({ content: 'user ' + user + ' not found', allowedMentions: { repliedUser: false } })
-                        fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
+                        fs.appendFileSync(`commands.log`, `\nCommand Information\nuser: ${user}\nsort: ${sort}\nmapperfilter: ${mapper}\nmode: ${gamemode}\nmods filter: ${mods}\npage: ${page}\ndetailed: ${detailed}`)
 
                     }
                 })

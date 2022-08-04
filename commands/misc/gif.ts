@@ -212,7 +212,7 @@ module.exports = {
 
                 }
                 message.channel.send(thelink)
-                fs.appendFileSync('commands.log', `\nCommand Information\n${message.content}`)
+                fs.appendFileSync(`commands.log`, `\nCommand Information\n${message.content}`)
                 message.delete()
 
             }
@@ -286,7 +286,7 @@ module.exports = {
             interaction.channel.send(thelink)
 
             interaction.reply({ content: 'success', ephemeral: true, allowedMentions: { repliedUser: false } })
-            fs.appendFileSync('commands.log', `\nCommand Information\ngif type: ${str}`)
+            fs.appendFileSync(`commands.log`, `\nCommand Information\ngif type: ${str}`)
         }
         /*
         function skillissue() {

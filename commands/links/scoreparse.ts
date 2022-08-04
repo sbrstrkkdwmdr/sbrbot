@@ -31,7 +31,7 @@ module.exports = {
         }).then(res => res.json() as any)
             .then(scoredata => {
                 fs.writeFileSync('debugosu/link-scoreparse.json', JSON.stringify(scoredata, null, 2));
-                fs.appendFileSync('link.log', `LINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\n`, 'utf-8')
+                fs.appendFileSync(`link.log`, `LINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\n`, 'utf-8')
                     ;
                 (async () => {
                     try {
@@ -171,7 +171,7 @@ module.exports = {
                     fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
                     let endofcommand = new Date().getTime();
                     let timeelapsed = endofcommand - currentDate.getTime();
-                    fs.appendFileSync('link.log', `\nCommand Latency (score parse) - ${timeelapsed}ms\n`)
+                    fs.appendFileSync(`link.log`, `\nCommand Latency (score parse) - ${timeelapsed}ms\n`)
                 })();
             })
     }

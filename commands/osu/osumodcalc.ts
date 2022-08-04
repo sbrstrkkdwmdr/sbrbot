@@ -8,15 +8,15 @@ module.exports = {
         '    `--option-name`: `option-description`\n',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osumodcalc (message)\n${currentDate} | ${currentDateISO}\n recieved osumodcalc command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - osumodcalc (message)\n${currentDate} | ${currentDateISO}\n recieved osumodcalc command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
 
         }
 
         //==============================================================================================================================================================================================
 
         if (interaction != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osumodcalc (interaction)\n${currentDate} | ${currentDateISO}\n recieved osumodcalc command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-            fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - osumodcalc (interaction)\n${currentDate} | ${currentDateISO}\n recieved osumodcalc command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nInteraction ID: ${interaction.id}`)
             let mods = interaction.options.getString('mods').toUpperCase();
             let baseCS = interaction.options.getNumber('cs')
             let baseAR = interaction.options.getNumber('ar')
@@ -57,10 +57,10 @@ module.exports = {
             embed.setTitle(`Modded Details (${mods})`)
             embed.setDescription("**CS:** " + baseCS + "\n**AR:** " + baseAR + "\n**OD:** " + baseOD + "\n**HP:** " + baseHP + "\n**BPM:** " + baseBPM)
             interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
-            fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
             let endofcommand = new Date().getTime();
             let timeelapsed = endofcommand - currentDate.getTime();
-            fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => osumodcalc) - ${timeelapsed}ms\n`)
+            fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => osumodcalc) - ${timeelapsed}ms\n`)
         }
     }
 }

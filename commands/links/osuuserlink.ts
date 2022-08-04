@@ -11,7 +11,7 @@ module.exports = {
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
 
         let user = messagenohttp.split('/').pop()
-        fs.appendFileSync('link.log', `LINK DETECT EVENT - osuuserlink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!profile link: ${message.content}\n`, 'utf-8')
+        fs.appendFileSync(`link.log`, `LINK DETECT EVENT - osuuserlink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!profile link: ${message.content}\n`, 'utf-8')
         const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         fetch(userurl, {
             headers: {
@@ -88,10 +88,10 @@ module.exports = {
                 `)
 
                     message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
-                    fs.appendFileSync('link.log', '\nsuccess\n\n', 'utf-8')
+                    fs.appendFileSync(`link.log`, '\nsuccess\n\n', 'utf-8')
                     let endofcommand = new Date().getTime();
                     let timeelapsed = endofcommand - currentDate.getTime();
-                    fs.appendFileSync('link.log', `\nCommand Latency (osuuserlink) - ${timeelapsed}ms\n`)
+                    fs.appendFileSync(`link.log`, `\nCommand Latency (osuuserlink) - ${timeelapsed}ms\n`)
 
                 } catch (error) {
                     message.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false } })

@@ -59,7 +59,7 @@ module.exports = {
                     /* .setLabel('End') */,
                 );
 
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - leaderboard (message)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - leaderboard (message)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let mapid = args[0]
 
             if (!mapid) {
@@ -205,7 +205,7 @@ module.exports = {
                             message.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons], failIfNotExists: true })
                             let endofcommand = new Date().getTime();
                             let timeelapsed = endofcommand - currentDate.getTime();
-                            fs.appendFileSync('commands.log', `\nCommand Latency (message command => leaderboard) - ${timeelapsed}ms\n`)
+                            fs.appendFileSync(`commands.log`, `\nCommand Latency (message command => leaderboard) - ${timeelapsed}ms\n`)
                             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
                         })
 
@@ -252,9 +252,9 @@ module.exports = {
 
 
             if (interaction.type == Discord.InteractionType.ApplicationCommand) {
-                fs.appendFileSync('commands.log', `\nCOMMAND EVENT - leaderboard (interaction)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-                fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-                fs.appendFileSync('commands.log',
+                fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - leaderboard (interaction)\n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+                fs.appendFileSync(`commands.log`, `\nInteraction ID: ${interaction.id}`)
+                fs.appendFileSync(`commands.log`,
                     `\noptions:
                 id: ${interaction.options.getInteger('id')}
                 page: ${interaction.options.getInteger('page')}
@@ -265,9 +265,9 @@ module.exports = {
                 page = interaction.options.getInteger('page')
                 mods1 = interaction.options.getString('mods')
             } else {
-                fs.appendFileSync('commands.log', `\nBUTTON EVENT - leaderboard \n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-                fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-                fs.appendFileSync('commands.log', `\n${button}`)
+                fs.appendFileSync(`commands.log`, `\nBUTTON EVENT - leaderboard \n${currentDate} | ${currentDateISO}\n recieved map leaderboard command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+                fs.appendFileSync(`commands.log`, `\nInteraction ID: ${interaction.id}`)
+                fs.appendFileSync(`commands.log`, `\n${button}`)
                 mapid = message.embeds[0].url.split('/b/')[1]
                 if (message.embeds[0].footer) {
                     mods1 = message.embeds[0].footer.text
@@ -315,7 +315,7 @@ module.exports = {
                 }
                 mapid = prevmap.id
             }
-            fs.appendFileSync('commands.log',
+            fs.appendFileSync(`commands.log`,
                 `\noptions(2):
             id: ${mapid}
             page: ${page}
@@ -472,10 +472,10 @@ module.exports = {
                                 if (interaction.type == Discord.InteractionType.ApplicationCommand) {
                                     interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
-                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                    fs.appendFileSync(`commands.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                 } else {
                                     message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                    fs.appendFileSync(`commands.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     //message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
                                 }
 
@@ -549,17 +549,17 @@ module.exports = {
                                 if (interaction.type == Discord.InteractionType.ApplicationCommand) {
                                     interaction.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
-                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                    fs.appendFileSync(`commands.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => leaderboard) - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => leaderboard) - ${timeelapsed}ms\n`)
                                 } else if (interaction.type == Discord.InteractionType.MessageComponent) {
                                     message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                     //message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
-                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                    fs.appendFileSync(`commands.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => leaderboard) - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => leaderboard) - ${timeelapsed}ms\n`)
                                 }
 
                             }).catch(err => {
@@ -571,6 +571,6 @@ module.exports = {
 
         }
 
-        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+        fs.appendFileSync(`commands.log`, '\nsuccess\n\n', 'utf-8')
     }
 }

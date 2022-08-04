@@ -6,13 +6,13 @@ module.exports = {
     description: 'null',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - image (message)\n${currentDate} | ${currentDateISO}\n recieved image command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - image (message)\n${currentDate} | ${currentDateISO}\n recieved image command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
             if (!args.length) {
                 return message.reply({ content: 'Please specify the name of the image you want to search.', allowedMentions: { repliedUser: false } })
             }
             let res =
-                await fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${args.join(' ')}&cx=${config.google.cx}&key=${config.google.apiKey}&searchType=image`).catch(error => fs.appendFileSync('commands.log', "\n" + error));
+                await fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${args.join(' ')}&cx=${config.google.cx}&key=${config.google.apiKey}&searchType=image`).catch(error => fs.appendFileSync(`commands.log`, "\n" + error));
 
             if (!res) return message.reply({ content: 'Unable to fetch the requested image.', allowedMentions: { repliedUser: false } })
             if (res.status >= 400) return message.reply({ content: `Error ${res.status}`, allowedMentions: { repliedUser: false } })
@@ -46,11 +46,11 @@ module.exports = {
                 .setImage(`${response.items[4].image.thumbnailLink}`)
 
             message.reply({ embeds: [imageEmbed, image1, image2, image3, image4, image5], allowedMentions: { repliedUser: false } })
-            fs.appendFileSync('commands.log', `\nCommand Information\nQuery: ${args.join(' ')}`)
+            fs.appendFileSync(`commands.log`, `\nCommand Information\nQuery: ${args.join(' ')}`)
 
         }
         if (interaction != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - image (interaction)\n${currentDate} | ${currentDateISO}\n recieved image command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - image (interaction)\n${currentDate} | ${currentDateISO}\n recieved image command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
 
             let query = interaction.options.getString('query')
 
@@ -78,7 +78,7 @@ module.exports = {
                 .setDescription(`(NOTE - links may be unsafe)\n${resimg}`)
 
             interaction.reply({ embeds: [imageEmbed], allowedMentions: { repliedUser: false } })
-            fs.appendFileSync('commands.log', `\nCommand Information\nquery: ${query}`)
+            fs.appendFileSync(`commands.log`, `\nCommand Information\nquery: ${query}`)
 
         }
     }

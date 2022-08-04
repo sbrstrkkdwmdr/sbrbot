@@ -5,7 +5,7 @@ module.exports = {
     description: 'returns the logs of the guild',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - log (message)\n${currentDate} | ${currentDateISO}\n recieved get guild logs command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - log (message)\n${currentDate} | ${currentDateISO}\n recieved get guild logs command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             if (checks.isOwner(message.author.id) || message.author.permissions.has('ADMINISTRATOR')) {
                 let guildname = client.guilds.cache.has(message.guild.id) ? client.guilds.cache.get(message.guild.id).name : 'unknown name';
                 let guildid = client.guilds.cache.has(message.guild.id) ? client.guilds.cache.get(message.guild.id).id : 'unknown id'
@@ -16,7 +16,7 @@ module.exports = {
         }
         //==============================================================================================================================================================================================
         if (interaction != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - log (interaction)\n${currentDate} | ${currentDateISO}\n recieved get guild logs command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - log (interaction)\n${currentDate} | ${currentDateISO}\n recieved get guild logs command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let guildidA = interaction.options.getString('guildid')
             if (checks.isOwner(interaction.member.user.id) && guildidA) {
                 //check if log file exists

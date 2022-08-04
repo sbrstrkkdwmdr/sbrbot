@@ -27,7 +27,7 @@ module.exports = {
         }
 
         if (message != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
             let time = args[0]
             let remindertxt = args.join(' ').replaceAll(args[0], '')
@@ -48,11 +48,11 @@ module.exports = {
 
 
             sendremind(reminder, time, message, true, remindertxt, message.author);
-            fs.appendFileSync('commands.log', `\nCommand Information\nMessage Content: ${message.content}`)
+            fs.appendFileSync(`commands.log`, `\nCommand Information\nMessage Content: ${message.content}`)
 
         }
         if (interaction != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - reminder (interaction)\n${currentDate} | ${currentDateISO}\n recieved reminder command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - reminder (interaction)\n${currentDate} | ${currentDateISO}\n recieved reminder command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
 
             let remindertxt = interaction.options.getString('reminder')
             let time = interaction.options.getString('time').replaceAll(' ', '')
@@ -76,7 +76,7 @@ module.exports = {
             } else {
                 sendremind(reminder, time, interaction, false, remindertxt, interaction.member.user);
             }
-            fs.appendFileSync('commands.log', `\nCommand Information\nreminder:${remindertxt}\ntime:${time}\nSendInChannel:${sendtochannel}`)
+            fs.appendFileSync(`commands.log`, `\nCommand Information\nreminder:${remindertxt}\ntime:${time}\nSendInChannel:${sendtochannel}`)
         }
     }
 }

@@ -97,7 +97,7 @@ module.exports = {
 
 
         if (message != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             if (!args[0]) {
                 message.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
             }
@@ -278,13 +278,13 @@ module.exports = {
                     .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
                 message.reply({ embeds: [commandInfo], allowedMentions: { repliedUser: false } })
             }
-            fs.appendFileSync('commands.log', `\nCommand Information\n${message.content}`)
+            fs.appendFileSync(`commands.log`, `\nCommand Information\n${message.content}`)
         }
 
 
 
         if (interaction != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - help (interaction)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - help (interaction)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
 
             let command = interaction.options.getString('command')
             let commandInfo = new Discord.EmbedBuilder()
@@ -459,7 +459,7 @@ module.exports = {
                 return interaction.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
             }
             interaction.reply({ embeds: [commandInfo], allowedMentions: { repliedUser: false } })
-            fs.appendFileSync('commands.log', `\nCommand Information\nCommand: ${command}`)
+            fs.appendFileSync(`commands.log`, `\nCommand Information\nCommand: ${command}`)
 
         }
 

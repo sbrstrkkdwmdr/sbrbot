@@ -15,7 +15,7 @@ module.exports = {
         '⠀⠀`user`: string/integer, optional. The osu! username of the user.',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
         if (message != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (message)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - osu (message)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             let searchid = message.author.id
             let mode = null
@@ -182,15 +182,15 @@ module.exports = {
                     `)
 
                         message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
-                        fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                        fs.appendFileSync(`commands.log`, '\nsuccess\n\n', 'utf-8')
+                        fs.appendFileSync(`commands.log`, `\nCommand Information\nmessage content: ${message.content}`)
                         let endofcommand = new Date().getTime();
                         let timeelapsed = endofcommand - currentDate.getTime();
-                        fs.appendFileSync('commands.log', `\nCommand Latency (message command => osu) - ${timeelapsed}ms\n`)
+                        fs.appendFileSync(`commands.log`, `\nCommand Latency (message command => osu) - ${timeelapsed}ms\n`)
 
                     } catch (error) {
                         message.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                        fs.appendFileSync(`commands.log`, `\nCommand Information\nmessage content: ${message.content}`)
 
                     }
                 })
@@ -199,9 +199,9 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (interaction != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - osu (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-            fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-            fs.appendFileSync('commands.log',
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - osu (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! profile command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nInteraction ID: ${interaction.id}`)
+            fs.appendFileSync(`commands.log`,
                 `\noptions:
             user: ${interaction.options.getString('user')}
             detailed: ${interaction.options.getBoolean('detailed')}
@@ -236,7 +236,7 @@ module.exports = {
             }
             //interaction.reply('Searching for ' + user + '...')
             const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/${cmdchecks.toHexadecimal(mode)}`
-            fs.appendFileSync('commands.log',
+            fs.appendFileSync(`commands.log`,
                 `\noptions(2):
             user: ${user}
             detailed: <N/A>
@@ -556,19 +556,19 @@ module.exports = {
                             interaction.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
                         }
 
-                        fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
-                        fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
+                        fs.appendFileSync(`commands.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                        fs.appendFileSync(`commands.log`, `\nCommand Information\nuser: ${user}`)
                         let endofcommand = new Date().getTime();
                         let timeelapsed = endofcommand - currentDate.getTime();
-                        fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => osu) - ${timeelapsed}ms\n`)
+                        fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => osu) - ${timeelapsed}ms\n`)
 
                     } catch (error) {
                         //console.log(error)
                         //interaction.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false } })
-                        fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}`)
+                        fs.appendFileSync(`commands.log`, `\nCommand Information\nuser: ${user}`)
                         let endofcommand = new Date().getTime();
                         let timeelapsed = endofcommand - currentDate.getTime();
-                        fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => osu) - ${timeelapsed}ms\n`)
+                        fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => osu) - ${timeelapsed}ms\n`)
 
                     }
 

@@ -9,7 +9,7 @@ module.exports = {
 
             ;
         if (message != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - find (message)\n${currentDate} | ${currentDateISO}\n recieved find by id command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - find (message)\n${currentDate} | ${currentDateISO}\n recieved find by id command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let type = args[0];
             let id = args[1];
             if (!args[0]) {
@@ -187,7 +187,7 @@ module.exports = {
         }
         //==============================================================================================================================================================================================
         if (interaction != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - find (interaction)\n${currentDate} | ${currentDateISO}\n recieved find by id command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - find (interaction)\n${currentDate} | ${currentDateISO}\n recieved find by id command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let type = interaction.options.getString('type');
             let id = interaction.options.getString('id');
             if (parseInt(id) == NaN) {

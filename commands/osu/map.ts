@@ -24,7 +24,7 @@ module.exports = {
         let access_token = JSON.parse(accessN).access_token;
 
         if (message != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (message)\n${currentDate} | ${currentDateISO}\n recieved get map info command\nrequested by ${message.author.id} AKA ${message.author.tag}]\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - map (message)\n${currentDate} | ${currentDateISO}\n recieved get map info command\nrequested by ${message.author.id} AKA ${message.author.tag}]\nMessage content: ${message.content}`, 'utf-8')
 
             //message.channel.send('Fetching map info...');
             let mapid;
@@ -75,7 +75,7 @@ module.exports = {
                     }
                 }).then(res => res.json() as any)
                     .then(mapidtest => {
-                        fs.appendFileSync('commands.log', `\nfetched title - ${maptitle}`)
+                        fs.appendFileSync(`commands.log`, `\nfetched title - ${maptitle}`)
                         fs.writeFileSync('debugosu/command-map=txt.json', JSON.stringify(mapidtest, null, 2))
                         let sortbyhigh;
                         try{
@@ -400,7 +400,7 @@ module.exports = {
                                                 ppComputedString = NaN
                                                 pp95ComputedString = NaN
                                                 ppissue = 'Error - pp calculator could not fetch beatmap'
-                                                fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
+                                                fs.appendFileSync(`commands.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
                                             }
 
                                             let mapname = json.beatmapset.title
@@ -467,10 +467,10 @@ module.exports = {
                                                             }
                                                         ])
                                                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false }, failIfNotExists: true });
-                                                    fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                                    fs.appendFileSync(`commands.log`, '\nsuccess\n\n', 'utf-8')
                                                     let endofcommand = new Date().getTime();
                                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                                    fs.appendFileSync('commands.log', `\nCommand Latency (message command => map) - ${timeelapsed}ms\n`)
+                                                    fs.appendFileSync(`commands.log`, `\nCommand Latency (message command => map) - ${timeelapsed}ms\n`)
                                                 })
                                         })();
                                     })
@@ -782,7 +782,7 @@ module.exports = {
                                     ppComputedString = NaN
                                     pp95ComputedString = NaN
                                     ppissue = 'Error - pp calculator could not fetch beatmap'
-                                    fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
+                                    fs.appendFileSync(`commands.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
                                 }
 
                                 let mapname = json.beatmapset.title
@@ -849,11 +849,11 @@ module.exports = {
                                                 }
                                             ])
                                         message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false }, failIfNotExists: true });
-                                        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
-                                        fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                                        fs.appendFileSync(`commands.log`, '\nsuccess\n\n', 'utf-8')
+                                        fs.appendFileSync(`commands.log`, `\nCommand Information\nmessage content: ${message.content}`)
                                         let endofcommand = new Date().getTime();
                                         let timeelapsed = endofcommand - currentDate.getTime();
-                                        fs.appendFileSync('commands.log', `\nCommand Latency (message command => map) - ${timeelapsed}ms\n`)
+                                        fs.appendFileSync(`commands.log`, `\nCommand Latency (message command => map) - ${timeelapsed}ms\n`)
                                     })
                             })();
                         })
@@ -862,9 +862,9 @@ module.exports = {
         }
         //==============================================================================================================================================================================================
         if (interaction != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - map (interaction)\n${currentDate} | ${currentDateISO}\n recieved get map command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-            fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-            fs.appendFileSync('commands.log',
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - map (interaction)\n${currentDate} | ${currentDateISO}\n recieved get map command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nInteraction ID: ${interaction.id}`)
+            fs.appendFileSync(`commands.log`,
                 `\noptions:
             id: ${interaction.options.getInteger('id')}
             mods: ${interaction.options.getString('mods')}
@@ -898,7 +898,7 @@ module.exports = {
                 mapmods = osucalc.OrderMods(mapmods.toUpperCase());
             }
             //interaction.reply('Fetching map info...');
-            fs.appendFileSync('commands.log',
+            fs.appendFileSync(`commands.log`,
                 `\noptions(2):
             id: ${mapid}
             mods: ${mapmods}
@@ -1218,7 +1218,7 @@ module.exports = {
                                     ppComputedString = NaN
                                     pp95ComputedString = NaN
                                     ppissue = 'Error - pp calculator could not fetch beatmap'
-                                    fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
+                                    fs.appendFileSync(`commands.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
                                 }
 
                                 let mapname = json.beatmapset.title
@@ -1285,11 +1285,11 @@ module.exports = {
                                                 }
                                             ])
                                         interaction.editReply({ content: "⠀", embeds: [Embed], allowedMentions: { repliedUser: false } });
-                                        fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
-                                        fs.appendFileSync('commands.log', `\nCommand Information\nmap id: ${mapid}\nmap mods: ${mapmods}\nmode: ${mapmode}`)
+                                        fs.appendFileSync(`commands.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                        fs.appendFileSync(`commands.log`, `\nCommand Information\nmap id: ${mapid}\nmap mods: ${mapmods}\nmode: ${mapmode}`)
                                         let endofcommand = new Date().getTime();
                                         let timeelapsed = endofcommand - currentDate.getTime();
-                                        fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => map) - ${timeelapsed}ms\n`)
+                                        fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => map) - ${timeelapsed}ms\n`)
                                     })
                             })();
                         })

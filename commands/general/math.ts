@@ -24,7 +24,7 @@ module.exports = {
                 }
                 )
             }
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - math (message)\n${currentDate} | ${currentDateISO}\n recieved math command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - math (message)\n${currentDate} | ${currentDateISO}\n recieved math command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let string = args.join(' ')
             let letterstoavoid = [
                 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -39,10 +39,10 @@ module.exports = {
                 message.reply({ content: `${error}`, allowedMentions: { repliedUser: false } })
                 console.log(error)
             }
-            fs.appendFileSync('commands.log', `\nCommand Information\nMessae Content: ${message.content}`)
+            fs.appendFileSync(`commands.log`, `\nCommand Information\nMessae Content: ${message.content}`)
         }
         if (interaction != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - math (interaction)\n${currentDate} | ${currentDateISO}\n recieved math command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - math (interaction)\n${currentDate} | ${currentDateISO}\n recieved math command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let type = interaction.options.getString('type')
             let num1 = interaction.options.getNumber('num1')
             let num2 = interaction.options.getNumber('num2')
@@ -127,7 +127,7 @@ module.exports = {
             }, 500)
             //interaction.reply({ content: equation, allowedMentions: { repliedUser: false } })
 
-            fs.appendFileSync('commands.log', `\nCommand Information\ntype: ${type}\nnum1: ${num1}\nnum2: ${num2}`)
+            fs.appendFileSync(`commands.log`, `\nCommand Information\ntype: ${type}\nnum1: ${num1}\nnum2: ${num2}`)
         }
     }
 }

@@ -11,7 +11,7 @@ module.exports = {
         //config.ownerusers
         if (message != null) {
             let guild;
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - LEAVEGUILD (message)\n${currentDate} | ${currentDateISO}\n recieved LEAVEGUILD command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - LEAVEGUILD (message)\n${currentDate} | ${currentDateISO}\n recieved LEAVEGUILD command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             if (args[0]) {
                 guild = client.guilds.cache.get(args[0])
             }
@@ -23,38 +23,38 @@ module.exports = {
                 message.reply({ content: 'Leaving guild...', allowedMentions: { repliedUser: false } })
 
                 guild.leave()
-                fs.appendFileSync('commands.log', 'success\n\n', 'utf-8')
-                fs.appendFileSync('commands.log', `left guild ${guild.name} | ${guild.id}`, 'utf-8')
-                fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                fs.appendFileSync(`commands.log`, 'success\n\n', 'utf-8')
+                fs.appendFileSync(`commands.log`, `left guild ${guild.name} | ${guild.id}`, 'utf-8')
+                fs.appendFileSync(`commands.log`, `\nCommand Information\nmessage content: ${message.content}`)
 
             } else {
                 message.reply('Error - you do not have the permissions to use this command')
-                fs.appendFileSync('commands.log', 'failed\n\n', 'utf-8')
-                fs.appendFileSync('commands.log', `${message.author.id} is not an owner`, 'utf-8')
-                fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                fs.appendFileSync(`commands.log`, 'failed\n\n', 'utf-8')
+                fs.appendFileSync(`commands.log`, `${message.author.id} is not an owner`, 'utf-8')
+                fs.appendFileSync(`commands.log`, `\nCommand Information\nmessage content: ${message.content}`)
 
             }
         }
         if (interaction != null) {
             /*             interaction.reply('command error - guild IDs are too long to be used in interactions. Please use the message version of this command.')
                         return */
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - LEAVEGUILD (interaction)\n${currentDate} | ${currentDateISO}\n recieved LEAVEGUILD command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - LEAVEGUILD (interaction)\n${currentDate} | ${currentDateISO}\n recieved LEAVEGUILD command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let guildid = interaction.options.getString('guild')
             if (isNaN(guildid)) {
                 interaction.reply({ content: 'Error - invalid guild id', allowedMentions: { repliedUser: false } })
-                fs.appendFileSync('commands.log', 'failed\n\n', 'utf-8')
+                fs.appendFileSync(`commands.log`, 'failed\n\n', 'utf-8')
             }
             let guild = client.guilds.cache.get(guildid)
             //leave guild
             if (commandchecks.isOwner(interaction.member.user.id)) {
                 interaction.reply({ content: 'Leaving guild...', allowedMentions: { repliedUser: false } })
                 guild.leave()
-                fs.appendFileSync('commands.log', 'success\n\n', 'utf-8')
-                fs.appendFileSync('commands.log', `left guild ${guild.name} | ${guild.id}`, 'utf-8')
+                fs.appendFileSync(`commands.log`, 'success\n\n', 'utf-8')
+                fs.appendFileSync(`commands.log`, `left guild ${guild.name} | ${guild.id}`, 'utf-8')
             } else {
                 interaction.reply('Error - you do not have the permissions to use this command')
-                fs.appendFileSync('commands.log', 'failed\n\n', 'utf-8')
-                fs.appendFileSync('commands.log', `${interaction.member.user.id} is not an owner`, 'utf-8')
+                fs.appendFileSync(`commands.log`, 'failed\n\n', 'utf-8')
+                fs.appendFileSync(`commands.log`, `${interaction.member.user.id} is not an owner`, 'utf-8')
             }
 
 

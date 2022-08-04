@@ -7,7 +7,7 @@ module.exports = {
     '    `--option-name`: `option-description`\n',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction){
         if(message != null){
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString())
             let trueping = message.createdAt.getTime() - new Date().getTime() + 'ms'
 
@@ -39,10 +39,10 @@ Commands: https://sbrstrkkdwmdr.github.io/sbrbot/commands
 //==============================================================================================================================================================================================
 
         if(interaction != null){
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
 
         }
 
-        fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+        fs.appendFileSync(`commands.log`, '\nsuccess\n\n', 'utf-8')
     }
 }

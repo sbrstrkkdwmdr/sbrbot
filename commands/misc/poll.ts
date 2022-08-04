@@ -41,7 +41,7 @@ module.exports = {
         ]
 
         if (message != null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - poll (message)\n${currentDate} | ${currentDateISO}\n recieved poll command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - poll (message)\n${currentDate} | ${currentDateISO}\n recieved poll command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
 
             let name = args.join(' ')
             if (!args[0]) {
@@ -61,7 +61,7 @@ module.exports = {
             let title = interaction.options.getString('title')
             let optsarr = options.split('+')
             let optstxt = ''
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - poll (interaction)\n${currentDate} | ${currentDateISO}\n recieved poll command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\ntitle: ${title}\noptions: ${options}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - poll (interaction)\n${currentDate} | ${currentDateISO}\n recieved poll command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\ntitle: ${title}\noptions: ${options}`, 'utf-8')
 
             let i:number;
             let curtxt:string;
@@ -86,6 +86,6 @@ module.exports = {
 
         }
 
-        fs.appendFileSync('commands.log', 'success\n\n', 'utf-8')
+        fs.appendFileSync(`commands.log`, 'success\n\n', 'utf-8')
     }
 }

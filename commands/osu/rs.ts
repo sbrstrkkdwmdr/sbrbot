@@ -18,7 +18,7 @@ module.exports = {
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
 
         if (message != null && button == null) {
-            fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (message)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - rs (message)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
             let buttons = new Discord.ActionRowBuilder()
                 .addComponents(
@@ -365,7 +365,7 @@ module.exports = {
                                                 }
                                                 ppiffc = NaN
                                                 ppissue = 'Error - pp calculator could not fetch beatmap'
-                                                fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
+                                                fs.appendFileSync(`commands.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
                                             }
                                             let fcflag;
                                             if (rsdata[0].perfect == true) {
@@ -419,13 +419,13 @@ module.exports = {
                                                         inline: true
                                                     }]);
                                             message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons], failIfNotExists: true })
-                                            fs.appendFileSync('commands.log', '\nsuccess\n\n', 'utf-8')
+                                            fs.appendFileSync(`commands.log`, '\nsuccess\n\n', 'utf-8')
                                             let endofcommand = new Date().getTime();
                                             let timeelapsed = endofcommand - currentDate.getTime();
-                                            fs.appendFileSync('commands.log', `\nCommand Latency (message command => rs) - ${timeelapsed}ms\n`)
+                                            fs.appendFileSync(`commands.log`, `\nCommand Latency (message command => rs) - ${timeelapsed}ms\n`)
 
                                             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: rsdata[0].beatmap.id }), null, 2));
-                                            fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                                            fs.appendFileSync(`commands.log`, `\nCommand Information\nmessage content: ${message.content}`)
 
                                         })();
                                     })
@@ -436,7 +436,7 @@ module.exports = {
                                 else if (mode != 'osu' && user) {
                                     message.reply({ content: 'Error - no score found. Maybe try changing your mode with `/osuset` or use `/rs` instead', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                                 }
-                                fs.appendFileSync('commands.log', `\nCommand Information\nmessage content: ${message.content}`)
+                                fs.appendFileSync(`commands.log`, `\nCommand Information\nmessage content: ${message.content}`)
                                 return;
                             }
 
@@ -483,9 +483,9 @@ module.exports = {
             let list = false;
 
             if (interaction.type == Discord.InteractionType.ApplicationCommand) {
-                fs.appendFileSync('commands.log', `\nCOMMAND EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-                fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-                fs.appendFileSync('commands.log',
+                fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+                fs.appendFileSync(`commands.log`, `\nInteraction ID: ${interaction.id}`)
+                fs.appendFileSync(`commands.log`,
                     `\noptions:
                 user: ${interaction.options.getString('user')}
                 page: ${interaction.options.getNumber('page')}
@@ -498,9 +498,9 @@ module.exports = {
                 mode = interaction.options.getString('mode')
                 list = interaction.options.getBoolean("list")
             } else {
-                fs.appendFileSync('commands.log', `\nBUTTON EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-                fs.appendFileSync('commands.log', `\nInteraction ID: ${interaction.id}`)
-                fs.appendFileSync('commands.log', `\n${button}`)
+                fs.appendFileSync(`commands.log`, `\nBUTTON EVENT - rs (interaction)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+                fs.appendFileSync(`commands.log`, `\nInteraction ID: ${interaction.id}`)
+                fs.appendFileSync(`commands.log`, `\n${button}`)
 
                 user =
                     message.embeds[0].title.includes('play for') ?
@@ -573,7 +573,7 @@ module.exports = {
             if (button == null) {
                 interaction.reply({ content: 'Fetching data...' })
             }
-            fs.appendFileSync('commands.log',
+            fs.appendFileSync(`commands.log`,
                 `\noptions(2):
             user: ${user}
             page: ${page}
@@ -866,7 +866,7 @@ module.exports = {
                                                     }
                                                     ppiffc = NaN
                                                     ppissue = 'Error - pp calculator could not fetch beatmap'
-                                                    fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
+                                                    fs.appendFileSync(`commands.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
                                                 }
                                                 let fcflag: any;
                                                 if (rsdata[0 + page].perfect == true) {
@@ -921,19 +921,19 @@ module.exports = {
                                                 if (interaction.type == Discord.InteractionType.ApplicationCommand) {
 
                                                     interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
-                                                    fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
+                                                    fs.appendFileSync(`commands.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                                    fs.appendFileSync(`commands.log`, `\nCommand Information\nuser: ${user}\npage: ${page}\nmode: ${mode}`)
                                                     let endofcommand = new Date().getTime();
                                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => rs) - ${timeelapsed}ms\n`)
+                                                    fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => rs) - ${timeelapsed}ms\n`)
 
                                                     fs.writeFileSync(`./debugosu/prevmap${interaction.guildId}.json`, JSON.stringify(({ id: rsdata[0 + page].beatmap.id }), null, 2));
                                                 } else if (interaction.type == Discord.InteractionType.MessageComponent) {
                                                     message.edit({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                                                    fs.appendFileSync('commands.log', `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                                    fs.appendFileSync(`commands.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                                                     let endofcommand = new Date().getTime();
                                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                                    fs.appendFileSync('commands.log', `\nCommand Latency (interaction command => rs) - ${timeelapsed}ms\n`)
+                                                    fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => rs) - ${timeelapsed}ms\n`)
                                                 }
                                             })();
                                         })
@@ -961,7 +961,7 @@ module.exports = {
                                     interaction.editReply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false }, components: [buttons] })
                                 }
                             } catch (error) {
-                                fs.appendFileSync('commands.log', `\nCommand Information\nuser: ${user}\nPage: ${page}\nmode: ${mode}`)
+                                fs.appendFileSync(`commands.log`, `\nCommand Information\nuser: ${user}\nPage: ${page}\nmode: ${mode}`)
                                 if (interaction.type == Discord.InteractionType.ApplicationCommand) {
                                     return interaction.editReply({ content: 'Error - no score found', allowedMentions: { repliedUser: false } })
                                 }
