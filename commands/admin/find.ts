@@ -16,7 +16,16 @@ module.exports = {
                 message.reply({ content: 'Please specify a type of id to find (user/guild/channel/role/emoji)', allowedMentions: { repliedUser: false } });
                 return;
             }
-            if (!args[1] || isNaN(args[1])) {
+            if(message.mentions.users.size > 0){
+                id = message.mentions.users.first().id
+            }
+            if(message.mentions.channels.size > 0){
+                id = message.mentions.channels.first().id
+            }
+            if(message.mentions.roles.size > 0){
+                id = message.mentions.roles.first().id
+            }
+            if (!args[1] || isNaN(args[1]) || !(message.mentions.users.size = 1 && args[0] == 'user') || !(message.mentions.channels.size = 1 && args[0] == 'channel') || !(message.mentions.roles.size = 1 && args[0] == 'roles')) {
                 message.reply({ content: 'Please specify an id to find', allowedMentions: { repliedUser: false } });
                 return;
             }
