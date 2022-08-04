@@ -56,6 +56,8 @@ if (!fs.existsSync('./debugosu')) {
 }
 if (!fs.existsSync('./logs')) {
     fs.mkdirSync('./logs')
+    fs.mkdirSync('./logs/moderator')
+    fs.mkdirSync('./logs/cmd')
 }
 if (fs.existsSync('./debug/timesince.txt')) {
 
