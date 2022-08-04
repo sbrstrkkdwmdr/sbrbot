@@ -13,13 +13,13 @@ module.exports = {
             try {
                 if(sendchannel == true){
                 setTimeout(() => {
-                    obj.channel.send({ content: `${remindertxt}` })
-                }, calc.timeToMsAll(time));
+                    obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` })
+                }, calc.timeToMs(time));
             }
             else {
                 setTimeout(() => {
                     interaction.member.user.send({ embeds: [reminder] })
-                }, calc.timeToMsAll(time));
+                }, calc.timeToMs(time));
             }
             } catch (error) {
                 console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
@@ -38,8 +38,8 @@ module.exports = {
             if (!args[1]) {
                 remindertxt = 'null'
             }
-            if (!args[0].endsWith('d') && !args[0].endsWith('h') && !args[0].endsWith('m') && !args[0].endsWith('s') && !time.includes(':')) {
-                return message.reply({ content: 'Incorrect time format: please use `d`, `h`, `m`, or `s`', allowedMentions: { repliedUser: false } })
+            if (!args[0].endsWith('d') && !args[0].endsWith('h') && !args[0].endsWith('m') && !args[0].endsWith('s') && !time.includes(':') && !time.includes('.')) {
+                return message.reply({ content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`', allowedMentions: { repliedUser: false } })
             }
             let reminder = new Discord.EmbedBuilder()
                 .setColor('#7289DA')
@@ -57,7 +57,7 @@ module.exports = {
             let remindertxt = interaction.options.getString('reminder')
             let time = interaction.options.getString('time').replaceAll(' ', '')
 
-            if (!time.endsWith('d') && !time.endsWith('h') && !time.endsWith('m') && !time.endsWith('s') && !time.includes(':')) {
+            if (!time.endsWith('d') && !time.endsWith('h') && !time.endsWith('m') && !time.endsWith('s') && !time.includes(':') && !time.includes('.')) {
                 return interaction.reply({ content: 'Incorrect time format: please use `d`, `h`, `m`, or `s`', ephemeral: true })
             }
 

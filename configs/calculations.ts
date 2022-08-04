@@ -275,95 +275,102 @@ function fixoffset(time: number) {
 
 /**
  * 
- * @param str string formatted as 0d0h0m0s or 0 days 0 hours 0 minutes 0 seconds
+ * @param str input string. formatted as hh:mm:ss._ms or ?d?h?m?s
  * @returns string converted to milliseconds
  */
-function timeToMsStr(str: string) {
-    let ms: number;
-    if (str.includes('d') || str.includes('days')) {
-        let curnum = str.split('d')[0]
-        ms += Math.floor(parseInt(curnum) * 1000 * 60 * 60 * 24)
-    }
-    if (str.includes('h') || str.includes('hours')) {
-        let curnum = str.includes('d') ?
-            str.includes('days') ?
-                str.split('h')[0].substring(str.indexOf('days'), str.length) :
-                str.split('h')[0].substring(str.indexOf('d'), str.length) :
-            str.split('h')[0]
-        //if(){if(){}else{}}else{}
+function timeToMs(str:string) {
+    if (str.includes('d') || str.includes('h') || str.includes('m') || str.includes('s')) {
+        let daysstr = '0'
+        let hoursstr = '0'
+        let minutesstr = '0'
+        let secondsstr = '0'
 
-        ms += Math.floor(parseInt(curnum) * 1000 * 60 * 60)
-    }
-    if (str.includes('m') || str.includes('minutes')) {
-        let curnum = str.includes('h') ?
-            str.includes('hours') ?
-                str.split('m')[0].substring(str.indexOf('hours'), str.length) :
-                str.split('m')[0].substring(str.indexOf('h'), str.length) :
-            str.split('m')[0]
-        //if(){if(){}else{}}else{}
-
-        ms += Math.floor(parseInt(curnum) * 1000 * 60)
-    }
-    if (str.includes('s') || str.includes('seconds')) {
-        let curnum = str.includes('m') ?
-            str.includes('minutes') ?
-                str.split('s')[0].substring(str.indexOf('minutes'), str.length) :
-                str.split('s')[0].substring(str.indexOf('m'), str.length) :
-            str.split('s')[0]
-        //if(){if(){}else{}}else{}
-
-        ms += Math.floor(parseInt(curnum) * 1000)
-    }
-    return ms;
-}
-
-/**
- * 
- * @param str string formatted as 00T00:00:00.000 (ddThh:mm:ss.ms)
- * @returns string converted to milliseconds
- */
-function timeToMsDef(str: string) {
-    let ms: number;
-    if (str.includes('T')) {
-        let curnum = str.split('T')[0]
-        ms += Math.floor(parseInt(curnum) * 1000 * 60 * 60 * 24)
-    }
-    if (str.includes(':')) {
-        let numofcolon = str.split(':').length-1
-        let hnum = 0;
-        let mnum = 0;
-        let snum = 0;
-        if (numofcolon = 1){
-            mnum = Math.floor(parseInt(str.split(':')[1])) * 1000 * 60
-            snum = Math.floor(parseInt(str.split(':')[2])) * 1000
-        } if (numofcolon = 2){
-            hnum = Math.floor(parseInt(str.split(':')[0])) * 1000 * 60 * 60
-            mnum = Math.floor(parseInt(str.split(':')[1])) * 1000 * 60
-            snum = Math.floor(parseInt(str.split(':')[2])) * 1000
+        if (str.includes('d')) {
+            daysstr = str.split('d')[0];
+            if (str.includes('h')) {
+                hoursstr = str.split('d')[1].split('h')[0];
+                if (str.includes('m')) {
+                    minutesstr = str.split('d')[1].split('h')[1].split('m')[0];
+                }
+                if (str.includes('s')) {
+                    secondsstr = str.split('d')[1].split('h')[1].split('m')[1].split('s')[0];
+                }
+            }
+            if (str.includes('m') && !str.includes('h')) {
+                minutesstr = str.split('d')[1].split('m')[0];
+                if (str.includes('s')) {
+                    secondsstr = str.split('d')[1].split('m')[1].split('s')[0];
+                }
+            }
+            if (str.includes('s') && !str.includes('m') && !str.includes('h')) {
+                secondsstr = str.split('d')[1].split('s')[0];
+            }
         }
-        ms += hnum + mnum + snum
+        if (str.includes('h') && !str.includes('d')) {
+            hoursstr = str.split('h')[0];
+            if (str.includes('m')) {
+                minutesstr = str.split('h')[1].split('m')[0];
+                if (str.includes('s')) {
+                    secondsstr = str.split('h')[1].split('m')[1].split('s')[0];
+                }
+            }
+            if (str.includes('s') && !str.includes('m')) {
+                secondsstr = str.split('h')[1].split('s')[0];
+            }
+        }
+        if (str.includes('m') && !str.includes('h') && !str.includes('d')) {
+            minutesstr = str.split('m')[0];
+            if (str.includes('s')) {
+                secondsstr = str.split('m')[1].split('s')[0];
+            }
+        }
+        if (str.includes('s') && !str.includes('m') && !str.includes('h') && !str.includes('d')) {
+            secondsstr = str.split('s')[0];
+        }
 
-    }
-    if (str.includes('.')) {
-        let curnum = str.split('.')[1]
-        ms += Math.floor(parseInt(curnum))
-    }
 
-    return ms;
-}
-/**
- * 
- * @param str string to convert
- * @returns time in milliseconds
- */
-function timeToMsAll(str:string){
-    if(str.includes(':')){
-        return timeToMsDef(str)
+        let days = parseInt(daysstr);
+        let hours = parseInt(hoursstr);
+        let minutes = parseInt(minutesstr);
+        let seconds = parseInt(secondsstr);
+        //convert to milliseconds
+        let ms = (days * 24 * 60 * 60 * 1000) + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
+
+        return ms;
+    } else if (str.includes(':') || str.includes('.')) {
+        let hours = 0;
+        let minutes = 0;
+        let seconds = 0;
+        let milliseconds = 0;
+        let coloncount = 0;
+        for (let i = 0; i < str.length; i++) {
+            if (str[i] === ':') {
+                coloncount++;
+            }
+        }
+        if (coloncount === 2) {
+            hours = parseInt(str.split(':')[0]);
+            minutes = parseInt(str.split(':')[1]);
+            seconds = parseInt(str.split(':')[2]);
+        }
+        if (coloncount === 1) {
+            minutes = parseInt(str.split(':')[0]);
+            seconds = parseInt(str.split(':')[1]);
+        }
+        if (str.includes('.')) {
+            milliseconds = parseInt(str.split('.')[1]);
+            if(coloncount === 0){
+                seconds = parseInt(str.split('.')[0]);
+            }
+        }
+        let ms = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
+        return ms;
+
     } else {
-        return timeToMsStr(str)
+        return NaN;
     }
 }
 
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
-export { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset, timeToMsStr, timeToMsDef, timeToMsAll };
+export { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset, timeToMs, };

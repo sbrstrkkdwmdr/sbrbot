@@ -1,9 +1,11 @@
 import fs = require('fs');
-import osucalc = require('osumodcalculator')
+import osucalc = require('osumodcalculator');
 import { access_token } from '../../configs/osuauth.json';
 import fetch from 'node-fetch';
-import emojis = require('../../configs/emojis')
-import osufunc = require('../../configs/osufunc')
+import emojis = require('../../configs/emojis');
+import osufunc = require('../../configs/osufunc');
+import cmdchecks = require('../../configs/commandchecks');
+
 module.exports = {
     name: 'pinned',
     description: 'template text\n' +
@@ -71,7 +73,7 @@ module.exports = {
             } else {
                 mode = 'osu'
             }
-            const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
+            const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
 
             fetch(userinfourl, {
                 headers: {
@@ -93,7 +95,7 @@ module.exports = {
                     };
                     fs.writeFileSync('debugosu/command-pinned=scores_username.json', JSON.stringify(osudata, null, 2), 'utf-8')
 
-                    let userpinnedurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/pinned?mode=${mode}&limit=100`
+                    let userpinnedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(userid)}/scores/pinned?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
                     fetch(userpinnedurl, {
                         headers: {
                             'Authorization': `Bearer ${access_token}`
@@ -286,7 +288,7 @@ module.exports = {
             mode: ${mode}
             page: ${page}
             `)
-            const userinfourl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
+            const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
             if (page < 2) {
                 page = 0
             } else if (!page) {
@@ -315,7 +317,7 @@ module.exports = {
                         return message.channel.send('Error - no user found')
                     };
                     fs.writeFileSync('debugosu/command-pinned=scores_username.json', JSON.stringify(osudata, null, 2), 'utf-8')
-                    let userpinnedurl = `https://osu.ppy.sh/api/v2/users/${userid}/scores/pinned?mode=${mode}&limit=100`
+                    let userpinnedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(userid)}/scores/pinned?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
                     fetch(userpinnedurl, {
                         headers: {
                             'Authorization': `Bearer ${access_token}`

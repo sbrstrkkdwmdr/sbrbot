@@ -2,7 +2,7 @@ import fs = require('fs')
 import fetch from 'node-fetch';
 import { access_token } from '../../configs/osuauth.json';
 import emojis = require('../../configs/emojis')
-
+import cmdchecks = require('../../configs/commandchecks')
 
 module.exports = {
     name: 'osuuserlink',
@@ -12,7 +12,7 @@ module.exports = {
 
         let user = messagenohttp.split('/').pop()
         fs.appendFileSync('link.log', `LINK DETECT EVENT - osuuserlink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!profile link: ${message.content}\n`, 'utf-8')
-        const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
+        const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         fetch(userurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`

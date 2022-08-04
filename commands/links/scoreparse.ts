@@ -4,6 +4,7 @@ import ppcalc = require('booba')
 import osucalc = require('osumodcalculator')
 import { access_token } from '../../configs/osuauth.json';
 import emojis = require('../../configs/emojis')
+import cmdchecks = require('../../configs/commandchecks')
 
 module.exports = {
     name: 'scoreparse',
@@ -22,7 +23,7 @@ module.exports = {
         }
 
 
-        let scoreurl = `https://osu.ppy.sh/api/v2/scores/${scoremode}/${scoreid}`
+        let scoreurl = `https://osu.ppy.sh/api/v2/scores/${cmdchecks.toHexadecimal(scoremode)}/${cmdchecks.toHexadecimal(scoreid)}`
         fetch(scoreurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`

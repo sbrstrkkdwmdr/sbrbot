@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import fs = require('fs');
 import { access_token } from '../../configs/osuauth.json';
 import emojis = require('../../configs/emojis')
+import cmdchecks = require('../../configs/commandchecks')
 
 module.exports = {
     name: 'scores',
@@ -34,7 +35,7 @@ module.exports = {
             let searchid = message.author.id
             if (message.mentions.users.size > 0) {
                 searchid = message.mentions.users.first().id
-            }            if (user.length < 1 || message.mentions.users.size > 0) {
+            } if (user.length < 1 || message.mentions.users.size > 0) {
                 let findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname == null) {
                     return message.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
@@ -61,7 +62,7 @@ module.exports = {
                 }
                 id = prevmap.id
             }
-            const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
+            const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
 
             fetch(userurl, {
                 headers: {
@@ -82,7 +83,7 @@ module.exports = {
                     }
                     let userid = userdata.id
 
-                    const scoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}/scores/users/${userid}/all`
+                    const scoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}/scores/users/${cmdchecks.toHexadecimal(userid)}/all`
                     fetch(scoreurl, {
                         headers: {
                             Authorization: `Bearer ${access_token}`
@@ -90,7 +91,7 @@ module.exports = {
                     }).then(res => res.json() as any)
                         .then(scoredataPreSort => {
                             fs.writeFileSync('debugosu/command-scores=pre_sort.json', JSON.stringify(scoredataPreSort, null, 2));
-                            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}`
+                            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}`
                             let scoredata = scoredataPreSort
                             let sortdata
 
@@ -119,7 +120,7 @@ module.exports = {
                                             return;
                                         }
                                     } catch (error) {
-                
+
                                     }
                                     fs.writeFileSync('debugosu/command-scores=map.json', JSON.stringify(mapdata, null, 2));
                                     fs.writeFileSync('debugosu/command-scores.json', JSON.stringify(scoredata, null, 2));
@@ -271,7 +272,7 @@ module.exports = {
             if (sort == null) {
                 sort = 'recent'
             }
-            const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`
+            const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
             fs.appendFileSync('commands.log',
                 `\noptions(2):
             username: ${user}
@@ -299,7 +300,7 @@ module.exports = {
                     }
                     let userid = userdata.id
 
-                    const scoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}/scores/users/${userid}/all`
+                    const scoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}/scores/users/${cmdchecks.toHexadecimal(userid)}/all`
                     fetch(scoreurl, {
                         headers: {
                             Authorization: `Bearer ${access_token}`
@@ -307,7 +308,7 @@ module.exports = {
                     }).then(res => res.json() as any)
                         .then(scoredataPreSort => {
                             fs.writeFileSync('debugosu/command-scores=pre_sort.json', JSON.stringify(scoredataPreSort, null, 2));
-                            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}`
+                            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}`
                             let scoredata = scoredataPreSort
                             let sortdata = ''
                             try {
@@ -388,7 +389,7 @@ module.exports = {
                                             return;
                                         }
                                     } catch (error) {
-                
+
                                     }
                                     fs.writeFileSync('debugosu/command-scores=map.json', JSON.stringify(mapdata, null, 2));
                                     fs.writeFileSync('debugosu/command-scores.json', JSON.stringify(scoredata, null, 2));

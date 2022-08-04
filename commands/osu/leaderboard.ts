@@ -2,6 +2,7 @@ import fs = require('fs')
 import osucalc = require('osumodcalculator');
 import fetch from 'node-fetch'
 //import { access_token } from '../../configs/osuauth.json';
+import cmdchecks = require('../../configs/commandchecks');
 
 
 module.exports = {
@@ -78,7 +79,7 @@ module.exports = {
                 mapid = prevmap.id
             }
 
-            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}`//?mode=osu`//?mods=${mods}`
+            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}`//?mode=osu`//?mods=${mods}`
 
             fetch(mapurl, {
                 method: 'GET',
@@ -111,7 +112,7 @@ module.exports = {
                     }
                     let fulltitle = `${artist} - ${title} [${mapdata.version}]`
 
-                    let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}/scores`
+                    let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/scores`
                     fs.writeFileSync('debugosu/command-leaderboard=map.json', JSON.stringify(mapdata, null, 2))
 
                     fetch(mapscoresurl, {
@@ -320,7 +321,7 @@ module.exports = {
             page: ${page}
             mods: ${mods}
             `)
-            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}`//?mode=osu`//?mods=${mods}`
+            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}`//?mode=osu`//?mods=${mods}`
 
             fetch(mapurl, {
                 method: 'GET',
@@ -360,7 +361,7 @@ module.exports = {
                     fs.writeFileSync('debugosu/command-leaderboard=map.json', JSON.stringify(mapdata, null, 2))
 
                     if (mods == null) {
-                        let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}/scores`
+                        let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/scores`
 
                         fetch(mapscoresurl, {
                             method: 'GET',
@@ -481,7 +482,7 @@ module.exports = {
                             })
                     }
                     else {
-                        let oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${mapid}&mods=${osucalc.ModStringToInt(osucalc.shortModName(mods))}&limit=100`
+                        let oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${cmdchecks.toHexadecimal(mapid)}&mods=${cmdchecks.toHexadecimal(osucalc.ModStringToInt(osucalc.shortModName(mods)))}&limit=100`
                         fetch(oldmsu, {})
                             .then(res => res.json() as any)
                             .then(lbdata => {

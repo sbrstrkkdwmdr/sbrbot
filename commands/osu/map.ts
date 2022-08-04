@@ -3,6 +3,7 @@ import osucalc = require('osumodcalculator');
 import fetch from 'node-fetch'
 import ppcalc = require('booba')
 import emojis = require('../../configs/emojis')
+import cmdchecks = require('../../configs/commandchecks')
 
 module.exports = {
     name: 'map',
@@ -64,7 +65,7 @@ module.exports = {
             let mapnameurl;
             if (args.join(' ').includes('"')) {
                 maptitle = args.join(' ').split('"')[1]//.join('')//.replaceAll(',', '')
-                mapnameurl = `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${maptitle}&s=any`
+                mapnameurl = `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${cmdchecks.toHexadecimal(maptitle)}&s=any`
                 fetch(mapnameurl, {
                     method: 'GET',
                     headers: {
@@ -96,7 +97,7 @@ module.exports = {
                             message.reply({ content: "No maps found for the parameters: \"" + maptitle + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                             return;
                         }
-                        let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}`
+                        let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}`
 
 
                         fetch(mapurl, {
@@ -171,7 +172,7 @@ module.exports = {
                                             "mods": osucalc.ModStringToInt(mapmods)
                                         })
                                 }
-                                let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}/attributes`;
+                                let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/attributes`;
                                 fetch(beatattrurl, {
                                     method: 'POST',
                                     headers: {
@@ -424,7 +425,7 @@ module.exports = {
 
                                             let mapsetlink = json.beatmapset_id
 
-                                            let mapperurl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`;
+                                            let mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapperlink)}/osu`;
                                             fetch(mapperurl, {
                                                 headers: {
                                                     'Authorization': `Bearer ${access_token}`
@@ -481,7 +482,7 @@ module.exports = {
 
             //==============================================================================================================================================================================================
 
-            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}`
+            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}`
 
             fetch(mapurl, {
                 method: 'GET',
@@ -553,7 +554,7 @@ module.exports = {
                                 "mods": osucalc.ModStringToInt(mapmods)
                             })
                     }
-                    let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}/attributes`;
+                    let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/attributes`;
                     fetch(beatattrurl, {
                         method: 'POST',
                         headers: {
@@ -806,7 +807,7 @@ module.exports = {
 
                                 let mapsetlink = json.beatmapset_id
 
-                                let mapperurl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`;
+                                let mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapperlink)}/osu`;
                                 fetch(mapperurl, {
                                     headers: {
                                         'Authorization': `Bearer ${access_token}`
@@ -903,7 +904,7 @@ module.exports = {
             mods: ${mapmods}
             detailed: <N/A>
             `)
-            fetch(`https://osu.ppy.sh/api/v2/beatmaps/${mapid}?`, {
+            fetch(`https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}?`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${access_token}`,
@@ -969,7 +970,7 @@ module.exports = {
                                 "mods": osucalc.ModStringToInt(mapmods)
                             })
                     }
-                    let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${mapid}/attributes`;
+                    let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/attributes`;
                     fetch(beatattrurl, {
                         method: 'POST',
                         headers: {
@@ -1242,7 +1243,7 @@ module.exports = {
 
                                 let mapsetlink = json.beatmapset_id
 
-                                let mapperurl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`;
+                                let mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapperlink)}/osu`;
                                 fetch(mapperurl, {
                                     headers: {
                                         'Authorization': `Bearer ${access_token}`

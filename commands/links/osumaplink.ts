@@ -5,6 +5,7 @@ import ppcalc = require('booba')
 import osucalc = require('osumodcalculator')
 import emojis = require('../../configs/emojis')
 import osuapiext = require('osu-api-extended')
+import cmdchecks = require('../../configs/commandchecks')
 
 
 module.exports = {
@@ -50,7 +51,7 @@ module.exports = {
             }
             fs.appendFileSync('link.log', `LINK DETECT EVENT - osumaplink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!map link: ${message.content}\n`, 'utf-8')
 
-            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}`
+            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}`
             fetch(mapurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -101,7 +102,7 @@ module.exports = {
                             "mods": osucalc.ModStringToInt(mapmods)
                         })
                 }
-                let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${id}/attributes`;
+                let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}/attributes`;
                 fetch(beatattrurl, {
                     method: 'POST',
                     headers: {
@@ -354,7 +355,7 @@ module.exports = {
                             }
                             let mapsetlink = json.beatmapset_id
 
-                            let mapperurl = `https://osu.ppy.sh/api/v2/users/${mapperlink}/osu`;
+                            let mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapperlink)}/osu`;
                             fetch(mapperurl, {
                                 headers: {
                                     'Authorization': `Bearer ${access_token}`
@@ -428,7 +429,7 @@ module.exports = {
                 }
             }
 
-            let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${setid}`;
+            let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
             fetch(lookupurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
