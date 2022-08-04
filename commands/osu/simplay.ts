@@ -8,9 +8,9 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
-        let absoluteID = currentDate.getTime()
-        
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+
+
         if (message != null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let embed = new Discord.EmbedBuilder()
@@ -46,10 +46,10 @@ module.exports = {
 
             try {
                 let test = simplay.data.artist
-            } catch(error) {
+            } catch (error) {
                 embed
-                .setTitle('There was an error calculating your play')
-                .setDescription('Please make sure you entered the beatmap id not the map**set** id')
+                    .setTitle('There was an error calculating your play')
+                    .setDescription('Please make sure you entered the beatmap id not the map**set** id')
 
                 message.reply({
                     embeds: [embed],

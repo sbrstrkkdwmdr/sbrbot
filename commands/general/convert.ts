@@ -4,7 +4,7 @@ import fetch = require('node-fetch')
 module.exports = {
     name: 'convert',
     description: 'null',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         /*         let Embedhelp = new Discord.EmbedBuilder()
                     .setTitle('w')
                     .addField('**Formula**', 'c>f = convert celcius to fahrenheit', false)

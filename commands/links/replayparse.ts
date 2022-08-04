@@ -10,8 +10,8 @@ import cmdchecks = require('../../configs/commandchecks');
 module.exports = {
     name: 'replayparse',
     description: 'replayparse',
-    execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO) {
-        let absoluteID = currentDate.getTime()
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+
         //console.log('true')
         fs.appendFileSync(`link${message.guildId}.log`, `LINK DETECT EVENT - replayparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
         let replay: any;

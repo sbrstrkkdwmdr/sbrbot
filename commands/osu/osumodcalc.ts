@@ -6,10 +6,9 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
-        let absoluteID = currentDate.getTime()
-        
-        
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+
+
         if (message != null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - osumodcalc (message)\n${currentDate} | ${currentDateISO}\n recieved osumodcalc command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
 
@@ -30,7 +29,7 @@ module.exports = {
             let embed = new Discord.EmbedBuilder()
 
             if ((mods.includes("HR") && mods.includes("EZ")) || (mods.includes("HT") && (mods.includes("DT") || mods.includes("NC")))) {
-                embed.setTitle("Error") 
+                embed.setTitle("Error")
                 embed.setDescription("You cannot have HR and EZ or HT and DT/NC at the same time.")
                 interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
                 return;

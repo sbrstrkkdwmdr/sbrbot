@@ -7,7 +7,7 @@ module.exports = {
         'Slash Command: `/checkperms [user]`' +
         'Options: \n' +
         '⠀⠀`user`: user/mention, optional. The user to check permissions of',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         if (message != null) {
             let user;
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - checkperms (message)\n${currentDate} | ${currentDateISO}\n recieved checkperms command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')

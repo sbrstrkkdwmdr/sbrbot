@@ -5,7 +5,7 @@ module.exports = {
     'Command: `sbr-command-name`\n' +
     'Options: \n' +
     '    `--option-name`: `option-description`\n',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction){
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button){
         if(message != null){
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
 

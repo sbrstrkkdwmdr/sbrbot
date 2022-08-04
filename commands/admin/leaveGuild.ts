@@ -7,7 +7,7 @@ module.exports = {
         'Slash Command: `/leaveguild [id]`\n' +
         'Options: \n' +
         '    `guild`: integer, required. The id of the guild to leave\n',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         //config.ownerusers
         if (message != null) {
             let guild;

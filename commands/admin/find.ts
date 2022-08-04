@@ -2,7 +2,7 @@ import fs = require('fs')
 module.exports = {
     name: 'find',
     description: 'returns name from the id given',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         let Embedr = new Discord.EmbedBuilder()
             .setTitle('Could not find the id')
             .setDescription('Does not exist or bot is not in the same guild')

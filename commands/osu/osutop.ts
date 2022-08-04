@@ -20,8 +20,7 @@ module.exports = {
         '⠀⠀`detailed`: boolean, optional. Whether to display extra details\n'
     ,
 
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
-        let absoluteID = currentDate.getTime()
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         
         if (message != null && button == null) {
 

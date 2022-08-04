@@ -4,7 +4,7 @@ import fetch from 'node-fetch'
 module.exports = {
     name: 'image',
     description: 'null',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         if (message != null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - image (message)\n${currentDate} | ${currentDateISO}\n recieved image command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 

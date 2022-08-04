@@ -10,10 +10,10 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+
         //import { access_token } from '../../configs/osuauth.json';
-        let absoluteID = currentDate.getTime()
-        
+
         let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         let access_token = JSON.parse(accessN).access_token;
 
@@ -85,13 +85,13 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
                 .then(osudata => {
-                    
+
                     try {
-                        if(osudata.authentication){
+                        if (osudata.authentication) {
                             message.reply({ content: 'error - osu auth out of date', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                             return;
                         }
-                    } catch(error){
+                    } catch (error) {
                     }
                     let userid = osudata.id
                     if (!userid) {
@@ -112,7 +112,7 @@ module.exports = {
                                 .setTitle(`#1 Scores for ${osudata.username}`)
                                 .setURL(`https://osu.ppy.sh/u/${userid}`)
                                 .setThumbnail(`https://a.ppy.sh/${userid}`);
-                                ;
+                            ;
 
                             if (firstscoresdata.length < 1) {
                                 firstsEmbed.setDescription('Error - no scores found')
@@ -198,7 +198,7 @@ module.exports = {
                             }
                             message.reply({
                                 embeds: [firstsEmbed],
-                                allowedMentions: { repliedUser: false }, 
+                                allowedMentions: { repliedUser: false },
                                 components: [buttons]
                             })
                             let endofcommand = new Date().getTime();
@@ -240,17 +240,17 @@ module.exports = {
                         .setEmoji('➡')
                     /* .setLabel('End') */,
                 );
-            let user:any;
+            let user: any;
             let searchid = interaction.member.user.id
-            let mode:any;
-            let page:any;
+            let mode: any;
+            let page: any;
             if (interaction.type == Discord.InteractionType.ApplicationCommand) {
 
                 user = interaction.options.getString('user')
                 mode = interaction.options.getString('mode')
             } else {
                 user = message.embeds[0].title.split('for ')[1]
-                mode = message.embeds[0].description.split('\n')[1] 
+                mode = message.embeds[0].description.split('\n')[1]
                 page = 0;
                 (message.embeds[0].description).split('/')[0].replace('Page ', '')
                 if (button == 'BigLeftArrow') {
@@ -287,7 +287,7 @@ module.exports = {
                 mode = 'osu'
             }
             fs.appendFileSync(`commands.log`,
-            `\noptions(2):
+                `\noptions(2):
             user: ${user}
             mode: ${mode}
             page: ${page}
@@ -408,18 +408,18 @@ module.exports = {
                                 }])
 
                             }
-                            if(interaction.type == Discord.InteractionType.ApplicationCommand){
+                            if (interaction.type == Discord.InteractionType.ApplicationCommand) {
 
                             } else if (interaction.type == Discord.InteractionType.MessageComponent) {
-                            message.edit({
-                                embeds: [firstsEmbed],
-                                allowedMentions: { repliedUser: false }, 
-                                components: [buttons]
-                            })
-                            let endofcommand = new Date().getTime();
-                            let timeelapsed = endofcommand - currentDate.getTime();
-                            fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => firsts) - ${timeelapsed}ms\n`)
-                        }
+                                message.edit({
+                                    embeds: [firstsEmbed],
+                                    allowedMentions: { repliedUser: false },
+                                    components: [buttons]
+                                })
+                                let endofcommand = new Date().getTime();
+                                let timeelapsed = endofcommand - currentDate.getTime();
+                                fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => firsts) - ${timeelapsed}ms\n`)
+                            }
                         })
                 })
         }

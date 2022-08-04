@@ -3,7 +3,7 @@ import fs = require('fs');
 module.exports = {
     name: '8ball',
     description: 'w',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
 
         let responses = [
             'yes', 'no', 'What? no', '知らない', 'nope', 'yeahhh', 'a strong maybe', 'definitely maybe not', 'nah', 'yeah of course', '多分', '絶対!!!',

@@ -7,7 +7,7 @@ module.exports = {
         'Command: `sbr-ping`\n' +
         'Slash command: `/ping`'
     ,
-    execute(message, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         let starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString())
 
         if (message != null) {

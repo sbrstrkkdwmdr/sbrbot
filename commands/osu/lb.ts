@@ -6,9 +6,8 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
-        let absoluteID = currentDate.getTime()
-        
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+
         if (message != null && button == null) {
             let buttons = new Discord.ActionRowBuilder()
                 .addComponents(
@@ -451,7 +450,7 @@ module.exports = {
                     page = Math.ceil(rarr.length / 10)
                     break;
             }
-            
+
             setTimeout(() => {
                 rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `
                 for (let i = 0; i + (page * 5) < rarr.length && i < 10; i++) {

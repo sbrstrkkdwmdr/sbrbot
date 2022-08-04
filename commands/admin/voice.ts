@@ -3,7 +3,7 @@ import commandchecks = require('../../configs/commandchecks')
 module.exports = {
     name: 'voice',
     description: 'changes voice state settings for a user',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
 
         if (message != null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - voice (message)\n${currentDate} | ${currentDateISO}\n recieved alter voice state command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')

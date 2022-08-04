@@ -8,7 +8,7 @@ module.exports = {
         'Options:\n' +
         '⠀⠀`type`: string, required. The type of gif to send.'
     ,
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         let thelink:string;
         let cryabtit = [
             'https://media.discordapp.net/attachments/858364068024156171/858364114183520266/cry_about_about_it.gif', //zitron map

@@ -6,7 +6,7 @@ import calc = require('../../configs/calculations');
 module.exports = {
     name: 'remind',
     description: 'null',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         let timetype = ['s', 'm', 'h', 'd']
 
         async function sendremind(reminder, time, obj, sendchannel, remindertxt, usersent) {

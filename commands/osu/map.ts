@@ -16,13 +16,12 @@ module.exports = {
         '⠀⠀`mods`: string, optional. the mods of the beatmap\n' +
         'If no map id is provided, the most recent map will be used'
     ,
-    execute(message, args, client, Discord, interaction, currentDate, currentDateISO, config) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         //check if file debugosu/prevmap.json exists
         let prevmap;
         let i;
         let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         let access_token = JSON.parse(accessN).access_token;
-        let absoluteID = currentDate.getTime()
         
         if (message != null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - map (message)\n${currentDate} | ${currentDateISO}\n recieved get map info command\nrequested by ${message.author.id} AKA ${message.author.tag}]\nMessage content: ${message.content}`, 'utf-8')

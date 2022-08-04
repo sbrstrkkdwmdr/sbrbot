@@ -11,8 +11,7 @@ import cmdchecks = require('../../configs/commandchecks')
 module.exports = {
     name: 'osumaplink',
     description: 'osumaplink',
-    execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO) {
-        let absoluteID = currentDate.getTime()
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
 
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         //let mods = message.content.split('+')[1]

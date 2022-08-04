@@ -2,7 +2,7 @@ import fs = require('fs')
 module.exports = {
     name: 'debug',
     description: 'Returns debug files of certain commands',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
 
         if (message != null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - debug (message)\n${currentDate} | ${currentDateISO}\n recieved return debug file command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')

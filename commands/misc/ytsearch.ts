@@ -6,7 +6,7 @@ import cmdchecks = require('../../configs/commandchecks')
 module.exports = {
     name: 'ytsearch',
     description: 'null',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         let i:number;
         if (message != null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - ytsearch (message)\n${currentDate} | ${currentDateISO}\n recieved search youtube command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')

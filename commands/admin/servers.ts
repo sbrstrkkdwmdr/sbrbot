@@ -5,7 +5,7 @@ module.exports = {
     description: 'Lists all servers the bot is in\n' +
         'Command: `sbr-servers`\n' +
         'Slash Command: `/servers`\n',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
 
         let servers = client.guilds.cache.map(guild => `\`||\` **${guild.name}** => \`${guild.id}\` | <@${guild.ownerId}> \`||\``)
 

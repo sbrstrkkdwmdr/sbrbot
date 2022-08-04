@@ -5,14 +5,17 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
         let absoluteID = currentDate.getTime();
+        let interaction = null
+        let button = null
+        let args = null
 
 
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         if (messagenohttp.startsWith('osu.ppy.sh/b/') || messagenohttp.startsWith('osu.ppy.sh/beatmaps/') || messagenohttp.startsWith('osu.ppy.sh/beatmapsets/') || messagenohttp.startsWith('osu.ppy.sh/s/')) {
-            client.links.get('osumaplink').execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO);
+            client.links.get('osumaplink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
         }
         if (messagenohttp.startsWith('osu.ppy.sh/u/') || messagenohttp.startsWith('osu.ppy.sh/users/')) {
-            client.links.get('osuuserlink').execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO);
+            client.links.get('osuuserlink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
         }
 
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osr'))) {
@@ -24,11 +27,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 //console.log('success')
             });
             setTimeout(() => {
-                client.links.get('replayparse').execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO);
+                client.links.get('replayparse').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
             }, 1500)
         }
         if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
-            client.links.get('scoreparse').execute(message, userdata, Discord, osuApiKey, osuClientID, osuClientSecret, config, currentDate, currentDateISO);
+            client.links.get('scoreparse').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
         }
     })
 }

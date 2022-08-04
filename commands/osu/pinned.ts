@@ -12,9 +12,8 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
-        let absoluteID = currentDate.getTime()
-        
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+
         if (message != null && button == null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
 
@@ -110,7 +109,7 @@ module.exports = {
                                 .setTitle(`Pinned scores for ${osudata.username}`)
                                 .setURL(`https://osu.ppy.sh/u/${userid}`)
                                 .setThumbnail(`https://a.ppy.sh/${userid}`);
-                                ;
+                            ;
 
                             if (pinnedcoresdata.length < 1) {
                                 pinnedEmbed.setDescription('Error - no scores found')
@@ -196,7 +195,7 @@ module.exports = {
                             }
                             message.reply({
                                 embeds: [pinnedEmbed],
-                                allowedMentions: { repliedUser: false }, 
+                                allowedMentions: { repliedUser: false },
                                 components: [buttons]
                             })
                             let endofcommand = new Date().getTime();
@@ -238,17 +237,17 @@ module.exports = {
                         .setEmoji('➡')
                     /* .setLabel('End') */,
                 );
-            let user:any;
+            let user: any;
             let searchid = interaction.member.user.id
-            let mode:any;
-            let page:any;
+            let mode: any;
+            let page: any;
             if (interaction.type == Discord.InteractionType.ApplicationCommand) {
 
                 user = interaction.options.getString('user')
                 mode = interaction.options.getString('mode')
             } else {
                 user = message.embeds[0].title.split('for ')[1]
-                mode = message.embeds[0].description.split('\n')[1] 
+                mode = message.embeds[0].description.split('\n')[1]
                 page = 0;
                 (message.embeds[0].description).split('/')[0].replace('Page ', '')
                 if (button == 'BigLeftArrow') {
@@ -285,7 +284,7 @@ module.exports = {
                 mode = 'osu'
             }
             fs.appendFileSync(`commands.log`,
-            `\noptions(2):
+                `\noptions(2):
             user: ${user}
             mode: ${mode}
             page: ${page}
@@ -414,18 +413,18 @@ module.exports = {
                                 }])
 
                             }
-                            if(interaction.type == Discord.InteractionType.ApplicationCommand){
+                            if (interaction.type == Discord.InteractionType.ApplicationCommand) {
 
                             } else if (interaction.type == Discord.InteractionType.MessageComponent) {
-                            message.edit({
-                                embeds: [pinnedEmbed],
-                                allowedMentions: { repliedUser: false }, 
-                                components: [buttons]
-                            })
-                            let endofcommand = new Date().getTime();
-                            let timeelapsed = endofcommand - currentDate.getTime();
-                            fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => pinned) - ${timeelapsed}ms\n`)
-                        }
+                                message.edit({
+                                    embeds: [pinnedEmbed],
+                                    allowedMentions: { repliedUser: false },
+                                    components: [buttons]
+                                })
+                                let endofcommand = new Date().getTime();
+                                let timeelapsed = endofcommand - currentDate.getTime();
+                                fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => pinned) - ${timeelapsed}ms\n`)
+                            }
                         })
                 })
         }

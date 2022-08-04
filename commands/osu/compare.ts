@@ -5,8 +5,7 @@ module.exports = {
     'Command: `sbr-command-name`\n' +
     'Options: \n' +
     '    `--option-name`: `option-description`\n',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button){
-        let absoluteID = new Date().getTime()
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
 
        
         if(message != null){

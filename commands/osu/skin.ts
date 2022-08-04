@@ -5,9 +5,8 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
-        let absoluteID = currentDate.getTime()
-                
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+
         if (message != null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - skin (message)\n${currentDate} | ${currentDateISO}\n recieved get user skin command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let searchid = message.author.id

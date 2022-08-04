@@ -13,10 +13,10 @@ module.exports = {
         '⠀⠀`user`: string/integer, optional. The username or id of the player\n' +
         '⠀⠀`id`: integer, optional. The id of the beatmap to display the scores of. If omitted, the last requested map will be used\n' +
         '⠀⠀`sort`: string, optional. The sort to display the top plays of. Valid values: `score`, `accuracy`, `pp`, `recent`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+
         let prevmap: any;
-        let absoluteID = currentDate.getTime()
-        
+
         /*         if (fs.existsSync(`./debugosu/prevmap.json`)) {
                     //console.log('hello there')
                     try {

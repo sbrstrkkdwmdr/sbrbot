@@ -3,7 +3,7 @@ import checks = require('../../configs/commandchecks')
 module.exports = {
     name: 'log',
     description: 'returns the logs of the guild',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         if (message != null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - log (message)\n${currentDate} | ${currentDateISO}\n recieved get guild logs command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             if (checks.isOwner(message.author.id) || message.author.permissions.has('ADMINISTRATOR')) {

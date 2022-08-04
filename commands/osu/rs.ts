@@ -15,9 +15,8 @@ module.exports = {
         '⠀⠀`user`: The user to display the most recent score of\n' +
         '⠀⠀`page`: The page to display the most recent score of\n' +
         '⠀⠀`mode`: The mode to display the most recent score of\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
-        let absoluteID = currentDate.getTime()
-        
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+
         if (message != null && button == null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - rs (message)\n${currentDate} | ${currentDateISO}\n recieved osu! recent play command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
 
@@ -592,9 +591,9 @@ module.exports = {
                     try {
                         if (osudata.authentication) {
                             setTimeout(() => {
-                            
-                                 interaction.channel.send({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true }) 
-                        }, 100)
+
+                                interaction.channel.send({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            }, 100)
                             return;
                         }
                     } catch (error) {

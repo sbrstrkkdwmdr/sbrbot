@@ -11,13 +11,12 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         let prevmap;
         let i: number;
         let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         let access_token = JSON.parse(accessN).access_token;
-        let absoluteID = currentDate.getTime()
-        
+
         /* if (fs.existsSync(`./debugosu/prevmap.json`)) {
             //console.log('hello there')
             try {
@@ -335,7 +334,7 @@ module.exports = {
             }).then(res => res.json() as any)
                 .then(mapdata => {
                     let title
-                    let titleuni 
+                    let titleuni
                     let fulltitle
                     let artist
                     let artistuni

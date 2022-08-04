@@ -7,7 +7,7 @@ module.exports = {
         'Slash command: `/help [command]`\n' +
         'Options:\n' +
         '`command` - string, optional. The command to get help for. If omitted, all commands will be displayed.\n',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         let i: number;
         let fullCommandList = new Discord.EmbedBuilder()
             .setColor('#0099ff')

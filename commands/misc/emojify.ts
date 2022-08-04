@@ -3,7 +3,7 @@ import emojisarr = require('../../configs/emojiarray')
 module.exports = {
     name: 'emojify',
     description: 'Emojify a string',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         if (args.length < 1) {
             message.reply({ content: 'Please provide a string to emojify.', allowedMentions: { repliedUser: false } });
             return;

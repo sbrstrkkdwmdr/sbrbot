@@ -4,7 +4,7 @@ import osucalc = require('osumodcalculator')
 module.exports = {
     name: 'math',
     description: 'null',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         let odcalc;
         if (message != null) {
             if (args[0] == 'help') {
