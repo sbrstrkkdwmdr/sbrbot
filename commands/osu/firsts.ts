@@ -18,7 +18,7 @@ module.exports = {
         let access_token = JSON.parse(accessN).access_token;
 
         if (message != null && button == null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
 
             let buttons = new Discord.ActionRowBuilder()
                 .addComponents(
@@ -203,7 +203,7 @@ module.exports = {
                             })
                             let endofcommand = new Date().getTime();
                             let timeelapsed = endofcommand - currentDate.getTime();
-                            fs.appendFileSync(`commands.log`, `\nCommand Latency (message command => firsts) - ${timeelapsed}ms\n`)
+                            fs.appendFileSync(`commands.log`, `\nCommand Latency (message command => firsts) - ${timeelapsed}ms\nID:${absoluteID}\n`)
                         })
                 })
         }
@@ -211,7 +211,7 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (interaction != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\nID:${absoluteID}\n`, 'utf-8')
             let buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
