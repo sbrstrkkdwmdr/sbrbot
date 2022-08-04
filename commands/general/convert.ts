@@ -103,8 +103,8 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
         }
         if (interaction != null) {
             fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - convert (interaction)\n${currentDate} | ${currentDateISO}\n recieved convert command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-            let cat1 = interaction.options.getString('type1')
-            let cat2 = interaction.options.getString('type2')
+            let cat1 = interaction.options.getString('from')
+            let cat2 = interaction.options.getString('to')
             let num = interaction.options.getNumber('number')
             embedres.setDescription('NOTE: NEGATIVES ARE SHOWN AS POSITIVE NUMBERS')
 
