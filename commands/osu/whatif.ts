@@ -5,10 +5,10 @@ module.exports = {
     'Command: `sbr-command-name`\n' +
     'Options: \n' +
     '    `--option-name`: `option-description`\n',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button){
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj){
                 
         if(message != null){
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
@@ -42,7 +42,7 @@ module.exports = {
 //==============================================================================================================================================================================================
 
         if(interaction != null){
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
 
             let buttons = new Discord.ActionRowBuilder()
                 .addComponents(
@@ -74,6 +74,6 @@ module.exports = {
                 );
         }
 
-        fs.appendFileSync(`commands.log`, '\nsuccess\n\n', 'utf-8')
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, '\nsuccess\n\n', 'utf-8')
     }
 }

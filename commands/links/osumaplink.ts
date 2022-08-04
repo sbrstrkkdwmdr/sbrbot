@@ -49,7 +49,7 @@ module.exports = {
                 return message.reply({ content: 'Please enter a valid beatmap link.', allowedMentions: { repliedUser: false } })
 
             }
-            fs.appendFileSync(`link${message.guildId}.log`, `LINK DETECT EVENT - osumaplink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!map link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - osumaplink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!map link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
 
             let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}`
             fetch(mapurl, {
@@ -331,7 +331,7 @@ module.exports = {
                                 ppComputedString = NaN
                                 pp95ComputedString = NaN
                                 ppissue = 'Error - pp calculator could not fetch beatmap'
-                                fs.appendFileSync(`link${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error + `\nID:${absoluteID}\n`)
+                                fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error + `\nID:${absoluteID}\n`)
                             }
 
                             let mapname = json.beatmapset.title
@@ -399,10 +399,10 @@ module.exports = {
                                         ])
                                     //console.log('true')
                                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
-                                    fs.appendFileSync(`link${message.guildId}.log`, `\nsuccess\n${absoluteID}\n\n`, 'utf-8')
+                                    fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nsuccess\n${absoluteID}\n\n`, 'utf-8')
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync(`link${message.guildId}.log`, `\nCommand Latency (osumaplink) - ${timeelapsed}ms\nID:${absoluteID}\n`)
+                                    fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nCommand Latency (osumaplink) - ${timeelapsed}ms\nID:${absoluteID}\n`)
                                 })
                         })();
                     })
@@ -429,100 +429,105 @@ module.exports = {
                 }
             }
 
-            let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
-            fetch(lookupurl, {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }).then(res => res.json() as any)
-                .then(setdata => {
-                    fs.writeFileSync('debugosu/link-map=set_data.json', JSON.stringify(setdata, null, 2))
-                    let bid = setdata.beatmaps[0].beatmap_id;
+            if (isNaN(setid)) {
+                message.reply({ content: 'Invalid beatmap URL', allowedMentions: { repliedUser: false } });
+                return;
+            }
 
-                    let mapstatus = (setdata.status)
-                    let statusimg: any;
-                    if (mapstatus == "ranked") {
-                        statusimg = "<:statusranked:944512775579926609>";
+                let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
+                fetch(lookupurl, {
+                    headers: {
+                        'Authorization': `Bearer ${access_token}`
                     }
-                    if (mapstatus == "approved" || mapstatus == "qualified") {
-                        statusimg = "<:statusapproved:944512764913811467>";
-                    }
-                    if (mapstatus == "loved") {
-                        statusimg = "<:statusloved:944512775810588733>";
-                    }
-                    if (mapstatus == "graveyard" || mapstatus == "pending") {
-                        statusimg = "<:statusgraveyard:944512765282897940>";
-                    }
-                    let mapimg = "<:modeosu:944181096868884481>";
+                }).then(res => res.json() as any)
+                    .then(setdata => {
+                        fs.writeFileSync('debugosu/link-map=set_data.json', JSON.stringify(setdata, null, 2))
+                        let bid = setdata.beatmaps[0].beatmap_id;
 
-                    let mapperid = setdata.user_id;
+                        let mapstatus = (setdata.status)
+                        let statusimg: any;
+                        if (mapstatus == "ranked") {
+                            statusimg = "<:statusranked:944512775579926609>";
+                        }
+                        if (mapstatus == "approved" || mapstatus == "qualified") {
+                            statusimg = "<:statusapproved:944512764913811467>";
+                        }
+                        if (mapstatus == "loved") {
+                            statusimg = "<:statusloved:944512775810588733>";
+                        }
+                        if (mapstatus == "graveyard" || mapstatus == "pending") {
+                            statusimg = "<:statusgraveyard:944512765282897940>";
+                        }
+                        let mapimg = "<:modeosu:944181096868884481>";
 
-                    let title = setdata.title;
-                    let titleuni = setdata.title_unicode;
-                    let artist = setdata.artist;
-                    let artistuni = setdata.artist_unicode;
+                        let mapperid = setdata.user_id;
 
-                    if (title != titleuni) {
-                        title = `${title} (${titleuni})`
-                    }
-                    if (artist != artistuni) {
-                        artist = `${artist} (${artistuni})`
-                    }
+                        let title = setdata.title;
+                        let titleuni = setdata.title_unicode;
+                        let artist = setdata.artist;
+                        let artistuni = setdata.artist_unicode;
+
+                        if (title != titleuni) {
+                            title = `${title} (${titleuni})`
+                        }
+                        if (artist != artistuni) {
+                            artist = `${artist} (${artistuni})`
+                        }
 
 
-                    let Embed = new Discord.EmbedBuilder()
-                        .setColor(0x91ff9a)
-                        .setTitle(title)
-                        .setURL(`https://osu.ppy.sh/s/${setid}`)
-                        .setThumbnail(`https://b.ppy.sh/thumb/${setid}l.jpg`)
-                        .setDescription(`
+                        let Embed = new Discord.EmbedBuilder()
+                            .setColor(0x91ff9a)
+                            .setTitle(title)
+                            .setURL(`https://osu.ppy.sh/s/${setid}`)
+                            .setThumbnail(`https://b.ppy.sh/thumb/${setid}l.jpg`)
+                            .setDescription(`
                     **MAP DETAILS**
                     ${statusimg}
                     ${setdata.bpm}BPM ${setdata.favourite_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}❤ ${setdata.play_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} plays
                     `)
 
-                        .setAuthor({ name: `${setdata.creator}`, url: `https://osu.ppy.sh/u/${mapperid}`, iconURL: `https://a.ppy.sh/${mapperid}` })
+                            .setAuthor({ name: `${setdata.creator}`, url: `https://osu.ppy.sh/u/${mapperid}`, iconURL: `https://a.ppy.sh/${mapperid}` })
 
-                    let beatmaps = setdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
+                        let beatmaps = setdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
 
-                    for (let i = 0; i < setdata.beatmaps.length; i++) {
-                        let curbm = beatmaps[i];
-                        let mapmode = curbm.mode
-                        if (mapmode == "taiko") {
-                            mapimg = "<:modetaiko:944181097053442068>";
+                        for (let i = 0; i < setdata.beatmaps.length; i++) {
+                            let curbm = beatmaps[i];
+                            let mapmode = curbm.mode
+                            if (mapmode == "taiko") {
+                                mapimg = "<:modetaiko:944181097053442068>";
+                            }
+                            if (mapmode == "fruits") {
+                                mapimg = "<:modefruits:944181096206176326>";
+                            }
+                            if (mapmode == "mania") {
+                                mapimg = "<:modemania:944181095874834453>";
+                            }
+                            //seconds to time
+                            let length = curbm.total_length;
+                            let minutes = Math.floor(length / 60);
+                            let seconds: any = length % 60;
+                            if (seconds < 10) {
+                                seconds = `0${seconds}`
+                            }
+                            let moddedlength = `${minutes}:${seconds}`
+                            Embed.addFields([{
+                                name: `${curbm.version}`,
+                                value:
+                                    `${mapimg} | ${curbm.difficulty_rating}⭐ \n` +
+                                    `CS${curbm.cs} AR${curbm.ar} OD${curbm.accuracy} HP${curbm.drain} \n` +
+                                    `${moddedlength}🕐 ${curbm.bpm}BPM⏱ | ${emojis.mapobjs.circle}${curbm.count_circles} ${emojis.mapobjs.slider}${curbm.count_sliders} ${emojis.mapobjs.spinner}${curbm.count_spinners}`,
+                                inline: false
+                            }])
                         }
-                        if (mapmode == "fruits") {
-                            mapimg = "<:modefruits:944181096206176326>";
-                        }
-                        if (mapmode == "mania") {
-                            mapimg = "<:modemania:944181095874834453>";
-                        }
-                        //seconds to time
-                        let length = curbm.total_length;
-                        let minutes = Math.floor(length / 60);
-                        let seconds: any = length % 60;
-                        if (seconds < 10) {
-                            seconds = `0${seconds}`
-                        }
-                        let moddedlength = `${minutes}:${seconds}`
-                        Embed.addFields([{
-                            name: `${curbm.version}`,
-                            value:
-                                `${mapimg} | ${curbm.difficulty_rating}⭐ \n` +
-                                `CS${curbm.cs} AR${curbm.ar} OD${curbm.accuracy} HP${curbm.drain} \n` +
-                                `${moddedlength}🕐 ${curbm.bpm}BPM⏱ | ${emojis.mapobjs.circle}${curbm.count_circles} ${emojis.mapobjs.slider}${curbm.count_sliders} ${emojis.mapobjs.spinner}${curbm.count_spinners}`,
-                            inline: false
-                        }])
+                        message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
+                        let endofcommand = new Date().getTime();
+                        let timeelapsed = endofcommand - currentDate.getTime();
+                        fs.appendFileSync(`logs/cmd/link${message.guildId}./logs/moderator/$`, `\nCommand Latency (osumaplink) (set) - ${timeelapsed}ms\n`)
+                        fs.writeFileSync(`./debugosu/prevmap.json${message.guildId}`, JSON.stringify(({ id: setdata.beatmaps[setdata.beatmaps.length - 1].id }), null, 2));
+
+
                     }
-                    message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
-                    let endofcommand = new Date().getTime();
-                    let timeelapsed = endofcommand - currentDate.getTime();
-                    fs.appendFileSync(`link${message.guildId}.log`, `\nCommand Latency (osumaplink) (set) - ${timeelapsed}ms\n`)
-                    fs.writeFileSync(`./debugosu/prevmap.json${message.guildId}`, JSON.stringify(({ id: setdata.beatmaps[setdata.beatmaps.length - 1].id }), null, 2));
-
-
-                }
-                )
+                    )
+            }
         }
     }
-}

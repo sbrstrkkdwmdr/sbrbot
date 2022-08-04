@@ -304,6 +304,12 @@ function toAlphaNum(str:string|number){
     return newstr;
 }
 
+function toMath(str:string){
+    let newstr:string;
+    newstr = str.toString().replace(/([^0-9pi^+-/*])/g, '')
+    return newstr;
+}
+
 /* module.exports = {
     audiofiletype,
     checkisfileblocked,
@@ -337,5 +343,6 @@ export {
     nthIndexLast,
     trackScore,
     toHexadecimal,
-    toAlphaNum
+    toAlphaNum,
+    toMath
 }

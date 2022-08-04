@@ -7,17 +7,17 @@ module.exports = {
         'Command: `sbr-ping`\n' +
         'Slash command: `/ping`'
     ,
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString())
 
         if (message != null) {
-            fs.appendFileSync(`commands.log`, `\nEvent: ping (message command)\nTime: ${currentDate} | ${currentDateISO}\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`)
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nEvent: ping (message command)\nTime: ${currentDate} | ${currentDateISO}\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}\n`)
             let trueping = message.createdAt.getTime() - new Date().getTime() + 'ms'
 
             message.channel.send({ content: `Pong!\nClient latency: ${Math.round(client.ws.ping)}ms\nMessage Latency: ${trueping}`, allowedMentions: { repliedUser: false } });
         }
         if (interaction != null) {
-            fs.appendFileSync(`commands.log`, `\nEvent: ping (interaction command)\nTime: ${currentDate} | ${currentDateISO}\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`)
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nEvent: ping (interaction command)\nTime: ${currentDate} | ${currentDateISO}\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`)
 
             let admininfo: any = '';
             let trueping = interaction.createdAt.getTime() - new Date().getTime() + 'ms'

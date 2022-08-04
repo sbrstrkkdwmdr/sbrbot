@@ -128,7 +128,7 @@ const userdata = sequelize.define('userdata', {
 client.once('ready', () => {
     userdata.sync()
     console.log('Ready!');
-    fs.appendFileSync('commands.log', `\n\n\nBOT IS NOW ONLINE\n${new Date()} | ${new Date().toISOString()}\n\n\n`, 'utf-8');
+    fs.appendFileSync('logs/general.log', `\n\n\nBOT IS NOW ONLINE\n${new Date()} | ${new Date().toISOString()}\n\n\n`, 'utf-8');
     CommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     LinkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     SlashCommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
@@ -165,6 +165,8 @@ fetch('https://osu.ppy.sh/oauth/token', {
 }).then(res => res.json() as any)
     .then(res => {
         fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
+        fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
+
     }
     )
 fs.writeFileSync('debug/starttime.txt', (new Date()).toString())

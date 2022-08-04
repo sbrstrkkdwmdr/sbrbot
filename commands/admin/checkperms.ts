@@ -7,10 +7,10 @@ module.exports = {
         'Slash Command: `/checkperms [user]`' +
         'Options: \n' +
         '⠀⠀`user`: user/mention, optional. The user to check permissions of',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         if (message != null) {
             let user;
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - checkperms (message)\n${currentDate} | ${currentDateISO}\n recieved checkperms command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - checkperms (message)\n${currentDate} | ${currentDateISO}\n recieved checkperms command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
             if (args[0]) {
                 user = message.mentions.users.first() || message.guild.members.cache.get(args.join(' '))
             } else {
@@ -32,11 +32,11 @@ module.exports = {
                 .setColor('#C9FF93')
                 ;
             message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
-            fs.appendFileSync(`commands.log`, `\nCommand Information\nmessage content: ${message.content}`)
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nmessage content: ${message.content}\n`)
 
         }
         if (interaction != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - checkperms (interaction)\n${currentDate} | ${currentDateISO}\n recieved checkperms command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - checkperms (interaction)\n${currentDate} | ${currentDateISO}\n recieved checkperms command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
             if (interaction.options.getUser('user')) {
                 let user = interaction.options.getUser('user')
                 let member = interaction.guild.members.cache.get(user.id)
@@ -54,7 +54,7 @@ module.exports = {
                 } else {
                     interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
                 }
-                fs.appendFileSync(`commands.log`, `\nCommand Information\nuser: ${user} AKA ${user.tag}`)
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nuser: ${user} AKA ${user.tag}\n`)
             }
             else {
                 interaction.reply({ content: 'Error', allowedMentions: { repliedUser: false } })

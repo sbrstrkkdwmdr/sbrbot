@@ -7,7 +7,7 @@ module.exports = {
         'Slash command: `/help [command]`\n' +
         'Options:\n' +
         '`command` - string, optional. The command to get help for. If omitted, all commands will be displayed.\n',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let i: number;
         let fullCommandList = new Discord.EmbedBuilder()
             .setColor('#0099ff')
@@ -97,7 +97,7 @@ module.exports = {
 
 
         if (message != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
             if (!args[0]) {
                 message.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
             }
@@ -278,13 +278,13 @@ module.exports = {
                     .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
                 message.reply({ embeds: [commandInfo], allowedMentions: { repliedUser: false } })
             }
-            fs.appendFileSync(`commands.log`, `\nCommand Information\n${message.content}`)
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\n${message.content}\n`)
         }
 
 
 
         if (interaction != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - help (interaction)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - help (interaction)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
 
             let command = interaction.options.getString('command')
             let commandInfo = new Discord.EmbedBuilder()
@@ -459,7 +459,7 @@ module.exports = {
                 return interaction.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
             }
             interaction.reply({ embeds: [commandInfo], allowedMentions: { repliedUser: false } })
-            fs.appendFileSync(`commands.log`, `\nCommand Information\nCommand: ${command}`)
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nCommand: ${command}\n`)
 
         }
 

@@ -3,10 +3,10 @@ import commandchecks = require('../../configs/commandchecks')
 module.exports = {
     name: 'voice',
     description: 'changes voice state settings for a user',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
 
         if (message != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - voice (message)\n${currentDate} | ${currentDateISO}\n recieved alter voice state command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - voice (message)\n${currentDate} | ${currentDateISO}\n recieved alter voice state command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}\n`, 'utf-8')
             let user = message.mentions.users.first() || message.author;
             let type = args[1]
             let channel = args[2]
@@ -83,7 +83,7 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (interaction != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - voice (interaction)\n${currentDate} | ${currentDateISO}\n recieved alter voice state command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - voice (interaction)\n${currentDate} | ${currentDateISO}\n recieved alter voice state command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
             let user = interaction.options.getUser('user');
             let type = interaction.options.getString('type');
             let channel = interaction.options.getChannel('channel');
@@ -150,7 +150,7 @@ module.exports = {
 
         }
 
-        fs.appendFileSync(`commands.log`, 'success\n\n', 'utf-8')
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, 'success\n\n', 'utf-8')
 
 
     }

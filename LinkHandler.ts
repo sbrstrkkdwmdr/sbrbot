@@ -8,14 +8,15 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let interaction = null
         let button = null
         let args = null
+        let obj = message
 
 
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         if (messagenohttp.startsWith('osu.ppy.sh/b/') || messagenohttp.startsWith('osu.ppy.sh/beatmaps/') || messagenohttp.startsWith('osu.ppy.sh/beatmapsets/') || messagenohttp.startsWith('osu.ppy.sh/s/')) {
-            client.links.get('osumaplink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
+            client.links.get('osumaplink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
         }
         if (messagenohttp.startsWith('osu.ppy.sh/u/') || messagenohttp.startsWith('osu.ppy.sh/users/')) {
-            client.links.get('osuuserlink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
+            client.links.get('osuuserlink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
         }
 
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osr'))) {
@@ -27,11 +28,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 //console.log('success')
             });
             setTimeout(() => {
-                client.links.get('replayparse').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
+                client.links.get('replayparse').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
             }, 1500)
         }
         if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
-            client.links.get('scoreparse').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
+            client.links.get('scoreparse').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
         }
     })
 }

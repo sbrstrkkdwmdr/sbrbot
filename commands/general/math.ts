@@ -1,10 +1,11 @@
-import fs = require('fs')
-import calculations = require('../../configs/calculations')
-import osucalc = require('osumodcalculator')
+import fs = require('fs');
+import calculations = require('../../configs/calculations');
+import osucalc = require('osumodcalculator');
+import cmdchecks = require('../../configs/commandchecks');
 module.exports = {
     name: 'math',
     description: 'null',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let odcalc;
         if (message != null) {
             if (args[0] == 'help') {
@@ -24,25 +25,25 @@ module.exports = {
                 }
                 )
             }
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - math (message)\n${currentDate} | ${currentDateISO}\n recieved math command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - math (message)\n${currentDate} | ${currentDateISO}\n recieved math command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
             let string = args.join(' ')
-            let letterstoavoid = [
+/*             let letterstoavoid = [
                 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
                 '{', '}', '[', ']', '&', '|', '~', '<<', '>>'
             ]
             let isvalid = letterstoavoid.find(v => (string.includes(v)))
-            if (isvalid) return message.channel.send('Invalid string - letters or unallowed characters found')
+            if (isvalid) return message.channel.send('Invalid string - letters or unallowed characters found') */
             try {
-                let evalstr = eval(string.replaceAll('^', '**').replaceAll('pi', 'Math.PI')).toString()
+                let evalstr = eval(cmdchecks.toMath(string).toString().replaceAll('^', '**').replaceAll('pi', 'Math.PI').toString()).toString()
                 message.reply({ content: evalstr, allowedMentions: { repliedUser: false } })
             } catch (error) {
-                message.reply({ content: `${error}`, allowedMentions: { repliedUser: false } })
+                message.reply({ content: `There was an error calculating.\nPlease use numbers and symbols only`, allowedMentions: { repliedUser: false } })
                 console.log(error)
             }
-            fs.appendFileSync(`commands.log`, `\nCommand Information\nMessae Content: ${message.content}`)
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nMessage Content: ${message.content}\n`)
         }
         if (interaction != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - math (interaction)\n${currentDate} | ${currentDateISO}\n recieved math command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - math (interaction)\n${currentDate} | ${currentDateISO}\n recieved math command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
             let type = interaction.options.getString('type')
             let num1 = interaction.options.getNumber('num1')
             let num2 = interaction.options.getNumber('num2')
@@ -127,7 +128,7 @@ module.exports = {
             }, 500)
             //interaction.reply({ content: equation, allowedMentions: { repliedUser: false } })
 
-            fs.appendFileSync(`commands.log`, `\nCommand Information\ntype: ${type}\nnum1: ${num1}\nnum2: ${num2}`)
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\ntype: ${type}\nnum1: ${num1}\nnum2: ${num2}`)
         }
     }
 }

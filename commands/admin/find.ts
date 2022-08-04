@@ -2,30 +2,30 @@ import fs = require('fs')
 module.exports = {
     name: 'find',
     description: 'returns name from the id given',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let Embedr = new Discord.EmbedBuilder()
             .setTitle('Could not find the id')
             .setDescription('Does not exist or bot is not in the same guild')
 
             ;
         if (message != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - find (message)\n${currentDate} | ${currentDateISO}\n recieved find by id command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - find (message)\n${currentDate} | ${currentDateISO}\n recieved find by id command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}\n`, 'utf-8')
             let type = args[0];
             let id = args[1];
             if (!args[0]) {
                 message.reply({ content: 'Please specify a type of id to find (user/guild/channel/role/emoji)', allowedMentions: { repliedUser: false } });
                 return;
             }
-            if(message.mentions.users.size > 0){
+            if (message.mentions.users.size > 0) {
                 id = message.mentions.users.first().id
             }
-            if(message.mentions.channels.size > 0){
+            if (message.mentions.channels.size > 0) {
                 id = message.mentions.channels.first().id
             }
-            if(message.mentions.roles.size > 0){
+            if (message.mentions.roles.size > 0) {
                 id = message.mentions.roles.first().id
             }
-            if (!args[1] || isNaN(args[1]) || !(message.mentions.users.size = 1 && args[0] == 'user') || !(message.mentions.channels.size = 1 && args[0] == 'channel') || !(message.mentions.roles.size = 1 && args[0] == 'roles')) {
+            if (!args[1] || isNaN(id) && (!(message.mentions.users.size > 0 && args[0] == 'user') || !(message.mentions.channels.size > 0 && args[0] == 'channel') || !(message.mentions.roles.size == 1 && args[0] == 'roles'))) {
                 message.reply({ content: 'Please specify an id to find', allowedMentions: { repliedUser: false } });
                 return;
             }
@@ -187,7 +187,7 @@ module.exports = {
         }
         //==============================================================================================================================================================================================
         if (interaction != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - find (interaction)\n${currentDate} | ${currentDateISO}\n recieved find by id command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - find (interaction)\n${currentDate} | ${currentDateISO}\n recieved find by id command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
             let type = interaction.options.getString('type');
             let id = interaction.options.getString('id');
             if (parseInt(id) == NaN) {

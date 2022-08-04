@@ -4,7 +4,7 @@ import fetch = require('node-fetch')
 module.exports = {
     name: 'convert',
     description: 'null',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         /*         let Embedhelp = new Discord.EmbedBuilder()
                     .setTitle('w')
                     .addField('**Formula**', 'c>f = convert celcius to fahrenheit', false)
@@ -93,7 +93,7 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
         let embedres = new Discord.EmbedBuilder()
             .setDescription('⠀');
         if (message != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - convert (message)\n${currentDate} | ${currentDateISO}\n recieved convert command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - convert (message)\n${currentDate} | ${currentDateISO}\n recieved convert command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             message.reply({ content: 'Just use the slash command', allowedMentions: { repliedUser: false } })
             /*             switch (args[0]) {
                 default:
@@ -102,7 +102,7 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
             } */
         }
         if (interaction != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - convert (interaction)\n${currentDate} | ${currentDateISO}\n recieved convert command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - convert (interaction)\n${currentDate} | ${currentDateISO}\n recieved convert command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
             let cat1 = interaction.options.getString('from')
             let cat2 = interaction.options.getString('to')
             let num = interaction.options.getNumber('number')
@@ -688,7 +688,7 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
                 }
             ])
             interaction.reply({ embeds: [embedres], allowedMentions: { repliedUser: false } })
-            fs.appendFileSync(`commands.log`, `\nCommand Information\ntype1: ${cat1}\ntyp2: ${cat2}\nvalue: ${num}`)
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\ntype1: ${cat1}\ntyp2: ${cat2}\nvalue: ${num}\n`)
         }
     }
 }

@@ -8,7 +8,7 @@ module.exports = {
         'Options:\n' +
         '⠀⠀`type`: string, required. The type of gif to send.'
     ,
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let thelink:string;
         let cryabtit = [
             'https://media.discordapp.net/attachments/858364068024156171/858364114183520266/cry_about_about_it.gif', //zitron map
@@ -136,6 +136,8 @@ module.exports = {
 
         ]
         if (message != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - gif (message)\n${currentDate} | ${currentDateISO}\n recieved gif command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+
             if (args[0] == null) {
                 message.author.send('Please specify a type of gif')
                 message.delete()
@@ -212,12 +214,14 @@ module.exports = {
 
                 }
                 message.channel.send(thelink)
-                fs.appendFileSync(`commands.log`, `\nCommand Information\n${message.content}`)
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\n${message.content}\n`)
                 message.delete()
 
             }
         }
         if (interaction != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - gif (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+
             let str = interaction.options.getString('type')
             switch (str) {
                 case 'cry about it':
@@ -286,7 +290,7 @@ module.exports = {
             interaction.channel.send(thelink)
 
             interaction.reply({ content: 'success', ephemeral: true, allowedMentions: { repliedUser: false } })
-            fs.appendFileSync(`commands.log`, `\nCommand Information\ngif type: ${str}`)
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\ngif type: ${str}\n`)
         }
         /*
         function skillissue() {

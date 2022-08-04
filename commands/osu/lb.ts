@@ -6,7 +6,7 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
 
         if (message != null && button == null) {
             let buttons = new Discord.ActionRowBuilder()
@@ -37,7 +37,7 @@ module.exports = {
                         .setEmoji('➡')
                     /* .setLabel('End') */,
                 );
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - lb (message)\n${currentDate} | ${currentDateISO}\n recieved server leaderboard command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - lb (message)\n${currentDate} | ${currentDateISO}\n recieved server leaderboard command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let gamemode = args[0];
 
             let mode: string = '';
@@ -229,14 +229,14 @@ module.exports = {
                 message.reply({ content: '⠀', embeds: [serverlb], allowedMentions: { repliedUser: false }, failIfNotExists: true, components: [buttons] })
                 let endofcommand = new Date().getTime();
                 let timeelapsed = endofcommand - currentDate.getTime();
-                fs.appendFileSync(`commands.log`, `\nCommand Latency (message command => lb server) - ${timeelapsed}ms\n`)
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (message command => lb server) - ${timeelapsed}ms\n`)
             }, 2000) //setting the timeout alllows enough time for the array to be sorted
         }
 
         //==============================================================================================================================================================================================
 
         if (interaction != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - lb (interaction)\n${currentDate} | ${currentDateISO}\n recieved server lb command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - lb (interaction)\n${currentDate} | ${currentDateISO}\n recieved server lb command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             let buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
@@ -468,11 +468,11 @@ module.exports = {
                 message.edit({ content: '⠀', embeds: [serverlb], allowedMentions: { repliedUser: false }, failIfNotExists: true, components: [buttons] })
                 let endofcommand = new Date().getTime();
                 let timeelapsed = endofcommand - currentDate.getTime();
-                fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => lb server) - ${timeelapsed}ms\n`)
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (interaction command => lb server) - ${timeelapsed}ms\n`)
             }, 2000) //setting the timeout alllows enough time for the array to be sorted
 
         }
 
-        fs.appendFileSync(`commands.log`, '\nsuccess\n\n', 'utf-8')
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, '\nsuccess\n\n', 'utf-8')
     }
 }

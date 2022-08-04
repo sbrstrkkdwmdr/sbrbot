@@ -14,6 +14,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
         const args = null;
         const message = interaction.message;
+        let obj = interaction;
 
         let command = interaction.customId.split('-')[1]
         let button = interaction.customId.split('-')[0]
@@ -49,27 +50,27 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                             )
                             break; */
             case 'leaderboard':
-                client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
+                client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 interaction.deferUpdate();
                 break;
             case 'osutop':
-                client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
+                client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 interaction.deferUpdate();
                 break;
             case 'rs':
-                client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
+                client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 interaction.deferUpdate();
                 break;
             case 'lb':
-                client.osucmds.get('lb').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
+                client.osucmds.get('lb').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 interaction.deferUpdate();
                 break;
             case 'first':
-                client.osucmds.get('firsts').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
+                client.osucmds.get('firsts').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 interaction.deferUpdate();
                 break;
             case 'pinned':
-                client.osucmds.get('pinned').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button);
+                client.osucmds.get('pinned').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 interaction.deferUpdate();
                 break;
         }

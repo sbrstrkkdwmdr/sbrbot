@@ -13,7 +13,7 @@ module.exports = {
         '⠀⠀`user`: string/integer, optional. The username or id of the player\n' +
         '⠀⠀`id`: integer, optional. The id of the beatmap to display the scores of. If omitted, the last requested map will be used\n' +
         '⠀⠀`sort`: string, optional. The sort to display the top plays of. Valid values: `score`, `accuracy`, `pp`, `recent`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
 
         let prevmap: any;
 
@@ -31,7 +31,7 @@ module.exports = {
 
 
         if (message != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - scores (message)\n${currentDate} | ${currentDateISO}\n recieved map scores command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - scores (message)\n${currentDate} | ${currentDateISO}\n recieved map scores command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             let user = args.join(' ')
             let id = null
             let searchid = message.author.id
@@ -213,11 +213,11 @@ module.exports = {
                                     }
                                     Embed.setDescription(scoretxt)
                                     message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                                    fs.appendFileSync(`commands.log`, '\nsuccess\n\n', 'utf-8')
-                                    fs.appendFileSync(`commands.log`, `\nCommand Information\nmessage content: ${message.content}`)
+                                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, '\nsuccess\n\n', 'utf-8')
+                                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nmessage content: ${message.content}`)
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync(`commands.log`, `\nCommand Latency (message command => scores) - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (message command => scores) - ${timeelapsed}ms\n`)
 
                                 })
                         })
@@ -228,9 +228,9 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (interaction != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - scores (interaction)\n${currentDate} | ${currentDateISO}\n recieved map scores command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-            fs.appendFileSync(`commands.log`, `\nInteraction ID: ${interaction.id}`)
-            fs.appendFileSync(`commands.log`,
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - scores (interaction)\n${currentDate} | ${currentDateISO}\n recieved map scores command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nInteraction ID: ${interaction.id}`)
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `\noptions:
             username: ${interaction.options.getString('username')}
             id: ${interaction.options.getNumber('id')}
@@ -275,7 +275,7 @@ module.exports = {
                 sort = 'recent'
             }
             const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
-            fs.appendFileSync(`commands.log`,
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `\noptions(2):
             username: ${user}
             id: ${id}
@@ -487,11 +487,11 @@ module.exports = {
                                     }
                                     Embed.setDescription(scoretxt)
                                     interaction.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
-                                    fs.appendFileSync(`commands.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
-                                    fs.appendFileSync(`commands.log`, `\nCommand Information\nuser: ${user}\nmap id: ${id}\nsort: ${sort}`)
+                                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
+                                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nuser: ${user}\nmap id: ${id}\nsort: ${sort}`)
                                     let endofcommand = new Date().getTime();
                                     let timeelapsed = endofcommand - currentDate.getTime();
-                                    fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => scores) - ${timeelapsed}ms\n`)
+                                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (interaction command => scores) - ${timeelapsed}ms\n`)
 
                                 })
                         })

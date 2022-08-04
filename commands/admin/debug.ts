@@ -2,10 +2,10 @@ import fs = require('fs')
 module.exports = {
     name: 'debug',
     description: 'Returns debug files of certain commands',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
 
         if (message != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - debug (message)\n${currentDate} | ${currentDateISO}\n recieved return debug file command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - debug (message)\n${currentDate} | ${currentDateISO}\n recieved return debug file command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let command = args[0]
             if (!args[0]) {
                 return message.channel.send('Please specify a command to return debug files for.')

@@ -24,7 +24,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         }).then(res => res.json() as any)
             .then(res => {
                 fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
-                fs.appendFileSync('updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
+                fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
             }
             )
     }, 1 * 60 * 1000);

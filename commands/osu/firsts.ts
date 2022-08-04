@@ -10,7 +10,7 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
 
         //import { access_token } from '../../configs/osuauth.json';
 
@@ -18,7 +18,7 @@ module.exports = {
         let access_token = JSON.parse(accessN).access_token;
 
         if (message != null && button == null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nCOMMAND EVENT - firsts (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
 
             let buttons = new Discord.ActionRowBuilder()
                 .addComponents(
@@ -203,7 +203,7 @@ module.exports = {
                             })
                             let endofcommand = new Date().getTime();
                             let timeelapsed = endofcommand - currentDate.getTime();
-                            fs.appendFileSync(`commands.log`, `\nCommand Latency (message command => firsts) - ${timeelapsed}ms\nID:${absoluteID}\n`)
+                            fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nCommand Latency (message command => firsts) - ${timeelapsed}ms\nID:${absoluteID}\n`)
                         })
                 })
         }
@@ -211,7 +211,7 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (interaction != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\nID:${absoluteID}\n`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`, `\nCOMMAND EVENT - firsts (button interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\nID:${absoluteID}\n`, 'utf-8')
             let buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
@@ -286,7 +286,7 @@ module.exports = {
             } else {
                 mode = 'osu'
             }
-            fs.appendFileSync(`commands.log`,
+            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`,
                 `\noptions(2):
             user: ${user}
             mode: ${mode}
@@ -418,12 +418,12 @@ module.exports = {
                                 })
                                 let endofcommand = new Date().getTime();
                                 let timeelapsed = endofcommand - currentDate.getTime();
-                                fs.appendFileSync(`commands.log`, `\nCommand Latency (interaction command => firsts) - ${timeelapsed}ms\n`)
+                                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (interaction command => firsts) - ${timeelapsed}ms\n`)
                             }
                         })
                 })
         }
 
-        fs.appendFileSync(`commands.log`, '\nsuccess\n\n', 'utf-8')
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, '\nsuccess\n\n', 'utf-8')
     }
 }

@@ -33,13 +33,13 @@ module.exports = {
         }).then(res => res.json() as any)
             .then(scoredata => {
                 fs.writeFileSync('debugosu/link-scoreparse.json', JSON.stringify(scoredata, null, 2));
-                fs.appendFileSync(`link${message.guildId}.log`, `LINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
+                fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
                     ;
                 (async () => {
                     try {
                         let ranking = scoredata.rank.toUpperCase()
                     } catch (error) {
-                        return message.reply({ content: 'This score is unsubmitted/failed and cannot be parsed', allowedMentions: { repliedUser: false } })
+                        return message.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
 
                     }
                     let ranking = scoredata.rank ? scoredata.rank : 'f'
@@ -134,7 +134,7 @@ module.exports = {
                     } catch (error) {
                         ppiffc = NaN
                         ppissue = 'Error - pp calculator could not fetch beatmap'
-                        fs.appendFileSync('commands.log', 'ERROR CALCULATING PERFORMANCE: ' + error)
+                        fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
 
                     }
 
@@ -173,7 +173,7 @@ module.exports = {
                     fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
                     let endofcommand = new Date().getTime();
                     let timeelapsed = endofcommand - currentDate.getTime();
-                    fs.appendFileSync(`link${message.guildId}.log`, `\nCommand Latency (score parse) - ${timeelapsed}ms\nID:${absoluteID}\n`)
+                    fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nCommand Latency (score parse) - ${timeelapsed}ms\nID:${absoluteID}\n`)
                 })();
             })
     }

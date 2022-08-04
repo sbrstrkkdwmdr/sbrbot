@@ -8,9 +8,9 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         if (message != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - say (message)\n${currentDate} | ${currentDateISO}\n recieved say command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - say (message)\n${currentDate} | ${currentDateISO}\n recieved say command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
             if (commandchecks.isOwner(message.author.id)) {
                 message.delete();
                 if(!args[0]){
@@ -28,7 +28,7 @@ module.exports = {
             return;
         }
         if (interaction != null) {
-            fs.appendFileSync(`commands.log`, `\nCOMMAND EVENT - say (interaction)\n${currentDate} | ${currentDateISO}\n recieved say command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - say (interaction)\n${currentDate} | ${currentDateISO}\n recieved say command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
             let msg = interaction.options.getString('message')
             let channel = interaction.options.getChannel('channel')
             //console.log(channel)
@@ -43,6 +43,6 @@ module.exports = {
             }
         }
 
-        fs.appendFileSync(`commands.log`, 'success\n\n', 'utf-8')
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, 'success\n\n', 'utf-8')
     }
 }
