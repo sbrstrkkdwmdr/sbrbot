@@ -35,7 +35,7 @@ module.exports = {
                 fs.writeFileSync('debugosu/link-scoreparse.json', JSON.stringify(scoredata, null, 2));
                 fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
                     ;
-                    let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(scoredata.beatmap.id)}`
+                let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(scoredata.beatmap.id)}`
 
                     ;
                 (async () => {
@@ -130,7 +130,7 @@ module.exports = {
                     if (mode == 'fruits') {
                         ppfc = new ppcalc.catch_ppv2().setPerformance(score)
                         hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
-                        fcacc = osucalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy
+                        fcacc = osucalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_katu, gamehits.count_miss).accuracy
                     }
                     if (mode == 'mania') {
                         ppfc = new ppcalc.mania_ppv2().setPerformance(score)

@@ -199,7 +199,7 @@ module.exports = {
                                 } else if (mode == 'taiko') {
                                     accgrade = osucalc.calcgradeTaiko(gamehits.count_300, gamehits.count_100, 0)
                                 } else if (mode == 'fruits') {
-                                    accgrade = osucalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_50, 0)
+                                    accgrade = osucalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_katu, 0)
                                 } else if (mode == 'mania') {
                                     accgrade = osucalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, 0)
                                 }
@@ -703,7 +703,7 @@ module.exports = {
                                     } else if (mode == 'taiko') {
                                         accgrade = osucalc.calcgradeTaiko(gamehits.count_300, gamehits.count_100, 0)
                                     } else if (mode == 'fruits') {
-                                        accgrade = osucalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_50, 0)
+                                        accgrade = osucalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_katu, gamehits.count_50, 0)
                                     } else if (mode == 'mania') {
                                         accgrade = osucalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, 0)
                                     }
