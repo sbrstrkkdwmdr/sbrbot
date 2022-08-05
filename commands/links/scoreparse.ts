@@ -49,7 +49,8 @@ module.exports = {
                         headers: {
                             'Authorization': `Bearer ${access_token}`
                         }
-                    }).json()
+                    }).then(res => res.json() as any)
+                    fs.appendFileSync('debugosu/link-scoreparse=map.json', JSON.stringify(mapdata, null, 2));
 
                     let ranking = scoredata.rank ? scoredata.rank : 'f'
                     let scoregrade = emojis.grades.F
@@ -118,7 +119,7 @@ module.exports = {
                     if (mode == 'osu') {
                         ppfc = new ppcalc.std_ppv2().setPerformance(score)
                         hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
-                        fcacc = osucalc.calcgrade(gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy
+                        fcacc = osucalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy
                     }
                     if (mode == 'taiko') {
                         ppfc = new ppcalc.taiko_ppv2().setPerformance(score)
@@ -176,7 +177,7 @@ module.exports = {
 
                         \`${hitlist}\`
                         ${scoredata.max_combo}x
-                        ${scorepp}pp | ${ppiffc}pp if ${fcacc.toFixed(2)} FC\n${ppissue}
+                        ${scorepp}pp | ${ppiffc}pp if ${fcacc.toFixed(2)}% FC\n${ppissue}
                         `)
                     message.reply({ embeds: [scoreembed], allowedMentions: { repliedUser: false } })
                     fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
