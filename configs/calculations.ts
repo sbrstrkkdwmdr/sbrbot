@@ -371,6 +371,35 @@ function timeToMs(str:string) {
     }
 }
 
+/**
+ * 
+ * @param seconds seconds
+ * @returns the time in hh:mm:ss format
+ */
+function secondsToTime(seconds:number){
+    //1 * 60 * 60
+    //assuming 6000 seconds
+
+    let hours:any = seconds / 60 / 60 % 24 < 10 ? '0' + Math.floor(seconds / 60 / 60 % 24) : Math.floor(seconds / 60 / 60 % 24);
+    let minutes = seconds / 60 % 60 < 10 ? '0' + Math.floor(seconds / 60 % 60) : Math.floor(seconds / 60 % 60);
+    let secs = seconds % 60 < 10 ? '0' + Math.floor(seconds % 60) : Math.floor(seconds % 60); 
+
+    let str:any = parseInt(hours) > 0 ? 
+    `${hours}:${minutes}:${secs}` : 
+    `${minutes}:${secs}`;
+
+    return str;
+
+}
+
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
-export { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset, timeToMs, };
+export { 
+    findHCF, findLCM, 
+    pythag, sigfig, 
+    fixtoundertwo, factorial, 
+    to12htime, relto12htime, 
+    dayhuman, tomonthname, 
+    fixoffset, timeToMs,
+    secondsToTime
+};
