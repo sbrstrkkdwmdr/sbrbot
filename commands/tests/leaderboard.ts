@@ -21,17 +21,17 @@ module.exports = {
         let mapid;
         let page = 0;
         let mods1;
-        if (fs.existsSync(`./debugosu/prevmap${message.guildId}.json`)) {
+        if (fs.existsSync(`./debugosu/prevmap${obj.guildId}.json`)) {
             try {
-                prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap${message.guildId}.json`, 'utf8'));
+                prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap${obj.guildId}.json`, 'utf8'));
             } catch {
-                console.log(`no prevmap.json id found for server ${message.guildId}\nCreating default file...`)
-                fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
+                console.log(`no prevmap.json id found for server ${obj.guildId}\nCreating default file...`)
+                fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
                 prevmap = { id: 32345 }
             }
         } else {
-            console.log(`no prevmap.json file for server ${message.guildId}\nCreating default file...`)
-            fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
+            console.log(`no prevmap.json file for server ${obj.guildId}\nCreating default file...`)
+            fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
             prevmap = { id: 32345 }
         }
 
@@ -201,7 +201,7 @@ module.exports = {
         if (mods == null) {
             let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/scores`
 
-            let lbdata = await fetch(mapscoresurl, {
+            let lbdataf = await fetch(mapscoresurl, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${access_token}`,
@@ -210,13 +210,14 @@ module.exports = {
                 }
             }).then(res => res.json() as any)
             try {
-                if (lbdata.authentication) {
+                if (lbdataf.authentication) {
                     obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                     return;
                 }
             } catch (error) {
 
             }
+            let lbdata = lbdataf.scores
             fs.writeFileSync('debugosu/command-leaderboard=scores.json', JSON.stringify(lbdata, null, 2), 'utf-8')
             let lbEmbed = new Discord.EmbedBuilder()
                 .setTitle(`Score leaderboard of ${fulltitle}`)
