@@ -212,7 +212,7 @@ module.exports = {
             }
         }
         if (page > 0) {
-            page--
+            page = page - 1
         }
         const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         const osudata = await fetch(userinfourl, {
