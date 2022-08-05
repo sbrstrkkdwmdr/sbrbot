@@ -35,6 +35,9 @@ module.exports = {
                 fs.writeFileSync('debugosu/link-scoreparse.json', JSON.stringify(scoredata, null, 2));
                 fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
                     ;
+                    let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(scoredata.beatmap.id)}`
+
+                    ;
                 (async () => {
                     try {
                         let ranking = scoredata.rank.toUpperCase()
@@ -42,6 +45,12 @@ module.exports = {
                         return message.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
 
                     }
+                    let mapdata = await fetch(mapurl, {
+                        headers: {
+                            'Authorization': `Bearer ${access_token}`
+                        }
+                    }).json()
+
                     let ranking = scoredata.rank ? scoredata.rank : 'f'
                     let scoregrade = emojis.grades.F
                     switch (ranking.toUpperCase()) {
@@ -84,7 +93,7 @@ module.exports = {
                     let score = {
                         beatmap_id: scoredata.beatmap.id,
                         score: '6795149',
-                        maxcombo: '630',
+                        maxcombo: mapdata.max_combo,
                         count50: gamehits.count_50,
                         count100: gamehits.count_100,
                         count300: gamehits.count_300,
@@ -160,7 +169,7 @@ module.exports = {
                         .setColor('#0099ff')
                         .setAuthor({ name: `${scoredata.user.username}`, iconURL: `https://a.ppy.sh/${scoredata.user.id}`, url: `https://osu.ppy.sh/users/${scoredata.user.id}` })
                         .setTitle(`${artist} - ${title}`)
-                        .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.beatmap_id}`)
+                        .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.id}`)
                         .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`)
                         .setDescription(`
                         ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade}
