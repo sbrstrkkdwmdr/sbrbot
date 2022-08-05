@@ -401,7 +401,7 @@ module.exports = {
                 basicvals = 
                 `CS${allvals.cs} (${allvals.details.csRadius.toFixed(2)}r)
                 AR${allvals.ar}  (${allvals.details.arMs}ms)
-                OD${allvals.od} (300: ${allvals.details.odMs.range300}ms 100: ${allvals.details.odMs.range100}ms 50:  ${allvals.details.odMs.range50}ms)
+                OD${allvals.od} (300: ${allvals.details.odMs.range300.toFixed(2)}ms 100: ${allvals.details.odMs.range100.toFixed(2)}ms 50:  ${allvals.details.odMs.range50.toFixed(2)}ms)
                 HP${allvals.hp}`
             }
         }
@@ -439,7 +439,7 @@ module.exports = {
                         `${basicvals}\n` +
                         `${totaldiff}⭐ | ${allvals.bpm}BPM⏲\n` +
                         `${emojis.mapobjs.circle}${mapdata.count_circles} | ${emojis.mapobjs.slider}${mapdata.count_sliders} | ${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
-                        `${allvals.length}🕐`,
+                        `${allvals.details.lengthFull}🕐`,
                     inline: true
                 },
                 {

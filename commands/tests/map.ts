@@ -439,7 +439,7 @@ module.exports = {
                         `${basicvals}\n` +
                         `${totaldiff}⭐ | ${allvals.bpm}BPM⏲\n` +
                         `${emojis.mapobjs.circle}${mapdata.count_circles} | ${emojis.mapobjs.slider}${mapdata.count_sliders} | ${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
-                        `${allvals.length}🕐`,
+                        `${allvals.details.lengthFull}🕐`,
                     inline: true
                 },
                 {
