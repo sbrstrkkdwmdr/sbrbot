@@ -34,7 +34,7 @@ module.exports = {
             'https://i.imgur.com/4kHRrcn.gif', // beast troll minecraft
             'https://media.discordapp.net/attachments/297712669342040064/969077431497527347/LettyWhiteRockJohnson.gif', // letty white rock jhohnosn (who)
             'https://media.discordapp.net/attachments/652388390095814658/949917542963617802/ezgif-7-49533ed57a.gif', //gura yapping
-            'https://media.discordapp.net/attachments/698111941238980634/926143071891116093/image0.gif', //the angry birds gif which somehow fixed my laptop screen when i put it in the bottom right corner
+            //'https://media.discordapp.net/attachments/698111941238980634/926143071891116093/image0.gif', //the angry birds gif which somehow fixed my laptop screen when i put it in the bottom right corner //commented out bcs link broke
             'https://media.discordapp.net/attachments/801693686010216461/937316740059258911/SPOILER_4024ab0508989392.gif', //sotarks
             'https://media.discordapp.net/attachments/837435513212370976/948682024456167474/image0.gif', // guy sucking on a door handle
             'https://media.discordapp.net/attachments/855538143302385727/978751222293098536/delta_dannerif-5-a495e94394.gif', //idk what this is but theres a girl that looks like kasane teto and an 8 in the middle
@@ -61,7 +61,7 @@ module.exports = {
             'https://tenor.com/view/speech-speech-bubble-meme-joke-arbys-we-have-the-meats-gif-24803181', //arby's
             'https://tenor.com/view/among-us-amongla-speech-bubble-meme-saraiva-gif-25059294', // among us speaking 
             'https://tenor.com/view/speech-bubble-chad-handsome-discord-gif-25759083', //
-            'https://media.discordapp.net/attachments/975869969336238100/989335327351119892/unknown.gif', //peter griffin buff
+            //'https://media.discordapp.net/attachments/975869969336238100/989335327351119892/unknown.gif', //peter griffin buff //broken url
             'https://media.discordapp.net/attachments/929807268994744340/987061740665700372/ThisWillBeAngryBirdsPigIn2014.gif', //bad piggies
             'https://media.discordapp.net/attachments/975869865258795078/993928228932698172/crcoer.gif' //crocodile vs man
 
