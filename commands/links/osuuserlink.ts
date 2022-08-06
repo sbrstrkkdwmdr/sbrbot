@@ -11,8 +11,7 @@ module.exports = {
     
 
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
-
-        let user = messagenohttp.split('/').pop()
+        let user = messagenohttp.split('/')[2]
         fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - osuuserlink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!profile link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
         const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         fetch(userurl, {
