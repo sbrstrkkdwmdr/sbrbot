@@ -276,13 +276,39 @@ Options:
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
+            .catch(error => {
+                if (button == null) {
+                    try {
+                        message.edit({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                        })
+                    } catch (err) {
+
+                    }
+                } else {
+                    obj.reply({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                return;
+            })
         fs.writeFileSync(`debugosu/command-scores=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2));
 
         osudata.id
         try {
             if (osudata.authentication) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-`
+                    `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Error - authentication
@@ -321,7 +347,33 @@ Error - authentication
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
-        }).then(res => res.json() as any);
+        }).then(res => res.json() as any)
+            .catch(error => {
+                if (button == null) {
+                    try {
+                        message.edit({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                        })
+                    } catch (err) {
+
+                    }
+                } else {
+                    obj.reply({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                return;
+            });
         fs.writeFileSync(`debugosu/command-scores=scoredataPresort=${obj.guildId}.json`, JSON.stringify(scoredataPresort, null, 2));
 
         let scoredata = scoredataPresort.scores
@@ -436,6 +488,32 @@ Error - authentication
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
+            .catch(error => {
+                if (button == null) {
+                    try {
+                        message.edit({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                        })
+                    } catch (err) {
+
+                    }
+                } else {
+                    obj.reply({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                return;
+            })
         fs.writeFileSync(`debugosu/command-scores=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2));
 
         let title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ?

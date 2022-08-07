@@ -261,12 +261,38 @@ Options:
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
+            .catch(error => {
+                if (button == null) {
+                    try {
+                        message.edit({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                        })
+                    } catch (err) {
+
+                    }
+                } else {
+                    obj.reply({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                return;
+            })
         fs.writeFileSync(`debugosu/command-rs=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
 
         try {
             if (osudata.authentication) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-`
+                    `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Error - authentication
@@ -334,7 +360,33 @@ Error - authentication
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(res => res.json() as any);
+        }).then(res => res.json() as any)
+            .catch(error => {
+                if (button == null) {
+                    try {
+                        message.edit({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                        })
+                    } catch (err) {
+
+                    }
+                } else {
+                    obj.reply({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                return;
+            });
         fs.writeFileSync(`debugosu/command-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
 
         let rsEmbed = new Discord.EmbedBuilder();
@@ -495,7 +547,33 @@ Error - authentication
                     'Authorization': `Bearer ${access_token}`
                 },
                 body: iftherearemodsasint
-            }).then(res => res.json() as any);
+            }).then(res => res.json() as any)
+                .catch(error => {
+                    if (button == null) {
+                        try {
+                            message.edit({
+                                content: 'Error',
+                                allowedMentions: { repliedUser: false },
+                            })
+                        } catch (err) {
+
+                        }
+                    } else {
+                        obj.reply({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                    return;
+                });
             fs.writeFileSync(`debugosu/command-rs=mapattrdata=${obj.guildId}.json`, JSON.stringify(mapattrdata, null, 2))
 
             let totaldiff = '?'
@@ -584,7 +662,7 @@ Error - authentication
                         ppc.total.toFixed(2)
             } catch (error) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-`
+                    `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Error - pp calculation failed

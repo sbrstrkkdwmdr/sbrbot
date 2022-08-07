@@ -220,6 +220,32 @@ mods: ${mods}
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
+            .catch(error => {
+                if (button == null) {
+                    try {
+                        message.edit({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                        })
+                    } catch (err) {
+
+                    }
+                } else {
+                    obj.reply({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                return;
+            })
         fs.writeFileSync(`debugosu/command-leaderboard=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
 
         let title = 'n';
@@ -260,6 +286,32 @@ ${error}
                     Accept: "application/json"
                 }
             }).then(res => res.json() as any)
+                .catch(error => {
+                    if (button == null) {
+                        try {
+                            message.edit({
+                                content: 'Error',
+                                allowedMentions: { repliedUser: false },
+                            })
+                        } catch (err) {
+
+                        }
+                    } else {
+                        obj.reply({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                    return;
+                })
             fs.writeFileSync(`debugosu/command-leaderboard=lbdataf=${obj.guildId}.json`, JSON.stringify(lbdataf, null, 2))
 
             try {
@@ -349,11 +401,37 @@ ${hitlist}
 
             let lbdata = await fetch(oldmsu)
                 .then(res => res.json() as any)
+                .catch(error => {
+                    if (button == null) {
+                        try {
+                            message.edit({
+                                content: 'Error',
+                                allowedMentions: { repliedUser: false },
+                            })
+                        } catch (err) {
+
+                        }
+                    } else {
+                        obj.reply({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    node-fetch error: ${error}
+    ----------------------------------------------------
+    `, 'utf-8')
+                    return;
+                })
             fs.writeFileSync(`debugosu/command-leaderboard=lbdata_apiv1=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
             try {
                 if (lbdata.authentication) {
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-`
+                        `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Error - authentication

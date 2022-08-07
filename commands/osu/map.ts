@@ -214,7 +214,7 @@ button: ${button}
                 mapid = bmstosr[0].id;
             }
 
-            if(message.embeds[0].fields[1].value.includes('aim') || message.embeds[0].fields[0].value.includes('ms')){
+            if (message.embeds[0].fields[1].value.includes('aim') || message.embeds[0].fields[0].value.includes('ms')) {
                 detailed = true
             }
             mapmods = message.embeds[0].title.split('+')[1];
@@ -260,7 +260,33 @@ Options:
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json() as any);
+            }).then(res => res.json() as any)
+                .catch(error => {
+                    if (button == null) {
+                        try {
+                            message.edit({
+                                content: 'Error',
+                                allowedMentions: { repliedUser: false },
+                            })
+                        } catch (err) {
+
+                        }
+                    } else {
+                        obj.reply({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                    return;
+                });
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
 
             try {
@@ -294,6 +320,32 @@ Error - authentication
                     'Authorization': `Bearer ${access_token}`
                 }
             }).then(res => res.json() as any)
+                .catch(error => {
+                    if (button == null) {
+                        try {
+                            message.edit({
+                                content: 'Error',
+                                allowedMentions: { repliedUser: false },
+                            })
+                        } catch (err) {
+
+                        }
+                    } else {
+                        obj.reply({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                    return;
+                })
             fs.writeFileSync(`debugosu/command-map=mapidtest=${obj.guildId}.json`, JSON.stringify(mapidtest, null, 2))
                 ;
             let mapidtest2;
@@ -337,7 +389,33 @@ ${error}
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json() as any);
+            }).then(res => res.json() as any)
+                .catch(error => {
+                    if (button == null) {
+                        try {
+                            message.edit({
+                                content: 'Error',
+                                allowedMentions: { repliedUser: false },
+                            })
+                        } catch (err) {
+
+                        }
+                    } else {
+                        obj.reply({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                    return;
+                });
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
             try {
                 let mapper = mapdata.beatmapset.creator
@@ -409,7 +487,33 @@ Error - authentication
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(res => res.json() as any);
+        }).then(res => res.json() as any)
+            .catch(error => {
+                if (button == null) {
+                    try {
+                        message.edit({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                        })
+                    } catch (err) {
+
+                    }
+                } else {
+                    obj.reply({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                return;
+            });
         fs.writeFileSync(`debugosu/command-map=mapattrdata=${obj.guildId}.json`, JSON.stringify(mapattrdata, null, 2))
         let totaldiff;
         if (mapattrdata.attributes == null || mapattrdata.attributes == undefined || mapattrdata.attributes.star_rating == NaN) {
@@ -551,7 +655,33 @@ ${error}
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(res => res.json() as any);
+        }).then(res => res.json() as any)
+            .catch(error => {
+                if (button == null) {
+                    try {
+                        message.edit({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                        })
+                    } catch (err) {
+
+                    }
+                } else {
+                    obj.reply({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                return;
+            });
         fs.writeFileSync(`./debugosu/command-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
 
         let Embed = new Discord.EmbedBuilder()

@@ -261,12 +261,39 @@ Options:
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(res => res.json() as any)
+        })
+            .then(res => res.json() as any)
+            .catch(error => {
+                if (button == null) {
+                    try {
+                        message.edit({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                        })
+                    } catch (err) {
+
+                    }
+                } else {
+                    obj.reply({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                return;
+            })
         fs.writeFileSync(`debugosu/command-firsts=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-`
+                    `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Error - authentication
@@ -285,6 +312,32 @@ Error - authentication
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
+            .catch(error => {
+                if (button == null) {
+                    try {
+                        message.edit({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                        })
+                    } catch (err) {
+
+                    }
+                } else {
+                    obj.reply({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                return;
+            })
         fs.writeFileSync(`debugosu/command-firsts=firstscoresdata=${obj.guildId}.json`, JSON.stringify(firstscoresdata, null, 2))
 
         let firstsEmbed = new Discord.EmbedBuilder()

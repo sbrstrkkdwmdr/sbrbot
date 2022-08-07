@@ -211,7 +211,33 @@ Options:
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(res => res.json() as any);
+        }).then(res => res.json() as any)
+            .catch(error => {
+                if (button == null) {
+                    try {
+                        message.edit({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                        })
+                    } catch (err) {
+
+                    }
+                } else {
+                    obj.reply({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                return;
+            });
         fs.writeFileSync(`debugosu/command-osu=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
