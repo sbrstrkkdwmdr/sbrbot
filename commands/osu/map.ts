@@ -21,6 +21,7 @@ module.exports = {
         let mapid;
         let mapmods;
         let maptitleq = null;
+        let detailed = false;
         if (fs.existsSync(`./debugosu/prevmap${obj.guildId}.json`)) {
             try {
                 prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap${obj.guildId}.json`, 'utf8'));
@@ -129,6 +130,7 @@ cmd ID: ${absoluteID}
                 );
             mapid = interaction.options.getInteger('id');
             mapmods = interaction.options.getString('mods');
+            detailed = interaction.options.getBoolean('detailed');
         }
 
         //==============================================================================================================================================================================================
@@ -142,6 +144,7 @@ ${currentDate} | ${currentDateISO}
 recieved map command
 requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
 cmd ID: ${absoluteID}
+button: ${button}
 ----------------------------------------------------
 `, 'utf-8')
             buttons = new Discord.ActionRowBuilder()
@@ -172,6 +175,50 @@ cmd ID: ${absoluteID}
                         .setEmoji('➡')
                 /* .setLabel('End') */,
                 );
+            let urlnohttp = message.embeds[0].url.split('https://')[1];
+            //osu.ppy.sh/beatmapsets/setid#gamemode/id
+            let setid = urlnohttp.split('/')[2].split('#')[0];
+            let curid = urlnohttp.split('/')[3];
+            mapid = curid;
+            let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
+            let bmsdata = await fetch(lookupurl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${access_token}`
+                }
+            }).then(res => res.json() as any)
+            fs.writeFileSync(`debugosu/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
+            let bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
+            fs.writeFileSync(`debugosu/command-map=bmstosr=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
+
+            //get which part of the array the current map is in
+            let curmapindex = bmstosr.findIndex(x => x.id == curid);
+            if (button == `RightArrow`) {
+                if (curmapindex == bmstosr.length - 1) {
+                    mapid = curid;
+                } else {
+                    mapid = bmstosr[curmapindex + 1].id;
+                }
+            }
+            if (button == `LeftArrow`) {
+                if (curmapindex == 0) {
+                    mapid = curid;
+                } else {
+                    mapid = bmstosr[curmapindex - 1].id;
+                }
+            }
+            if (button == `BigRightArrow`) {
+                mapid = bmstosr[bmstosr.length - 1].id;
+            }
+            if (button == `BigLeftArrow`) {
+                mapid = bmstosr[0].id;
+            }
+
+            if(message.embeds[0].fields[1].value.includes('aim') || message.embeds[0].fields[0].value.includes('ms')){
+                detailed = true
+            }
+            mapmods = message.embeds[0].title.split('+')[1];
+
         }
 
         //==============================================================================================================================================================================================
@@ -202,6 +249,7 @@ Options:
     mapid: ${mapid}
     mapmods: ${mapmods}
     maptitleq: ${maptitleq}
+    detailed: ${detailed}
 ----------------------------------------------------
 `, 'utf-8')
 
@@ -221,7 +269,7 @@ Options:
                 try {
                     if (mapdata.authentication) {
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-`
+                            `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Error - authentication
@@ -252,7 +300,7 @@ Error - authentication
             try {
                 if (mapidtest.authentication) {
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-`
+                        `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Error - authentication
@@ -273,7 +321,7 @@ Error - authentication
                 mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)
             } catch (error) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-`
+                    `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Error - map not found
@@ -301,7 +349,7 @@ ${error}
                 try {
                     if (mapdata.authentication) {
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-`
+                            `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Error - authentication
@@ -312,7 +360,7 @@ Error - authentication
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
+                    `
                 ----------------------------------------------------
                 cmd ID: ${absoluteID}
                 Error - map not found
@@ -452,16 +500,14 @@ Error - authentication
             ppissue = '';
             fs.writeFileSync('./debugosu/command-map=pp_calc.json', JSON.stringify(ppComputed, null, 2))
             fs.writeFileSync('./debugosu/command-map=pp_calc_95.json', JSON.stringify(pp95Computed, null, 2))
-            if (interaction) {
-                if (interaction.options.getBoolean('detailed') == true) {
-                    ppComputedString += ` \naim: ${ppComputed.aim.toFixed(2)}pp, \nspeed: ${ppComputed.speed.toFixed(2)}pp, \nacc: ${ppComputed.acc.toFixed(2)}pp\n`
-                    pp95ComputedString += ` \naim: ${pp95Computed.aim.toFixed(2)}pp, \nspeed: ${pp95Computed.speed.toFixed(2)}pp, \nacc: ${pp95Computed.acc.toFixed(2)}pp\n`
-                }
+            if (detailed == true) {
+                ppComputedString += ` \naim: ${ppComputed.aim.toFixed(2)}pp, \nspeed: ${ppComputed.speed.toFixed(2)}pp, \nacc: ${ppComputed.acc.toFixed(2)}pp\n`
+                pp95ComputedString += ` \naim: ${pp95Computed.aim.toFixed(2)}pp, \nspeed: ${pp95Computed.speed.toFixed(2)}pp, \nacc: ${pp95Computed.acc.toFixed(2)}pp\n`
             }
 
         } catch (error) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-`
+                `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Error - pp calculation failed
@@ -482,10 +528,10 @@ ${error}
         }
         let basicvals = `CS${allvals.cs} AR${allvals.ar} OD${allvals.od} HP${allvals.hp}`;
         if (interaction) {
-            if (interaction.options.getBoolean('detailed') == true) {
+            if (detailed == true) {
                 basicvals =
                     `CS${allvals.cs} (${allvals.details.csRadius.toFixed(2)}r)
-                AR${allvals.ar}  (${allvals.details.arMs}ms)
+                AR${allvals.ar}  (${allvals.details.arMs.toFixed(2)}ms)
                 OD${allvals.od} (300: ${allvals.details.odMs.range300.toFixed(2)}ms 100: ${allvals.details.odMs.range100.toFixed(2)}ms 50:  ${allvals.details.odMs.range50.toFixed(2)}ms)
                 HP${allvals.hp}`
             }
@@ -545,12 +591,29 @@ ${error}
                 }
             ])
         if (message && interaction == null) {
-            obj.reply({ content: "⠀", embeds: [Embed], allowedMentions: { repliedUser: false } })
+            obj.reply({
+                content: "⠀",
+                embeds: [Embed],
+                allowedMentions: { repliedUser: false },
+                components: [buttons]
+            })
         }
         if (interaction != null && message == null) {
-            obj.editReply({ content: "⠀", embeds: [Embed], allowedMentions: { repliedUser: false } })
+            obj.editReply({
+                content: "⠀",
+                embeds: [Embed],
+                allowedMentions: { repliedUser: false },
+                components: [buttons]
+            })
         }
-
+        if (button) {
+            message.edit({
+                content: "⠀",
+                embeds: [Embed],
+                allowedMentions: { repliedUser: false },
+                components: [buttons]
+            })
+        }
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
