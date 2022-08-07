@@ -145,7 +145,7 @@ module.exports = {
                 page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
             }
         }
-        if (user.length < 1 || message.mentions.users.size > 0) {
+        if (user == null || message.mentions.users.size > 0) {
             let findname;
             findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
@@ -182,6 +182,7 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
+        fs.writeFileSync(`debugosu/command-pinned=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
 
         try {
             if (osudata.authentication) {
@@ -206,6 +207,7 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any);
+        fs.writeFileSync(`debugosu/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
 
         let pinnedEmbed = new Discord.EmbedBuilder()
             .setTitle(`Pinned scores for ${osudata.username}`)

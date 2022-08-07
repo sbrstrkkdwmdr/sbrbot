@@ -61,7 +61,7 @@ module.exports = {
             if (message.mentions.users.size > 0) {
                 searchid = message.mentions.users.first().id
             }
-            if(!args[0]) {
+            if (!args[0]) {
                 user = null
             }
             mode = null;
@@ -174,7 +174,7 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any);
-        fs.writeFileSync('debugosu/command-osu.json', JSON.stringify(osudata, null, 2), 'utf-8')
+        fs.writeFileSync(`debugosu/command-osu=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
                 return obj.reply({
@@ -364,6 +364,9 @@ module.exports = {
                     'Authorization': `Bearer ${access_token}`
                 }
             }).then(res => res.json() as any)
+            fs.writeFileSync(`debugosu/command-osu=osutopdata=${obj.guildId}.json`, JSON.stringify(osutopdata, null, 2))
+
+
             let mostplayedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/beatmapsets/most_played`
 
             const mostplayeddata = await fetch(mostplayedurl, {
@@ -371,6 +374,8 @@ module.exports = {
                     'Authorization': `Bearer ${access_token}`
                 }
             }).then(res => res.json() as any)
+            fs.writeFileSync(`debugosu/command-osu=mostplayeddata=${obj.guildId}.json`, JSON.stringify(mostplayeddata, null, 2))
+            
             let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             let maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
             let minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)

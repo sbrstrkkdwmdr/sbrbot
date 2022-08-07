@@ -237,6 +237,8 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
+        fs.writeFileSync(`debugosu/command-scores=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2));
+
         osudata.id
         try {
             if (osudata.authentication) {
@@ -275,7 +277,8 @@ module.exports = {
                 Authorization: `Bearer ${access_token}`
             }
         }).then(res => res.json() as any);
-        fs.writeFileSync(`./debugosu/scoredata${obj.guildId}.json`, JSON.stringify(scoredataPresort, null, 2));
+        fs.writeFileSync(`debugosu/command-scores=scoredataPresort=${obj.guildId}.json`, JSON.stringify(scoredataPresort, null, 2));
+
         let scoredata = scoredataPresort.scores
         let sortdata = ''
         if (scoredataPresort.scores.length < 1) {
@@ -376,6 +379,9 @@ module.exports = {
                     break;
             }
         }
+        fs.writeFileSync(`debugosu/command-scores=scoredata=${obj.guildId}.json`, JSON.stringify(scoredata, null, 2));
+
+
         if (compact == true) {
             sortdata += `\nCompact mode`
         }
@@ -385,6 +391,7 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
+        fs.writeFileSync(`debugosu/command-scores=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2));
 
         let title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ?
             mapdata.beatmapset.title :
@@ -465,7 +472,7 @@ module.exports = {
 
                 } else {
                     scoretxt +=
-                        `**[Score #${i + 1 + page*5}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}) ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') : ''}** <t:${new Date(curscore.created_at).getTime() / 1000}:R>
+                        `**[Score #${i + 1 + page * 5}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}) ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') : ''}** <t:${new Date(curscore.created_at).getTime() / 1000}:R>
                     ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${curscore.pp}pp
                     \`${hitlist}\` | ${curscore.max_combo}x/**${mapdata.max_combo}**
                     `

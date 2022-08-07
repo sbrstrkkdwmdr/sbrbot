@@ -181,6 +181,8 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
+        fs.writeFileSync(`debugosu/command-leaderboard=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+
         let title = 'n';
         let fulltitle = 'n';
         let artist = 'n';
@@ -195,9 +197,6 @@ module.exports = {
             }
         }
         fulltitle = `${artist} - ${title} [${mapdata.version}]`
-
-        fs.writeFileSync('debugosu/command-leaderboard=map.json', JSON.stringify(mapdata, null, 2), 'utf-8')
-
         if (mods == null) {
             let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/scores`
 
@@ -209,6 +208,8 @@ module.exports = {
                     Accept: "application/json"
                 }
             }).then(res => res.json() as any)
+            fs.writeFileSync(`debugosu/command-leaderboard=lbdataf=${obj.guildId}.json`, JSON.stringify(lbdataf, null, 2))
+
             try {
                 if (lbdataf.authentication) {
                     obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
@@ -218,7 +219,8 @@ module.exports = {
 
             }
             let lbdata = lbdataf.scores
-            fs.writeFileSync('debugosu/command-leaderboard=scores.json', JSON.stringify(lbdata, null, 2), 'utf-8')
+            fs.writeFileSync(`debugosu/command-leaderboard=lbdata=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
+
             let lbEmbed = new Discord.EmbedBuilder()
                 .setTitle(`Score leaderboard of ${fulltitle}`)
                 .setURL(`https://osu.ppy.sh/b/${mapid}`)
@@ -293,6 +295,7 @@ ${hitlist}
 
             let lbdata = await fetch(oldmsu)
                 .then(res => res.json() as any)
+            fs.writeFileSync(`debugosu/command-leaderboard=lbdata_apiv1=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
             try {
                 if (lbdata.authentication) {
                     obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
@@ -300,7 +303,6 @@ ${hitlist}
                 }
             } catch (error) {
             }
-            fs.writeFileSync('debugosu/command-leaderboard=scores_api_v1.json', JSON.stringify(lbdata, null, 2), 'utf-8')
 
             let lbEmbed = new Discord.EmbedBuilder()
                 .setTitle(`Modded score leaderboard of ${fulltitle}`)
@@ -351,7 +353,7 @@ ${hitlist}
             }
             lbEmbed.setDescription(`${scoretxt}`)
 
-            if(button == null){
+            if (button == null) {
                 obj.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                 fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess\n\n`, 'utf-8')

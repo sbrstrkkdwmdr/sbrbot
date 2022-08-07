@@ -156,7 +156,7 @@ module.exports = {
                     page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1
                 } else if (button == 'RightArrow') {
                     page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1
-                } else if (button == 'BigRightArrow'){
+                } else if (button == 'BigRightArrow') {
                     page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))
                 }
                 list = true
@@ -223,7 +223,8 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
-        fs.writeFileSync('debugosu/commands-rs=user.json', JSON.stringify(osudata, null, 2))
+        fs.writeFileSync(`debugosu/command-rs=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
+
         try {
             if (osudata.authentication) {
                 setTimeout(() => {
@@ -290,6 +291,8 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any);
+        fs.writeFileSync(`debugosu/command-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
+
         let rsEmbed = new Discord.EmbedBuilder();
 
         if (list != true) {
@@ -449,7 +452,8 @@ module.exports = {
                 },
                 body: iftherearemodsasint
             }).then(res => res.json() as any);
-            fs.writeFileSync('debugosu/command-rs=mapattr.json', JSON.stringify(mapattrdata, null, 2))
+            fs.writeFileSync(`debugosu/command-rs=mapattrdata=${obj.guildId}.json`, JSON.stringify(mapattrdata, null, 2))
+            
             let totaldiff = '?'
             if (mapattrdata.error) {
                 totaldiff = curbm.difficulty_rating.toFixed(2);

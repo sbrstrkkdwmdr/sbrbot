@@ -220,6 +220,7 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
+        fs.writeFileSync(`debugosu/command-firsts=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
                 obj.reply({ content: 'error - osu auth out of date', allowedMentions: { repliedUser: false }, failIfNotExists: true })
@@ -230,15 +231,14 @@ module.exports = {
         if (!osudata.id) {
             return obj.channel.send('Error - no user found')
         };
-        fs.writeFileSync('debugosu/command-firsts=scores_username.json', JSON.stringify(osudata, null, 2), 'utf-8')
         let userfirstsurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/firsts?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
         const firstscoresdata = await fetch(userfirstsurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
+        fs.writeFileSync(`debugosu/command-firsts=firstscoresdata=${obj.guildId}.json`, JSON.stringify(firstscoresdata, null, 2))
 
-        fs.writeFileSync('debugosu/command-firsts=scores.json', JSON.stringify(firstscoresdata, null, 2), 'utf-8')
         let firstsEmbed = new Discord.EmbedBuilder()
             .setTitle(`#1 scores for ${osudata.username}`)
             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)

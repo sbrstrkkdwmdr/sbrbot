@@ -176,7 +176,8 @@ module.exports = {
                     'Authorization': `Bearer ${access_token}`
                 }
             }).then(res => res.json() as any);
-            fs.writeFileSync('debugosu/command-map=map.json', JSON.stringify(mapdata, null, 2));
+            fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+
             try {
                 let mapper = mapdata.beatmapset.creator
             } catch (error) {
@@ -202,9 +203,9 @@ module.exports = {
                     'Authorization': `Bearer ${access_token}`
                 }
             }).then(res => res.json() as any)
+            fs.writeFileSync(`debugosu/command-map=mapidtest=${obj.guildId}.json`, JSON.stringify(mapidtest, null, 2))
                 ;
-            let mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)
-            fs.writeFileSync('debugosu/command-map=txt.json', JSON.stringify(mapidtest, null, 2))
+            let mapidtest2;
             try {
                 if (mapidtest.authentication) {
                     let ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
@@ -214,16 +215,25 @@ module.exports = {
             } catch (error) {
 
             }
+
             if (mapidtest.length == 0) {
                 obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: \"' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true });
                 return;
             }
+            try {
+                mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)
+            } catch (error) {
+                obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: \"' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true });
+                return;
+            }
+
             let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapidtest2[0].id)}?`
             mapdata = await fetch(mapurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
             }).then(res => res.json() as any);
+            fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
             try {
                 let mapper = mapdata.beatmapset.creator
             } catch (error) {
@@ -284,7 +294,7 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any);
-        fs.writeFileSync('debugosu/command-map=mapattr.json', JSON.stringify(mapattrdata, null, 2));
+        fs.writeFileSync(`debugosu/command-map=mapattrdata=${obj.guildId}.json`, JSON.stringify(mapattrdata, null, 2))
         let totaldiff;
         if (mapattrdata.attributes == null || mapattrdata.attributes == undefined || mapattrdata.attributes.star_rating == NaN) {
             totaldiff = mapdata.difficulty_rating;
@@ -398,14 +408,14 @@ module.exports = {
         let basicvals = `CS${allvals.cs} AR${allvals.ar} OD${allvals.od} HP${allvals.hp}`;
         if (interaction) {
             if (interaction.options.getBoolean('detailed') == true) {
-                basicvals = 
-                `CS${allvals.cs} (${allvals.details.csRadius.toFixed(2)}r)
+                basicvals =
+                    `CS${allvals.cs} (${allvals.details.csRadius.toFixed(2)}r)
                 AR${allvals.ar}  (${allvals.details.arMs}ms)
                 OD${allvals.od} (300: ${allvals.details.odMs.range300.toFixed(2)}ms 100: ${allvals.details.odMs.range100.toFixed(2)}ms 50:  ${allvals.details.odMs.range50.toFixed(2)}ms)
                 HP${allvals.hp}`
             }
         }
-        
+
         let mapname: string;
         let artist: string
 
@@ -420,6 +430,7 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any);
+        fs.writeFileSync(`./debugosu/command-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
 
         let Embed = new Discord.EmbedBuilder()
             .setColor(0x91ff9a)

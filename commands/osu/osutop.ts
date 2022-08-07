@@ -72,7 +72,6 @@ module.exports = {
             if (!args[0]) {
                 user = null
             }
-            console.log('nm')
         }
 
         //==============================================================================================================================================================================================
@@ -216,17 +215,6 @@ module.exports = {
             }
         }
 
-        console.log(user)
-        console.log(mode)
-        console.log(mapper)
-        console.log(mods)
-        console.log(sort)
-        console.log(page)
-        console.log(detailed)
-        console.log(reverse)
-        console.log(compact)
-        console.log(searchid)
-
 
         if (user == null) {
             let findname = await userdata.findOne({ where: { userid: searchid } })
@@ -258,7 +246,8 @@ module.exports = {
                 Authorization: `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
-        fs.writeFileSync('debugosu/command-otop=user.json', JSON.stringify(osudata, null, 2))
+        fs.writeFileSync(`debugosu/command-otop=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
+
         try {
             if (osudata.authentication) {
                 obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
@@ -290,6 +279,8 @@ module.exports = {
             }
         }
         ).then(res => res.json() as any)
+        fs.writeFileSync(`debugosu/command-otop=osutopdataPreSort=${obj.guildId}`, JSON.stringify(osutopdataPreSort, null, 2))
+
         try {
             let usernametesting = osutopdataPreSort[0].user.username
         } catch (error) {
@@ -368,6 +359,8 @@ module.exports = {
                 filterinfo += `\nsorted by most misses`
             }
         }
+        fs.writeFileSync(`debugosu/command-otop=osutopdata=${obj.guildId}`, JSON.stringify(osutopdata, null, 2))
+
         if (compact == true) {
             filterinfo += `\ncompact mode`
         }
@@ -560,7 +553,7 @@ module.exports = {
                 embeds: [topEmbed],
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
-            })  
+            })
         }
 
 
