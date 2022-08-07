@@ -426,6 +426,8 @@ Error - authentication
             mapdata.hit_length,
             mapmods
         )
+        let fixedmods = mapmods.replace('TD', '')
+
         let score = {
             beatmap_id: mapdata.id,
             score: "6795149",
@@ -437,7 +439,7 @@ Error - authentication
             countkatu: "0",
             countgeki: "0",
             perfect: "1",
-            enabled_mods: "0",
+            enabled_mods: osumodcalc.ModStringToInt(fixedmods),
             user_id: "13780464",
             date: "2022-02-08 05:24:54",
             rank: "S",
@@ -456,19 +458,18 @@ Error - authentication
             countkatu: "0",
             countgeki: "0",
             perfect: "0",
-            enabled_mods: "0",
+            enabled_mods: osumodcalc.ModStringToInt(fixedmods),
             user_id: "13780464",
             date: "2022-02-08 05:24:54",
             rank: "S",
             score_id: "4057765057",
         };
-        let fixedmods = mapmods.replace('TD', '')
         let modissue = ''
         if (mapmods.includes('TD')) {
             modissue = '\ncalculations aren\'t supported for TD'
         }
-        let pp = new ppcalc.std_ppv2().setPerformance(score).setMods(fixedmods);
-        let pp95 = new ppcalc.std_ppv2().setPerformance(score95).setMods(fixedmods);
+        let pp = new ppcalc.std_ppv2().setPerformance(score)//.setMods(fixedmods);
+        let pp95 = new ppcalc.std_ppv2().setPerformance(score95)//.setMods(fixedmods);
         let mapimg = emojis.gamemodes.standard;
 
         switch (mapdata.mode) {
