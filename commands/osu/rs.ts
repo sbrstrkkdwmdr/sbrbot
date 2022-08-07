@@ -134,6 +134,7 @@ ${currentDate} | ${currentDateISO}
 recieved recent play command
 requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
 cmd ID: ${absoluteID}
+button: ${button}
 ----------------------------------------------------
 `, 'utf-8')
             buttons = new Discord.ActionRowBuilder()
