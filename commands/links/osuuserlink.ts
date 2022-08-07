@@ -8,7 +8,7 @@ module.exports = {
     name: 'osuuserlink',
     description: 'osuuserlink',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
-    
+
 
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         let user = messagenohttp.split('/')[2]
@@ -20,7 +20,7 @@ module.exports = {
             }
         }).then(res => res.json() as any)
             .then(osudata => {
-                fs.writeFileSync('debugosu/link-osu.json', JSON.stringify(osudata, null, 2))
+                fs.writeFileSync(`debugosu/link-osu=osu=${message.guildId}.json`, JSON.stringify(osudata, null, 2))
                 try {
                     let osustats = osudata.statistics
                     let grades = osustats.grade_counts
@@ -39,7 +39,7 @@ module.exports = {
                         countryrank = countryrank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }
 
-                    let playerlasttoint:any = new Date(osudata.last_visit)
+                    let playerlasttoint: any = new Date(osudata.last_visit)
 
                     let online = osudata.is_online;
 
@@ -53,7 +53,7 @@ module.exports = {
                     }
 
                     let prevnames = osudata.previous_usernames;
-                    let prevnameslist:any
+                    let prevnameslist: any
                     if (prevnames.length > 0) {
                         prevnameslist = '**Previous Usernames:** ' + prevnames.join(', ');
                     }

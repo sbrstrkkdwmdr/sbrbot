@@ -32,7 +32,7 @@ module.exports = {
             }
         }).then(res => res.json() as any)
             .then(scoredata => {
-                fs.writeFileSync('debugosu/link-scoreparse.json', JSON.stringify(scoredata, null, 2));
+                fs.writeFileSync(`debugosu/link-scoreparse=scoredata=${message.guildId}.json`, JSON.stringify(scoredata, null, 2));
                 fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
                     ;
                 let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(scoredata.beatmap.id)}`

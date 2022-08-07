@@ -64,7 +64,7 @@ module.exports = {
                     message.reply({ content: 'Error - map not found', allowedMentions: { repliedUser: false } });
                     return;
                 }
-                fs.writeFileSync('debugosu/link-map.json', JSON.stringify(json, null, 2));
+                fs.writeFileSync(`debugosu/link-map=mapdata=${message.guildId}.json`, JSON.stringify(json, null, 2));
                 fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: json.id }), null, 2));
 
                 let mapperlink = (`${json.beatmapset.creator}`).replaceAll(' ', '%20');
@@ -120,7 +120,7 @@ module.exports = {
                         } else {
                             totaldiff = mapattrdata.attributes.star_rating.toFixed(2);
                         }
-                        fs.writeFileSync('debugosu/link-map=attr_data.json', JSON.stringify(mapattrdata, null, 2));
+                        fs.writeFileSync(`debugosu/link-map=mapattrdata=${message.guildId}.json`, JSON.stringify(mapattrdata, null, 2));
 
                         let cs = json.cs
                         let ar = json.ar
@@ -325,8 +325,8 @@ module.exports = {
                                 ppComputedString = (Math.abs(ppComputed.total)).toFixed(2)
                                 pp95ComputedString = (Math.abs(pp95Computed.total)).toFixed(2)
                                 ppissue = ''
-                                fs.writeFileSync('./debugosu/link-map=pp_calc.json', JSON.stringify(ppComputed, null, 2))
-                                fs.writeFileSync('./debugosu/link-map=pp_calc_95.json', JSON.stringify(pp95Computed, null, 2))
+                                fs.writeFileSync(`./debugosu/link-map=pp_calc=${message.guildId}.json`, JSON.stringify(ppComputed, null, 2))
+                                fs.writeFileSync(`./debugosu/link-map=pp_calc_95=${message.guildId}.json`, JSON.stringify(pp95Computed, null, 2))
                             } catch (error) {
                                 ppComputedString = NaN
                                 pp95ComputedString = NaN
@@ -434,100 +434,100 @@ module.exports = {
                 return;
             }
 
-                let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
-                fetch(lookupurl, {
-                    headers: {
-                        'Authorization': `Bearer ${access_token}`
+            let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
+            fetch(lookupurl, {
+                headers: {
+                    'Authorization': `Bearer ${access_token}`
+                }
+            }).then(res => res.json() as any)
+                .then(setdata => {
+                    fs.writeFileSync(`debugosu/link-map=setdata=${message.guildId}.json`, JSON.stringify(setdata, null, 2))
+                    let bid = setdata.beatmaps[0].beatmap_id;
+
+                    let mapstatus = (setdata.status)
+                    let statusimg: any;
+                    if (mapstatus == "ranked") {
+                        statusimg = "<:statusranked:944512775579926609>";
                     }
-                }).then(res => res.json() as any)
-                    .then(setdata => {
-                        fs.writeFileSync('debugosu/link-map=set_data.json', JSON.stringify(setdata, null, 2))
-                        let bid = setdata.beatmaps[0].beatmap_id;
+                    if (mapstatus == "approved" || mapstatus == "qualified") {
+                        statusimg = "<:statusapproved:944512764913811467>";
+                    }
+                    if (mapstatus == "loved") {
+                        statusimg = "<:statusloved:944512775810588733>";
+                    }
+                    if (mapstatus == "graveyard" || mapstatus == "pending") {
+                        statusimg = "<:statusgraveyard:944512765282897940>";
+                    }
+                    let mapimg = "<:modeosu:944181096868884481>";
 
-                        let mapstatus = (setdata.status)
-                        let statusimg: any;
-                        if (mapstatus == "ranked") {
-                            statusimg = "<:statusranked:944512775579926609>";
-                        }
-                        if (mapstatus == "approved" || mapstatus == "qualified") {
-                            statusimg = "<:statusapproved:944512764913811467>";
-                        }
-                        if (mapstatus == "loved") {
-                            statusimg = "<:statusloved:944512775810588733>";
-                        }
-                        if (mapstatus == "graveyard" || mapstatus == "pending") {
-                            statusimg = "<:statusgraveyard:944512765282897940>";
-                        }
-                        let mapimg = "<:modeosu:944181096868884481>";
+                    let mapperid = setdata.user_id;
 
-                        let mapperid = setdata.user_id;
+                    let title = setdata.title;
+                    let titleuni = setdata.title_unicode;
+                    let artist = setdata.artist;
+                    let artistuni = setdata.artist_unicode;
 
-                        let title = setdata.title;
-                        let titleuni = setdata.title_unicode;
-                        let artist = setdata.artist;
-                        let artistuni = setdata.artist_unicode;
-
-                        if (title != titleuni) {
-                            title = `${title} (${titleuni})`
-                        }
-                        if (artist != artistuni) {
-                            artist = `${artist} (${artistuni})`
-                        }
+                    if (title != titleuni) {
+                        title = `${title} (${titleuni})`
+                    }
+                    if (artist != artistuni) {
+                        artist = `${artist} (${artistuni})`
+                    }
 
 
-                        let Embed = new Discord.EmbedBuilder()
-                            .setColor(0x91ff9a)
-                            .setTitle(title)
-                            .setURL(`https://osu.ppy.sh/s/${setid}`)
-                            .setThumbnail(`https://b.ppy.sh/thumb/${setid}l.jpg`)
-                            .setDescription(`
+                    let Embed = new Discord.EmbedBuilder()
+                        .setColor(0x91ff9a)
+                        .setTitle(title)
+                        .setURL(`https://osu.ppy.sh/s/${setid}`)
+                        .setThumbnail(`https://b.ppy.sh/thumb/${setid}l.jpg`)
+                        .setDescription(`
                     **MAP DETAILS**
                     ${statusimg}
                     ${setdata.bpm}BPM ${setdata.favourite_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}❤ ${setdata.play_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} plays
                     `)
 
-                            .setAuthor({ name: `${setdata.creator}`, url: `https://osu.ppy.sh/u/${mapperid}`, iconURL: `https://a.ppy.sh/${mapperid}` })
+                        .setAuthor({ name: `${setdata.creator}`, url: `https://osu.ppy.sh/u/${mapperid}`, iconURL: `https://a.ppy.sh/${mapperid}` })
 
-                        let beatmaps = setdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
+                    let beatmaps = setdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
 
-                        for (let i = 0; i < setdata.beatmaps.length; i++) {
-                            let curbm = beatmaps[i];
-                            let mapmode = curbm.mode
-                            if (mapmode == "taiko") {
-                                mapimg = "<:modetaiko:944181097053442068>";
-                            }
-                            if (mapmode == "fruits") {
-                                mapimg = "<:modefruits:944181096206176326>";
-                            }
-                            if (mapmode == "mania") {
-                                mapimg = "<:modemania:944181095874834453>";
-                            }
-                            //seconds to time
-                            let length = curbm.total_length;
-                            let minutes = Math.floor(length / 60);
-                            let seconds: any = length % 60;
-                            if (seconds < 10) {
-                                seconds = `0${seconds}`
-                            }
-                            let moddedlength = `${minutes}:${seconds}`
-                            Embed.addFields([{
-                                name: `${curbm.version}`,
-                                value:
-                                    `${mapimg} | ${curbm.difficulty_rating}⭐ \n` +
-                                    `CS${curbm.cs} AR${curbm.ar} OD${curbm.accuracy} HP${curbm.drain} \n` +
-                                    `${moddedlength}🕐 ${curbm.bpm}BPM⏱ | ${emojis.mapobjs.circle}${curbm.count_circles} ${emojis.mapobjs.slider}${curbm.count_sliders} ${emojis.mapobjs.spinner}${curbm.count_spinners}`,
-                                inline: false
-                            }])
+                    for (let i = 0; i < setdata.beatmaps.length; i++) {
+                        let curbm = beatmaps[i];
+                        let mapmode = curbm.mode
+                        if (mapmode == "taiko") {
+                            mapimg = "<:modetaiko:944181097053442068>";
                         }
-                        message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
-                        let endofcommand = new Date().getTime();
-                        let timeelapsed = endofcommand - currentDate.getTime();
-                        fs.appendFileSync(`logs/cmd/link${message.guildId}./logs/moderator/$`, `\nCommand Latency (osumaplink) (set) - ${timeelapsed}ms\n`)
-                        fs.writeFileSync(`./debugosu/prevmap.json${message.guildId}`, JSON.stringify(({ id: setdata.beatmaps[setdata.beatmaps.length - 1].id }), null, 2));
-
-
+                        if (mapmode == "fruits") {
+                            mapimg = "<:modefruits:944181096206176326>";
+                        }
+                        if (mapmode == "mania") {
+                            mapimg = "<:modemania:944181095874834453>";
+                        }
+                        //seconds to time
+                        let length = curbm.total_length;
+                        let minutes = Math.floor(length / 60);
+                        let seconds: any = length % 60;
+                        if (seconds < 10) {
+                            seconds = `0${seconds}`
+                        }
+                        let moddedlength = `${minutes}:${seconds}`
+                        Embed.addFields([{
+                            name: `${curbm.version}`,
+                            value:
+                                `${mapimg} | ${curbm.difficulty_rating}⭐ \n` +
+                                `CS${curbm.cs} AR${curbm.ar} OD${curbm.accuracy} HP${curbm.drain} \n` +
+                                `${moddedlength}🕐 ${curbm.bpm}BPM⏱ | ${emojis.mapobjs.circle}${curbm.count_circles} ${emojis.mapobjs.slider}${curbm.count_sliders} ${emojis.mapobjs.spinner}${curbm.count_spinners}`,
+                            inline: false
+                        }])
                     }
-                    )
-            }
+                    message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } });
+                    let endofcommand = new Date().getTime();
+                    let timeelapsed = endofcommand - currentDate.getTime();
+                    fs.appendFileSync(`logs/cmd/link${message.guildId}./logs/moderator/$`, `\nCommand Latency (osumaplink) (set) - ${timeelapsed}ms\n`)
+                    fs.writeFileSync(`./debugosu/prevmap.json${message.guildId}`, JSON.stringify(({ id: setdata.beatmaps[setdata.beatmaps.length - 1].id }), null, 2));
+
+
+                }
+                )
         }
     }
+}
