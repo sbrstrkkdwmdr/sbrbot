@@ -5,6 +5,7 @@ import fetch from 'node-fetch';
 import emojis = require('../../configs/emojis');
 import osufunc = require('../../configs/osufunc');
 import cmdchecks = require('../../configs/commandchecks');
+import calc = require('../../configs/calculations');
 module.exports = {
     name: 'rs',
     description: 'template text\n' +
@@ -402,7 +403,7 @@ module.exports = {
             let rsgrade;
             switch (curscore.rank.toUpperCase()) {
                 case 'F':
-                    rspassinfo = `\n??:??/${curbm.total_length} (NaN% completed)`
+                    rspassinfo = `\n??:??/${calc.secondsToTime(curbm.total_length)} (NaN% completed)`
                     rsgrade = emojis.grades.F
                     break;
                 case 'D':
@@ -441,7 +442,7 @@ module.exports = {
                     })
             }
             let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(curbm.id)}/attributes`;
-            const mapattrdata = fetch(beatattrurl, {
+            const mapattrdata = await fetch(beatattrurl, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${access_token}`
