@@ -459,13 +459,13 @@ module.exports = {
                 };
                 if (compact == true) {
                     scoretxt += `
-                    **[Score #${i + 1}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id})**
+                    **[Score #${i + 1 + page * 5}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id})**
                     ${(curscore.accuracy * 100).toFixed(2)}% | ${curscore.pp}pp | ${curscore.mods.join('').length > 1 ? curscore.mods.join('') : 'NM'} `
 
 
                 } else {
                     scoretxt +=
-                        `**[Score #${i + 1 + page*5}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}) ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') : ''}** <t:${new Date(curscore.created_at).getTime() / 1000}:R>
+                        `**[Score #${i + 1 + page * 5}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}) ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') : ''}** <t:${new Date(curscore.created_at).getTime() / 1000}:R>
                     ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${curscore.pp}pp
                     \`${hitlist}\` | ${curscore.max_combo}x/**${mapdata.max_combo}**
                     `
