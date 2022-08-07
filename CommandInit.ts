@@ -93,8 +93,6 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The second number',
                 type: Discord.ApplicationCommandOptionType.Number,
                 required: false,
-                minValue: 1,
-                maxValue: 100
             }
         ]
     },
