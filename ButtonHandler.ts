@@ -73,6 +73,10 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.osucmds.get('pinned').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 interaction.deferUpdate();
                 break;
+            case 'scores':
+                client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                interaction.deferUpdate();
+                break;
         }
         fs.appendFileSync('logs/totalcommands.txt', 'x')
 
