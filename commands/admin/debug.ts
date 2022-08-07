@@ -13,14 +13,21 @@ module.exports = {
             let debugfiles: string[] = [];
             let readfiles = fs.readdirSync('debugosu')
             switch (command) {
-                case 'leaderboard': case 'maplb':case 'mapleaderboard':
+                case 'firsts':
+                    for (let i = 0; i < readfiles.length; i++) {
+                        if (readfiles[i].startsWith('command-firsts')) {
+                            debugfiles.push('debugosu\\' + readfiles[i])
+                        }
+                    }
+                    break;
+                case 'leaderboard': case 'maplb': case 'mapleaderboard':
                     for (let i = 0; i < readfiles.length; i++) {
                         if (readfiles[i].startsWith('command-leaderboard')) {
                             debugfiles.push('debugosu\\' + readfiles[i])
                         }
                     }
                     break;
-                case 'map':case 'm':
+                case 'map': case 'm':
                     for (let i = 0; i < readfiles.length; i++) {
                         if (readfiles[i].startsWith('command-map')) {
                             debugfiles.push('debugosu\\' + readfiles[i])
@@ -65,7 +72,14 @@ module.exports = {
                         }
                     }
                     break;
-                case 'rs': case 'recent':case 'r':
+                case 'pinned':
+                    for (let i = 0; i < readfiles.length; i++) {
+                        if (readfiles[i].startsWith('command-pinned')) {
+                            debugfiles.push('debugosu\\' + readfiles[i])
+                        }
+                    }
+                    break;
+                case 'rs': case 'recent': case 'r':
                     for (let i = 0; i < readfiles.length; i++) {
                         if (readfiles[i].startsWith('command-rs')) {
                             debugfiles.push('debugosu\\' + readfiles[i])
