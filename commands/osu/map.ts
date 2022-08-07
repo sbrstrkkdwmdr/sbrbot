@@ -36,7 +36,16 @@ module.exports = {
         }
 
         if (message != null && button == null) {
-            fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - map (message)
+${currentDate} | ${currentDateISO}
+recieved map command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
@@ -80,8 +89,16 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null) {
-            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - map (interaction)
+${currentDate} | ${currentDateISO}
+recieved map command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
@@ -117,7 +134,16 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (button != null) {
-            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (button)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - map (button)
+${currentDate} | ${currentDateISO}
+recieved map command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
@@ -168,6 +194,17 @@ module.exports = {
             mapid = prevmap.id;
         }
 
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Options: 
+    mapid: ${mapid}
+    mapmods: ${mapmods}
+    maptitleq: ${maptitleq}
+----------------------------------------------------
+`, 'utf-8')
+
         if (maptitleq == null) {
             let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}?`;
 
@@ -183,6 +220,12 @@ module.exports = {
             } catch (error) {
                 try {
                     if (mapdata.authentication) {
+                        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+`
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
                         let ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
                         obj.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
                         return;
@@ -208,6 +251,12 @@ module.exports = {
             let mapidtest2;
             try {
                 if (mapidtest.authentication) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+`
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
                     let ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
                     message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
                     return;
@@ -223,6 +272,14 @@ module.exports = {
             try {
                 mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)
             } catch (error) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+`
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - map not found
+params: ${maptitleq}
+${error}
+----------------------------------------------------`)
                 obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: \"' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true });
                 return;
             }
@@ -242,14 +299,25 @@ module.exports = {
                     ifid = `Found map id = ${mapid}\n${maptitleq}`
                 }
                 try {
-                    let au = mapdata.authentication
-                    if (au == "basic") {
+                    if (mapdata.authentication) {
+                        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+`
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
                         ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
                     }
                 } catch (error) {
 
                 }
-
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+                ----------------------------------------------------
+                cmd ID: ${absoluteID}
+                Error - map not found
+                params: ${mapid} | ${maptitleq}
+                ----------------------------------------------------`)
                 obj.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
                 return;
             }
@@ -392,6 +460,13 @@ module.exports = {
             }
 
         } catch (error) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+`
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - pp calculation failed
+${error}
+----------------------------------------------------`)
             ppComputedString = 'NaN pp';
             pp95ComputedString = 'NaN pp';
             ppissue = 'Error - pp could not be calculated';
@@ -477,9 +552,13 @@ module.exports = {
         }
 
 
-        let endofcommand = new Date().getTime();
-        let timeelapsed = endofcommand - currentDate.getTime();
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, '\nsuccess\n\n', 'utf-8')
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Command Latency - ${new Date().getTime() - currentDate.getTime()}ms
+success
+----------------------------------------------------
+`, 'utf-8')
     }
 }

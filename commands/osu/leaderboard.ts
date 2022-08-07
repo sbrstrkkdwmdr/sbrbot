@@ -38,7 +38,16 @@ module.exports = {
 
 
         if (message != null && button == null) {
-            fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - leaderboard (message)
+${currentDate} | ${currentDateISO}
+recieved map leaderboard command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
@@ -74,8 +83,16 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null) {
-            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - leaderboard (interaction)
+${currentDate} | ${currentDateISO}
+recieved map leaderboard command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
@@ -113,7 +130,16 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (button != null) {
-            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (button)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - leaderboard (button)
+${currentDate} | ${currentDateISO}
+recieved map leaderboard command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
@@ -174,6 +200,18 @@ module.exports = {
         } else {
             page--
         }
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Options: 
+mapid: ${mapid}
+page: ${page}
+mods: ${mods}
+----------------------------------------------------
+`, 'utf-8')
+
+
         let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}`//?mode=osu`//?mods=${mods}`
 
         let mapdata = await fetch(mapurl, {
@@ -192,9 +230,22 @@ module.exports = {
 
         } catch (error) {
             if (mapdata.authentication) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
                 obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 return;
             }
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - unknown
+${error}
+----------------------------------------------------`)
         }
         fulltitle = `${artist} - ${title} [${mapdata.version}]`
         if (mods == null) {
@@ -213,6 +264,12 @@ module.exports = {
             try {
                 if (lbdataf.authentication) {
                     obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
                     return;
                 }
             } catch (error) {
@@ -230,48 +287,46 @@ module.exports = {
             let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`
 
             for (i = 0; i < lbdata.length && i < 5; i++) {
-                try {
-                    let score = lbdata[i + (page * 5)]
+                let score = lbdata[i + (page * 5)]
+                if (!score) {
+                    break;
+                }
+                let gamestats = score.statistics
 
-                    let gamestats = score.statistics
+                let hitgeki = gamestats.count_geki
+                let hit300 = gamestats.count_300
+                let hitkatu = gamestats.count_katu
+                let hit100 = gamestats.count_100
+                let hit50 = gamestats.count_50
+                let miss = gamestats.count_miss
+                let mode = score.mode_int
+                let hitlist;
+                switch (mode) {
+                    case 0: //std
+                        hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
+                        break;
+                    case 1: //taiko
+                        hitlist = `${hit300}/${hit100}/${miss}`
+                        break;
+                    case 2: //catch/fruits
+                        hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
+                        break;
+                    case 3: //mania
+                        hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
+                        break;
+                }
+                let ifmods: string = ''
+                if (score.mods.length > 0) {
+                    ifmods = `+${score.mods.join('')} |`
+                }
 
-                    let hitgeki = gamestats.count_geki
-                    let hit300 = gamestats.count_300
-                    let hitkatu = gamestats.count_katu
-                    let hit100 = gamestats.count_100
-                    let hit50 = gamestats.count_50
-                    let miss = gamestats.count_miss
-                    let mode = score.mode_int
-                    let hitlist;
-                    switch (mode) {
-                        case 0: //std
-                            hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
-                            break;
-                        case 1: //taiko
-                            hitlist = `${hit300}/${hit100}/${miss}`
-                            break;
-                        case 2: //catch/fruits
-                            hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
-                            break;
-                        case 3: //mania
-                            hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
-                            break;
-                    }
-                    let ifmods: string = ''
-                    if (score.mods.length > 0) {
-                        ifmods = `+${score.mods.join('')} |`
-                    }
-
-                    scoretxt += `
+                scoretxt += `
 **[Score #${i + (page * 5) + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id}) | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
 Score set <t:${new Date(score.created_at).getTime() / 1000}:R>
 ${(score.accuracy * 100).toFixed(2)}% | ${score.rank} | ${score.pp}pp
 ${ifmods} ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
 ${hitlist}
 `
-                } catch (error) {
-
-                }
             }
 
             if (lbdata.length < 1 || scoretxt.length < 10) {
@@ -285,10 +340,8 @@ ${hitlist}
             if (button == null) {
                 obj.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                 fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess\n\n`, 'utf-8')
             } else {
                 message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess\n\n`, 'utf-8')
             }
         } else {
             let oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${cmdchecks.toHexadecimal(mapid)}&mods=${cmdchecks.toHexadecimal(osumodcalc.ModStringToInt(osumodcalc.shortModName(mods)))}&limit=100`
@@ -298,6 +351,12 @@ ${hitlist}
             fs.writeFileSync(`debugosu/command-leaderboard=lbdata_apiv1=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
             try {
                 if (lbdata.authentication) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+`
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
                     obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                     return;
                 }
@@ -356,19 +415,21 @@ ${hitlist}
             if (button == null) {
                 obj.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                 fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess\n\n`, 'utf-8')
 
             } else {
                 message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
                 //message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess\n\n`, 'utf-8')
             }
         }
 
 
-        let endofcommand = new Date().getTime();
-        let timeelapsed = endofcommand - currentDate.getTime();
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, '\nsuccess\n\n', 'utf-8')
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Command Latency - ${new Date().getTime() - currentDate.getTime()}ms
+success
+----------------------------------------------------
+`, 'utf-8')
     }
 }

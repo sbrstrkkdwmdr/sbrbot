@@ -29,7 +29,16 @@ module.exports = {
         let compact = false;
 
         if (message != null && button == null) {
-            fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - osutop (message)
+${currentDate} | ${currentDateISO}
+recieved osutop command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
@@ -77,8 +86,16 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null) {
-            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - osutop (interaction)
+${currentDate} | ${currentDateISO}
+recieved osutop command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
@@ -122,7 +139,16 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (button != null) {
-            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (button)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - osutop (button)
+${currentDate} | ${currentDateISO}
+recieved osutop command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
@@ -240,6 +266,23 @@ module.exports = {
         } else {
             page = page - 1
         }
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Options: 
+    user: ${user}
+    mapper: ${mapper}
+    mods: ${mods}
+    sort: ${sort}
+    reverse: ${reverse}
+    detailed: ${detailed}
+    compact: ${compact}
+    page: ${page}
+    mode: ${mode}
+
+----------------------------------------------------
+`, 'utf-8')
         let userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
         const osudata = await fetch(userurl, {
             headers: {
@@ -250,6 +293,12 @@ module.exports = {
 
         try {
             if (osudata.authentication) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
                 obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 return;
             }
@@ -285,7 +334,12 @@ module.exports = {
             let usernametesting = osutopdataPreSort[0].user.username
         } catch (error) {
             console.log(error)
-            fs.writeFileSync(`logs/cmd/commands${obj.guildId}.log`, JSON.stringify(error, null, 2))
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+            ----------------------------------------------------
+            cmd ID: ${absoluteID}
+            Error - no scores found
+            ----------------------------------------------------`)
             return obj.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false } })
         }
         let filtereddata = osutopdataPreSort;
@@ -368,6 +422,14 @@ module.exports = {
             let usernamefortests = osutopdata[0].user.username
 
         } catch (error) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+`
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - no scores found (filtered)
+params: ${sort} | ${reverse} | ${mods} | ${mapper}
+${error}
+----------------------------------------------------`)
             return obj.reply({ content: 'no plays found for the options given', allowedMentions: { repliedUser: false } })
         }
         let topEmbed = new Discord.EmbedBuilder()
@@ -558,9 +620,13 @@ module.exports = {
 
 
 
-        let endofcommand = new Date().getTime();
-        let timeelapsed = endofcommand - currentDate.getTime();
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, '\nsuccess\n\n', 'utf-8')
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Command Latency - ${new Date().getTime() - currentDate.getTime()}ms
+success
+----------------------------------------------------
+`, 'utf-8')
     }
 }
