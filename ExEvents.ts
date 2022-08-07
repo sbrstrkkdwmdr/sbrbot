@@ -8,25 +8,29 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     //update oauth access token
     setInterval(() => {
-        fetch('https://osu.ppy.sh/oauth/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-            ,
-            body: JSON.stringify({
-                grant_type: 'client_credentials',
-                client_id: osuClientID,
-                client_secret: osuClientSecret,
-                scope: 'public'
-            })
+        try {
+            fetch('https://osu.ppy.sh/oauth/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+                ,
+                body: JSON.stringify({
+                    grant_type: 'client_credentials',
+                    client_id: osuClientID,
+                    client_secret: osuClientSecret,
+                    scope: 'public'
+                })
 
-        }).then(res => res.json() as any)
-            .then(res => {
-                fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
-                fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
-            }
-            )
+            }).then(res => res.json() as any)
+                .then(res => {
+                    fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
+                    fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
+                }
+                )
+        } catch (error) {
+            fs.appendFileSync('logs/updates.log', '\n' + new Date().toLocaleString() + '\n' + error + '\n')
+        }
     }, 1 * 60 * 1000);
 
     let songsarr = [
