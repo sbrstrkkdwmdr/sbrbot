@@ -11,11 +11,14 @@ module.exports = {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - crash (message)\n${currentDate} | ${currentDateISO}\n recieved crash command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}\n`, 'utf-8')
             if (commandchecks.isOwner(message.author.id)) {
                 console.log('crash command triggered')
+                message.channel.send('crashing')
+                setTimeout(() => {
                 for (let i = 0; i < 100; i++) {
                     message.reply('Running crash command...')
                     message.delete();
                     message.reply('balls??')
                 }
+            }, 1000)
             }
         }
 
