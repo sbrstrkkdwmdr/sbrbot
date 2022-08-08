@@ -38,9 +38,9 @@ module.exports = {
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
-LINK PARSE EVENT - map (button)
+LINK PARSE EVENT - map link (button)
 ${currentDate} | ${currentDateISO}
-recieved map command
+recieved map link
 requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
 cmd ID: ${absoluteID}
 button: ${button}
@@ -128,7 +128,7 @@ button: ${button}
 ----------------------------------------------------
 LINK PARSE EVENT - map (message)
 ${currentDate} | ${currentDateISO}
-recieved map command
+recieved map link
 requested by ${message.author.id} AKA ${message.author.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
