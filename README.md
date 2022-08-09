@@ -19,7 +19,6 @@ whatif x pp score/score simulation</br>
 twitch/yt notifications</br>
 [x] server leaderboard</br>
 support for other servers like gatari, ez-pp farm etc.</br>
-music player </br>
 
 ### Things
 Performance calculation: [booba](https://www.npmjs.com/package/booba)</br>
