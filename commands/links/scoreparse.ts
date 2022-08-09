@@ -4,8 +4,8 @@ import ppcalc = require('booba')
 import osucalc = require('osumodcalculator')
 import { access_token } from '../../configs/osuauth.json';
 import emojis = require('../../configs/emojis');
-import cmdchecks = require('../../configs/commandchecks');
-import osugame = require('../../configs/osugame');
+import cmdchecks = require('../../calc/commandchecks');
+import osugame = require('../../calc/osugame');
 
 module.exports = {
     name: 'scoreparse',

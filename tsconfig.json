@@ -4,7 +4,7 @@
       "lib": ["ES2021"],
       "resolveJsonModule": true
     },
-    "include": ["commands/**/*", "configs/**/*", "other/**/*", "test/*", "*.ts"],
+    "include": ["commands/**/*", "configs/**/*", "other/**/*", "test/*", "*.ts", "calc/*"],
 /*     "files": [
         "main.ts",
         "Moderator.ts",

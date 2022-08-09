@@ -5,8 +5,8 @@ import fetch from 'node-fetch';
 import { access_token } from '../../configs/osuauth.json';
 import ppcalc = require('booba')
 import chartjsimg = require('chartjs-to-image');
-import cmdchecks = require('../../configs/commandchecks');
-import osugame = require('../../configs/osugame');
+import cmdchecks = require('../../calc/commandchecks');
+import osugame = require('../../calc/osugame');
 
 
 module.exports = {

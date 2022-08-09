@@ -3,9 +3,9 @@ import osumodcalc = require('osumodcalculator');
 import ppcalc = require('booba');
 import fetch from 'node-fetch';
 import emojis = require('../../configs/emojis');
-import osufunc = require('../../configs/osufunc');
-import cmdchecks = require('../../configs/commandchecks');
-import osugame = require('../../configs/osugame');
+import osufunc = require('../../calc/osufunc');
+import cmdchecks = require('../../calc/commandchecks');
+import osugame = require('../../calc/osugame');
 
 module.exports = {
     name: 'pinned',

@@ -1,7 +1,7 @@
 import fs = require('fs');
-import calculations = require('../../configs/calculations');
+import calculations = require('../../calc/calculations');
 import osucalc = require('osumodcalculator');
-import cmdchecks = require('../../configs/commandchecks');
+import cmdchecks = require('../../calc/commandchecks');
 module.exports = {
     name: 'math',
     description: 'null',

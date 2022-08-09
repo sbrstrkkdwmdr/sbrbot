@@ -2,7 +2,7 @@ import ms = require('ms')
 import fetch = require('node-fetch')
 import notxt = require('../../configs/w')
 import fs = require('fs')
-import calc = require('../../configs/calculations');
+import calc = require('../../calc/calculations');
 module.exports = {
     name: 'remind',
     description: 'null',
