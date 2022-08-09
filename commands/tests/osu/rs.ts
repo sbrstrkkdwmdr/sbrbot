@@ -578,7 +578,7 @@ module.exports = {
                 .addFields([
                     {
                         name: 'MAP DETAILS',
-                        value: `${fulltitle}(https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods ? '+' + curscore.mods.join('').toUpperCase() : ''} ${totaldiff}⭐ | ${curscore.mode}`,
+                        value: `[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods ? '+' + curscore.mods.join('').toUpperCase() : ''} ${totaldiff}⭐ | ${curscore.mode}`,
                         inline: false
                     },
                     {
