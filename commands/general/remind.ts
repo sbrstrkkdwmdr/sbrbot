@@ -48,6 +48,7 @@ module.exports = {
 
 
             sendremind(reminder, time, message, true, remindertxt, message.author);
+            message.react("✅")
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nMessage Content: ${message.content}\n`)
 
         }
