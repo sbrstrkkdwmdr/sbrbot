@@ -19,6 +19,7 @@ let playsortopts = [
     { name: 'Accuracy', value: 'acc' },
     { name: 'Combo', value: 'combo' },
     { name: 'Misses', value: 'miss' },
+    { name: 'Rank', value: 'rank' },
 ]
 let skincmdopts = [
     { name: 'SaberStrikeCustom', value: '1' },

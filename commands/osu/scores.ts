@@ -429,6 +429,10 @@ node-fetch error: ${error}
                     )
                     sortdata += 'Sorted by: least misses'
                     break;
+                case 'rank':
+                    scoredata = scoredataPresort.scores.sort((a, b) => a.rank.localeCompare(b.rank))
+                    sortdata += `\nsorted by rank`
+                    break;
             }
         } else {
             switch (sort) {
@@ -473,6 +477,10 @@ node-fetch error: ${error}
                             b.statistics.count_miss - a.statistics.count_miss
                     )
                     sortdata += 'Sorted by: most misses'
+                    break;
+                case 'rank':
+                    scoredata = scoredataPresort.scores.sort((a, b) => b.rank.localeCompare(a.rank))
+                    sortdata += `\nsorted by rank`
                     break;
             }
         }

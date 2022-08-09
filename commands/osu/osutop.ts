@@ -207,6 +207,9 @@ button: ${button}
                     case sort1.includes('miss'):
                         sort = 'miss'
                         break;
+                    case sort1.includes('rank'):
+                        sort = 'rank'
+                        break;
 
                 }
 
@@ -440,6 +443,10 @@ node-fetch error: ${error}
                 osutopdata = filtereddata.sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
                 filterinfo += `\nsorted by least misses`
             }
+            if (sort == 'rank') {
+                osutopdata = filtereddata.sort((a, b) => a.rank.localeCompare(b.rank))
+                filterinfo += `\nsorted by rank`
+            }
         } else {
             if (sort == 'score') {
                 osutopdata = filtereddata.sort((a, b) => a.score - b.score)
@@ -464,6 +471,10 @@ node-fetch error: ${error}
             if (sort == 'miss') {
                 osutopdata = filtereddata.sort((a, b) => b.statistics.count_miss - a.statistics.count_miss)
                 filterinfo += `\nsorted by most misses`
+            }
+            if (sort == 'rank') {
+                osutopdata = filtereddata.sort((a, b) => b.rank.localeCompare(a.rank))
+                filterinfo += `\nsorted by lowest rank`
             }
         }
         fs.writeFileSync(`debugosu/command-otop=osutopdata=${obj.guildId}`, JSON.stringify(osutopdata, null, 2))
