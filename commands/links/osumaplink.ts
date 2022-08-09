@@ -6,6 +6,8 @@ import emojis = require('../../configs/emojis');
 import osufunc = require('../../configs/osufunc');
 import cmdchecks = require('../../configs/commandchecks');
 import calc = require('../../configs/calculations');
+import osugame = require('../../configs/osugame');
+
 module.exports = {
     name: 'osumaplink',
     description: 'template text\n' +
@@ -428,94 +430,38 @@ node-fetch error: ${error}
         )
         let fixedmods = mapmods.replace('TD', '')
 
-        let score = {
-            beatmap_id: mapdata.id,
-            score: "6795149",
-            maxcombo: mapdata.max_combo,
-            count50: "0",
-            count100: "0",
-            count300: "374",
-            countmiss: "0",
-            countkatu: "0",
-            countgeki: "0",
-            perfect: "1",
-            enabled_mods: osumodcalc.ModStringToInt(fixedmods),
-            user_id: "13780464",
-            date: "2022-02-08 05:24:54",
-            rank: "S",
-            score_id: "4057765057",
-        };
-        let score95 = {
-            beatmap_id: mapdata.id,
-            score: "6795149",
-            maxcombo: mapdata.max_combo,
-            count50: "0",
-            //count100: "5281700",
-            //count300: "65140967",
-            count100: "810811",
-            count300: "10000000",
-            countmiss: "0",
-            countkatu: "0",
-            countgeki: "0",
-            perfect: "0",
-            enabled_mods: osumodcalc.ModStringToInt(fixedmods),
-            user_id: "13780464",
-            date: "2022-02-08 05:24:54",
-            rank: "S",
-            score_id: "4057765057",
-        };
         let modissue = ''
         if (mapmods.includes('TD')) {
             modissue = '\ncalculations aren\'t supported for TD'
         }
-        let pp = new ppcalc.std_ppv2().setPerformance(score)//.setMods(fixedmods);
-        let pp95 = new ppcalc.std_ppv2().setPerformance(score95)//.setMods(fixedmods);
         let mapimg = emojis.gamemodes.standard;
 
         switch (mapdata.mode) {
             case 'taiko':
                 mapimg = emojis.gamemodes.taiko;
-                pp = new ppcalc.taiko_ppv2().setPerformance(score).setMods(fixedmods);
-                pp95 = new ppcalc.taiko_ppv2().setPerformance(score95).setMods(fixedmods);
                 break;
             case 'fruits':
                 mapimg = emojis.gamemodes.fruits;
-                pp = new ppcalc.catch_ppv2().setPerformance(score).setMods(fixedmods);
-                pp95 = new ppcalc.catch_ppv2().setPerformance(score95).setMods(fixedmods);
                 break;
             case 'mania':
                 mapimg = emojis.gamemodes.mania;
-                pp = new ppcalc.mania_ppv2().setPerformance(score).setMods(fixedmods);
-                pp95 = new ppcalc.mania_ppv2().setPerformance(score95).setMods(fixedmods);
                 break;
         }
-        let ppComputedString: string;
-        let pp95ComputedString: string;
+        let ppComputed: any;
         let ppissue: string;
         try {
-            let ppComputed = await pp.compute();
-            let pp95Computed = await pp95.compute();
-
-            ppComputedString = `${ppComputed.total.toFixed(2)}pp`;
-            pp95ComputedString = `${pp95Computed.total.toFixed(2)}pp`;
+            ppComputed = await osugame.mapcalc(mapmods, mapdata.mode, mapdata.id, 0)
             ppissue = '';
-            fs.writeFileSync('./debugosu/link-map=pp_calc.json', JSON.stringify(ppComputed, null, 2))
-            fs.writeFileSync('./debugosu/link-map=pp_calc_95.json', JSON.stringify(pp95Computed, null, 2))
-            /*                 if (detailed == true) {
-                                ppComputedString += ` \naim: ${ppComputed.aim.toFixed(2)}pp, \nspeed: ${ppComputed.speed.toFixed(2)}pp, \nacc: ${ppComputed.acc.toFixed(2)}pp\n`
-                                pp95ComputedString += ` \naim: ${pp95Computed.aim.toFixed(2)}pp, \nspeed: ${pp95Computed.speed.toFixed(2)}pp, \nacc: ${pp95Computed.acc.toFixed(2)}pp\n`
-                            } */
+            fs.writeFileSync(`./debugosu/command-map=pp_calc=${obj.guildId}.json`, JSON.stringify(ppComputed, null, 2))
 
         } catch (error) {
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Error - pp calculation failed
 ${error}
 ----------------------------------------------------`)
-            ppComputedString = 'NaN pp';
-            pp95ComputedString = 'NaN pp';
             ppissue = 'Error - pp could not be calculated';
             let tstmods = mapmods.toUpperCase();
 
@@ -604,9 +550,14 @@ node-fetch error: ${error}
                 {
                     name: 'PP',
                     value:
-                        `SS: ${ppComputedString} \n ` +
-                        `95: ${pp95ComputedString} \n ` +
-                        `${modissue}\n${ppissue}`,
+                            `SS: ${ppComputed[0].pp.toFixed(2)} \n ` +
+                            `99: ${ppComputed[1].pp.toFixed(2)} \n ` +
+                            `98: ${ppComputed[2].pp.toFixed(2)} \n ` +
+                            `97: ${ppComputed[3].pp.toFixed(2)} \n ` +
+                            `96: ${ppComputed[4].pp.toFixed(2)} \n ` +
+                            `95: ${ppComputed[5].pp.toFixed(2)} \n ` +
+                            `${modissue}\n${ppissue}` 
+                    ,
                     inline: true
                 },
                 {

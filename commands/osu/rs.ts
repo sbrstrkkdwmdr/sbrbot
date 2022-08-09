@@ -6,6 +6,8 @@ import emojis = require('../../configs/emojis');
 import osufunc = require('../../configs/osufunc');
 import cmdchecks = require('../../configs/commandchecks');
 import calc = require('../../configs/calculations');
+import osugame = require('../../configs/osugame');
+
 module.exports = {
     name: 'rs',
     description: 'template text\n' +
@@ -223,7 +225,7 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
-        fs.writeFileSync('debugosu/commands-rs=user.json', JSON.stringify(osudata, null, 2))
+        fs.writeFileSync(`debugosu/commands-rs=user=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
                 setTimeout(() => {
@@ -449,7 +451,7 @@ module.exports = {
                 },
                 body: iftherearemodsasint
             }).then(res => res.json() as any);
-            fs.writeFileSync('debugosu/command-rs=mapattr.json', JSON.stringify(mapattrdata, null, 2))
+            fs.writeFileSync(`debugosu/command-rs=mapattr=${obj.guildId}.json`, JSON.stringify(mapattrdata, null, 2))
             let totaldiff = '?'
             if (mapattrdata.error) {
                 totaldiff = curbm.difficulty_rating.toFixed(2);
@@ -459,81 +461,51 @@ module.exports = {
             if (totaldiff == '?') {
                 totaldiff = curbm.difficulty_rating.toFixed(2);
             }
-
-            const score = {
-                beatmap_id: rsdata[0 + page].beatmap.id,
-                score: '6795149',
-                maxcombo: '630',
-                count50: gamehits.count_50,
-                count100: gamehits.count_100,
-                count300: gamehits.count_300,
-                countmiss: '0',
-                countkatu: gamehits.count_katu,
-                countgeki: gamehits.count_geki,
-                perfect: '1',
-                enabled_mods: osumodcalc.ModStringToInt(curscore.mods.join('')),
-                user_id: osudata.id,
-                date: '2022-02-08 05:24:54',
-                rank: 'S',
-                score_id: '4057765057'
-            }
-            const scorenofc = {
-                beatmap_id: rsdata[0 + page].beatmap.id,
-                score: '6795149',
-                maxcombo: '630',
-                count50: gamehits.count_50,
-                count100: gamehits.count_100,
-                count300: gamehits.count_300,
-                countmiss: gamehits.count_miss,
-                countkatu: gamehits.count_katu,
-                countgeki: gamehits.count_geki,
-                perfect: '0',
-                enabled_mods: osumodcalc.ModStringToInt(curscore.mods.join('')),
-                user_id: osudata.id,
-                date: '2022-02-08 05:24:54',
-                rank: 'S',
-                score_id: '4057765057'
-            }
             let pp: any;
             let ppfc: any;
             let hitlist: any;
             switch (curscore.mode) {
                 case 'osu': default:
-                    pp = new ppcalc.std_ppv2().setPerformance(scorenofc)
-                    ppfc = new ppcalc.std_ppv2().setPerformance(score)
                     hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
                     break;
                 case 'taiko':
-                    pp = new ppcalc.taiko_ppv2().setPerformance(scorenofc)
-                    ppfc = new ppcalc.taiko_ppv2().setPerformance(score)
                     hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`
                     break;
                 case 'fruits':
-                    pp = new ppcalc.catch_ppv2().setPerformance(scorenofc)
-                    ppfc = new ppcalc.catch_ppv2().setPerformance(score)
                     hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
                     break;
                 case 'mania':
-                    pp = new ppcalc.mania_ppv2().setPerformance(scorenofc)
-                    ppfc = new ppcalc.mania_ppv2().setPerformance(score)
                     hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
                     break;
             }
             let rspp = 0;
             let ppissue: any = '';
             let ppiffc = NaN;
+            let ppcalcing
             try {
-                let ppc = await pp.compute();
-                let ppfcd = await ppfc.compute();
+                ppcalcing = await osugame.scorecalc(
+                    curscore.mods.join('').length > 1 ?
+                        curscore.mods.join('') : 'NM',
+                    curscore.mode,
+                    curscore.beatmap.id,
+                    gamehits.count_geki,
+                    gamehits.count_300,
+                    gamehits.count_katu,
+                    gamehits.count_100,
+                    gamehits.count_50,
+                    gamehits.count_miss,
+                    curscore.accuracy,
+                    curscore.max_combo,
+                    curscore.score,
+                    0
+                )
 
-                ppiffc = curscore.perfect == true ?
-                    '' :
-                    ppfcd.total.toFixed(2)
 
                 rspp =
                     curscore.pp ?
                         curscore.pp.toFixed(2) :
-                        ppc.total.toFixed(2)
+                        ppcalcing[0].pp.toFixed(2)
+                fs.writeFileSync(`debugosu/command-rs=ppcalc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2))
             } catch (error) {
                 rspp =
                     curscore.pp ?
@@ -543,10 +515,14 @@ module.exports = {
             }
             let fcflag = '**FC**'
             if (curscore.perfect) {
-
+            }
+            if (curscore.accuracy != 100) {
+                fcflag = `**${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
             }
             if (curscore.perfect == false) {
-                fcflag = `**${ppiffc}**p IF ${fcaccgr.accuracy.toFixed(2)}% FC`
+                fcflag =
+                    `**${ppcalcing[1].pp.toFixed(2)}**pp IF ${fcaccgr.accuracy.toFixed(2)}% FC
+                **${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
             }
             let title =
                 curbms.title == curbms.title_unicode ?

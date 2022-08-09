@@ -5,6 +5,8 @@ import fetch from 'node-fetch';
 import emojis = require('../../configs/emojis');
 import osufunc = require('../../configs/osufunc');
 import cmdchecks = require('../../configs/commandchecks');
+import osugame = require('../../configs/osugame');
+
 module.exports = {
     name: 'scores',
     description: 'template text\n' +
@@ -602,10 +604,46 @@ node-fetch error: ${error}
 
 
                 } else {
+                    let ppcalcing = await osugame.scorecalc(
+                        curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
+                        curscore.mode,
+                        mapdata.id,
+                        scorestats.count_geki,
+                        scorestats.count_300,
+                        scorestats.count_katu,
+                        scorestats.count_100,
+                        scorestats.count_50,
+                        scorestats.count_miss,
+                        curscore.accuracy,
+                        curscore.max_comb,
+                        curscore.score,
+                        0
+                    )
+                    let pptxt;
+                    if (curscore.accuracy.toFixed(2) != 100.00) {
+                        if (curscore.pp == null || curscore.pp == NaN) {
+                            pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
+                        } else {
+                            pptxt = `${curscore.pp.toFixed(2)}pp`
+                        }
+                        if (curscore.perfect == false) {
+                            pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`
+                        }
+                        pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`
+                    } else {
+                        if (curscore.pp == null || curscore.pp == NaN) {
+                            pptxt =
+                                `${await ppcalcing[0].pp.toFixed(2)}pp`
+                        } else {
+                            pptxt =
+                                `${curscore.pp.toFixed(2)}pp`
+                        }
+                    }
                     scoretxt +=
                         `**[Score #${i + 1 + page * 5}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}) ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') : ''}** <t:${new Date(curscore.created_at).getTime() / 1000}:R>
-                    ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${curscore.pp}pp
+                    ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
                     \`${hitlist}\` | ${curscore.max_combo}x/**${mapdata.max_combo}**
+                    ${pptxt}
                     `
                 }
             }

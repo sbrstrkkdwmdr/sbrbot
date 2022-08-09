@@ -6,6 +6,8 @@ import { access_token } from '../../configs/osuauth.json';
 import ppcalc = require('booba')
 import chartjsimg = require('chartjs-to-image');
 import cmdchecks = require('../../configs/commandchecks');
+import osugame = require('../../configs/osugame');
+
 
 module.exports = {
     name: 'replayparse',
@@ -174,8 +176,6 @@ Error: ${error}
             score_id: '4057765057'
         }
         let xpp: any;
-        let xppa: any;
-        let ppfc: any;
         let hitlist: any;
         let fcacc: any;
         let ppiffc: any;
@@ -183,42 +183,54 @@ Error: ${error}
 
         switch (gameMode) {
             case 0:
-                xppa = new ppcalc.std_ppv2().setPerformance(scorenofc)
-                ppfc = new ppcalc.std_ppv2().setPerformance(score)
+
                 hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
                 accuracy = osucalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, replay.misses).accuracy
                 fcacc = osucalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, 0).accuracy
                 break;
             case 1:
-                xppa = new ppcalc.taiko_ppv2().setPerformance(scorenofc)
-                ppfc = new ppcalc.taiko_ppv2().setPerformance(score)
+
                 hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.misses}`
                 accuracy = osucalc.calcgradeTaiko(replay.number_300s, replay.number_100s, replay.misses).accuracy
                 fcacc = osucalc.calcgradeTaiko(replay.number_300s, replay.number_100s, 0).accuracy
                 break;
             case 2:
-                xppa = new ppcalc.catch_ppv2().setPerformance(scorenofc)
-                ppfc = new ppcalc.catch_ppv2().setPerformance(score)
+
                 hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
                 accuracy = osucalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, replay.misses).accuracy
                 fcacc = osucalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, 0).accuracy
                 break;
             case 3:
-                xppa = new ppcalc.mania_ppv2().setPerformance(scorenofc)
-                ppfc = new ppcalc.mania_ppv2().setPerformance(score)
+
                 hitlist = `${replay.gekis}/${replay.number_300s}/${replay.katus}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
                 accuracy = osucalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, replay.misses).accuracy
                 fcacc = osucalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, 0).accuracy
                 break;
         }
         try {
-            let xppc = await xppa.compute();
-            let ppfc2 = await ppfc.compute()
-            xpp = xppc.total.toFixed(2)
-            ppiffc = ppfc2.total.toFixed(2)
+            xpp = await osugame.scorecalc(
+                osucalc.ModIntToString(replay.mods),
+                osucalc.ModeIntToName(replay.gameMode),
+                mapdata.id,
+                replay.gekis,
+                replay.number_300s,
+                replay.katus,
+                replay.number_100s,
+                replay.number_50s,
+                replay.misses,
+                accuracy,
+                replay.max_combo,
+                replay.score,
+                0
+            )
             ppissue = ''
         } catch (error) {
-            xpp = NaN
+            xpp = [{
+                pp: 0
+            },
+            {
+                pp: 0
+            }]
             ppiffc = NaN
             ppissue = 'Error - pp calculator could not fetch beatmap'
             fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
@@ -288,7 +300,7 @@ Error: ${error}
                 `[${fulltitle}](${mapdataid}) ${ifmods}
                     ${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapcombo}x** | ${accuracy.toFixed(2)}%
                     \`${hitlist}\`
-                    ${xpp}pp | ${ppiffc}pp if ${fcacc.toFixed(2)}% FC 
+                    ${xpp[0].pp.toFixed(2)}pp | ${xpp[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC 
                     ${ppissue}
                     `
             )

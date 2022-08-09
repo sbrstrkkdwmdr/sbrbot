@@ -3,8 +3,9 @@ import fetch from 'node-fetch';
 import ppcalc = require('booba')
 import osucalc = require('osumodcalculator')
 import { access_token } from '../../configs/osuauth.json';
-import emojis = require('../../configs/emojis')
-import cmdchecks = require('../../configs/commandchecks')
+import emojis = require('../../configs/emojis');
+import cmdchecks = require('../../configs/commandchecks');
+import osugame = require('../../configs/osugame');
 
 module.exports = {
     name: 'scoreparse',
@@ -150,25 +151,6 @@ Error: ${error}
                 modint = osucalc.ModStringToInt(scoredata.mods.join(''))
             }
 
-            let score = {
-                beatmap_id: scoredata.beatmap.id,
-                score: '6795149',
-                maxcombo: mapdata.max_combo,
-                count50: gamehits.count_50,
-                count100: gamehits.count_100,
-                count300: gamehits.count_300,
-                countmiss: '0',
-                countkatu: gamehits.count_katu,
-                countgeki: gamehits.count_geki,
-                perfect: '1',
-                enabled_mods: modint,
-                user_id: scoredata.user_id,
-                date: '2022-02-08 05:24:54',
-                rank: ranking,
-
-                score_id: '4057765057'
-            }
-
             let mode = scoredata.mode
             let ppfc: any;
             let hitlist: any;
@@ -176,40 +158,36 @@ Error: ${error}
             let ppiffc: any;
             let ppissue: any;
             if (mode == 'osu') {
-                ppfc = new ppcalc.std_ppv2().setPerformance(score)
                 hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
                 fcacc = osucalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy
             }
             if (mode == 'taiko') {
-                ppfc = new ppcalc.taiko_ppv2().setPerformance(score)
                 hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_miss}`
                 fcacc = osucalc.calcgradeTaiko(gamehits.count_300, gamehits.count_100, gamehits.count_miss).accuracy
 
             }
             if (mode == 'fruits') {
-                ppfc = new ppcalc.catch_ppv2().setPerformance(score)
                 hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
                 fcacc = osucalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_katu, gamehits.count_miss).accuracy
             }
             if (mode == 'mania') {
-                ppfc = new ppcalc.mania_ppv2().setPerformance(score)
                 hitlist = `${gamehits.count_geki}/${gamehits.count_300}/${gamehits.count_katu}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
                 fcacc = osucalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy
             }
+            let ppcalcing;
             try {
-                let ppfc2 = await ppfc.compute()
-                ppiffc = ppfc2.total.toFixed(2)
+                ppcalcing = await osugame.scorecalc(scoredata.mods.join('').length > 1 ? scoredata.mods.join('') : 'NM', scoredata.mode, scoredata.beatmap.id, gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss, scoredata.accuracy, scoredata.max_combo, scoredata.score, 0)
                 ppissue = ''
+                fs.writeFileSync(`debugosu/link-scoreparse=ppcalc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2));
             } catch (error) {
-                ppiffc = NaN
+                ppcalcing = [{
+                    pp: 0.000
+                }, {
+                    pp: 0.000
+                }]
                 ppissue = 'Error - pp calculator could not fetch beatmap'
                 fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
 
-            }
-
-            let scorepp = scoredata.pp
-            if (isNaN(scorepp)) {
-                scorepp = 'N/A'
             }
 
             let artist = scoredata.beatmapset.artist
@@ -236,7 +214,7 @@ Error: ${error}
 
                         \`${hitlist}\`
                         ${scoredata.max_combo}x
-                        ${scorepp}pp | ${ppiffc}pp if ${fcacc.toFixed(2)}% FC\n${ppissue}
+                        ${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC\n${ppissue}
                         `)
             message.reply({ embeds: [scoreembed], allowedMentions: { repliedUser: false } })
             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));

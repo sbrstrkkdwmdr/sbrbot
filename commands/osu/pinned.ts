@@ -5,6 +5,8 @@ import fetch from 'node-fetch';
 import emojis = require('../../configs/emojis');
 import osufunc = require('../../configs/osufunc');
 import cmdchecks = require('../../configs/commandchecks');
+import osugame = require('../../configs/osugame');
+
 module.exports = {
     name: 'pinned',
     description: 'template text\n' +
@@ -398,6 +400,42 @@ ${mode}`
                         `${curscore.beatmapset.artist} (${curscore.beatmapset.artist_unicode})`
                 let fulltitle = `${artist} - ${title} [${curscore.beatmap.version}]`
 
+                let pptxt: any;
+                let ppcalcing = await osugame.scorecalc(
+                    curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
+                    curscore.mode,
+                    curscore.beatmap.id,
+                    hitstats.count_geki,
+                    hitstats.count_300,
+                    hitstats.count_katu,
+                    hitstats.count_100,
+                    hitstats.count_50,
+                    hitstats.count_miss,
+                    curscore.accuracy,
+                    curscore.max_comb,
+                    curscore.score,
+                    0
+                )
+                if (curscore.accuracy.toFixed(2) != 100.00) {
+                    if (curscore.pp == null || curscore.pp == NaN) {
+                        pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
+                    } else {
+                        pptxt = `${curscore.pp.toFixed(2)}pp`
+                    }
+                    if (curscore.perfect == false) {
+                        pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`
+                    }
+                    pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`
+                } else {
+                    if (curscore.pp == null || curscore.pp == NaN) {
+                        pptxt =
+                            `${await ppcalcing[0].pp.toFixed(2)}pp`
+                    } else {
+                        pptxt =
+                            `${curscore.pp.toFixed(2)}pp`
+                    }
+                }
+                fs.writeFileSync(`debugosu/command-pinned=ppcalc=${obj.guildId}`, JSON.stringify(ppcalcing, null, 2))
 
                 pinnedEmbed.addFields([
                     {
@@ -406,7 +444,7 @@ ${mode}`
                         [${fulltitle}](https://osu.ppy.sh/b/${curscore.beatmap.id})
                         ${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
                         \`${hitlist}\`
-                        ${curscore.pp}pp
+                        ${pptxt}
                         `,
                         inline: false
                     }
