@@ -156,7 +156,7 @@ module.exports = {
                     page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1
                 } else if (button == 'RightArrow') {
                     page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1
-                } else if (button == 'BigRightArrow'){
+                } else if (button == 'BigRightArrow') {
                     page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))
                 }
                 list = true
@@ -593,6 +593,8 @@ module.exports = {
                         inline: true
                     }
                 ])
+
+            fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: curbm.id }), null, 2));
         } else if (list == true) {
             rsEmbed
                 .setColor(0x9AAAC0)
