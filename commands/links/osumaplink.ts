@@ -247,7 +247,7 @@ node-fetch error: ${error}
                 fs.writeFileSync(`debugosu/link-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2))
                 try {
                     mapid = bmsdata.beatmaps[0].id;
-                } catch(error) {
+                } catch (error) {
                     obj.reply({
                         content: 'Error - invalid mapset link',
                         allowedMentions: { repliedUser: false },
@@ -370,55 +370,9 @@ Error - authentication
                 break;
         }
         fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapid }), null, 2));
-        let iftherearemodsasint = JSON.stringify({
-            "ruleset": mapdata.mode
-        });
-        if (mapmods != 'NM') {
-            iftherearemodsasint =
-                JSON.stringify({
-                    "ruleset": mapdata.mode,
-                    "mods": osumodcalc.ModStringToInt(mapmods)
-                })
-        }
-        let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/attributes`;
-        let mapattrdata = await fetch(beatattrurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-                    } catch (err) {
 
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                }
-                fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            });
-        fs.writeFileSync(`debugosu/link-map=mapattrdata=${obj.guildId}.json`, JSON.stringify(mapattrdata, null, 2))
         let totaldiff;
-        if (mapattrdata.attributes == null || mapattrdata.attributes == undefined || mapattrdata.attributes.star_rating == NaN) {
-            totaldiff = mapdata.difficulty_rating;
-        } else {
-            totaldiff = mapattrdata.attributes.star_rating.toFixed(2);
-        }
+
         let allvals = osumodcalc.calcValues(
             mapdata.cs,
             mapdata.ar,
@@ -452,6 +406,7 @@ node-fetch error: ${error}
         try {
             ppComputed = await osugame.mapcalc(mapmods, mapdata.mode, mapdata.id, 0)
             ppissue = '';
+            totaldiff = ppComputed[0].stars.toFixed(2)
             fs.writeFileSync(`./debugosu/command-map=pp_calc=${obj.guildId}.json`, JSON.stringify(ppComputed, null, 2))
 
         } catch (error) {
@@ -526,6 +481,10 @@ node-fetch error: ${error}
             });
         fs.writeFileSync(`./debugosu/link-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
 
+        let strains = await osugame.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
+        let mapgraph = await osugame.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
+
+
         let Embed = new Discord.EmbedBuilder()
             .setColor(0x91ff9a)
             .setTitle(maptitle)
@@ -536,6 +495,7 @@ node-fetch error: ${error}
                 iconURL: `https://a.ppy.sh/${mapperdata.id}`,
             })
             .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`)
+            .setImage(`${mapgraph}`)
             .addFields([
                 {
                     name: 'MAP DETAILS',
@@ -550,13 +510,13 @@ node-fetch error: ${error}
                 {
                     name: 'PP',
                     value:
-                            `SS: ${ppComputed[0].pp.toFixed(2)} \n ` +
-                            `99: ${ppComputed[1].pp.toFixed(2)} \n ` +
-                            `98: ${ppComputed[2].pp.toFixed(2)} \n ` +
-                            `97: ${ppComputed[3].pp.toFixed(2)} \n ` +
-                            `96: ${ppComputed[4].pp.toFixed(2)} \n ` +
-                            `95: ${ppComputed[5].pp.toFixed(2)} \n ` +
-                            `${modissue}\n${ppissue}` 
+                        `SS: ${ppComputed[0].pp.toFixed(2)} \n ` +
+                        `99: ${ppComputed[1].pp.toFixed(2)} \n ` +
+                        `98: ${ppComputed[2].pp.toFixed(2)} \n ` +
+                        `97: ${ppComputed[3].pp.toFixed(2)} \n ` +
+                        `96: ${ppComputed[4].pp.toFixed(2)} \n ` +
+                        `95: ${ppComputed[5].pp.toFixed(2)} \n ` +
+                        `${modissue}\n${ppissue}`
                     ,
                     inline: true
                 },
