@@ -605,9 +605,17 @@ ${error}
 
                     ppflag += `${ppcalcing[2].pp.toFixed(2)}pp if SS`
                 } */
+                let ifnopp = '';
+                let trueppindex = osutopdata.sort((a, b) => { b.pp - a.pp }).indexOf(curscore) // WHY DOES THIS NOT WORK PROPERLY WTF
+
+                if (sort == 'pp') {
+                }
+                else {
+                    ifnopp = `(#${trueppindex + 1})`
+                }
 
                 topEmbed.addFields([{
-                    name: `#${scorenum}`,
+                    name: `#${scorenum} ${ifnopp}`,
                     value: `
                     [**${curscore.beatmapset.title} [${curscore.beatmap.version}]**](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}
                     **Score set ** <t:${new Date(curscore.created_at).getTime() / 1000}:R>
