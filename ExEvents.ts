@@ -33,6 +33,33 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         }
     }, 1 * 60 * 1000);
 
+    //clear maps folder
+    try {
+        fs.readdirSync('files/maps').forEach(file => {
+            fs.unlinkSync('files/maps/' + file)
+        }
+        )
+        fs.appendFileSync('logs/updates.log', '\nmaps folder cleared at ' + new Date().toLocaleString() + '\n')
+    } catch (error) {
+        fs.appendFileSync('logs/updates.log', '\n' + new Date().toLocaleString() + '\n' + error + '\n')
+    }
+
+    setInterval(() => {
+        try {
+            fs.readdirSync('files/maps').forEach(file => {
+                fs.unlinkSync('files/maps/' + file)
+            }
+            )
+            fs.appendFileSync('logs/updates.log', '\nmaps folder cleared at ' + new Date().toLocaleString() + '\n')
+        } catch (error) {
+            fs.appendFileSync('logs/updates.log', '\n' + new Date().toLocaleString() + '\n' + error + '\n')
+        }
+    }
+        , 60 * 60 * 1000);
+
+
+
+    //status updates
     let songsarr = [
         "Yomi Yori kikoyu, Koukoku no hi to Honoo no Shoujo [Kurushimi]",
         "FREEDOM DiVE [FOUR DiMENSIONS]",
