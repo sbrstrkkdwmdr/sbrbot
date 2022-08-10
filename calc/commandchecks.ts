@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import fetch from 'node-fetch';
-const config = require('./config.json')
+const config = require('../configs/config.json')
 import { access_token } from '../configs/osuauth.json';
 
 /**
