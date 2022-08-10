@@ -645,6 +645,7 @@ node-fetch error: ${error}
                     \`${hitlist}\` | ${curscore.max_combo}x/**${mapdata.max_combo}**
                     ${pptxt}
                     `
+                    fs.writeFileSync(`debugosu/command-scores=pp_calc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2))
                 }
             }
             scoresEmbed.setDescription(scoretxt)

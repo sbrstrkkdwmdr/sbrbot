@@ -433,7 +433,7 @@ module.exports = {
                     rsgrade = emojis.grades.XH
                     break;
             }
-            let totaldiff:any;
+            let totaldiff: any;
             let pp: any;
             let ppfc: any;
             let hitlist: any;
@@ -479,7 +479,7 @@ module.exports = {
                     curscore.pp ?
                         curscore.pp.toFixed(2) :
                         ppcalcing[0].pp.toFixed(2)
-                fs.writeFileSync(`debugosu/command-rs=ppcalc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2))
+                fs.writeFileSync(`debugosu/command-rs=pp_calc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2))
             } catch (error) {
                 rspp =
                     curscore.pp ?
