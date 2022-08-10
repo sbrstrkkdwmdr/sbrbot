@@ -101,13 +101,14 @@ async function mapcalc(
  */
 async function scorecalc(
     mods: string, gamemode: string, mapid: number,
-    hitgeki: number, hit300: number, hitkatu: number, hit100: number, hit50: number, miss: number,
-    acc: number, maxcombo: number, score: number,
+    hitgeki: number | null, hit300: number | null, hitkatu: number | null, hit100: number | null, hit50: number | null, miss: number | null,
+    acc: number | null, maxcombo: number | null, score: number | null,
     calctype: number | null
 ) {
     let ppl;
     let scorenofc;
     let scorefc;
+
     let calctyper = osumodcalc.ModeNameToInt(gamemode)
     switch (calctype) {
         case 0: default:
@@ -120,6 +121,22 @@ async function scorecalc(
             }
 
 
+            let newacc = osumodcalc.calcgrade(hit300, hit100, hit50, miss).accuracy;
+            switch (gamemode) {
+                case 'osu':
+                    break;
+                case 'taiko':
+                    newacc = osumodcalc.calcgradeTaiko(hit300, hit100, miss).accuracy;
+                    break;
+                case 'fruits':
+                    newacc = osumodcalc.calcgradeCatch(hit300, hit100, hit50, miss, hitkatu).accuracy;
+                    break;
+                case 'mania':
+                    newacc = osumodcalc.calcgradeMania(hitgeki, hit300, hit100, hit50, miss, hitkatu).accuracy;
+                    break;
+            }
+
+
             scorenofc = {
                 path: `files/maps/${mapid}.osu`,
                 params: [
@@ -127,23 +144,18 @@ async function scorecalc(
                         mode: gamemode,
                         mods: osumodcalc.ModStringToInt(mods),
                         combo: maxcombo,
-                        acc: acc,
-                        n300: hit300,
-                        n100: hit100,
-                        n50: hit50,
-                        nMisses: miss,
-                        nKatu: hitkatu,
-                        score: score,
-
+                        acc: acc || 100,
+                        n300: hit300 != null || hit300 != NaN ? hit300 : 0,
+                        n100: hit100 != null || hit100 != NaN ? hit100 : 0,
+                        n50: hit50 != null || hit50 != NaN ? hit50 : 0,
+                        nMisses: miss != null || miss != NaN ? miss : 0,
+                        nKatu: hitkatu != null || hitkatu != NaN ? hitkatu : 0,
+                        score: score != null || score != NaN ? score : 0,
                     },
                     {
                         mode: gamemode,
                         mods: osumodcalc.ModStringToInt(mods),
-                        acc: acc,
-                        n300: hit300,
-                        n100: hit100,
-                        n50: hit50,
-                        nKatu: hitkatu,
+                        acc: newacc,
                     },
                     {
                         mode: gamemode,
