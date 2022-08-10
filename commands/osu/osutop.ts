@@ -5,6 +5,7 @@ import fetch from 'node-fetch';
 import emojis = require('../../configs/emojis');
 import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
+import osugame = require('../../calc/osugame');
 module.exports = {
     name: 'osutop',
     description: 'template text\n' +
@@ -511,21 +512,20 @@ ${error}
 
                 let scoreoffset = page * 5 + i
 
-                let tstscore = osutopdata[scoreoffset]
-                if (!tstscore) {
+                let curscore = osutopdata[scoreoffset]
+                if (!curscore) {
                     break;
                 }
+                let score = curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                let hitgeki = curscore.statistics.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                let hit300 = curscore.statistics.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                let hitkatu = curscore.statistics.count_katu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                let hit100 = curscore.statistics.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                let hit50 = curscore.statistics.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                let miss = curscore.statistics.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                let combo = curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-                let score = osutopdata[scoreoffset].score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let hitgeki = osutopdata[scoreoffset].statistics.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let hit300 = osutopdata[scoreoffset].statistics.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let hitkatu = osutopdata[scoreoffset].statistics.count_katu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let hit100 = osutopdata[scoreoffset].statistics.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let hit50 = osutopdata[scoreoffset].statistics.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let miss = osutopdata[scoreoffset].statistics.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let combo = osutopdata[scoreoffset].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-                let ranking = osutopdata[scoreoffset].rank.toUpperCase()
+                let ranking = curscore.rank.toUpperCase()
                 let grade: any;
                 switch (ranking) {
                     case 'F':
@@ -571,7 +571,7 @@ ${error}
                 if (mode == 'mania') {
                     hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
                 }
-                let topmods = osutopdata[scoreoffset].mods
+                let topmods = curscore.mods
                 let ifmods: any;
 
                 if (!topmods || topmods == '' || topmods == 'undefined' || topmods == null || topmods == undefined) {
@@ -586,14 +586,35 @@ ${error}
                     scorenum = scoreoffset + 1
                 }
 
+                let ppflag = ''
+
+                /* if(parseFloat(curscore.accuracy) != 1){
+                    let ppcalcing = await osugame.scorecalc(
+                        curscore.mods.join('').length > 1 ? curscore.mods.join('') : 'NM', 
+                        mode, 
+                        curscore.beatmap.id,
+                        hitgeki, hit300, hitkatu, hit100, hit50, miss,
+                        curscore.accuracy * 100, 
+                        curscore.max_combo,
+                        curscore.score,
+                        0
+                        )    
+                    if(curscore.perfect == false){
+                        ppflag += `${ppcalcing[1].pp.toFixed(2)}pp if FC\n` 
+                    }
+
+                    ppflag += `${ppcalcing[2].pp.toFixed(2)}pp if SS`
+                } */
+
                 topEmbed.addFields([{
                     name: `#${scorenum}`,
                     value: `
-                    [**${osutopdata[scoreoffset].beatmapset.title} [${osutopdata[scoreoffset].beatmap.version}]**](https://osu.ppy.sh/b/${osutopdata[scoreoffset].beatmap.id}) ${ifmods}
-                    **Score set ** <t:${new Date(osutopdata[scoreoffset].created_at).getTime() / 1000}:R>
-                    **SCORE:** ${score} | x${combo} | ${Math.abs(osutopdata[scoreoffset].accuracy * 100).toFixed(2)}% | ${grade}
-                    \`${hitlist}\`
-                    ${(osutopdata[scoreoffset].pp).toFixed(2)}pp | ${(osutopdata[scoreoffset].weight.pp).toFixed(2)}pp (Weighted at **${(osutopdata[scoreoffset].weight.percentage).toFixed(2)}%**)
+                    [**${curscore.beatmapset.title} [${curscore.beatmap.version}]**](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}
+                    **Score set ** <t:${new Date(curscore.created_at).getTime() / 1000}:R>
+                    **SCORE:** ${score} | x${combo} | ${Math.abs(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+                    \`${hitlist}\` | ${(curscore.pp).toFixed(2)}pp 
+                    ${(curscore.weight.pp).toFixed(2)}pp (Weighted at **${(curscore.weight.percentage).toFixed(2)}%**)
+                    ${ppflag}
                     `,
                     inline: false
                 }])
