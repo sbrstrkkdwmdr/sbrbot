@@ -21,14 +21,12 @@ twitch/yt notifications</br>
 support for other servers like gatari, ez-pp farm etc.</br>
 
 ### Things
-Performance calculation: [rosu-pp](https://github.com/MaxOhn/rosu-pp-js)</br>
+Performance calculation [rosu](https://github.com/MaxOhn/rosu-pp)</br>
 Performance calculation (old): [booba](https://www.npmjs.com/package/booba)</br>
-Tools: [osu-api-extended](https://github.com/cyperdark/osu-api-extended)
+Tools: [osu-api-extended](https://github.com/cyperdark/osu-api-extended)</br>
 Difficulty calculation: [osumodcalc](https://www.npmjs.com/package/osumodcalculator)</br>
 Database: [Sequelize](https://www.npmjs.com/package/sequelize)</br>
 Server: </br>
-
-### Issues
 
 
 ## setup

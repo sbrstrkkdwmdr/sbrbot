@@ -3,10 +3,10 @@ import osumodcalc = require('osumodcalculator');
 import ppcalc = require('booba');
 import fetch from 'node-fetch';
 import emojis = require('../../configs/emojis');
-import osufunc = require('../../configs/osufunc');
-import cmdchecks = require('../../configs/commandchecks');
-import calc = require('../../configs/calculations');
-import osugame = require('../../configs/osugame');
+import osufunc = require('../../calc/osufunc');
+import cmdchecks = require('../../calc/commandchecks');
+import calc = require('../../calc/calculations');
+import osugame = require('../../calc/osugame');
 
 module.exports = {
     name: 'map',

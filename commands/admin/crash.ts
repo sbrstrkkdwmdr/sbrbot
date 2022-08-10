@@ -1,4 +1,4 @@
-import commandchecks = require('../../configs/commandchecks');
+import commandchecks = require('../../calc/commandchecks');
 import fs = require('fs')
 module.exports = {
     name: 'crash',

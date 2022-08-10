@@ -1,5 +1,5 @@
 import fs = require('fs')
-import commandchecks = require('../../configs/commandchecks')
+import commandchecks = require('../../calc/commandchecks')
 module.exports = {
     name: 'voice',
     description: 'changes voice state settings for a user',

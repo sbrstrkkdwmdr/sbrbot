@@ -3,6 +3,7 @@ import booba = require('booba');
 import osumodcalc = require('osumodcalculator');
 import osuapiext = require('osu-api-extended');
 import fs = require('fs');
+import charttoimg = require('chartjs-to-image');
 
 /**
  * 
@@ -235,4 +236,138 @@ async function scorecalc(
 
 }
 
-export { mapcalc, scorecalc } 
+/**
+ * 
+ * @param mapid 
+ * @param mods 
+ * @param calctype 
+ * @param mode 
+ * @returns the strains of a beatmap. times given in milliseconds
+ */
+async function straincalc(mapid: number, mods: string, calctype: number, mode: string) {
+    let strains: any;
+    switch (calctype) {
+        case 0: default:
+            switch (mode) {
+                case 'osu':
+                    let strains1 = await rosu.strains(`files/maps/${mapid}.osu`, osumodcalc.ModStringToInt(mods))
+                    let aimval = strains1.aim;
+                    let aimnoslideval = strains1.aimNoSliders;
+                    let speedval = strains1.speed;
+                    let flashlightval = strains1.flashlight;
+                    let straintimes = [];
+                    let totalval = [];
+
+                    for (let i = 0; i < aimval.length; i++) {
+                        let curval = aimval[i] + aimnoslideval[i] + speedval[i] + flashlightval[i] != NaN ? flashlightval[i] : 0
+                        totalval.push(curval)
+                        straintimes.push((strains1.sectionLength / 1000) * (i + 1))
+                    }
+                    strains = {
+                        strainTime: straintimes,
+                        value: totalval,
+                    }
+
+
+                    break;
+            }
+
+
+
+            break;
+    }
+    return strains;
+
+}
+
+/**
+ * 
+ * @param x 
+ * @param y 
+ * @param label name of graph
+ * @param startzero whether or not graph starts at zero
+ * @param reverse y-value goes up or down (useful for rank graphs)
+ * @param showlabelx show names of x axes
+ * @param showlabely show names of y axes
+ * @param fill fill under the line
+ * @param settingsoverride override the given settings
+ * @returns graph url
+ */
+async function graph(x: number[] | string[], y: number[], label: string, startzero: boolean | null, reverse: boolean | null, showlabelx: boolean | null, showlabely: boolean | null, fill: boolean | null, settingsoverride: string | null) {
+
+    if (startzero == null) {
+        startzero = true
+    }
+    if (reverse == null) {
+        reverse = false
+    }
+    if (showlabelx == null) {
+        showlabelx = false
+    }
+    if (showlabely == null) {
+        showlabely = false
+    }
+    if (fill == null) {
+        fill = false
+    }
+    switch (settingsoverride) {
+        case 'replay':
+            showlabely = true
+            break;
+        case 'rank':
+            reverse = true
+            startzero = false
+            showlabely = true
+            break;
+        case 'strains':
+            fill = true
+            showlabely = true
+            showlabelx = true
+            break;
+        default:
+            break;
+    }
+
+    const chart = new charttoimg()
+        .setConfig({
+            type: 'line',
+            data: {
+                labels: x,
+                datasets: [{
+                    label: label,
+                    data: y,
+                    fill: fill,
+                    borderColor: 'rgb(75, 192, 192)',
+                    borderWidth: 1,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            display: showlabelx
+                        }
+                    ],
+                    yAxes: [
+                        {
+                            display: showlabely,
+                            type: 'linear',
+                            ticks: {
+                                reverse: reverse,
+                                beginAtZero: startzero
+                            },
+                        }
+                    ]
+                }
+            }
+        })
+    chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250)
+
+    return await chart.getShortUrl();
+
+}
+export { mapcalc, scorecalc, straincalc, graph } 

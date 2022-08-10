@@ -1,7 +1,7 @@
 import fs = require('fs')
 import fetch from 'node-fetch'
 import yts = require('yt-search')
-import cmdchecks = require('../../configs/commandchecks')
+import cmdchecks = require('../../calc/commandchecks')
 
 module.exports = {
     name: 'ytsearch',
