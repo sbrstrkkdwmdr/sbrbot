@@ -128,7 +128,7 @@ Error: ${error}
             fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nCommand Latency (osuuserlink) - ${timeelapsed}ms\nID:${absoluteID}\n`)
 
         } catch (error) {
-            message.reply({ content: 'no osu! profile found\nNo user found with the name `' + user + '`', allowedMentions: { repliedUser: false } })
+            message.reply({ content: 'no osu! profile found\nNo user found with the name/id `' + user + '`', allowedMentions: { repliedUser: false } })
         }
 
 
