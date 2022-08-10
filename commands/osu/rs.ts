@@ -433,34 +433,7 @@ module.exports = {
                     rsgrade = emojis.grades.XH
                     break;
             }
-            let iftherearemodsasint = JSON.stringify({
-                "ruleset": mode
-            });
-            if (curscore.mods.join('') != 'NM' && curscore.mods.join('').length > 1) {
-                iftherearemodsasint =
-                    JSON.stringify({
-                        "ruleset": mode,
-                        "mods": osumodcalc.ModStringToInt(curscore.mods.join(''))
-                    })
-            }
-            let beatattrurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(curbm.id)}/attributes`;
-            const mapattrdata = await fetch(beatattrurl, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                },
-                body: iftherearemodsasint
-            }).then(res => res.json() as any);
-            fs.writeFileSync(`debugosu/command-rs=mapattr=${obj.guildId}.json`, JSON.stringify(mapattrdata, null, 2))
-            let totaldiff = '?'
-            if (mapattrdata.error) {
-                totaldiff = curbm.difficulty_rating.toFixed(2);
-            } else if (mapattrdata.attributes) {
-                totaldiff = mapattrdata.attributes.star_rating.toFixed(2);
-            }
-            if (totaldiff == '?') {
-                totaldiff = curbm.difficulty_rating.toFixed(2);
-            }
+            let totaldiff:any;
             let pp: any;
             let ppfc: any;
             let hitlist: any;
@@ -499,6 +472,7 @@ module.exports = {
                     curscore.score,
                     0
                 )
+                totaldiff = ppcalcing[0].stars.toFixed(2)
 
 
                 rspp =
