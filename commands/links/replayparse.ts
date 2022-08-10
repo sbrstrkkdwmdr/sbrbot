@@ -291,6 +291,7 @@ Error: ${error}
             })
         chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250)
         await chart.toFile('./debugosu/replaygraph.jpg')
+        let graphul = await osugame.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay')
         let Embed = new Discord.EmbedBuilder()
             .setColor('#0099ff')
             .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
@@ -304,7 +305,7 @@ Error: ${error}
                     ${ppissue}
                     `
             )
-            .setImage(`${await chart.getShortUrl()}`);
+            .setImage(`${await graphul}`);
 
         message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
         let endofcommand = new Date().getTime();

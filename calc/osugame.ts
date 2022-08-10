@@ -293,7 +293,7 @@ async function straincalc(mapid: number, mods: string, calctype: number, mode: s
  * @param settingsoverride override the given settings
  * @returns graph url
  */
-async function graph(x: number[], y: number[], label: string, startzero: boolean | null, reverse: boolean | null, showlabelx: boolean | null, showlabely: boolean | null, fill: boolean | null, settingsoverride: string | null) {
+async function graph(x: number[] | string[], y: number[], label: string, startzero: boolean | null, reverse: boolean | null, showlabelx: boolean | null, showlabely: boolean | null, fill: boolean | null, settingsoverride: string | null) {
 
     if (startzero == null) {
         startzero = true
@@ -370,5 +370,4 @@ async function graph(x: number[], y: number[], label: string, startzero: boolean
     return await chart.getShortUrl();
 
 }
-
 export { mapcalc, scorecalc, straincalc, graph } 
