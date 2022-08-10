@@ -250,7 +250,7 @@ async function straincalc(mapid: number, mods: string, calctype: number, mode: s
         case 0: default:
             switch (mode) {
                 case 'osu':
-                    let strains1 = await rosu.strains(`files/maps/${mapid}.osu`, osumodcalc.ModStringToInt(mods))
+                    let strains1 = JSON.parse(JSON.stringify(await rosu.strains(`files/maps/${mapid}.osu`, osumodcalc.ModStringToInt(mods)), null, 2));
                     let aimval = strains1.aim;
                     let aimnoslideval = strains1.aimNoSliders;
                     let speedval = strains1.speed;
@@ -258,16 +258,17 @@ async function straincalc(mapid: number, mods: string, calctype: number, mode: s
                     let straintimes = [];
                     let totalval = [];
 
-                    for (let i = 0; i < aimval.length; i++) {
-                        let curval = aimval[i] + aimnoslideval[i] + speedval[i] + flashlightval[i] != NaN ? flashlightval[i] : 0
+                    let div = aimval.length / 200;
+                    for (let i = 0; i < 200; i++) {
+                        let offset = Math.ceil(i * div);
+                        let curval = aimval[offset] + aimnoslideval[offset] + speedval[offset] + flashlightval[offset];
                         totalval.push(curval)
-                        straintimes.push((strains1.sectionLength / 1000) * (i + 1))
+                        straintimes.push(((strains1.section_length / 1000) * (i + 1)).toFixed(3));
                     }
                     strains = {
                         strainTime: straintimes,
                         value: totalval,
                     }
-
 
                     break;
             }
@@ -321,8 +322,8 @@ async function graph(x: number[] | string[], y: number[], label: string, startze
             break;
         case 'strains':
             fill = true
-            showlabely = true
-            showlabelx = true
+            showlabely = false
+            showlabelx = false
             break;
         default:
             break;
