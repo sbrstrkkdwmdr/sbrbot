@@ -116,7 +116,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'skin':
                 client.osucmds.get('skin').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
-            case 'simplay':
+            case 'simplay':case 'simulate':
                 client.osucmds.get('simplay').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
 

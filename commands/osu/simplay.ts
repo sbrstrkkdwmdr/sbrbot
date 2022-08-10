@@ -1,6 +1,9 @@
 import fs = require('fs');
 import osuapiext = require('osu-api-extended');
 import osumodcalc = require('osumodcalculator');
+import osugame = require('../../calc/osugame');
+import fetch from 'node-fetch';
+import cmdchecks = require('../../calc/commandchecks');
 
 module.exports = {
     name: 'simplay',
@@ -9,7 +12,8 @@ module.exports = {
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-
+        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        let access_token = JSON.parse(accessN).access_token;
 
         if (message != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
@@ -37,15 +41,78 @@ module.exports = {
                 }
                 mapid = prevmap.id;
             }
-            let mods = x.includes('+') ? osumodcalc.ModStringToInt(x.split('+')[1].split(' ')[0]) : 0;
-            let miss = x.includes('miss') ? x.split('miss=')[1].split(' ')[0] : 0;
-            let acc = x.includes('acc') ? x.split('acc=')[1].split(' ')[0] : 100.00;
-            let combo = x.includes('combo') ? x.split('combo=')[1].split(' ')[0] : NaN;
-            let simplay = await osuapiext.tools.pp.calculate(mapid, mods, combo, miss, acc);
-            fs.writeFileSync('./debugosu/command-simulate.json', JSON.stringify(simplay, null, 2));
+            let mods: any = 'NM';
+            let miss: any = 0;
+            let combo: any = 'e';
+            let acc: any = 100.00;
 
             try {
-                let test = simplay.data.artist
+                mods = x.includes('+') ? x.split('+')[1].split(' ')[0] : 'NM';
+            } catch { }
+            try {
+                miss = x.includes('miss') ? x.split('miss=')[1].split(' ')[0] : 0;
+            } catch { }
+            try {
+                acc = x.includes('acc') ? x.split('acc=')[1].split(' ')[0] : 100.00;
+            } catch { }
+            try {
+                combo = x.includes('combo') ? x.split('combo=')[1].split(' ')[0] : 'e';
+            } catch { }
+            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}?`
+            const mapdata = await fetch(mapurl, {
+                headers: {
+                    'Authorization': `Bearer ${access_token}`
+                }
+            })
+                .then(res => res.json() as any)
+                .catch(error => {
+                    if (button == null) {
+                        try {
+                            message.edit({
+                                content: 'Error',
+                                allowedMentions: { repliedUser: false },
+                            })
+                        } catch (err) {
+
+                        }
+                    } else {
+                        obj.reply({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                    return;
+                });
+
+            if (combo == 'e') {
+                combo = mapdata.max_combo;
+            }
+            if (isNaN(parseFloat(miss))) {
+                miss = 0;
+            }
+            if (isNaN(parseFloat(acc))) {
+                acc = 100.00;
+            }
+            if (isNaN(parseFloat(combo))) {
+                combo = mapdata.max_combo;
+            }
+
+
+            let simplay = await osugame.scorecalc(mods, 'osu', mapid, null, null, null, null, null, parseFloat(miss), parseFloat(acc), parseFloat(combo), null, 0);
+            let mapcalc = await osugame.mapcalc(mods, 'osu', mapid, 0);
+
+            fs.writeFileSync(`./debugosu/command-simulate=playcalc=${obj.guildId}.json`, JSON.stringify(simplay, null, 2));
+
+            try {
+                let test = simplay[0].pp
             } catch (error) {
                 embed
                     .setTitle('There was an error calculating your play')
@@ -59,29 +126,29 @@ module.exports = {
             }
 
             embed
-                .setTitle(`Simulated play on ${simplay.data.artist} [${simplay.data.diff}]`)
+                .setTitle(`Simulated play on ${mapdata.beatmapset.title} [${mapdata.version}]`)
                 .setURL(`https://osu.ppy.sh/b/${mapid}`)
+                .setThumbnail(`https://assets.ppy.sh/beatmaps/${mapdata.beatmapset.id}/covers/list@2x.jpg`)
                 .addFields([ //error
                     {
                         name: 'Map Details',
                         value: `
-                ${parseFloat(acc).toFixed(2)}% | ${miss}x miss | ${combo}x/**${simplay.stats.combo}x** 
-                ${osumodcalc.ModIntToString(mods)} | ${simplay.stats.star.pure}⭐
-                CS${simplay.stats.cs} AR${simplay.stats.ar} HP${simplay.stats.hp} OD${simplay.stats.od}
+                ${parseFloat(acc).toFixed(2)}% | ${miss}x miss | ${combo}x/**${simplay[0].maxCombo}x** 
+                ${mods} | ${simplay[0].stars.toFixed(2)}⭐
+                CS${simplay[0].cs.toFixed(2)} AR${simplay[0].ar.toFixed(2)} HP${simplay[0].hp.toFixed(2)} OD${simplay[0].od.toFixed(2)}
                 `, inline: true
                     },
                     {
                         name: 'Performance',
                         value:
                             `
-\`Current: ${simplay.pp.current}pp | FC: ${simplay.pp.fc}pp 
-SS: ${simplay.pp.acc['100']}pp   | 95: ${simplay.pp.acc['95']}pp\`
+\`Current: ${simplay[0].pp.toFixed(2)}pp | FC: ${simplay[1].pp.toFixed(2)}pp 
+SS: ${mapcalc[0].pp.toFixed(2)}pp   | 95: ${mapcalc[5].pp.toFixed(2)}pp\`
                         `,
                         inline: true
                     }
                 ]
                 )
-                .setThumbnail(`${simplay.other.bg.list['2']}`)
             message.reply({
                 embeds: [embed],
                 allowedMentions: { repliedUser: false },
