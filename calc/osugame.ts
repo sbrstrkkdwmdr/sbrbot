@@ -128,7 +128,7 @@ async function scorecalc(
                         mods: osumodcalc.ModStringToInt(mods),
                         combo: maxcombo,
                         acc: acc,
-                        n300: hit300 + hitgeki,
+                        n300: hit300,
                         n100: hit100,
                         n50: hit50,
                         nMisses: miss,
@@ -140,12 +140,10 @@ async function scorecalc(
                         mode: gamemode,
                         mods: osumodcalc.ModStringToInt(mods),
                         acc: acc,
-                        n300: hit300 + hitgeki,
+                        n300: hit300,
                         n100: hit100,
                         n50: hit50,
-                        nMisses: 0,
                         nKatu: hitkatu,
-                        score: score,
                     },
                     {
                         mode: gamemode,
@@ -154,7 +152,6 @@ async function scorecalc(
                     }
                 ]
             }
-
             ppl = await rosu.calculate(scorenofc);
 
 
