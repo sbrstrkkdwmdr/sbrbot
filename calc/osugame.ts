@@ -267,12 +267,16 @@ async function straincalc(mapid: number, mods: string, calctype: number, mode: s
                     let straintimes = [];
                     let totalval = [];
 
-                    let div = aimval.length / 200;
-                    for (let i = 0; i < 200; i++) {
-                        let offset = Math.ceil(i * div);
+                    //let div = aimval.length / 200;
+                    for (let i = 0; i < aimval.length; i++) {
+                        //let offset = Math.ceil(i * div);
+                        let offset = i
                         let curval = aimval[offset] + aimnoslideval[offset] + speedval[offset] + flashlightval[offset];
                         totalval.push(curval)
-                        straintimes.push(((strains1.section_length / 1000) * (i + 1)).toFixed(3));
+
+                        let curtime = ((strains1.section_length / 1000) * (i + 1))
+                        let curtimestr = Math.floor(curtime / 60) + ':' + `${(curtime % 60) < 10 ? '0' + (curtime % 60).toFixed(2) : (curtime % 60).toFixed(2)}`;
+                        straintimes.push(curtimestr);
                     }
                     strains = {
                         strainTime: straintimes,
@@ -332,20 +336,37 @@ async function graph(x: number[] | string[], y: number[], label: string, startze
         case 'strains':
             fill = true
             showlabely = false
-            showlabelx = false
+            showlabelx = true
+            startzero = true
             break;
         default:
             break;
+    }
+
+    let curx = []
+    let cury = []
+
+    if (y.length > 200) {
+        let div = y.length / 200;
+        for (let i = 0; i < 200; i++) {
+            let offset = Math.ceil(i * div);
+            let curval = y[offset];
+            cury.push(curval)
+            curx.push(x[offset]);
+        }
+    } else {
+        curx = x
+        cury = y
     }
 
     const chart = new charttoimg()
         .setConfig({
             type: 'line',
             data: {
-                labels: x,
+                labels: curx,
                 datasets: [{
                     label: label,
-                    data: y,
+                    data: cury,
                     fill: fill,
                     borderColor: 'rgb(75, 192, 192)',
                     borderWidth: 1,
@@ -359,7 +380,11 @@ async function graph(x: number[] | string[], y: number[], label: string, startze
                 scales: {
                     xAxes: [
                         {
-                            display: showlabelx
+                            display: showlabelx,
+                            ticks: {
+                                autoSkip: true,
+                                maxTicksLimit: 10
+                            }
                         }
                     ],
                     yAxes: [
