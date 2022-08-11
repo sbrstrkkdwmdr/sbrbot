@@ -1,8 +1,12 @@
 //MAP OBJECTS
 let mapobjs = {
-    circle: '<:circle:927478586028474398>',
-    slider: '<:slider:927478585701330976>',
-    spinner: '🔁'
+    circle_old: '<:circle:927478586028474398>',
+    slider_old: '<:slider:927478585701330976>',
+    circle: '<:count_circles:1007196068196384899>',
+    slider: '<:count_sliders:1007196069794431036>',
+    spinner: '<:count_spinners:1007196071388262400>',
+    bpm: '<:bpm:1007196066220871723>',
+    total_length: '<:total_length:1007196072956940348>'
 }
 
 let gamemodes = {

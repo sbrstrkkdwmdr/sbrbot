@@ -611,6 +611,7 @@ node-fetch error: ${error}
         fs.writeFileSync(`./debugosu/command-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
 
         let strains = await osugame.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
+        fs.writeFileSync(`./debugosu/command-map=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))
         let mapgraph = await osugame.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
         let Embed = new Discord.EmbedBuilder()
             .setColor(0x91ff9a)
@@ -629,9 +630,9 @@ node-fetch error: ${error}
                     value:
                         `${statusimg} | ${mapimg} \n ` +
                         `${basicvals}\n` +
-                        `${totaldiff}⭐ ${allvals.bpm}BPM\n` +
+                        `${totaldiff}⭐ ${allvals.bpm}${emojis.mapobjs.bpm}\n` +
                         `${emojis.mapobjs.circle}${mapdata.count_circles} ${emojis.mapobjs.slider}${mapdata.count_sliders} ${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
-                        `${allvals.details.lengthFull}🕐`,
+                        `${allvals.details.lengthFull}${emojis.mapobjs.total_length}`,
                     inline: true
                 },
                 {
