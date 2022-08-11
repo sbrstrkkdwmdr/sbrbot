@@ -446,7 +446,7 @@ ${error}
         artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})`;
 
         let maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
-        let mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapdata.beatmapset.creator)}`;
+        let mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapdata.beatmapset.creator)}/osu`;
 
         let mapperdata = await fetch(mapperurl, {
             headers: {
@@ -493,7 +493,7 @@ node-fetch error: ${error}
             .setTitle(maptitle)
             .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
             .setAuthor({
-                name: `${mapperdata.username}`,
+                name: `${mapdata.beatmapset.creator}`,
                 url: `https://osu.ppy.sh/u/${mapperdata.id}`,
                 iconURL: `https://a.ppy.sh/${mapperdata.id}`,
             })
@@ -501,13 +501,12 @@ node-fetch error: ${error}
             .setImage(`${mapgraph}`)
             .addFields([
                 {
-                    name: 'MAP DETAILS',
+                    name: 'MAP VALUES',
                     value:
-                        `${statusimg} | ${mapimg} \n ` +
                         `${basicvals}\n` +
-                        `${totaldiff}⭐ ${allvals.bpm}${emojis.mapobjs.bpm}\n` +
-                        `${emojis.mapobjs.circle}${mapdata.count_circles} ${emojis.mapobjs.slider}${mapdata.count_sliders} ${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
-                        `${allvals.details.lengthFull}${emojis.mapobjs.total_length}`,
+                        `${totaldiff}⭐ ${emojis.mapobjs.bpm}${allvals.bpm}\n` +
+                        `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
+                        `${emojis.mapobjs.total_length}${allvals.details.lengthFull}`,
                     inline: true
                 },
                 {
@@ -529,6 +528,24 @@ node-fetch error: ${error}
                         `[osu!](https://osu.ppy.sh/b/${mapdata.id}) | [Chimu](https://api.chimu.moe/v1/download${mapdata.beatmapset_id}) | [Beatconnect](https://beatconnect.io/b/${mapdata.beatmapset_id}) | [Kitsu](https://kitsu.io/d/${mapdata.beatmapset_id})\n` +
                         `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapdata.id})`,
                     inline: true
+                },
+                {
+                    name: 'MAP DETAILS',
+                    value: `${statusimg} | ${mapimg} \n ` +
+                        `${mapdata.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} plays | ${mapdata.beatmapset.play_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} mapset plays | ${mapdata.passcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} passes\n` +
+                        `Submitted <t:${new Date(mapdata.beatmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(mapdata.beatmapset.last_updated).getTime() / 1000}:R>
+                        ${mapdata.status == 'ranked' ?
+                            `Ranked <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                        }${mapdata.status == 'approved' || mapdata.status == 'qualified' ?
+                            `Approved/Qualified <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                        }${mapdata.status == 'loved' ?
+                            `Loved <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                        }\n` +
+                        `${mapdata.video == true ? '📺' : ''} ${mapdata.storyboard == true ? '🎨' : ''}`
+
+                    ,
+                    inline: false
+
                 }
             ])
         if (message && interaction == null) {
