@@ -292,6 +292,9 @@ module.exports = {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any);
+
+        fs.writeFileSync(`debugosu/commands-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
+
         let rsEmbed = new Discord.EmbedBuilder();
 
         if (list != true) {
@@ -553,7 +556,7 @@ module.exports = {
             for (let i = 0; i < rsdata.length - (page * 20) && i < 20; i++) {
                 let curscore = rsdata[i + page * 20]
                 txt +=
-                    `${1 + i + page * 20} | [${curscore.beatmapset.title}](https://osu.ppy.sh/b/${curscore.beatmap.id}) | [score](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id})
+                    `${1 + i + page * 20} | [${curscore.beatmapset.title}](https://osu.ppy.sh/b/${curscore.beatmap.id}) | [score](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})
                 ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') + ' | ' : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${curscore.rank}\n`
             }
             if (txt == '') {
