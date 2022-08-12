@@ -323,7 +323,7 @@ Error - authentication
             `**${emojis.onlinestatus.offline} Offline** | Last online <t:${(new Date(osudata.last_visit)).getTime() / 1000}:R>`
 
         let prevnames = osudata.previous_usernames.length > 0 ?
-            '**Previous Usernames:**' + osudata.previous_usernames.join(', ') :
+            '**Previous Usernames:** ' + osudata.previous_usernames.join(', ') :
             ''
             ;
 
@@ -339,20 +339,19 @@ Error - authentication
             '---'
 
         const osuEmbed = new Discord.EmbedBuilder()
-        .setColor(colours.embedColour.user.hex)
-        .setTitle(`${osudata.username}'s osu! profile`)
+            .setColor(colours.embedColour.user.hex)
+            .setTitle(`${osudata.username}'s osu! profile`)
             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
             .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
 
 
         if (detailed == true) {
             const loading = new Discord.EmbedBuilder()
-            .setColor(colours.embedColour.user.hex)
-            .setTitle(`${osudata.username}'s osu! profile`)
+                .setColor(colours.embedColour.user.hex)
+                .setTitle(`${osudata.username}'s osu! profile`)
                 .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
                 .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
-                .setDescription(`Loading...`)
-
+                .setDescription(`Loading...`);
 
             if (interaction != null && message == null) {
                 obj.reply({
@@ -462,6 +461,28 @@ Error - authentication
                 let bmpc = mostplayeddata[i2]
                 mostplaytxt += `[${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id}) | ${bmpc.count} plays\n`
             }
+            osuEmbed.addFields([
+                {
+                    name: 'Stats',
+                    value:
+                        `**Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)\n
+**pp:** ${osustats.pp}
+**Accuracy:** ${(osustats.hit_accuracy != null ? osustats.hit_accuracy : 0).toFixed(2)}%
+**Play Count:** ${playcount}
+**Level:** ${lvl}`,
+                    inline: true
+                },
+                {
+                    name: '-',
+                    value:
+                        `**Player joined** <t:${new Date(osudata.join_date).getTime() / 1000}:R>                        
+${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
+**Followers:** ${osudata.follower_count}
+${prevnames}
+${onlinestatus}`,
+                    inline: true
+                }
+            ])
             if (mostplaytxt != ``) {
                 osuEmbed.addFields([{
                     name: 'Most Played Beatmaps',
@@ -473,7 +494,7 @@ Error - authentication
 
             osuEmbed.addFields([
                 {
-                    name: 'TOP PLAY',
+                    name: 'Top play info',
                     value:
                         `**Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
             **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
@@ -482,7 +503,7 @@ Error - authentication
                     inline: true
                 },
                 {
-                    name: 'INFO',
+                    name: '-',
                     value: `**Highest pp:** ${maxpp}
             **Lowest pp:** ${minpp}
             **Average pp:** ${avgpp}
