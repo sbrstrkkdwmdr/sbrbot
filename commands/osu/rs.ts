@@ -7,6 +7,7 @@ import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
 import calc = require('../../calc/calculations');
 import osugame = require('../../calc/osugame');
+import colours = require('../../configs/colours');
 
 module.exports = {
     name: 'rs',
@@ -298,6 +299,8 @@ module.exports = {
         let rsEmbed = new Discord.EmbedBuilder();
 
         if (list != true) {
+            rsEmbed.setColor(colours.embedColour.score.hex)
+
             if (!rsdata[0 + page] && interaction && button == null) {
                 return interaction.editReply(
                     {
@@ -519,7 +522,6 @@ module.exports = {
             let trycountstr = `try #${trycount}`;
 
             rsEmbed
-                .setColor(0x9AAAC0)
                 .setTitle(`#${page + 1} most recent play for ${curscore.user.username} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>`)
                 .setURL(`https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}`)
                 .setAuthor({
@@ -550,7 +552,7 @@ module.exports = {
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: curbm.id }), null, 2));
         } else if (list == true) {
             rsEmbed
-                .setColor(0x9AAAC0)
+                .setColor(colours.embedColour.scorelist.hex)
                 .setTitle(`Recent plays for ${osudata.username}`);
             let txt = '';
             for (let i = 0; i < rsdata.length - (page * 20) && i < 20; i++) {

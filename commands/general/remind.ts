@@ -1,8 +1,10 @@
-import ms = require('ms')
-import fetch = require('node-fetch')
-import notxt = require('../../configs/w')
-import fs = require('fs')
+import ms = require('ms');
+import fetch = require('node-fetch');
+import notxt = require('../../configs/w');
+import fs = require('fs');
 import calc = require('../../calc/calculations');
+import colours = require('../../configs/colours');
+
 module.exports = {
     name: 'remind',
     description: 'null',
@@ -11,16 +13,16 @@ module.exports = {
 
         async function sendremind(reminder, time, obj, sendchannel, remindertxt, usersent) {
             try {
-                if(sendchannel == true){
-                setTimeout(() => {
-                    obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` })
-                }, calc.timeToMs(time));
-            }
-            else {
-                setTimeout(() => {
-                    interaction.member.user.send({ embeds: [reminder] })
-                }, calc.timeToMs(time));
-            }
+                if (sendchannel == true) {
+                    setTimeout(() => {
+                        obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` })
+                    }, calc.timeToMs(time));
+                }
+                else {
+                    setTimeout(() => {
+                        interaction.member.user.send({ embeds: [reminder] })
+                    }, calc.timeToMs(time));
+                }
             } catch (error) {
                 console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
             }
@@ -42,7 +44,7 @@ module.exports = {
                 return message.reply({ content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`', allowedMentions: { repliedUser: false } })
             }
             let reminder = new Discord.EmbedBuilder()
-                .setColor('#7289DA')
+                .setColor(colours.embedColour.info.hex)
                 .setTitle('REMINDER')
                 .setDescription(`${remindertxt}`)
 
@@ -63,7 +65,7 @@ module.exports = {
             }
 
             let reminder = new Discord.EmbedBuilder()
-                .setColor('#7289DA')
+                .setColor(colours.embedColour.info.hex)
                 .setTitle('REMINDER')
                 .setDescription(`${remindertxt}`)
 

@@ -7,6 +7,7 @@ import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
 import calc = require('../../calc/calculations');
 import osugame = require('../../calc/osugame');
+import colours = require('../../configs/colours');
 
 module.exports = {
     name: 'osumaplink',
@@ -548,6 +549,35 @@ node-fetch error: ${error}
 
                 }
             ])
+        switch (true) {
+            case parseFloat(totaldiff.toString()) >= 8:
+                Embed.setColor(colours.diffcolour[7].hex)
+                break;
+            case parseFloat(totaldiff.toString()) >= 7:
+                Embed.setColor(colours.diffcolour[6].hex)
+                break;
+            case parseFloat(totaldiff.toString()) >= 6:
+                Embed.setColor(colours.diffcolour[5].hex)
+                break;
+            case parseFloat(totaldiff.toString()) >= 4.5:
+                Embed.setColor(colours.diffcolour[4].hex)
+                break;
+            case parseFloat(totaldiff.toString()) >= 3.25:
+                Embed.setColor(colours.diffcolour[3].hex)
+                break;
+            case parseFloat(totaldiff.toString()) >= 2.5:
+                Embed.setColor(colours.diffcolour[2].hex)
+                break;
+            case parseFloat(totaldiff.toString()) >= 2:
+                Embed.setColor(colours.diffcolour[1].hex)
+                break;
+            case parseFloat(totaldiff.toString()) >= 1.5:
+                Embed.setColor(colours.diffcolour[0].hex)
+                break;
+            default:
+                Embed.setColor(colours.diffcolour[0].hex)
+                break;
+        }
         if (message && interaction == null) {
             obj.reply({
                 content: "⠀",

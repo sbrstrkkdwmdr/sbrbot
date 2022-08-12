@@ -1,5 +1,7 @@
-import fs = require('fs')
-import calc = require('../../calc/calculations')
+import fs = require('fs');
+import calc = require('../../calc/calculations');
+import colours = require('../../configs/colours');
+
 module.exports = {
     name: 'time',
     description: 'template text\n' +
@@ -74,6 +76,7 @@ module.exports = {
 
 
             let Embed = new Discord.EmbedBuilder()
+                .setColor(colours.embedColour.info.hex)
                 .setTitle('Current Time')
                 .addFields([{
                     name: 'UTC/GMT+00:00',

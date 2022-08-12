@@ -4,6 +4,7 @@ import osumodcalc = require('osumodcalculator');
 import osugame = require('../../calc/osugame');
 import fetch from 'node-fetch';
 import cmdchecks = require('../../calc/commandchecks');
+import colours = require('../../configs/colours');
 
 module.exports = {
     name: 'simplay',
@@ -18,6 +19,7 @@ module.exports = {
         if (message != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let embed = new Discord.EmbedBuilder()
+                .setColor(colours.embedColour.score.hex)
 
                 ;
             let x = args.join(' ');

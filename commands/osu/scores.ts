@@ -6,6 +6,7 @@ import emojis = require('../../configs/emojis');
 import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
 import osugame = require('../../calc/osugame');
+import colours = require('../../configs/colours');
 
 module.exports = {
     name: 'scores',
@@ -534,7 +535,7 @@ node-fetch error: ${error}
             `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})`
 
         let scoresEmbed = new Discord.EmbedBuilder()
-            .setColor('#0099ff')
+            .setColor(colours.embedColour.scorelist.hex)
             .setTitle(`${artist} - ${title} [${mapdata.version}]`)
             .setThumbnail(`${mapdata.beatmapset.covers['list@2x']}`)
             .setAuthor({ name: `${osudata.username}`, url: `https://osu.ppy.sh/u/${osudata.id}`, iconURL: `https://a.ppy.sh/${osudata.id}` })

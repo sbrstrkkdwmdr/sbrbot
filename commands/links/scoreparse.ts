@@ -6,6 +6,7 @@ import { access_token } from '../../configs/osuauth.json';
 import emojis = require('../../configs/emojis');
 import cmdchecks = require('../../calc/commandchecks');
 import osugame = require('../../calc/osugame');
+import colours = require('../../configs/colours');
 
 module.exports = {
     name: 'scoreparse',
@@ -216,7 +217,7 @@ Error: ${error}
             }
 
             let scoreembed = new Discord.EmbedBuilder()
-                .setColor('#0099ff')
+                .setColor(colours.embedColour.score.hex)
                 .setAuthor({ name: `${scoredata.user.username}`, iconURL: `https://a.ppy.sh/${scoredata.user.id}`, url: `https://osu.ppy.sh/users/${scoredata.user.id}` })
                 .setTitle(`${artist} - ${title}`)
                 .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.id}`)

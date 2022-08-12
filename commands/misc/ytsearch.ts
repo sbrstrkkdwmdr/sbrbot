@@ -1,7 +1,8 @@
-import fs = require('fs')
-import fetch from 'node-fetch'
-import yts = require('yt-search')
-import cmdchecks = require('../../calc/commandchecks')
+import fs = require('fs');
+import fetch from 'node-fetch';
+import yts = require('yt-search');
+import cmdchecks = require('../../calc/commandchecks');
+import colours = require('../../configs/colours');
 
 module.exports = {
     name: 'ytsearch',
@@ -20,6 +21,8 @@ module.exports = {
             let vids = searching.videos
             let embed = new Discord.EmbedBuilder()
                 .setTitle(`Results for ${args.join(' ')}`)
+                .setColor(colours.embedColour.query.hex)
+
                 ;
             for (i = 0; i < 5 && i < vids.length; i++) {
                 embed.addFields([{
@@ -50,6 +53,7 @@ module.exports = {
             let vids = searching.videos
             let embed = new Discord.EmbedBuilder()
                 .setTitle(`Results for ${query}`)
+                .setColor(colours.embedColour.query.hex)
                 ;
             for (i = 0; i < 5 && i < vids.length; i++) {
                 embed.addFields([{

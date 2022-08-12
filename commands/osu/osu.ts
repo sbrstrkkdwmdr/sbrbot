@@ -6,6 +6,8 @@ import emojis = require('../../configs/emojis');
 import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
 import chartjsimg = require('chartjs-to-image');
+import colours = require('../../configs/colours');
+
 
 module.exports = {
     name: 'osu',
@@ -337,16 +339,16 @@ Error - authentication
             '---'
 
         const osuEmbed = new Discord.EmbedBuilder()
-            .setColor('#0099ff')
-            .setTitle(`${osudata.username}'s osu! profile`)
+        .setColor(colours.embedColour.user.hex)
+        .setTitle(`${osudata.username}'s osu! profile`)
             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
             .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
 
 
         if (detailed == true) {
             const loading = new Discord.EmbedBuilder()
-                .setColor('#0099ff')
-                .setTitle(`${osudata.username}'s osu! profile`)
+            .setColor(colours.embedColour.user.hex)
+            .setTitle(`${osudata.username}'s osu! profile`)
                 .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
                 .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
                 .setDescription(`Loading...`)

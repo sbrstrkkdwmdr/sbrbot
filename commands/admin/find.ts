@@ -1,9 +1,11 @@
-import fs = require('fs')
+import fs = require('fs');
+import colours = require('../../configs/colours');
 module.exports = {
     name: 'find',
     description: 'returns name from the id given',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let Embedr = new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.admin.hex)
             .setTitle('Could not find the id')
             .setDescription('Does not exist or bot is not in the same guild')
 

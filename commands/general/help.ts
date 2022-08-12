@@ -1,5 +1,7 @@
-const commandhelp = require('../../configs/info')
-import fs = require('fs')
+const commandhelp = require('../../configs/info');
+import fs = require('fs');
+import colours = require('../../configs/colours');
+
 module.exports = {
     name: 'help',
     description: 'Displays all commands\n' +
@@ -10,7 +12,7 @@ module.exports = {
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let i: number;
         let fullCommandList = new Discord.EmbedBuilder()
-            .setColor('#0099ff')
+            .setColor(colours.embedColour.info.hex)
             .setTitle('Command List')
             .setDescription('use `/help <command>` to get more info on a command')
             .addFields([
@@ -104,7 +106,7 @@ module.exports = {
             if (args[0]) {
                 let command = args[0].toString()
                 let commandInfo = new Discord.EmbedBuilder()
-                    .setColor('#0099ff')
+                    .setColor(colours.embedColour.info.hex)
                 if (commandhelp.cmds.find(obj => obj.name == args[0])) {
 
                     let res = commandhelp.cmds.find(obj => obj.name == args[0])
@@ -288,7 +290,7 @@ module.exports = {
 
             let command = interaction.options.getString('command')
             let commandInfo = new Discord.EmbedBuilder()
-                .setColor('#0099ff')
+                .setColor(colours.embedColour.info.hex)
             if (commandhelp.cmds.find(obj => obj.name == command)) {
 
                 let res = commandhelp.cmds.find(obj => obj.name == command)

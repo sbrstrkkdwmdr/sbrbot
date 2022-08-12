@@ -7,6 +7,7 @@ import ppcalc = require('booba')
 import chartjsimg = require('chartjs-to-image');
 import cmdchecks = require('../../calc/commandchecks');
 import osugame = require('../../calc/osugame');
+import colours = require('../../configs/colours');
 
 
 module.exports = {
@@ -293,7 +294,7 @@ Error: ${error}
         await chart.toFile('./debugosu/replaygraph.jpg')
         let graphul = await osugame.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay')
         let Embed = new Discord.EmbedBuilder()
-            .setColor('#0099ff')
+            .setColor(colours.embedColour.score.hex)
             .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
             .setTitle(`Replay`)
             .setThumbnail(mapbg)

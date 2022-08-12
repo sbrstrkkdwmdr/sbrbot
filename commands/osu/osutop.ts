@@ -6,6 +6,8 @@ import emojis = require('../../configs/emojis');
 import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
 import osugame = require('../../calc/osugame');
+import colours = require('../../configs/colours');
+
 module.exports = {
     name: 'osutop',
     description: 'template text\n' +
@@ -502,7 +504,7 @@ ${error}
             return obj.reply({ content: 'no plays found for the options given', allowedMentions: { repliedUser: false } })
         }
         let topEmbed = new Discord.EmbedBuilder()
-            .setColor(0x462B71)
+            .setColor(colours.embedColour.scorelist.hex)
             .setTitle(`Top plays of ${osutopdata[0].user.username}`)
             .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
             .setURL(`https://osu.ppy.sh/users/${osutopdata[0].user.id}`)

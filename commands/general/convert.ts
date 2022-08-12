@@ -1,5 +1,6 @@
-import fs = require('fs')
-import fetch = require('node-fetch')
+import fs = require('fs');
+import fetch = require('node-fetch');
+import colours = require('../../configs/colours');
 
 module.exports = {
     name: 'convert',
@@ -11,6 +12,7 @@ module.exports = {
                     .addField('**math stuff idk**', '* = multiply\n/ = divide\n- = subtract\n+ = add\n^ = power', false)
                     ; */
         let EmbedList = new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.info.hex)
             .setTitle('List of measurements')
             /*             .addField('Temperature', `c (celsius), f (fahnrenheit), k (kelvin)`, false)
                         .addField('Distance', 'in (inch), fe (feet), m (metres), mi (miles)', false)
@@ -53,6 +55,7 @@ module.exports = {
             ])
             ;
         let siEmbed = new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.info.hex)
             .setTitle('List of SI prefixes')
             .addFields([
                 {
@@ -91,6 +94,7 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
                 }
             ]);
         let embedres = new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.info.hex)
             .setDescription('⠀');
         if (message != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - convert (message)\n${currentDate} | ${currentDateISO}\n recieved convert command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')

@@ -1,5 +1,6 @@
 import commandchecks = require('../../calc/commandchecks');
 import fs = require('fs')
+import colours = require('../../configs/colours');
 module.exports = {
     name: 'checkperms',
     description: 'Checks the permissions of a user\n' +
@@ -29,7 +30,7 @@ module.exports = {
             let embed = new Discord.EmbedBuilder()
                 .setTitle(`Permissions for \`${user.username}\``)
                 .setDescription(`${permissions}`)
-                .setColor('#C9FF93')
+                .setColor(colours.embedColour.admin.hex)
                 ;
             message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nmessage content: ${message.content}\n`)
@@ -47,7 +48,7 @@ module.exports = {
                 let embed = new Discord.EmbedBuilder()
                     .setTitle(`Permissions for \`${user.username}\``)
                     .setDescription(`${permissions}`)
-                    .setColor('#C9FF93')
+                    .setColor(colours.embedColour.admin.hex)
                     ;
                 if (commandchecks.isOwner(interaction.member.user.id)) {
                     interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false }, ephemeral: true })

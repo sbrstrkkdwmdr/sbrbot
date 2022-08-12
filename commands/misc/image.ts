@@ -1,6 +1,7 @@
-import fs = require('fs')
-import fetch from 'node-fetch'
-
+import fs = require('fs');
+import fetch from 'node-fetch';
+import colours = require('../../configs/colours');
+import cmdchecks = require('../../calc/commandchecks');
 module.exports = {
     name: 'image',
     description: 'null',
@@ -27,22 +28,25 @@ module.exports = {
                 resimg += `\n\n<${response.items[i].link}>`
             }
             let imageEmbed = new Discord.EmbedBuilder()
+                .setURL(`${'https://www.google.com/search?q=' + args.join('+')}`)
                 .setTitle(`IMAGE RESULTS FOR ${args.join(' ')}`)
                 .setDescription(`(NOTE - links may be unsafe)\n${resimg}`)
+                .setColor(colours.embedColour.query.hex)
+
             let image1 = new Discord.EmbedBuilder()
-                .setURL('https://www.google.com/search?q=' + args.join(' '))
+                .setURL(`${'https://www.google.com/search?q=' + args.join('+')}`)
                 .setImage(`${response.items[0].image.thumbnailLink}`)
             let image2 = new Discord.EmbedBuilder()
-                .setURL('https://www.google.com/search?q=' + args.join(' '))
+                .setURL(`${'https://www.google.com/search?q=' + args.join('+')}`)
                 .setImage(`${response.items[1].image.thumbnailLink}`)
             let image3 = new Discord.EmbedBuilder()
-                .setURL('https://www.google.com/search?q=' + args.join(' '))
+                .setURL(`${'https://www.google.com/search?q=' + args.join('+')}`)
                 .setImage(`${response.items[2].image.thumbnailLink}`)
             let image4 = new Discord.EmbedBuilder()
-                .setURL('https://www.google.com/search?q=' + args.join(' '))
+                .setURL(`${'https://www.google.com/search?q=' + args.join('+')}`)
                 .setImage(`${response.items[3].image.thumbnailLink}`)
             let image5 = new Discord.EmbedBuilder()
-                .setURL('https://www.google.com/search?q=' + args.join(' '))
+                .setURL(`${'https://www.google.com/search?q=' + args.join('+')}`)
                 .setImage(`${response.items[4].image.thumbnailLink}`)
 
             message.reply({ embeds: [imageEmbed, image1, image2, image3, image4, image5], allowedMentions: { repliedUser: false } })

@@ -6,6 +6,7 @@ import emojis = require('../../configs/emojis');
 import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
 import osugame = require('../../calc/osugame');
+import colours = require('../../configs/colours');
 
 module.exports = {
     name: 'pinned',
@@ -306,6 +307,7 @@ node-fetch error: ${error}
         fs.writeFileSync(`debugosu/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
 
         let pinnedEmbed = new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.scorelist.hex)
             .setTitle(`Pinned scores for ${osudata.username}`)
             .setURL(`https://osu.ppy.sh/u/${osudata.id}`)
             .setThumbnail(`https://a.ppy.sh/${osudata.id}`)

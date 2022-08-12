@@ -1,5 +1,7 @@
 import fs = require('fs');
 import Sequelize = require('sequelize');
+import colours = require('../../configs/colours');
+
 module.exports = {
     name: 'lb',
     description: 'template text\n' +
@@ -57,6 +59,7 @@ module.exports = {
                 mode = 'mania'
             }
             let serverlb = new Discord.EmbedBuilder()
+                .setColor(colours.embedColour.userlist.hex)
                 .setTitle(`server leaderboard for ${message.guild.name}`)
             let userids = await userdata.findAll();
             let useridsarraylen = await userdata.count();
@@ -271,6 +274,7 @@ module.exports = {
             let page
 
             let serverlb = new Discord.EmbedBuilder()
+                .setColor(colours.embedColour.userlist.hex)
                 .setTitle(`server leaderboard for ${message.guild.name}`)
                 .setFooter({ text: mode });
             let userids = await userdata.findAll();

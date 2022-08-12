@@ -2,7 +2,9 @@ import fs = require('fs')
 import fetch from 'node-fetch';
 import { access_token } from '../../configs/osuauth.json';
 import emojis = require('../../configs/emojis')
-import cmdchecks = require('../../calc/commandchecks')
+import cmdchecks = require('../../calc/commandchecks');
+import colours = require('../../configs/colours');
+
 
 module.exports = {
     name: 'osuuserlink',
@@ -103,7 +105,7 @@ Error: ${error}
             }
 
             const Embed = new Discord.EmbedBuilder()
-                .setColor('#0099ff')
+                .setColor(colours.embedColour.user.hex)
                 .setTitle(`${osudata.username}'s osu! profile`)
                 .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
                 .setThumbnail(`https://a.ppy.sh/${osudata.id}`)

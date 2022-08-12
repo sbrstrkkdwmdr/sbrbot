@@ -2,6 +2,8 @@ import fs = require('fs');
 import calculations = require('../../calc/calculations');
 import osucalc = require('osumodcalculator');
 import cmdchecks = require('../../calc/commandchecks');
+import colours = require('../../configs/colours');
+
 module.exports = {
     name: 'math',
     description: 'null',

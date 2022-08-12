@@ -6,6 +6,7 @@ import emojis = require('../../configs/emojis');
 import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
 import osugame = require('../../calc/osugame');
+import colours = require('../../configs/colours');
 
 module.exports = {
     name: 'firsts',
@@ -343,6 +344,7 @@ node-fetch error: ${error}
         fs.writeFileSync(`debugosu/command-firsts=firstscoresdata=${obj.guildId}.json`, JSON.stringify(firstscoresdata, null, 2))
 
         let firstsEmbed = new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.scorelist.hex)
             .setTitle(`#1 scores for ${osudata.username}`)
             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
             .setThumbnail(`https://a.ppy.sh/${osudata.id}`)

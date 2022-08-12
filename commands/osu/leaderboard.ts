@@ -5,6 +5,8 @@ import fetch from 'node-fetch';
 import emojis = require('../../configs/emojis');
 import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
+import colours = require('../../configs/colours');
+
 module.exports = {
     name: 'leaderboard',
     description: 'template text\n' +
@@ -332,6 +334,7 @@ Error - authentication
             fs.writeFileSync(`debugosu/command-leaderboard=lbdata=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
 
             let lbEmbed = new Discord.EmbedBuilder()
+                .setColor(colours.embedColour.scorelist.hex)
                 .setTitle(`Score leaderboard of ${fulltitle}`)
                 .setURL(`https://osu.ppy.sh/b/${mapid}`)
                 .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`)
@@ -443,6 +446,7 @@ Error - authentication
             }
 
             let lbEmbed = new Discord.EmbedBuilder()
+                .setColor(colours.embedColour.scorelist.hex)
                 .setTitle(`Modded score leaderboard of ${fulltitle}`)
                 .setURL(`https://osu.ppy.sh/b/${mapid}`)
                 .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`)
