@@ -45,7 +45,5 @@ Open up any terminal in the bot's directory by clicking on the address bar, type
 First, install all the dependencies by running `npm i`</br>
 Then, setup the bot by running `node setup.js`</br>
 ~~Once the bot has been setup, you can run it anytime by using `node main` or `node main.js`.~~</br> 
-Then, setup ts-node by running `npm i -g ts-node` and `npm i -g typescript`</br>
-Once the bot has been setup, you can run it anytime by using `ts-node main.ts`</br>
-You can also compile it into js by using `tsc main.ts` </br>
+Once the bot has been setup, you can run it anytime by using `ts-node main.ts` or `tsc && node main.js`</br>
 To stop the bot, use ctrl+c while the window is in focus (or you can just close it)

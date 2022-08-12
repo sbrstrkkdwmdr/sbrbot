@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node main.ts",
-    "setup": "node setup.js"
+    "setup": "node setup.js",
+    "compile": "tsc",
   },
   "author": "sbrstrkkdwmdr",
   "license": "ISC",
