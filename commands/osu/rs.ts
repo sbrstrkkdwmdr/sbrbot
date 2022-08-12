@@ -292,7 +292,32 @@ module.exports = {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(res => res.json() as any);
+        }).then(res => res.json() as any).catch(error => {
+            if (button == null) {
+                try {
+                    message.edit({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                    })
+                } catch (err) {
+
+                }
+            } else {
+                obj.reply({
+                    content: 'Error',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+            return;
+        });
 
         fs.writeFileSync(`debugosu/commands-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
 
@@ -333,6 +358,40 @@ module.exports = {
                 osumodcalc.OrderMods(curscore.mods.join(''))
             );
 
+            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(curbm.id)}?`;
+
+            const mapdata = await fetch(mapurl, {
+                headers: {
+                    'Authorization': `Bearer ${access_token}`
+                }
+            }).then(res => res.json() as any).catch(error => {
+                if (button == null) {
+                    try {
+                        message.edit({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                        })
+                    } catch (err) {
+
+                    }
+                } else {
+                    obj.reply({
+                        content: 'Error',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+                return;
+            });
+
+            fs.writeFileSync(`debugosu/commands-rs=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
 
             let accgr;
             let fcaccgr;
@@ -408,10 +467,29 @@ module.exports = {
                     break;
             }
             let rspassinfo = '';
+            let totalhits;
+
+            switch (rsdata.mode) {
+                case 'osu': default:
+                    totalhits = gamehits.count_300 + gamehits.count_100 + gamehits.count_50 + gamehits.count_miss;
+                    break;
+                case 'taiko':
+                    totalhits = gamehits.count_300 + gamehits.count_100 + gamehits.count_miss;
+                    break;
+                case 'fruits':
+                    totalhits = gamehits.count_300 + gamehits.count_100 + gamehits.count_50 + gamehits.count_katu + gamehits.count_miss;
+                    break;
+                case 'mania':
+                    totalhits = gamehits.count_geki + gamehits.count_300 + gamehits.count_katu + gamehits.count_100 + gamehits.count_50 + gamehits.count_miss;
+            }
+            let curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
+            let guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
+            let curbmpasstime = Math.floor(guesspasspercentage / 100 * curbm.total_length);
+
             let rsgrade;
             switch (curscore.rank.toUpperCase()) {
                 case 'F':
-                    rspassinfo = `\n??:??/${calc.secondsToTime(curbm.total_length)} (NaN% completed)`
+                    rspassinfo = `\n${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.total_length)})`
                     rsgrade = emojis.grades.F
                     break;
                 case 'D':
