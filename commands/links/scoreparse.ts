@@ -189,7 +189,7 @@ Error: ${error}
             }
             let ppcalcing;
             try {
-                ppcalcing = await osugame.scorecalc(scoredata.mods.join('').length > 1 ? scoredata.mods.join('') : 'NM', scoredata.mode, scoredata.beatmap.id, gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss, scoredata.accuracy, scoredata.max_combo, scoredata.score, 0)
+                ppcalcing = await osugame.scorecalc(scoredata.mods.join('').length > 1 ? scoredata.mods.join('') : 'NM', scoredata.mode, scoredata.beatmap.id, gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss, scoredata.accuracy * 100, scoredata.max_combo, scoredata.score, 0)
                 ppissue = ''
                 fs.writeFileSync(`debugosu/link-scoreparse=ppcalc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2));
             } catch (error) {
@@ -215,6 +215,21 @@ Error: ${error}
             if (title != titleuni) {
                 title = `${title} (${titleuni})`
             }
+            let pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`
+
+            if (scoredata.accuracy == 1) {
+                if (scoredata.perfect == true) {
+                    pptxt = `${ppcalcing[0].pp.toFixed(2)}pp`
+                } else {
+                    pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`
+                }
+            } else {
+                if (scoredata.perfect == true) {
+                    pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[2].pp.toFixed(2)}pp if SS`
+                } else {
+                    pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC | ${ppcalcing[2].pp.toFixed(2)}pp if SS`
+                }
+            }
 
             let scoreembed = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.score.hex)
@@ -227,7 +242,7 @@ Error: ${error}
 
                         \`${hitlist}\`
                         ${scoredata.max_combo}x
-                        ${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC\n${ppissue}
+                        ${pptxt}\n${ppissue}
                         `)
             message.reply({ embeds: [scoreembed], allowedMentions: { repliedUser: false } })
             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
