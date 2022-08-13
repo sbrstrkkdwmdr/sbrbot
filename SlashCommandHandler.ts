@@ -2,7 +2,9 @@ import fs = require('fs');
 //const { Constants } = require('discord.js');
 const { ApplicationCommandOptionType, InteractionType } = require('discord.js');
 const cmdconfig = require('./configs/commandopts')
-module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
+module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, oncooldown) => {
+
+    let timeouttime;
 
     client.on('interactionCreate', async (interaction) => {
         if (!(interaction.type === InteractionType.ApplicationCommand)) return;
@@ -15,6 +17,29 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let args = null;
         let button = null;
         let obj = interaction;
+
+        if (!oncooldown.has(interaction.member.user.id)) {
+            timeouttime = new Date().getTime() + 3000
+        }
+        if (oncooldown.has(interaction.member.user.id)) {
+            return interaction.reply({
+                content: `You're on cooldown!\nTry again in ${getTimeLeft(timeouttime) / 1000}s`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true,
+                ephemeral: true
+            });
+        };
+        if (!oncooldown.has(interaction.member.user.id)) {
+            oncooldown.add(interaction.member.user.id);
+            timeouttime = new Date().getTime()
+            setTimeout(() => {
+                oncooldown.delete(interaction.member.user.id)
+            }, 3000)
+        }
+        function getTimeLeft(timeout) {
+            let timeLeft = timeout - new Date().getTime();
+            return Math.floor(timeLeft);
+        }
 
         switch (interaction.commandName) {
             case 'convert':

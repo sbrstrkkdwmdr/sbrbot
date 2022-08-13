@@ -129,9 +129,12 @@ client.once('ready', () => {
     userdata.sync()
     console.log('Ready!');
     fs.appendFileSync('logs/general.log', `\n\n\nBOT IS NOW ONLINE\n${new Date()} | ${new Date().toISOString()}\n\n\n`, 'utf-8');
-    CommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    
+    let oncooldown = new Set();
+
+    CommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, oncooldown);
     LinkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    SlashCommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    SlashCommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, oncooldown);
     Moderator(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     //MusicHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     ButtonHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);

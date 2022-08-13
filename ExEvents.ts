@@ -139,9 +139,16 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     client.on('messageCreate', async (message) => {
         if (message.mentions.users.size > 0) {
-            if (message.mentions.users.first().id == client.user.id) {
+            if (message.mentions.users.first().id == client.user.id && message.content.replaceAll(' ', '').length == (`<@${client.user.id}>`).length) {
                 return message.reply({ content: `Prefix is \`${config.prefix}\``, allowedMentions: { repliedUser: false } })
             }
+        } 
+        if (message.content.startsWith('You\'re on cooldown') && message.author.id == client.user.id) {
+            setTimeout(() => {
+                message.delete()
+                .catch(err => {
+                })
+            }, 3000)
         }
     })
 

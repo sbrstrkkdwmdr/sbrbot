@@ -1,6 +1,7 @@
 import fs = require('fs');
-module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
-    const oncooldown = new Set();
+module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, oncooldown) => {
+
+    let timeouttime;
 
     client.on('messageCreate', async (message) => {
 
@@ -17,21 +18,29 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 message.delete();
             }, 1)
         }
-        let timeouttime;
         if (message.author.bot && !(message.author.id == '755220989494951997' || message.author.id == '777125560869978132')) return;
+        if (!oncooldown.has(message.author.id)) {
+            timeouttime = new Date().getTime() + 3000
+        }
         if (oncooldown.has(message.author.id)) {
-            return message.channel.send(`You're on cooldown\nTime left: ${getTimeLeft(timeouttime)}ms`);
+            return message.reply({
+                content: `You're on cooldown!\nTry again in ${getTimeLeft(timeouttime) / 1000}s`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true,
+                ephemeral: true
+            });
         };
         if (!oncooldown.has(message.author.id)) {
             oncooldown.add(message.author.id);
             setTimeout(() => {
                 oncooldown.delete(message.author.id)
             }, 3000)
-            timeouttime = setTimeout(() => { }, 3000)
         }
         function getTimeLeft(timeout) {
-            return '???' //Math.ceil(timeout._idleStart - timeout._idleTimeout)
+            let timeLeft = timeout - new Date().getTime();
+            return (timeLeft);
         }
+
         let interaction = null;
         let button = null;
         let obj = message;
@@ -116,7 +125,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'skin':
                 client.osucmds.get('skin').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
-            case 'simplay':case 'simulate':
+            case 'simplay': case 'simulate':
                 client.osucmds.get('simplay').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
 
