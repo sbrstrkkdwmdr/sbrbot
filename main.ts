@@ -1,3 +1,5 @@
+console.log('Loading...')
+
 import Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
 import fs = require('fs');

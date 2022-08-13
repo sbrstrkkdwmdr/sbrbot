@@ -13,3 +13,5 @@ logs/
 files/music/
 files/ffmpegbin
 files/maps
+*.js
+!setup.js
