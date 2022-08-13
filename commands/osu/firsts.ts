@@ -432,7 +432,8 @@ node-fetch error: ${error}
                 curscore.accuracy,
                 curscore.max_comb,
                 curscore.score,
-                0
+                0, 
+                null, false
             )
             if (curscore.accuracy.toFixed(2) != 100.00) {
                 if (curscore.pp == null || curscore.pp == NaN) {

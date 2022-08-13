@@ -618,7 +618,8 @@ node-fetch error: ${error}
                         curscore.accuracy,
                         curscore.max_comb,
                         curscore.score,
-                        0
+                        0,
+                        null, false
                     )
                     let pptxt;
                     if (curscore.accuracy.toFixed(2) != 100.00) {

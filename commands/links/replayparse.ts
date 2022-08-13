@@ -181,33 +181,39 @@ Error: ${error}
         let fcacc: any;
         let ppiffc: any;
         let ppissue: any;
+        let totalhits = 0
 
         switch (gameMode) {
             case 0:
-
                 hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
                 accuracy = osucalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, replay.misses).accuracy
                 fcacc = osucalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, 0).accuracy
+                totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.misses
                 break;
             case 1:
 
                 hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.misses}`
                 accuracy = osucalc.calcgradeTaiko(replay.number_300s, replay.number_100s, replay.misses).accuracy
                 fcacc = osucalc.calcgradeTaiko(replay.number_300s, replay.number_100s, 0).accuracy
+                totalhits = replay.number_300s + replay.number_100s + replay.misses
                 break;
             case 2:
 
                 hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
                 accuracy = osucalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, replay.misses).accuracy
                 fcacc = osucalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, 0).accuracy
+                totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.katus + replay.misses
                 break;
             case 3:
 
                 hitlist = `${replay.gekis}/${replay.number_300s}/${replay.katus}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
                 accuracy = osucalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, replay.misses).accuracy
                 fcacc = osucalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, 0).accuracy
+                totalhits = replay.gekis + replay.number_300s + replay.katus + replay.number_100s + replay.number_50s + replay.misses
                 break;
         }
+        let failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true
+
         try {
             xpp = await osugame.scorecalc(
                 osucalc.ModIntToString(replay.mods),
@@ -222,7 +228,8 @@ Error: ${error}
                 accuracy,
                 replay.max_combo,
                 replay.score,
-                0
+                0,
+                totalhits, failed
             )
             ppissue = ''
         } catch (error) {

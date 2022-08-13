@@ -108,7 +108,7 @@ node-fetch error: ${error}
             }
 
 
-            let simplay = await osugame.scorecalc(mods, 'osu', mapid, null, null, null, null, null, parseFloat(miss), parseFloat(acc), parseFloat(combo), null, 0);
+            let simplay = await osugame.scorecalc(mods, 'osu', mapid, null, null, null, null, null, parseFloat(miss), parseFloat(acc), parseFloat(combo), null, 0, null, false);
             let mapcalc = await osugame.mapcalc(mods, 'osu', mapid, 0);
 
             fs.writeFileSync(`./debugosu/command-simulate=playcalc=${obj.guildId}.json`, JSON.stringify(simplay, null, 2));
