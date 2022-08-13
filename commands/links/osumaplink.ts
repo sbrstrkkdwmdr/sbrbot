@@ -254,6 +254,7 @@ node-fetch error: ${error}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                    return;
                 }
             }
         }
@@ -533,7 +534,7 @@ node-fetch error: ${error}
                 {
                     name: 'MAP DETAILS',
                     value: `${statusimg} | ${mapimg} \n ` +
-                        `${mapdata.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} plays | ${mapdata.beatmapset.play_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} mapset plays | ${mapdata.passcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} passes\n` +
+                        `${mapdata.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} plays | ${mapdata.beatmapset.play_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} mapset plays | ${mapdata.passcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} passes | ${mapdata.beatmapset.favourite_count} favourites\n` +
                         `Submitted <t:${new Date(mapdata.beatmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(mapdata.beatmapset.last_updated).getTime() / 1000}:R>
                         ${mapdata.status == 'ranked' ?
                             `Ranked <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
