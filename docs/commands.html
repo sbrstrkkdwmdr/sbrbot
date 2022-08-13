@@ -1509,6 +1509,52 @@
 
             <div>
                 <details>
+                    <summary class="divCommandName" id="admin-purge">purge</summary>
+                    <div class="divCommandDetails">
+                        <p>Bulk deletes messages in the current channel
+                        </p>
+
+                        <pre>
+                        Command: sbr-purge [amount] [user]
+                        Example: sbr-purge 20
+                        Example: sbr-purge 12 @SSoB
+                        </pre>
+
+                        Aliases:
+
+                        <br><br>Options:
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                                <th>Choices</th>
+                                <th>Defaults</th>
+                            </tr>
+                            <tr>
+                                <td>Amount</td>
+                                <td>Integer</td>
+                                <td>True</td>
+                                <td>The number of messages to delete</td>
+                                <td>1-100</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>User</td>
+                                <td>Mention</td>
+                                <td>False</td>
+                                <td>Delete messages from this user only</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div>
+                <details>
                     <summary class="divCommandName" id="admin-servers">servers</summary>
                     <div class="divCommandDetails">
                         <p>Returns a list of servers the bot is in
