@@ -459,6 +459,7 @@ Error - authentication
                 let hitlist;
                 let acc;
                 let score = lbdata[i + (page * 5)]
+                if(!score) break;
                 let mode = mapdata.mode
                 switch (mode) {
                     case 'osu':
