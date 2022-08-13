@@ -48,6 +48,12 @@ let cmds = [
         ]
     },
     {
+        name: 'info',
+        description: 'Returns information for the bot',
+        usage: 'info',
+        options: []
+    },
+    {
         name: 'math',
         description: 'Solves a simple math problem',
         usage: 'math <problem>',

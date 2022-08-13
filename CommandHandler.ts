@@ -66,6 +66,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'time':
                 client.commands.get('time').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
+            case 'info':
+                client.commands.get('info').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                break;
 
             case '8ball': case 'ask':
                 client.misccmds.get('8ball').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
