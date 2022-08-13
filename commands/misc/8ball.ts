@@ -11,23 +11,19 @@ module.exports = {
         ]
 
         let q = responses[Math.floor(Math.random() * responses.length)]
-        if (q == 3) {
-            if (message != null) return message.channel.send('sbr-gif speech bubble')
-            if (interaction != null) {
-                interaction.channel.send('sbr-gif speech bubble')
-                interaction.reply({ content: ';)', ephemeral: true })
-                return;
-            }
-        }
 
         if (message != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - 8ball (message)\n${currentDate} | ${currentDateISO}\n recieved 8ball command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             message.reply({ content: q, allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\n${message.content}\n${q}`)
         }
         if (interaction != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - 8ball (message)\n${currentDate} | ${currentDateISO}\n recieved 8ball command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             interaction.reply({ content: q, allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\n${q}`)
         }
     }

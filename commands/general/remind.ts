@@ -16,11 +16,13 @@ module.exports = {
                 if (sendchannel == true) {
                     setTimeout(() => {
                         obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` })
+
                     }, calc.timeToMs(time));
                 }
                 else {
                     setTimeout(() => {
                         interaction.member.user.send({ embeds: [reminder] })
+
                     }, calc.timeToMs(time));
                 }
             } catch (error) {
@@ -36,12 +38,16 @@ module.exports = {
 
             if (!args[0]) {
                 return message.reply({ content: 'Please specify a time', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
             if (!args[1]) {
                 remindertxt = 'null'
             }
             if (!args[0].endsWith('d') && !args[0].endsWith('h') && !args[0].endsWith('m') && !args[0].endsWith('s') && !time.includes(':') && !time.includes('.')) {
                 return message.reply({ content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
             let reminder = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.info.hex)
@@ -62,6 +68,8 @@ module.exports = {
 
             if (!time.endsWith('d') && !time.endsWith('h') && !time.endsWith('m') && !time.endsWith('s') && !time.includes(':') && !time.includes('.')) {
                 return interaction.reply({ content: 'Incorrect time format: please use `d`, `h`, `m`, or `s`', ephemeral: true })
+                    .catch(error => { });
+
             }
 
             let reminder = new Discord.EmbedBuilder()
@@ -70,6 +78,8 @@ module.exports = {
                 .setDescription(`${remindertxt}`)
 
             interaction.reply({ content: 'success!', ephemeral: true, allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
 
             let sendtochannel = interaction.options.getBoolean('sendinchannel')
             if (sendtochannel == true) {

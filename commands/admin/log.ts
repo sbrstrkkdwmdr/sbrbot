@@ -9,9 +9,12 @@ module.exports = {
             if (checks.isOwner(message.author.id) || message.author.permissions.has('ADMINISTRATOR')) {
                 let guildname = client.guilds.cache.has(message.guild.id) ? client.guilds.cache.get(message.guild.id).name : 'unknown name';
                 let guildid = client.guilds.cache.has(message.guild.id) ? client.guilds.cache.get(message.guild.id).id : 'unknown id'
-                message.reply({ content: `Logs for **${guildname}** \`${guildid}\``, files: [`./logs/moderator/${message.guild.id}.log`], allowedMentions: { repliedUser: false } });
+                message.reply({ content: `Logs for **${guildname}** \`${guildid}\``, files: [`./logs/moderator/${message.guild.id}.log`], allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             } else {
                 message.reply('you do not have permission to use this command')
+                .catch(error => { });
             }
         }
         //==============================================================================================================================================================================================
@@ -22,22 +25,30 @@ module.exports = {
                 //check if log file exists
                 if (isNaN(guildidA)) {
                     interaction.reply({ content: 'please enter a valid guild id', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
                 }
                 else if (fs.existsSync(`./logs/moderator/${guildidA}.log`)) {
                     let guildname = client.guilds.cache.has(guildidA) ? client.guilds.cache.get(guildidA).name : 'unknown name';
                     let guildid = client.guilds.cache.has(guildidA) ? client.guilds.cache.get(guildidA).id : 'unknown id'
 
-                    interaction.reply({ content: `Logs for **${guildname}** \`${guildid}\``, files: [`./logs/moderator/${guildid}.log`], allowedMentions: { repliedUser: false } });
+                    interaction.reply({ content: `Logs for **${guildname}** \`${guildid}\``, files: [`./logs/moderator/${guildid}.log`], allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
                 } else {
                     interaction.reply('there is no log file for this guild')
+                    .catch(error => { });
+
                 }
             }
             else if (checks.isOwner(interaction.member.user.id) || interaction.member.permissions.has('ADMINISTRATOR')) {
                 let guildname = client.guilds.cache.has(interaction.guild.id) ? client.guilds.cache.get(interaction.guild.id).name : 'unknown name';
                 let guildid = client.guilds.cache.has(interaction.guild.id) ? client.guilds.cache.get(interaction.guild.id).id : 'unknown id'
-                interaction.reply({ content: `Logs for **${guildname}** \`${guildid}\``, files: [`./logs/moderator/${interaction.guild.id}.log`], allowedMentions: { repliedUser: false } });
+                interaction.reply({ content: `Logs for **${guildname}** \`${guildid}\``, files: [`./logs/moderator/${interaction.guild.id}.log`], allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             } else {
                 interaction.reply('you do not have permission to use this command')
+                .catch(error => { });
             }
         }
     }

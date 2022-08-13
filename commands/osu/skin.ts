@@ -19,10 +19,14 @@ module.exports = {
             findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 return message.reply({ content: 'Error - user not found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                    .catch(error => { });
+
             } else {
                 skin = findname.get('skin')
                 if (skin.length < 1 || skin == null) {
                     return message.reply({ content: 'Error - no skin is set for the user', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch(error => { });
+
                 }
             }
             let Embed = new Discord.EmbedBuilder()
@@ -31,6 +35,8 @@ module.exports = {
                 embeds: [Embed],
                 allowedMentions: { repliedUser: false }
             })
+                .catch(error => { });
+
             let endofcommand = new Date().getTime();
             let timeelapsed = endofcommand - currentDate.getTime();
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (message command => skin) - ${timeelapsed}ms\n`)

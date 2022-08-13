@@ -22,6 +22,7 @@ module.exports = {
                     },
                     failIfNotExists: true
                 })
+                .catch(error => { });
                 return;
             }
 
@@ -42,6 +43,7 @@ module.exports = {
                     },
                     failIfNotExists: true
                 })
+                .catch(error => { });
                 return;
             }
 

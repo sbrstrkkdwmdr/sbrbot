@@ -178,6 +178,8 @@ button: ${button}
                 user = findname.get('osuname');
             } else {
                 return interaction.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             }
         }
         if (mode == null) {
@@ -221,6 +223,7 @@ Options:
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -230,6 +233,8 @@ Options:
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                    .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -254,6 +259,7 @@ Error - authentication
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
+
             }
         } catch (error) {
 
@@ -359,6 +365,8 @@ Error - authentication
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
+                .catch(error => { });
+
             }
             let dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
             let datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
@@ -517,6 +525,8 @@ ${onlinestatus}`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
+                    .catch(error => { });
+
             }
             if (message != null && interaction == null) {
                 obj.reply({
@@ -524,6 +534,8 @@ ${onlinestatus}`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
+                    .catch(error => { });
+
             }
 
 

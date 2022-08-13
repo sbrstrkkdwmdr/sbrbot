@@ -229,6 +229,7 @@ mods: ${mods}
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -238,6 +239,8 @@ mods: ${mods}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -266,6 +269,8 @@ cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
                 obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                    .catch(error => { });
+
                 return;
             }
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -295,6 +300,7 @@ ${error}
                                 content: 'Error',
                                 allowedMentions: { repliedUser: false },
                             })
+
                         } catch (err) {
 
                         }
@@ -304,6 +310,8 @@ ${error}
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
+                            .catch(error => { });
+
                     }
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                         `
@@ -319,6 +327,8 @@ node-fetch error: ${error}
             try {
                 if (lbdataf.authentication) {
                     obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch(error => { });
+
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                         `
 ----------------------------------------------------
@@ -395,9 +405,13 @@ ${hitlist}
 
             if (button == null) {
                 obj.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                    .catch(error => { });
+
                 fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
             } else {
                 message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                    .catch(error => { });
+
             }
         } else {
             let oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${cmdchecks.toHexadecimal(mapid)}&mods=${cmdchecks.toHexadecimal(osumodcalc.ModStringToInt(osumodcalc.shortModName(mods)))}&limit=100`
@@ -411,6 +425,7 @@ ${hitlist}
                                 content: 'Error',
                                 allowedMentions: { repliedUser: false },
                             })
+
                         } catch (err) {
 
                         }
@@ -420,6 +435,8 @@ ${hitlist}
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
+                            .catch(error => { });
+
                     }
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                         `
@@ -440,6 +457,7 @@ cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
                     obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch(error => { });
                     return;
                 }
             } catch (error) {
@@ -459,7 +477,7 @@ Error - authentication
                 let hitlist;
                 let acc;
                 let score = lbdata[i + (page * 5)]
-                if(!score) break;
+                if (!score) break;
                 let mode = mapdata.mode
                 switch (mode) {
                     case 'osu':
@@ -498,11 +516,14 @@ Error - authentication
 
             if (button == null) {
                 obj.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                    .catch(error => { });
+
                 fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
 
             } else {
                 message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                //message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
         }
 

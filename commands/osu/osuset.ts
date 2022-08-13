@@ -12,7 +12,8 @@ module.exports = {
         if (message != null) {
             let username = args.join(' ')
             if (!args[0]) return message.reply({ content: 'Please enter a username or ID', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-            //message.reply({ content: 'please use the slash command instead', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                .catch(error => { });
+
             try {
                 await userdata.create({
                     userid: message.author.id,
@@ -20,6 +21,7 @@ module.exports = {
                     mode: 'osu',
                 })
                 message.reply({ content: 'added to the database', allowedMentions: { repliedUser: false } })
+
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess\n\n`, 'utf-8')
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nusername: ${username}\n`)
                 let endofcommand = new Date().getTime();
@@ -38,12 +40,13 @@ module.exports = {
                     let timeelapsed = endofcommand - currentDate.getTime();
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                     return message.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
                 }
                 let endofcommand = new Date().getTime();
                 let timeelapsed = endofcommand - currentDate.getTime();
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                 return message.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
-
+                    .catch(error => { });
 
             }
         }
@@ -67,6 +70,7 @@ module.exports = {
                         mode: 'osu',
                     })
                     interaction.reply({ content: 'added to the database', allowedMentions: { repliedUser: false } })
+
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
@@ -85,11 +89,15 @@ module.exports = {
                         let timeelapsed = endofcommand - currentDate.getTime();
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                         return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
+                            .catch(error => { });
+
                     }
                     let endofcommand = new Date().getTime();
                     let timeelapsed = endofcommand - currentDate.getTime();
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                     return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
+
                 }
             }
             else if (!skin) {
@@ -100,6 +108,7 @@ module.exports = {
                         mode: mode,
                     })
                     interaction.reply({ content: 'added to the database', allowedMentions: { repliedUser: false } })
+
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
                     let endofcommand = new Date().getTime();
@@ -118,11 +127,15 @@ module.exports = {
                         let timeelapsed = endofcommand - currentDate.getTime();
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                         return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
+                            .catch(error => { });
+
                     }
                     let endofcommand = new Date().getTime();
                     let timeelapsed = endofcommand - currentDate.getTime();
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                     return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
+
 
 
                 }
@@ -136,6 +149,7 @@ module.exports = {
                         skin: skin
                     })
                     interaction.reply({ content: 'added skin to the database', allowedMentions: { repliedUser: false } })
+
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
                     let endofcommand = new Date().getTime();
@@ -155,12 +169,14 @@ module.exports = {
                         let timeelapsed = endofcommand - currentDate.getTime();
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                         return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
+                            .catch(error => { });
+
                     }
                     let endofcommand = new Date().getTime();
                     let timeelapsed = endofcommand - currentDate.getTime();
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                     return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
-
+                        .catch(error => { });
 
                 }
             }

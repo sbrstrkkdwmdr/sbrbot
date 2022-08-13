@@ -255,6 +255,8 @@ button: ${button}
                 user = findname.get('osuname');
             } else {
                 return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
         }
         if (mode == null) {
@@ -303,6 +305,7 @@ Options:
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -312,6 +315,8 @@ Options:
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -333,6 +338,8 @@ cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
                 obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+
+                
                 return;
             }
         } catch (error) {
@@ -368,6 +375,7 @@ Error - authentication
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -377,6 +385,8 @@ Error - authentication
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -400,6 +410,8 @@ node-fetch error: ${error}
             Error - no scores found
             ----------------------------------------------------`)
             return obj.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
         }
         let filtereddata = osutopdataPreSort;
         let filterinfo = '';
@@ -502,6 +514,8 @@ params: ${sort} | ${reverse} | ${mods} | ${mapper}
 ${error}
 ----------------------------------------------------`)
             return obj.reply({ content: 'no plays found for the options given', allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
         }
         let topEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.hex)
@@ -708,6 +722,8 @@ ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
+                .catch(error => { });
+
         } else {
             message.edit({
                 content: '⠀',
@@ -715,6 +731,8 @@ ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
+            .catch(error => { });
+
         }
 
 

@@ -99,6 +99,8 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
         if (message != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - convert (message)\n${currentDate} | ${currentDateISO}\n recieved convert command\nrequested by ${message.author.id} AKA ${message.author.tag}`, 'utf-8')
             message.reply({ content: 'Just use the slash command', allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             /*             switch (args[0]) {
                 default:
                     message.channel.send({ embeds: [Embedhelp, EmbedList] })
@@ -119,10 +121,14 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
 
             if (cat1 == 'help' || cat2 == 'help') {
                 interaction.reply({ embeds: [EmbedList], allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
                 return;
             }
             if (cat1 == 'metricprefixes' || cat2 == 'metricprefixes') {
                 interaction.reply({ embeds: [siEmbed], allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
                 return;
             }
 
@@ -131,6 +137,8 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
                 case (cat1 == cat2):
                     let msg = `did you really just convert ${cat1.toLowerCase()} to ${cat2.toLowerCase()}? smh my head`
                     interaction.reply(msg)
+                        .catch(error => { });
+
                     //
                     break;
                 //temperature
@@ -675,6 +683,8 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
                 */
                 default:
                     interaction.reply({ content: 'Invalid conversion or it hasn\'t been added yet', embeds: [EmbedList], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
+
                     return;
                     break;
             }
@@ -692,6 +702,8 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
                 }
             ])
             interaction.reply({ embeds: [embedres], allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\ntype1: ${cat1}\ntyp2: ${cat2}\nvalue: ${num}\n`)
         }
     }

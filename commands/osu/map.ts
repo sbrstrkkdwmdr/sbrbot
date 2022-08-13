@@ -197,6 +197,7 @@ button: ${button}
                                 content: 'Error',
                                 allowedMentions: { repliedUser: false },
                             })
+
                         } catch (err) {
 
                         }
@@ -206,6 +207,8 @@ button: ${button}
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
+                            .catch(error => { });
+
                     }
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                         `
@@ -297,6 +300,7 @@ Options:
                                 content: 'Error',
                                 allowedMentions: { repliedUser: false },
                             })
+
                         } catch (err) {
 
                         }
@@ -306,6 +310,8 @@ Options:
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
+                            .catch(error => { });
+
                     }
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                         `
@@ -330,13 +336,16 @@ cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
                         let ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
-                        obj.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
+                        obj.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+
                         return;
                     }
                 } catch (error) {
 
                 }
-                obj.reply({ content: 'Error - map not found', allowedMentions: { repliedUser: false } });
+                obj.reply({ content: 'Error - map not found', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
                 return;
             }
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
@@ -356,6 +365,7 @@ Error - authentication
                                 content: 'Error',
                                 allowedMentions: { repliedUser: false },
                             })
+
                         } catch (err) {
 
                         }
@@ -365,6 +375,8 @@ Error - authentication
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
+                            .catch(error => { });
+
                     }
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                         `
@@ -387,7 +399,8 @@ cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
                     let ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
-                    message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
+                    message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+
                     return;
                 }
             } catch (error) {
@@ -395,7 +408,9 @@ Error - authentication
             }
 
             if (mapidtest.length == 0) {
-                obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: \"' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true });
+                obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: \"' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                    .catch(error => { });
+
                 return;
             }
             try {
@@ -409,7 +424,9 @@ Error - map not found
 params: ${maptitleq}
 ${error}
 ----------------------------------------------------`)
-                obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: \"' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true });
+                obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: \"' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                    .catch(error => { });
+
                 return;
             }
 
@@ -426,6 +443,7 @@ ${error}
                                 content: 'Error',
                                 allowedMentions: { repliedUser: false },
                             })
+
                         } catch (err) {
 
                         }
@@ -435,6 +453,8 @@ ${error}
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
+                            .catch(error => { });
+
                     }
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                         `
@@ -473,7 +493,9 @@ Error - authentication
                 Error - map not found
                 params: ${mapid} | ${maptitleq}
                 ----------------------------------------------------`)
-                obj.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true });
+                obj.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                    .catch(error => { });
+
                 return;
             }
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
@@ -488,6 +510,8 @@ Error - authentication
         ;
         if (interaction != null && message == null) {
             obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
         }
         switch (mapdata.status) {
             case 'ranked':
@@ -590,6 +614,7 @@ ${error}
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -599,6 +624,8 @@ ${error}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -716,6 +743,8 @@ node-fetch error: ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
+                .catch(error => { });
+
         }
         if (interaction != null && message == null) {
             obj.editReply({
@@ -724,6 +753,8 @@ node-fetch error: ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
+                .catch(error => { });
+
         }
         if (button) {
             message.edit({
@@ -732,6 +763,8 @@ node-fetch error: ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
+            .catch(error => { });
+
         }
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,

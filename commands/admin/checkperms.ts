@@ -17,11 +17,6 @@ module.exports = {
             } else {
                 user = message.author
             }
-
-
-            /*             else {
-                            return message.reply({content: 'Error'})
-                        }  */
             let member = message.guild.members.cache.get(user.id)
             let permissions = member.permissions.toArray().join(' **|** ').replace('ADMINISTRATOR', '***!!!ADMINISTRATOR!!!***')
 
@@ -33,6 +28,7 @@ module.exports = {
                 .setColor(colours.embedColour.admin.hex)
                 ;
             message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+                .catch(error => { });
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nmessage content: ${message.content}\n`)
 
         }
@@ -52,13 +48,16 @@ module.exports = {
                     ;
                 if (commandchecks.isOwner(interaction.member.user.id)) {
                     interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false }, ephemeral: true })
+                        .catch(error => { });
                 } else {
                     interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nuser: ${user} AKA ${user.tag}\n`)
             }
             else {
                 interaction.reply({ content: 'Error', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
             }
 
         }

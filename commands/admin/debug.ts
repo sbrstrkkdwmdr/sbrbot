@@ -119,6 +119,7 @@ module.exports = {
                     image.json
                     */
                     return message.reply({ content: 'Cannot send image debug file - contains sensitive information', allowedMentions: { repliedUser: false } })
+                    .catch(error => {});
                     //message.channel.send({files: [`debug\\image.json`]})
                     break;
 
@@ -134,9 +135,11 @@ module.exports = {
             if (debugfiles.length > 0) {
 
                 message.reply({ files: debugfiles, allowedMentions: { repliedUser: false } })
+                .catch(error => {});
             }
             else {
                 message.reply({ content: `error - no files found for \`${args.join(' ')}\``, allowedMentions: { repliedUser: false } })
+                .catch(error => {});
             }
         }
 

@@ -8,15 +8,19 @@ module.exports = {
     name: 'ytsearch',
     description: 'null',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        let i:number;
+        let i: number;
         if (message != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - ytsearch (message)\n${currentDate} | ${currentDateISO}\n recieved search youtube command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
             if (!args.length) {
                 return message.reply({ content: 'Please specify the video you want to search.', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
             const searching = await yts.search(args.join(' '))
             if (searching.videos.length < 1) {
                 return message.reply({ content: 'No results found', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
             let vids = searching.videos
             let embed = new Discord.EmbedBuilder()
@@ -38,6 +42,8 @@ module.exports = {
             }
             fs.writeFileSync('debug/ytsearch.json', JSON.stringify(searching, null, 2))
             message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nmessage content: ${message.content}\n`)
         }
         if (interaction != null) {
@@ -45,10 +51,14 @@ module.exports = {
             let query = interaction.options.getString('query')
             if (!query) {
                 return interaction.reply({ content: 'Please specify the video you want to search.', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
             const searching = await yts.search(query)
             if (searching.videos.length < 1) {
                 return interaction.reply({ content: 'No results found', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
             let vids = searching.videos
             let embed = new Discord.EmbedBuilder()
@@ -69,6 +79,8 @@ module.exports = {
             }
             fs.writeFileSync('debug/ytsearch.json', JSON.stringify(searching, null, 2))
             interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nquery: ${query}\n`)
         }
     }

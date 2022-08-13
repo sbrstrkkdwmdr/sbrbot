@@ -180,10 +180,14 @@ module.exports = {
             findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                    .catch(error => { });
+
             } else {
                 user = findname.get('osuname')
                 if (user.length < 1) {
                     return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch(error => { });
+
                 }
             }
         }
@@ -218,6 +222,8 @@ module.exports = {
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
+                .catch(error => { });
+
         }
         let userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
 
@@ -232,6 +238,7 @@ module.exports = {
                 setTimeout(() => {
 
                     obj.channel.send({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+
                 }, 100)
                 return;
             }
@@ -242,6 +249,8 @@ module.exports = {
             return obj.channel.send(
                 'Error - no user found'
             )
+                .catch(error => { });
+
         }
         let findname;
         findname = await userdata.findOne({ where: { osuname: user } })
@@ -299,6 +308,8 @@ module.exports = {
                         content: 'Error',
                         allowedMentions: { repliedUser: false },
                     })
+
+
                 } catch (err) {
 
                 }
@@ -308,6 +319,8 @@ module.exports = {
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
+                    .catch(error => { });
+
             }
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
@@ -326,23 +339,30 @@ node-fetch error: ${error}
         if (list != true) {
             rsEmbed.setColor(colours.embedColour.score.hex)
 
-            if (!rsdata[0 + page] && interaction && button == null) {
-                return interaction.editReply(
-                    {
-                        content: ' Error - no score found',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-            }
-            if (!rsdata[0 + page] && message && button == null) {
-                return message.reply(
-                    {
-                        content: ' Error - no score found',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-            }
             let curscore = rsdata[0 + page]
+            if (!curscore || curscore == undefined || curscore == null) {
+                if (interaction && button == null) {
+                    interaction.editReply(
+                        {
+                            content: ' Error - no score found',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                        .catch(error => { });
+
+                }
+                if (message && button == null) {
+                    message.reply(
+                        {
+                            content: ' Error - no score found',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                        .catch(error => { });
+
+                }
+                return;
+            }
             let curbm = curscore.beatmap
             let curbms = curscore.beatmapset
             let hittime = curbm.hit_length
@@ -371,6 +391,7 @@ node-fetch error: ${error}
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -380,6 +401,8 @@ node-fetch error: ${error}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -678,6 +701,8 @@ node-fetch error: ${error}
                 components: [buttons],
                 failIfNotExists: true
             })
+                .catch(error => { });
+
         }
         if (message && button == null) {
             obj.reply({
@@ -686,6 +711,8 @@ node-fetch error: ${error}
                 components: [buttons],
                 failIfNotExists: true
             })
+                .catch(error => { });
+
         }
         if (button != null) {
             message.edit({
@@ -694,6 +721,8 @@ node-fetch error: ${error}
                 components: [buttons],
                 failIfNotExists: true
             })
+                .catch(error => { });
+
         }
 
         let endofcommand = new Date().getTime();

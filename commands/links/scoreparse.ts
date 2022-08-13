@@ -58,6 +58,8 @@ cmd ID: ${absoluteID}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                     `
@@ -76,6 +78,7 @@ Error: ${error}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
+                .catch(error => { });
             return;
         }
 
@@ -91,6 +94,8 @@ Error: ${error}
                 let ranking = scoredata.rank.toUpperCase()
             } catch (error) {
                 return message.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
 
             }
             let mapdata = await fetch(mapurl, {
@@ -114,6 +119,8 @@ Error: ${error}
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
+                            .catch(error => { });
+
                     }
                     fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                         `
@@ -245,6 +252,8 @@ Error: ${error}
                         ${pptxt}\n${ppissue}
                         `)
             message.reply({ embeds: [scoreembed], allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
             let endofcommand = new Date().getTime();
             let timeelapsed = endofcommand - currentDate.getTime();

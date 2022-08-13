@@ -91,7 +91,9 @@ button: ${button}
             }).then(res => res.json() as any)
                 .catch(err => {
                     console.log(err);
-                    return interaction.channel.send('An error occured while fetching the beatmap data.');
+                    return interaction.channel.send('An error occured while fetching the beatmap data.')
+                        .catch(error => { });
+
                 })
 
             fs.writeFileSync(`debugosu/link-map=bmsdataButton=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
@@ -196,6 +198,7 @@ cmd ID: ${absoluteID}
                 } catch (error) {
                     console.log(error)
                     return message.reply({ content: 'Please enter a valid beatmap link.', allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
 
                 }
             } else {
@@ -235,6 +238,8 @@ cmd ID: ${absoluteID}
                                 allowedMentions: { repliedUser: false },
                                 failIfNotExists: true
                             })
+                                .catch(error => { });
+
                         }
                         fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                             `
@@ -254,6 +259,8 @@ node-fetch error: ${error}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                     return;
                 }
             }
@@ -314,6 +321,7 @@ Options:
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
                 }
                 fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                     `
@@ -344,7 +352,9 @@ Error - authentication
             } catch (error) {
 
             }
-            obj.reply({ content: 'Error - map not found', allowedMentions: { repliedUser: false } });
+            obj.reply({ content: 'Error - map not found', allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             return;
         }
         fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
@@ -359,6 +369,8 @@ Error - authentication
         ;
         if (interaction != null && message == null) {
             obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
         }
         switch (mapdata.status) {
             case 'ranked':
@@ -471,6 +483,8 @@ ${error}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                     `
@@ -586,6 +600,8 @@ node-fetch error: ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
+                .catch(error => { });
+
         }
         if (interaction != null && message == null) {
             obj.editReply({
@@ -594,6 +610,8 @@ node-fetch error: ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
+                .catch(error => { });
+
         }
         if (button) {
             message.edit({

@@ -13,15 +13,19 @@ module.exports = {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - say (message)\n${currentDate} | ${currentDateISO}\n recieved say command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
             if (commandchecks.isOwner(message.author.id)) {
                 message.delete();
-                if(!args[0]){
+                if (!args[0]) {
                     let Embed = new Discord.EmbedBuilder()
-                    .setTitle('Message')
-                    .setDescription(defaulttext)
-                    message.channel.send({ embeds: [Embed]})
+                        .setTitle('Message')
+                        .setDescription(defaulttext)
+                    message.channel.send({ embeds: [Embed] })
+                        .catch(error => { });
+
                     return
                 }
 
                 message.channel.send(args.join(' '))
+                    .catch(error => { });
+
             } else {
                 message.reply({ content: 'L + ratio + no + you do not have permissions + no bitches + L', allowedMentions: { repliedUser: false } })
             }
@@ -37,9 +41,15 @@ module.exports = {
             }
             if (commandchecks.isOwner(interaction.member.user.id)) {
                 interaction.reply({ content: 'success', ephemeral: true, allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
                 channel.send(`${msg}`)
+                    .catch(error => { });
+
             } else {
                 interaction.reply({ content: 'L + ratio + no permissions 🥺🥺🥺', ephemeral: true, allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
         }
 

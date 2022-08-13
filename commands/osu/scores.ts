@@ -235,10 +235,14 @@ button: ${button}
             let findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             } else {
                 user = findname.get('osuname')
                 if (user.length < 1) {
                     return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
+
                 }
             }
         }
@@ -286,6 +290,7 @@ Options:
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -295,6 +300,8 @@ Options:
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -318,8 +325,10 @@ Error - authentication
 ----------------------------------------------------`)
                 if (button == null) {
                     obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+
                 } else {
                     message.edit({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+
                 } return;
             }
         } catch (error) {
@@ -332,12 +341,16 @@ Error - authentication
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
+                    .catch(error => { });
+
             } else {
                 return message.edit({
                     content: 'Error - no user found',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
+                .catch(error => { });
+
             }
         }
         if (page == null || page < 1) {
@@ -358,6 +371,7 @@ Error - authentication
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -367,6 +381,8 @@ Error - authentication
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -387,6 +403,8 @@ node-fetch error: ${error}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
+                .catch(error => { });
+
         }
         if (reverse != true) {
             switch (sort) {
@@ -506,6 +524,7 @@ node-fetch error: ${error}
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -515,6 +534,8 @@ node-fetch error: ${error}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -660,6 +681,8 @@ node-fetch error: ${error}
                     failIfNotExists: true,
                     components: [buttons]
                 })
+                    .catch(error => { });
+
             } else {
                 message.edit({
                     content: '⠀',
@@ -668,6 +691,8 @@ node-fetch error: ${error}
                     failIfNotExists: true,
                     components: [buttons]
                 })
+                    .catch(error => { });
+
             }
         }
 

@@ -137,6 +137,7 @@ module.exports = {
                         }]
                         )
                         message.reply({ embeds: [Embed] })
+                        .catch(error => { });
                         return;
                     }
                     let optionaldatefirst = new Date(new Date().toLocaleString('en-US', timeopts));//).toISOString();
@@ -174,6 +175,8 @@ module.exports = {
             }
             //message.channel.send(`${currentDateISO} | ${currentDate}`) 
             message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
+            .catch(error => { });
+
         }
 
         //==============================================================================================================================================================================================

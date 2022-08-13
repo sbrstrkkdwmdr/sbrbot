@@ -15,7 +15,8 @@ module.exports = {
             let type = args[0];
             let id = args[1];
             if (!args[0]) {
-                message.reply({ content: 'Please specify a type of id to find (user/guild/channel/role/emoji)', allowedMentions: { repliedUser: false } });
+                message.reply({ content: 'Please specify a type of id to find (user/guild/channel/role/emoji)', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
                 return;
             }
             if (message.mentions.users.size > 0) {
@@ -28,7 +29,8 @@ module.exports = {
                 id = message.mentions.roles.first().id
             }
             if (!args[1] || isNaN(id) && (!(message.mentions.users.size > 0 && args[0] == 'user') || !(message.mentions.channels.size > 0 && args[0] == 'channel') || !(message.mentions.roles.size == 1 && args[0] == 'roles'))) {
-                message.reply({ content: 'Please specify an id to find', allowedMentions: { repliedUser: false } });
+                message.reply({ content: 'Please specify an id to find', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
                 return;
             }
             switch (type) {
@@ -91,7 +93,8 @@ module.exports = {
                             return;
                         }
                     })
-                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
+                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
 
                     break;
                 case 'guild':
@@ -116,7 +119,8 @@ module.exports = {
                             return;
                         }
                     })
-                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
+                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
                     break;
                 case 'channel':
                     let channelfind: any = 'Channel not found'
@@ -137,8 +141,8 @@ module.exports = {
                             return;
                         }
                     })
-                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
-
+                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
                     break;
                 case 'role':
                     let rolefind: any = 'No role found'
@@ -159,8 +163,8 @@ module.exports = {
                             return;
                         }
                     })
-                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
-
+                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
                     break;
                 case 'emoji':
                     let emojifind: any = 'No emoji found'
@@ -179,10 +183,12 @@ module.exports = {
                             return;
                         }
                     })
-                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
+                    message.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
                     break;
                 default:
-                    message.reply({ content: 'Error - invalid search parameters. Valid params are: user, guild, channel, role', allowedMentions: { repliedUser: false } });
+                    message.reply({ content: 'Error - invalid search parameters. Valid params are: user, guild, channel, role', allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
                     break;
             }
 
@@ -193,7 +199,8 @@ module.exports = {
             let type = interaction.options.getString('type');
             let id = interaction.options.getString('id');
             if (parseInt(id) == NaN) {
-                return interaction.reply({ content: 'IDs must be integers', allowedMentions: { repliedUser: false } });
+                return interaction.reply({ content: 'IDs must be integers', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
             }
             switch (type) {
                 case 'user':
@@ -258,7 +265,8 @@ module.exports = {
 
 
 
-                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
+                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
 
                     break;
                 case 'guild':
@@ -283,7 +291,8 @@ module.exports = {
                             return;
                         }
                     })
-                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
+                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
                     break;
                 case 'channel':
                     let channelfind: any = 'Channel not found'
@@ -304,7 +313,8 @@ module.exports = {
                             return;
                         }
                     })
-                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
+                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
 
                     break;
                 case 'role':
@@ -326,7 +336,8 @@ module.exports = {
                             return;
                         }
                     })
-                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
+                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
 
                     break;
                 case 'emoji':
@@ -346,10 +357,12 @@ module.exports = {
                             return;
                         }
                     })
-                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } });
+                    interaction.reply({ embeds: [Embedr], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
                     break;
                 default:
-                    interaction.reply({ content: 'Error - invalid search parameters. Valid params are: user, guild, channel, role', allowedMentions: { repliedUser: false } });
+                    interaction.reply({ content: 'Error - invalid search parameters. Valid params are: user, guild, channel, role', allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
                     break;
             }
         }

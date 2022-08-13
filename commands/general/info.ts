@@ -20,7 +20,8 @@ module.exports = {
         [Creator](https://sbrstrkkdwmdr.github.io/sbr-web/)
         [Commands list](https://sbrstrkkdwmdr.github.io/sbrbot/commands)
         `)
-            message.reply({ embeds: [Embed], ephemeral: true, allowedMentions: { repliedUser: false } });
+            message.reply({ embeds: [Embed], ephemeral: true, allowedMentions: { repliedUser: false } })
+                .catch(error => { });
 
         }
 
@@ -36,7 +37,8 @@ module.exports = {
             [Github repo](https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts)
             [Creator](https://sbrstrkkdwmdr.github.io/sbr-web/)
             `)
-            interaction.reply({ embeds: [Embed], ephemeral: true, allowedMentions: { repliedUser: false } });
+            interaction.reply({ embeds: [Embed], ephemeral: true, allowedMentions: { repliedUser: false } })
+                .catch(error => { });
 
         }
 

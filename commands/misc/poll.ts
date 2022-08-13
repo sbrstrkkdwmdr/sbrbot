@@ -48,6 +48,8 @@ module.exports = {
             let name = args.join(' ')
             if (!args[0]) {
                 message.reply({ content: 'Please specify a title!', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
                 return;
             }
             pollEmbedDefault.setTitle(`${name}`)
@@ -58,6 +60,8 @@ module.exports = {
                 sentEmbed.react("✅")
                 sentEmbed.react("❌")
             })
+                .catch(error => { });
+
         }
         if (interaction != null) {
             let options = interaction.options.getString('options')
@@ -81,12 +85,14 @@ module.exports = {
             pollEmbedDefault.setDescription(`${optstxt}`)
                 .setColor(colours.embedColour.misc.hex)
             interaction.reply({ content: 'success', ephemeral: true, allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             interaction.channel.send({ embeds: [pollEmbedDefault] }).then(sentEmbed => {
                 for (i = 0; i < optsarr.length && i < 20; i++) {
                     sentEmbed.react(react[i])
                 }
             })
-
+                .catch(error => { });
 
         }
 

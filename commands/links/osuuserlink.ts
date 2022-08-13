@@ -46,6 +46,8 @@ cmd ID: ${absoluteID}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                     `
@@ -124,6 +126,8 @@ Error: ${error}
                 `)
 
             message.reply({ content: '⠀', embeds: [Embed], allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nsuccess\nID:${absoluteID}\n\n`, 'utf-8')
             let endofcommand = new Date().getTime();
             let timeelapsed = endofcommand - currentDate.getTime();
@@ -131,6 +135,8 @@ Error: ${error}
 
         } catch (error) {
             message.reply({ content: 'no osu! profile found\nNo user found with the name/id `' + user + '`', allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
         }
 
 

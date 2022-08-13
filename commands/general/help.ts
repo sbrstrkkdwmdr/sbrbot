@@ -102,6 +102,8 @@ module.exports = {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
             if (!args[0]) {
                 message.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
             if (args[0]) {
                 let command = args[0].toString()
@@ -275,10 +277,14 @@ module.exports = {
                         .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
 
                     return message.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
+
                 }
                 fullCommandList
                     .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
                 message.reply({ embeds: [commandInfo], allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\n${message.content}\n`)
         }
@@ -459,91 +465,15 @@ module.exports = {
                 fullCommandList
                     .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
                 return interaction.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
             interaction.reply({ embeds: [commandInfo], allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nCommand: ${command}\n`)
 
         }
 
     }
 }
-
-/* module.exports = {
-    name: 'help',
-    description: 'Displays all commands\n' +
-        'Command: `sbr-help`\n' +
-        'Slash command: `/help [command]`\n' +
-        'Options:\n' +
-        '`command` - string, optional. The command to get help for. If omitted, all commands will be displayed.\n',
-    execute(message, client, Discord, interaction, currentDate, currentDateISO, config) {
-
-        let fullCommandList = new Discord.EmbedBuilder()
-            .setColor('#0099ff')
-            .setTitle('Command List')
-            .setDescription('use `/help <command>` to get more info on a command')
-            .addField('Main commands',
-                `**ping** - Displays the bot's ping\n` +
-                `**help** - Displays this message\n`
-                , false)
-            .addField('osu! commands',
-                `**osu** \`[user]\`- displays a user's profile\n` +
-                `**osuset** \`[user] [mode]\` - sets your osu! username\n` +
-                `**osutop** \`[user] [mode] [sort] [page] [mapper] [detailed (booleanoptional)]\` - displays the user's top plays\n` +
-                `**map** \`[id] [mods]\` - displays the map info for a beatmap\n` +
-                `**rs** \`[user] [mode] [offset]\`  - displays the most recent score for the user\n` +
-                `[WIP]**scores** \`[user] [id] [sort]\` - displays the users scores for a given beatmap`
-                , false)
-            .addField('admin commands',
-                '[WIP]**checkperms** \`[user]\` - checks the permissions of a given user\n' +
-                '[WIP]**leaveguild** \`[guild]\` - leaves a given server\n' +
-                '[WIP]**servers** - displays all servers the bot is in', false)
-            .addField('other commands',
-                '[WIP]**gif** \`[type]\` - displays a gif of a given type\n' +
-                '[WIP]**ytsearch** \`[query]\` - searches youtube for a given query\n' +
-                '[WIP]**imagesearch** \`[query]\` - searches google images for a given query\n' +
-                '[WIP]**remind** \`[reminder] [time]\` - creates a reminder\n' +
-                '[WIP]**math** \`[expression]\` - evaluates a math expression\n' +
-                '[WIP]**convert** \`[value] [from] [to]\` - converts a value from one unit to another\n', false
-            )
-
-
-        if (message != null) {
-            message.reply({ embeds: [fullCommandList] })
-        }
-
-
-
-        if (interaction != null) {
-            let command = interaction.options.getString('command')
-            let commandInfo = new Discord.EmbedBuilder()
-                .setColor('#0099ff')
-            if (client.commands.get(command)) {
-
-                commandInfo.setTitle(client.commands.get(command).name)
-                commandInfo.setDescription(client.commands.get(command).description)
-
-            } else if (client.osucmds.get(command)) {
-
-                commandInfo.setTitle(client.osucmds.get(command).name)
-                commandInfo.setDescription(client.osucmds.get(command).description)
-
-            }
-            else if (client.admincmds.get(command)) {
-
-                commandInfo.setTitle(client.admincmds.get(command).name)
-                commandInfo.setDescription(client.admincmds.get(command).description)
-
-            } else if (client.links.get(command)) {
-
-                commandInfo.setTitle(client.links.get(command).name)
-                commandInfo.setDescription(client.links.get(command).description)
-            }
-            else {
-                return interaction.reply({ embeds: [fullCommandList] })
-            }
-            interaction.reply({ embeds: [commandInfo] })
-
-        }
-
-    }
-} */

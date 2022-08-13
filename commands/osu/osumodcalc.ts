@@ -32,6 +32,8 @@ module.exports = {
                 embed.setTitle("Error")
                 embed.setDescription("You cannot have HR and EZ or HT and DT/NC at the same time.")
                 interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
                 return;
             }
             if (mods.includes("HR")) {
@@ -59,6 +61,8 @@ module.exports = {
             embed.setTitle(`Modded Details (${mods})`)
             embed.setDescription("**CS:** " + baseCS + "\n**AR:** " + baseAR + "\n**OD:** " + baseOD + "\n**HP:** " + baseHP + "\n**BPM:** " + baseBPM)
             interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
             let endofcommand = new Date().getTime();
             let timeelapsed = endofcommand - currentDate.getTime();

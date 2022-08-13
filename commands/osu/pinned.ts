@@ -182,6 +182,8 @@ button: ${button}
                 user = findname.get('osuname');
             } else {
                 return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                    .catch(error => { });
+
             }
         }
         if (mode == null) {
@@ -228,6 +230,7 @@ Options:
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -237,6 +240,8 @@ Options:
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -258,6 +263,7 @@ cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
                 obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+
                 return;
             }
         } catch (error) {
@@ -269,6 +275,8 @@ Error - authentication
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
+            .catch(error => { });
+
             return;
         }
 
@@ -285,6 +293,7 @@ Error - authentication
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -294,6 +303,8 @@ Error - authentication
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                    .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -460,12 +471,16 @@ ${mode}`
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
+                .catch(error => { });
+
         } else {
             message.edit({
                 embeds: [pinnedEmbed],
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
+            .catch(error => { });
+
         }
 
 

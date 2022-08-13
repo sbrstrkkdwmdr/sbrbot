@@ -14,6 +14,8 @@ module.exports = {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - SERVERS (message)\n${currentDate} | ${currentDateISO}\n recieved SERVERS command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
 
             message.reply({ content: 'Servers:\n' + servers, allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nmessage content: ${message.content}\n`)
 
         }
@@ -22,8 +24,10 @@ module.exports = {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - SERVERS (interaction)\n${currentDate} | ${currentDateISO}\n recieved SERVERS command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
             if (commandchecks.isOwner(interaction.member.user.id)) {
                 interaction.reply({ content: 'Servers:\n ' + servers, ephemeral: true, allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
             } else {
                 interaction.reply({ content: 'You do not have permission to use this command', ephemeral: true, allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
             }
         }
 

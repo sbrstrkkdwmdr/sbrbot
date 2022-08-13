@@ -5,7 +5,9 @@ module.exports = {
     description: 'Emojify a string',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         if (args.length < 1) {
-            message.reply({ content: 'Please provide a string to emojify.', allowedMentions: { repliedUser: false } });
+            message.reply({ content: 'Please provide a string to emojify.', allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             return;
         }
         let emojified = '';
@@ -14,12 +16,14 @@ module.exports = {
             if (i < args.length - 1) {
                 let rdm = Math.floor(Math.random() * emojisarr.emojiarray.length - 1) + 1;
                 //console.log(rdm);
-                if(emojisarr.emojiarray[rdm] == null || emojisarr.emojiarray[rdm].length < 1){
+                if (emojisarr.emojiarray[rdm] == null || emojisarr.emojiarray[rdm].length < 1) {
                     console.log('nullchar')
                 }
                 emojified += `${emojisarr.emojiarray[rdm]}` + ' ';
             }
         }
-        message.reply({ content: emojified, allowedMentions: { repliedUser: false } });
+        message.reply({ content: emojified, allowedMentions: { repliedUser: false } })
+            .catch(error => { });
+
     }
 }

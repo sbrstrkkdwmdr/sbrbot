@@ -11,16 +11,24 @@ module.exports = {
 
             if (!args.length) {
                 return message.reply({ content: 'Please specify the name of the image you want to search.', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
             let res =
                 await fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${args.join(' ')}&cx=${config.google.cx}&key=${config.google.apiKey}&searchType=image`).catch(error => fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, "\n" + error));
 
             if (!res) return message.reply({ content: 'Unable to fetch the requested image.', allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             if (res.status >= 400) return message.reply({ content: `Error ${res.status}`, allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
 
             let response = await res.json() as any;
             fs.writeFileSync('debug/image.json', JSON.stringify(response, null, 2))
             if (response.items.length < 1) return message.reply({ content: 'Error - no results found', allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
 
             let resimg = ''
             let i: number;
@@ -50,6 +58,8 @@ module.exports = {
                 .setImage(`${response.items[4].image.thumbnailLink}`)
 
             message.reply({ embeds: [imageEmbed, image1, image2, image3, image4, image5], allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nQuery: ${args.join(' ')}`)
 
         }
@@ -60,16 +70,23 @@ module.exports = {
 
             if (!query) {
                 return interaction.reply({ content: 'Please specify the name of the image you want to search.', allowedMentions: { repliedUser: false } })
+                    .catch(error => { });
+
             }
             let res =
                 await fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${query}&cx=${config.googlecx}&key=${config.googlekey}&searchType=image`).catch(error => fs.appendFileSync('other.log', "\n" + error));
 
             if (!res) return interaction.reply({ content: 'Unable to fetch the requested image.', allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             if (res.status >= 400) return interaction.reply({ content: `Error ${res.status}`, allowedMentions: { repliedUser: false } })
+                .catch(error => { });
 
             let response = await res.json() as any;
             fs.writeFileSync('debug/image.json', JSON.stringify(response, null, 2))
             if (response.items.length < 1) return interaction.reply({ content: 'Error - no results found', allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
 
             let resimg = ''
             let i: number;
@@ -82,6 +99,8 @@ module.exports = {
                 .setDescription(`(NOTE - links may be unsafe)\n${resimg}`)
 
             interaction.reply({ embeds: [imageEmbed], allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nquery: ${query}`)
 
         }

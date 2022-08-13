@@ -9,7 +9,7 @@ module.exports = {
         '⠀⠀`type`: string, required. The type of gif to send.'
     ,
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        let thelink:string;
+        let thelink: string;
         let cryabtit = [
             'https://media.discordapp.net/attachments/858364068024156171/858364114183520266/cry_about_about_it.gif', //zitron map
             'https://tenor.com/view/cry-about-it-jtoh-get-real-gif-20687952', // imperfect circle
@@ -140,6 +140,8 @@ module.exports = {
 
             if (args[0] == null) {
                 message.author.send('Please specify a type of gif')
+                    .catch(error => { });
+
                 message.delete()
             } else {
                 let interaction = message
@@ -209,11 +211,15 @@ module.exports = {
                         message.author.send('invald type\n' +
                             'Valid types: cry about it, speech bubble, chad speak, reaction, skill issue, no bitches, agree, cope, disagree, nocare, misspell, compliment, insult, ratio, reaction to info'
                         )
+                            .catch(error => { });
+
                         return;
                         break;
 
                 }
                 message.channel.send(thelink)
+                    .catch(error => { });
+
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\n${message.content}\n`)
                 message.delete()
 
@@ -288,8 +294,11 @@ module.exports = {
                     break;
             }
             interaction.channel.send(thelink)
+                .catch(error => { });
 
             interaction.reply({ content: 'success', ephemeral: true, allowedMentions: { repliedUser: false } })
+                .catch(error => { });
+
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\ngif type: ${str}\n`)
         }
         /*

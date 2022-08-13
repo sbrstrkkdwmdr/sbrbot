@@ -57,6 +57,8 @@ cmd ID: ${absoluteID}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                     `
@@ -93,6 +95,8 @@ Error: ${error}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                     `
@@ -316,6 +320,8 @@ Error: ${error}
             .setImage(`${await graphul}`);
 
         message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
+            .catch(error => { });
+
         let endofcommand = new Date().getTime();
         let timeelapsed = endofcommand - currentDate.getTime();
         fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nCommand Latency (replay parse) - ${timeelapsed}ms\nID:${absoluteID}\n`)

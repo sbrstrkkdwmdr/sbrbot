@@ -76,6 +76,8 @@ cmd ID: ${absoluteID}
                     user = findname.get('osuname');
                 } else {
                     return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch(error => { });
+
                 }
             }
             if (mode == null && (!args[0] || message.mentions.users.size > 0)) {
@@ -146,6 +148,8 @@ cmd ID: ${absoluteID}
                     user = findname.get('osuname');
                 } else {
                     return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch(error => { });
+
                 }
             }
             if (mode == null) {
@@ -225,6 +229,8 @@ button: ${button}
                     user = findname.get('osuname');
                 } else {
                     return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch(error => { });
+
                 }
             }
             if (mode == null) {
@@ -273,6 +279,7 @@ Options:
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -282,6 +289,8 @@ Options:
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -302,12 +311,15 @@ cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
                 obj.reply({ content: 'error - osu auth out of date', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+
                 return;
             }
         } catch (error) {
         }
         if (!osudata.id) {
             return obj.channel.send('Error - no user found')
+                .catch(error => { });
+
         };
         let userfirstsurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/firsts?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
         const firstscoresdata = await fetch(userfirstsurl, {
@@ -322,6 +334,7 @@ Error - authentication
                             content: 'Error',
                             allowedMentions: { repliedUser: false },
                         })
+
                     } catch (err) {
 
                     }
@@ -331,6 +344,8 @@ Error - authentication
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
+                        .catch(error => { });
+
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -352,6 +367,8 @@ node-fetch error: ${error}
         if (firstscoresdata.length < 1) {
             firstsEmbed.setDescription('Error - no scores found')
             obj.reply({ embeds: [firstsEmbed], allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                .catch(error => { });
+
             return;
         }
         firstsEmbed.setDescription(
@@ -432,7 +449,7 @@ node-fetch error: ${error}
                 curscore.accuracy,
                 curscore.max_comb,
                 curscore.score,
-                0, 
+                0,
                 null, false
             )
             if (curscore.accuracy.toFixed(2) != 100.00) {
@@ -475,6 +492,8 @@ node-fetch error: ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
+                .catch(error => { });
+
         }
         else {
             obj.reply({
@@ -483,6 +502,8 @@ node-fetch error: ${error}
                 failIfNotExists: true,
                 components: [buttons]
             })
+                .catch(error => { });
+
         }
 
 

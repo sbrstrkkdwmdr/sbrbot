@@ -230,6 +230,8 @@ module.exports = {
                 serverlb.setFooter({ text: mode + ` | Page 1/${Math.ceil(rarr.length / 10)}` });
 
                 message.reply({ content: '⠀', embeds: [serverlb], allowedMentions: { repliedUser: false }, failIfNotExists: true, components: [buttons] })
+                    .catch(error => { });
+
                 let endofcommand = new Date().getTime();
                 let timeelapsed = endofcommand - currentDate.getTime();
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (message command => lb server) - ${timeelapsed}ms\n`)
@@ -470,6 +472,8 @@ module.exports = {
                 serverlb.setDescription(rtxt);
                 serverlb.setFooter({ text: mode + ` | Page ${page + 1}/${Math.ceil(rarr.length / 10)}` });
                 message.edit({ content: '⠀', embeds: [serverlb], allowedMentions: { repliedUser: false }, failIfNotExists: true, components: [buttons] })
+                    .catch(error => { });
+
                 let endofcommand = new Date().getTime();
                 let timeelapsed = endofcommand - currentDate.getTime();
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (interaction command => lb server) - ${timeelapsed}ms\n`)
