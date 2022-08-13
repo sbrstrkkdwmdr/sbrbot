@@ -554,8 +554,29 @@ node-fetch error: ${error}
                     curscore.accuracy,
                     curscore.max_combo,
                     curscore.score,
-                    0
+                    0,
+                    0, false
                 )
+                if (curscore.rank == 'F') {
+                    ppcalcing = await osugame.scorecalc(
+                        curscore.mods.join('').length > 1 ?
+                            curscore.mods.join('') : 'NM',
+                        curscore.mode,
+                        curscore.beatmap.id,
+                        gamehits.count_geki,
+                        gamehits.count_300,
+                        gamehits.count_katu,
+                        gamehits.count_100,
+                        gamehits.count_50,
+                        gamehits.count_miss,
+                        curscore.accuracy,
+                        curscore.max_combo,
+                        curscore.score,
+                        0,
+                        totalhits,
+                        true
+                    )
+                }
                 totaldiff = ppcalcing[0].stars.toFixed(2)
 
 

@@ -97,17 +97,23 @@ async function mapcalc(
  * @param maxcombo 
  * @param score 
  * @param calctype 0 = rosu, 1 = booba, 2 = osu api extended
+ * @param passedObj number of objects hit
+ * @param failed whether the score is failed or not
  * @returns 
  */
 async function scorecalc(
     mods: string, gamemode: string, mapid: number,
     hitgeki: number | null, hit300: number | null, hitkatu: number | null, hit100: number | null, hit50: number | null, miss: number | null,
     acc: number | null, maxcombo: number | null, score: number | null,
-    calctype: number | null
+    calctype: number | null, passedObj: number | null, failed: boolean | null
 ) {
     let ppl;
     let scorenofc;
     let scorefc;
+
+    if (failed == null) {
+        failed = false
+    }
 
     let calctyper = osumodcalc.ModeNameToInt(gamemode)
     switch (calctype) {
@@ -135,23 +141,38 @@ async function scorecalc(
                     newacc = osumodcalc.calcgradeMania(hitgeki, hit300, hit100, hit50, miss, hitkatu).accuracy;
                     break;
             }
-
+            let basescore:any = {
+                mode: gamemode,
+                mods: osumodcalc.ModStringToInt(mods),
+                combo: maxcombo,
+                acc: acc || 100,
+                n300: hit300 != null || hit300 != NaN ? hit300 : 0,
+                n100: hit100 != null || hit100 != NaN ? hit100 : 0,
+                n50: hit50 != null || hit50 != NaN ? hit50 : 0,
+                nMisses: miss != null || miss != NaN ? miss : 0,
+                nKatu: hitkatu != null || hitkatu != NaN ? hitkatu : 0,
+                score: score != null || score != NaN ? score : 0,
+            }
+            if (failed == true) {
+                basescore = {
+                    mode: gamemode,
+                    mods: osumodcalc.ModStringToInt(mods),
+                    combo: maxcombo,
+                    acc: acc || 100,
+                    n300: hit300 != null || hit300 != NaN ? hit300 : 0,
+                    n100: hit100 != null || hit100 != NaN ? hit100 : 0,
+                    n50: hit50 != null || hit50 != NaN ? hit50 : 0,
+                    nMisses: miss != null || miss != NaN ? miss : 0,
+                    nKatu: hitkatu != null || hitkatu != NaN ? hitkatu : 0,
+                    score: score != null || score != NaN ? score : 0,
+                    passedObjects: passedObj
+                }
+            }
 
             scorenofc = {
                 path: `files/maps/${mapid}.osu`,
                 params: [
-                    {
-                        mode: gamemode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        combo: maxcombo,
-                        acc: acc || 100,
-                        n300: hit300 != null || hit300 != NaN ? hit300 : 0,
-                        n100: hit100 != null || hit100 != NaN ? hit100 : 0,
-                        n50: hit50 != null || hit50 != NaN ? hit50 : 0,
-                        nMisses: miss != null || miss != NaN ? miss : 0,
-                        nKatu: hitkatu != null || hitkatu != NaN ? hitkatu : 0,
-                        score: score != null || score != NaN ? score : 0,
-                    },
+                    basescore,
                     {
                         mode: gamemode,
                         mods: osumodcalc.ModStringToInt(mods),
