@@ -1,5 +1,7 @@
 console.log('Loading...')
 
+let initdate = new Date();
+
 import Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
 import fs = require('fs');
@@ -130,8 +132,12 @@ const userdata = sequelize.define('userdata', {
 client.once('ready', () => {
     userdata.sync()
     console.log('Ready!');
+    //get time between now and initdate
+    let timetostart = new Date().getTime() - initdate.getTime()
+    console.log(`Boot time: ${timetostart}ms`)
+
     fs.appendFileSync('logs/general.log', `\n\n\nBOT IS NOW ONLINE\n${new Date()} | ${new Date().toISOString()}\n\n\n`, 'utf-8');
-    
+
     let oncooldown = new Set();
 
     CommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, oncooldown);
@@ -143,14 +149,35 @@ client.once('ready', () => {
     CommandInit(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     ExEvents(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
-    client.guilds.cache.forEach(guild => {
-        if (!fs.existsSync(`./logs/${guild.id}.log`)) {
-            fs.writeFileSync(`./logs/${guild.id}.log`, ''
-            )
+    (async () => {
+        if (!fs.existsSync(`./logs`)) {
+            console.log(`Creating logs folder`);
+            fs.mkdirSync(`./logs`);
+        }
+        if (!fs.existsSync(`./logs/gen`)) {
+            console.log(`Creating logs/gen folder`);
+            fs.mkdirSync(`./logs/gen`);
+        }
+        if (!fs.existsSync(`./logs/cmd`)) {
+            console.log(`Creating logs/cmd folder`);
+            fs.mkdirSync(`./logs/cmd`);
+        }
+        if (!fs.existsSync(`./logs/moderator`)) {
+            console.log(`Creating logs/moderator folder`);
+            fs.mkdirSync(`./logs/moderator`);
         }
 
-    }
-    )
+        await client.guilds.cache.forEach(guild => {
+            if (!fs.existsSync(`./logs/moderator/${guild.id}.log`)) {
+                console.log(`Creating moderator log for ${guild.name}`);
+                fs.writeFileSync(`./logs/moderator/${guild.id}.log`, ''
+                )
+            }
+
+        }
+        )
+    })();
+
 
 })
 client.login(token)
@@ -175,4 +202,4 @@ fetch('https://osu.ppy.sh/oauth/token', {
     }
     )
 fs.writeFileSync('debug/starttime.txt', (new Date()).toString())
-export {};
+export { };

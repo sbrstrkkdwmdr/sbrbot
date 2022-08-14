@@ -15,3 +15,4 @@ files/ffmpegbin
 files/maps
 *.js
 !setup.js
+*.traineddata

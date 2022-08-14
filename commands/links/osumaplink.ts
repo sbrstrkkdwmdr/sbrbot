@@ -8,6 +8,7 @@ import cmdchecks = require('../../calc/commandchecks');
 import calc = require('../../calc/calculations');
 import osugame = require('../../calc/osugame');
 import colours = require('../../configs/colours');
+import tesseract = require('tesseract.js');
 
 module.exports = {
     name: 'osumaplink',
@@ -15,7 +16,7 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, parse, worker) {
         //let absoluteID = new Date().getTime()
         let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         let access_token = JSON.parse(accessN).access_token;
@@ -24,6 +25,7 @@ module.exports = {
         let mapid;
         let mapmods;
         let detailed = false;
+
         if (fs.existsSync(`./debugosu/prevmap${obj.guildId}.json`)) {
             try {
                 prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap${obj.guildId}.json`, 'utf8'));
@@ -37,7 +39,7 @@ module.exports = {
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
             prevmap = { id: 32345 }
         }
-        if (button != null) {
+        if (button != null && parse == null) {
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -90,7 +92,6 @@ button: ${button}
                 }
             }).then(res => res.json() as any)
                 .catch(err => {
-                    console.log(err);
                     return interaction.channel.send('An error occured while fetching the beatmap data.')
                         .catch(error => { });
 
@@ -127,7 +128,7 @@ button: ${button}
 
         }
 
-        if (message != null && button == null) {
+        if (message != null && button == null && parse == null) {
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -196,7 +197,6 @@ cmd ID: ${absoluteID}
 
 
                 } catch (error) {
-                    console.log(error)
                     return message.reply({ content: 'Please enter a valid beatmap link.', allowedMentions: { repliedUser: false } })
                         .catch(error => { });
 
@@ -264,6 +264,111 @@ node-fetch error: ${error}
                     return;
                 }
             }
+        }
+        if (parse != null) {
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+LINK PARSE EVENT - map link (text from image)
+${currentDate} | ${currentDateISO}
+recieved map link
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+input: ${parse}
+----------------------------------------------------
+`, 'utf-8')
+            buttons = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigLeftArrow-osumaplink-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('⬅')
+            /* .setLabel('Start') */,
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`LeftArrow-osumaplink-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('◀')
+            /* .setLabel('Previous') */,
+                    /*                 new Discord.ButtonBuilder()
+                                        .setCustomId('Middle-map')
+                                        .setStyle('Primary')
+                                        .setLabel('🔍')
+                                    , */
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`RightArrow-osumaplink-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('▶')
+            /* .setLabel('Next') */,
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigRightArrow-osumaplink-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('➡')
+            /* .setLabel('End') */,
+                );
+            let mapnameurl = `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${cmdchecks.toHexadecimal(parse)}&s=any`
+            let mapidtest = await fetch(mapnameurl, {
+                headers: {
+                    'Authorization': `Bearer ${access_token}`
+                }
+            }).then(res => res.json() as any)
+                .catch(error => {
+                    if (button == null) {
+                        try {
+                            message.edit({
+                                content: 'Error',
+                                allowedMentions: { repliedUser: false },
+                            })
+
+                        } catch (err) {
+
+                        }
+                    } else {
+                        obj.reply({
+                            content: 'Error',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                            .catch(error => { });
+
+                    }
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    node-fetch error: ${error}
+    ----------------------------------------------------
+    `, 'utf-8')
+                    return;
+                })
+            fs.writeFileSync(`debugosu/link-map=mapidtest=${obj.guildId}.json`, JSON.stringify(mapidtest, null, 2))
+            if (mapidtest.beatmapsets.length == 0) {
+                return;
+            }
+            //filter to get the result with the version that is the same inside the square brackets
+            //i.e kani [Extreme] << get the version 'Extreme'
+            let found = false;
+            let i = 0;
+            while (!found && i < mapidtest.beatmapsets.length) {
+                let mapidint = await mapidtest.beatmapsets[i].beatmaps.filter(x =>
+                    x.version.includes(parse.split('[')[1].split(']')[0])
+                )[0]
+                if (mapidint == null) {
+
+                } else {
+                    mapid = mapidint.id;
+                    found = true
+                }
+                i++;
+            }
+/*             let mapidint = await mapidtest.beatmapsets[0].beatmaps.filter(x =>
+                x.version.includes(parse.split('[')[1].split(']')[0])
+            )[0]
+            if (mapidint == null || mapidint.length == 0) {
+                return;
+            }
+            else {
+                mapid = mapidint.id;
+            } */
         }
 
         //==============================================================================================================================================================================================
