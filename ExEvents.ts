@@ -8,29 +8,34 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     //update oauth access token
     setInterval(() => {
-        try {
-            fetch('https://osu.ppy.sh/oauth/token', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-                ,
-                body: JSON.stringify({
-                    grant_type: 'client_credentials',
-                    client_id: osuClientID,
-                    client_secret: osuClientSecret,
-                    scope: 'public'
-                })
+        fetch('https://osu.ppy.sh/oauth/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+            ,
+            body: JSON.stringify({
+                grant_type: 'client_credentials',
+                client_id: osuClientID,
+                client_secret: osuClientSecret,
+                scope: 'public'
+            })
 
-            }).then(res => res.json() as any)
-                .then(res => {
-                    fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
-                    fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
-                }
-                )
-        } catch (error) {
-            fs.appendFileSync('logs/updates.log', '\n' + new Date().toLocaleString() + '\n' + error + '\n')
-        }
+        }).then(res => res.json() as any)
+            .then(res => {
+                fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
+                fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
+            }
+            ).catch(error => {
+                fs.appendFileSync(`logs/updates.log`,
+                    `
+            ----------------------------------------------------
+            ERROR
+            node-fetch error: ${error}
+            ----------------------------------------------------
+            `, 'utf-8')
+                return;
+            });
     }, 1 * 60 * 1000);
 
     //clear maps folder
@@ -142,12 +147,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             if (message.mentions.users.first().id == client.user.id && message.content.replaceAll(' ', '').length == (`<@${client.user.id}>`).length) {
                 return message.reply({ content: `Prefix is \`${config.prefix}\``, allowedMentions: { repliedUser: false } })
             }
-        } 
+        }
         if (message.content.startsWith('You\'re on cooldown') && message.author.id == client.user.id) {
             setTimeout(() => {
                 message.delete()
-                .catch(err => {
-                })
+                    .catch(err => {
+                    })
             }, 3000)
         }
     })

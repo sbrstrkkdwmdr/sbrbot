@@ -201,5 +201,15 @@ fetch('https://osu.ppy.sh/oauth/token', {
 
     }
     )
+    .catch(error => {
+        fs.appendFileSync(`logs/updates.log`,
+            `
+----------------------------------------------------
+ERROR
+node-fetch error: ${error}
+----------------------------------------------------
+`, 'utf-8')
+        return;
+    });
 fs.writeFileSync('debug/starttime.txt', (new Date()).toString())
 export { };
