@@ -23,7 +23,8 @@ let config =
     "twitch": {
         "clientID": "null",
         "clientSecret": "null"
-    }
+    },
+    "useScreenshotParse": false
 }
 if (fs.existsSync('./configs/config.json')) {
     try {
