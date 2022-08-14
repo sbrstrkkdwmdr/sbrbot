@@ -680,8 +680,10 @@ node-fetch error: ${error}
             for (let i = 0; i < rsdata.length - (page * 20) && i < 20; i++) {
                 let curscore = rsdata[i + page * 20]
                 txt +=
-                    `${1 + i + page * 20} | [${curscore.beatmapset.title}](https://osu.ppy.sh/b/${curscore.beatmap.id}) | [score](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})
-                ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') + ' | ' : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${curscore.rank}\n`
+`**${1 + i + page * 20} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>**
+[${curscore.beatmapset.title}](https://osu.ppy.sh/b/${curscore.beatmap.id}) | [score link](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})
+${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') + ' | ' : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${curscore.rank}
+`
             }
             if (txt == '') {
                 txt = 'No recent plays found'
