@@ -5,7 +5,7 @@ import osucalc = require('osumodcalculator')
 import { access_token } from '../../configs/osuauth.json';
 import emojis = require('../../configs/emojis');
 import cmdchecks = require('../../calc/commandchecks');
-import osugame = require('../../calc/osugame');
+import osufunc = require('../../calc/osufunc');
 import colours = require('../../configs/colours');
 
 module.exports = {
@@ -27,13 +27,25 @@ cmd ID: ${absoluteID}
         } else {
             return;
         }
-        //console.log(map)
+        let mods = 'NM'
+        if (message.content.includes('+')) {
+            mods = message.content.split('+')[1].split(' ')[0]
+        }
 
+        try {
+            let hitobjs = map.split('[HitObjects]')[1].split('\n')
+        } catch (error) {
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
         let metadata = map.split('[Metadata]')[1].split('[')[0]
 
         if (metadata.includes('BeatmapID')) {
             let bid = metadata.split('BeatmapID')[1].split('\n')[0]
-            if (parseInt(bid) != NaN) {
+            if (parseInt(bid) != NaN && parseInt(bid) > 0) {
                 let parse = null;
                 let overrideID = cmdchecks.toAlphaNum(bid)
                 fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
@@ -49,7 +61,7 @@ overrideID: ${overrideID}
                 return;
             }
         }
-        let ppcalcing = await osugame.mapcalclocal('NM', 'osu', null, 0)
+        let ppcalcing = await osufunc.mapcalclocal(mods, 'osu', null, 0)
 
         let ftstr: string;
 
@@ -73,7 +85,7 @@ overrideID: ${overrideID}
         let creator = metadata.split('Creator:')[1].split('\n')[0]
         let version = metadata.split('Version:')[1].split('\n')[0]
 
-        ftstr = `${artist} - ${title} [${version}] //${creator}`
+        ftstr = `${artist} - ${title} [${version}] //${creator} ${mods ? `+${mods}` : ''}`
 
         let hitobjs = map.split('[HitObjects]')[1].split('\n')
         let countcircle = 0
@@ -94,8 +106,6 @@ overrideID: ${overrideID}
         let fintimep = hitobjs[hitobjs.length - 2].split(',')[2] //inaccurate cos of sliders n stuff
 
         let mslen = parseInt(fintimep) - parseInt(firsttimep)
-        console.log(firsttimep)
-        console.log(fintimep)
 
         let nlength = mslen / 1000
         let truelen = nlength > 60 ? // if length over 60
@@ -124,12 +134,45 @@ overrideID: ${overrideID}
 
         let timing = map.split('[TimingPoints]')[1].split('[')[0]
 
+        function pointToBPM(point: string) {
+            let arr = point.split(',')
+            //'a,b,c'
+            //b is time in milliseconds between each beat
+            //https://osu.ppy.sh/community/forums/topics/59274?n=4
+            let bpm = 60000 / parseInt(arr[1])
+            return bpm;
+        }
+        let totalpoints = 0
+        let bpmmax = 0
+        let bpmmin = 0
+        for (let i = 0; i < timing.split('\n').length; i++) {
+            let curpoint = timing.split('\n')[i]
+            if (curpoint.includes(',')) {
+                if (curpoint.includes('-')) {
+                    break;
+                }
+                bpm = pointToBPM(curpoint)
+                totalpoints++
+                if (bpm > bpmmax) {
+                    bpmmax = bpm
+                }
+                if (bpm < bpmmin || bpmmin == 0) {
+                    bpmmin = bpm
+                }
+            }
+        }
+        let bpmavg = bpm / totalpoints
+
             ;
+        let gm = general.split('Mode:')[1].split('\n')[0].replaceAll(' ', '')
+        let strains = await osufunc.straincalclocal(null, mods, 0, osucalc.ModeIntToName(parseInt(gm)))
+        //fs.writeFileSync(`./debugosu/link-maplocal=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))
+
+        let mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
 
 
         let osuEmbed = new Discord.EmbedBuilder()
             .setTitle(`${ftstr}`)
-
             .addFields([
                 {
                     name: 'MAP VALUES',
@@ -140,7 +183,7 @@ ${emojis.mapobjs.circle}${countcircle}
 ${emojis.mapobjs.slider}${countslider}
 ${emojis.mapobjs.spinner}${countspinner}
 ${emojis.mapobjs.total_length}${truelen}
-${emojis.mapobjs.bpm}${bpm}
+${emojis.mapobjs.bpm}${bpmmax.toFixed(2)} - ${bpmmin.toFixed(2)} (${bpmavg.toFixed(2)})
 `,
                     inline: true
                 },
@@ -154,22 +197,10 @@ ${emojis.mapobjs.bpm}${bpm}
                         `96: ${ppcalcing[4].pp.toFixed(2)} \n ` +
                         `95: ${ppcalcing[5].pp.toFixed(2)} \n `,
                     inline: true
-                },
-                {
-                    name: 'Other',
-                    value:
-                        `
-                        Audio Lead: ${general.split('AudioLeadIn:')[1].split('\n')[0]}| Audio Filename: ${general.split('Filename:')[1].split('\n')[0]}
-                        Preview Timestamp: ${general.split('PreviewTime:')[1].split('\n')[0]} | Countdown: ${general.split('Countdown:')[1].split('\n')[0]}
-                        Default sampleset:${general.split('SampleSet:')[1].split('\n')[0]} | Stack Leniency:${general.split('Leniency:')[1].split('\n')[0]}
-                        Gamemode: ${general.split('Mode:')[1].split('\n')[0]} | 
-                        Tags: ${metadata.split('Tags:')[1].split('\n')[0]}
-                        Source: ${metadata.split('Source:')[1].split('\n')[0]}
-                        Combo colours: ${combocolours}
-                        `,
-                    inline: false
                 }
             ])
+            .setImage(`${mapgraph}`)
+
         message.reply({
             embeds: [osuEmbed],
             allowedMentions: { repliedUser: false },
@@ -178,7 +209,7 @@ ${emojis.mapobjs.bpm}${bpm}
 
         })
         fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-        `
+            `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Success
