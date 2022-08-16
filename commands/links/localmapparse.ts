@@ -244,11 +244,12 @@ Error: ${error}
                 '00:' + Math.floor(nlength) : //true
                 '00:' + Math.floor(nlength) //false
 
-        let combocolours = []
+/*         let combocolours = []
         let colours;
         try {
             colours = map.split('[Colours]')[1].split('[')[0].split('\n')
         } catch (error) {
+            colours = []
             message.reply({
                 content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
@@ -270,7 +271,7 @@ Error: ${error}
             } catch (err) {
                 break;
             }
-        }
+        } */
 
         let bpm = NaN
 
