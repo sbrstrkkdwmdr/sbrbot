@@ -128,7 +128,7 @@ button: ${button}
 
         }
 
-        if (message != null && button == null && parse == null) {
+        if (message != null && button == null && parse == null && overrideID == null) {
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -360,21 +360,64 @@ input: ${parse}
                 }
                 i++;
             }
-/*             let mapidint = await mapidtest.beatmapsets[0].beatmaps.filter(x =>
-                x.version.includes(parse.split('[')[1].split(']')[0])
-            )[0]
-            if (mapidint == null || mapidint.length == 0) {
-                return;
-            }
-            else {
-                mapid = mapidint.id;
-            } */
+            /*             let mapidint = await mapidtest.beatmapsets[0].beatmaps.filter(x =>
+                            x.version.includes(parse.split('[')[1].split(']')[0])
+                        )[0]
+                        if (mapidint == null || mapidint.length == 0) {
+                            return;
+                        }
+                        else {
+                            mapid = mapidint.id;
+                        } */
         }
 
         //==============================================================================================================================================================================================
-        if(overrideID != null){
+        if (overrideID != null) {
+            buttons = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigLeftArrow-osumaplink-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('⬅')
+            /* .setLabel('Start') */,
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`LeftArrow-osumaplink-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('◀')
+            /* .setLabel('Previous') */,
+                    /*                 new Discord.ButtonBuilder()
+                                        .setCustomId('Middle-map')
+                                        .setStyle('Primary')
+                                        .setLabel('🔍')
+                                    , */
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`RightArrow-osumaplink-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('▶')
+            /* .setLabel('Next') */,
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigRightArrow-osumaplink-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('➡')
+            /* .setLabel('End') */,
+                );
             mapid = overrideID
+            mapmods = message.content.includes('+') ? message.content.split('+')[1].split(' ')[0] : 'NM'
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+LINK PARSE EVENT - map link (parsed from .osu file)
+${currentDate} | ${currentDateISO}
+recieved map link
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+input: ${overrideID}
+----------------------------------------------------
+`, 'utf-8')
         }
+
+        //==============================================================================================================================================================================================
+
         let mapdata
         if (mapid == null || mapid == '') {
             if (fs.existsSync(`./debugosu/prevmap${obj.guildId}.json`)) {
@@ -460,7 +503,8 @@ Error - authentication
 
             }
             obj.reply({ content: 'Error - map not found', allowedMentions: { repliedUser: false } })
-                .catch(error => { });
+                .catch(error => {
+                });
 
             return;
         }
@@ -707,7 +751,8 @@ node-fetch error: ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
-                .catch(error => { });
+                .catch(error => {
+                });
 
         }
         if (interaction != null && message == null) {
