@@ -11,6 +11,16 @@ import colours = require('../../configs/colours');
 module.exports = {
     name: 'localmapparse',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+        fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+            `
+----------------------------------------------------
+LINK PARSE EVENT - local map parse
+${currentDate} | ${currentDateISO}
+recieved \`.osu\` file
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
         let map: any = ''
         if (fs.existsSync('./files/tempdiff.osu')) {
             map = fs.readFileSync('./files/tempdiff.osu', 'utf-8')
@@ -24,9 +34,17 @@ module.exports = {
         if (metadata.includes('BeatmapID')) {
             let bid = metadata.split('BeatmapID')[1].split('\n')[0]
             if (parseInt(bid) != NaN) {
-                //do osumaplink stuff
                 let parse = null;
                 let overrideID = cmdchecks.toAlphaNum(bid)
+                fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Beatmap ID detected => moving to osumaplinkparse
+bid: ${bid}
+overrideID: ${overrideID}
+----------------------------------------------------
+`, 'utf-8')
                 await client.links.get('osumaplink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, parse, overrideID);
                 return;
             }
@@ -156,6 +174,15 @@ ${emojis.mapobjs.bpm}${bpm}
             embeds: [osuEmbed],
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
+        }).catch(error => {
+
         })
+        fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+        `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Success
+----------------------------------------------------
+`, 'utf-8')
     }
 }
