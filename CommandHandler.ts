@@ -13,22 +13,23 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         const command = args.shift().toLowerCase();
 
         if (!message.content.startsWith(config.prefix)) return; //the return is so if its just prefix nothing happens
-        if (message.author.bot && message.content.includes("You're on cooldown")) {
-            setTimeout(() => {
-                message.delete();
-            }, 1)
-        }
         if (message.author.bot && !(message.author.id == '755220989494951997' || message.author.id == '777125560869978132')) return;
         if (!oncooldown.has(message.author.id)) {
             timeouttime = new Date().getTime() + 3000
         }
         if (oncooldown.has(message.author.id)) {
-            return message.reply({
+            setTimeout(() => {
+                message.delete()
+            }, 3000)
+        };
+        if (oncooldown.has(message.author.id)) {
+            message.reply({
                 content: `You're on cooldown!\nTry again in ${getTimeLeft(timeouttime) / 1000}s`,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true,
                 ephemeral: true
             });
+            return;
         };
         if (!oncooldown.has(message.author.id)) {
             oncooldown.add(message.author.id);
