@@ -20,7 +20,7 @@ module.exports = {
 
         let mapdata: any;
 
-        let ppcalcing = osugame.mapcalclocal('NM', 'osu', null, 0)
+        let ppcalcing = await osugame.mapcalclocal('NM', 'osu', null, 0)
 
         let ftstr: string;
 
@@ -100,7 +100,7 @@ module.exports = {
         let bpm = NaN
 
         let timing = map.split('[TimingPoints]')[1].split('[Colours]')[0]
-        
+
         ;
 
 
@@ -147,5 +147,10 @@ ${emojis.mapobjs.bpm}${bpm}
                     inline: false
                 }
             ])
+            message.reply({
+                embeds: [osuEmbed],
+                allowedMentions: {repliedUser: false},
+                failIfNotExists: true
+            })
     }
 }
