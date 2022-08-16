@@ -409,9 +409,12 @@ async function straincalclocal(path: string | null, mods: string, calctype: numb
  * @param showlabely show names of y axes
  * @param fill fill under the line
  * @param settingsoverride override the given settings
+ * @param displayLegend whether or not to display the legend
+ * @param secondY second set of data
+ * @param secondYlabel label for second set of data
  * @returns graph url
  */
-async function graph(x: number[] | string[], y: number[], label: string, startzero: boolean | null, reverse: boolean | null, showlabelx: boolean | null, showlabely: boolean | null, fill: boolean | null, settingsoverride: string | null) {
+async function graph(x: number[] | string[], y: number[], label: string, startzero: boolean | null, reverse: boolean | null, showlabelx: boolean | null, showlabely: boolean | null, fill: boolean | null, settingsoverride: string | null, displayLegend?: boolean, secondY?: number[], secondLabel?: string) {
 
     if (startzero == null) {
         startzero = true
@@ -428,6 +431,10 @@ async function graph(x: number[] | string[], y: number[], label: string, startze
     if (fill == null) {
         fill = false
     }
+    if (displayLegend == null || displayLegend == undefined) {
+        displayLegend = false
+    }
+    let type = 'line'
     switch (settingsoverride) {
         case 'replay':
             showlabely = true
@@ -439,9 +446,15 @@ async function graph(x: number[] | string[], y: number[], label: string, startze
             break;
         case 'strains':
             fill = true
-            showlabely = false
+            showlabely = true
             showlabelx = true
             startzero = true
+            displayLegend = true
+            break;
+        case 'bar':
+            type = 'bar'
+            showlabely = true
+            displayLegend = true
             break;
         default:
             break;
@@ -462,24 +475,34 @@ async function graph(x: number[] | string[], y: number[], label: string, startze
         curx = x
         cury = y
     }
-
+    let datasets = [{
+        label: label,
+        data: cury,
+        fill: fill,
+        borderColor: 'rgb(75, 192, 192)',
+        borderWidth: 1,
+        pointRadius: 0
+    }]
+    if (!(secondY == null || secondY == undefined)) {
+        datasets.push({
+            label: secondLabel,
+            data: secondY,
+            fill: fill,
+            borderColor: 'rgb(255, 0, 0)',
+            borderWidth: 1,
+            pointRadius: 0
+        })
+    }
     const chart = new charttoimg()
         .setConfig({
-            type: 'line',
+            type: type,
             data: {
                 labels: curx,
-                datasets: [{
-                    label: label,
-                    data: cury,
-                    fill: fill,
-                    borderColor: 'rgb(75, 192, 192)',
-                    borderWidth: 1,
-                    pointRadius: 0
-                }]
+                datasets: datasets
             },
             options: {
                 legend: {
-                    display: false
+                    display: displayLegend
                 },
                 scales: {
                     xAxes: [

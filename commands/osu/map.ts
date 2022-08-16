@@ -640,6 +640,7 @@ node-fetch error: ${error}
         let strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
         fs.writeFileSync(`./debugosu/command-map=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))
         let mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
+
         let Embed = new Discord.EmbedBuilder()
             .setColor(0x91ff9a)
             .setTitle(maptitle)
@@ -672,10 +673,10 @@ node-fetch error: ${error}
                             `96: ${ppComputed[4].pp.toFixed(2)} \n ` +
                             `95: ${ppComputed[5].pp.toFixed(2)} \n ` +
                             `${modissue}\n${ppissue}` :
-                            `SS: ${ppComputed[0].pp.toFixed(2)} | Aim:${ppComputed[0].ppAim.toFixed(2)} | Speed:${ppComputed[0].ppSpeed.toFixed(2)} | Acc: ${ppComputed[0].ppAcc.toFixeD(2)} \n ` +
-                            `99: ${ppComputed[1].pp.toFixed(2)} | Aim:${ppComputed[1].ppAim.toFixed(2)} | Speed:${ppComputed[1].ppSpeed.toFixed(2)} | Acc: ${ppComputed[1].ppAcc.toFixeD(2)} \n ` +
-                            `97: ${ppComputed[3].pp.toFixed(2)} | Aim:${ppComputed[3].ppAim.toFixed(2)} | Speed:${ppComputed[3].ppSpeed.toFixed(2)} | Acc: ${ppComputed[3].ppAcc.toFixeD(2)} \n ` +
-                            `95: ${ppComputed[5].pp.toFixed(2)} | Aim:${ppComputed[5].ppAim.toFixed(2)} | Speed:${ppComputed[5].ppSpeed.toFixed(2)} | Acc: ${ppComputed[5].ppAcc.toFixeD(2)} \n ` +
+                            `SS: ${ppComputed[0].pp.toFixed(2)} | Aim:${ppComputed[0].ppAim.toFixed(2)} | Speed:${ppComputed[0].ppSpeed.toFixed(2)} | Acc: ${ppComputed[0].ppAcc.toFixed(2)} \n ` +
+                            `99: ${ppComputed[1].pp.toFixed(2)} | Aim:${ppComputed[1].ppAim.toFixed(2)} | Speed:${ppComputed[1].ppSpeed.toFixed(2)} | Acc: ${ppComputed[1].ppAcc.toFixed(2)} \n ` +
+                            `97: ${ppComputed[3].pp.toFixed(2)} | Aim:${ppComputed[3].ppAim.toFixed(2)} | Speed:${ppComputed[3].ppSpeed.toFixed(2)} | Acc: ${ppComputed[3].ppAcc.toFixed(2)} \n ` +
+                            `95: ${ppComputed[5].pp.toFixed(2)} | Aim:${ppComputed[5].ppAim.toFixed(2)} | Speed:${ppComputed[5].ppSpeed.toFixed(2)} | Acc: ${ppComputed[5].ppAcc.toFixed(2)} \n ` +
                             `${modissue}\n${ppissue}`
                     ,
                     inline: true
@@ -703,7 +704,6 @@ node-fetch error: ${error}
 
                     ,
                     inline: false
-
                 }
             ])
         switch (true) {
@@ -735,10 +735,27 @@ node-fetch error: ${error}
                 Embed.setColor(colours.diffcolour[0].hex)
                 break;
         }
+        let embeds = [Embed];
+
+        if (detailed == true) {
+            let failval = mapdata.failtimes.fail;
+            let exitval = mapdata.failtimes.exit;
+            let numofval = [];
+            for (let i = 0; i < failval.length; i++) {
+                numofval.push(i)
+            }
+
+            let passurl = await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits');
+            let passEmbed = new Discord.EmbedBuilder()
+                .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
+                .setImage(`${passurl}`);
+            await embeds.push(passEmbed);
+        }
+
         if (message && interaction == null) {
             obj.reply({
                 content: "⠀",
-                embeds: [Embed],
+                embeds: embeds,
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
@@ -748,7 +765,7 @@ node-fetch error: ${error}
         if (interaction != null && message == null) {
             obj.editReply({
                 content: "⠀",
-                embeds: [Embed],
+                embeds: embeds,
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
@@ -758,11 +775,11 @@ node-fetch error: ${error}
         if (button) {
             message.edit({
                 content: "⠀",
-                embeds: [Embed],
+                embeds: embeds,
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
-            .catch(error => { });
+                .catch(error => { });
 
         }
 
