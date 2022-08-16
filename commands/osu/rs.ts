@@ -6,7 +6,6 @@ import emojis = require('../../configs/emojis');
 import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
 import calc = require('../../calc/calculations');
-import osugame = require('../../calc/osugame');
 import colours = require('../../configs/colours');
 
 module.exports = {
@@ -563,7 +562,7 @@ node-fetch error: ${error}
             let ppiffc = NaN;
             let ppcalcing
             try {
-                ppcalcing = await osugame.scorecalc(
+                ppcalcing = await osufunc.scorecalc(
                     curscore.mods.join('').length > 1 ?
                         curscore.mods.join('') : 'NM',
                     curscore.mode,
@@ -581,7 +580,7 @@ node-fetch error: ${error}
                     0, false
                 )
                 if (curscore.rank == 'F') {
-                    ppcalcing = await osugame.scorecalc(
+                    ppcalcing = await osufunc.scorecalc(
                         curscore.mods.join('').length > 1 ?
                             curscore.mods.join('') : 'NM',
                         curscore.mode,

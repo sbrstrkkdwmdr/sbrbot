@@ -3,9 +3,8 @@ import osumodcalc = require('osumodcalculator');
 import ppcalc = require('booba');
 import fetch from 'node-fetch';
 import emojis = require('../../configs/emojis');
-import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
-import osugame = require('../../calc/osugame');
+import osufunc = require('../../calc/osufunc');
 import colours = require('../../configs/colours');
 
 module.exports = {
@@ -436,7 +435,7 @@ node-fetch error: ${error}
             }
 
             let pptxt: any;
-            let ppcalcing = await osugame.scorecalc(
+            let ppcalcing = await osufunc.scorecalc(
                 curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
                 curscore.mode,
                 curscore.beatmap.id,

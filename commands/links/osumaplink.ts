@@ -6,7 +6,6 @@ import emojis = require('../../configs/emojis');
 import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
 import calc = require('../../calc/calculations');
-import osugame = require('../../calc/osugame');
 import colours = require('../../configs/colours');
 import tesseract = require('tesseract.js');
 
@@ -412,6 +411,7 @@ recieved map link
 requested by ${message.author.id} AKA ${message.author.tag}
 cmd ID: ${absoluteID}
 input: ${overrideID}
+msg: ${message.content}
 ----------------------------------------------------
 `, 'utf-8')
         }
@@ -569,7 +569,7 @@ Error - authentication
         let ppComputed: any;
         let ppissue: string;
         try {
-            ppComputed = await osugame.mapcalc(mapmods, mapdata.mode, mapdata.id, 0)
+            ppComputed = await osufunc.mapcalc(mapmods, mapdata.mode, mapdata.id, 0)
             ppissue = '';
             totaldiff = ppComputed[0].stars.toFixed(2)
             fs.writeFileSync(`./debugosu/command-map=pp_calc=${obj.guildId}.json`, JSON.stringify(ppComputed, null, 2))
@@ -648,11 +648,11 @@ node-fetch error: ${error}
             });
         fs.writeFileSync(`./debugosu/link-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
 
-        let strains = await osugame.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
+        let strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
 
         fs.writeFileSync(`./debugosu/link-map=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))
 
-        let mapgraph = await osugame.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
+        let mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
 
 
         let Embed = new Discord.EmbedBuilder()

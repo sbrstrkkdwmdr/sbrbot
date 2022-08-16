@@ -5,7 +5,7 @@ import osucalc = require('osumodcalculator')
 import { access_token } from '../../configs/osuauth.json';
 import emojis = require('../../configs/emojis');
 import cmdchecks = require('../../calc/commandchecks');
-import osugame = require('../../calc/osugame');
+import osufunc = require('../../calc/osufunc');
 import colours = require('../../configs/colours');
 
 module.exports = {
@@ -196,7 +196,7 @@ Error: ${error}
             }
             let ppcalcing;
             try {
-                ppcalcing = await osugame.scorecalc(scoredata.mods.join('').length > 1 ? scoredata.mods.join('') : 'NM', scoredata.mode, scoredata.beatmap.id, gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss, scoredata.accuracy * 100, scoredata.max_combo, scoredata.score, 0, null, false)
+                ppcalcing = await osufunc.scorecalc(scoredata.mods.join('').length > 1 ? scoredata.mods.join('') : 'NM', scoredata.mode, scoredata.beatmap.id, gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss, scoredata.accuracy * 100, scoredata.max_combo, scoredata.score, 0, null, false)
                 ppissue = ''
                 fs.writeFileSync(`debugosu/link-scoreparse=ppcalc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2));
             } catch (error) {

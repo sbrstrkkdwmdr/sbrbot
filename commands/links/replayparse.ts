@@ -6,7 +6,7 @@ import { access_token } from '../../configs/osuauth.json';
 import ppcalc = require('booba')
 import chartjsimg = require('chartjs-to-image');
 import cmdchecks = require('../../calc/commandchecks');
-import osugame = require('../../calc/osugame');
+import osufunc = require('../../calc/osufunc');
 import colours = require('../../configs/colours');
 
 
@@ -219,7 +219,7 @@ Error: ${error}
         let failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true
 
         try {
-            xpp = await osugame.scorecalc(
+            xpp = await osufunc.scorecalc(
                 osucalc.ModIntToString(replay.mods),
                 osucalc.ModeIntToName(replay.gameMode),
                 mapdata.id,
@@ -303,7 +303,7 @@ Error: ${error}
             })
         chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250)
         await chart.toFile('./debugosu/replaygraph.jpg')
-        let graphul = await osugame.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay')
+        let graphul = await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay')
         let Embed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.score.hex)
             .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })

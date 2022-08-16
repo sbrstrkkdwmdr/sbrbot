@@ -1,7 +1,7 @@
 import fs = require('fs');
 import osuapiext = require('osu-api-extended');
 import osumodcalc = require('osumodcalculator');
-import osugame = require('../../calc/osugame');
+import osufunc = require('../../calc/osufunc');
 import fetch from 'node-fetch';
 import cmdchecks = require('../../calc/commandchecks');
 import colours = require('../../configs/colours');
@@ -111,8 +111,8 @@ node-fetch error: ${error}
             }
 
 
-            let simplay = await osugame.scorecalc(mods, 'osu', mapid, null, null, null, null, null, parseFloat(miss), parseFloat(acc), parseFloat(combo), null, 0, null, false);
-            let mapcalc = await osugame.mapcalc(mods, 'osu', mapid, 0);
+            let simplay = await osufunc.scorecalc(mods, 'osu', mapid, null, null, null, null, null, parseFloat(miss), parseFloat(acc), parseFloat(combo), null, 0, null, false);
+            let mapcalc = await osufunc.mapcalc(mods, 'osu', mapid, 0);
 
             fs.writeFileSync(`./debugosu/command-simulate=playcalc=${obj.guildId}.json`, JSON.stringify(simplay, null, 2));
 

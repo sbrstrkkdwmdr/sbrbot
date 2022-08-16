@@ -5,7 +5,6 @@ import fetch from 'node-fetch';
 import emojis = require('../../configs/emojis');
 import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
-import osugame = require('../../calc/osugame');
 import colours = require('../../configs/colours');
 
 module.exports = {
@@ -626,7 +625,7 @@ node-fetch error: ${error}
 
 
                 } else {
-                    let ppcalcing = await osugame.scorecalc(
+                    let ppcalcing = await osufunc.scorecalc(
                         curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
                         curscore.mode,
                         mapdata.id,
