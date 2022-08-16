@@ -41,16 +41,30 @@ cmd ID: ${absoluteID}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
         let metadata;
         try {
             metadata = map.split('[Metadata]')[1].split('[')[0]
         } catch (error) {
-            await message.reply({
-                content: `Error - invalid .osu file`,
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
-            return;
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
         if (metadata.includes('BeatmapID')) {
             let bid;
@@ -83,11 +97,18 @@ overrideID: ${overrideID}
         try {
             ppcalcing = await osufunc.mapcalclocal(mods, 'osu', null, 0)
         } catch (error) {
-            await message.reply({
-                content: `Error - invalid .osu file`,
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
-            return;
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
 
         let ftstr: string;
@@ -97,11 +118,18 @@ overrideID: ${overrideID}
             general = map.split('[General]')[1].split('[')[0]
             diff = map.split('[Difficulty]')[1].split('[')[0]
         } catch (error) {
-            await message.reply({
-                content: `Error - invalid .osu file`,
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
-            return;
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
         let title;
         let artist;
@@ -124,22 +152,36 @@ overrideID: ${overrideID}
             creator = metadata.split('Creator:')[1].split('\n')[0]
             version = metadata.split('Version:')[1].split('\n')[0]
         } catch (error) {
-            await message.reply({
-                content: `Error - invalid .osu file`,
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
-            return;
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
         ftstr = `${artist} - ${title} [${version}] //${creator} ${mods ? `+${mods}` : ''}`
         let hitobjs;
         try {
             hitobjs = map.split('[HitObjects]')[1].split('\n')
         } catch (error) {
-            await message.reply({
-                content: `Error - invalid .osu file`,
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
-            return;
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
         let countcircle = 0
         let countslider = 0
@@ -157,11 +199,18 @@ overrideID: ${overrideID}
                 }
             }
         } catch (error) {
-            await message.reply({
-                content: `Error - invalid .osu file`,
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
-            return;
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
 
         let firsttimep;
@@ -170,11 +219,18 @@ overrideID: ${overrideID}
             firsttimep = hitobjs[1].split(',')[2]
             fintimep = hitobjs[hitobjs.length - 2].split(',')[2] //inaccurate cos of sliders n stuff
         } catch (error) {
-            await message.reply({
-                content: `Error - invalid .osu file`,
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
-            return;
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
         let mslen = parseInt(fintimep) - parseInt(firsttimep)
 
@@ -193,11 +249,18 @@ overrideID: ${overrideID}
         try {
             colours = map.split('[Colours]')[1].split('[')[0].split('\n')
         } catch (error) {
-            await message.reply({
-                content: `Error - invalid .osu file`,
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
-            return;
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
         for (let i = 0; i < colours.length; i++) {
 
@@ -215,11 +278,18 @@ overrideID: ${overrideID}
         try {
             timing = map.split('[TimingPoints]')[1].split('[')[0]
         } catch (error) {
-            await message.reply({
-                content: `Error - invalid .osu file`,
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
-            return;
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
         function pointToBPM(point: string) {
             let arr = point.split(',')
@@ -258,22 +328,36 @@ overrideID: ${overrideID}
         try {
             strains = await osufunc.straincalclocal(null, mods, 0, osucalc.ModeIntToName(parseInt(gm)))
         } catch (error) {
-            await message.reply({
-                content: `Error - invalid .osu file`,
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
-            return;
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
 
         //fs.writeFileSync(`./debugosu/link-maplocal=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))
         try {
             mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
         } catch (error) {
-            await message.reply({
-                content: `Error - invalid .osu file`,
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
-            return;
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
         let osuEmbed;
         try {
@@ -307,11 +391,18 @@ ${emojis.mapobjs.bpm}${bpmmax.toFixed(2)} - ${bpmmin.toFixed(2)} (${bpmavg.toFix
                 ])
                 .setImage(`${mapgraph}`)
         } catch (error) {
-            await message.reply({
-                content: `Error - invalid .osu file`,
+            message.reply({
+                content: 'Error - empty or invalid .osu file',
                 allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
-            return;
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error: ${error}
+----------------------------------------------------
+`, 'utf-8')
         }
         message.reply({
             embeds: [osuEmbed],
