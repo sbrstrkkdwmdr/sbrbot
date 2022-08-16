@@ -172,7 +172,7 @@ button: ${button}
                 );
         }
 
-        if (user == null) {
+        if (user == null || user.includes('<') || message.mentions.users.size > 0) {
             let findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 user = findname.get('osuname');
@@ -207,6 +207,7 @@ Options:
     user: ${user}
     mode: ${mode}
     detailed: ${detailed}
+    searchid: ${searchid}
 ----------------------------------------------------
 `, 'utf-8')
         const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(await user)}/${cmdchecks.toHexadecimal(mode)}`

@@ -230,7 +230,7 @@ button: ${button}
                 page = parseInt((message.embeds[0].footer.text).split('/')[1].split('\n')[0])
             }
         }
-        if (user == null) {
+        if (user == null || message.mentions.users.size > 0) {
             let findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
@@ -348,7 +348,7 @@ Error - authentication
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
-                .catch(error => { });
+                    .catch(error => { });
 
             }
         }

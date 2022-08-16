@@ -248,7 +248,7 @@ button: ${button}
         }
 
 
-        if (user == null) {
+        if (user == null || message.mentions.users.size > 0) {
             let findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 user = findname.get('osuname');
@@ -338,7 +338,7 @@ Error - authentication
 ----------------------------------------------------`)
                 obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
 
-                
+
                 return;
             }
         } catch (error) {
@@ -730,7 +730,7 @@ ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
-            .catch(error => { });
+                .catch(error => { });
 
         }
 

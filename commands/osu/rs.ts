@@ -174,7 +174,7 @@ module.exports = {
             }
             searchid == interaction.member.user.id;
         }
-        if (user == null) {
+        if (user == null || message.mentions.users.size > 0) {
             let findname;
             findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
