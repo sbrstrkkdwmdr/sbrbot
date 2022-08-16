@@ -73,7 +73,8 @@ progress: ${m.progress ? m.progress : 'none'}
         }
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         if (messagenohttp.startsWith('osu.ppy.sh/b/') || messagenohttp.startsWith('osu.ppy.sh/beatmaps/') || messagenohttp.startsWith('osu.ppy.sh/beatmapsets/') || messagenohttp.startsWith('osu.ppy.sh/s/') || parse != null) {
-            client.links.get('osumaplink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, parse);
+            let overrideID = null
+            client.links.get('osumaplink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, parse, overrideID);
         }
         if (messagenohttp.startsWith('osu.ppy.sh/u/') || messagenohttp.startsWith('osu.ppy.sh/users/')) {
             client.links.get('osuuserlink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
@@ -91,6 +92,16 @@ progress: ${m.progress ? m.progress : 'none'}
         }
         if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
             client.links.get('scoreparse').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+        }
+        if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osu'))) {
+            let attachosu = message.attachments.first().url
+            let osudlfile = fs.createWriteStream('./files/tempdiff.osu')
+            let requestw = https.get(`${attachosu}`, function (response) {
+                response.pipe(osudlfile);
+            });
+            setTimeout(() => {
+                client.links.get('localmapparse').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+            }, 1500)
         }
     })
 }

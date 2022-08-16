@@ -426,4 +426,78 @@ async function graph(x: number[] | string[], y: number[], label: string, startze
     return await chart.getShortUrl();
 
 }
-export { mapcalc, scorecalc, straincalc, graph } 
+
+/**
+ * 
+ * @param mods 
+ * @param gamemode 
+ * @param mapid 
+ * @param calctype 0 = rosu, 1 = booba, 2 = osu api extended
+ * @returns 
+ */
+ async function mapcalclocal(
+    mods: string, gamemode: string, path: string|null,
+    calctype: number | null
+) {
+    let ppl
+    let mapscore
+    let calctyper = osumodcalc.ModeNameToInt(gamemode)
+
+    if(path == null){
+        path = `files/tempdiff.osu`
+    }
+
+    switch (calctyper) {
+        case 0: default:
+
+            mapscore = {
+                path: path,
+                params: [
+                    {
+                        mode: gamemode,
+                        mods: osumodcalc.ModStringToInt(mods),
+                        acc: 100,
+
+                    },
+                    {
+                        mode: gamemode,
+                        mods: osumodcalc.ModStringToInt(mods),
+                        acc: 99,
+
+                    },
+                    {
+                        mode: gamemode,
+                        mods: osumodcalc.ModStringToInt(mods),
+                        acc: 98,
+
+                    },
+                    {
+                        mode: gamemode,
+                        mods: osumodcalc.ModStringToInt(mods),
+                        acc: 97,
+
+                    },
+                    {
+                        mode: gamemode,
+                        mods: osumodcalc.ModStringToInt(mods),
+                        acc: 96
+                    },
+                    {
+                        mode: gamemode,
+                        mods: osumodcalc.ModStringToInt(mods),
+                        acc: 95,
+                    }
+                ]
+            }
+
+            ppl = await rosu.calculate(mapscore);
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+    }
+    return ppl;
+}
+
+export { mapcalc, scorecalc, straincalc, graph, mapcalclocal } 

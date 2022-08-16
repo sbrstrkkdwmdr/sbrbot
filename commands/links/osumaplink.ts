@@ -16,7 +16,7 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, parse) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, parse, overrideID) {
         //let absoluteID = new Date().getTime()
         let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         let access_token = JSON.parse(accessN).access_token;
@@ -372,7 +372,9 @@ input: ${parse}
         }
 
         //==============================================================================================================================================================================================
-
+        if(overrideID != null){
+            mapid = overrideID
+        }
         let mapdata
         if (mapid == null || mapid == '') {
             if (fs.existsSync(`./debugosu/prevmap${obj.guildId}.json`)) {
