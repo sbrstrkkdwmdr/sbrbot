@@ -27,6 +27,8 @@ cmd ID: ${absoluteID}
         } else {
             return;
         }
+        let errmap = fs.readFileSync('./files/errmap.osu', 'utf-8')
+        let errtxt = '';
         let mods = 'NM'
 
         if (message.content.includes('+')) {
@@ -36,11 +38,12 @@ cmd ID: ${absoluteID}
         try {
             let hitobjs = map.split('[HitObjects]')[1].split('\n')
         } catch (error) {
-            message.reply({
-                content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+            /*             message.reply({
+                            content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }) */
+            errtxt += '\nError - invalid section: [HitObjects]'
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -53,11 +56,13 @@ Error: ${error}
         try {
             metadata = map.split('[Metadata]')[1].split('[')[0]
         } catch (error) {
-            message.reply({
-                content: 'Error - empty or invalid .osu file\nSection: [Metadata]',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+            /*             message.reply({
+                            content: 'Error - empty or invalid .osu file\nSection: [Metadata]',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }) */
+            errtxt += '\nError - invalid section: [Metadata]'
+            metadata = errmap.split('[Metadata]')[1].split('[')[0]
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -97,11 +102,15 @@ overrideID: ${overrideID}
         try {
             ppcalcing = await osufunc.mapcalclocal(mods, 'osu', null, 0)
         } catch (error) {
-            message.reply({
+            ppcalcing = await osufunc.mapcalclocal(mods, 'osu', './files/errmap.osu', 0)
+/*             message.reply({
                 content: 'Error - pp calculations failed',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
-            })
+            }) */
+
+            errtxt += '\nError - pp calculations failed'
+
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -118,11 +127,16 @@ Error: ${error}
             general = map.split('[General]')[1].split('[')[0]
             diff = map.split('[Difficulty]')[1].split('[')[0]
         } catch (error) {
-            message.reply({
-                content: 'Error - empty or invalid .osu file\nSection: [General] or [Difficulty]',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+            /*             message.reply({
+                            content: 'Error - empty or invalid .osu file\nSection: [General] or [Difficulty]',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }) */
+            errtxt += '\nError - invalid section: [General] or [Difficulty]'
+
+            general = errmap.split('[General]')[1].split('[')[0]
+            diff = errmap.split('[Difficulty]')[1].split('[')[0]
+
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -152,11 +166,25 @@ Error: ${error}
             creator = metadata.split('Creator:')[1].split('\n')[0]
             version = metadata.split('Version:')[1].split('\n')[0]
         } catch (error) {
-            message.reply({
-                content: 'Error - empty or invalid .osu file\nSection: [Metadata]',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+            /*             message.reply({
+                            content: 'Error - empty or invalid .osu file\nSection: [Metadata]',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }) */
+            errtxt += '\nError - invalid section: [Metadata]'
+
+            title = errmap.split('Title:')[1].split('\n')[0]
+                == errmap.split('TitleUnicode:')[1].split('\n')[0] ?
+                errmap.split('TitleUnicode:')[1].split('\n')[0] :
+                `${errmap.split('Title:')[1].split('\n')[0]} (${errmap.split('TitleUnicode:')[1].split('\n')[0]})`
+            artist = errmap.split('Artist:')[1].split('\n')[0]
+                == errmap.split('ArtistUnicode:')[1].split('\n')[0] ?
+                errmap.split('ArtistUnicode:')[1].split('\n')[0] :
+                `${errmap.split('Artist:')[1].split('\n')[0]} (${errmap.split('ArtistUnicode:')[1].split('\n')[0]})`
+            creator = errmap.split('Creator:')[1].split('\n')[0]
+            version = errmap.split('Version:')[1].split('\n')[0]
+
+
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -170,11 +198,15 @@ Error: ${error}
         try {
             hitobjs = map.split('[HitObjects]')[1].split('\n')
         } catch (error) {
-            message.reply({
-                content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+            /*             message.reply({
+                            content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }) */
+            errtxt += '\nError - invalid section: [HitObjects]'
+
+            hitobjs = errmap.split('[HitObjects]')[1].split('\n')
+
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -199,11 +231,24 @@ Error: ${error}
                 }
             }
         } catch (error) {
-            message.reply({
-                content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+            /*             message.reply({
+                            content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }) */
+            errtxt += '\nError - invalid section: [HitObjects] (counting objects)'
+
+            for (let i = 0; i < errmap.split('[HitObjects]')[1].split('\n').length; i++) {
+                let curobj = errmap.split('[HitObjects]')[1].split('\n')[i]
+                if (curobj.includes('|')) {
+                    countslider++
+                } else if (curobj.split(',').length > 5) {
+                    countspinner++
+                } else {
+                    countcircle++
+                }
+            }
+
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -219,11 +264,16 @@ Error: ${error}
             firsttimep = hitobjs[1].split(',')[2]
             fintimep = hitobjs[hitobjs.length - 2].split(',')[2] //inaccurate cos of sliders n stuff
         } catch (error) {
-            message.reply({
-                content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+            /*             message.reply({
+                            content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }) */
+            errtxt += '\nError - invalid section: [HitObjects] (getting object timings)'
+
+            firsttimep = errmap.split('[HitObjects]')[1].split('\n')[1].split(',')[2]
+            fintimep = errmap.split('[HitObjects]')[1].split('\n')[errmap.split('[HitObjects]').length - 2].split(',')[2] //inaccurate cos of sliders n stuff                                                                            
+
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -244,34 +294,34 @@ Error: ${error}
                 '00:' + Math.floor(nlength) : //true
                 '00:' + Math.floor(nlength) //false
 
-/*         let combocolours = []
-        let colours;
-        try {
-            colours = map.split('[Colours]')[1].split('[')[0].split('\n')
-        } catch (error) {
-            colours = []
-            message.reply({
-                content: 'Error - empty or invalid .osu file',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-        }
-        for (let i = 0; i < colours.length; i++) {
-
-            try {
-                let curstr = colours[i].split(`Combo${i + 1}`)[1].replaceAll(' ', '')
-                combocolours.push(curstr)
-            } catch (err) {
-                break;
-            }
-        } */
+        /*         let combocolours = []
+                let colours;
+                try {
+                    colours = map.split('[Colours]')[1].split('[')[0].split('\n')
+                } catch (error) {
+                    colours = []
+                    message.reply({
+                        content: 'Error - empty or invalid .osu file',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                    fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                        `
+        ----------------------------------------------------
+        cmd ID: ${absoluteID}
+        Error: ${error}
+        ----------------------------------------------------
+        `, 'utf-8')
+                }
+                for (let i = 0; i < colours.length; i++) {
+        
+                    try {
+                        let curstr = colours[i].split(`Combo${i + 1}`)[1].replaceAll(' ', '')
+                        combocolours.push(curstr)
+                    } catch (err) {
+                        break;
+                    }
+                } */
 
         let bpm = NaN
 
@@ -279,11 +329,15 @@ Error: ${error}
         try {
             timing = map.split('[TimingPoints]')[1].split('[')[0]
         } catch (error) {
-            message.reply({
-                content: 'Error - empty or invalid .osu file\nSection: [TimingPoints]',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+            /*             message.reply({
+                            content: 'Error - empty or invalid .osu file\nSection: [TimingPoints]',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }) */
+            errtxt += '\nError - invalid section: [TimingPoints]'
+
+            timing = errmap.split('[TimingPoints]')[1].split('[')[0]
+
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -322,18 +376,32 @@ Error: ${error}
         let bpmavg = bpm / totalpoints
 
             ;
-        let gm = general.split('Mode:')[1].split('\n')[0].replaceAll(' ', '')
-
+        let gm = '0'
+        try {
+            gm = general.split('Mode:')[1].split('\n')[0].replaceAll(' ', '')
+        } catch (error) {
+            gm = '0'
+        }
         let strains;
         let mapgraph
         try {
             strains = await osufunc.straincalclocal(null, mods, 0, osucalc.ModeIntToName(parseInt(gm)))
         } catch (error) {
-            message.reply({
-                content: 'Error - empty or invalid .osu file',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+            /*             message.reply({
+                            content: 'Error - empty or invalid .osu file',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }) */
+
+            errtxt += '\nError - strains calculation failed'
+
+            strains = {
+                strainTime: [0, 0],
+                value: [0, 0]
+            }
+
+            strains = await osufunc.straincalclocal('./files/errmap.osu', mods, 0, osucalc.ModeIntToName(parseInt(gm)))
+
             fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -375,6 +443,7 @@ ${emojis.mapobjs.slider}${countslider}
 ${emojis.mapobjs.spinner}${countspinner}
 ${emojis.mapobjs.total_length}${truelen}
 ${emojis.mapobjs.bpm}${bpmmax.toFixed(2)} - ${bpmmin.toFixed(2)} (${bpmavg.toFixed(2)})
+${errtxt.length > 0 ? `${errtxt}` : ''}
 `,
                         inline: true
                     },

@@ -543,7 +543,7 @@ async function graph(x: number[] | string[], y: number[], label: string, startze
  */
 async function mapcalclocal(
     mods: string, gamemode: string, path: string | null,
-    calctype: number | null
+    calctype: number | null,
 ) {
     let ppl
     let mapscore
