@@ -63,8 +63,8 @@ module.exports = {
             'https://tenor.com/view/speech-bubble-chad-handsome-discord-gif-25759083', //
             //'https://media.discordapp.net/attachments/975869969336238100/989335327351119892/unknown.gif', //peter griffin buff //broken url
             'https://media.discordapp.net/attachments/929807268994744340/987061740665700372/ThisWillBeAngryBirdsPigIn2014.gif', //bad piggies
-            'https://media.discordapp.net/attachments/975869865258795078/993928228932698172/crcoer.gif' //crocodile vs man
-
+            'https://media.discordapp.net/attachments/975869865258795078/993928228932698172/crcoer.gif', //crocodile vs man
+            'https://media.discordapp.net/attachments/999722639390163065/1006556693267763280/attachment-5.gif' //im allergic to girls
 
         ]
         let reaction = [
