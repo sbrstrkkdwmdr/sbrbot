@@ -1,7 +1,8 @@
 import fs = require('fs');
 //const { Constants } = require('discord.js');
 const { ApplicationCommandOptionType, InteractionType } = require('discord.js');
-const cmdconfig = require('./configs/commandopts')
+const cmdconfig = require('./configs/commandopts');
+import cmdchecks = require('./calc/commandchecks');
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, oncooldown) => {
 
     let timeouttime;
@@ -121,21 +122,27 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
 
             case 'checkperms':
+                if (cmdchecks.isAdmin(interaction.member.user.id, interaction.guildId, client) || cmdchecks.isOwner(interaction.member.user.id))
                 client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'servers':
+                if (cmdchecks.isAdmin(interaction.member.user.id, interaction.guildId, client) || cmdchecks.isOwner(interaction.member.user.id))
                 client.admincmds.get('servers').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'leaveguild':
+                if (cmdchecks.isAdmin(interaction.member.user.id, interaction.guildId, client) || cmdchecks.isOwner(interaction.member.user.id))
                 client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'voice':
+                if (cmdchecks.isAdmin(interaction.member.user.id, interaction.guildId, client) || cmdchecks.isOwner(interaction.member.user.id))
                 client.admincmds.get('voice').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'find':
+                if (cmdchecks.isAdmin(interaction.member.user.id, interaction.guildId, client) || cmdchecks.isOwner(interaction.member.user.id))
                 client.admincmds.get('find').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'log':
+                if (cmdchecks.isAdmin(interaction.member.user.id, interaction.guildId, client) || cmdchecks.isOwner(interaction.member.user.id))
                 client.admincmds.get('log').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'Links':
