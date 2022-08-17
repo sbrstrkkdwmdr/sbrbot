@@ -37,7 +37,7 @@ cmd ID: ${absoluteID}
             let hitobjs = map.split('[HitObjects]')[1].split('\n')
         } catch (error) {
             message.reply({
-                content: 'Error - empty or invalid .osu file',
+                content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
@@ -54,7 +54,7 @@ Error: ${error}
             metadata = map.split('[Metadata]')[1].split('[')[0]
         } catch (error) {
             message.reply({
-                content: 'Error - empty or invalid .osu file',
+                content: 'Error - empty or invalid .osu file\nSection: [Metadata]',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
@@ -72,7 +72,7 @@ Error: ${error}
                 bid = metadata.split('BeatmapID')[1].split('\n')[0]
             } catch (error) {
                 await message.reply({
-                    content: `Error - invalid .osu file`,
+                    content: `Error - invalid .osu file\nSection: BeatmapID`,
                     allowedMentions: { repliedUser: false },
                 })
                 return;
@@ -98,7 +98,7 @@ overrideID: ${overrideID}
             ppcalcing = await osufunc.mapcalclocal(mods, 'osu', null, 0)
         } catch (error) {
             message.reply({
-                content: 'Error - empty or invalid .osu file',
+                content: 'Error - pp calculations failed',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
@@ -119,7 +119,7 @@ Error: ${error}
             diff = map.split('[Difficulty]')[1].split('[')[0]
         } catch (error) {
             message.reply({
-                content: 'Error - empty or invalid .osu file',
+                content: 'Error - empty or invalid .osu file\nSection: [General] or [Difficulty]',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
@@ -153,7 +153,7 @@ Error: ${error}
             version = metadata.split('Version:')[1].split('\n')[0]
         } catch (error) {
             message.reply({
-                content: 'Error - empty or invalid .osu file',
+                content: 'Error - empty or invalid .osu file\nSection: [Metadata]',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
@@ -171,7 +171,7 @@ Error: ${error}
             hitobjs = map.split('[HitObjects]')[1].split('\n')
         } catch (error) {
             message.reply({
-                content: 'Error - empty or invalid .osu file',
+                content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
@@ -200,7 +200,7 @@ Error: ${error}
             }
         } catch (error) {
             message.reply({
-                content: 'Error - empty or invalid .osu file',
+                content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
@@ -220,7 +220,7 @@ Error: ${error}
             fintimep = hitobjs[hitobjs.length - 2].split(',')[2] //inaccurate cos of sliders n stuff
         } catch (error) {
             message.reply({
-                content: 'Error - empty or invalid .osu file',
+                content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
@@ -280,7 +280,7 @@ Error: ${error}
             timing = map.split('[TimingPoints]')[1].split('[')[0]
         } catch (error) {
             message.reply({
-                content: 'Error - empty or invalid .osu file',
+                content: 'Error - empty or invalid .osu file\nSection: [TimingPoints]',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
@@ -348,7 +348,7 @@ Error: ${error}
             mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
         } catch (error) {
             message.reply({
-                content: 'Error - empty or invalid .osu file',
+                content: 'Error - calculating strain graph.',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
@@ -393,7 +393,7 @@ ${emojis.mapobjs.bpm}${bpmmax.toFixed(2)} - ${bpmmin.toFixed(2)} (${bpmavg.toFix
                 .setImage(`${mapgraph}`)
         } catch (error) {
             message.reply({
-                content: 'Error - empty or invalid .osu file',
+                content: 'Error - unknown',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
