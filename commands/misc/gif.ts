@@ -72,6 +72,7 @@ module.exports = {
             'https://tenor.com/view/live-garfield-reaction-gif-25354213', //garfield
             'https://tenor.com/view/live-eating-reaction-sauceland-twili-gif-25355949', //minecraft bedrock eating baked potato
             'https://tenor.com/view/armstron-senator-armstrong-armstrong-mgrr-metal-gif-25128679', // live armstrong reaction
+            'https://tenor.com/view/live-nuclear-reaction-live-tucker-reaction-live-reaction-gif-25285499' // live nuclear reaction
         ]
 
         let skillissue = [
