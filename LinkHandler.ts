@@ -3,6 +3,8 @@ const https = require('https');
 import tesseract = require('tesseract.js');
 
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
+    let imgParseCooldown = false
+
     client.on('messageCreate', async (message) => {
         let currentDate = new Date();
         let currentDateISO = new Date().toISOString();
@@ -34,41 +36,50 @@ progress: ${m.progress ? m.progress : 'none'}
                 }
             });
             //if message attachments size > 0
-            if (message.attachments.size > 0) {
-                if (message.attachments.first().url.includes('.png') || message.attachments.first().url.includes('.jpg')) {
+            if (imgParseCooldown == false) {
+                if (message.attachments.size > 0) {
+                    if (message.attachments.first().url.includes('.png') || message.attachments.first().url.includes('.jpg')) {
+                        imgParseCooldown = true
+                        await (async () => {
+                            await worker.load();
+                            await worker.loadLanguage('eng');
+                            await worker.initialize('eng');
+                            const { data: { text } } = await worker.recognize(message.attachments.first().url);
+                            if (text.includes('Beatmap by')) {
+                                let txttitle = text.split('\n')[0]
+                                let txtcreator = text.split('Beatmap by ')[1].split('\n')[0]
+
+                                parse = `${txttitle}//${txtcreator}`
+
+                            }
+                            if (text.includes('Mapped by')) {
+                                let txttitle = text.split('\n')[0]
+                                let txtcreator = text.split('Mapped by ')[1].split('\n')[0]
+
+                                parse = `${txttitle}//${txtcreator}`
+                            }
+                        })();
+                    }
+                } if (message.content.includes('.png') || message.content.includes('.jpg')) {
+                    imgParseCooldown = true
                     await (async () => {
                         await worker.load();
                         await worker.loadLanguage('eng');
                         await worker.initialize('eng');
-                        const { data: { text } } = await worker.recognize(message.attachments.first().url);
+                        const { data: { text } } = await worker.recognize(message.content);
                         if (text.includes('Beatmap by')) {
                             let txttitle = text.split('\n')[0]
                             let txtcreator = text.split('Beatmap by ')[1].split('\n')[0]
 
                             parse = `${txttitle}//${txtcreator}`
-
-                        }
-                        if (text.includes('Mapped by')) {
-                            let txttitle = text.split('\n')[0]
-                            let txtcreator = text.split('Mapped by ')[1].split('\n')[0]
-
-                            parse = `${txttitle}//${txtcreator}`
                         }
                     })();
                 }
-            } if (message.content.includes('.png') || message.content.includes('.jpg')) {
-                await (async () => {
-                    await worker.load();
-                    await worker.loadLanguage('eng');
-                    await worker.initialize('eng');
-                    const { data: { text } } = await worker.recognize(message.content);
-                    if (text.includes('Beatmap by')) {
-                        let txttitle = text.split('\n')[0]
-                        let txtcreator = text.split('Beatmap by ')[1].split('\n')[0]
-
-                        parse = `${txttitle}//${txtcreator}`
-                    }
-                })();
+            }
+            if (imgParseCooldown == true) {
+                setTimeout(() => {
+                    imgParseCooldown = false
+                }, 5000);
             }
         }
         let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
