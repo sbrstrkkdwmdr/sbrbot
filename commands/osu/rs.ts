@@ -227,7 +227,7 @@ module.exports = {
         }
         let userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
 
-        const osudata = await fetch(userinfourl, {
+        const osudata: osuApiTypes.User = await fetch(userinfourl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -297,7 +297,7 @@ module.exports = {
         } else { }
         let recentplayurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/recent?include_fails=1&mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`
 
-        const rsdata = await fetch(recentplayurl, {
+        const rsdata: osuApiTypes.Score[] = await fetch(recentplayurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -380,7 +380,7 @@ node-fetch error: ${error}
 
             let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(curbm.id)}?`;
 
-            const mapdata = await fetch(mapurl, {
+            const mapdata: osuApiTypes.Beatmap = await fetch(mapurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -419,7 +419,7 @@ node-fetch error: ${error}
             let accgr;
             let fcaccgr;
             let gamehits = curscore.statistics;
-            switch (rsdata.mode) {
+            switch (rsdata[0].mode) {
                 case 'osu': default:
                     accgr =
                         osumodcalc.calcgrade(
@@ -492,7 +492,7 @@ node-fetch error: ${error}
             let rspassinfo = '';
             let totalhits;
 
-            switch (rsdata.mode) {
+            switch (rsdata[0].mode) {
                 case 'osu': default:
                     totalhits = gamehits.count_300 + gamehits.count_100 + gamehits.count_50 + gamehits.count_miss;
                     break;
@@ -558,7 +558,7 @@ node-fetch error: ${error}
                     hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
                     break;
             }
-            let rspp = 0;
+            let rspp: string | number = 0;
             let ppissue: any = '';
             let ppiffc = NaN;
             let ppcalcing
@@ -680,7 +680,7 @@ node-fetch error: ${error}
             for (let i = 0; i < rsdata.length - (page * 20) && i < 20; i++) {
                 let curscore = rsdata[i + page * 20]
                 txt +=
-`**${1 + i + page * 20} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>**
+                    `**${1 + i + page * 20} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>**
 [${curscore.beatmapset.title}](https://osu.ppy.sh/b/${curscore.beatmap.id}) | [score link](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})
 ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') + ' | ' : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${curscore.rank}
 `

@@ -271,7 +271,7 @@ Options:
                 'Authorization': `Bearer ${access_token}`
             }
         })
-            .then(res => res.json())
+            .then(res => res.json() as any)
             .catch(error => {
                 if (button == null) {
                     try {
@@ -326,7 +326,7 @@ Error - authentication
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(res => res.json())
+        }).then(res => res.json() as any)
             .catch(error => {
                 if (button == null) {
                     try {

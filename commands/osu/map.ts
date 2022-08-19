@@ -357,7 +357,7 @@ Error - authentication
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json() as any)
+            }).then(res => res.json() as any) //type is undocumented so it's set to any for now
                 .catch(error => {
                     if (button == null) {
                         try {
@@ -435,7 +435,7 @@ ${error}
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json() as osuApiTypes.Beatmap)
+            }).then(res => res.json() as any)
                 .catch(error => {
                     if (button == null) {
                         try {
@@ -603,7 +603,7 @@ ${error}
         let maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
         let mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapdata.beatmapset.creator)}/osu`;
 
-        let mapperdata = await fetch(mapperurl, {
+        let mapperdata:osuApiTypes.User = await fetch(mapperurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -702,7 +702,7 @@ node-fetch error: ${error}
                         }${mapdata.status == 'loved' ?
                             `Loved <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
                         }\n` +
-                        `${mapdata.video == true ? '📺' : ''} ${mapdata.storyboard == true ? '🎨' : ''}`
+                        `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`
 
                     ,
                     inline: false

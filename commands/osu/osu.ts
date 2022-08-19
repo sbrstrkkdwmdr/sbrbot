@@ -212,7 +212,7 @@ Options:
 `, 'utf-8')
         const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(await user)}/${cmdchecks.toHexadecimal(mode)}`
 
-        const osudata = await fetch(userurl, {
+        const osudata:osuApiTypes.User = await fetch(userurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -439,7 +439,7 @@ Error - authentication
 
             let usertopurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/best?mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`;
 
-            const osutopdata = await fetch(usertopurl, {
+            const osutopdata:osuApiTypes.Score[] = await fetch(usertopurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -449,7 +449,7 @@ Error - authentication
 
             let mostplayedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/beatmapsets/most_played`
 
-            const mostplayeddata = await fetch(mostplayedurl, {
+            const mostplayeddata:osuApiTypes.BeatmapPlaycount[] = await fetch(mostplayedurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }

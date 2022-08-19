@@ -278,7 +278,7 @@ Options:
 ----------------------------------------------------
 `, 'utf-8')
         let userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
-        const osudata = await fetch(userurl, {
+        const osudata:osuApiTypes.User = await fetch(userurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -395,7 +395,7 @@ node-fetch error: ${error}
             });
         fs.writeFileSync(`debugosu/command-scores=scoredataPresort=${obj.guildId}.json`, JSON.stringify(scoredataPresort, null, 2));
 
-        let scoredata = scoredataPresort.scores
+        let scoredata:osuApiTypes.Score[] = scoredataPresort.scores
         let sortdata = ''
         if (scoredataPresort.scores.length < 1) {
             return obj.reply({
@@ -512,7 +512,7 @@ node-fetch error: ${error}
             sortdata += `\nCompact mode`
         }
         let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}`
-        const mapdata = await fetch(mapurl, {
+        const mapdata:osuApiTypes.Beatmap = await fetch(mapurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -637,13 +637,13 @@ node-fetch error: ${error}
                         scorestats.count_50,
                         scorestats.count_miss,
                         curscore.accuracy,
-                        curscore.max_comb,
+                        curscore.max_combo,
                         curscore.score,
                         0,
                         null, false
                     )
                     let pptxt;
-                    if (curscore.accuracy.toFixed(2) != 100.00) {
+                    if (curscore.accuracy != 1) {
                         if (curscore.pp == null || curscore.pp == NaN) {
                             pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
                         } else {

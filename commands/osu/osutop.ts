@@ -293,7 +293,7 @@ Options:
 ----------------------------------------------------
 `, 'utf-8')
         let userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
-        const osudata = await fetch(userurl, {
+        const osudata:osuApiTypes.User = await fetch(userurl, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
@@ -362,7 +362,7 @@ Error - authentication
 
         }
         let usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
-        const osutopdataPreSort = await fetch(usertopurl, {
+        const osutopdataPreSort:osuApiTypes.Score[] = await fetch(usertopurl, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
@@ -448,7 +448,7 @@ node-fetch error: ${error}
                     filterinfo += `\nsorted by highest pp`
                     break;
                 case 'recent':
-                    osutopdata = filtereddata.sort((a, b) => Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
+                    osutopdata = filtereddata.sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
                     filterinfo += `\nsorted by most recent`
                     break;
                 case 'combo':
@@ -479,7 +479,7 @@ node-fetch error: ${error}
                     filterinfo += `\nsorted by lowest pp`
                     break;
                 case 'recent':
-                    osutopdata = filtereddata.sort((a, b) => Math.abs(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - Math.abs(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
+                    osutopdata = filtereddata.sort((a, b) => parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
                     filterinfo += `\nsorted by oldest`
                     break;
                 case 'combo':
@@ -590,7 +590,7 @@ ${error}
                 let topmods = curscore.mods
                 let ifmods: any;
 
-                if (!topmods || topmods == '' || topmods == 'undefined' || topmods == null || topmods == undefined) {
+                if (!topmods || topmods.join('') == '' || topmods == null || topmods == undefined) {
                     ifmods = ''
                 } else {
                     ifmods = '+' + topmods.toString().replaceAll(",", '')
@@ -622,7 +622,7 @@ ${error}
                     ppflag += `${ppcalcing[2].pp.toFixed(2)}pp if SS`
                 } */
                 let ifnopp = '';
-                let trueppindex = osutopdata.sort((a, b) => { b.pp - a.pp }).indexOf(curscore) // WHY DOES THIS NOT WORK PROPERLY WTF
+                let trueppindex = osutopdata.sort((a, b) => b.pp - a.pp).indexOf(curscore) // WHY DOES THIS NOT WORK PROPERLY WTF
 
                 if (sort == 'pp') {
                 }
@@ -653,7 +653,7 @@ ${error}
                     break;
                 }
                 let ifmods;
-                if (!score.mods || score.mods == '' || score.mods == 'undefined' || score.mods == null || score.mods == undefined) {
+                if (!score.mods || score.mods.join('') == '' || score.mods == null || score.mods == undefined) {
                     ifmods = ''
                 } else {
                     ifmods = '+' + score.mods.join('').toString()
