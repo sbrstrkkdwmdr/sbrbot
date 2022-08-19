@@ -14,7 +14,7 @@
 
 //==============================================================================================================================================================================================
 
-type BeatmapCompact = {
+export type BeatmapCompact = {
     beatmapset_id: number,
     difficulty_rating: number,
     id: number,
@@ -25,16 +25,13 @@ type BeatmapCompact = {
     version: string,
     beatmapset?: BeatmapsetCompact,
     checksum?: string,
-    failtimes: {
-        fail: number[],
-        exit: number[],
-    },
+    failtimes: Failtimes
     max_combo?: number,
 }
 
 //==============================================================================================================================================================================================
 
-type Beatmap = BeatmapCompact & {
+export type Beatmap = BeatmapCompact & {
     accuracy: number,
     ar: number,
     beatmapset_id: number,
@@ -59,7 +56,7 @@ type Beatmap = BeatmapCompact & {
 
 //==============================================================================================================================================================================================
 
-type BeatmapDifficultyAttributes = {
+export type BeatmapDifficultyAttributes = {
     attributes: {
         aim_difficulty: number,
         approach_rate: number,
@@ -91,7 +88,7 @@ type BeatmapDifficultyAttributes = {
 
 //==============================================================================================================================================================================================
 
-type BeatmapPlaycount = {
+export type BeatmapPlaycount = {
     beatmap_id: number,
     beatmap?: BeatmapCompact,
     beatmapset?: BeatmapsetCompact,
@@ -100,21 +97,12 @@ type BeatmapPlaycount = {
 
 //==============================================================================================================================================================================================
 
-type BeatmapsetCompact = {
+export type BeatmapsetCompact = {
     artist: string,
     artist_unicode: string,
     beatmaps?: BeatmapCompact[],
     converts?: BeatmapCompact[],
-    covers: {
-        cover: string,
-        'cover@2x': string,
-        card: string,
-        'card@2x': string,
-        list: string,
-        'list@2x': string,
-        slimcover: string,
-        'slimcover@2x': string,
-    },
+    covers: Covers,
     creator: string,
     current_user_attributes?: any,
     description?: {
@@ -155,7 +143,7 @@ type BeatmapsetCompact = {
 
 //==============================================================================================================================================================================================
 
-type Beatmapset = BeatmapsetCompact & {
+export type Beatmapset = BeatmapsetCompact & {
     availability: {
         download_disabled: boolean,
         more_information?: string,
@@ -195,7 +183,7 @@ type Beatmapset = BeatmapsetCompact & {
 
 //==============================================================================================================================================================================================
 
-type BeatmapsetDiscussion = {
+export type BeatmapsetDiscussion = {
     beatmap?: BeatmapCompact,
     beatmap_id?: number,
     beatmapset?: BeatmapsetCompact,
@@ -219,7 +207,7 @@ type BeatmapsetDiscussion = {
     user_id: number,
 }
 
-type BeatmapsetDiscussionPost = {
+export type BeatmapsetDiscussionPost = {
     beatmapset_discussion_id: number,
     created_at: Timestamp,
     deleted_at?: Timestamp,
@@ -232,7 +220,7 @@ type BeatmapsetDiscussionPost = {
     user_id: number,
 }
 
-type BeatmapsetDiscussionVote = {
+export type BeatmapsetDiscussionVote = {
     beatmapset_discussion_id: number,
     created_at: Timestamp,
     id: number,
@@ -243,21 +231,21 @@ type BeatmapsetDiscussionVote = {
 
 //==============================================================================================================================================================================================
 
-type BeatmapScores = {
+export type BeatmapScores = {
     scores: Score[],
     userScore?: Score,
 }
 
 //==============================================================================================================================================================================================
 
-type BeatmapUserScore = {
+export type BeatmapUserScore = {
     position: number,
     score: Score,
 } | any
 
 //==============================================================================================================================================================================================
 
-type Build = {
+export type Build = {
     created_at: Timestamp,
     display_version: string,
     id: number,
@@ -270,7 +258,7 @@ type Build = {
 
 //==============================================================================================================================================================================================
 
-type ChangelogEntry = {
+export type ChangelogEntry = {
     category: string,
     created_at?: Timestamp,
     github_pull_request_id?: number,
@@ -288,7 +276,7 @@ type ChangelogEntry = {
 
 //==============================================================================================================================================================================================
 
-type ChatChannel = {
+export type ChatChannel = {
     channel_id: number,
     current_user_attributes: CurrentUserAttributes,
     name: string,
@@ -304,7 +292,7 @@ type ChatChannel = {
 
 //==============================================================================================================================================================================================
 
-type ChatMessage = {
+export type ChatMessage = {
     message_id: number,
     sender_id: number,
     channel_id: number,
@@ -316,7 +304,7 @@ type ChatMessage = {
 
 //==============================================================================================================================================================================================
 
-type Comment = {
+export type Comment = {
     commentable_id: number,
     commentable_type: string,
     created_at: Timestamp,
@@ -335,7 +323,7 @@ type Comment = {
     votes_count: number,
 }
 
-type CommentBundle = {
+export type CommentBundle = {
     commentable_meta: CommentableMeta,
     comments: Comment[],
     cursor: Cursor,
@@ -351,16 +339,16 @@ type CommentBundle = {
     users: UserCompact[],
 }
 
-type CommentSort = 'new' | 'old' | 'top'
+export type CommentSort = 'new' | 'old' | 'top'
 
-type CommentableMeta = {
+export type CommentableMeta = {
     id: number,
     title: string,
     type: string,
     url: string,
 }
 
-type CurrentUserAttributes = /* {
+export type CurrentUserAttributes = /* {
     BeatmapsetDiscusionPermissions: {
         can_destroy: boolean,
         can_reopen: boolean,
@@ -375,17 +363,17 @@ type CurrentUserAttributes = /* {
     }
 } */ any
 
-type Cursor = CursorString//{}
+export type Cursor = CursorString//{}
 
-type CursorString = any//{}
+export type CursorString = any//{}
 
-type Event = {
+export type Event = {
     created_at: Timestamp,
     id: number,
     type: EventType,
 }
 
-type ForumPost = {
+export type ForumPost = {
     created_at: Timestamp,
     deleted_at?: Timestamp,
     edited_at?: Timestamp,
@@ -396,7 +384,7 @@ type ForumPost = {
     user_id: number,
 }
 
-type ForumTopic = {
+export type ForumTopic = {
     created_at: Timestamp,
     deleted_at?: Timestamp,
     first_post_id: number,
@@ -412,9 +400,9 @@ type ForumTopic = {
     user_id: number,
 }
 
-type GameMode = 'osu' | 'taiko' | 'fruits' | 'mania'
+export type GameMode = 'osu' | 'taiko' | 'fruits' | 'mania'
 
-type GithubUser = {
+export type GithubUser = {
     display_name: string,
     github_url?: string,
     id?: number,
@@ -423,7 +411,7 @@ type GithubUser = {
     user_url?: string,
 }
 
-type Group = {
+export type Group = {
     colour?: string,
     has_lsisting: boolean,
     has_playmodes: boolean,
@@ -434,27 +422,92 @@ type Group = {
     short_name: string
 }
 
-type KudosuHistory = {}
+export type KudosuHistory = {
+    id: number,
+    action: string,
+    amount: number,
+    model: string,
+    created_at: Timestamp,
+    giver?: Giver,
+    post: Post,
+}
 
-type MultiplayerScore = {}
+export type MultiplayerScore = {
+    id: number,
+    user_id: number,
+    room_id: number,
+    playlist_item_id: number,
+    beatmap_id: number,
+    rank: Rank,
+    total_score: number,
+    accuracy: number,
+    max_combo: number,
+    mods: Mod[],
+    statistics: Statistics,
+    passed: boolean,
+    position?: number,
+    scores_around?: MultiplayerScoresAround,
+    user: User,
+}
 
-type MultiplayerScores = {}
+export type MultiplayerScores = {
+    cursor: MultiplayerScoresCursor,
+    params: object, //read https://osu.ppy.sh/docs/index.html?javascript#multiplayerscores for more info
+    scores: MultiplayerScore[],
+    total?: number,
+    user_score?: MultiplayerScore,
+}
 
-type MultiplayerScoresAround = {}
+export type MultiplayerScoresAround = {
+    higher: MultiplayerScores,
+    lower: MultiplayerScores,
+}
 
-type MultiplayerScoresCursor = {}
+export type MultiplayerScoresCursor = {
+    score_id: number,
+    total_score: number,
+}
 
-type MultiplayerScoresSort = {}
+export type MultiplayerScoresSort = 'score_asc' | 'score_desc'
 
-type NewsPost = {}
+export type NewsPost = {
+    author: string,
+    edit_url: string,
+    first_image?: string,
+    id: number,
+    published_at: Timestamp,
+    slug: string,
+    title: string,
+    updated_at: Timestamp,
+    content?: string,
+    navigation?: Navigation,
+    preview?: string,
+}
 
-type Notification = {}
+export type Notification = {
+    id: number,
+    name: string,
+    created_at: Timestamp,
+    object_type: string,
+    object_id: number,
+    source_user_id?: number,
+    is_read: boolean,
+    details: NotificationEvent | object,
+}
 
-type RankingType = {}
+export type RankingType = 'charts' | 'country' | 'performance' | 'score'
+
+export type Rankings = {
+    beatmapsets?: Beatmapset[],
+    cursor: Cursor,
+    ranking: UserStatistics,
+    spotlight?: SpotLight,
+    total: number,
+}
 
 //==============================================================================================================================================================================================
 
-type Score = {
+export type Score = {
     accuracy: number,
     beatmap?: BeatmapCompact,
     beatmapset?: BeatmapsetCompact,
@@ -474,14 +527,7 @@ type Score = {
     rank: string,
     replay: string,
     score: number,
-    statistics: {
-        count_100: number,
-        count_300: number,
-        count_50: number,
-        count_geki: number,
-        count_katu: number,
-        count_miss: number
-    },
+    statistics: Statistics,
     user_id: number,
     user?: UserCompact,
     weight?: {
@@ -492,19 +538,36 @@ type Score = {
 
 //==============================================================================================================================================================================================
 
-type SpotLight = {}
+export type SpotLight = {
+    end_date: Timestamp,
+    id: number,
+    mode_specific: boolean,
+    participant_coount?: number,
+    name: string,
+    start_date: Timestamp,
+    type: string,
+}
 
-type SpotLights = {}
+export type SpotLights = {
+    spotlights: SpotLight[]
+}
 
-type Timestamp = string
+export type Timestamp = string
 //iso 8601 date
 //ie 2019-09-05T06:31:20+00:00
 
-type UpdateStream = {}
+export type UpdateStream = {
+    display_name?: string | null,
+    id: number,
+    is_featured: boolean,
+    name: string,
+    latest_build?: Build | null,
+    user_count?: number,
+}
 
 //==============================================================================================================================================================================================
 
-type UserCompact = {
+export type UserCompact = {
     avatar_url: string,
     country_code: string,
     default_group: string,
@@ -523,7 +586,7 @@ type UserCompact = {
 
 //==============================================================================================================================================================================================
 
-type User = UserCompact & {
+export type User = UserCompact & {
     cover?: {
         custom_url: string,
         url: string,
@@ -547,6 +610,7 @@ type User = UserCompact & {
     playstyle: string[],
     post_count: number,
     profile_order: ProfilePage[],
+    statistics?: UserStatistics,
     title?: string,
     title_url?: string,
     twitter?: string,
@@ -555,23 +619,67 @@ type User = UserCompact & {
 
 //==============================================================================================================================================================================================
 
-type UserGroup = {}
+export type UserGroup = {
+    playmodes: string[] | null,
+}
 
-type UserSilence = {}
+export type UserSilence = {
+    id: number,
+    user_id: number,
+}
 
-type UserStatistics = {}
+export type UserStatistics = {
+    grade_counts: {
+        a: number,
+        s: number,
+        sh: number,
+        ss: number,
+        ssh: number
+    } | {
+        a: number,
+        s: number,
+        sh: number,
+        x: number,
+        xh: number,
+    },
+    hit_accuracy: number,
+    is_ranked: boolean,
+    level: {
+        current: number,
+        progress: number,
+    },
+    maximum_combo: number,
+    play_count: number,
+    play_time: number,
+    pp: number,
+    global_rank: number | null,
+    ranked_score: number,
+    replays_watched_by_others: number,
+    total_hits: number,
+    total_score: number,
+    user: UserCompact,
+}
 
-type WikiPage = {}
+export type WikiPage = {
+    available_locales: string[],
+    layout: string,
+    locale: string,
+    markdown: string,
+    path: string,
+    subtitle: string | null,
+    tags: string,
+    title: string,
+}
 
 //api shit
 
-type Error = {
+export type Error = {
     error: string,
 } | {
     authentication: string,
 }
 
-type OAuth = {
+export type OAuth = {
     access_token: string,
     expires_in: number,
     token_type: string,
@@ -692,24 +800,129 @@ type PollOption = {
     },
     vote_count: number,
 }
+//Kudosu History
+type Giver = {
+    url: string,
+    username: string,
+}
+type Post = {
+    url?: string,
+    title: string,
+}
+
+//scores
+type Mod = string;
+//'NM' | ''
+
+type Rank = 'XH' | 'X' | 'SH' | 'S' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
+
+type Statistics = {
+    count_100: number,
+    count_300: number,
+    count_50: number,
+    count_geki: number,
+    coutn_katu: number,
+    count_miss: number
+}
+
+//newspost
+type Navigation = {
+    newer?: NewsPost,
+    older?: NewsPost,
+}
+
+//notification
+type NotificationEvent =
+    Notification_beatmapset_discussion_lock | Notification_beatmapset_discussion_post_new | Notification_beatmapset_discussion_unlock | Notification_beatmapset_disqualify | Notification_beatmapset_love | Notification_beatmapset_nominate | Notification_beatmapset_qualify | Notification_beatmapset_remove_from_loved
+    | Notification_reset_nominations
+    | Notification_channel_message | Notification_forum_topic_reply
+
+type Notification_beatmapset_discussion_lock = {
+    cover_url: string,
+    title: string,
+    username: string,
+}
+type Notification_beatmapset_discussion_post_new = {
+    title: string,
+    cover_url: string,
+    discussion_id: number,
+    post_id: number,
+    beatmap_id?: number,
+    username: string,
+}
+type Notification_beatmapset_discussion_unlock = {
+    cover_url: string,
+    title: string,
+    username: string,
+}
+type Notification_beatmapset_disqualify = {
+    cover_url: string,
+    title: string,
+    username: string,
+}
+type Notification_beatmapset_love = {
+    cover_url: string,
+    title: string,
+    username: string,
+}
+type Notification_beatmapset_nominate = {
+    cover_url: string,
+    title: string,
+    username: string,
+}
+type Notification_beatmapset_qualify = {
+    cover_url: string,
+    title: string,
+    username: string,
+}
+type Notification_beatmapset_remove_from_loved = {
+    cover_url: string,
+    title: string,
+    username: string,
+}
+type Notification_reset_nominations = {
+    cover_url: string,
+    title: string,
+    username: string,
+}
+type Notification_channel_message = {
+    cover_url: string,
+    title: string,
+    username: string,
+}
+type Notification_forum_topic_reply = {
+    cover_url: string,
+    title: string,
+    username?: string,
+    post_id: number,
+}
+
 
 //user
 type ProfilePage = 'me' | 'recent_activity' | 'beatmaps' | 'historical' | 'kudosu' | 'top_ranks' | 'medals';
 
-
+/* 
 export {
     Beatmap,
     BeatmapCompact,
     BeatmapDifficultyAttributes,
-    BeatmapsetDiscussion,
-    BeatmapsetDiscussionPost,
-    BeatmapsetDiscussionVote,
     BeatmapPlaycount,
     BeatmapScores,
     BeatmapUserScore,
     Beatmapset,
     BeatmapsetCompact,
+    BeatmapsetDiscussion,
+    BeatmapsetDiscussionPost,
+    BeatmapsetDiscussionVote,
+
+    ChangelogEntry,
+    Comment,
+    CommentBundle,
+    CommentableMeta,
+    CommentSort,
+
     Score,
+
     User,
     UserCompact,
 
@@ -720,7 +933,7 @@ export {
     Covers,
     RankStatus,
     MessageType,
-};
+}; */
 
 //done list
 /**
