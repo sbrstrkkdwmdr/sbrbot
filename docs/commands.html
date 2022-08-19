@@ -263,16 +263,16 @@
                             <tr>
                                 <td>Time</td>
                                 <td>String</td>
-                                <td>The amount of time to wait before sending the reminder</td>
                                 <td>True</td>
+                                <td>The amount of time to wait before sending the reminder</td>
                                 <td>Formatted as ?d?h?m?s ie 1d2h3m4s <br>(1 day 2 hours 3 minutes 4 seconds)</td>
                                 <td>N/A</td>
                             </tr>
                             <tr>
                                 <td>Reminder</td>
                                 <td>String</td>
-                                <td>The reminder to send</td>
                                 <td>True</td>
+                                <td>The reminder to send</td>
                                 <td>N/A</td>
                                 <td>null</td>
                             </tr>
@@ -353,7 +353,7 @@
                             <tr>
                                 <td>Score id 1</td>
                                 <td>Integer</td>
-                                <td>True</td>
+                                <td>Sometimes</td>
                                 <td>The id of the first score to compare</td>
                                 <td>N/A</td>
                                 <td>User's most recent</td>
@@ -362,7 +362,7 @@
                             <tr>
                                 <td>Score id 2</td>
                                 <td>Integer</td>
-                                <td>True</td>
+                                <td>Sometimes</td>
                                 <td>The id of the second score to compare</td>
                                 <td>N/A</td>
                                 <td>Most recent score requested</td>
@@ -507,11 +507,11 @@
                   Slash Command: /map [id] [mods] [detailed]
                         Example: sbr-m "harumachi" +HDDT
                         Example: /map mods:DT detailed:true
-                        Link: https://osu.ppy.sh/beatmapsets/[sid]#[gamemode]/[id] +[mods]
-                        Link: https://osu.ppy.sh/b/[id] +[mods]
-                        Link: https://osu.ppy.sh/s/[sid] +[mods]
-                        Link: https://osu.ppy.sh/beatmap[id] +[mods]
-                        Link: https://osu.ppy.sh/beatmapsets/[sid] +[mods]
+                        Link (full): https://osu.ppy.sh/beatmapsets/[sid]#[gamemode]/[id] +[mods]
+                  Link (short, map): https://osu.ppy.sh/b/[id] +[mods]
+                  Link (short, set): https://osu.ppy.sh/s/[sid] +[mods]
+                   Link (long, map): https://osu.ppy.sh/beatmap[id] +[mods]
+                   Link (long, set): https://osu.ppy.sh/beatmapsets/[sid] +[mods]
                         File: [filename].osu
 
 
@@ -565,16 +565,17 @@
                             <tr>
                                 <td>SID</td>
                                 <td>Integer</td>
-                                <td>False<br>(True if ID is absent in link)</td>
-                                <td>The ID of the beatmap set</td>
+                                <td>Sometimes</td>
+                                <td>The ID of the beatmap set. <br>Required if using osu.ppy.sh/s/ or
+                                    osu.ppy.sh/beatmapsets/</td>
                                 <td>N/A</td>
                                 <td>N/A</td>
                             </tr>
                             <tr>
                                 <td>Mode</td>
                                 <td>String</td>
-                                <td>False<br>(True if using full map link)</td>
-                                <td>The mode of the beatmap</td>
+                                <td>Sometimes</td>
+                                <td>The mode of the beatmap. <br>Required if using full map link</td>
                                 <td>osu/taiko/fruits/mania</td>
                                 <td>osu</td>
                             </tr>
@@ -614,11 +615,8 @@
                             <tr>
                                 <td>User</td>
                                 <td>String/Integer/Mention</td>
-                                <td>False<br>(True if using link)</td>
-                                <td>The username/id of the user. If omitted or a mention is used, the database will
-                                    search
-                                    for
-                                    the user's name</td>
+                                <td>Sometimes</td>
+                                <td>The username/id of the user. If omitted or a mention is used, the database will search for the user's name <br>Required if using profile link</td>
                                 <td>N/A</td>
                                 <td>Database</td>
                             </tr>
@@ -1526,8 +1524,8 @@
                         <tr>
                             <td>Type</td>
                             <td>String</td>
-                            <td>True</td>
-                            <td>The type to find</td>
+                            <td>Sometimes</td>
+                            <td>The type to find. Can be omitted if ID is a mention</td>
                             <td>user/guild/channel/role/emoji</td>
                             <td>N/A</td>
                         </tr>
@@ -1991,7 +1989,7 @@
 
 
     <!-- link parse -->
-<!--     <div class="spaceForNav" id="link"></div>
+    <!--     <div class="spaceForNav" id="link"></div>
 
     <div>
         <h2 class="divSubheading">Link Parse</h2>
@@ -2102,9 +2100,9 @@
             </details>
         </div> -->
 
-        <div style="margin-top: 900px;">
+    <div style="margin-top: 900px;">
 
-        </div>
+    </div>
 </body>
 
 </html>
