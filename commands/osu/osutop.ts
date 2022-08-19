@@ -293,7 +293,7 @@ Options:
 ----------------------------------------------------
 `, 'utf-8')
         let userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
-        const osudata:osuApiTypes.User = await fetch(userurl, {
+        const osudata: osuApiTypes.User = await fetch(userurl, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
@@ -362,7 +362,7 @@ Error - authentication
 
         }
         let usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
-        const osutopdataPreSort:osuApiTypes.Score[] = await fetch(usertopurl, {
+        const osutopdataPreSort: osuApiTypes.Score[] = await fetch(usertopurl, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
@@ -622,14 +622,78 @@ ${error}
                     ppflag += `${ppcalcing[2].pp.toFixed(2)}pp if SS`
                 } */
                 let ifnopp = '';
-                let trueppindex = osutopdata.sort((a, b) => b.pp - a.pp).indexOf(curscore) // WHY DOES THIS NOT WORK PROPERLY WTF
+                let trueppindex: number;
+                let indexdata = osutopdata.sort((a, b) => b.pp - a.pp)
 
                 if (sort == 'pp') {
                 }
                 else {
-                    ifnopp = `(#${trueppindex + 1})`
+                    trueppindex = await indexdata.indexOf(curscore)
+                    ifnopp = await `(#${trueppindex + 1})`
+                    if (reverse == false || reverse == null) {
+                        switch (sort) {
+                            case 'score':
+                                osutopdata = filtereddata.sort((a, b) => b.score - a.score)
+                                filterinfo += `\nsorted by score`
+                                break;
+                            case 'acc':
+                                osutopdata = filtereddata.sort((a, b) => b.accuracy - a.accuracy)
+                                filterinfo += `\nsorted by highest accuracy`
+                                break;
+                            case 'pp': default:
+                                osutopdata = filtereddata.sort((a, b) => b.pp - a.pp)
+                                filterinfo += `\nsorted by highest pp`
+                                break;
+                            case 'recent':
+                                osutopdata = filtereddata.sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
+                                filterinfo += `\nsorted by most recent`
+                                break;
+                            case 'combo':
+                                osutopdata = filtereddata.sort((a, b) => b.max_combo - a.max_combo)
+                                filterinfo += `\nsorted by highest combo`
+                                break;
+                            case 'miss':
+                                osutopdata = filtereddata.sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
+                                filterinfo += `\nsorted by least misses`
+                                break;
+                            case 'rank':
+                                osutopdata = filtereddata.sort((a, b) => a.rank.localeCompare(b.rank))
+                                filterinfo += `\nsorted by rank`
+                                break;
+                        }
+                    } else {
+                        switch (sort) {
+                            case 'score':
+                                osutopdata = filtereddata.sort((a, b) => a.score - b.score)
+                                filterinfo += `\nsorted by lowest score`
+                                break;
+                            case 'acc':
+                                osutopdata = filtereddata.sort((a, b) => a.accuracy - b.accuracy)
+                                filterinfo += `\nsorted by lowest accuracy`
+                                break;
+                            case 'pp': default:
+                                osutopdata = filtereddata.sort((a, b) => a.pp - b.pp)
+                                filterinfo += `\nsorted by lowest pp`
+                                break;
+                            case 'recent':
+                                osutopdata = filtereddata.sort((a, b) => parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
+                                filterinfo += `\nsorted by oldest`
+                                break;
+                            case 'combo':
+                                osutopdata = filtereddata.sort((a, b) => a.max_combo - b.max_combo)
+                                filterinfo += `\nsorted by lowest combo`
+                                break;
+                            case 'miss':
+                                osutopdata = filtereddata.sort((a, b) => b.statistics.count_miss - a.statistics.count_miss)
+                                filterinfo += `\nsorted by most misses`
+                                break;
+                            case 'rank':
+                                osutopdata = filtereddata.sort((a, b) => b.rank.localeCompare(a.rank))
+                                filterinfo += `\nsorted by lowest rank`
+                                break;
+                        }
+                    } //added this cos it keeps re-sorting back to pp
                 }
-
                 topEmbed.addFields([{
                     name: `#${scorenum} ${ifnopp}`,
                     value: `
