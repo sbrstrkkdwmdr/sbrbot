@@ -27,7 +27,7 @@ export type BeatmapCompact = {
     checksum?: string,
     failtimes: Failtimes
     max_combo?: number,
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -52,7 +52,7 @@ export type Beatmap = BeatmapCompact & {
     playcount: number,
     ranked: number,
     url: string,
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -84,7 +84,7 @@ export type BeatmapDifficultyAttributes = {
         great_hit_window: number,
         score_multiplier: number,
     }
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -93,7 +93,7 @@ export type BeatmapPlaycount = {
     beatmap?: BeatmapCompact,
     beatmapset?: BeatmapsetCompact,
     count: number,
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -139,7 +139,7 @@ export type BeatmapsetCompact = {
     user: UserCompact,
     user_id: number,
     video: boolean,
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -179,7 +179,7 @@ export type Beatmapset = BeatmapsetCompact & {
     storyboard: boolean,
     submitted_date: Timestamp,
     tags: string,
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -205,7 +205,7 @@ export type BeatmapsetDiscussion = {
     timestamp?: number,
     updated_at: Timestamp,
     user_id: number,
-} | Error
+} & Error
 
 export type BeatmapsetDiscussionPost = {
     beatmapset_discussion_id: number,
@@ -218,7 +218,7 @@ export type BeatmapsetDiscussionPost = {
     system: boolean,
     updated_at: Timestamp,
     user_id: number,
-} | Error
+} & Error
 
 export type BeatmapsetDiscussionVote = {
     beatmapset_discussion_id: number,
@@ -227,14 +227,14 @@ export type BeatmapsetDiscussionVote = {
     score: number,
     updated_at: Timestamp,
     user_id: number,
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
 export type BeatmapScores = {
     scores: Score[],
     userScore?: Score,
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -242,7 +242,7 @@ export type BeatmapUserScore = {
     position: number,
     score: Score,
 } | any
-    | Error
+    & Error
 
 //==============================================================================================================================================================================================
 
@@ -255,7 +255,7 @@ export type Build = {
     version?: string,
     changelog_entries?: ChangelogEntry[],
     versions: Versions
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -273,7 +273,7 @@ export type ChangelogEntry = {
     title?: string,
     type: string,
     url?: string,
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -289,7 +289,7 @@ export type ChatChannel = {
     recent_messages?: ChatMessage[],
     moderated: boolean,
     users?: number[],
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -301,7 +301,7 @@ export type ChatMessage = {
     content: string,
     is_action: boolean,
     sender: UserCompact
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -322,7 +322,7 @@ export type Comment = {
     updated_at: Timestamp,
     user_id: number,
     votes_count: number,
-} | Error
+} & Error
 
 export type CommentBundle = {
     commentable_meta: CommentableMeta,
@@ -338,16 +338,16 @@ export type CommentBundle = {
     user_follow: boolean
     user_votes: number[],
     users: UserCompact[],
-} | Error
+} & Error
 
-export type CommentSort = 'new' | 'old' | 'top' | Error
+export type CommentSort = 'new' | 'old' | 'top' & Error
 
 export type CommentableMeta = {
     id: number,
     title: string,
     type: string,
     url: string,
-} | Error
+} & Error
 
 export type CurrentUserAttributes = /* {
     BeatmapsetDiscusionPermissions: {
@@ -362,17 +362,17 @@ export type CurrentUserAttributes = /* {
         can_message_error?: string,
         last_read_id: number,
     }
-} */ any | Error
+} */ any & Error
 
-export type Cursor = CursorString | Error
+export type Cursor = CursorString & Error
 
-export type CursorString = any | Error//{}
+export type CursorString = any & Error//{}
 
 export type Event = {
     created_at: Timestamp,
     id: number,
     type: EventType,
-} | Error
+} & Error
 
 export type ForumPost = {
     created_at: Timestamp,
@@ -383,7 +383,7 @@ export type ForumPost = {
     id: number,
     topic_id: number,
     user_id: number,
-} | Error
+} & Error
 
 export type ForumTopic = {
     created_at: Timestamp,
@@ -399,9 +399,9 @@ export type ForumTopic = {
     type: 'normal' | 'sticky' | 'announcement',
     updated_at: Timestamp,
     user_id: number,
-} | Error
+} & Error
 
-export type GameMode = 'osu' | 'taiko' | 'fruits' | 'mania' | Error
+export type GameMode = 'osu' | 'taiko' | 'fruits' | 'mania' & Error
 
 export type GithubUser = {
     display_name: string,
@@ -410,7 +410,7 @@ export type GithubUser = {
     osu_username?: string,
     user_id?: number,
     user_url?: string,
-} | Error
+} & Error
 
 export type Group = {
     colour?: string,
@@ -421,7 +421,7 @@ export type Group = {
     is_probationary: boolean,
     name: string,
     short_name: string
-} | Error
+} & Error
 
 export type KudosuHistory = {
     id: number,
@@ -431,7 +431,7 @@ export type KudosuHistory = {
     created_at: Timestamp,
     giver?: Giver,
     post: Post,
-} | Error
+} & Error
 
 export type MultiplayerScore = {
     id: number,
@@ -449,7 +449,7 @@ export type MultiplayerScore = {
     position?: number,
     scores_around?: MultiplayerScoresAround,
     user: User,
-} | Error
+} & Error
 
 export type MultiplayerScores = {
     cursor: MultiplayerScoresCursor,
@@ -457,19 +457,19 @@ export type MultiplayerScores = {
     scores: MultiplayerScore[],
     total?: number,
     user_score?: MultiplayerScore,
-} | Error
+} & Error
 
 export type MultiplayerScoresAround = {
     higher: MultiplayerScores,
     lower: MultiplayerScores,
-} | Error
+} & Error
 
 export type MultiplayerScoresCursor = {
     score_id: number,
     total_score: number,
-} | Error
+} & Error
 
-export type MultiplayerScoresSort = 'score_asc' | 'score_desc' | Error
+export type MultiplayerScoresSort = 'score_asc' | 'score_desc' & Error
 
 export type NewsPost = {
     author: string,
@@ -483,7 +483,7 @@ export type NewsPost = {
     content?: string,
     navigation?: Navigation,
     preview?: string,
-} | Error
+} & Error
 
 export type Notification = {
     id: number,
@@ -494,9 +494,9 @@ export type Notification = {
     source_user_id?: number,
     is_read: boolean,
     details: NotificationEvent | object,
-} | Error
+} & Error
 
-export type RankingType = 'charts' | 'country' | 'performance' | 'score' | Error
+export type RankingType = 'charts' | 'country' | 'performance' | 'score' & Error
 
 export type Rankings = {
     beatmapsets?: Beatmapset[],
@@ -504,7 +504,7 @@ export type Rankings = {
     ranking: UserStatistics,
     spotlight?: SpotLight,
     total: number,
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -519,7 +519,7 @@ export type Score = {
     max_combo: number,
     mode_int: number,
     mode: string,
-    mods: number,
+    mods: Mod[],
     passed: boolean,
     perfect: boolean,
     pp: number,
@@ -535,7 +535,7 @@ export type Score = {
         percentage: number,
         pp: number,
     },
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -547,13 +547,13 @@ export type SpotLight = {
     name: string,
     start_date: Timestamp,
     type: string,
-} | Error
+} & Error
 
 export type SpotLights = {
     spotlights: SpotLight[]
-} | Error
+} & Error
 
-export type Timestamp = string | Error
+export type Timestamp = string & Error
 //iso 8601 date
 //ie 2019-09-05T06:31:20+00:00
 
@@ -564,7 +564,7 @@ export type UpdateStream = {
     name: string,
     latest_build?: Build | null,
     user_count?: number,
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -583,7 +583,7 @@ export type UserCompact = {
     profile_colour: any,
     username: string,
     account_history?: ''
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
@@ -616,18 +616,18 @@ export type User = UserCompact & {
     title_url?: string,
     twitter?: string,
     website?: string,
-} | Error
+} & Error
 
 //==============================================================================================================================================================================================
 
 export type UserGroup = {
     playmodes: string[] | null,
-} | Error
+} & Error
 
 export type UserSilence = {
     id: number,
     user_id: number,
-} | Error
+} & Error
 
 export type UserStatistics = {
     grade_counts: {
@@ -659,7 +659,7 @@ export type UserStatistics = {
     total_hits: number,
     total_score: number,
     user: UserCompact,
-} | Error
+} & Error
 
 export type WikiPage = {
     available_locales: string[],
@@ -670,21 +670,20 @@ export type WikiPage = {
     subtitle: string | null,
     tags: string,
     title: string,
-} | Error
+} & Error
 
 //api shit
 
 export type Error = {
-    error: string,
-} | {
-    authentication: string,
+    error?: string,
+    authentication?: string,
 }
 
 export type OAuth = {
     access_token: string,
     expires_in: number,
     token_type: string,
-} | Error
+} & Error
 
 //mini-types ???
 
@@ -822,7 +821,7 @@ type Statistics = {
     count_300: number,
     count_50: number,
     count_geki: number,
-    coutn_katu: number,
+    count_katu: number,
     count_miss: number
 }
 
