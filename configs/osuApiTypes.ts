@@ -18,7 +18,7 @@
 export type BeatmapCompact = {
     beatmapset_id: number,
     beatmapset?: BeatmapsetCompact,
-    checksum?: string,
+    checksum?: string | null,
     difficulty_rating: number,
     failtimes: Failtimes
     id: number,
@@ -37,13 +37,13 @@ export type Beatmap = BeatmapCompact & {
     ar: number,
     beatmapset_id: number,
     beatmapset?: Beatmapset,
-    bpm: number,
+    bpm?: number | null,
     convert: boolean,
     count_circles: number,
     count_sliders: number,
     count_spinners: number,
     cs: number,
-    deleted_at: Timestamp,
+    deleted_at: Timestamp | null,
     drain: number,
     hit_length: number,
     is_scoreable: boolean,
@@ -91,8 +91,8 @@ export type BeatmapDifficultyAttributes = {
 
 export type BeatmapPlaycount = {
     beatmap_id: number,
-    beatmap?: BeatmapCompact,
-    beatmapset?: BeatmapsetCompact,
+    beatmap: BeatmapCompact | null,
+    beatmapset: BeatmapsetCompact | null,
     count: number,
 } & Error
 
@@ -147,7 +147,7 @@ export type BeatmapsetCompact = {
 export type Beatmapset = BeatmapsetCompact & {
     availability: {
         download_disabled: boolean,
-        more_information?: string,
+        more_information?: string | null,
     }
     beatmaps?: Beatmap[],
     bpm: number,
@@ -165,6 +165,7 @@ export type Beatmapset = BeatmapsetCompact & {
     },
     is_scoreable: boolean,
     last_updated: Timestamp,
+    legacy_thread_url?: string | null,
     nominations?: {
         current: number,
         required: number,
@@ -174,36 +175,36 @@ export type Beatmapset = BeatmapsetCompact & {
         required: number,
     }
     ranked: number,
-    ranked_date?: Timestamp,
+    ranked_date?: Timestamp | null,
     ratings?: number[],
     source: string,
     storyboard: boolean,
-    submitted_date: Timestamp,
+    submitted_date?: Timestamp | null,
     tags: string,
 } & Error
 
 //==============================================================================================================================================================================================
 
 export type BeatmapsetDiscussion = {
-    beatmap?: BeatmapCompact,
-    beatmap_id?: number,
-    beatmapset?: BeatmapsetCompact,
-    beatmapset_id?: number,
+    beatmap?: BeatmapCompact | null,
+    beatmap_id?: number | null,
+    beatmapset?: BeatmapsetCompact | null,
+    beatmapset_id: number,
     can_be_resolved: boolean,
     can_grant_kudosu: boolean,
     created_at: Timestamp,
     current_user_attributes: CurrentUserAttributes,
-    deleted_at?: Timestamp,
-    deleted_by_id?: number,
+    deleted_at?: Timestamp | null,
+    deleted_by_id?: number | null,
     id: number,
     kudosu_denied: boolean,
     last_post_at: Timestamp,
     message_type: MessageType,
-    parent_id?: number,
-    posts?: BeatmapsetDiscussionPost[],
+    parent_id?: number | null,
+    posts?: BeatmapsetDiscussionPost[] | null,
     resolved: boolean,
-    starting_post?: BeatmapsetDiscussionPost,
-    timestamp?: number,
+    starting_post?: BeatmapsetDiscussionPost | null,
+    timestamp?: number | null,
     updated_at: Timestamp,
     user_id: number,
 } & Error
@@ -211,10 +212,10 @@ export type BeatmapsetDiscussion = {
 export type BeatmapsetDiscussionPost = {
     beatmapset_discussion_id: number,
     created_at: Timestamp,
-    deleted_at?: Timestamp,
-    deleted_by_id?: number,
+    deleted_at?: Timestamp | null,
+    deleted_by_id?: number | null,
     id: number,
-    last_editor_id?: number,
+    last_editor_id?: number | null,
     message: string,
     system: boolean,
     updated_at: Timestamp,
@@ -234,7 +235,7 @@ export type BeatmapsetDiscussionVote = {
 
 export type BeatmapScores = {
     scores: Score[],
-    userScore?: Score,
+    userScore: Score | null,
 } & Error
 
 //==============================================================================================================================================================================================
@@ -251,45 +252,45 @@ export type Build = {
     created_at: Timestamp,
     display_version: string,
     id: number,
-    update_stream?: UpdateStream,
+    update_stream?: UpdateStream | null,
     users: number,
-    version?: string,
+    version?: string | null,
     changelog_entries?: ChangelogEntry[],
-    versions: Versions
+    versions?: Versions
 } & Error
 
 //==============================================================================================================================================================================================
 
 export type ChangelogEntry = {
     category: string,
-    created_at?: Timestamp,
-    github_pull_request_id?: number,
+    created_at?: Timestamp | null,
+    github_pull_request_id?: number | null,
     github_url?: string,
     github_user?: GithubUser,
-    id?: number,
+    id?: number | null,
     major: boolean,
     message?: string,
     message_html?: string,
-    repository?: string,
-    title?: string,
+    repository?: string | null,
+    title?: string | null,
     type: string,
-    url?: string,
+    url?: string | null,
 } & Error
 
 //==============================================================================================================================================================================================
 
 export type ChatChannel = {
     channel_id: number,
-    current_user_attributes: CurrentUserAttributes,
+    current_user_attributes?: CurrentUserAttributes | null,
     name: string,
-    description?: string,
+    description?: string | null,
     icon: string,
     type: 'PUBLIC' | 'PRIVATE' | 'MULTIPLAYER' | 'SPECTATOR' | 'TEMPORARY' | 'PM' | 'GROUP',
-    last_read_id?: number,
-    last_message_id?: number,
-    recent_messages?: ChatMessage[],
+    last_read_id?: number | null,
+    last_message_id?: number | null,
+    recent_messages?: ChatMessage[] | null,
     moderated: boolean,
-    users?: number[],
+    users?: number[] | null,
 } & Error
 
 //==============================================================================================================================================================================================
@@ -310,14 +311,14 @@ export type Comment = {
     commentable_id: number,
     commentable_type: string,
     created_at: Timestamp,
-    deleted_at?: Timestamp,
-    edited_at?: Timestamp,
-    edited_by_id?: number,
+    deleted_at?: Timestamp | null,
+    edited_at?: Timestamp | null,
+    edited_by_id?: number | null,
     id: number,
-    legacy_name?: string,
-    message?: string,
-    message_html?: string,
-    parent_id?: number,
+    legacy_name?: string | null,
+    message?: string | null,
+    message_html?: string | null,
+    parent_id?: number | null,
     pinned: boolean,
     replies_count: number,
     updated_at: Timestamp,
@@ -330,18 +331,18 @@ export type CommentBundle = {
     comments: Comment[],
     cursor: Cursor,
     has_more: boolean,
-    has_more_id?: number,
+    has_more_id?: number | null,
     included_comments: Comment[],
-    pinned_comments?: Comment[],
+    pinned_comments?: Comment[] | null,
     sort: string,
-    top_level_count?: number,
-    total?: number,
+    top_level_count?: number | null,
+    total?: number | null,
     user_follow: boolean
     user_votes: number[],
     users: UserCompact[],
 } & Error
 
-export type CommentSort = 'new' | 'old' | 'top' & Error
+export type CommentSort = 'new' | 'old' | 'top' //& Error
 
 export type CommentableMeta = {
     id: number,
@@ -350,7 +351,8 @@ export type CommentableMeta = {
     url: string,
 } & Error
 
-export type CurrentUserAttributes = /* {
+export type CurrentUserAttributes =
+/* {
     BeatmapsetDiscusionPermissions: {
         can_destroy: boolean,
         can_reopen: boolean,
@@ -363,9 +365,9 @@ export type CurrentUserAttributes = /* {
         can_message_error?: string,
         last_read_id: number,
     }
-} */ any & Error
+} */ any //& Error
 
-export type Cursor = CursorString & Error
+export type Cursor = CursorString //& Error
 
 export type CursorString = any & Error//{}
 
@@ -377,9 +379,9 @@ export type Event = {
 
 export type ForumPost = {
     created_at: Timestamp,
-    deleted_at?: Timestamp,
-    edited_at?: Timestamp,
-    edited_by_id?: number,
+    deleted_at?: Timestamp | null,
+    edited_at?: Timestamp | null,
+    edited_by_id?: number | null,
     forum_id: number,
     id: number,
     topic_id: number,
@@ -388,13 +390,13 @@ export type ForumPost = {
 
 export type ForumTopic = {
     created_at: Timestamp,
-    deleted_at?: Timestamp,
+    deleted_at?: Timestamp | null,
     first_post_id: number,
     forum_id: number,
     id: number,
     is_locked: boolean,
     last_post_id: number,
-    poll?: Poll,
+    poll?: Poll | null,
     post_count: number,
     title: string,
     type: 'normal' | 'sticky' | 'announcement',
@@ -406,16 +408,17 @@ export type GameMode = 'osu' | 'taiko' | 'fruits' | 'mania' & Error
 
 export type GithubUser = {
     display_name: string,
-    github_url?: string,
-    id?: number,
-    osu_username?: string,
-    user_id?: number,
-    user_url?: string,
+    github_url?: string | null,
+    id?: number | null,
+    osu_username?: string | null,
+    user_id?: number | null,
+    user_url?: string | null,
 } & Error
 
 export type Group = {
-    colour?: string,
-    has_lsisting: boolean,
+    colour?: string | null,
+    description?: Description
+    has_listing: boolean,
     has_playmodes: boolean,
     id: number,
     identifier: string,
@@ -430,7 +433,7 @@ export type KudosuHistory = {
     amount: number,
     model: string,
     created_at: Timestamp,
-    giver?: Giver,
+    giver?: Giver | null,
     post: Post,
 } & Error
 
@@ -447,8 +450,8 @@ export type MultiplayerScore = {
     mods: Mod[],
     statistics: Statistics,
     passed: boolean,
-    position?: number,
-    scores_around?: MultiplayerScoresAround,
+    position?: number | null,
+    scores_around?: MultiplayerScoresAround | null,
     user: User,
 } & Error
 
@@ -456,9 +459,11 @@ export type MultiplayerScores = {
     cursor: MultiplayerScoresCursor,
     params: object, //read https://osu.ppy.sh/docs/index.html?javascript#multiplayerscores for more info
     scores: MultiplayerScore[],
-    total?: number,
+    total?: number | null,
     user_score?: MultiplayerScore,
 } & Error
+//params:
+//sort, limit, cursor[score_id],cursor[total_score]
 
 export type MultiplayerScoresAround = {
     higher: MultiplayerScores,
@@ -475,7 +480,7 @@ export type MultiplayerScoresSort = 'score_asc' | 'score_desc' & Error
 export type NewsPost = {
     author: string,
     edit_url: string,
-    first_image?: string,
+    first_image?: string | null,
     id: number,
     published_at: Timestamp,
     slug: string,
@@ -492,7 +497,7 @@ export type Notification = {
     created_at: Timestamp,
     object_type: string,
     object_id: number,
-    source_user_id?: number,
+    source_user_id?: number | null,
     is_read: boolean,
     details: NotificationEvent | object,
 } & Error
@@ -503,7 +508,7 @@ export type Rankings = {
     beatmapsets?: Beatmapset[],
     cursor: Cursor,
     ranking: UserStatistics,
-    spotlight?: SpotLight,
+    spotlight?: SpotLight | null,
     total: number,
 } & Error
 
@@ -544,7 +549,7 @@ export type SpotLight = {
     end_date: Timestamp,
     id: number,
     mode_specific: boolean,
-    participant_coount?: number,
+    participant_coount?: number | null,
     name: string,
     start_date: Timestamp,
     type: string,
@@ -579,9 +584,8 @@ export type UserCompact = {
     is_deleted: boolean,
     is_online: boolean,
     is_supporter: boolean,
-    last_visit: string | null,
     pm_friends_only: boolean,
-    profile_colour: any | null,
+    profile_colour: string | null,
     username: string,
     account_history?: UserAccountHistory[],
     active_tournament?: ProfileBanner,
@@ -593,12 +597,14 @@ export type UserCompact = {
         custom_url: string,
         url: string,
         id: number,
-    }, favourite_beatmapset_count?: number,
+    },
+    favourite_beatmapset_count?: number,
     follower_count?: number,
     friends?: any,
     graveyard_beatmapset_count?: number,
     groups?: Group[],
-    is_restricted?: boolean | null,
+    is_restricted?: boolean,
+    last_visit?: Timestamp | null,
     loved_beatmapset_count?: number,
     monthly_playcounts?: UserMonthlyPlaycount[],
     page?: any,
@@ -622,26 +628,26 @@ export type UserCompact = {
 
 export type User = UserCompact & {
     cover_url: string,
-    discord?: string,
+    discord?: string | null,
     has_supported: boolean,
-    interests?: string,
+    interests?: string | null,
     join_date: Timestamp,
     kudosu: {
         available: number,
         total: number,
     },
-    location?: string,
+    location?: string | null,
     max_blocks: number,
     max_friends: number,
-    occupation?: string,
+    occupation?: string | null,
     playmode: GameMode,
     playstyle: string[],
     post_count: number,
     profile_order: ProfilePage[],
-    title?: string,
-    title_url?: string,
-    twitter?: string,
-    website?: string,
+    title?: string | null,
+    title_url?: string | null,
+    twitter?: string | null,
+    website?: string | null,
 } & Error
 
 //==============================================================================================================================================================================================
@@ -716,8 +722,8 @@ export type OAuth = {
 
 //beatmap
 type Failtimes = {
-    exit: number[],
-    fail: number[],
+    exit: number[] | null,
+    fail: number[] | null,
 }
 type Covers = {
     cover: string,
@@ -755,7 +761,7 @@ type EventBeatmap = {
 type EventUser = {
     username: string,
     url: string
-    previousUsername?: string,
+    previousUsername?: string | null,
 }
 
 type EventAchievement = {
@@ -808,9 +814,9 @@ type EventUsernameChange = {
 //forum-topic
 type Poll = {
     allow_vote_change: boolean,
-    ended_at?: Timestamp,
+    ended_at?: Timestamp | null,
     hide_incomplete_results: boolean,
-    last_vote_at?: Timestamp,
+    last_vote_at?: Timestamp | null,
     options: PollOption[],
     started_at: Timestamp,
     title: {
@@ -825,15 +831,22 @@ type PollOption = {
         bbcode: string,
         html: string,
     },
-    vote_count: number,
+    vote_count?: number | null,
 }
+//Group
+type Description = {
+    html: string,
+    markdown: string,
+}
+
+
 //Kudosu History
 type Giver = {
     url: string,
     username: string,
 }
 type Post = {
-    url?: string,
+    url?: string | null,
     title: string,
 }
 
@@ -874,7 +887,7 @@ type Notification_beatmapset_discussion_post_new = {
     cover_url: string,
     discussion_id: number,
     post_id: number,
-    beatmap_id?: number,
+    beatmap_id?: number | null,
     username: string,
 }
 type Notification_beatmapset_discussion_unlock = {
@@ -920,7 +933,7 @@ type Notification_channel_message = {
 type Notification_forum_topic_reply = {
     cover_url: string,
     title: string,
-    username?: string,
+    username?: string | null,
     post_id: number,
 };
 
