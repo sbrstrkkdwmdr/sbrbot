@@ -1,4 +1,4 @@
-import commandchecks = require('../../calc/commandchecks');
+import cmdchecks = require('../../calc/commandchecks');
 import fs = require('fs');
 import colours = require('../../configs/colours');
 module.exports = {
@@ -46,14 +46,55 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
         }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
 
-        //==============================================================================================================================================================================================
+----------------------------------------------------
+`, 'utf-8')
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+
+
+        //SEND/EDIT MSG==============================================================================================================================================================================================
+
+        if (message != null && interaction == null && button == null) {
+            message.reply({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (interaction != null && button == null && message == null) {
+            interaction.reply({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (button != null) {
+            message.edit({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
 
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
+----------------------------------------------------
 success
 ID: ${absoluteID}
+----------------------------------------------------
 \n\n`, 'utf-8')
     }
 }
