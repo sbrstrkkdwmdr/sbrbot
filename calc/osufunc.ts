@@ -159,30 +159,28 @@ async function scorecalc(
             }
 
 
-            let newacc = osumodcalc.calcgrade(hit300, hit100, hit50, miss).accuracy;
+            let newacc = osumodcalc.calcgrade(hit300, hit100, hit50, 0).accuracy;
             switch (gamemode) {
                 case 'osu':
                     break;
                 case 'taiko':
-                    newacc = osumodcalc.calcgradeTaiko(hit300, hit100, miss).accuracy;
+                    newacc = osumodcalc.calcgradeTaiko(hit300, hit100, 0).accuracy;
                     break;
                 case 'fruits':
-                    newacc = osumodcalc.calcgradeCatch(hit300, hit100, hit50, miss, hitkatu).accuracy;
+                    newacc = osumodcalc.calcgradeCatch(hit300, hit100, hit50, 0, hitkatu).accuracy;
                     break;
                 case 'mania':
-                    newacc = osumodcalc.calcgradeMania(hitgeki, hit300, hit100, hit50, miss, hitkatu).accuracy;
+                    newacc = osumodcalc.calcgradeMania(hitgeki, hit300, hitkatu, hit100, hit50, 0).accuracy;
                     break;
+            }
+            if (isNaN(newacc)) {
+                newacc = acc;
             }
             let basescore: any = {
                 mode: gamemode,
                 mods: osumodcalc.ModStringToInt(mods),
                 combo: maxcombo,
                 acc: acc || 100,
-                n300: hit300 != null || hit300 != NaN ? hit300 : 0,
-                n100: hit100 != null || hit100 != NaN ? hit100 : 0,
-                n50: hit50 != null || hit50 != NaN ? hit50 : 0,
-                nMisses: miss != null || miss != NaN ? miss : 0,
-                nKatu: hitkatu != null || hitkatu != NaN ? hitkatu : 0,
                 score: score != null || score != NaN ? score : 0,
             }
             if (failed == true) {
@@ -191,16 +189,25 @@ async function scorecalc(
                     mods: osumodcalc.ModStringToInt(mods),
                     combo: maxcombo,
                     acc: acc || 100,
-                    n300: hit300 != null || hit300 != NaN ? hit300 : 0,
-                    n100: hit100 != null || hit100 != NaN ? hit100 : 0,
-                    n50: hit50 != null || hit50 != NaN ? hit50 : 0,
-                    nMisses: miss != null || miss != NaN ? miss : 0,
-                    nKatu: hitkatu != null || hitkatu != NaN ? hitkatu : 0,
                     score: score != null || score != NaN ? score : 0,
                     passedObjects: passedObj
                 }
             }
-
+            if (hit300 != null || hit300 != NaN) {
+                basescore.n300 = hit300
+            }
+            if (hit100 != null || hit100 != NaN) {
+                basescore.n100 = hit100
+            }
+            if (hit50 != null || hit50 != NaN) {
+                basescore.n50 = hit50
+            }
+            if (miss != null || miss != NaN) {
+                basescore.nMisses = miss
+            }
+            if (hitkatu != null || hitkatu != NaN) {
+                basescore.nKatu = hitkatu
+            }
             scorenofc = {
                 path: `files/maps/${mapid}.osu`,
                 params: [

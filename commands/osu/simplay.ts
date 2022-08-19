@@ -84,7 +84,7 @@ module.exports = {
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
-                        .catch(error => { });
+                            .catch(error => { });
 
                     }
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -110,7 +110,6 @@ node-fetch error: ${error}
                 combo = mapdata.max_combo;
             }
 
-
             let simplay = await osufunc.scorecalc(mods, 'osu', mapid, null, null, null, null, null, parseFloat(miss), parseFloat(acc), parseFloat(combo), null, 0, null, false);
             let mapcalc = await osufunc.mapcalc(mods, 'osu', mapid, 0);
 
@@ -127,7 +126,7 @@ node-fetch error: ${error}
                     embeds: [embed],
                     allowedMentions: { repliedUser: false },
                 })
-                .catch(error => { });
+                    .catch(error => { });
 
                 return;
             }
@@ -160,7 +159,7 @@ SS: ${mapcalc[0].pp.toFixed(2)}pp   | 95: ${mapcalc[5].pp.toFixed(2)}pp\`
                 embeds: [embed],
                 allowedMentions: { repliedUser: false },
             })
-            .catch(error => { });
+                .catch(error => { });
 
             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify({ id: mapid }, null, 2));
 
