@@ -7,6 +7,7 @@ import emojis = require('../../configs/emojis');
 import cmdchecks = require('../../calc/commandchecks');
 import osufunc = require('../../calc/osufunc');
 import colours = require('../../configs/colours');
+import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'localmapparse',

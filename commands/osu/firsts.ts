@@ -6,6 +6,7 @@ import emojis = require('../../configs/emojis');
 import cmdchecks = require('../../calc/commandchecks');
 import osufunc = require('../../calc/osufunc');
 import colours = require('../../configs/colours');
+import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'firsts',
@@ -265,12 +266,12 @@ Options:
 
 
         const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
-        const osudata = await fetch(userinfourl, {
+        const osudata:osuApiTypes.User = await fetch(userinfourl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
         })
-            .then(res => res.json() as any)
+            .then(res => res.json())
             .catch(error => {
                 if (button == null) {
                     try {
@@ -321,11 +322,11 @@ Error - authentication
 
         };
         let userfirstsurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/firsts?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
-        const firstscoresdata = await fetch(userfirstsurl, {
+        const firstscoresdata:osuApiTypes.Score[] = await fetch(userfirstsurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(res => res.json() as any)
+        }).then(res => res.json())
             .catch(error => {
                 if (button == null) {
                     try {
@@ -446,12 +447,12 @@ node-fetch error: ${error}
                 hitstats.count_50,
                 hitstats.count_miss,
                 curscore.accuracy,
-                curscore.max_comb,
+                curscore.max_combo,
                 curscore.score,
                 0,
                 null, false
             )
-            if (curscore.accuracy.toFixed(2) != 100.00) {
+            if (curscore.accuracy != 1) {
                 if (curscore.pp == null || curscore.pp == NaN) {
                     pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
                 } else {

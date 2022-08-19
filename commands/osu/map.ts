@@ -7,6 +7,7 @@ import cmdchecks = require('../../calc/commandchecks');
 import calc = require('../../calc/calculations');
 import osufunc = require('../../calc/osufunc');
 import colours = require('../../configs/colours');
+import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'map',
@@ -183,7 +184,7 @@ button: ${button}
             let curid = urlnohttp.split('/')[3];
             mapid = curid;
             let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
-            let bmsdata = await fetch(lookupurl, {
+            let bmsdata:osuApiTypes.Beatmapset = await fetch(lookupurl, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -253,7 +254,7 @@ node-fetch error: ${error}
         }
 
         //==============================================================================================================================================================================================
-        let mapdata
+        let mapdata:osuApiTypes.Beatmap
 
         if (mapid == null || mapid == '') {
             if (fs.existsSync(`./debugosu/prevmap${obj.guildId}.json`)) {
@@ -434,7 +435,7 @@ ${error}
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json() as any)
+            }).then(res => res.json() as osuApiTypes.Beatmap)
                 .catch(error => {
                     if (button == null) {
                         try {
