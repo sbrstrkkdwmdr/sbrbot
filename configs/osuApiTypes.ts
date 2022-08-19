@@ -11,22 +11,23 @@
 //types using osu api v2 2022-08-18
 //https://osu.ppy.sh/docs/index.html?javascript
 //anything using "any" as it's type means that I haven't figured out the type yet (not all types are documented on the API)
+//some properties aren't documented on the API, but I've written down everything I've seen so far
 
 //==============================================================================================================================================================================================
 
 export type BeatmapCompact = {
     beatmapset_id: number,
+    beatmapset?: BeatmapsetCompact,
+    checksum?: string,
     difficulty_rating: number,
+    failtimes: Failtimes
     id: number,
+    max_combo?: number,
     mode: string,
     status: string,
     total_length: number,
     user_id: number,
     version: string,
-    beatmapset?: BeatmapsetCompact,
-    checksum?: string,
-    failtimes: Failtimes
-    max_combo?: number,
 } & Error
 
 //==============================================================================================================================================================================================
@@ -510,8 +511,8 @@ export type Rankings = {
 
 export type Score = {
     accuracy: number,
-    beatmap?: BeatmapCompact,
-    beatmapset?: BeatmapsetCompact,
+    beatmap?: Beatmap,
+    beatmapset?: Beatmapset,
     best_id: number,
     created_at: Timestamp,
     id: number,
@@ -553,7 +554,7 @@ export type SpotLights = {
     spotlights: SpotLight[]
 } & Error
 
-export type Timestamp = string & Error
+export type Timestamp = string //& Error
 //iso 8601 date
 //ie 2019-09-05T06:31:20+00:00
 
@@ -578,23 +579,49 @@ export type UserCompact = {
     is_deleted: boolean,
     is_online: boolean,
     is_supporter: boolean,
-    last_visit: string,
+    last_visit: string | null,
     pm_friends_only: boolean,
-    profile_colour: any,
+    profile_colour: any | null,
     username: string,
-    account_history?: ''
+    account_history?: UserAccountHistory[],
+    active_tournament?: ProfileBanner,
+    badges?: UserBadge[],
+    beatmap_playcounts_count?: number,
+    blocks?: any,
+    country?: Country,
+    cover?: {
+        custom_url: string,
+        url: string,
+        id: number,
+    }, favourite_beatmapset_count?: number,
+    follower_count?: number,
+    friends?: any,
+    graveyard_beatmapset_count?: number,
+    groups?: Group[],
+    is_restricted?: boolean | null,
+    loved_beatmapset_count?: number,
+    monthly_playcounts?: UserMonthlyPlaycount[],
+    page?: any,
+    pending_beatmapset_count?: any,
+    previous_usernames?: string[],
+    rank_history?: any,
+    ranked_beatmapset_count?: number,
+    replays_watched_counts?: any,
+    scores_best_count?: number,
+    scores_first_count?: number,
+    scores_recent_count?: number,
+    statistics?: UserStatistics,
+    statstics_rulesets?: UserStatisticsRulesets,
+    support_level?: any,
+    unread_pm_count?: any,
+    user_achievements?: any,
+    user_preferences?: any,
 } & Error
 
 //==============================================================================================================================================================================================
 
 export type User = UserCompact & {
-    cover?: {
-        custom_url: string,
-        url: string,
-        id: number,
-    },
     cover_url: string,
-    country?: string,
     discord?: string,
     has_supported: boolean,
     interests?: string,
@@ -611,7 +638,6 @@ export type User = UserCompact & {
     playstyle: string[],
     post_count: number,
     profile_order: ProfilePage[],
-    statistics?: UserStatistics,
     title?: string,
     title_url?: string,
     twitter?: string,
@@ -636,13 +662,13 @@ export type UserStatistics = {
         sh: number,
         ss: number,
         ssh: number
-    } | {
+    } /* | {
         a: number,
         s: number,
         sh: number,
         x: number,
         xh: number,
-    },
+    } */,
     hit_accuracy: number,
     is_ranked: boolean,
     level: {
@@ -653,6 +679,7 @@ export type UserStatistics = {
     play_count: number,
     play_time: number,
     pp: number,
+    country_rank: number | null,
     global_rank: number | null,
     ranked_score: number,
     replays_watched_by_others: number,
@@ -895,10 +922,43 @@ type Notification_forum_topic_reply = {
     title: string,
     username?: string,
     post_id: number,
-}
+};
 
 
 //user
+type UserAccountHistory = {
+    description: string | null,
+    id: number,
+    length: number,
+    permanent: boolean,
+    timestamp: Timestamp,
+    type: 'note' | 'restriction' | 'silence',
+};
+
+type ProfileBanner = {
+    id: number,
+    tournament_id: number,
+    image: string
+}
+
+type UserBadge = {
+    awarded_at: Timestamp,
+    description: string,
+    image_url: string,
+    url: string,
+}
+
+type UserMonthlyPlaycount = {
+    start_date: Timestamp,
+    count: number,
+} //undocumented so this is all based off debug stuff
+
+type UserStatisticsRulesets = any/* {
+
+} */
+
+type Country = any
+
 type ProfilePage = 'me' | 'recent_activity' | 'beatmaps' | 'historical' | 'kudosu' | 'top_ranks' | 'medals';
 
 /*
