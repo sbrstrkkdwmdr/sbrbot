@@ -1,31 +1,23 @@
+import cmdchecks = require('../../calc/commandchecks');
 import fs = require('fs');
+import colours = require('../../configs/colours');
 module.exports = {
     name: 'purge',
-    description: 'template text\n' +
-        'Command: `sbr-command-name`\n' +
-        'Options: \n' +
-        '    `--option-name`: `option-description`\n',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-
-        let totalmessagecount = 1;
+        let totalmessagecount;
         let filteruser = null;
-
-        if (message != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - purge (message)\n${currentDate} | ${currentDateISO}\n recieved purge command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
-
-            let member = message.guild.members.cache.get(message.author.id)
-            if (!(member.permissions.has('Administrator') || member.permissions.has('ManageMessages'))) {
-                message.reply({
-                    content: 'You do not have permission to use this command.',
-                    allowedMentions: {
-                        repliedUser: false
-                    },
-                    failIfNotExists: true
-                })
-                .catch(error => { });
-                return;
-            }
-
+        let curuserid;
+        if (message != null && interaction == null && button == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - purge (message)
+${currentDate} | ${currentDateISO}
+recieved purge command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             if (args[0] != null) {
                 if (!isNaN(args[0])) {
                     totalmessagecount = parseInt(args[0]);
@@ -35,54 +27,127 @@ module.exports = {
             } else if (args[2] != null && !isNaN(args[2])) {
                 totalmessagecount = parseInt(args[2]);
             }
-            if(totalmessagecount > 100){
-                message.reply({
-                    content: 'You can only delete up to 100 messages at a time.',
-                    allowedMentions: {
-                        repliedUser: false
-                    },
-                    failIfNotExists: true
-                })
-                .catch(error => { });
-                return;
-            }
-
             if (message.mentions.users.size > 0) {
                 filteruser = message.mentions.users.first().id;
             }
-            message.delete();
-
-            if (filteruser != null) {
-                message.channel.messages.fetch({ limit: totalmessagecount })
-                    .then(messages => {
-                        messages.filter(message => message.author.id == filteruser)
-                            .forEach(
-                                message => {
-                                    message.delete().catch(error => {});
-                                }
-                            )
-                    }).catch(error => {});
-            } else {
-                message.channel.messages.fetch({ limit: totalmessagecount })
-                    .then(messages => {
-                        messages.forEach(
-                            message => {
-                                message.delete().catch(error => {});
-                            }
-                        )
-                    }).catch(error => {});
-            }
-
-
         }
 
         //==============================================================================================================================================================================================
 
-        if (interaction != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\nID:${absoluteID}\n`, 'utf-8')
-
+        if (interaction != null && button == null && message == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - purge (interaction)
+${currentDate} | ${currentDateISO}
+recieved purge command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            totalmessagecount = interaction.options.getInteger('count');
+            if (interaction.options.getString('filteruser') != null) {
+                filteruser = interaction.options.getString('filteruser');
+            }
         }
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, '\nsuccess\n\n', 'utf-8')
+        //==============================================================================================================================================================================================
+
+        if (button != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - purge (interaction)
+${currentDate} | ${currentDateISO}
+recieved purge command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+totalmessagecount: ${totalmessagecount}
+filteruser: ${filteruser}
+----------------------------------------------------
+`, 'utf-8')
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+        if (totalmessagecount > 100) {
+            obj.reply({
+                content: 'You can only delete up to 100 messages at a time.',
+                allowedMentions: {
+                    repliedUser: false
+                },
+                failIfNotExists: true
+            })
+                .catch(error => { });
+            return;
+        }
+        if (message != null) {
+            message.delete();
+        }
+        if (filteruser != null) {
+            obj.channel.messages.fetch({ limit: totalmessagecount })
+                .then(messages => {
+                    messages.filter(message => message.author.id == filteruser)
+                        .forEach(
+                            message => {
+                                message.delete().catch(error => { });
+                            }
+                        )
+                }).catch(error => { });
+        } else {
+            obj.channel.messages.fetch({ limit: totalmessagecount })
+                .then(messages => {
+                    messages.forEach(
+                        message => {
+                            message.delete().catch(error => { });
+                        }
+                    )
+                }).catch(error => { });
+        }
+
+        //SEND/EDIT MSG==============================================================================================================================================================================================
+
+        /*         if (message != null && interaction == null && button == null) {
+                    message.reply({
+                        content: '',
+                        embeds: [],
+                        files: [],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                } */
+        if (interaction != null && button == null && message == null) {
+            interaction.reply({
+                content: 'success',
+                ephemeral: true,
+                /*                 embeds: [],
+                                files: [], */
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (button != null) {
+            message.edit({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
     }
 }

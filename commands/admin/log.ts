@@ -1,55 +1,158 @@
-import fs = require('fs')
-import checks = require('../../calc/commandchecks')
+import cmdchecks = require('../../calc/commandchecks');
+import fs = require('fs');
+import colours = require('../../configs/colours');
 module.exports = {
     name: 'log',
-    description: 'returns the logs of the guild',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        if (message != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - log (message)\n${currentDate} | ${currentDateISO}\n recieved get guild logs command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}\n`, 'utf-8')
-            if (checks.isOwner(message.author.id) || message.author.permissions.has('ADMINISTRATOR')) {
-                let guildname = client.guilds.cache.has(message.guild.id) ? client.guilds.cache.get(message.guild.id).name : 'unknown name';
-                let guildid = client.guilds.cache.has(message.guild.id) ? client.guilds.cache.get(message.guild.id).id : 'unknown id'
-                message.reply({ content: `Logs for **${guildname}** \`${guildid}\``, files: [`./logs/moderator/${message.guild.id}.log`], allowedMentions: { repliedUser: false } })
-                .catch(error => { });
-
-            } else {
-                message.reply('you do not have permission to use this command')
-                .catch(error => { });
+        let guildid;
+        let curuserid;
+        if (message != null && interaction == null && button == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - log (message)
+${currentDate} | ${currentDateISO}
+recieved log command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            curuserid = message.author.id;
+            guildid = message.guild.id;
+            if (args[0] && !isNaN(parseInt(args[0]))) {
+                guildid = args[0];
             }
         }
+
         //==============================================================================================================================================================================================
-        if (interaction != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - log (interaction)\n${currentDate} | ${currentDateISO}\n recieved get guild logs command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
-            let guildidA = interaction.options.getString('guildid')
-            if (checks.isOwner(interaction.member.user.id) && guildidA) {
-                //check if log file exists
-                if (isNaN(guildidA)) {
-                    interaction.reply({ content: 'please enter a valid guild id', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-                }
-                else if (fs.existsSync(`./logs/moderator/${guildidA}.log`)) {
-                    let guildname = client.guilds.cache.has(guildidA) ? client.guilds.cache.get(guildidA).name : 'unknown name';
-                    let guildid = client.guilds.cache.has(guildidA) ? client.guilds.cache.get(guildidA).id : 'unknown id'
 
-                    interaction.reply({ content: `Logs for **${guildname}** \`${guildid}\``, files: [`./logs/moderator/${guildid}.log`], allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
-                } else {
-                    interaction.reply('there is no log file for this guild')
-                    .catch(error => { });
-
-                }
-            }
-            else if (checks.isOwner(interaction.member.user.id) || interaction.member.permissions.has('ADMINISTRATOR')) {
-                let guildname = client.guilds.cache.has(interaction.guild.id) ? client.guilds.cache.get(interaction.guild.id).name : 'unknown name';
-                let guildid = client.guilds.cache.has(interaction.guild.id) ? client.guilds.cache.get(interaction.guild.id).id : 'unknown id'
-                interaction.reply({ content: `Logs for **${guildname}** \`${guildid}\``, files: [`./logs/moderator/${interaction.guild.id}.log`], allowedMentions: { repliedUser: false } })
-                .catch(error => { });
-
-            } else {
-                interaction.reply('you do not have permission to use this command')
-                .catch(error => { });
+        if (interaction != null && button == null && message == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - log (interaction)
+${currentDate} | ${currentDateISO}
+recieved log command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            curuserid = interaction.member.user.id;
+            guildid = interaction.options.getString('guildid');
+            if (isNaN(parseInt(guildid))) {
+                guildid = interaction.guild.id;
             }
         }
+
+        //==============================================================================================================================================================================================
+
+        if (button != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - log (interaction)
+${currentDate} | ${currentDateISO}
+recieved log command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+Guild ID: ${guildid}
+User ID: ${curuserid}
+----------------------------------------------------
+`, 'utf-8')
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+        let member = message.guild.members.cache.get(curuserid)
+        if (!(member.permissions.has('Administrator') || cmdchecks.isOwner(curuserid))) {
+            if (message != null && interaction == null && button == null) {
+                message.reply({
+                    content: 'Error - you do not have permission to use this command.',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+            if (interaction != null && button == null && message == null) {
+                interaction.reply({
+                    content: 'Error - you do not have permission to use this command.',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+            if (button != null) {
+                message.edit({
+                    content: 'Error - you do not have permission to use this command.',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+        } else {
+            let guildname = 'null_name';
+            let logfiles = []
+            if (client.guilds.cache.has(guildid)) {
+                guildname = client.guilds.cache.get(guildid).name;
+            }
+
+            if (fs.existsSync(`./logs/moderator/${guildid}.log`)) {
+                logfiles.push(`./logs/moderator/${guildid}.log`);
+            }
+            if (fs.existsSync(`./logs/cmd/commands${guildid}.log`)) {
+                logfiles.push(`./logs/cmd/commands${guildid}.log`);
+            }
+            if (fs.existsSync(`./logs/cmd/link${guildid}.log`)) {
+                logfiles.push(`./logs/cmd/link${guildid}.log`);
+            }
+            if (fs.existsSync(`./logs/gen/imagerender${guildid}.log`)) {
+                logfiles.push(`./logs/gen/imagerender${guildid}.log`);
+            }
+            let txt;
+            if (logfiles.length > 0) {
+                txt = `Logs for **${guildname}** \`${guildid}\``;
+            } else {
+                txt = `Error - no logs found for server \`${guildid}\``
+            }
+
+            //SEND/EDIT MSG==============================================================================================================================================================================================
+
+            if (message != null && interaction == null && button == null) {
+                message.reply({
+                    content: txt,
+                    files: logfiles,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+            if (interaction != null && button == null && message == null) {
+                interaction.reply({
+                    content: txt,
+                    files: logfiles,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+            if (button != null) {
+                message.edit({
+                    content: '',
+                    embeds: [],
+                    files: [],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+        }
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
+
     }
 }

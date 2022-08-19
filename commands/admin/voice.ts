@@ -1,199 +1,188 @@
-import fs = require('fs')
-import commandchecks = require('../../calc/commandchecks')
+import commandchecks = require('../../calc/commandchecks');
+import fs = require('fs');
+import colours = require('../../configs/colours');
 module.exports = {
     name: 'voice',
-    description: 'changes voice state settings for a user',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-
-        if (message != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - voice (message)\n${currentDate} | ${currentDateISO}\n recieved alter voice state command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}\n`, 'utf-8')
-            let user = message.mentions.users.first() || message.author;
-            let type = args[1]
-            let channel = args[2]
-            if (user.id == message.author.id) {
-                type = args[0]
-                channel = args[1]
-            }
+        let user;
+        let type;
+        let channel;
+        if (message != null && interaction == null && button == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - voice (message)
+${currentDate} | ${currentDateISO}
+recieved voice command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            user = message.mentions.users.first() || message.author;
+            type = args[1];
+            channel = message.mentions.channels.first() || message.channel;
             if (!type) {
                 return message.reply({ content: 'Please specify the type of setting you want to change', allowedMentions: { repliedUser: false } })
                     .catch(error => { });
-
-            }
-
-            let guildMember = message.guild.members.cache.get(user.id);
-            if (guildMember.id == message.author.id || commandchecks.isOwner(message.author.id)) {
-                if (guildMember.voice.channel === null || guildMember.voice.channel === undefined) return message.reply({ content: `User is not in a voice channel`, allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
-                try {
-                    switch (type) {
-                        case 'deafen': case 'undeafen':
-                            try {
-                                if (guildMember.voice.serverDeaf == false) {
-                                    guildMember.voice.setDeaf(true, `Deafened by ${message.author.id}`)
-                                    message.reply({ content: `${guildMember.user.tag} is now deafened`, allowedMentions: { repliedUser: false } })
-                                } else {
-                                    guildMember.voice.setDeaf(false, `Undeafened by ${message.author.id}`)
-                                    message.reply({ content: `${guildMember.user.tag} is no longer deafened`, allowedMentions: { repliedUser: false } })
-                                }
-                            } catch (error) {
-                                return message.reply({ content: `${guildMember.user.tag} is not in a voice channel`, allowedMentions: { repliedUser: false } })
-                            }
-                            break;
-                        case 'mute': case 'unmute':
-                            try {
-                                if (guildMember.voice.serverMute == false) {
-                                    guildMember.voice.setMute(true, `Muted by ${message.author.id}`)
-                                    message.reply({ content: `${guildMember.user.tag} is now muted`, allowedMentions: { repliedUser: false } })
-                                } else {
-                                    guildMember.voice.setMute(false, `Unmuted by ${message.author.id}`)
-                                    message.reply({ content: `${guildMember.user.tag} is no longer muted`, allowedMentions: { repliedUser: false } })
-                                }
-                            } catch (error) {
-                                return message.reply({ content: `${guildMember.user.tag} is not in a voice channel`, allowedMentions: { repliedUser: false } })
-                            }
-                            break;
-                        case 'disconnect':
-                            try {
-                                guildMember.voice.disconnect(`Disconnected by ${message.author.id}`);
-                                message.reply({ content: `${guildMember.user.tag} has been disconnected`, allowedMentions: { repliedUser: false } })
-
-                            } catch (error) {
-                                return message.reply({ content: `${guildMember.user.tag} is not in a voice channel`, allowedMentions: { repliedUser: false } })
-
-                            }
-                            break;
-                        case 'move': case 'moveto':
-                            if (!channel) return message.reply({ content: 'Please specify a channel to move to', allowedMentions: { repliedUser: false } })
-
-                            if (isNaN(channel)) return message.reply({ content: 'Please use the channel ID', allowedMentions: { repliedUser: false } })
-
-                            let guildChannel = message.guild.channels.cache.get(channel);
-                            if (guildChannel.type != 'GUILD_VOICE') return message.reply({ content: 'Please specify a voice channel', allowedMentions: { repliedUser: false } })
-
-                            try {
-                                guildMember.voice.setChannel(guildChannel, `Moved by ${message.author.id}`);
-                                message.reply({ content: `Moved ${guildMember.user.tag} to ${channel.name}`, allowedMentions: { repliedUser: false } })
-
-                            } catch (error) {
-                                console.log(error)
-                                return message.reply({ content: `${guildMember.user.tag} is not in a voice channel`, allowedMentions: { repliedUser: false } })
-                            }
-                            break;
-                    }
-                } catch (error) {
-                    console.log(error)
-                    return message.reply({ content: `${guildMember.user.tag} is not in a voice channel`, allowedMentions: { repliedUser: false } })
-                        .catch(error => { });
-
-                }
-            } else {
-                interaction.reply({ content: `You do not have permission to alter ${guildMember.user.tag}'s voice state`, allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
             }
         }
 
         //==============================================================================================================================================================================================
 
-        if (interaction != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - voice (interaction)\n${currentDate} | ${currentDateISO}\n recieved alter voice state command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
-            let user = interaction.options.getUser('user');
-            let type = interaction.options.getString('type');
-            let channel = interaction.options.getChannel('channel');
+        if (interaction != null && button == null && message == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - voice (interaction)
+${currentDate} | ${currentDateISO}
+recieved voice command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            user = interaction.options.getUser('user');
+            type = interaction.options.getString('type');
+            channel = interaction.options.getChannel('channel');
+        }
 
-            let guildMember = interaction.guild.members.cache.get(user.id);
-            if (guildMember.id == interaction.member.user.id || commandchecks.isOwner(interaction.member.user.id)) {
-                if (guildMember.voice.channel === null || guildMember.voice.channel === undefined) return interaction.reply({ content: `User is not in a voice channel`, allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
+        //==============================================================================================================================================================================================
 
+        if (button != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - voice (interaction)
+${currentDate} | ${currentDateISO}
+recieved voice command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+user: ${user.id} | ${user.username}
+type: ${type}
+channel: ${channel ? `${channel.id} | ${channel.name}` : 'unused'}
+----------------------------------------------------
+`, 'utf-8')
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+        let guildMember = obj.guild.members.cache.get(user.id);
+        let ctx = '---'
+        if (guildMember.id == interaction.member.user.id || commandchecks.isOwner(interaction.member.user.id)) {
+            if (guildMember.voice.channel === null || guildMember.voice.channel === undefined) {
+                ctx = 'Error - user is not in a voice channel'
+            } else {
                 try {
                     switch (type) {
                         case 'deafen':
                             try {
                                 if (guildMember.voice.serverDeaf == false) {
                                     guildMember.voice.setDeaf(true, `Deafened by ${interaction.member.user.id}`)
-                                    interaction.reply({ content: `${guildMember.user.tag} is now deafened`, allowedMentions: { repliedUser: false } })
-                                        .catch(error => { });
-
+                                    ctx = `${guildMember.user.tag} is now deafened`
                                 } else {
                                     guildMember.voice.setDeaf(false, `Undeafened by ${interaction.member.user.id}`)
-                                    interaction.reply({ content: `${guildMember.user.tag} is no longer deafened`, allowedMentions: { repliedUser: false } })
-                                        .catch(error => { });
+                                    ctx = `${guildMember.user.tag} is no longer deafened`
 
                                 }
                             } catch (error) {
-                                return interaction.reply({ content: `${guildMember.user.tag} is not in a voice channel`, allowedMentions: { repliedUser: false } })
-                                    .catch(error => { });
-
+                                ctx = `${guildMember.user.tag} is not in a voice channel`
                             }
                             break;
                         case 'mute':
                             try {
                                 if (guildMember.voice.serverMute == false) {
                                     guildMember.voice.setMute(true, `Muted by ${interaction.member.user.id}`)
-                                    interaction.reply({ content: `${guildMember.user.tag} is now muted`, allowedMentions: { repliedUser: false } })
-                                        .catch(error => { });
+                                    ctx = `${guildMember.user.tag} is now muted`
 
                                 } else {
                                     guildMember.voice.setMute(false, `Unmuted by ${interaction.member.user.id}`)
-                                    interaction.reply({ content: `${guildMember.user.tag} is no longer muted`, allowedMentions: { repliedUser: false } })
-                                        .catch(error => { });
+                                    ctx = `${guildMember.user.tag} is no longer muted`
 
                                 }
                             } catch (error) {
-                                return interaction.reply({ content: `${guildMember.user.tag} is not in a voice channel`, allowedMentions: { repliedUser: false } })
-                                    .catch(error => { });
+                                ctx = `${guildMember.user.tag} is not in a voice channel`
 
                             }
                             break;
                         case 'disconnect':
                             try {
                                 guildMember.voice.disconnect(`Disconnected by ${interaction.member.user.id}`);
-                                interaction.reply({ content: `${guildMember.user.tag} has been disconnected`, allowedMentions: { repliedUser: false } })
-                                    .catch(error => { });
-
+                                ctx = `${guildMember.user.tag} has been disconnected`
                             } catch (error) {
-                                return interaction.reply({ content: `${guildMember.user.tag} is not in a voice channel`, allowedMentions: { repliedUser: false } })
-                                    .catch(error => { });
-
+                                ctx = `${guildMember.user.tag} is not in a voice channel`
                             }
                             break;
                         case 'move':
-                            if (!channel) return interaction.reply({ content: 'Please specify a channel to move to', allowedMentions: { repliedUser: false } })
-                                .catch(error => { });
+                            if (!channel) {
+                                ctx = 'Please specify a channel to move to'
+                            } else {
 
-                            let guildChannel = interaction.guild.channels.cache.get(channel.id);
-                            if (guildChannel.type != 'GUILD_VOICE') return interaction.reply({ content: 'Please specify a voice channel', allowedMentions: { repliedUser: false } })
-                                .catch(error => { });
+                                let guildChannel = interaction.guild.channels.cache.get(channel.id);
+                                if (guildChannel.type != 2) {
+                                    ctx = 'Please specify a voice channel'
+                                    console.log(guildChannel.type)
+                                } else {
 
-                            try {
-                                guildMember.voice.setChannel(guildChannel, `Moved by ${interaction.member.user.id}`);
-                                interaction.reply({ content: `Moved ${guildMember.user.tag} to ${channel.name}`, allowedMentions: { repliedUser: false } })
+                                    try {
+                                        guildMember.voice.setChannel(guildChannel, `Moved by ${interaction.member.user.id}`);
+                                        ctx = `Moved ${guildMember.user.tag} to ${channel.name}`
 
-                            } catch (error) {
-                                console.log(error)
-                                return interaction.reply({ content: `${guildMember.user.tag} is not in a voice channel`, allowedMentions: { repliedUser: false } })
-                                    .catch(error => { });
-
+                                    } catch (error) {
+                                        console.log(error)
+                                        return ctx = `${guildMember.user.tag} is not in a voice channel`
+                                    }
+                                }
                             }
                             break;
                     }
                 } catch (error) {
                     console.log(error)
-                    return interaction.reply({ content: `${guildMember.user.tag} is not in a voice channel`, allowedMentions: { repliedUser: false } })
-                        .catch(error => { });
+                    ctx = `${guildMember.user.tag} is not in a voice channel`
 
                 }
-            } else {
-                interaction.reply({ content: `You do not have permission to alter ${guildMember.user.tag}'s voice state`, allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
             }
 
+
+            //SEND/EDIT MSG==============================================================================================================================================================================================
+        } else {
+            ctx = 'You do not have permission to use this command'
+        }
+        if (message != null && interaction == null && button == null) {
+            message.reply({
+                content: ctx,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (interaction != null && button == null && message == null) {
+            interaction.reply({
+                content: ctx,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (button != null) {
+            message.edit({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
         }
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, 'success\n\n', 'utf-8')
 
-
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
     }
 }

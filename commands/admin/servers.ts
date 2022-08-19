@@ -1,35 +1,104 @@
-import commandchecks = require('../../calc/commandchecks');
-import fs = require('fs')
+import cmdchecks = require('../../calc/commandchecks');
+import fs = require('fs');
+import colours = require('../../configs/colours');
 module.exports = {
     name: 'servers',
-    description: 'Lists all servers the bot is in\n' +
-        'Command: `sbr-servers`\n' +
-        'Slash Command: `/servers`\n',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
 
         let servers = client.guilds.cache.map(guild => `\`||\` **${guild.name}** => \`${guild.id}\` | <@${guild.ownerId}> \`||\``)
 
-
-        if (message != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - SERVERS (message)\n${currentDate} | ${currentDateISO}\n recieved SERVERS command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
-
-            message.reply({ content: 'Servers:\n' + servers, allowedMentions: { repliedUser: false } })
-                .catch(error => { });
-
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nmessage content: ${message.content}\n`)
-
-        }
-        if (interaction != null) {
-
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - SERVERS (interaction)\n${currentDate} | ${currentDateISO}\n recieved SERVERS command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
-            if (commandchecks.isOwner(interaction.member.user.id)) {
-                interaction.reply({ content: 'Servers:\n ' + servers, ephemeral: true, allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-            } else {
-                interaction.reply({ content: 'You do not have permission to use this command', ephemeral: true, allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-            }
+        if (message != null && interaction == null && button == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - servers (message)
+${currentDate} | ${currentDateISO}
+recieved servers command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
         }
 
+        //==============================================================================================================================================================================================
+
+        if (interaction != null && button == null && message == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - servers (interaction)
+${currentDate} | ${currentDateISO}
+recieved servers command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+
+        //==============================================================================================================================================================================================
+
+        if (button != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - servers (interaction)
+${currentDate} | ${currentDateISO}
+recieved servers command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+no options for this command
+----------------------------------------------------
+`, 'utf-8')
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+
+
+        //SEND/EDIT MSG==============================================================================================================================================================================================
+
+        let content =
+            `Servers:
+        ${servers}
+        `
+
+        if (message != null && interaction == null && button == null) {
+            message.reply({
+                content: content,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (interaction != null && button == null && message == null) {
+            interaction.reply({
+                content: content,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (button != null) {
+            message.edit({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
     }
 }

@@ -1,72 +1,143 @@
-import commandchecks = require('../../calc/commandchecks');
-import fs = require('fs')
+import cmdchecks = require('../../calc/commandchecks');
+import fs = require('fs');
+import colours = require('../../configs/colours');
 module.exports = {
     name: 'leaveguild',
-    description: 'Leaves the guild\n' +
-        'Command: `sbr-leaveguild <id>`\n' +
-        'Slash Command: `/leaveguild [id]`\n' +
-        'Options: \n' +
-        '    `guild`: integer, required. The id of the guild to leave\n',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        //config.ownerusers
-        if (message != null) {
-            let guild;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - LEAVEGUILD (message)\n${currentDate} | ${currentDateISO}\n recieved LEAVEGUILD command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
+        let guild;
+        let doleave = false;
+        if (message != null && interaction == null && button == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - leaveGuild (message)
+${currentDate} | ${currentDateISO}
+recieved leaveGuild command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            guild = message.guild;
             if (args[0]) {
                 guild = client.guilds.cache.get(args[0])
             }
-            else {
-                guild = message.guild
-            }
-            if (commandchecks.isOwner(message.author.id)) {
-
-                message.reply({ content: 'Leaving guild...', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
-                guild.leave()
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, 'success\n\n', 'utf-8')
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `left guild ${guild.name} | ${guild.id}\n`, 'utf-8')
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nmessage content: ${message.content}\n`)
-
-            } else {
-                message.reply('Error - you do not have the permissions to use this command')
-                    .catch(error => { });
-
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, 'failed\n\n', 'utf-8')
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `${message.author.id} is not an owner\n`, 'utf-8')
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nmessage content: ${message.content}\n`)
-
+            if (cmdchecks.isOwner(message.author.id)) {
+                doleave = true;
             }
         }
-        if (interaction != null) {
-            /*             interaction.reply('command error - guild IDs are too long to be used in interactions. Please use the message version of this command.')
-                        return */
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - LEAVEGUILD (interaction)\n${currentDate} | ${currentDateISO}\n recieved LEAVEGUILD command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
-            let guildid = interaction.options.getString('guild')
-            if (isNaN(guildid)) {
-                interaction.reply({ content: 'Error - invalid guild id', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
 
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, 'failed\n\n', 'utf-8')
+        //==============================================================================================================================================================================================
+
+        if (interaction != null && button == null && message == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - leaveGuild (interaction)
+${currentDate} | ${currentDateISO}
+recieved leaveGuild command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            guild = interaction.guild;
+            guild = client.guilds.cache.get(interaction.options.getString('guild'));
+            if (cmdchecks.isOwner(interaction.member.user.id)) {
+                doleave = true;
             }
-            let guild = client.guilds.cache.get(guildid)
-            //leave guild
-            if (commandchecks.isOwner(interaction.member.user.id)) {
-                interaction.reply({ content: 'Leaving guild...', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
-                guild.leave()
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, 'success\n\n', 'utf-8')
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `left guild ${guild.name} | ${guild.id}\n`, 'utf-8')
-            } else {
-                interaction.reply('Error - you do not have the permissions to use this command')
-                    .catch(error => { });
-
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, 'failed\n\n', 'utf-8')
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `${interaction.member.user.id} is not an owner\n`, 'utf-8')
-            }
-
-
         }
+
+
+        //==============================================================================================================================================================================================
+
+        if (button != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - leaveGuild (interaction)
+${currentDate} | ${currentDateISO}
+recieved leaveGuild command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+        //checking for errors==============================================================================================================================================================================================
+
+        try {
+            guild.id
+        } catch (error) {
+            if (message != null && interaction == null && button == null) {
+                message.reply({
+                    content: 'Error - no guild found',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch(error => { });
+            }
+            if (interaction != null && button == null && message == null) {
+                interaction.reply({
+                    content: 'Error - no guild found',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch(error => { });
+            }
+            return;
+        }
+
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+Guild ID: ${guild.id}
+Do Leave: ${doleave}
+----------------------------------------------------
+`, 'utf-8')
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+        let ctx;
+        if (doleave == true) {
+            ctx = 'Leaving guild...';
+        } else {
+            ctx = 'Error - you do not have permission to use this command';
+        }
+
+
+        //SEND/EDIT MSG==============================================================================================================================================================================================
+
+        if (message != null && interaction == null && button == null) {
+            message.reply({
+                content: ctx,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (interaction != null && button == null && message == null) {
+            interaction.reply({
+                content: ctx,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (button != null) {
+            message.edit({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (doleave == true) {
+            guild.leave();
+        }
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
     }
 }
