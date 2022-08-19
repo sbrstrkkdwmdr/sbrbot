@@ -218,7 +218,7 @@ mods: ${mods}
 
         let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}`//?mode=osu`//?mods=${mods}`
 
-        let mapdata = await fetch(mapurl, {
+        let mapdata:osuApiTypes.Beatmap = await fetch(mapurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -286,7 +286,7 @@ ${error}
         if (mods == null) {
             let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/scores`
 
-            let lbdataf = await fetch(mapscoresurl, {
+            let lbdataf:osuApiTypes.BeatmapScores = await fetch(mapscoresurl, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${access_token}`,
@@ -417,7 +417,7 @@ ${hitlist}
         } else {
             let oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${cmdchecks.toHexadecimal(mapid)}&mods=${cmdchecks.toHexadecimal(osumodcalc.ModStringToInt(osumodcalc.shortModName(mods)))}&limit=100`
 
-            let lbdata = await fetch(oldmsu)
+            let lbdata = await fetch(oldmsu) //uses apiv1 so im sticking with "any" type
                 .then(res => res.json() as any)
                 .catch(error => {
                     if (button == null) {
