@@ -25,7 +25,7 @@ cmd ID: ${absoluteID}
         let user = messagenohttp.split('/')[2]
         fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - osuuserlink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!profile link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
         const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
-        const osudata = await fetch(userurl, {
+        const osudata: osuApiTypes.User = await fetch(userurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -62,8 +62,8 @@ Error: ${error}
             let osustats = osudata.statistics
             let grades = osustats.grade_counts
 
-            let playerrank = osudata.statistics.global_rank//.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            let countryrank = osudata.statistics.country_rank//.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            let playerrank = osudata.statistics.global_rank || ''//.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            let countryrank = osudata.statistics.country_rank || ''//.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
             if (playerrank == null || typeof playerrank == 'undefined') {
                 playerrank = '---'
@@ -98,7 +98,7 @@ Error: ${error}
                 prevnameslist = ''
             }
 
-            let playcount = osustats.play_count
+            let playcount = osustats.play_count || ''
             if (playcount == null || typeof playcount == 'undefined') {
                 playcount = '---'
             }

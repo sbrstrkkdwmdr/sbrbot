@@ -38,7 +38,7 @@ cmd ID: ${absoluteID}
 
 
         let scoreurl = `https://osu.ppy.sh/api/v2/scores/${cmdchecks.toHexadecimal(scoremode)}/${cmdchecks.toHexadecimal(scoreid)}`
-        const scoredata = await fetch(scoreurl, {
+        const scoredata:osuApiTypes.Score = await fetch(scoreurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }

@@ -84,7 +84,7 @@ button: ${button}
             let curid = urlnohttp.split('/')[3];
             mapid = curid;
             let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
-            let bmsdata = await fetch(lookupurl, {
+            let bmsdata:osuApiTypes.Beatmapset = await fetch(lookupurl, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -216,7 +216,7 @@ cmd ID: ${absoluteID}
                     }
                 }
                 let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
-                const bmsdata = await fetch(lookupurl, {
+                const bmsdata:osuApiTypes.Beatmapset = await fetch(lookupurl, {
                     headers: {
                         'Authorization': `Bearer ${access_token}`
                     }
@@ -418,7 +418,7 @@ msg: ${message.content}
 
         //==============================================================================================================================================================================================
 
-        let mapdata
+        let mapdata:osuApiTypes.Beatmap
         if (mapid == null || mapid == '') {
             if (fs.existsSync(`./debugosu/prevmap${obj.guildId}.json`)) {
                 try {
@@ -613,7 +613,7 @@ ${error}
         let maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
         let mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapdata.beatmapset.creator)}/osu`;
 
-        let mapperdata = await fetch(mapperurl, {
+        let mapperdata:osuApiTypes.User = await fetch(mapperurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -708,7 +708,7 @@ node-fetch error: ${error}
                         }${mapdata.status == 'loved' ?
                             `Loved <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
                         }\n` +
-                        `${mapdata.video == true ? '📺' : ''} ${mapdata.storyboard == true ? '🎨' : ''}`
+                        `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`
 
                     ,
                     inline: false
