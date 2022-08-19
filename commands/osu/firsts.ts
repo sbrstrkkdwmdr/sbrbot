@@ -6,6 +6,7 @@ import emojis = require('../../configs/emojis');
 import cmdchecks = require('../../calc/commandchecks');
 import osufunc = require('../../calc/osufunc');
 import colours = require('../../configs/colours');
+import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'firsts',
@@ -270,7 +271,7 @@ Options:
                 'Authorization': `Bearer ${access_token}`
             }
         })
-            .then(res => res.json() as any)
+            .then(res => res.json())
             .catch(error => {
                 if (button == null) {
                     try {

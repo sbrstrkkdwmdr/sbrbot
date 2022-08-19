@@ -7,6 +7,7 @@ import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
 import calc = require('../../calc/calculations');
 import colours = require('../../configs/colours');
+import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'rs',

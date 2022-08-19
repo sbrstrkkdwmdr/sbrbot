@@ -8,7 +8,7 @@ import chartjsimg = require('chartjs-to-image');
 import cmdchecks = require('../../calc/commandchecks');
 import osufunc = require('../../calc/osufunc');
 import colours = require('../../configs/colours');
-
+import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'replayparse',
