@@ -67,20 +67,13 @@ no options for this command
             `Servers:
         ${servers}
         `
-
-        if (message != null && interaction == null && button == null) {
-            message.reply({
+        if ((message != null || interaction != null) && button == null) {
+            obj.reply({
                 content: content,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-        }
-        if (interaction != null && button == null && message == null) {
-            interaction.reply({
-                content: content,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+                .catch(error => { });
         }
         if (button != null) {
             message.edit({

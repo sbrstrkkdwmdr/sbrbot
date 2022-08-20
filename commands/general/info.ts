@@ -68,23 +68,16 @@ Coded in: TypeScript
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
-        if (message != null && interaction == null && button == null) {
-            message.reply({
+        if ((message != null || interaction != null) && button == null) {
+            obj.reply({
                 content: '',
                 embeds: [Embed],
                 files: [],
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-        }
-        if (interaction != null && button == null && message == null) {
-            interaction.reply({
-                content: '',
-                embeds: [Embed],
-                files: [],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+                .catch(error => { });
+
         }
         if (button != null) {
             message.edit({

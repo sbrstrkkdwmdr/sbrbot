@@ -765,20 +765,13 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
         ])
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
-        if (message != null && interaction == null && button == null) {
-            message.reply({
+        if ((message != null || interaction != null) && button == null) {
+            obj.reply({
                 embeds: [embedres],
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-        }
-        if (interaction != null && button == null && message == null) {
-            interaction.reply({
-                content: '',
-                embeds: [embedres],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+                .catch(error => { });
         }
         if (button != null) {
             message.edit({

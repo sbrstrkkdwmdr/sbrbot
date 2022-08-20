@@ -65,15 +65,8 @@ no options for this command
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
-        if (message != null && interaction == null && button == null) {
-            message.reply({
-                content: q,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
-        }
-        if (interaction != null && button == null && message == null) {
-            interaction.reply({
+        if ((message != null || interaction != null) && button == null) {
+            obj.reply({
                 content: q,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true

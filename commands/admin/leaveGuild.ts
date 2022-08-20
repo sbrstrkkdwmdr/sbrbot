@@ -66,22 +66,12 @@ cmd ID: ${absoluteID}
         try {
             guild.id
         } catch (error) {
-            if (message != null && interaction == null && button == null) {
-                message.reply({
-                    content: 'Error - no guild found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch(error => { });
-            }
-            if (interaction != null && button == null && message == null) {
-                interaction.reply({
-                    content: 'Error - no guild found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch(error => { });
-            }
+            obj.reply({
+                content: 'Error - no guild found',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch(error => { });
             return;
         }
 
@@ -105,15 +95,8 @@ Do Leave: ${doleave}
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
-        if (message != null && interaction == null && button == null) {
-            message.reply({
-                content: ctx,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
-        }
-        if (interaction != null && button == null && message == null) {
-            interaction.reply({
+        if ((message != null || interaction != null) && button == null) {
+            obj.reply({
                 content: ctx,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true

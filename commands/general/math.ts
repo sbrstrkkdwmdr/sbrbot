@@ -169,19 +169,13 @@ num2: ${num2}
         //SEND/EDIT MSG==============================================================================================================================================================================================
         setTimeout(() => {
 
-            if (message != null && interaction == null && button == null) {
-                message.reply({
+            if ((message != null || interaction == null) && button == null) {
+                obj.reply({
                     content: equation,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                })
-            }
-            if (interaction != null && button == null && message == null) {
-                interaction.editReply({
-                    content: equation,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                }).catch(error => { });
+
             }
             if (button != null) {
                 message.edit({

@@ -152,19 +152,13 @@ channel: ${channel ? `${channel.id} | ${channel.name}` : 'unused'}
         } else {
             ctx = 'You do not have permission to use this command'
         }
-        if (message != null && interaction == null && button == null) {
-            message.reply({
+        if ((message != null || interaction != null) && button == null) {
+            obj.reply({
                 content: ctx,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-        }
-        if (interaction != null && button == null && message == null) {
-            interaction.reply({
-                content: ctx,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+                .catch(error => { });
         }
         if (button != null) {
             message.edit({

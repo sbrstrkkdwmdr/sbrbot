@@ -6,7 +6,7 @@ module.exports = {
     name: 'help',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let i: number;
-        let command:string;
+        let command: string;
         let fullCommandList = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.hex)
             .setTitle('Command List')
@@ -54,7 +54,7 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
             command = args[0];
-            if(!args[0]){
+            if (!args[0]) {
                 command = null
             }
         }
@@ -276,20 +276,16 @@ command: ${command}
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
-        if (message != null && interaction == null && button == null) {
-            message.reply({
+        if ((message != null && interaction != null) && button == null) {
+            obj.reply({
                 embeds: useEmbeds,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
+                .catch(error => { });
+
         }
-        if (interaction != null && button == null && message == null) {
-            interaction.reply({
-                embeds: useEmbeds,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
-        }
+
         if (button != null) {
             message.edit({
                 content: '',

@@ -176,7 +176,7 @@ commmand: ${command}
                 /*
                 image.json
                 */
-                return message.reply({ content: 'Cannot send image debug file - contains sensitive information', allowedMentions: { repliedUser: false } })
+                return obj.reply({ content: 'Cannot send image debug file - contains sensitive information', allowedMentions: { repliedUser: false } })
                     .catch(error => { });
                 //message.channel.send({files: [`debug\\image.json`]})
                 break;
@@ -192,17 +192,8 @@ commmand: ${command}
         }
 
         if (debugfiles.length > 0) {
-            if (message != null && interaction == null && button == null) {
-                message.reply({
-                    files: debugfiles,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExits: true
-                })
-                    .catch(error => { });
-
-            }
-            if (message == null && interaction != null && button == null) {
-                interaction.reply({
+            if ((message != null || interaction != null) && button == null) {
+                obj.reply({
                     files: debugfiles,
                     allowedMentions: { repliedUser: false },
                     failIfNotExits: true

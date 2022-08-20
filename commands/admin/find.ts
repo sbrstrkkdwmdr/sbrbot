@@ -236,27 +236,13 @@ id: ${id}
         }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
-        if (message != null && interaction == null && button == null) {
-            message.reply({
+        if ((message != null || interaction != null) && button == null) {
+            obj.reply({
                 embeds: [Embedr],
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             }).catch(error => {
-                message.reply({
-                    content: `Error: ${type} does not exist or bot is not in the same guild as the ${type}`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch(error => { });
-            });
-
-        }
-        if (interaction != null && button == null && message == null) {
-            interaction.reply({
-                embeds: [Embedr],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch(error => {
-                message.reply({
+                obj.reply({
                     content: `Error: ${type} does not exist or bot is not in the same guild as the ${type}`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true

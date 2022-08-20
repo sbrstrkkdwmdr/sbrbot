@@ -73,7 +73,7 @@ ID: ${absoluteID}
         let Embed = new Discord.EmbedBuilder()
             .setTitle(`${client.user.username} stats`)
             .setDescription(
-`Client latency: ${Math.round(client.ws.ping)}ms
+                `Client latency: ${Math.round(client.ws.ping)}ms
 Message Latency: ${trueping}
 ${upandtime}
 Guilds: ${totalguilds}
@@ -86,15 +86,8 @@ Commands: https://sbrstrkkdwmdr.github.io/sbrbot/commands
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
-        if (message != null && interaction == null && button == null) {
-            message.reply({
-                embeds: [Embed],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
-        }
-        if (interaction != null && button == null && message == null) {
-            interaction.reply({
+        if ((message != null || interaction != null) && button == null) {
+            obj.reply({
                 embeds: [Embed],
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true

@@ -129,6 +129,8 @@ user: ${user.id}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
+                .catch(error => { });
+
         }
         if (button != null) {
             message.edit({

@@ -82,15 +82,8 @@ ${admininfo}
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
-        if (message != null && interaction == null && button == null) {
-            message.reply({
-                embeds: [pingEmbed],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
-        }
-        if (interaction != null && button == null && message == null) {
-            interaction.reply({
+        if ((message != null || interaction != null) && button == null) {
+            obj.reply({
                 embeds: [pingEmbed],
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true

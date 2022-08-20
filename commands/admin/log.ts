@@ -69,19 +69,14 @@ User ID: ${curuserid}
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
         if (!(cmdchecks.isAdmin(curuserid, obj.guildId, client) || cmdchecks.isOwner(curuserid))) {
-            if (message != null && interaction == null && button == null) {
-                message.reply({
+            if ((message != null || interaction != null) && button == null) {
+                obj.reply({
                     content: 'Error - you do not have permission to use this command.',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
-            }
-            if (interaction != null && button == null && message == null) {
-                interaction.reply({
-                    content: 'Error - you do not have permission to use this command.',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                    .catch(error => { });
+
             }
             if (button != null) {
                 message.edit({
@@ -117,22 +112,14 @@ User ID: ${curuserid}
             }
 
             //SEND/EDIT MSG==============================================================================================================================================================================================
-
-            if (message != null && interaction == null && button == null) {
-                message.reply({
+            if ((message != null || interaction != null) && button == null) {
+                obj.reply({
                     content: txt,
                     files: logfiles,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
-            }
-            if (interaction != null && button == null && message == null) {
-                interaction.reply({
-                    content: txt,
-                    files: logfiles,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                    .catch(error => { });
             }
             if (button != null) {
                 message.edit({
