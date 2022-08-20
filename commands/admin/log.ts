@@ -68,8 +68,7 @@ User ID: ${curuserid}
 ----------------------------------------------------
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-        let member = message.guild.members.cache.get(curuserid)
-        if (!(member.permissions.has('Administrator') || cmdchecks.isOwner(curuserid))) {
+        if (!(cmdchecks.isAdmin(curuserid, obj.guildId, client) || cmdchecks.isOwner(curuserid))) {
             if (message != null && interaction == null && button == null) {
                 message.reply({
                     content: 'Error - you do not have permission to use this command.',
