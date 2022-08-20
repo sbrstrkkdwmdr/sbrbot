@@ -2,7 +2,7 @@ import cmdchecks = require('../../calc/commandchecks');
 import fs = require('fs');
 import colours = require('../../configs/colours');
 module.exports = {
-    name: '',
+    name: 'COMMANDNAME',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         if (message != null && interaction == null && button == null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,

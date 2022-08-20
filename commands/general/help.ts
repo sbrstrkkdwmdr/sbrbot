@@ -1,16 +1,12 @@
-const commandhelp = require('../../configs/info');
+import cmdchecks = require('../../calc/commandchecks');
 import fs = require('fs');
 import colours = require('../../configs/colours');
-
+const commandhelp = require('../../configs/info');
 module.exports = {
     name: 'help',
-    description: 'Displays all commands\n' +
-        'Command: `sbr-help`\n' +
-        'Slash command: `/help [command]`\n' +
-        'Options:\n' +
-        '`command` - string, optional. The command to get help for. If omitted, all commands will be displayed.\n',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let i: number;
+        let command:string;
         let fullCommandList = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.hex)
             .setTitle('Command List')
@@ -41,292 +37,76 @@ module.exports = {
                     value: "`play`, `np`, `skip`, `pause`, `queue`, `resume`",
                     inline: false
                 }
-
-                /* {
-                name: 'Main commands',
-                value: `**ping** - Displays the bot's ping\n` +
-                    `**help** - Displays this message\n` +
-                    '**remind** \`[time] [reminder] [sendinchannel]\` - creates a reminder\n' +
-                    '**math** \`[expression]\` - evaluates a math expression\n' +
-                    '**convert** \`[from] [to] [value]\` - converts a value from one unit to another\n'
-                , inline: false
-            },
-            {
-                name: 'osu! commands',
-                value: `**leaderboard** \`[id] [page] [mods]\` - displays the top five plays of a map \n` +
-                    `**osu** \`[user] [detailed]\`- displays a user's profile\n` +
-                    `**osuset** \`[user] [mode]\` - sets your osu! username\n` +
-                    `**osutop** \`[user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [compact]\` - displays the user's top plays\n` +
-                    `**map** \`[id] [mods] [detailed]\` - displays the map info for a beatmap\n` +
-                    `**rs** \`[user] [page] [mode] [list]\`  - displays the most recent score for the user\n` +
-                    `**scores** \`[user] [id] [sort] [reverse] [compact]\` - displays the users scores for a given beatmap`
-                , inline: false
-            }, {
-                name: 'Admin commands',
-                value: '**checkperms** \`[user]\` - checks the permissions of a given user\n' +
-                    '**leaveguild** \`[guild]\` - leaves a given server\n' +
-                    '**servers** - displays all servers the bot is in\n' +
-                    '**voice** \`[user(required)] [type(required)] [channel]\` - alters a user in a voice channel\n' +
-                    '**servers** - displays all servers the bot is in', inline: false
-            },
-            {
-                name: 'General commands',
-                value: '**gif** \`[type]\` - displays a gif of a given type\n' +
-                    '**ytsearch** \`[query]\` - searches youtube for a given query\n' +
-                    '**image** \`[query]\` - searches google images for a given query\n' +
-                    '**8ball** - responds with a yes/no/maybe/??? answer  \n' +
-                    '**roll** \`[number]\` - returns a number between 1-100 (or the given number)\n' +
-                    '**poll** \`[question] [options]\` - creates a poll\n' +
-                    ''
-                    , 
-                    inline: false
-            },
-            {
-                name: 'Music commands (WIP)',
-                value: '**play** \`[query]\` - plays a song from youtube\n' +
-                    '**skip** - skips the current song\n' +
-                    '**stop** - stops the current song\n' +
-                    '**pause** - pauses the current song\n' +
-                    '**resume** - resumes the current song\n' +
-                    '**queue** - displays the current queue\n' +
-                    '**np** - displays the current song\n'
-                , inline: false
-            } */
             ])
             .setFooter({
                 text: 'Website: https://sbrstrkkdwmdr.github.io/sbrbot/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
-            })
+            });
 
-
-        if (message != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
-            if (!args[0]) {
-                message.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
+        if (message != null && interaction == null && button == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - help (message)
+${currentDate} | ${currentDateISO}
+recieved help command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            command = args[0];
+            if(!args[0]){
+                command = null
             }
-            if (args[0]) {
-                let command = args[0].toString()
-                let commandInfo = new Discord.EmbedBuilder()
-                    .setColor(colours.embedColour.info.hex)
-                if (commandhelp.cmds.find(obj => obj.name == args[0])) {
-
-                    let res = commandhelp.cmds.find(obj => obj.name == args[0])
-
-                    let desc = ''
-                    desc += res.description + "\n"
-                    if (res.usage) {
-                        desc += `\nCommand: \`${config.prefix}${res.usage}\``
-                    }
-                    if (res.slashusage) {
-                        desc += `\nSlash Command: \`${res.slashusage}\``
-                    }
-
-                    let opts = res.options
-                    let opttxt = '';
-                    for (i = 0; i < opts.length; i++) {
-                        opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
-
-                    }
-                    desc += "\n\n" + opttxt
-
-                    if (res.aliases) {
-                        desc += `\n\nAliases: ${res.aliases}`
-                    }
-
-                    commandInfo.setTitle("Command info for: " + res.name)
-                    commandInfo.setDescription(desc)
-
-                } else if (commandhelp.othercmds.find(obj => obj.name == args[0])) {
-                    let res = commandhelp.othercmds.find(obj => obj.name == args[0])
-
-                    let desc = ''
-                    desc += res.description + "\n"
-                    if (res.usage) {
-                        desc += `\nCommand: \`${config.prefix}${res.usage}\``
-                    }
-                    if (res.slashusage) {
-                        desc += `\nSlash Command: \`${res.slashusage}\``
-                    }
-
-                    let opts = res.options
-                    let opttxt = '';
-                    for (i = 0; i < opts.length; i++) {
-                        opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
-
-                    }
-                    desc += "\n\n" + opttxt
-
-                    if (res.aliases) {
-                        desc += `\n\nAliases: ${res.aliases}`
-                    }
-
-                    commandInfo.setTitle("Command info for: " + res.name)
-                    commandInfo.setDescription(desc)
-                } else if (commandhelp.osucmds.find(obj => obj.name == args[0])) {
-                    let res = commandhelp.osucmds.find(obj => obj.name == args[0])
-
-
-                    let desc = ''
-                    desc += res.description + "\n"
-                    if (res.usage) {
-                        desc += `\nCommand: \`${config.prefix}${res.usage}\``
-                    }
-                    if (res.slashusage) {
-                        desc += `\nSlash Command: \`${res.slashusage}\``
-                    }
-
-                    let opts = res.options
-                    let opttxt = '';
-                    for (i = 0; i < opts.length; i++) {
-                        opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
-
-                    }
-                    desc += "\n\n" + opttxt
-
-                    if (res.aliases) {
-                        desc += `\n\nAliases: ${res.aliases}`
-                    }
-
-                    commandInfo.setTitle("Command info for: " + res.name)
-                    commandInfo.setDescription(desc)
-
-                }
-                else if (commandhelp.admincmds.find(obj => obj.name == args[0])) {
-                    let res = commandhelp.admincmds.find(obj => obj.name == args[0])
-
-
-                    let desc = ''
-                    desc += res.description + "\n"
-                    if (res.usage) {
-                        desc += `\nCommand: \`${config.prefix}${res.usage}\``
-                    }
-                    if (res.slashusage) {
-                        desc += `\nSlash Command: \`${res.slashusage}\``
-                    }
-
-                    let opts = res.options
-                    let opttxt = '';
-                    for (i = 0; i < opts.length; i++) {
-                        opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
-
-                    }
-                    desc += "\n\n" + opttxt
-
-                    if (res.aliases) {
-                        desc += `\n\nAliases: ${res.aliases}`
-                    }
-
-                    commandInfo.setTitle("Command info for: " + res.name)
-                    commandInfo.setDescription(desc)
-
-                } else if (commandhelp.links.find(obj => obj.name == args[0])) {
-
-                    let res = commandhelp.links.find(obj => obj.name == args[0])
-
-
-                    let desc = ''
-                    desc += res.description + "\n"
-                    if (res.usage) {
-                        desc += `\nUsage: ${res.usage}`
-                    }
-
-                    let opts = res.options
-                    let opttxt = '';
-                    for (i = 0; i < opts.length; i++) {
-                        opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
-
-                    }
-                    desc += "\n\n" + opttxt
-
-                    if (res.aliases) {
-                        desc += `\n\nAliases: ${res.aliases}`
-                    }
-
-                    commandInfo.setTitle("Command info for: " + res.name)
-                    commandInfo.setDescription(desc)
-                } else if (commandhelp.musiccmds.find(obj => obj.name == args[0])) {
-                    let res = commandhelp.musiccmds.find(obj => obj.name == args[0])
-
-
-                    let desc = ''
-                    desc += res.description + "\n"
-                    if (res.usage) {
-                        desc += `\nCommand: \`${config.prefix}${res.usage}\``
-                    }
-                    if (res.slashusage) {
-                        desc += `\nSlash Command: \`${res.slashusage}\``
-                    }
-
-                    let opts = res.options
-                    let opttxt = '';
-                    for (i = 0; i < opts.length; i++) {
-                        opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
-
-                    }
-                    desc += "\n\n" + opttxt
-
-                    if (res.aliases) {
-                        desc += `\n\nAliases: ${res.aliases}`
-                    }
-
-                    commandInfo.setTitle("Command info for: " + res.name)
-                    commandInfo.setDescription(desc)
-                } else {
-                    fullCommandList
-                        .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
-
-                    return message.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
-                        .catch(error => { });
-
-                }
-                fullCommandList
-                    .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
-                message.reply({ embeds: [commandInfo], allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
-            }
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\n${message.content}\n`)
         }
 
+        //==============================================================================================================================================================================================
 
+        if (interaction != null && button == null && message == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - help (interaction)
+${currentDate} | ${currentDateISO}
+recieved help command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            command = interaction.options.getString('command');
+        }
 
-        if (interaction != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - help (interaction)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
+        //==============================================================================================================================================================================================
 
-            let command = interaction.options.getString('command')
+        if (button != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - help (interaction)
+${currentDate} | ${currentDateISO}
+recieved help command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+command: ${command}
+----------------------------------------------------
+`, 'utf-8')
+
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+        let useEmbeds = []
+        if (command != null) {
+            let fetchcmd = command.toString()
             let commandInfo = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.info.hex)
-            if (commandhelp.cmds.find(obj => obj.name == command)) {
+            if (commandhelp.cmds.find(obj => obj.name == args[0])) {
 
-                let res = commandhelp.cmds.find(obj => obj.name == command)
-
-                let desc = ''
-                desc += res.description + "\n"
-                if (res.usage) {
-                    desc += `\nCommand: \`${config.prefix}${res.usage}\``
-                }
-                if (res.slashusage) {
-                    desc += `\nSlash Command: \`${res.slashusage}\``
-                }
-
-                let opts = res.options
-                let opttxt = '';
-                for (i = 0; i < opts.length; i++) {
-                    opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
-
-                }
-                desc += "\n\n" + opttxt
-
-                if (res.aliases) {
-                    desc += `\n\nAliases: ${res.aliases}`
-                }
-
-                commandInfo.setTitle("Command info for: " + res.name)
-                commandInfo.setDescription(desc)
-
-            } else if (commandhelp.othercmds.find(obj => obj.name == command)) {
-                let res = commandhelp.othercmds.find(obj => obj.name == command)
+                let res = commandhelp.cmds.find(obj => obj.name == args[0])
 
                 let desc = ''
                 desc += res.description + "\n"
@@ -351,8 +131,35 @@ module.exports = {
 
                 commandInfo.setTitle("Command info for: " + res.name)
                 commandInfo.setDescription(desc)
-            } else if (commandhelp.osucmds.find(obj => obj.name == command)) {
-                let res = commandhelp.osucmds.find(obj => obj.name == command)
+
+            } else if (commandhelp.othercmds.find(obj => obj.name == args[0])) {
+                let res = commandhelp.othercmds.find(obj => obj.name == args[0])
+
+                let desc = ''
+                desc += res.description + "\n"
+                if (res.usage) {
+                    desc += `\nCommand: \`${config.prefix}${res.usage}\``
+                }
+                if (res.slashusage) {
+                    desc += `\nSlash Command: \`${res.slashusage}\``
+                }
+
+                let opts = res.options
+                let opttxt = '';
+                for (i = 0; i < opts.length; i++) {
+                    opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
+
+                }
+                desc += "\n\n" + opttxt
+
+                if (res.aliases) {
+                    desc += `\n\nAliases: ${res.aliases}`
+                }
+
+                commandInfo.setTitle("Command info for: " + res.name)
+                commandInfo.setDescription(desc)
+            } else if (commandhelp.osucmds.find(obj => obj.name == args[0])) {
+                let res = commandhelp.osucmds.find(obj => obj.name == args[0])
 
 
                 let desc = ''
@@ -380,8 +187,8 @@ module.exports = {
                 commandInfo.setDescription(desc)
 
             }
-            else if (commandhelp.admincmds.find(obj => obj.name == command)) {
-                let res = commandhelp.admincmds.find(obj => obj.name == command)
+            else if (commandhelp.admincmds.find(obj => obj.name == args[0])) {
+                let res = commandhelp.admincmds.find(obj => obj.name == args[0])
 
 
                 let desc = ''
@@ -408,9 +215,9 @@ module.exports = {
                 commandInfo.setTitle("Command info for: " + res.name)
                 commandInfo.setDescription(desc)
 
-            } else if (commandhelp.links.find(obj => obj.name == command)) {
+            } else if (commandhelp.links.find(obj => obj.name == args[0])) {
 
-                let res = commandhelp.links.find(obj => obj.name == command)
+                let res = commandhelp.links.find(obj => obj.name == args[0])
 
 
                 let desc = ''
@@ -433,8 +240,8 @@ module.exports = {
 
                 commandInfo.setTitle("Command info for: " + res.name)
                 commandInfo.setDescription(desc)
-            } else if (commandhelp.musiccmds.find(obj => obj.name == command)) {
-                let res = commandhelp.musiccmds.find(obj => obj.name == command)
+            } else if (commandhelp.musiccmds.find(obj => obj.name == args[0])) {
+                let res = commandhelp.musiccmds.find(obj => obj.name == args[0])
 
 
                 let desc = ''
@@ -461,19 +268,45 @@ module.exports = {
                 commandInfo.setTitle("Command info for: " + res.name)
                 commandInfo.setDescription(desc)
             }
-            else {
-                fullCommandList
-                    .setDescription(`Could not find command "${command}"` + '\nuse `/help <command>` to get more info on a command')
-                return interaction.reply({ embeds: [fullCommandList], allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
-            }
-            interaction.reply({ embeds: [commandInfo], allowedMentions: { repliedUser: false } })
-                .catch(error => { });
-
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nCommand: ${command}\n`)
-
+            useEmbeds.push(commandInfo)
+        } else {
+            useEmbeds.push(fullCommandList)
         }
 
+
+        //SEND/EDIT MSG==============================================================================================================================================================================================
+
+        if (message != null && interaction == null && button == null) {
+            message.reply({
+                embeds: useEmbeds,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (interaction != null && button == null && message == null) {
+            interaction.reply({
+                embeds: useEmbeds,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (button != null) {
+            message.edit({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
     }
 }

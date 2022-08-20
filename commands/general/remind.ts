@@ -1,40 +1,31 @@
-import ms = require('ms');
-import fetch = require('node-fetch');
-import notxt = require('../../configs/w');
+import cmdchecks = require('../../calc/commandchecks');
 import fs = require('fs');
-import calc = require('../../calc/calculations');
 import colours = require('../../configs/colours');
+import calc = require('../../calc/calculations');
 
 module.exports = {
     name: 'remind',
-    description: 'null',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        let timetype = ['s', 'm', 'h', 'd']
+        let time;
+        let remindertxt;
+        let sendtochannel;
+        let user;
 
-        async function sendremind(reminder, time, obj, sendchannel, remindertxt, usersent) {
-            try {
-                if (sendchannel == true) {
-                    setTimeout(() => {
-                        obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` })
-
-                    }, calc.timeToMs(time));
-                }
-                else {
-                    setTimeout(() => {
-                        interaction.member.user.send({ embeds: [reminder] })
-
-                    }, calc.timeToMs(time));
-                }
-            } catch (error) {
-                console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
-            }
-        }
-
-        if (message != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - help (message)\n${currentDate} | ${currentDateISO}\n recieved help command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
-
-            let time = args[0]
-            let remindertxt = args.join(' ').replaceAll(args[0], '')
+        if (message != null && interaction == null && button == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - remind (message)
+${currentDate} | ${currentDateISO}
+recieved remind command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            time = args[0]
+            remindertxt = args.join(' ').replaceAll(args[0], '')
+            sendtochannel = true;
+            user = message.author;
 
             if (!args[0]) {
                 return message.reply({ content: 'Please specify a time', allowedMentions: { repliedUser: false } })
@@ -49,47 +40,113 @@ module.exports = {
                     .catch(error => { });
 
             }
-            let reminder = new Discord.EmbedBuilder()
-                .setColor(colours.embedColour.info.hex)
-                .setTitle('REMINDER')
-                .setDescription(`${remindertxt}`)
-
-
-            sendremind(reminder, time, message, true, remindertxt, message.author);
-            message.react("✅")
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nMessage Content: ${message.content}\n`)
-
         }
-        if (interaction != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - reminder (interaction)\n${currentDate} | ${currentDateISO}\n recieved reminder command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
 
-            let remindertxt = interaction.options.getString('reminder')
-            let time = interaction.options.getString('time').replaceAll(' ', '')
+        //==============================================================================================================================================================================================
+
+        if (interaction != null && button == null && message == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - remind (interaction)
+${currentDate} | ${currentDateISO}
+recieved remind command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            remindertxt = interaction.options.getString('reminder');
+            time = interaction.options.getString('time').replaceAll(' ', '');
+            sendtochannel = interaction.options.getBoolean('sendinchannel');
+            user = interaction.member.user;
 
             if (!time.endsWith('d') && !time.endsWith('h') && !time.endsWith('m') && !time.endsWith('s') && !time.includes(':') && !time.includes('.')) {
                 return interaction.reply({ content: 'Incorrect time format: please use `d`, `h`, `m`, or `s`', ephemeral: true })
                     .catch(error => { });
-
             }
-
-            let reminder = new Discord.EmbedBuilder()
-                .setColor(colours.embedColour.info.hex)
-                .setTitle('REMINDER')
-                .setDescription(`${remindertxt}`)
-
-            interaction.reply({ content: 'success!', ephemeral: true, allowedMentions: { repliedUser: false } })
-                .catch(error => { });
-
-
-            let sendtochannel = interaction.options.getBoolean('sendinchannel')
-            if (sendtochannel == true) {
-
-                sendremind(reminder, time, interaction, true, remindertxt, interaction.member.user);
-
-            } else {
-                sendremind(reminder, time, interaction, false, remindertxt, interaction.member.user);
-            }
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nreminder:${remindertxt}\ntime:${time}\nSendInChannel:${sendtochannel}\n`)
         }
+
+        //==============================================================================================================================================================================================
+
+        if (button != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - remind (interaction)
+${currentDate} | ${currentDateISO}
+recieved remind command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+time: ${time}
+reminder: ${remindertxt}
+sendtochannel: ${sendtochannel}
+user: ${user.id}
+----------------------------------------------------
+`, 'utf-8')
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+        async function sendremind(reminder, time, obj, sendchannel, remindertxt, usersent) {
+            try {
+                if (sendchannel == true) {
+                    setTimeout(() => {
+                        obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` })
+
+                    }, calc.timeToMs(time));
+                }
+                else {
+                    setTimeout(() => {
+                        usersent.send({ embeds: [reminder] })
+
+                    }, calc.timeToMs(time));
+                }
+            } catch (error) {
+                console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
+            }
+        }
+        let reminder = new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.info.hex)
+            .setTitle('REMINDER')
+            .setDescription(`${remindertxt}`)
+
+        sendremind(reminder, time, obj, sendtochannel, remindertxt, user)
+
+        //SEND/EDIT MSG==============================================================================================================================================================================================
+
+        if (message != null && interaction == null && button == null) {
+            message.react("✅")
+        }
+        if (interaction != null && button == null && message == null) {
+            interaction.reply({
+                content: 'success!',
+                ephemeral: true,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        if (button != null) {
+            message.edit({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
     }
 }
