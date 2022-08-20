@@ -134,10 +134,17 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         dmPermission: false,
         options: [
             {
-                name: 'number',
+                name: 'max',
                 description: 'The maximum number to get',
                 type: Discord.ApplicationCommandOptionType.Number,
                 required: false
+            },
+            {
+                name: 'min',
+                description: 'The minimum number to get',
+                type: Discord.ApplicationCommandOptionType.Number,
+                required: false,
+                minValue: 0
             }
         ]
     },
@@ -378,7 +385,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 name: 'id',
                 description: 'The id of the map to display',
                 required: false,
-                type: Discord.ApplicationCommandOptionType.Integer
+                type: Discord.ApplicationCommandOptionType.Integer,
             },
             {
                 name: 'page',

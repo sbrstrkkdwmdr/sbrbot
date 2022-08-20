@@ -1,14 +1,66 @@
-import fs = require('fs')
-
+import cmdchecks = require('../../calc/commandchecks');
+import fs = require('fs');
+import colours = require('../../configs/colours');
 module.exports = {
     name: 'gif',
-    description: 'Sends a random gif from the type given\n' +
-        'Slash command: `/gif <type>`\n' +
-        'Command: `sbr-gif [type]`\n' +
-        'Options:\n' +
-        '⠀⠀`type`: string, required. The type of gif to send.'
-    ,
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+        let type;
+        let user;
+        if (message != null && interaction == null && button == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - gif (message)
+${currentDate} | ${currentDateISO}
+recieved gif command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            type = args.join(' ');
+            user = message.author;
+        }
+
+        //==============================================================================================================================================================================================
+
+        if (interaction != null && button == null && message == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - gif (interaction)
+${currentDate} | ${currentDateISO}
+recieved gif command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            type = interaction.options.getString('type');
+            user = interaction.member.user;
+        }
+
+        //==============================================================================================================================================================================================
+
+        if (button != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - gif (interaction)
+${currentDate} | ${currentDateISO}
+recieved gif command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+type: ${type}
+----------------------------------------------------
+`, 'utf-8')
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
         let thelink: string;
         let cryabtit = [
             'https://media.discordapp.net/attachments/858364068024156171/858364114183520266/cry_about_about_it.gif', //zitron map
@@ -136,180 +188,113 @@ module.exports = {
             'https://tenor.com/view/kumala-la-kumala-mrtti-gif-25688572'
 
         ]
-        if (message != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - gif (message)\n${currentDate} | ${currentDateISO}\n recieved gif command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
+        switch (type) {
+            case 'cry about it':
+                thelink = cryabtit[Math.floor(Math.random() * cryabtit.length)]
 
-            if (args[0] == null) {
-                message.author.send('Please specify a type of gif')
-                    .catch(error => { });
+                break;
+            case 'speech bubble':
+                thelink = speechbubble[Math.floor(Math.random() * speechbubble.length)]
 
-                message.delete()
-            } else {
-                let interaction = message
-                let str = args.join(' ')
-                switch (str) {
-                    case 'cry about it':
-                        thelink = cryabtit[Math.floor(Math.random() * cryabtit.length)]
+                break;
+            case 'chad speak':
+                thelink = 'https://cdn.discordapp.com/attachments/724514625005158403/979287601146118184/gigachad_speak.png'
 
-                        break;
-                    case 'speech bubble':
-                        thelink = speechbubble[Math.floor(Math.random() * speechbubble.length)]
+                break;
+            case 'reaction':
+                thelink = reaction[Math.floor(Math.random() * reaction.length)]
 
-                        break;
-                    case 'chad speak':
-                        thelink = 'https://cdn.discordapp.com/attachments/724514625005158403/979287601146118184/gigachad_speak.png'
+                break;
+            case 'skill issue':
+                thelink = skillissue[Math.floor(Math.random() * skillissue.length)]
 
-                        break;
-                    case 'reaction':
-                        thelink = reaction[Math.floor(Math.random() * reaction.length)]
+                break;
+            case 'no bitches':
+                thelink = nobitches[Math.floor(Math.random() * nobitches.length)]
 
-                        break;
-                    case 'skill issue':
-                        thelink = skillissue[Math.floor(Math.random() * skillissue.length)]
+                break;
+            case 'agree':
+                thelink = agree[Math.floor(Math.random() * agree.length)]
 
-                        break;
-                    case 'no bitches':
-                        thelink = nobitches[Math.floor(Math.random() * nobitches.length)]
+                break;
+            case 'cope':
+                thelink = cope[Math.floor(Math.random() * cope.length)]
 
-                        break;
-                    case 'agree':
-                        thelink = agree[Math.floor(Math.random() * agree.length)]
+                break;
+            case 'disagree':
+                thelink = disagree[Math.floor(Math.random() * disagree.length)]
 
-                        break;
-                    case 'cope':
-                        thelink = cope[Math.floor(Math.random() * cope.length)]
+                break;
+            case 'nocare':
+                thelink = nocare[Math.floor(Math.random() * nocare.length)]
 
-                        break;
-                    case 'disagree':
-                        thelink = disagree[Math.floor(Math.random() * disagree.length)]
+                break;
+            case 'misspell':
+                thelink = misspell[Math.floor(Math.random() * misspell.length)]
 
-                        break;
-                    case 'nocare':
-                        thelink = nocare[Math.floor(Math.random() * nocare.length)]
+                break;
+            case 'compliment':
+                thelink = compliment[Math.floor(Math.random() * compliment.length)]
 
-                        break;
-                    case 'misspell':
-                        thelink = misspell[Math.floor(Math.random() * misspell.length)]
+                break;
+            case 'insult':
+                thelink = insult[Math.floor(Math.random() * insult.length)]
 
-                        break;
-                    case 'compliment':
-                        thelink = compliment[Math.floor(Math.random() * compliment.length)]
+                break;
+            case 'ratio':
+                thelink = ratio[Math.floor(Math.random() * ratio.length)]
 
-                        break;
-                    case 'insult':
-                        thelink = insult[Math.floor(Math.random() * insult.length)]
-
-                        break;
-                    case 'ratio':
-                        thelink = ratio[Math.floor(Math.random() * ratio.length)]
-
-                        break;
-                    case 'reaction to info':
-                        thelink = reactiontoinf[Math.floor(Math.random() * reactiontoinf.length)]
-
-                        break;
-                    default:
-                        message.author.send('invald type\n' +
-                            'Valid types: cry about it, speech bubble, chad speak, reaction, skill issue, no bitches, agree, cope, disagree, nocare, misspell, compliment, insult, ratio, reaction to info'
-                        )
-                            .catch(error => { });
-
-                        return;
-                        break;
-
-                }
-                message.channel.send(thelink)
-                    .catch(error => { });
-
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\n${message.content}\n`)
-                message.delete()
-
-            }
+                break;
+            case 'reaction to info':
+                thelink = reactiontoinf[Math.floor(Math.random() * reactiontoinf.length)]
+                break;
+            default:
+                thelink = 'err'
+                break;
         }
-        if (interaction != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - gif (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
 
-            let str = interaction.options.getString('type')
-            switch (str) {
-                case 'cry about it':
-                    thelink = cryabtit[Math.floor(Math.random() * cryabtit.length)]
+        //SEND/EDIT MSG==============================================================================================================================================================================================
 
-                    break;
-                case 'speech bubble':
-                    thelink = speechbubble[Math.floor(Math.random() * speechbubble.length)]
+        if (thelink == 'err') {
+            user.send('Error - invalid/missing type')
+            return;
+        }
 
-                    break;
-                case 'chad speak':
-                    thelink = 'https://cdn.discordapp.com/attachments/724514625005158403/979287601146118184/gigachad_speak.png'
-
-                    break;
-                case 'reaction':
-                    thelink = reaction[Math.floor(Math.random() * reaction.length)]
-
-                    break;
-                case 'skill issue':
-                    thelink = skillissue[Math.floor(Math.random() * skillissue.length)]
-
-                    break;
-                case 'no bitches':
-                    thelink = nobitches[Math.floor(Math.random() * nobitches.length)]
-
-                    break;
-                case 'agree':
-                    thelink = agree[Math.floor(Math.random() * agree.length)]
-
-                    break;
-                case 'cope':
-                    thelink = cope[Math.floor(Math.random() * cope.length)]
-
-                    break;
-                case 'disagree':
-                    thelink = disagree[Math.floor(Math.random() * disagree.length)]
-
-                    break;
-                case 'nocare':
-                    thelink = nocare[Math.floor(Math.random() * nocare.length)]
-
-                    break;
-                case 'misspell':
-                    thelink = misspell[Math.floor(Math.random() * misspell.length)]
-
-                    break;
-                case 'compliment':
-                    thelink = compliment[Math.floor(Math.random() * compliment.length)]
-
-                    break;
-                case 'insult':
-                    thelink = insult[Math.floor(Math.random() * insult.length)]
-
-                    break;
-                case 'ratio':
-                    thelink = ratio[Math.floor(Math.random() * ratio.length)]
-
-                    break;
-                case 'reaction to info':
-                    thelink = reactiontoinf[Math.floor(Math.random() * reactiontoinf.length)]
-                    break;
-                default:
-                    return;
-                    break;
-            }
-            interaction.channel.send(thelink)
+        if (message != null && interaction == null && button == null) {
+            message.delete()
                 .catch(error => { });
 
-            interaction.reply({ content: 'success', ephemeral: true, allowedMentions: { repliedUser: false } })
+        }
+        if (interaction != null && button == null && message == null) {
+            interaction.reply({
+                content: 'success',
+                ephemeral: true,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
                 .catch(error => { });
 
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\ngif type: ${str}\n`)
         }
-        /*
-        function skillissue() {
-            let url;
-            let randomnum = Math.floor(Math.random() * 2 + 1)
-            switch(randomnum){
+        if (button != null) {
+            message.edit({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch(error => { });
 
-            }
-            return url;
-        }*/
+        }
+        obj.channel.send(thelink)
+            .catch(error => { });
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
     }
 }

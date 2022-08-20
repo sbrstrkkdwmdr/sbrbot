@@ -68,6 +68,8 @@ ID: ${absoluteID}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
+                .catch(error => { });
+
         }
         if (interaction != null && button == null && message == null) {
             interaction.reply({
@@ -77,6 +79,8 @@ ID: ${absoluteID}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
+                .catch(error => { });
+
         }
         if (button != null) {
             message.edit({
@@ -86,6 +90,8 @@ ID: ${absoluteID}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
+                .catch(error => { });
+
         }
 
 

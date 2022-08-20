@@ -1,87 +1,122 @@
-import fs = require('fs');
-import fetch from 'node-fetch';
-import yts = require('yt-search');
 import cmdchecks = require('../../calc/commandchecks');
+import fs = require('fs');
 import colours = require('../../configs/colours');
+import yts = require('yt-search');
 
 module.exports = {
     name: 'ytsearch',
-    description: 'null',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let i: number;
-        if (message != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - ytsearch (message)\n${currentDate} | ${currentDateISO}\n recieved search youtube command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
-            if (!args.length) {
-                return message.reply({ content: 'Please specify the video you want to search.', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
+        let query: any;
 
+        if (message != null && interaction == null && button == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - ytsearch (message)
+${currentDate} | ${currentDateISO}
+recieved ytsearch command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            query = args.join(' ');
+            if (!args[0]) {
+                message.reply({
+                    content: 'Please provide a search query.',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true,
+                })
+                return;
             }
-            const searching = await yts.search(args.join(' '))
-            if (searching.videos.length < 1) {
-                return message.reply({ content: 'No results found', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
+        }
 
-            }
-            let vids = searching.videos
-            let embed = new Discord.EmbedBuilder()
-                .setTitle(`Results for ${args.join(' ')}`)
-                .setColor(colours.embedColour.query.hex)
+        //==============================================================================================================================================================================================
 
-                ;
-            for (i = 0; i < 5 && i < vids.length; i++) {
-                embed.addFields([{
-                    name: `#${i + 1}`,
-                    value: `[${cmdchecks.shorten(vids[i].title)}](${vids[i].url})
-                Published by [${vids[i].author.name}](${vids[i].author.url})
-                ${vids[i].ago}
-                Duration: ${vids[i].timestamp} (${vids[i].seconds}s)
-                Description: \`${vids[i].description}\`
-                `,
-                    inline: false
-                }])
-            }
-            fs.writeFileSync('debug/ytsearch.json', JSON.stringify(searching, null, 2))
-            message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+        if (interaction != null && button == null && message == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - ytsearch (interaction)
+${currentDate} | ${currentDateISO}
+recieved ytsearch command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            query = interaction.options.getString('query')
+        }
+
+        //==============================================================================================================================================================================================
+
+        if (button != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - ytsearch (interaction)
+${currentDate} | ${currentDateISO}
+recieved ytsearch command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+query: ${query}
+----------------------------------------------------
+`, 'utf-8')
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+        if (!query) {
+            return obj.reply({ content: 'Please specify the video you want to search.', allowedMentions: { repliedUser: false } })
                 .catch(error => { });
 
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nmessage content: ${message.content}\n`)
         }
-        if (interaction != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - ytsearch (interaction)\n${currentDate} | ${currentDateISO}\n recieved search youtube command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
-            let query = interaction.options.getString('query')
-            if (!query) {
-                return interaction.reply({ content: 'Please specify the video you want to search.', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
-            }
-            const searching = await yts.search(query)
-            if (searching.videos.length < 1) {
-                return interaction.reply({ content: 'No results found', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
-            }
-            let vids = searching.videos
-            let embed = new Discord.EmbedBuilder()
-                .setTitle(`Results for ${query}`)
-                .setColor(colours.embedColour.query.hex)
-                ;
-            for (i = 0; i < 5 && i < vids.length; i++) {
-                embed.addFields([{
-                    name: `#${i + 1}`,
-                    value: `[${cmdchecks.shorten(vids[i].title)}](${vids[i].url})
-                Published by [${vids[i].author.name}](${vids[i].author.url})
-                ${vids[i].ago}
-                Duration: ${vids[i].timestamp} (${vids[i].seconds}s)
-                Description: \`${vids[i].description}\`
-                `,
-                    inline: false
-                }])
-            }
-            fs.writeFileSync('debug/ytsearch.json', JSON.stringify(searching, null, 2))
-            interaction.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+        const searching = await yts.search(query)
+        if (searching.videos.length < 1) {
+            return obj.reply({ content: 'No results found', allowedMentions: { repliedUser: false } })
                 .catch(error => { });
 
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nquery: ${query}\n`)
         }
+        let vids = searching.videos
+        let embed = new Discord.EmbedBuilder()
+            .setTitle(`Results for ${query}`)
+            .setColor(colours.embedColour.query.hex)
+            ;
+        for (i = 0; i < 5 && i < vids.length; i++) {
+            embed.addFields([{
+                name: `#${i + 1}`,
+                value: `[${cmdchecks.shorten(vids[i].title)}](${vids[i].url})
+            Published by [${vids[i].author.name}](${vids[i].author.url})
+            ${vids[i].ago}
+            Duration: ${vids[i].timestamp} (${vids[i].seconds}s)
+            Description: \`${vids[i].description}\`
+            `,
+                inline: false
+            }])
+        }
+        fs.writeFileSync(`debug/ytsearc${obj.guildId}h.json`, JSON.stringify(searching, null, 2))
+
+
+        //SEND/EDIT MSG==============================================================================================================================================================================================
+
+        obj.reply({
+            embeds: [embed],
+            allowedMentions: { repliedUser: false },
+            failIfNotExists: true,
+        })
+
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
     }
 }

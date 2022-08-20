@@ -1,58 +1,128 @@
-import fs = require('fs')
-import commandchecks = require('../../calc/commandchecks');
+import cmdchecks = require('../../calc/commandchecks');
+import fs = require('fs');
+import colours = require('../../configs/colours');
 const defaulttext = require('../../configs/w').chocomint
 
 module.exports = {
     name: 'say',
-    description: 'template text\n' +
-        'Command: `sbr-command-name`\n' +
-        'Options: \n' +
-        '    `--option-name`: `option-description`\n',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        if (message != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - say (message)\n${currentDate} | ${currentDateISO}\n recieved say command\nrequested by ${message.author.id} AKA ${message.author.tag}\n`, 'utf-8')
-            if (commandchecks.isOwner(message.author.id)) {
-                message.delete();
-                if (!args[0]) {
-                    let Embed = new Discord.EmbedBuilder()
-                        .setTitle('Message')
+        let msg;
+        let channel;
+        let uid;
+
+        if (message != null && interaction == null && button == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - say (message)
+${currentDate} | ${currentDateISO}
+recieved say command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            channel = message.channel;
+            uid = message.author.id;
+            msg = args.join(' ');
+            if (!args[0]) {
+                msg = defaulttext;
+            }
+        }
+
+        //==============================================================================================================================================================================================
+
+        if (interaction != null && button == null && message == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - say (interaction)
+${currentDate} | ${currentDateISO}
+recieved say command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            uid = interaction.member.user.id;
+            msg = interaction.options.getString('message');
+            channel = interaction.channel;
+            if (interaction.options.getChannel('channel')) {
+                channel = interaction.options.getChannel('channel');
+            }
+        }
+
+        //==============================================================================================================================================================================================
+
+        if (button != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - say (interaction)
+${currentDate} | ${currentDateISO}
+recieved say command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+channel: ${channel.id}
+uid: ${uid}
+msg: ${msg}
+----------------------------------------------------
+`, 'utf-8')
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+        let ltxt = '';
+        if (cmdchecks.isOwner(uid)) {
+            ltxt = 'success'
+            channel.send(msg == defaulttext ? {
+                embeds: [
+                    new Discord.EmbedBuilder()
+                        .setColor(colours.embedColour.info.hex)
                         .setDescription(defaulttext)
-                    message.channel.send({ embeds: [Embed] })
-                        .catch(error => { });
-
-                    return
-                }
-
-                message.channel.send(args.join(' '))
-                    .catch(error => { });
-
-            } else {
-                message.reply({ content: 'L + ratio + no + you do not have permissions + no bitches + L', allowedMentions: { repliedUser: false } })
-            }
-            return;
-        }
-        if (interaction != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - say (interaction)\n${currentDate} | ${currentDateISO}\n recieved say command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
-            let msg = interaction.options.getString('message')
-            let channel = interaction.options.getChannel('channel')
-            //console.log(channel)
-            if (!channel) {
-                channel = interaction.channel
-            }
-            if (commandchecks.isOwner(interaction.member.user.id)) {
-                interaction.reply({ content: 'success', ephemeral: true, allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
-                channel.send(`${msg}`)
-                    .catch(error => { });
-
-            } else {
-                interaction.reply({ content: 'L + ratio + no permissions 🥺🥺🥺', ephemeral: true, allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
-            }
+                ]
+            } : msg);
+        } else {
+            ltxt = 'L + ratio + no permissions 🥺🥺🥺'
         }
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, 'success\n\n', 'utf-8')
+        //SEND/EDIT MSG==============================================================================================================================================================================================
+
+        if (message != null && interaction == null && button == null) {
+            message.delete();
+        }
+        if (interaction != null && button == null && message == null) {
+            interaction.reply({
+                content: ltxt,
+                ephemeral: true,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch(error => { });
+
+        }
+        if (button != null) {
+            message.edit({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch(error => { });
+
+        }
+
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
     }
 }

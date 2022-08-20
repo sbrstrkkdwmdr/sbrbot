@@ -1,18 +1,73 @@
+import cmdchecks = require('../../calc/commandchecks');
 import fs = require('fs');
 import colours = require('../../configs/colours');
-
 module.exports = {
     name: 'poll',
-    description: 'template text\n' +
-        'Command: `sbr-command-name`\n' +
-        'Options: \n' +
-        '    `--option-name`: `option-description`\n',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+        let name = 'poll';
+        let options = '+';
+        if (message != null && interaction == null && button == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - poll (message)
+${currentDate} | ${currentDateISO}
+recieved poll command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            name = args.join(' ');
+            if (!args[0]) {
+                name = 'poll';
+            }
+        }
+
+        //==============================================================================================================================================================================================
+
+        if (interaction != null && button == null && message == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - poll (interaction)
+${currentDate} | ${currentDateISO}
+recieved poll command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+            name = interaction.options.getString('title')
+            options = interaction.options.getString('options');
+
+        }
+
+        //==============================================================================================================================================================================================
+
+        if (button != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - poll (interaction)
+${currentDate} | ${currentDateISO}
+recieved poll command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+title: ${name}
+options: ${options}
+----------------------------------------------------
+`, 'utf-8')
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
         let pollEmbedDefault = new Discord.EmbedBuilder()
-            .setDescription('✅ for yes\n❌ for no')
-            ;
-
-
+            .setDescription('✅ for yes\n❌ for no');
         let react = [
             '🇦',
             '🇧',
@@ -41,61 +96,79 @@ module.exports = {
             '🇾',
             '🇿'
         ]
+        let i: number;
+        let curtxt: string;
+        let optsarr = options.split('+')
+        let optstxt = '';
+        for (i = 0; i < optsarr.length && i < 20; i++) {
+            if (optsarr[i].length > 150) {
+                curtxt = optsarr[i].substring(0, 149) + '...'
+                optstxt += `${react[i]} = ${curtxt}\n`
 
-        if (message != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - poll (message)\n${currentDate} | ${currentDateISO}\n recieved poll command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
-
-            let name = args.join(' ')
-            if (!args[0]) {
-                message.reply({ content: 'Please specify a title!', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
-
-                return;
+            } else {
+                optstxt += `${react[i]} = ${optsarr[i]}\n`
             }
-            pollEmbedDefault.setTitle(`${name}`)
-                .setColor(colours.embedColour.misc.hex)
-            message.delete()
+        }
+        pollEmbedDefault.setTitle(`${name}`)
+        pollEmbedDefault.setDescription(`${optstxt}`)
+            .setColor(colours.embedColour.misc.hex)
+        //SEND/EDIT MSG==============================================================================================================================================================================================
 
-            message.channel.send({ embeds: [pollEmbedDefault] }).then(sentEmbed => {
-                sentEmbed.react("✅")
-                sentEmbed.react("❌")
+        if (message != null && interaction == null && button == null) {
+            pollEmbedDefault
+                .setDescription('✅ for yes\n❌ for no')
+            message.channel.send({
+                embeds: [pollEmbedDefault],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            }).then(sent => {
+                sent.react('✅')
+                sent.react('❌')
+            })
+                .catch(error => { });
+            message.delete().catch(error => { });
+
+
+        }
+        if (interaction != null && button == null && message == null) {
+            interaction.channel.send({
+                embeds: [pollEmbedDefault],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .then(sent => {
+                    for (i = 0; i < optsarr.length && i < 20; i++) {
+                        sent.react(react[i])
+                    }
+                })
+                .catch(error => { });
+            interaction.reply({
+                content: '✅                      ⠀',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true,
+                ephemeral: true
+            });
+
+        }
+        if (button != null) {
+            message.edit({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
             })
                 .catch(error => { });
 
         }
-        if (interaction != null) {
-            let options = interaction.options.getString('options')
-            let title = interaction.options.getString('title')
-            let optsarr = options.split('+')
-            let optstxt = ''
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - poll (interaction)\n${currentDate} | ${currentDateISO}\n recieved poll command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\ntitle: ${title}\noptions: ${options}`, 'utf-8')
 
-            let i: number;
-            let curtxt: string;
-            for (i = 0; i < optsarr.length && i < 20; i++) {
-                if (optsarr[i].length > 150) {
-                    curtxt = optsarr[i].substring(0, 149) + '...'
-                    optstxt += `${react[i]} = ${curtxt}\n`
 
-                } else {
-                    optstxt += `${react[i]} = ${optsarr[i]}\n`
-                }
-            }
-            pollEmbedDefault.setTitle(`${title}`)
-            pollEmbedDefault.setDescription(`${optstxt}`)
-                .setColor(colours.embedColour.misc.hex)
-            interaction.reply({ content: 'success', ephemeral: true, allowedMentions: { repliedUser: false } })
-                .catch(error => { });
-
-            interaction.channel.send({ embeds: [pollEmbedDefault] }).then(sentEmbed => {
-                for (i = 0; i < optsarr.length && i < 20; i++) {
-                    sentEmbed.react(react[i])
-                }
-            })
-                .catch(error => { });
-
-        }
-
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, 'success\n\n', 'utf-8')
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
     }
 }
