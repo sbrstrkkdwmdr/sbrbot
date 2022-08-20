@@ -17,3 +17,4 @@ files/maps
 !setup.js
 *.traineddata
 files/tempdiff.osu
+*OLD.ts
