@@ -19,13 +19,14 @@ module.exports = {
         //let absoluteID = new Date().getTime()
         let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         let access_token = JSON.parse(accessN).access_token;
-        let buttons;
+        let buttons = new Discord.ActionRowBuilder();
 
         //args 
         let user;
         let searchid;
         let mode = 'osu';
         let detailed = false;
+        let curuid;
 
 
         if (message != null && button == null) {
@@ -39,34 +40,8 @@ requested by ${message.author.id} AKA ${message.author.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-cmd-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-cmd-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-cmd')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-cmd-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-cmd-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
+            curuid = message.author.id
+
             user = args.join(' ')
             searchid = message.author.id
             if (message.mentions.users.size > 0) {
@@ -92,34 +67,7 @@ requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-cmd')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
+            curuid = interaction.member.user.id
 
             user = interaction.options.getString('user');
             mode = interaction.options.getString('mode');
@@ -142,34 +90,19 @@ cmd ID: ${absoluteID}
 button: ${button}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-cmd')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                /* .setLabel('End') */,
-                );
+            curuid = interaction.member.user.id
+            if (message.embeds[0].fields[0]) {
+                detailed = true
+            }
+
+            //user =  message.embeds[0].title.split('\'s')[0]
+            user = message.embeds[0].url.split('users/')[1]
+            if (button == 'DetailEnable') {
+                detailed = true;
+            }
+            if (button == 'DetailDisable') {
+                detailed = false;
+            }
         }
 
         if (user == null || user.includes('<') || message.mentions.users.size > 0) {
@@ -178,7 +111,7 @@ button: ${button}
                 user = findname.get('osuname');
             } else {
                 return interaction.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
-                .catch(error => { });
+                    .catch(error => { });
 
             }
         }
@@ -199,6 +132,24 @@ button: ${button}
             mode = 'osu'
         }
 
+        if (detailed == true) {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`DetailDisable-osu-${curuid}`)
+                    .setStyle('Primary')
+                    .setEmoji('ℹ')
+                /* .setLabel('End') */
+            )
+        } else {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`DetailEnable-osu-${curuid}`)
+                    .setStyle('Primary')
+                    .setEmoji('ℹ')
+                /* .setLabel('End') */
+            )
+        }
+
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
@@ -212,7 +163,7 @@ Options:
 `, 'utf-8')
         const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(await user)}/${cmdchecks.toHexadecimal(mode)}`
 
-        const osudata:osuApiTypes.User = await fetch(userurl, {
+        const osudata: osuApiTypes.User = await fetch(userurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -234,7 +185,7 @@ Options:
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
-                    .catch(error => { });
+                        .catch(error => { });
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -351,7 +302,7 @@ Error - authentication
             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
             .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
 
-
+        let useEmbeds = [];
         if (detailed == true) {
             const loading = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.user.hex)
@@ -366,7 +317,7 @@ Error - authentication
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
-                .catch(error => { });
+                    .catch(error => { });
 
             }
             let dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
@@ -439,7 +390,7 @@ Error - authentication
 
             let usertopurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/best?mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`;
 
-            const osutopdata:osuApiTypes.Score[] = await fetch(usertopurl, {
+            const osutopdata: osuApiTypes.Score[] = await fetch(usertopurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -449,7 +400,7 @@ Error - authentication
 
             let mostplayedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/beatmapsets/most_played`
 
-            const mostplayeddata:osuApiTypes.BeatmapPlaycount[] = await fetch(mostplayedurl, {
+            const mostplayeddata: osuApiTypes.BeatmapPlaycount[] = await fetch(mostplayedurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -520,26 +471,8 @@ ${onlinestatus}`,
             **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%`,
                     inline: true
                 }])
-            if (interaction != null && message == null) {
-                obj.editReply({
-                    embeds: [osuEmbed, ChartsEmbedRank, ChartsEmbedPlay],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch(error => { });
 
-            }
-            if (message != null && interaction == null) {
-                obj.reply({
-                    embeds: [osuEmbed, ChartsEmbedRank, ChartsEmbedPlay],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch(error => { });
-
-            }
-
-
+            useEmbeds = [osuEmbed, ChartsEmbedRank, ChartsEmbedPlay]
         } else {
             osuEmbed.setDescription(`
 **Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)\n
@@ -554,22 +487,38 @@ ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.
 ${prevnames}
 ${onlinestatus}
             `)
-            if (interaction != null && message == null) {
-                obj.reply({
-                    embeds: [osuEmbed],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }
-            if (message != null && interaction == null) {
-                obj.reply({
-                    embeds: [osuEmbed],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }
+            useEmbeds = [osuEmbed]
         }
 
+        if (interaction != null && message == null && button == null) {
+            obj.editReply({
+                embeds: useEmbeds,
+                components: [buttons],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch(error => { });
+
+        }
+        if (message != null && interaction == null && button == null) {
+            obj.reply({
+                embeds: useEmbeds,
+                components: [buttons],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch(error => { });
+
+        }
+        if (button != null) {
+            message.edit({
+                embeds: useEmbeds,
+                components: [buttons],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch(error => { });
+        }
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------

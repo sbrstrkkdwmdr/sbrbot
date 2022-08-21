@@ -30,6 +30,7 @@ module.exports = {
         let searchid = null;
         let reverse = false;
         let compact = false;
+        let curuid;
 
         if (message != null && button == null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -70,6 +71,8 @@ cmd ID: ${absoluteID}
                         .setEmoji('➡')
                     /* .setLabel('End') */,
                 );
+            curuid = message.author.id
+
             user = args.join(' ')
             searchid = message.author.id;
             mode = null;
@@ -127,6 +130,8 @@ cmd ID: ${absoluteID}
                         .setEmoji('➡')
                     /* .setLabel('End') */,
                 );
+            curuid = interaction.member.user.id
+
             user = interaction.options.getString('user')
             mode = interaction.options.getString('mode')
             mapper = interaction.options.getString('mapper')
@@ -181,6 +186,8 @@ button: ${button}
                         .setEmoji('➡')
                 /* .setLabel('End') */,
                 );
+            curuid = interaction.member.user.id
+
             user = message.embeds[0].title.split('Top plays of ')[1]
 
             if (message.embeds[0].description) {
@@ -246,6 +253,12 @@ button: ${button}
                 }
                 mode = message.embeds[0].description.split('mode: ')[1].split('\n')[0]
             }
+            if (button == 'DetailEnable') {
+                detailed = true;
+            }
+            if (button == 'DetailDisable') {
+                detailed = false;
+            }
         }
 
 
@@ -275,6 +288,24 @@ button: ${button}
         } else {
             page = page - 1
         }
+        if (detailed == true) {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`DetailDisable-osutop-${curuid}`)
+                    .setStyle('Primary')
+                    .setEmoji('ℹ')
+                /* .setLabel('End') */
+            )
+        } else {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`DetailEnable-osutop-${curuid}`)
+                    .setStyle('Primary')
+                    .setEmoji('ℹ')
+                /* .setLabel('End') */
+            )
+        }
+
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
@@ -446,6 +477,7 @@ node-fetch error: ${error}
                 case 'pp': default:
                     osutopdata = filtereddata.sort((a, b) => b.pp - a.pp)
                     filterinfo += `\nsorted by highest pp`
+                    sort = 'pp'
                     break;
                 case 'recent':
                     osutopdata = filtereddata.sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
@@ -477,6 +509,7 @@ node-fetch error: ${error}
                 case 'pp': default:
                     osutopdata = filtereddata.sort((a, b) => a.pp - b.pp)
                     filterinfo += `\nsorted by lowest pp`
+                    sort = 'pp'
                     break;
                 case 'recent':
                     osutopdata = filtereddata.sort((a, b) => parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))

@@ -25,6 +25,7 @@ module.exports = {
         let mapmods;
         let maptitleq = null;
         let detailed = false;
+        let curuid;
         if (fs.existsSync(`./debugosu/prevmap${obj.guildId}.json`)) {
             try {
                 prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap${obj.guildId}.json`, 'utf8'));
@@ -78,6 +79,8 @@ cmd ID: ${absoluteID}
                         .setEmoji('➡')
                     /* .setLabel('End') */,
                 );
+            curuid = message.author.id
+
             if (!isNaN(args[0])) {
                 mapid = args[0];
             }
@@ -131,6 +134,8 @@ cmd ID: ${absoluteID}
                         .setEmoji('➡')
                     /* .setLabel('End') */,
                 );
+            curuid = interaction.member.user.id
+
             mapid = interaction.options.getInteger('id');
             mapmods = interaction.options.getString('mods');
             detailed = interaction.options.getBoolean('detailed');
@@ -178,13 +183,15 @@ button: ${button}
                         .setEmoji('➡')
                 /* .setLabel('End') */,
                 );
+            curuid = interaction.member.user.id
+
             let urlnohttp = message.embeds[0].url.split('https://')[1];
             //osu.ppy.sh/beatmapsets/setid#gamemode/id
             let setid = urlnohttp.split('/')[2].split('#')[0];
             let curid = urlnohttp.split('/')[3];
             mapid = curid;
             let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
-            let bmsdata:osuApiTypes.Beatmapset = await fetch(lookupurl, {
+            let bmsdata: osuApiTypes.Beatmapset = await fetch(lookupurl, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -250,11 +257,16 @@ node-fetch error: ${error}
                 detailed = true
             }
             mapmods = message.embeds[0].title.split('+')[1];
-
+            if (button == 'DetailEnable') {
+                detailed = true;
+            }
+            if (button == 'DetailDisable') {
+                detailed = false;
+            }
         }
 
         //==============================================================================================================================================================================================
-        let mapdata:osuApiTypes.Beatmap
+        let mapdata: osuApiTypes.Beatmap
 
         if (mapid == null || mapid == '') {
             if (fs.existsSync(`./debugosu/prevmap${obj.guildId}.json`)) {
@@ -271,6 +283,24 @@ node-fetch error: ${error}
                 prevmap = { id: 32345 }
             }
             mapid = prevmap.id;
+        }
+
+        if (detailed == true) {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`DetailDisable-map-${curuid}`)
+                    .setStyle('Primary')
+                    .setEmoji('ℹ')
+                /* .setLabel('End') */
+            )
+        } else {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`DetailEnable-map-${curuid}`)
+                    .setStyle('Primary')
+                    .setEmoji('ℹ')
+                /* .setLabel('End') */
+            )
         }
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -603,7 +633,7 @@ ${error}
         let maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
         let mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapdata.beatmapset.creator)}/osu`;
 
-        let mapperdata:osuApiTypes.User = await fetch(mapperurl, {
+        let mapperdata: osuApiTypes.User = await fetch(mapperurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
