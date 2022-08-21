@@ -1,11 +1,24 @@
 {
     "compilerOptions": {
-      "module": "commonjs",
-      "lib": ["ES2021"],
-      "resolveJsonModule": true
+        "module": "commonjs",
+        "lib": [
+            "ES2021"
+        ],
+        "resolveJsonModule": true
     },
-    "include": ["commands/**/*", "configs/**/*", "other/**/*", "test/*", "*.ts", "calc/*", "src/*"],
-/*     "files": [
+    "include": [
+        "commands/**/*",
+        "configs/**/*",
+        "other/**/*",
+        "test/*",
+        "*.ts",
+        "calc/*",
+        "src/*"
+    ],
+    "exclude": [
+        "commands/tests/*"
+    ]
+    /*     "files": [
         "main.ts",
         "Moderator.ts",
         "CommandHandler.ts",
@@ -15,4 +28,4 @@
         "CommandInit.ts",
         "ExEvents.ts",
     ] */
-  }
+}
