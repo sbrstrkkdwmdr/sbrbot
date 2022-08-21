@@ -17,6 +17,7 @@ const MusicHandler = require('./MusicHandler');
 const ButtonHandler = require('./ButtonHandler');
 const CommandInit = require('./CommandInit');
 const ExEvents = require('./ExEvents');
+const osutrack = require('./src/osutrack');
 
 const config = require('./configs/config.json');
 
@@ -148,6 +149,7 @@ client.once('ready', () => {
     ButtonHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     CommandInit(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     ExEvents(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    osutrack(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
     (async () => {
         if (!fs.existsSync(`./logs`)) {
