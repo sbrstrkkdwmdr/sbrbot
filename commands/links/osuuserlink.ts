@@ -1,15 +1,18 @@
 import fs = require('fs')
 import fetch from 'node-fetch';
-import { access_token } from '../../configs/osuauth.json';
 import emojis = require('../../configs/emojis')
 import cmdchecks = require('../../calc/commandchecks');
 import colours = require('../../configs/colours');
 import osuApiTypes = require('../../configs/osuApiTypes');
+import osufunc = require('../../calc/osufunc');
 
 module.exports = {
     name: 'osuuserlink',
     description: 'osuuserlink',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+        /*         let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+                let access_token = JSON.parse(accessN).access_token; */
+
         fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
             `
 ----------------------------------------------------
@@ -25,38 +28,26 @@ cmd ID: ${absoluteID}
         let user = messagenohttp.split('/')[2]
         fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - osuuserlink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!profile link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
         const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
-        const osudata: osuApiTypes.User = await fetch(userurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
+        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
+        try {
+            if (osudata.authentication) {
                 if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-                    } catch (err) {
+                    obj.reply
+                    return;
 
-                    }
                 } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch(error => { });
 
                 }
-                fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                    `
+            }
+        } catch (error) {
+            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+                `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
-            })
+        }
         fs.writeFileSync(`debugosu/link-osu=osu=${message.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {
             let osustats = osudata.statistics
