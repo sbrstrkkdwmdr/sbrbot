@@ -85,9 +85,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.links.get('osumaplink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 interaction.deferUpdate();
                 break;
-                case 'osu':
-                    client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                    interaction.deferUpdate();
+            case 'osu':
+                client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                interaction.deferUpdate();
         }
         fs.appendFileSync('logs/totalcommands.txt', 'x')
 
