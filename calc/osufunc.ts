@@ -4,7 +4,9 @@ import osumodcalc = require('osumodcalculator');
 import osuapiext = require('osu-api-extended');
 import fs = require('fs');
 import charttoimg = require('chartjs-to-image');
-
+import fetch from 'node-fetch';
+import osuApiTypes = require('../configs/osuApiTypes');
+import config = require('../configs/config.json');
 /**
  * 
  * @param {*} arr array of scores
@@ -613,4 +615,86 @@ async function mapcalclocal(
     return ppl;
 }
 
-export { mapcalc, scorecalc, straincalc, graph, mapcalclocal, straincalclocal } 
+/**
+ * 
+ * @param type type of api call to make
+ * @param params separate each param with +
+ * @param version 1 or 2. defaults to 2
+ * @returns data
+ */
+async function apiget(type: string, mainparam: string, params?: string, version?: number) {
+    const baseurl = 'https://osu.ppy.sh/api'
+    let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+    let access_token = JSON.parse(accessN).access_token;
+    let key = config.osuApiKey
+    if (!version) {
+        version = 2
+    }
+    let url = `${baseurl}/v${version}/`
+    if (version == 1) {
+        switch (type) {
+            case 'scores_get_map':
+                url += `get_scores?k=${key}&b=${mainparam}&mods=${params}&limit=100`
+                break;
+        }
+    }
+    if (version == 2) {
+        switch (type) {
+            case 'map_search':
+                break;
+            case 'map_get':
+                url += `beatmaps/${mainparam}`
+                break;
+            case 'mapset_get':
+                url += `beatmapsets/${mainparam}`
+                break;
+            case 'mapset_search':
+                url += `beatmapsets/search?q=${mainparam}&s=any`
+                break;
+            case 'scores_get_best':
+                url += `users/${mainparam}/scores/best?mode=${params}&limit=100&offset=0`
+                break;
+            case 'scores_get_first':
+                url += `users/${mainparam}/scores/firsts?mode=${params}&limit=100`
+                break;
+            case 'scores_get_map':
+                url += `beatmaps/${mainparam}/scores`
+                break;
+            case 'scores_get_pinned':
+                url += `users/${mainparam}/scores/pinned?mode=${params}&limit=100`
+                break;
+            case 'scores_get_recent':
+                url += `users/${mainparam}/scores/recent?include_fails=1&mode=${params}&limit=100&offset=0`
+                break;
+            case 'user_get' || 'user':
+                url += `users/${mainparam}/osu`
+                break;
+            case 'user_get_most_played' || 'most_played':
+                url += `users/${mainparam}/beatmapsets/most_played`
+                break;
+            case 'user_get_scores_map':
+                url += `beatmaps/${mainparam}/scores/users/${params}/all`
+                break;
+        }
+    }
+    let data:any = await fetch(url, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json"
+        }
+    }).then(res=> res.json())
+/*         .then(res => {
+            console.log(res.status)
+            if (res.status > 199 && res.status < 300) {
+                data = res.json() as any
+            } else {
+            }
+        }) */
+    return data;
+
+}
+
+
+export { mapcalc, scorecalc, straincalc, graph, mapcalclocal, straincalclocal, apiget } 
