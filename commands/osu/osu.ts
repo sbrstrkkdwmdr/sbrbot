@@ -27,7 +27,7 @@ module.exports = {
         let mode = 'osu';
         let detailed = false;
         let curuid;
-
+        let mtns = 0;
 
         if (message != null && button == null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -52,6 +52,7 @@ cmd ID: ${absoluteID}
             }
             mode = null;
             detailed = false;
+            mtns = message.mentions.size
         }
 
         //==============================================================================================================================================================================================
@@ -104,8 +105,7 @@ button: ${button}
                 detailed = false;
             }
         }
-
-        if (user == null || user.includes('<') || message.mentions.users.size > 0) {
+        if (user == null || user.includes('<') || mtns > 0) {
             let findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 user = findname.get('osuname');
@@ -419,7 +419,7 @@ Error - authentication
             let mostplaytxt = ``
             for (let i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
                 let bmpc = mostplayeddata[i2]
-                mostplaytxt += `[${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id}) | ${bmpc.count} plays\n`
+                mostplaytxt += `\`${bmpc.count.toString() + ' plays'.padEnd(15, ' ')}\` | [${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id})\n`
             }
             osuEmbed.addFields([
                 {
@@ -491,14 +491,23 @@ ${onlinestatus}
         }
 
         if (interaction != null && message == null && button == null) {
-            obj.editReply({
-                embeds: useEmbeds,
-                components: [buttons],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
-                .catch(error => { });
-
+            if (detailed == true) {
+                obj.editReply({
+                    embeds: useEmbeds,
+                    components: [buttons],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch(error => { });
+            } else {
+                obj.reply({
+                    embeds: useEmbeds,
+                    components: [buttons],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch(error => { });
+            }
         }
         if (message != null && interaction == null && button == null) {
             obj.reply({
