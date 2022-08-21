@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.0.6",
-    "discord.js": "^14.0.2",
+    "discord.js": "^14.2.0",
     "tslib": "^2.4.0"
   }
 }
