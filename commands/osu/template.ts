@@ -1,7 +1,6 @@
 import fs = require('fs');
 import osumodcalc = require('osumodcalculator');
 import osuapiext = require('osu-api-extended');
-import { access_token } from '../../configs/osuauth.json';
 import fetch from 'node-fetch';
 module.exports = {
     name: 'template',
@@ -11,7 +10,13 @@ module.exports = {
         '    `--option-name`: `option-description`\n',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
         //let absoluteID = new Date().getTime()
-
+        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        let access_token
+        try {
+            access_token = JSON.parse(accessN).access_token;
+        } catch (error) {
+            access_token = ''
+        }
         if (message != null) {
             fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let buttons = new Discord.ActionRowBuilder()

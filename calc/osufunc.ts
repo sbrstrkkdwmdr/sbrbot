@@ -7,6 +7,8 @@ import charttoimg = require('chartjs-to-image');
 import fetch from 'node-fetch';
 import osuApiTypes = require('../configs/osuApiTypes');
 import config = require('../configs/config.json');
+import cmdchecks = require('./commandchecks')
+
 /**
  * 
  * @param {*} arr array of scores
@@ -625,8 +627,12 @@ async function mapcalclocal(
 async function apiget(type: string, mainparam: string, params?: string, version?: number) {
     const baseurl = 'https://osu.ppy.sh/api'
     let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-    let access_token = JSON.parse(accessN).access_token;
-    let key = config.osuApiKey
+    let access_token
+    try {
+        access_token = JSON.parse(accessN).access_token;
+    } catch (error) {
+        access_token = ''
+    }    let key = config.osuApiKey
     if (!version) {
         version = 2
     }
@@ -638,6 +644,8 @@ async function apiget(type: string, mainparam: string, params?: string, version?
                 break;
         }
     }
+    mainparam = cmdchecks.toHexadecimal(mainparam)
+    if (params) params = cmdchecks.toHexadecimal(params);
     if (version == 2) {
         switch (type) {
             case 'map_search':
@@ -666,7 +674,7 @@ async function apiget(type: string, mainparam: string, params?: string, version?
             case 'scores_get_recent':
                 url += `users/${mainparam}/scores/recent?include_fails=1&mode=${params}&limit=100&offset=0`
                 break;
-            case 'user_get' || 'user':
+            case 'user_get': case 'user':
                 url += `users/${mainparam}/osu`
                 break;
             case 'user_get_most_played' || 'most_played':
@@ -677,21 +685,21 @@ async function apiget(type: string, mainparam: string, params?: string, version?
                 break;
         }
     }
-    let data:any = await fetch(url, {
+    let data: any = await fetch(url, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${access_token}`,
             "Content-Type": "application/json",
             Accept: "application/json"
         }
-    }).then(res=> res.json())
-/*         .then(res => {
-            console.log(res.status)
-            if (res.status > 199 && res.status < 300) {
-                data = res.json() as any
-            } else {
-            }
-        }) */
+    }).then(res => res.json())
+    /*         .then(res => {
+                console.log(res.status)
+                if (res.status > 199 && res.status < 300) {
+                    data = res.json() as any
+                } else {
+                }
+            }) */
     return data;
 
 }

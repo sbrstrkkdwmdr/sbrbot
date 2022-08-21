@@ -1,8 +1,13 @@
 import * as fs from 'fs';
 import fetch from 'node-fetch';
 const config = require('../configs/config.json')
-import { access_token } from '../configs/osuauth.json';
-
+let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+let access_token
+try {
+    access_token = JSON.parse(accessN).access_token;
+} catch (error) {
+    access_token = ''
+}
 /**
  * 
  * @param {number} userid 

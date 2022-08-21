@@ -53,12 +53,12 @@ button: ${button}
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-osumaplink-${interaction.user.id}`)
+                        .setCustomId(`BigLeftArrow-map-${interaction.user.id}`)
                         .setStyle('Primary')
                         .setEmoji('⬅')
             /* .setLabel('Start') */,
                     new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-osumaplink-${interaction.user.id}`)
+                        .setCustomId(`LeftArrow-map-${interaction.user.id}`)
                         .setStyle('Primary')
                         .setEmoji('◀')
             /* .setLabel('Previous') */,
@@ -68,12 +68,12 @@ button: ${button}
                                         .setLabel('🔍')
                                     , */
                     new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-osumaplink-${interaction.user.id}`)
+                        .setCustomId(`RightArrow-map-${interaction.user.id}`)
                         .setStyle('Primary')
                         .setEmoji('▶')
             /* .setLabel('Next') */,
                     new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-osumaplink-${interaction.user.id}`)
+                        .setCustomId(`BigRightArrow-map-${interaction.user.id}`)
                         .setStyle('Primary')
                         .setEmoji('➡')
             /* .setLabel('End') */,
@@ -84,17 +84,7 @@ button: ${button}
             let curid = urlnohttp.split('/')[3];
             mapid = curid;
             let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
-            let bmsdata:osuApiTypes.Beatmapset = await fetch(lookupurl, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }).then(res => res.json() as any)
-                .catch(err => {
-                    return interaction.channel.send('An error occured while fetching the beatmap data.')
-                        .catch(error => { });
-
-                })
+            let bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
 
             fs.writeFileSync(`debugosu/link-map=bmsdataButton=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
             let bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
@@ -141,12 +131,12 @@ cmd ID: ${absoluteID}
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-osumaplink-${message.author.id}`)
+                        .setCustomId(`BigLeftArrow-map-${message.author.id}`)
                         .setStyle('Primary')
                         .setEmoji('⬅')
                     /* .setLabel('Start') */,
                     new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-osumaplink-${message.author.id}`)
+                        .setCustomId(`LeftArrow-map-${message.author.id}`)
                         .setStyle('Primary')
                         .setEmoji('◀')
                     /* .setLabel('Previous') */,
@@ -156,12 +146,12 @@ cmd ID: ${absoluteID}
                                         .setLabel('🔍')
                                     , */
                     new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-osumaplink-${message.author.id}`)
+                        .setCustomId(`RightArrow-map-${message.author.id}`)
                         .setStyle('Primary')
                         .setEmoji('▶')
                     /* .setLabel('Next') */,
                     new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-osumaplink-${message.author.id}`)
+                        .setCustomId(`BigRightArrow-map-${message.author.id}`)
                         .setStyle('Primary')
                         .setEmoji('➡')
                     /* .setLabel('End') */,
@@ -216,7 +206,7 @@ cmd ID: ${absoluteID}
                     }
                 }
                 let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
-                const bmsdata:osuApiTypes.Beatmapset = await fetch(lookupurl, {
+                const bmsdata: osuApiTypes.Beatmapset = await fetch(lookupurl, {
                     headers: {
                         'Authorization': `Bearer ${access_token}`
                     }
@@ -279,12 +269,12 @@ input: ${parse}
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-osumaplink-${message.author.id}`)
+                        .setCustomId(`BigLeftArrow-map-${message.author.id}`)
                         .setStyle('Primary')
                         .setEmoji('⬅')
             /* .setLabel('Start') */,
                     new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-osumaplink-${message.author.id}`)
+                        .setCustomId(`LeftArrow-map-${message.author.id}`)
                         .setStyle('Primary')
                         .setEmoji('◀')
             /* .setLabel('Previous') */,
@@ -294,12 +284,12 @@ input: ${parse}
                                         .setLabel('🔍')
                                     , */
                     new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-osumaplink-${message.author.id}`)
+                        .setCustomId(`RightArrow-map-${message.author.id}`)
                         .setStyle('Primary')
                         .setEmoji('▶')
             /* .setLabel('Next') */,
                     new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-osumaplink-${message.author.id}`)
+                        .setCustomId(`BigRightArrow-map-${message.author.id}`)
                         .setStyle('Primary')
                         .setEmoji('➡')
             /* .setLabel('End') */,
@@ -375,12 +365,12 @@ input: ${parse}
             buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-osumaplink-${message.author.id}`)
+                        .setCustomId(`BigLeftArrow-map-${message.author.id}`)
                         .setStyle('Primary')
                         .setEmoji('⬅')
             /* .setLabel('Start') */,
                     new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-osumaplink-${message.author.id}`)
+                        .setCustomId(`LeftArrow-map-${message.author.id}`)
                         .setStyle('Primary')
                         .setEmoji('◀')
             /* .setLabel('Previous') */,
@@ -390,12 +380,12 @@ input: ${parse}
                                         .setLabel('🔍')
                                     , */
                     new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-osumaplink-${message.author.id}`)
+                        .setCustomId(`RightArrow-map-${message.author.id}`)
                         .setStyle('Primary')
                         .setEmoji('▶')
             /* .setLabel('Next') */,
                     new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-osumaplink-${message.author.id}`)
+                        .setCustomId(`BigRightArrow-map-${message.author.id}`)
                         .setStyle('Primary')
                         .setEmoji('➡')
             /* .setLabel('End') */,
@@ -418,7 +408,7 @@ msg: ${message.content}
 
         //==============================================================================================================================================================================================
 
-        let mapdata:osuApiTypes.Beatmap
+        let mapdata: osuApiTypes.Beatmap
         if (mapid == null || mapid == '') {
             if (fs.existsSync(`./debugosu/prevmap${obj.guildId}.json`)) {
                 try {
@@ -613,7 +603,7 @@ ${error}
         let maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
         let mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapdata.beatmapset.creator)}/osu`;
 
-        let mapperdata:osuApiTypes.User = await fetch(mapperurl, {
+        let mapperdata: osuApiTypes.User = await fetch(mapperurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -744,6 +734,13 @@ node-fetch error: ${error}
                 Embed.setColor(colours.diffcolour[0].hex)
                 break;
         }
+        buttons.addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`DetailEnable-map-${message.author.id}`)
+                .setStyle('Primary')
+                .setEmoji('ℹ')
+            /* .setLabel('End') */
+        )
         if (message && interaction == null) {
             obj.reply({
                 content: "⠀",

@@ -2,7 +2,6 @@ import fs = require('fs')
 import fetch from 'node-fetch';
 import ppcalc = require('booba')
 import osucalc = require('osumodcalculator')
-import { access_token } from '../../configs/osuauth.json';
 import emojis = require('../../configs/emojis');
 import cmdchecks = require('../../calc/commandchecks');
 import osufunc = require('../../calc/osufunc');
@@ -12,6 +11,8 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 module.exports = {
     name: 'localmapparse',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        let access_token = JSON.parse(accessN).access_token;
         fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
             `
 ----------------------------------------------------

@@ -2,7 +2,6 @@ import fs = require('fs')
 import osucalc = require('osumodcalculator')
 import replayparse = require('osureplayparser')
 import fetch from 'node-fetch';
-import { access_token } from '../../configs/osuauth.json';
 import ppcalc = require('booba')
 import chartjsimg = require('chartjs-to-image');
 import cmdchecks = require('../../calc/commandchecks');
@@ -14,6 +13,9 @@ module.exports = {
     name: 'replayparse',
     description: 'replayparse',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        let access_token = JSON.parse(accessN).access_token;
+
         fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
             `
 ----------------------------------------------------
