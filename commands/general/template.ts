@@ -1,6 +1,9 @@
 import cmdchecks = require('../../calc/commandchecks');
 import fs = require('fs');
 import colours = require('../../configs/colours');
+import calc = require('../../calc/calculations');
+import emojis = require('../../configs/emojis');
+
 module.exports = {
     name: 'COMMANDNAME',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {

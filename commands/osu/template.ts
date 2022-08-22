@@ -1,95 +1,113 @@
+import cmdchecks = require('../../calc/commandchecks');
 import fs = require('fs');
+import calc = require('../../calc/calculations');
+import emojis = require('../../configs/emojis');
+import colours = require('../../configs/colours');
+import osufunc = require('../../calc/osufunc');
 import osumodcalc = require('osumodcalculator');
-import osuapiext = require('osu-api-extended');
-import fetch from 'node-fetch';
+import osuApiTypes = require('../../configs/osuApiTypes');
+
+
 module.exports = {
-    name: 'template',
-    description: 'template text\n' +
-        'Command: `sbr-command-name`\n' +
-        'Options: \n' +
-        '    `--option-name`: `option-description`\n',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button) {
-        //let absoluteID = new Date().getTime()
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token
-        try {
-            access_token = JSON.parse(accessN).access_token;
-        } catch (error) {
-            access_token = ''
-        }
-        if (message != null) {
-            fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
-            let buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-cmd-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-cmd-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-cmd')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-cmd-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-cmd-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
-            let endofcommand = new Date().getTime();
-            let timeelapsed = endofcommand - currentDate.getTime();
-            fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
+    name: 'COMMANDNAME',
+    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+        if (message != null && interaction == null && button == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - COMMANDNAME (message)
+${currentDate} | ${currentDateISO}
+recieved COMMANDNAME command
+requested by ${message.author.id} AKA ${message.author.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
         }
 
         //==============================================================================================================================================================================================
 
-        if (interaction != null) {
-            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-
-            let buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-cmd')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
-            let endofcommand = new Date().getTime();
-            let timeelapsed = endofcommand - currentDate.getTime();
-            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
+        if (interaction != null && button == null && message == null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - COMMANDNAME (interaction)
+${currentDate} | ${currentDateISO}
+recieved COMMANDNAME command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
         }
 
-        fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`, '\nsuccess\n\n', 'utf-8')
+        //==============================================================================================================================================================================================
+
+        if (button != null) {
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - COMMANDNAME (interaction)
+${currentDate} | ${currentDateISO}
+recieved COMMANDNAME command
+requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+        }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+
+----------------------------------------------------
+`, 'utf-8')
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+
+
+        //SEND/EDIT MSG==============================================================================================================================================================================================
+
+        if (message != null && interaction == null && button == null) {
+            message.reply({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch(error => { });
+
+        }
+        if (interaction != null && button == null && message == null) {
+            interaction.reply({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch(error => { });
+
+        }
+        if (button != null) {
+            message.edit({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch(error => { });
+
+        }
+
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
     }
 }
