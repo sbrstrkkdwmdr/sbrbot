@@ -258,7 +258,6 @@ function tomonthname(monthnum: number) {//date.getUTCMonth returns an int so thi
 function fixoffset(time: number) {
     const offsettype = time.toString().includes('-') ?
         '+' : '-';
-    ;
     const current = Math.abs(time / 60).toFixed(2);
     const actualoffset = (offsettype + current).replace('.', ':');
     return actualoffset;

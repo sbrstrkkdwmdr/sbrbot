@@ -206,7 +206,8 @@ function checkisfileblocked(userid: number) {
  * @returns the index of the nth time a substring appears in a string
  */
 function nthIndex(str: string, pat: string, n: number) {
-    let L = str.length, i = -1;
+    const L = str.length
+    let i = -1;
     while (n-- && i++ < L) {
         i = str.indexOf(pat, i);
         if (i < 0) break;
@@ -222,7 +223,8 @@ function nthIndex(str: string, pat: string, n: number) {
  * @returns the index of the nth time a substring appears in a string but from the end
  */
 function nthIndexLast(str: string, pat: string, n: number) {
-    let L = str.length, i = -1;
+    const L = str.length;
+    let i = -1;
     while (n-- && i++ < L) {
         i = str.lastIndexOf(pat, i);
         if (i < 0) break;
