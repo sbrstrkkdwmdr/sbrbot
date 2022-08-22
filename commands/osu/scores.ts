@@ -668,7 +668,7 @@ node-fetch error: ${error}
                     scoretxt +=
                         `**[Score #${i + 1 + page * 5}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}) ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') : ''}** <t:${new Date(curscore.created_at).getTime() / 1000}:R>
                     ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
-                    \`${hitlist}\` | ${curscore.max_combo}x/**${mapdata.max_combo}**
+                    \`${hitlist}\` | ${curscore.max_combo}x/**${mapdata.max_combo}x**
                     ${pptxt}
                     `
                     fs.writeFileSync(`debugosu/command-scores=pp_calc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2))
