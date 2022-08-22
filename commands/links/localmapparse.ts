@@ -73,7 +73,7 @@ Error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
         }
-        if (metadata.includes('BeatmapID')) {
+/*         if (metadata.includes('BeatmapID')) {
             let bid;
             try {
                 bid = metadata.split('BeatmapID')[1].split('\n')[0]
@@ -99,7 +99,7 @@ overrideID: ${overrideID}
                 await client.links.get('osumaplink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, parse, overrideID);
                 return;
             }
-        }
+        } */
         let ppcalcing;
         try {
             ppcalcing = await osufunc.mapcalclocal(mods, 'osu', null, 0)
