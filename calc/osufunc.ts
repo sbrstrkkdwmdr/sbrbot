@@ -633,12 +633,14 @@ async function apiget(type: string, mainparam: string, params?: string, version?
         access_token = JSON.parse(accessN).access_token;
     } catch (error) {
         access_token = ''
-    } let key = config.osuApiKey
+    }
+    let key = config.osuApiKey
     if (!version) {
         version = 2
     }
     let url = `${baseurl}/v${version}/`
     if (version == 1) {
+        url = `${baseurl}/`
         switch (type) {
             case 'scores_get_map':
                 url += `get_scores?k=${key}&b=${mainparam}&mods=${params}&limit=100`
@@ -651,34 +653,34 @@ async function apiget(type: string, mainparam: string, params?: string, version?
         switch (type) {
             case 'map_search':
                 break;
-            case 'map_get':case 'map':
+            case 'map_get': case 'map':
                 url += `beatmaps/${mainparam}`
                 break;
-            case 'mapset_get':case 'mapset':
+            case 'mapset_get': case 'mapset':
                 url += `beatmapsets/${mainparam}`
                 break;
             case 'mapset_search':
                 url += `beatmapsets/search?q=${mainparam}&s=any`
                 break;
-            case 'scores_get_best':case 'osutop':
+            case 'scores_get_best': case 'osutop': case 'best':
                 url += `users/${mainparam}/scores/best?mode=${params}&limit=100&offset=0`
                 break;
-            case 'scores_get_first':case 'firsts':
+            case 'scores_get_first': case 'firsts':
                 url += `users/${mainparam}/scores/firsts?mode=${params}&limit=100`
                 break;
-            case 'scores_get_map':
+            case 'scores_get_map': case 'maplb':
                 url += `beatmaps/${mainparam}/scores`
                 break;
-            case 'scores_get_pinned':case 'pinned':
+            case 'scores_get_pinned': case 'pinned':
                 url += `users/${mainparam}/scores/pinned?mode=${params}&limit=100`
                 break;
-            case 'scores_get_recent':
+            case 'scores_get_recent': case 'recent':
                 url += `users/${mainparam}/scores/recent?include_fails=1&mode=${params}&limit=100&offset=0`
-                break;      
+                break;
             case 'user_get': case 'user':
                 url += `users/${mainparam}/${params ? params : 'osu'}`
                 break;
-            case 'user_get_most_played' || 'most_played':
+            case 'user_get_most_played': case 'most_played':
                 url += `users/${mainparam}/beatmapsets/most_played`
                 break;
             case 'user_get_scores_map':
@@ -698,8 +700,17 @@ async function apiget(type: string, mainparam: string, params?: string, version?
         }).then(res => res.json())
     } catch (error) {
         data = {
-            error: 'error',
+            error: true,
+            url: url,
+            params: {
+                type: type,
+                mainparam: mainparam,
+                version: version,
+            },
             info: error
+        }
+        if (params) {
+            data.params.params = params
         }
     }
     /*         .then(res => {

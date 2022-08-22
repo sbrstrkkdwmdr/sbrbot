@@ -419,7 +419,7 @@ ${hitlist}
         } else {
             let oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${cmdchecks.toHexadecimal(mapid)}&mods=${cmdchecks.toHexadecimal(osumodcalc.ModStringToInt(osumodcalc.shortModName(mods)))}&limit=100`
 
-            let lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`);
+            let lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1);
             /* let lbdata = await fetch(oldmsu) //uses apiv1 so im sticking with "any" type
                 .then(res => res.json() as any)
                 .catch(error => {

@@ -218,7 +218,8 @@ Options:
 `, 'utf-8')
         let userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
 
-        const osudata:osuApiTypes.User = await fetch(userinfourl, {
+        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
+        /* const osudata: osuApiTypes.User = await fetch(userurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -251,7 +252,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
                 return;
-            });
+            }); */
         fs.writeFileSync(`debugosu/command-pinned=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
 
         try {
@@ -281,7 +282,8 @@ Error - authentication
         }
 
         let userpinnedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/pinned?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
-        const pinnedscoresdata:osuApiTypes.Score[] = await fetch(userpinnedurl, {
+        const pinnedscoresdata:osuApiTypes.Score[] = await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
+        /* const pinnedscoresdata:osuApiTypes.Score[] = await fetch(userpinnedurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -314,7 +316,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
                 return;
-            });
+            }); */
         fs.writeFileSync(`debugosu/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
 
         let pinnedEmbed = new Discord.EmbedBuilder()

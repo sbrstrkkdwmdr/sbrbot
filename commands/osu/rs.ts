@@ -227,11 +227,12 @@ module.exports = {
         }
         let userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
 
-        const osudata: osuApiTypes.User = await fetch(userinfourl, {
+        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
+        /* await fetch(userinfourl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(res => res.json() as any)
+        }).then(res => res.json() as any) */
         fs.writeFileSync(`debugosu/commands-rs=user=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
@@ -297,7 +298,8 @@ module.exports = {
         } else { }
         let recentplayurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/recent?include_fails=1&mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`
 
-        const rsdata: osuApiTypes.Score[] = await fetch(recentplayurl, {
+        const rsdata: osuApiTypes.Score[] = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
+        /* await fetch(recentplayurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -330,7 +332,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
             return;
-        });
+        }); */
 
         fs.writeFileSync(`debugosu/commands-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
 
@@ -380,7 +382,8 @@ node-fetch error: ${error}
 
             let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(curbm.id)}?`;
 
-            const mapdata: osuApiTypes.Beatmap = await fetch(mapurl, {
+            const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${curbm.id}`)
+            /* const mapdata: osuApiTypes.Beatmap = await fetch(mapurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -413,7 +416,7 @@ node-fetch error: ${error}
 `, 'utf-8')
                 return;
             });
-
+ */
             fs.writeFileSync(`debugosu/commands-rs=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
 
             let accgr;
@@ -655,7 +658,7 @@ node-fetch error: ${error}
                 .addFields([
                     {
                         name: 'MAP DETAILS',
-                        value: `[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods ? '+' + curscore.mods.join('').toUpperCase() : ''} \n${totaldiff}⭐ | ${curscore.mode}`,
+                        value: `[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} \n${totaldiff}⭐ | ${curscore.mode}`,
                         inline: false
                     },
                     {

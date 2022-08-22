@@ -391,21 +391,23 @@ Error - authentication
 
             let usertopurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/best?mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`;
 
-            const osutopdata: osuApiTypes.Score[] = await fetch(usertopurl, {
+            const osutopdata:osuApiTypes.Score[] = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
+            /* const osutopdata: osuApiTypes.Score[] = await fetch(usertopurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json() as any)
+            }).then(res => res.json() as any) */
             fs.writeFileSync(`debugosu/command-osu=osutopdata=${obj.guildId}.json`, JSON.stringify(osutopdata, null, 2))
 
 
             let mostplayedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/beatmapsets/most_played`
 
-            const mostplayeddata: osuApiTypes.BeatmapPlaycount[] = await fetch(mostplayedurl, {
+            const mostplayeddata:osuApiTypes.BeatmapPlaycount[] = await osufunc.apiget('most_played', `${osudata.id}`)
+           /*  const mostplayeddata: osuApiTypes.BeatmapPlaycount[] = await fetch(mostplayedurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
-            }).then(res => res.json() as any)
+            }).then(res => res.json() as any) */
             fs.writeFileSync(`debugosu/command-osu=mostplayeddata=${obj.guildId}.json`, JSON.stringify(mostplayeddata, null, 2))
 
             let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -444,14 +446,13 @@ ${onlinestatus}`,
                     inline: true
                 }
             ])
-            if (mostplaytxt != ``) {
                 osuEmbed.addFields([{
                     name: 'Most Played Beatmaps',
-                    value: mostplaytxt,
+                    value: mostplaytxt != `` ? mostplaytxt : 'No data',
                     inline: false
                 }]
                 )
-            }
+            
 
             osuEmbed.addFields([
                 {

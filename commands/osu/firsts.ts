@@ -323,7 +323,7 @@ Error - authentication
 
         };
         let userfirstsurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/firsts?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
-        const firstscoresdata: osuApiTypes.Score[] = await osufunc.apiget('scores_get_first', `${osudata.id}`)
+        const firstscoresdata: osuApiTypes.Score[] = await osufunc.apiget('firsts', `${osudata.id}`, `${mode}`)
         /*         const firstscoresdata:osuApiTypes.Score[] = await fetch(userfirstsurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`

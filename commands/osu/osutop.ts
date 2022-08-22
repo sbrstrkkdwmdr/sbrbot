@@ -324,9 +324,10 @@ Options:
 ----------------------------------------------------
 `, 'utf-8')
         let userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
-        const osudata: osuApiTypes.User = await fetch(userurl, {
+        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
+        /* const osudata: osuApiTypes.User = await fetch(userurl, {
             headers: {
-                Authorization: `Bearer ${access_token}`
+                'Authorization': `Bearer ${access_token}`
             }
         }).then(res => res.json() as any)
             .catch(error => {
@@ -357,7 +358,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
                 return;
-            });
+            }); */
         fs.writeFileSync(`debugosu/command-otop=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
 
         try {
@@ -393,7 +394,8 @@ Error - authentication
 
         }
         let usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
-        const osutopdataPreSort: osuApiTypes.Score[] = await fetch(usertopurl, {
+        const osutopdataPreSort: osuApiTypes.Score[] = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
+        /* const osutopdataPreSort: osuApiTypes.Score[] = await fetch(usertopurl, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
@@ -427,7 +429,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
                 return;
-            });
+            }); */
         fs.writeFileSync(`debugosu/command-otop=osutopdataPreSort=${obj.guildId}`, JSON.stringify(osutopdataPreSort, null, 2))
 
         try {
@@ -629,7 +631,7 @@ ${error}
                     ifmods = '+' + topmods.toString().replaceAll(",", '')
                 }
                 let scorenum;
-                if (reverse == true && sort == 'pp') {
+                if (reverse == true) {
                     scorenum = osutopdata.length - scoreoffset
                 } else {
                     scorenum = scoreoffset + 1
