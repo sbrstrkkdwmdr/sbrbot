@@ -6,13 +6,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     let imgParseCooldown = false
 
     client.on('messageCreate', async (message) => {
-        let currentDate = new Date();
-        let currentDateISO = new Date().toISOString();
-        let absoluteID = currentDate.getTime();
-        let interaction = null
-        let button = null
+        const currentDate = new Date();
+        const currentDateISO = new Date().toISOString();
+        const absoluteID = currentDate.getTime();
+        const interaction = null
+        const button = null
         let args = null
-        let obj = message
+        const obj = message
         let parse = null
 
         if (config.useScreenshotParse == true) {
@@ -46,15 +46,15 @@ progress: ${m.progress ? m.progress : 'none'}
                             await worker.initialize('eng');
                             const { data: { text } } = await worker.recognize(message.attachments.first().url);
                             if (text.includes('Beatmap by')) {
-                                let txttitle = text.split('\n')[0]
-                                let txtcreator = text.split('Beatmap by ')[1].split('\n')[0]
+                                const txttitle = text.split('\n')[0]
+                                const txtcreator = text.split('Beatmap by ')[1].split('\n')[0]
 
                                 parse = `${txttitle}//${txtcreator}`
 
                             }
                             if (text.includes('Mapped by')) {
-                                let txttitle = text.split('\n')[0]
-                                let txtcreator = text.split('Mapped by ')[1].split('\n')[0]
+                                const txttitle = text.split('\n')[0]
+                                const txtcreator = text.split('Mapped by ')[1].split('\n')[0]
 
                                 parse = `${txttitle}//${txtcreator}`
                             }
@@ -68,8 +68,8 @@ progress: ${m.progress ? m.progress : 'none'}
                         await worker.initialize('eng');
                         const { data: { text } } = await worker.recognize(message.content);
                         if (text.includes('Beatmap by')) {
-                            let txttitle = text.split('\n')[0]
-                            let txtcreator = text.split('Beatmap by ')[1].split('\n')[0]
+                            const txttitle = text.split('\n')[0]
+                            const txtcreator = text.split('Beatmap by ')[1].split('\n')[0]
 
                             parse = `${txttitle}//${txtcreator}`
                         }
@@ -82,22 +82,22 @@ progress: ${m.progress ? m.progress : 'none'}
                 }, 5000);
             }
         }
-        let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
+        const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         if (messagenohttp.startsWith('osu.ppy.sh/b/') || messagenohttp.startsWith('osu.ppy.sh/beatmaps/') || messagenohttp.startsWith('osu.ppy.sh/beatmapsets/') || messagenohttp.startsWith('osu.ppy.sh/s/') || parse != null) {
-            let overrideID = null
+            const overrideID = null
             client.links.get('osumaplink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, parse, overrideID);
         }
         if (messagenohttp.startsWith('osu.ppy.sh/u/') || messagenohttp.startsWith('osu.ppy.sh/users/')) {
-            let user = messagenohttp.split('/')[2]
+            const user = messagenohttp.split('/')[2]
             args = [user]
             client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
             //client.links.get('osuuserlink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
         }
 
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osr'))) {
-            let attachosr = message.attachments.first().url
-            let osrdlfile = fs.createWriteStream('./files/replay.osr')
-            let requestw = https.get(`${attachosr}`, function (response) {
+            const attachosr = message.attachments.first().url
+            const osrdlfile = fs.createWriteStream('./files/replay.osr')
+            https.get(`${attachosr}`, function (response) {
                 response.pipe(osrdlfile);
             });
             setTimeout(() => {
@@ -108,9 +108,9 @@ progress: ${m.progress ? m.progress : 'none'}
             client.links.get('scoreparse').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
         }
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osu'))) {
-            let attachosu = message.attachments.first().url
-            let osudlfile = fs.createWriteStream('./files/tempdiff.osu')
-            let requestw = https.get(`${attachosu}`, function (response) {
+            const attachosu = message.attachments.first().url
+            const osudlfile = fs.createWriteStream('./files/tempdiff.osu')
+            https.get(`${attachosu}`, function (response) {
                 response.pipe(osudlfile);
             });
             setTimeout(() => {

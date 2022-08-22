@@ -5,10 +5,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     let timeouttime;
 
     client.on('messageCreate', async (message) => {
-
-        let currentDate = new Date();
-        let currentDateISO = new Date().toISOString();
-        let absoluteID = currentDate.getTime()
+        const currentDate = new Date();
+        const currentDateISO = new Date().toISOString();
+        const absoluteID = currentDate.getTime()
 
         const args = message.content.slice(config.prefix.length).split(/ +/);
         const command = args.shift().toLowerCase();
@@ -39,14 +38,13 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }, 3000)
         }
         function getTimeLeft(timeout) {
-            let timeLeft = timeout - new Date().getTime();
-            return (timeLeft);
+            return (timeout - new Date().getTime());
         }
 
-        let interaction = null;
-        let button = null;
-        let obj = message;
-        let overrides = null;
+        const interaction = null;
+        const button = null;
+        const obj = message;
+        const overrides = null;
         switch (command) {
             case 'convert':
                 client.commands.get('convert').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
@@ -137,25 +135,20 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
             //admincmds below
             case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
-
                 if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))
                     client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                ;
                 break;
             case 'leaveguild': case 'leave':
                 if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))
                     client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                ;
                 break;
             case 'servers':
                 if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))
                     client.admincmds.get('servers').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                ;
                 break;
             case 'debug':
                 if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))
                     client.admincmds.get('debug').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                ;
                 break;
             case 'voice':
                 if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))

@@ -8,17 +8,17 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         //console.log(interaction.message.id)
         //console.log(interaction.customId)
 
-        let currentDate = new Date();
-        let currentDateISO = new Date().toISOString();
-        let absoluteID = currentDate.getTime();
+        const currentDate = new Date();
+        const currentDateISO = new Date().toISOString();
+        const absoluteID = currentDate.getTime();
 
         const args = null;
         const message = interaction.message;
-        let obj = interaction;
+        const obj = interaction;
 
-        let command = interaction.customId.split('-')[1]
-        let button = interaction.customId.split('-')[0]
-        let specid = interaction.customId.split('-')[2]
+        const command = interaction.customId.split('-')[1]
+        const button = interaction.customId.split('-')[0]
+        const specid = interaction.customId.split('-')[2]
         if (specid && specid != interaction.user.id) {
             interaction.deferUpdate();
             return;

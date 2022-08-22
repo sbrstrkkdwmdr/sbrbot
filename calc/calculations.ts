@@ -25,8 +25,8 @@ function findHCF(x: number, y: number) {
  */
 function findLCM(n1: number, n2: number) {
     if (isNaN(n1) || isNaN(n2)) return NaN;
-    let lar = Math.max(n1, n2);
-    let small = Math.min(n1, n2);
+    const lar = Math.max(n1, n2);
+    const small = Math.min(n1, n2);
 
 
     let i = lar;
@@ -45,8 +45,8 @@ function findLCM(n1: number, n2: number) {
  */
 function pythag(a: number, b: number) {
     if (isNaN(a) || isNaN(b)) return NaN;
-    let cp = (a ** 2) + (b ** 2);
-    let c: number = Math.sqrt(cp)
+    const cp = (a ** 2) + (b ** 2);
+    const c: number = Math.sqrt(cp)
     return (c)
 }
 /**
@@ -55,15 +55,15 @@ function pythag(a: number, b: number) {
  * @param {number} b number of significant figiures
  * @result converts the number to a significant figure
  */
-function sigfigold(a: number, b: number) {
+/* function sigfigold(a: number, b: number) {
     if (isNaN(a)) return NaN;
     let s: number = parseFloat((a / Math.abs(10 ** (a.toString().length - 1))).toFixed(a.toString().length - 1));
     if (b) {
         s = parseFloat((a / (10 ** (a.toString().length - 1))).toFixed(b))
     }
-    let c = s + ' x 10^' + (a.toString().length - 1)
+    const c = s + ' x 10^' + (a.toString().length - 1)
     return c;
-}
+} */
 /**
  * 
  * @param {number} a first number
@@ -72,17 +72,15 @@ function sigfigold(a: number, b: number) {
  */
 function sigfig(a: number, b: number) {
     if (isNaN(a)) return {
-
         number: a,
         sigfig: NaN,
-
     };
-    let aAsArr = a.toString().replaceAll('.', '').split('')
-    if (b < 2 || b == null) { b = aAsArr.length };
-    let sigfig = aAsArr.slice(1, b).join('')
+    const aAsArr = a.toString().replaceAll('.', '').split('')
+    if (b < 2 || b == null) { b = aAsArr.length }
+    const sigfig = aAsArr.slice(1, b).join('')
     let mult: number = Math.floor(a / parseFloat(aAsArr[0] + '.' + sigfig))//.toString().length - 1
     if (mult < 1 && mult != 0) { mult = mult.toString().length - 1 }
-    let answer = aAsArr[0] + '.' + sigfig + '*10^' + mult
+    const answer = aAsArr[0] + '.' + sigfig + '*10^' + mult
     return {
         number: answer,
         sigfig: sigfig.length + 1,
@@ -95,7 +93,7 @@ function sigfig(a: number, b: number) {
  * @returns checks if number is under two decimals, then will return the number with two decimals or less
  */
 function fixtoundertwo(number: number) {
-    let truenum = number * 100;
+    const truenum = number * 100;
     if (!isNaN(truenum)) return number;
     else return number.toFixed(2);
 }
@@ -136,8 +134,7 @@ function to12htime(date) {
     if (seconds < 10) {
         seconds = '0' + seconds
     }
-    var strTime = hours + ':' + minutes + ':' + seconds + amorpm;
-    return strTime;
+    return hours + ':' + minutes + ':' + seconds + amorpm;
 }
 /**
  * 
@@ -164,8 +161,7 @@ function relto12htime(date) { //relative version of above
         seconds = '0' + seconds
 
     }
-    var strTime = hours + ':' + minutes + ':' + seconds + amorpm;
-    return strTime;
+    return hours + ':' + minutes + ':' + seconds + amorpm;
 }
 
 /**
@@ -260,16 +256,11 @@ function tomonthname(monthnum: number) {//date.getUTCMonth returns an int so thi
  * @returns fixes offset i.e. +11:00 being returned as -660.
  */
 function fixoffset(time: number) {
-    let offsettype;
-    if (time.toString().includes('-')) {
-        offsettype = '+'
-    } else {
-        offsettype = '-'
-    }
-    let current;
-    let actualoffset;
-    current = Math.abs(time / 60).toFixed(2)
-    actualoffset = (offsettype + current).replace('.', ':')
+    const offsettype = time.toString().includes('-') ?
+        '+' : '-';
+    ;
+    const current = Math.abs(time / 60).toFixed(2);
+    const actualoffset = (offsettype + current).replace('.', ':');
     return actualoffset;
 }
 
@@ -278,7 +269,7 @@ function fixoffset(time: number) {
  * @param str input string. formatted as hh:mm:ss._ms or ?d?h?m?s
  * @returns string converted to milliseconds
  */
-function timeToMs(str:string) {
+function timeToMs(str: string) {
     if (str.includes('d') || str.includes('h') || str.includes('m') || str.includes('s')) {
         let daysstr = '0'
         let hoursstr = '0'
@@ -329,12 +320,12 @@ function timeToMs(str:string) {
         }
 
 
-        let days = parseInt(daysstr);
-        let hours = parseInt(hoursstr);
-        let minutes = parseInt(minutesstr);
-        let seconds = parseInt(secondsstr);
+        const days = parseInt(daysstr);
+        const hours = parseInt(hoursstr);
+        const minutes = parseInt(minutesstr);
+        const seconds = parseInt(secondsstr);
         //convert to milliseconds
-        let ms = (days * 24 * 60 * 60 * 1000) + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
+        const ms = (days * 24 * 60 * 60 * 1000) + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
 
         return ms;
     } else if (str.includes(':') || str.includes('.')) {
@@ -359,7 +350,7 @@ function timeToMs(str:string) {
         }
         if (str.includes('.')) {
             milliseconds = parseInt(str.split('.')[1]);
-            if(coloncount === 0){
+            if (coloncount === 0) {
                 seconds = parseInt(str.split('.')[0]);
             }
         }
@@ -376,30 +367,30 @@ function timeToMs(str:string) {
  * @param seconds seconds
  * @returns the time in hh:mm:ss format
  */
-function secondsToTime(seconds:number){
+function secondsToTime(seconds: number) {
     //1 * 60 * 60
     //assuming 6000 seconds
 
-    let hours:any = seconds / 60 / 60 % 24 < 10 ? '0' + Math.floor(seconds / 60 / 60 % 24) : Math.floor(seconds / 60 / 60 % 24);
-    let minutes = seconds / 60 % 60 < 10 ? '0' + Math.floor(seconds / 60 % 60) : Math.floor(seconds / 60 % 60);
-    let secs = seconds % 60 < 10 ? '0' + Math.floor(seconds % 60) : Math.floor(seconds % 60); 
+    const hours = (seconds / 60 / 60 % 24 < 10 ? '0' + Math.floor(seconds / 60 / 60 % 24) : Math.floor(seconds / 60 / 60 % 24)).toString();
+    const minutes = seconds / 60 % 60 < 10 ? '0' + Math.floor(seconds / 60 % 60) : Math.floor(seconds / 60 % 60);
+    const secs = seconds % 60 < 10 ? '0' + Math.floor(seconds % 60) : Math.floor(seconds % 60);
 
-    let str:any = parseInt(hours) > 0 ? 
-    `${hours}:${minutes}:${secs}` : 
-    `${minutes}:${secs}`;
+    const str = parseInt(hours) > 0 ?
+        `${hours}:${minutes}:${secs}` :
+        `${minutes}:${secs}`;
 
     return str;
-
 }
 
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
-export { 
-    findHCF, findLCM, 
-    pythag, sigfig, 
-    fixtoundertwo, factorial, 
-    to12htime, relto12htime, 
-    dayhuman, tomonthname, 
+export {
+    findHCF, findLCM,
+    pythag, sigfig,
+    fixtoundertwo, factorial,
+    to12htime, relto12htime,
+    dayhuman, tomonthname,
     fixoffset, timeToMs,
     secondsToTime
 };
+

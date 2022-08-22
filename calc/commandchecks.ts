@@ -1,13 +1,6 @@
 import * as fs from 'fs';
 import fetch from 'node-fetch';
 const config = require('../configs/config.json')
-let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-let access_token
-try {
-    access_token = JSON.parse(accessN).access_token;
-} catch (error) {
-    access_token = ''
-}
 /**
  * 
  * @param {number} userid 
@@ -71,13 +64,7 @@ function shorten(txt: string) {
  * @returns shorten to under 150 characters
  */
 function lengthshorten(txt: string) {
-    let newtxt: string;
-    if (txt.length > 150) {
-        newtxt = txt.substring(0, 149) + '...'
-    } else {
-        newtxt = txt
-    }
-
+    const newtxt = txt.length > 150 ? txt.substring(0, 149) + '...' : txt;
     return newtxt;
 }
 /**
@@ -86,17 +73,11 @@ function lengthshorten(txt: string) {
  * @returns shortened string to under 4000 characters to avoid discord message errors
  */
 function discshort(txt: string) {
-    let newtxt: string;
-    if (txt.length > 4000) {
-        newtxt = txt.substring(0, 3999)
-    } else {
-        newtxt = txt
-    }
-
+    const newtxt = txt.length > 4000 ? txt.substring(0, 3999) : txt;
     return newtxt
 }
 //file extensions for videos
-let vidfiletypes: string[] = [
+const vidfiletypes: string[] = [
     "3g2",
     "3gp",
     "amv",
@@ -142,7 +123,7 @@ let vidfiletypes: string[] = [
 ]
 
 //file types of images
-let imgfiletype: string[] = [
+const imgfiletype: string[] = [
     'apng',
     'gif',
     'jpeg',
@@ -151,7 +132,7 @@ let imgfiletype: string[] = [
     'png'
 ]
 
-let audiofiletype: string[] = [
+const audiofiletype: string[] = [
     'aac',
     'flac',
     'mp3',
@@ -168,7 +149,7 @@ function checkisvideo(filename: any) {
     for (let i = 0; i < vidfiletypes.length; i++) {
         if (filename.url.indexOf(vidfiletypes[i], filename.url.length - vidfiletypes.length) !== -1) {
             return true;
-        };
+        }
 
     }
 
@@ -183,7 +164,7 @@ function checkisimage(filename: any) {
     for (let i = 0; i < imgfiletype.length; i++) {
         if (filename.url.indexOf(imgfiletype[i], filename.url.length - imgfiletype.length) !== -1) {
             return true;
-        };
+        }
 
     }
 
@@ -198,7 +179,7 @@ function checkisaudio(filename: any) {
     for (let i = 0; i < audiofiletype.length; i++) {
         if (filename.url.indexOf(audiofiletype[i], filename.url.length - audiofiletype.length) !== -1) {
             return true;
-        };
+        }
 
     }
 
@@ -225,7 +206,7 @@ function checkisfileblocked(userid: number) {
  * @returns the index of the nth time a substring appears in a string
  */
 function nthIndex(str: string, pat: string, n: number) {
-    var L = str.length, i = -1;
+    let L = str.length, i = -1;
     while (n-- && i++ < L) {
         i = str.indexOf(pat, i);
         if (i < 0) break;
@@ -241,29 +222,12 @@ function nthIndex(str: string, pat: string, n: number) {
  * @returns the index of the nth time a substring appears in a string but from the end
  */
 function nthIndexLast(str: string, pat: string, n: number) {
-    var L = str.length, i = -1;
+    let L = str.length, i = -1;
     while (n-- && i++ < L) {
         i = str.lastIndexOf(pat, i);
         if (i < 0) break;
     }
     return i;
-}
-/**
- * 
- * @param userid the user id to check for
- * @param type best/firsts/pinned/recent
- * @returns the users top plays 
- */
-function trackScore(userid: number, type: string) {
-    fetch(`https://osu.ppy/api/v2/users/${userid}/scores/${type}?`,
-        {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-        .then(json => {
-            return json;
-        })
 }
 
 /**
@@ -272,8 +236,7 @@ function trackScore(userid: number, type: string) {
  * @returns a string with special characters converted to versions that won't break URLs
  */
 function toHexadecimal(str: string | number) {
-    let newstr: string;
-    newstr = str.toString()
+    const newstr = str.toString()
         .replaceAll('%', '%25')
         .replaceAll('`', '%60')
         .replaceAll('~', '%7E')
@@ -307,10 +270,7 @@ function toHexadecimal(str: string | number) {
         .replaceAll('?', '%3F')
         .replaceAll('/', '%2F')
         .replaceAll(' ', '%20')
-
-
-        .replace(/([^A-Za-z0-9 %])/g, '')
-
+        .replace(/([^A-Za-z0-9 %])/g, '');
     return newstr;
 }
 
@@ -320,14 +280,12 @@ function toHexadecimal(str: string | number) {
  * @returns non alpha numeric characters removed
  */
 function toAlphaNum(str: string | number) {
-    let newstr: string;
-    newstr = str.toString().replace(/([^A-Za-z 0-9])/g, '')
+    const newstr: string = str.toString().replace(/([^A-Za-z 0-9])/g, '');
     return newstr;
 }
 
 function toMath(str: string) {
-    let newstr: string;
-    newstr = str.toString().replace(/([^0-9pi^+-/*])/g, '')
+    const newstr: string = str.toString().replace(/([^0-9pi^+-/*])/g, '');
     return newstr;
 }
 
@@ -363,8 +321,8 @@ export {
     vidfiletypes,
     nthIndex,
     nthIndexLast,
-    trackScore,
     toHexadecimal,
     toAlphaNum,
     toMath
-}
+};
+

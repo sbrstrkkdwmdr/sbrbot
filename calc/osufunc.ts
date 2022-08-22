@@ -56,7 +56,7 @@ async function mapcalc(
 ) {
     let ppl
     let mapscore
-    let calctyper = osumodcalc.ModeNameToInt(gamemode)
+    const calctyper = osumodcalc.ModeNameToInt(gamemode)
 
     switch (calctyper) {
         case 0: default:
@@ -152,88 +152,88 @@ async function scorecalc(
         failed = false
     }
 
-    let calctyper = osumodcalc.ModeNameToInt(gamemode)
+    const calctyper = osumodcalc.ModeNameToInt(gamemode)
     switch (calctype) {
         case 0: default:
-            //check if 'files/maps/' exists
-            if (!fs.existsSync('files/maps/')) {
-                fs.mkdirSync('files/maps/');
-            }
-            if (!fs.existsSync('files/maps/' + mapid + '.osu')) {
-                await osuapiext.tools.download.difficulty(mapid, 'files/maps/', mapid); //uses fs btw
-            }
+            {            //check if 'files/maps/' exists
+                if (!fs.existsSync('files/maps/')) {
+                    fs.mkdirSync('files/maps/');
+                }
+                if (!fs.existsSync('files/maps/' + mapid + '.osu')) {
+                    await osuapiext.tools.download.difficulty(mapid, 'files/maps/', mapid); //uses fs btw
+                }
 
 
-            let newacc = osumodcalc.calcgrade(hit300, hit100, hit50, 0).accuracy;
-            switch (gamemode) {
-                case 'osu':
-                    break;
-                case 'taiko':
-                    newacc = osumodcalc.calcgradeTaiko(hit300, hit100, 0).accuracy;
-                    break;
-                case 'fruits':
-                    newacc = osumodcalc.calcgradeCatch(hit300, hit100, hit50, 0, hitkatu).accuracy;
-                    break;
-                case 'mania':
-                    newacc = osumodcalc.calcgradeMania(hitgeki, hit300, hitkatu, hit100, hit50, 0).accuracy;
-                    break;
-            }
-            if (isNaN(newacc)) {
-                newacc = acc;
-            }
-            let basescore: any = {
-                mode: gamemode,
-                mods: osumodcalc.ModStringToInt(mods),
-                combo: maxcombo,
-                acc: acc || 100,
-                score: score != null || score != NaN ? score : 0,
-            }
-            if (failed == true) {
-                basescore = {
+                let newacc = osumodcalc.calcgrade(hit300, hit100, hit50, 0).accuracy;
+                switch (gamemode) {
+                    case 'osu':
+                        break;
+                    case 'taiko':
+                        newacc = osumodcalc.calcgradeTaiko(hit300, hit100, 0).accuracy;
+                        break;
+                    case 'fruits':
+                        newacc = osumodcalc.calcgradeCatch(hit300, hit100, hit50, 0, hitkatu).accuracy;
+                        break;
+                    case 'mania':
+                        newacc = osumodcalc.calcgradeMania(hitgeki, hit300, hitkatu, hit100, hit50, 0).accuracy;
+                        break;
+                }
+                if (isNaN(newacc)) {
+                    newacc = acc;
+                }
+                let basescore: any = {
                     mode: gamemode,
                     mods: osumodcalc.ModStringToInt(mods),
                     combo: maxcombo,
                     acc: acc || 100,
-                    score: score != null || score != NaN ? score : 0,
-                    passedObjects: passedObj
+                    score: score != null && !isNaN(score) ? score : 0,
                 }
-            }
-            if (hit300 != null || hit300 != NaN) {
-                basescore.n300 = hit300
-            }
-            if (hit100 != null || hit100 != NaN) {
-                basescore.n100 = hit100
-            }
-            if (hit50 != null || hit50 != NaN) {
-                basescore.n50 = hit50
-            }
-            if (miss != null || miss != NaN) {
-                basescore.nMisses = miss
-            }
-            if (hitkatu != null || hitkatu != NaN) {
-                basescore.nKatu = hitkatu
-            }
-            scorenofc = {
-                path: `files/maps/${mapid}.osu`,
-                params: [
-                    basescore,
-                    {
+                if (failed == true) {
+                    basescore = {
                         mode: gamemode,
                         mods: osumodcalc.ModStringToInt(mods),
-                        acc: newacc,
-                    },
-                    {
-                        mode: gamemode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        acc: 100,
+                        combo: maxcombo,
+                        acc: acc || 100,
+                        score: score != null && !isNaN(score) ? score : 0,
+                        passedObjects: passedObj
                     }
-                ]
+                }
+                if (hit300 != null && !isNaN(hit300)) {
+                    basescore.n300 = hit300
+                }
+                if (hit100 != null && !isNaN(hit100)) {
+                    basescore.n100 = hit100
+                }
+                if (hit50 != null && !isNaN(hit50)) {
+                    basescore.n50 = hit50
+                }
+                if (miss != null && !isNaN(miss)) {
+                    basescore.nMisses = miss
+                }
+                if (hitkatu != null && !isNaN(hitkatu)) {
+                    basescore.nKatu = hitkatu
+                }
+                scorenofc = {
+                    path: `files/maps/${mapid}.osu`,
+                    params: [
+                        basescore,
+                        {
+                            mode: gamemode,
+                            mods: osumodcalc.ModStringToInt(mods),
+                            acc: newacc,
+                        },
+                        {
+                            mode: gamemode,
+                            mods: osumodcalc.ModStringToInt(mods),
+                            acc: 100,
+                        }
+                    ]
+                }
+                ppl = await rosu.calculate(scorenofc);
+
             }
-            ppl = await rosu.calculate(scorenofc);
-
-
             break;
-        case 1:
+        case 1: {
             scorenofc = {
                 beatmap_id: `${mapid}`,
                 score: `${score}`,
@@ -302,6 +302,7 @@ async function scorecalc(
                     error: error
                 }
             }
+        }
             break;
         case 2: //osu api extended
             break;
@@ -323,31 +324,31 @@ async function straincalc(mapid: number, mods: string, calctype: number, mode: s
     switch (calctype) {
         case 0: default:
             switch (mode) {
-                case 'osu':
-                    let strains1 = JSON.parse(JSON.stringify(await rosu.strains(`files/maps/${mapid}.osu`, osumodcalc.ModStringToInt(mods)), null, 2));
-                    let aimval = strains1.aim;
-                    let aimnoslideval = strains1.aimNoSliders;
-                    let speedval = strains1.speed;
-                    let flashlightval = strains1.flashlight;
-                    let straintimes = [];
-                    let totalval = [];
+                case 'osu': {
+                    const strains1 = JSON.parse(JSON.stringify(await rosu.strains(`files/maps/${mapid}.osu`, osumodcalc.ModStringToInt(mods)), null, 2));
+                    const aimval = strains1.aim;
+                    const aimnoslideval = strains1.aimNoSliders;
+                    const speedval = strains1.speed;
+                    const flashlightval = strains1.flashlight;
+                    const straintimes = [];
+                    const totalval = [];
 
                     //let div = aimval.length / 200;
                     for (let i = 0; i < aimval.length; i++) {
                         //let offset = Math.ceil(i * div);
-                        let offset = i
-                        let curval = aimval[offset] + aimnoslideval[offset] + speedval[offset] + flashlightval[offset];
+                        const offset = i
+                        const curval = aimval[offset] + aimnoslideval[offset] + speedval[offset] + flashlightval[offset];
                         totalval.push(curval)
 
-                        let curtime = ((strains1.section_length / 1000) * (i + 1))
-                        let curtimestr = Math.floor(curtime / 60) + ':' + `${(curtime % 60) < 10 ? '0' + (curtime % 60).toFixed(2) : (curtime % 60).toFixed(2)}`;
+                        const curtime = ((strains1.section_length / 1000) * (i + 1))
+                        const curtimestr = Math.floor(curtime / 60) + ':' + `${(curtime % 60) < 10 ? '0' + (curtime % 60).toFixed(2) : (curtime % 60).toFixed(2)}`;
                         straintimes.push(curtimestr);
                     }
                     strains = {
                         strainTime: straintimes,
                         value: totalval,
                     }
-
+                }
                     break;
             }
 
@@ -375,31 +376,31 @@ async function straincalclocal(path: string | null, mods: string, calctype: numb
     switch (calctype) {
         case 0: default:
             switch (mode) {
-                case 'osu':
-                    let strains1 = JSON.parse(JSON.stringify(await rosu.strains(`${path}`, osumodcalc.ModStringToInt(mods)), null, 2));
-                    let aimval = strains1.aim;
-                    let aimnoslideval = strains1.aimNoSliders;
-                    let speedval = strains1.speed;
-                    let flashlightval = strains1.flashlight;
-                    let straintimes = [];
-                    let totalval = [];
+                case 'osu': {
+                    const strains1 = JSON.parse(JSON.stringify(await rosu.strains(`${path}`, osumodcalc.ModStringToInt(mods)), null, 2));
+                    const aimval = strains1.aim;
+                    const aimnoslideval = strains1.aimNoSliders;
+                    const speedval = strains1.speed;
+                    const flashlightval = strains1.flashlight;
+                    const straintimes = [];
+                    const totalval = [];
 
                     //let div = aimval.length / 200;
                     for (let i = 0; i < aimval.length; i++) {
                         //let offset = Math.ceil(i * div);
-                        let offset = i
-                        let curval = aimval[offset] + aimnoslideval[offset] + speedval[offset] + flashlightval[offset];
+                        const offset = i
+                        const curval = aimval[offset] + aimnoslideval[offset] + speedval[offset] + flashlightval[offset];
                         totalval.push(curval)
 
-                        let curtime = ((strains1.section_length / 1000) * (i + 1))
-                        let curtimestr = Math.floor(curtime / 60) + ':' + `${(curtime % 60) < 10 ? '0' + (curtime % 60).toFixed(2) : (curtime % 60).toFixed(2)}`;
+                        const curtime = ((strains1.section_length / 1000) * (i + 1))
+                        const curtimestr = Math.floor(curtime / 60) + ':' + `${(curtime % 60) < 10 ? '0' + (curtime % 60).toFixed(2) : (curtime % 60).toFixed(2)}`;
                         straintimes.push(curtimestr);
                     }
                     strains = {
                         strainTime: straintimes,
                         value: totalval,
                     }
-
+                }
                     break;
             }
 
@@ -476,10 +477,10 @@ async function graph(x: number[] | string[], y: number[], label: string, startze
     let cury = []
 
     if (y.length > 200) {
-        let div = y.length / 200;
+        const div = y.length / 200;
         for (let i = 0; i < 200; i++) {
-            let offset = Math.ceil(i * div);
-            let curval = y[offset];
+            const offset = Math.ceil(i * div);
+            const curval = y[offset];
             cury.push(curval)
             curx.push(x[offset]);
         }
@@ -487,7 +488,7 @@ async function graph(x: number[] | string[], y: number[], label: string, startze
         curx = x
         cury = y
     }
-    let datasets = [{
+    const datasets = [{
         label: label,
         data: cury,
         fill: fill,
@@ -559,7 +560,7 @@ async function mapcalclocal(
 ) {
     let ppl
     let mapscore
-    let calctyper = osumodcalc.ModeNameToInt(gamemode)
+    const calctyper = osumodcalc.ModeNameToInt(gamemode)
 
     if (path == null) {
         path = `files/tempdiff.osu`
@@ -627,14 +628,14 @@ async function mapcalclocal(
  */
 async function apiget(type: string, mainparam: string, params?: string, version?: number) {
     const baseurl = 'https://osu.ppy.sh/api'
-    let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+    const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
     let access_token
     try {
         access_token = JSON.parse(accessN).access_token;
     } catch (error) {
         access_token = ''
     }
-    let key = config.osuApiKey
+    const key = config.osuApiKey
     if (!version) {
         version = 2
     }
