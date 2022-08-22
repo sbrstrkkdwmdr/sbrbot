@@ -46,6 +46,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let interaction = null;
         let button = null;
         let obj = message;
+        let overrides = null;
         switch (command) {
             case 'convert':
                 client.commands.get('convert').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
@@ -101,7 +102,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 client.osucmds.get('firsts').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'map': case 'm':
-                client.osucmds.get('map').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                client.osucmds.get('map').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
                 break;
             case 'rs': case 'recent': case 'r':
                 client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);

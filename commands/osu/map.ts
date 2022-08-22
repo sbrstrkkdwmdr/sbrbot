@@ -15,7 +15,7 @@ module.exports = {
         'Command: `sbr-command-name`\n' +
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides) {
         //let absoluteID = new Date().getTime()
         let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         let access_token = JSON.parse(accessN).access_token;
@@ -40,7 +40,7 @@ module.exports = {
             prevmap = { id: 32345 }
         }
 
-        if (message != null && button == null) {
+        if (message != null && button == null && overrides == null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -91,6 +91,39 @@ cmd ID: ${absoluteID}
             if (args.join(' ').includes('"')) {
                 maptitleq = args.join(' ').split('"')[1]
             }
+        }
+        if(overrides != null){
+            buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-map-${message.author.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                /* .setLabel('Start') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-map-${message.author.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('◀')
+                /* .setLabel('Previous') */,
+                /*                 new Discord.ButtonBuilder()
+                                    .setCustomId('Middle-map')
+                                    .setStyle('Primary')
+                                    .setLabel('🔍')
+                                , */
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-map-${message.author.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                /* .setLabel('Next') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-map-${message.author.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                /* .setLabel('End') */,
+            );
+            mapmods = overrides.mods;
+            mapid = overrides.id;
+            detailed = overrides.detailed;
         }
 
         //==============================================================================================================================================================================================
