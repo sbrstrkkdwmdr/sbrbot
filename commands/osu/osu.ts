@@ -163,7 +163,8 @@ Options:
 `, 'utf-8')
         const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(await user)}/${cmdchecks.toHexadecimal(mode)}`
 
-        const osudata: osuApiTypes.User = await fetch(userurl, {
+        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
+        /* const osudata: osuApiTypes.User = await fetch(userurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -196,7 +197,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
                 return;
-            });
+            }); */
         fs.writeFileSync(`debugosu/command-osu=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {

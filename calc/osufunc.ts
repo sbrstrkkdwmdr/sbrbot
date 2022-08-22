@@ -36,7 +36,8 @@ function modemappers(arr) {
 } */
 export {
     modemods, modemappers
-}
+};
+export { mapcalc, scorecalc, straincalc, graph, mapcalclocal, straincalclocal, apiget };
 
 
 
@@ -632,7 +633,7 @@ async function apiget(type: string, mainparam: string, params?: string, version?
         access_token = JSON.parse(accessN).access_token;
     } catch (error) {
         access_token = ''
-    }    let key = config.osuApiKey
+    } let key = config.osuApiKey
     if (!version) {
         version = 2
     }
@@ -650,32 +651,32 @@ async function apiget(type: string, mainparam: string, params?: string, version?
         switch (type) {
             case 'map_search':
                 break;
-            case 'map_get':
+            case 'map_get':case 'map':
                 url += `beatmaps/${mainparam}`
                 break;
-            case 'mapset_get':
+            case 'mapset_get':case 'mapset':
                 url += `beatmapsets/${mainparam}`
                 break;
             case 'mapset_search':
                 url += `beatmapsets/search?q=${mainparam}&s=any`
                 break;
-            case 'scores_get_best':
+            case 'scores_get_best':case 'osutop':
                 url += `users/${mainparam}/scores/best?mode=${params}&limit=100&offset=0`
                 break;
-            case 'scores_get_first':
+            case 'scores_get_first':case 'firsts':
                 url += `users/${mainparam}/scores/firsts?mode=${params}&limit=100`
                 break;
             case 'scores_get_map':
                 url += `beatmaps/${mainparam}/scores`
                 break;
-            case 'scores_get_pinned':
+            case 'scores_get_pinned':case 'pinned':
                 url += `users/${mainparam}/scores/pinned?mode=${params}&limit=100`
                 break;
             case 'scores_get_recent':
                 url += `users/${mainparam}/scores/recent?include_fails=1&mode=${params}&limit=100&offset=0`
-                break;
+                break;      
             case 'user_get': case 'user':
-                url += `users/${mainparam}/osu`
+                url += `users/${mainparam}/${params ? params : 'osu'}`
                 break;
             case 'user_get_most_played' || 'most_played':
                 url += `users/${mainparam}/beatmapsets/most_played`
@@ -685,14 +686,22 @@ async function apiget(type: string, mainparam: string, params?: string, version?
                 break;
         }
     }
-    let data: any = await fetch(url, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${access_token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json"
+    let data: any
+    try {
+        data = await fetch(url, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            }
+        }).then(res => res.json())
+    } catch (error) {
+        data = {
+            error: 'error',
+            info: error
         }
-    }).then(res => res.json())
+    }
     /*         .then(res => {
                 console.log(res.status)
                 if (res.status > 199 && res.status < 300) {
@@ -705,4 +714,3 @@ async function apiget(type: string, mainparam: string, params?: string, version?
 }
 
 
-export { mapcalc, scorecalc, straincalc, graph, mapcalclocal, straincalclocal, apiget } 

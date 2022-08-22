@@ -191,7 +191,8 @@ button: ${button}
             let curid = urlnohttp.split('/')[3];
             mapid = curid;
             let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
-            let bmsdata: osuApiTypes.Beatmapset = await fetch(lookupurl, {
+            let bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
+            /* let bmsdata: osuApiTypes.Beatmapset = await fetch(lookupurl, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -225,7 +226,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
                     return;
-                });
+                }); */
             fs.writeFileSync(`debugosu/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
             let bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
             fs.writeFileSync(`debugosu/command-map=bmstosr=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
@@ -318,7 +319,8 @@ Options:
         if (maptitleq == null) {
             let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}?`;
 
-            mapdata = await fetch(mapurl, {
+            mapdata = await osufunc.apiget('map_get', `${mapid}`)
+            /* mapdata = await fetch(mapurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -351,7 +353,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
                     return;
-                });
+                }); */
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
 
             try {
@@ -383,7 +385,8 @@ Error - authentication
 
         if (maptitleq != null) {
             let mapnameurl = `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${cmdchecks.toHexadecimal(maptitleq)}&s=any`
-            let mapidtest = await fetch(mapnameurl, {
+            let mapidtest = await osufunc.apiget('mapset_search', `${maptitleq}`)
+            /* let mapidtest = await fetch(mapnameurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -416,7 +419,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
                     return;
-                })
+                }) */
             fs.writeFileSync(`debugosu/command-map=mapidtest=${obj.guildId}.json`, JSON.stringify(mapidtest, null, 2))
                 ;
             let mapidtest2;
@@ -461,7 +464,8 @@ ${error}
             }
 
             let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapidtest2[0].id)}?`
-            mapdata = await fetch(mapurl, {
+            mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
+            /* mapdata = await fetch(mapurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -494,7 +498,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
                     return;
-                });
+                }); */
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
             try {
@@ -633,7 +637,8 @@ ${error}
         let maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
         let mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapdata.beatmapset.creator)}/osu`;
 
-        let mapperdata: osuApiTypes.User = await fetch(mapperurl, {
+        let mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
+        /* let mapperdata: osuApiTypes.User = await fetch(mapperurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -666,7 +671,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
                 return;
-            });
+            }); */
         fs.writeFileSync(`./debugosu/command-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
 
         let strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)

@@ -266,7 +266,8 @@ Options:
 
 
         const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
-        const osudata:osuApiTypes.User = await fetch(userinfourl, {
+        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
+        /* const osudata:osuApiTypes.User = await fetch(userinfourl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -300,7 +301,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
                 return;
-            })
+            }) */
         fs.writeFileSync(`debugosu/command-firsts=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
@@ -322,7 +323,8 @@ Error - authentication
 
         };
         let userfirstsurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/firsts?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
-        const firstscoresdata:osuApiTypes.Score[] = await fetch(userfirstsurl, {
+        const firstscoresdata: osuApiTypes.Score[] = await osufunc.apiget('scores_get_first', `${osudata.id}`)
+        /*         const firstscoresdata:osuApiTypes.Score[] = await fetch(userfirstsurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -355,7 +357,7 @@ node-fetch error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
                 return;
-            })
+            }) */
         fs.writeFileSync(`debugosu/command-firsts=firstscoresdata=${obj.guildId}.json`, JSON.stringify(firstscoresdata, null, 2))
 
         let firstsEmbed = new Discord.EmbedBuilder()
