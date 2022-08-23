@@ -16,8 +16,8 @@ module.exports = {
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token = JSON.parse(accessN).access_token;
+        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token;
         let buttons;
 
         let user = null;
@@ -187,7 +187,7 @@ button: ${button}
             }
         }
         if (mode == null) {
-            let findname = await userdata.findOne({ where: { userid: searchid } })
+            const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 mode = 'osu'
             } else {
@@ -216,7 +216,7 @@ Options:
     page: ${page}
 ----------------------------------------------------
 `, 'utf-8')
-        let userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
+        const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         /* const osudata: osuApiTypes.User = await fetch(userurl, {
@@ -281,7 +281,7 @@ Error - authentication
             return;
         }
 
-        let userpinnedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/pinned?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
+        const userpinnedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/pinned?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
         const pinnedscoresdata:osuApiTypes.Score[] = await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
         /* const pinnedscoresdata:osuApiTypes.Score[] = await fetch(userpinnedurl, {
             headers: {
@@ -319,7 +319,7 @@ node-fetch error: ${error}
             }); */
         fs.writeFileSync(`debugosu/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
 
-        let pinnedEmbed = new Discord.EmbedBuilder()
+        const pinnedEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.hex)
             .setTitle(`Pinned scores for ${osudata.username}`)
             .setURL(`https://osu.ppy.sh/u/${osudata.id}`)
@@ -332,7 +332,7 @@ node-fetch error: ${error}
 ${mode}`
             )
             for (let i = 0; i < 5 && i < pinnedscoresdata.length; i++) {
-                let curscore = pinnedscoresdata[i + page * 5]
+                const curscore = pinnedscoresdata[i + page * 5]
                 if (!curscore) break;
                 let grade;
                 switch (pinnedscoresdata[i].rank.toUpperCase()) {
@@ -365,7 +365,7 @@ ${mode}`
                         break;
                 }
                 let hitlist: string;
-                let hitstats = curscore.statistics
+                const hitstats = curscore.statistics
                 switch (mode) {
                     case 'osu':
                     default:
@@ -400,23 +400,23 @@ ${mode}`
                         `).replaceAll(' ', '').replaceAll('\n', '')
                         break;
                 }
-                let ifmods =
+                const ifmods =
                     curscore.mods.join('').length > 1 ?
                         '+' + curscore.mods.join('').toUpperCase() :
                         ''
-                let title =
+                const title =
                     curscore.beatmapset.title == curscore.beatmapset.title_unicode ?
                         curscore.beatmapset.title :
                         `${curscore.beatmapset.title} (${curscore.beatmapset.title_unicode})`
 
-                let artist =
+                const artist =
                     curscore.beatmapset.artist == curscore.beatmapset.artist_unicode ?
                         curscore.beatmapset.artist :
                         `${curscore.beatmapset.artist} (${curscore.beatmapset.artist_unicode})`
-                let fulltitle = `${artist} - ${title} [${curscore.beatmap.version}]`
+                const fulltitle = `${artist} - ${title} [${curscore.beatmap.version}]`
 
                 let pptxt: any;
-                let ppcalcing = await osufunc.scorecalc(
+                const ppcalcing = await osufunc.scorecalc(
                     curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
                     curscore.mode,
                     curscore.beatmap.id,

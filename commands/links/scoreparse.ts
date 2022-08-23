@@ -12,8 +12,8 @@ module.exports = {
     name: 'scoreparse',
     description: 'scoreparse',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token = JSON.parse(accessN).access_token;
+        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token;
         fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
             `
 ----------------------------------------------------
@@ -25,7 +25,7 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
 
-        let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
+        const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         let scorelink: any;
         let scoremode: any;
         let scoreid: any;
@@ -38,7 +38,7 @@ cmd ID: ${absoluteID}
         }
 
 
-        let scoreurl = `https://osu.ppy.sh/api/v2/scores/${cmdchecks.toHexadecimal(scoremode)}/${cmdchecks.toHexadecimal(scoreid)}`
+        const scoreurl = `https://osu.ppy.sh/api/v2/scores/${cmdchecks.toHexadecimal(scoremode)}/${cmdchecks.toHexadecimal(scoreid)}`
         const scoredata:osuApiTypes.Score = await fetch(scoreurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
@@ -88,19 +88,19 @@ Error: ${error}
         fs.writeFileSync(`debugosu/link-scoreparse=scoredata=${message.guildId}.json`, JSON.stringify(scoredata, null, 2));
         fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
             ;
-        let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(scoredata.beatmap.id)}`
+        const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(scoredata.beatmap.id)}`
 
             ;
         (async () => {
             try {
-                let ranking = scoredata.rank.toUpperCase()
+                const ranking = scoredata.rank.toUpperCase()
             } catch (error) {
                 return message.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
                     .catch(error => { });
 
 
             }
-            let mapdata = await fetch(mapurl, {
+            const mapdata = await fetch(mapurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -134,7 +134,7 @@ Error: ${error}
                 })
             fs.appendFileSync('debugosu/link-scoreparse=map.json', JSON.stringify(mapdata, null, 2));
 
-            let ranking = scoredata.rank ? scoredata.rank : 'f'
+            const ranking = scoredata.rank ? scoredata.rank : 'f'
             let scoregrade = emojis.grades.F
             switch (ranking.toUpperCase()) {
                 case 'F':
@@ -165,15 +165,15 @@ Error: ${error}
                     scoregrade = emojis.grades.XH
 
                     break;
-            };
-            let gamehits = scoredata.statistics
+            }
+            const gamehits = scoredata.statistics
 
             let modint = 0
             if (scoredata.mods) {
                 modint = osucalc.ModStringToInt(scoredata.mods.join(''))
             }
 
-            let mode = scoredata.mode
+            const mode = scoredata.mode
             let ppfc: any;
             let hitlist: any;
             let fcacc: any;
@@ -213,9 +213,9 @@ Error: ${error}
             }
 
             let artist = scoredata.beatmapset.artist
-            let artistuni = scoredata.beatmapset.artist_unicode
+            const artistuni = scoredata.beatmapset.artist_unicode
             let title = scoredata.beatmapset.title
-            let titleuni = scoredata.beatmapset.title_unicode
+            const titleuni = scoredata.beatmapset.title_unicode
 
             if (artist != artistuni) {
                 artist = `${artist} (${artistuni})`
@@ -240,7 +240,7 @@ Error: ${error}
                 }
             }
 
-            let scoreembed = new Discord.EmbedBuilder()
+            const scoreembed = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.score.hex)
                 .setAuthor({ name: `${scoredata.user.username}`, iconURL: `https://a.ppy.sh/${scoredata.user.id}`, url: `https://osu.ppy.sh/users/${scoredata.user.id}` })
                 .setTitle(`${artist} - ${title}`)
@@ -257,8 +257,8 @@ Error: ${error}
                 .catch(error => { });
 
             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
-            let endofcommand = new Date().getTime();
-            let timeelapsed = endofcommand - currentDate.getTime();
+            const endofcommand = new Date().getTime();
+            const timeelapsed = endofcommand - currentDate.getTime();
             fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nCommand Latency (score parse) - ${timeelapsed}ms\nID:${absoluteID}\n`)
         })();
 

@@ -63,19 +63,19 @@ no options for this command
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
         let admininfo = ''
         if (cmdchecks.isOwner(uid)) {
-            let starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString())
-            let uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
-            let uptimehours = Math.floor(uptime / 3600) >= 10 ? Math.floor(uptime / 3600) : '0' + Math.floor(uptime / 3600);
-            let uptimeminutes = Math.floor((uptime % 3600) / 60) >= 10 ? Math.floor((uptime % 3600) / 60) : '0' + Math.floor((uptime % 3600) / 60);
-            let uptimeseconds = Math.floor(uptime % 60) >= 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
+            const starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString())
+            const uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
+            const uptimehours = Math.floor(uptime / 3600) >= 10 ? Math.floor(uptime / 3600) : '0' + Math.floor(uptime / 3600);
+            const uptimeminutes = Math.floor((uptime % 3600) / 60) >= 10 ? Math.floor((uptime % 3600) / 60) : '0' + Math.floor((uptime % 3600) / 60);
+            const uptimeseconds = Math.floor(uptime % 60) >= 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
             admininfo = `Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}`
         }
-        let frtxt =
+        const frtxt =
 `Client latency: ${client.ws.ping}ms
 ${trueping}
 ${admininfo}
 `
-        let pingEmbed = new Discord.EmbedBuilder()
+        const pingEmbed = new Discord.EmbedBuilder()
             .setTitle('Pong!')
             .setColor(colours.embedColour.info.hex)
             .setDescription(frtxt)

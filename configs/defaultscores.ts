@@ -1,4 +1,4 @@
-let score = {
+const score = {
     beatmap_id: '',
     score: "6795149",
     maxcombo: '',
@@ -16,7 +16,7 @@ let score = {
     score_id: "4057765057",
 };
 //const score = scorew
-let score95 = {
+const score95 = {
     beatmap_id: '',
     score: "6795149",
     maxcombo: '',

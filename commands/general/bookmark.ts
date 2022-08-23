@@ -16,7 +16,7 @@ module.exports = {
         if (interaction != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - Bookmark (interaction, message)\n${currentDate} | ${currentDateISO}\n recieved bookmark command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}\n`, 'utf-8')
             //console.log(interaction)
-            let link = interaction.guild.id && interaction.channel.id ? `https://discordapp.com/channels/${interaction.guild.id}/${interaction.channel.id}/${interaction.targetId}` : ''
+            const link = interaction.guild.id && interaction.channel.id ? `https://discordapp.com/channels/${interaction.guild.id}/${interaction.channel.id}/${interaction.targetId}` : ''
             interaction.member.user.send({ content: `Bookmarked message: \n${link}\n${interaction.targetId}\nContent:\`${interaction.targetMessage.content}\`` })
                 .catch(error => { });
             interaction.reply({ content: 'Bookmarked!', ephemeral: true })

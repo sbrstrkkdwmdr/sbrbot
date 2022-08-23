@@ -11,9 +11,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         }
     })
 
-    let songqueue = [];
+    const songqueue = [];
 
-    let yd = new ytaudio({
+    const yd = new ytaudio({
         "ffmpegPath": ".\\files\\ffmpegbin",
         "outputPath": ".\\files\\music",
         "youtubeVideoQuality": "highestaudio",
@@ -24,9 +24,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     client.on('messageCreate', async (message) => {
 
-        let currentDate = new Date();
-        let currentDateISO = new Date().toISOString();
-        let absoluteID = currentDate.getTime();
+        const currentDate = new Date();
+        const currentDateISO = new Date().toISOString();
+        const absoluteID = currentDate.getTime();
 
 
         const args = message.content.slice(config.prefix.length).split(/ +/);
@@ -36,7 +36,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
         if (message.author.bot && message.author.id != '755220989494951997') return;
 
-        let interaction = null;
+        const interaction = null;
         switch (command) {
             case 'play':
                 let url;
@@ -45,7 +45,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 } else {
                     return message.reply({ content: 'Please use a valid youtube url', allowedMentions: { repliedUser: false }, failIfNotExists: true });
                 }
-                let ytid = url.split('v=')[1];
+                const ytid = url.split('v=')[1];
                 await yd.download(ytid, `${ytid}`);
 
                 yd.on('finished', (err, data) => {

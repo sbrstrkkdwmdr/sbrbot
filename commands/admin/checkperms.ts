@@ -58,7 +58,7 @@ userID: ${user.id}
         member = obj.guild.members.cache.get(user.id)
         permissions = member.permissions.toArray().join(' **|** ').replace('ADMINISTRATOR', '***!!!ADMINISTRATOR!!!***')
 
-        let embed = new Discord.EmbedBuilder()
+        const embed = new Discord.EmbedBuilder()
             .setTitle(`Permissions for \`${user.username}\``)
             .setDescription(`${permissions}`)
             .setColor(colours.embedColour.admin.hex)

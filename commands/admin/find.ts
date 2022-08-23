@@ -82,7 +82,7 @@ id: ${id}
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        let Embedr = new Discord.EmbedBuilder();
+        const Embedr = new Discord.EmbedBuilder();
 
         switch (type) {
             case 'user':

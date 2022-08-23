@@ -29,7 +29,7 @@ module.exports = {
 
                 }
             }
-            let Embed = new Discord.EmbedBuilder()
+            const Embed = new Discord.EmbedBuilder()
                 .setDescription(`<@${searchid}>'s skin\nSkin: ${skin}`)
             message.reply({
                 embeds: [Embed],
@@ -37,8 +37,8 @@ module.exports = {
             })
                 .catch(error => { });
 
-            let endofcommand = new Date().getTime();
-            let timeelapsed = endofcommand - currentDate.getTime();
+            const endofcommand = new Date().getTime();
+            const timeelapsed = endofcommand - currentDate.getTime();
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (message command => skin) - ${timeelapsed}ms\n`)
 
         }

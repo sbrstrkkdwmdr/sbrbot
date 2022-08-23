@@ -60,28 +60,28 @@ ID: ${absoluteID}
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        let epoch = new Date().getTime()
-        let Datenow = new Date(currentDate).toUTCString()
+        const epoch = new Date().getTime()
+        const Datenow = new Date(currentDate).toUTCString()
 
-        let msepochsince = (epoch) - 1640995200000
-        let thedaysthingyiuseonmydiscordstatus = (msepochsince / 1000 / 60 / 60 / 24).toFixed(2)
+        const msepochsince = (epoch) - 1640995200000
+        const thedaysthingyiuseonmydiscordstatus = (msepochsince / 1000 / 60 / 60 / 24).toFixed(2)
 
-        let rn = new Date()
-        let seconds = rn.getUTCSeconds()
-        let datenow12hhours = calc.to12htime(rn)
-        let day = calc.dayhuman(rn.getUTCDay())
-        let date = rn.getUTCDate()
-        let month = calc.tomonthname(rn.getUTCMonth())//tomonthname(rn.getUTCMonth())
-        let year = rn.getUTCFullYear()
-        let datenow12h = `${day}, ${date} ${month} ${year} ${datenow12hhours}`
-        let lasttime = (fs.readFileSync('debug/timesince.txt')).toString()
+        const rn = new Date()
+        const seconds = rn.getUTCSeconds()
+        const datenow12hhours = calc.to12htime(rn)
+        const day = calc.dayhuman(rn.getUTCDay())
+        const date = rn.getUTCDate()
+        const month = calc.tomonthname(rn.getUTCMonth())//tomonthname(rn.getUTCMonth())
+        const year = rn.getUTCFullYear()
+        const datenow12h = `${day}, ${date} ${month} ${year} ${datenow12hhours}`
+        const lasttime = (fs.readFileSync('debug/timesince.txt')).toString()
 
-        let lasttimetodateobj = new Date(lasttime)
-        let timetonum = (rn.getTime() - lasttimetodateobj.getTime()) / (1000 * 60)
+        const lasttimetodateobj = new Date(lasttime)
+        const timetonum = (rn.getTime() - lasttimetodateobj.getTime()) / (1000 * 60)
 
-        let lasvisdays = (Math.trunc(timetonum / 60 / 24));
-        let lastvishours = (Math.trunc(timetonum / 60)) % 24;
-        let lastvisminutes = Math.trunc(timetonum % 60);
+        const lasvisdays = (Math.trunc(timetonum / 60 / 24));
+        const lastvishours = (Math.trunc(timetonum / 60)) % 24;
+        const lastvisminutes = Math.trunc(timetonum % 60);
         let minlastvisw = ''
 
         if (lasvisdays > 0) {
@@ -104,27 +104,27 @@ ID: ${absoluteID}
         let daynum: any = rn.getUTCDate()
         if (monthnum < 10) { monthnum = '0' + monthnum }
         if (daynum < 10) { daynum = '0' + daynum }
-        let truedate = `${year}/${monthnum}/${daynum}`
+        const truedate = `${year}/${monthnum}/${daynum}`
 
-        let offsetnum = rn.getTimezoneOffset()
-        let offset = calc.fixoffset(offsetnum)
+        const offsetnum = rn.getTimezoneOffset()
+        const offset = calc.fixoffset(offsetnum)
 
-        let relseconds = rn.getSeconds()
-        let reldatenow12hhours = calc.relto12htime(rn)
-        let relday = calc.dayhuman(rn.getDay())
-        let reldate = rn.getDate()
-        let relmonth = calc.tomonthname(rn.getMonth())//tomonthname(rn.getUTCMonth())
-        let relyear = rn.getFullYear()
-        let reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`
+        const relseconds = rn.getSeconds()
+        const reldatenow12hhours = calc.relto12htime(rn)
+        const relday = calc.dayhuman(rn.getDay())
+        const reldate = rn.getDate()
+        const relmonth = calc.tomonthname(rn.getMonth())//tomonthname(rn.getUTCMonth())
+        const relyear = rn.getFullYear()
+        const reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`
 
         let relmonthnum: any = rn.getMonth()
         let reldaynum: any = rn.getDate()
         if (relmonthnum < 10) { relmonthnum = '0' + relmonthnum }
         if (reldaynum < 10) { reldaynum = '0' + reldaynum }
-        let reltruedate = `${relyear}/${relmonthnum}/${reldaynum}`
+        const reltruedate = `${relyear}/${relmonthnum}/${reldaynum}`
 
 
-        let Embed = new Discord.EmbedBuilder()
+        const Embed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.hex)
             .setTitle('Current Time')
             .addFields([{
@@ -151,35 +151,35 @@ ID: ${absoluteID}
             )
         if (fetchtimezone != null && fetchtimezone != '') {
             if (fetchtimezone.includes('/')) {
-                let timezone = args.splice(0, 1000).join(" ");
+                const timezone = args.splice(0, 1000).join(" ");
                 //timezone = 'Europe/Andorra'
-                let timeopts = {
+                const timeopts = {
                     timeZone: `${timezone}`,
                     hour12: false
                 }
-                let timeopts2 = {
+                const timeopts2 = {
                     timeZone: `${timezone}`,
                     hour12: true
                 }
                 try {
-                    let optionaldatefirst = new Date(new Date().toLocaleString('en-US', timeopts));//).toISOString();
-                    let optionaldateISO = new Date(optionaldatefirst).toISOString()
-                    let optionaldateDate = new Date(optionaldateISO).toLocaleDateString();
-                    let optionaldate = new Date(optionaldateISO)//.toString();
+                    const optionaldatefirst = new Date(new Date().toLocaleString('en-US', timeopts));//).toISOString();
+                    const optionaldateISO = new Date(optionaldatefirst).toISOString()
+                    const optionaldateDate = new Date(optionaldateISO).toLocaleDateString();
+                    const optionaldate = new Date(optionaldateISO)//.toString();
                     //let optionaldate12hISO = new Date().toISOString(timeopts2);//.toString(timeopts2);
-                    let optionaldate12hfirst = new Date(new Date().toLocaleString('en-US', timeopts2));
-                    let optionaldateoffset = calc.fixoffset(new Date(optionaldateISO).getTimezoneOffset())
+                    const optionaldate12hfirst = new Date(new Date().toLocaleString('en-US', timeopts2));
+                    const optionaldateoffset = calc.fixoffset(new Date(optionaldateISO).getTimezoneOffset())
 
                     //let reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`
-                    let optionaldate2 = `${calc.dayhuman(optionaldate.getDay())}, ${calc.tomonthname(optionaldate.getMonth())} ${optionaldate.getDate()} ${optionaldate.getFullYear()}`
-                    let optionaldatetime = calc.relto12htime(new Date(optionaldate12hfirst))
-                    let optionaldate12h = `${optionaldate2} ${optionaldatetime}`
+                    const optionaldate2 = `${calc.dayhuman(optionaldate.getDay())}, ${calc.tomonthname(optionaldate.getMonth())} ${optionaldate.getDate()} ${optionaldate.getFullYear()}`
+                    const optionaldatetime = calc.relto12htime(new Date(optionaldate12hfirst))
+                    const optionaldate12h = `${optionaldate2} ${optionaldatetime}`
 
-                    let optionaldatehours = (optionaldate.getHours())
-                    let optionaldateutchours = (new Date().getUTCHours())
+                    const optionaldatehours = (optionaldate.getHours())
+                    const optionaldateutchours = (new Date().getUTCHours())
                     /* console.log(optionaldatehours)
                     console.log(optionaldateutchours) */
-                    let optionaldateoffsetNEW = calc.fixoffset((optionaldateutchours - optionaldatehours) * 60) //had to remake another version of offset 
+                    const optionaldateoffsetNEW = calc.fixoffset((optionaldateutchours - optionaldatehours) * 60) //had to remake another version of offset 
 
                     //
 

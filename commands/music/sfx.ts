@@ -6,7 +6,7 @@ module.exports = {
     description: 'plays a sound',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction){
         if(message != null){
-            let connection = voice.joinVoiceChannel({
+            const connection = voice.joinVoiceChannel({
                 channelId: 724514625005158404,
                 guildId: 724514625005158400,
                 adapterCreator: message.channel.guild.voiceAdapterCreator,
@@ -16,7 +16,7 @@ module.exports = {
                     noSubscriber: voice.NoSubscriberBehavior.Pause,
                 }
             })
-            let audiotoplay = voice.createAudioResource('../files/audio/test.wav');
+            const audiotoplay = voice.createAudioResource('../files/audio/test.wav');
             player.play(audiotoplay)
 
             connection.subscribe(player);

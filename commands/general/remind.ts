@@ -110,7 +110,7 @@ user: ${user.id}
                 console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
             }
         }
-        let reminder = new Discord.EmbedBuilder()
+        const reminder = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.hex)
             .setTitle('REMINDER')
             .setDescription(`${remindertxt}`)

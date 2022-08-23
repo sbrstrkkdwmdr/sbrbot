@@ -1,6 +1,6 @@
 console.log('Loading...')
 
-let initdate = new Date();
+const initdate = new Date();
 
 import Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
@@ -134,12 +134,12 @@ client.once('ready', () => {
     userdata.sync()
     console.log('Ready!');
     //get time between now and initdate
-    let timetostart = new Date().getTime() - initdate.getTime()
+    const timetostart = new Date().getTime() - initdate.getTime()
     console.log(`Boot time: ${timetostart}ms`)
 
     fs.appendFileSync('logs/general.log', `\n\n\nBOT IS NOW ONLINE\n${new Date()} | ${new Date().toISOString()}\n\n\n`, 'utf-8');
 
-    let oncooldown = new Set();
+    const oncooldown = new Set();
 
     CommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, oncooldown);
     LinkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);

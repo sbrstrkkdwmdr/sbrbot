@@ -71,7 +71,7 @@ channel: ${channel ? `${channel.id} | ${channel.name}` : 'unused'}
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        let guildMember = obj.guild.members.cache.get(user.id);
+        const guildMember = obj.guild.members.cache.get(user.id);
         let ctx = '---'
         if (guildMember.id == interaction.member.user.id || commandchecks.isOwner(interaction.member.user.id)) {
             if (guildMember.voice.channel === null || guildMember.voice.channel === undefined) {
@@ -122,7 +122,7 @@ channel: ${channel ? `${channel.id} | ${channel.name}` : 'unused'}
                                 ctx = 'Please specify a channel to move to'
                             } else {
 
-                                let guildChannel = interaction.guild.channels.cache.get(channel.id);
+                                const guildChannel = interaction.guild.channels.cache.get(channel.id);
                                 if (guildChannel.type != 2) {
                                     ctx = 'Please specify a voice channel'
                                     console.log(guildChannel.type)

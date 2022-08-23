@@ -11,8 +11,8 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 module.exports = {
     name: 'localmapparse',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token = JSON.parse(accessN).access_token;
+        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token;
         fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
             `
 ----------------------------------------------------
@@ -29,7 +29,7 @@ cmd ID: ${absoluteID}
         } else {
             return;
         }
-        let errmap = fs.readFileSync('./files/errmap.osu', 'utf-8')
+        const errmap = fs.readFileSync('./files/errmap.osu', 'utf-8')
         let errtxt = '';
         let mods = 'NM'
 
@@ -38,7 +38,7 @@ cmd ID: ${absoluteID}
         }
 
         try {
-            let hitobjs = map.split('[HitObjects]')[1].split('\n')
+            const hitobjs = map.split('[HitObjects]')[1].split('\n')
         } catch (error) {
             /*             message.reply({
                             content: 'Error - empty or invalid .osu file\nSection: [HitObjects]',
@@ -223,7 +223,7 @@ Error: ${error}
         //to get count_circle, get every line without a |
         try {
             for (let i = 0; i < hitobjs.length; i++) {
-                let curobj = hitobjs[i]
+                const curobj = hitobjs[i]
                 if (curobj.includes('|')) {
                     countslider++
                 } else if (curobj.split(',').length > 5) {
@@ -241,7 +241,7 @@ Error: ${error}
             errtxt += '\nError - invalid section: [HitObjects] (counting objects)'
 
             for (let i = 0; i < errmap.split('[HitObjects]')[1].split('\n').length; i++) {
-                let curobj = errmap.split('[HitObjects]')[1].split('\n')[i]
+                const curobj = errmap.split('[HitObjects]')[1].split('\n')[i]
                 if (curobj.includes('|')) {
                     countslider++
                 } else if (curobj.split(',').length > 5) {
@@ -284,10 +284,10 @@ Error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
         }
-        let mslen = parseInt(fintimep) - parseInt(firsttimep)
+        const mslen = parseInt(fintimep) - parseInt(firsttimep)
 
-        let nlength = mslen / 1000
-        let truelen = nlength > 60 ? // if length over 60
+        const nlength = mslen / 1000
+        const truelen = nlength > 60 ? // if length over 60
             nlength % 60 < 10 ? //if length over 60 and seconds under 10
                 Math.floor(nlength / 60) + ':0' + Math.floor(nlength % 60) : //seconds under 10
                 Math.floor(nlength / 60) + ':' + Math.floor(nlength % 60) //seconds over 10
@@ -349,18 +349,18 @@ Error: ${error}
 `, 'utf-8')
         }
         function pointToBPM(point: string) {
-            let arr = point.split(',')
+            const arr = point.split(',')
             //'a,b,c'
             //b is time in milliseconds between each beat
             //https://osu.ppy.sh/community/forums/topics/59274?n=4
-            let bpm = 60000 / parseInt(arr[1])
+            const bpm = 60000 / parseInt(arr[1])
             return bpm;
         }
         let totalpoints = 0
         let bpmmax = 0
         let bpmmin = 0
         for (let i = 0; i < timing.split('\n').length; i++) {
-            let curpoint = timing.split('\n')[i]
+            const curpoint = timing.split('\n')[i]
             if (curpoint.includes(',')) {
                 if (curpoint.includes('-')) {
                     break;
@@ -375,7 +375,7 @@ Error: ${error}
                 }
             }
         }
-        let bpmavg = bpm / totalpoints
+        const bpmavg = bpm / totalpoints
 
             ;
         let gm = '0'

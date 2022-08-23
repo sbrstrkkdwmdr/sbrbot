@@ -56,12 +56,12 @@ no options for this command
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        let responses = [
+        const responses = [
             'yes', 'no', 'What? no', '知らない', 'nope', 'yeahhh', 'a strong maybe', 'definitely maybe not', 'nah', 'yeah of course', '多分', '絶対!!!',
             'come again?', 'ehhhh', '⠀', '💀', '🥺', 'bruhhh', 'splish splash your question is trash', 3
         ]
 
-        let q = responses[Math.floor(Math.random() * responses.length)]
+        const q = responses[Math.floor(Math.random() * responses.length)]
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
 

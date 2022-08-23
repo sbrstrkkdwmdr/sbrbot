@@ -1,4 +1,4 @@
-let diffcolour = [
+const diffcolour = [
     {
         decimal: '5554943',
         hex: '#54C2FF',
@@ -58,7 +58,7 @@ let diffcolour = [
 
 ]
 
-let embedColour = {
+const embedColour = {
     score: {
         hex: '#DF7FFF',
         dec: '',

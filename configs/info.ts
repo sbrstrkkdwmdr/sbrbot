@@ -1,5 +1,5 @@
 //just a document for the help command
-let template = [
+const template = [
     {
         name: 'name',
         description: 'description',
@@ -14,7 +14,7 @@ let template = [
     }
 ]
 
-let cmds = [
+const cmds = [
     {
         name: 'convert',
         description: 'Converts one value to another',
@@ -114,7 +114,7 @@ let cmds = [
     }
 ]
 
-let othercmds = [
+const othercmds = [
     {
         name: '8ball',
         description: 'Responds with a yes or no or maybe answer',
@@ -207,7 +207,7 @@ let othercmds = [
 ]
 
 
-let osucmds = [
+const osucmds = [
     {
         name: 'compare',
         description: 'Compares two scores. If options are omitted, then the most recent score will be compared with the user\'s best score on that map',
@@ -474,7 +474,7 @@ let osucmds = [
 
 ]
 
-let admincmds = [
+const admincmds = [
     {
         name: 'checkperms',
         description: 'Retrieves all permissions of the requested user',
@@ -558,7 +558,7 @@ let admincmds = [
     }
 ]
 
-let links = [
+const links = [
     {
         name: 'maplink',
         description: 'Returns information from a map link',
@@ -619,7 +619,7 @@ let links = [
     }
 
 ]
-let musiccmds = [
+const musiccmds = [
     {
         name: 'np',
         description: 'Retrieves the current song',

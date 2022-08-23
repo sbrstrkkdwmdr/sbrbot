@@ -5,7 +5,7 @@ module.exports = {
     name: 'servers',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
 
-        let servers = client.guilds.cache.map(guild => `\`||\` **${guild.name}** => \`${guild.id}\` | <@${guild.ownerId}> \`||\``)
+        const servers = client.guilds.cache.map(guild => `\`||\` **${guild.name}** => \`${guild.id}\` | <@${guild.ownerId}> \`||\``)
 
         if (message != null && interaction == null && button == null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -63,7 +63,7 @@ no options for this command
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
-        let content =
+        const content =
             `Servers:
         ${servers}
         `

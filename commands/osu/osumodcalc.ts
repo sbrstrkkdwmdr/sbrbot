@@ -19,14 +19,14 @@ module.exports = {
         if (interaction != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - osumodcalc (interaction)\n${currentDate} | ${currentDateISO}\n recieved osumodcalc command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nInteraction ID: ${interaction.id}`)
-            let mods = interaction.options.getString('mods').toUpperCase();
+            const mods = interaction.options.getString('mods').toUpperCase();
             let baseCS = interaction.options.getNumber('cs')
             let baseAR = interaction.options.getNumber('ar')
             let baseOD = interaction.options.getNumber('od')
             let baseHP = interaction.options.getNumber('hp')
             let baseBPM = interaction.options.getNumber('bpm')
 
-            let embed = new Discord.EmbedBuilder()
+            const embed = new Discord.EmbedBuilder()
 
             if ((mods.includes("HR") && mods.includes("EZ")) || (mods.includes("HT") && (mods.includes("DT") || mods.includes("NC")))) {
                 embed.setTitle("Error")
@@ -64,8 +64,8 @@ module.exports = {
                 .catch(error => { });
 
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
-            let endofcommand = new Date().getTime();
-            let timeelapsed = endofcommand - currentDate.getTime();
+            const endofcommand = new Date().getTime();
+            const timeelapsed = endofcommand - currentDate.getTime();
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (interaction command => osumodcalc) - ${timeelapsed}ms\n`)
         }
     }

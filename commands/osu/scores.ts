@@ -16,8 +16,8 @@ module.exports = {
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token = JSON.parse(accessN).access_token;
+        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token;
         let buttons;
 
         let user = null;
@@ -188,7 +188,7 @@ button: ${button}
             page = 0;
             user = message.embeds[0].author.name
             id = message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]
-            let sorting = message.embeds[0].description.split('Sorted by:')[1].split('\n')[0].toLowerCase()
+            const sorting = message.embeds[0].description.split('Sorted by:')[1].split('\n')[0].toLowerCase()
             switch (true) {
                 default: case sorting.includes('recent'): case sorting.includes('old'):
                     sort = 'recent'
@@ -232,7 +232,7 @@ button: ${button}
             }
         }
         if (user == null || message.mentions.users.size > 0) {
-            let findname = await userdata.findOne({ where: { userid: searchid } })
+            const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                     .catch(error => { });
@@ -277,7 +277,7 @@ Options:
     compact: ${compact}
 ----------------------------------------------------
 `, 'utf-8')
-        let userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
+        const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         /* const osudata: osuApiTypes.User = await fetch(userurl, {
             headers: {
@@ -359,7 +359,7 @@ Error - authentication
         } else {
             page = page - 1
         }
-        let scoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}/scores/users/${cmdchecks.toHexadecimal(osudata.id)}/all`
+        const scoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}/scores/users/${cmdchecks.toHexadecimal(osudata.id)}/all`
         const scoredataPresort = await osufunc.apiget('user_get_scores_map', `${id}`, `${osudata.id}`)
         /*  const scoredataPresort = await fetch(scoreurl, {
             headers: {
@@ -513,7 +513,7 @@ node-fetch error: ${error}
         if (compact == true) {
             sortdata += `\nCompact mode`
         }
-        let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}`
+        const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}`
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${id}`)
         /* const mapdata:osuApiTypes.Beatmap = await fetch(mapurl, {
             headers: {
@@ -551,14 +551,14 @@ node-fetch error: ${error}
             }) */
         fs.writeFileSync(`debugosu/command-scores=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2));
 
-        let title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ?
+        const title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ?
             mapdata.beatmapset.title :
             `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})`
-        let artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ?
+        const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ?
             mapdata.beatmapset.artist :
             `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})`
 
-        let scoresEmbed = new Discord.EmbedBuilder()
+        const scoresEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.hex)
             .setTitle(`${artist} - ${title} [${mapdata.version}]`)
             .setThumbnail(`${mapdata.beatmapset.covers['list@2x']}`)
@@ -571,12 +571,12 @@ node-fetch error: ${error}
             scoretxt += sortdata + '\n\n'
             scoresEmbed.setFooter({ text: `Page ${page + 1}/${Math.ceil(scoredata.length / 5)}` })
             for (let i = 0; i < scoredata.length && i < 5; i++) {
-                let curscore = scoredata[i + page * 5]
+                const curscore = scoredata[i + page * 5]
                 if (!curscore) {
                     break;
                 }
 
-                let scorestats = curscore.statistics
+                const scorestats = curscore.statistics
                 let hitlist = ''
                 switch (curscore.mode) {
                     case 'osu': default:
@@ -621,7 +621,7 @@ node-fetch error: ${error}
                     case 'XH':
                         grade = emojis.grades.XH
                         break;
-                };
+                }
                 if (compact == true) {
                     scoretxt += `
                     **[Score #${i + 1}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id})**
@@ -629,7 +629,7 @@ node-fetch error: ${error}
 
 
                 } else {
-                    let ppcalcing = await osufunc.scorecalc(
+                    const ppcalcing = await osufunc.scorecalc(
                         curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
                         curscore.mode,
                         mapdata.id,

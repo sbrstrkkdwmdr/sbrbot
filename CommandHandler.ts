@@ -21,7 +21,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             setTimeout(() => {
                 message.delete()
             }, 3000)
-        };
+        }
         if (oncooldown.has(message.author.id)) {
             message.reply({
                 content: `You're on cooldown!\nTry again in ${getTimeLeft(timeouttime) / 1000}s`,
@@ -30,7 +30,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 ephemeral: true
             });
             return;
-        };
+        }
         if (!oncooldown.has(message.author.id)) {
             oncooldown.add(message.author.id);
             setTimeout(() => {

@@ -62,7 +62,7 @@ type: ${type}
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
         let thelink: string;
-        let cryabtit = [
+        const cryabtit = [
             'https://media.discordapp.net/attachments/858364068024156171/858364114183520266/cry_about_about_it.gif', //zitron map
             'https://tenor.com/view/cry-about-it-jtoh-get-real-gif-20687952', // imperfect circle
             'https://tenor.com/view/cry-about-it-cry-about-computer-motherboard-gif-21225172', //washing motherboard
@@ -77,7 +77,7 @@ type: ${type}
             'https://tenor.com/view/cry-about-it-gif-19162157', //the marble hit each other thing 
             'https://media.discordapp.net/attachments/716812353034780703/855178667420024863/ezgif.com-gif-maker_1.gif', //zitron map og
         ]
-        let speechbubble = [
+        const speechbubble = [
             //'https://cdn.discordapp.com/attachments/724514625005158403/979287600852500490/amogus_speak.png', // among ASS speaking
             'https://cdn.discordapp.com/attachments/724514625005158403/979287601443926032/guardian_speak.png', //minecraft guardian inside glass inside a stone box surrounding my guardian farm
             'https://cdn.discordapp.com/attachments/724514625005158403/989314110250451004/zanei.png', //zan'ei jumps
@@ -120,7 +120,7 @@ type: ${type}
             'https://tenor.com/view/tails-speech-bubble-soup-gif-26158321', //tails speech bubble soup
             'https://media.discordapp.net/attachments/792190772257488936/987347301863403630/cock.gif', //cock water
         ]
-        let reaction = [
+        const reaction = [
             'https://tenor.com/view/jerma-jerma985-burger-eating-tucker-carson-gif-22054018', // jerma eating
             'https://tenor.com/view/live-garfield-reaction-gif-25354213', //garfield
             'https://tenor.com/view/live-eating-reaction-sauceland-twili-gif-25355949', //minecraft bedrock eating baked potato
@@ -128,50 +128,50 @@ type: ${type}
             'https://tenor.com/view/live-nuclear-reaction-live-tucker-reaction-live-reaction-gif-25285499' // live nuclear reaction
         ]
 
-        let skillissue = [
+        const skillissue = [
             'https://media.discordapp.net/attachments/894054954661204009/940062600119611452/gg_skill_issue.gif', // gg skill issue okuu
             'https://tenor.com/view/metal-gear-rising-gif-24563434', // metal gear sword skill issue
             'https://tenor.com/view/skill-issue-gif-23142299', // sounds like skill issue
         ]
 
-        let nobitches = [
+        const nobitches = [
             'https://tenor.com/view/no-bitches-no-damsels-meme-cubism-gif-24935368', // no damsels
             'https://tenor.com/view/foss-no-bitches-no-hoes-0bitches-no-gif-24529727', // no bitches
             'https://tenor.com/view/no-bitches-no-girls-funny-gif-25343933', // travel thru space no bitches
         ]
 
-        let agree = [
+        const agree = [
             'https://tenor.com/view/jojo-anime-yes-yes-yes-yeah-its-a-yes-gif-17161748', // jojo yes yes yes
         ]
 
-        let cope = [
+        const cope = [
             'https://tenor.com/view/cope-cope-harder-copium-digicharat-anime-dance-gif-24244737',//anime girls cope harder
             'https://tenor.com/view/cope-harder-cope-harder-baboon-mentality-gif-22115122', //copy long charlie moistcritikal
             'https://media.discordapp.net/attachments/883455161450762301/944520240270802984/caption.gif', //tetris
         ]
 
-        let disagree = [
+        const disagree = [
             'https://tenor.com/view/yakuzalad-gif-22281385', // i dont agree with your opinion press phone then boom everyone dies
         ]
 
-        let nocare = [
+        const nocare = [
             'https://tenor.com/view/ice-eating-ok-and-gif-19666657', // ok and eat ice
             'https://tenor.com/view/eating-the-chip-chips-chip-eating-chip-man-eating-three-chips-gif-18885184', //eating chips
         ]
 
-        let misspell = [
+        const misspell = [
             'https://tenor.com/view/clone-drone-in-the-danger-zone-yroue-gif-22600859', //yroue
             'https://tenor.com/view/omaru-polka-minor-spelling-mistake-death-fading-hololive-gif-23611404', // minor spelling mistake polka
             'https://tenor.com/view/omori-gif-21640508', //when you youer
         ]
         //https://media.discordapp.net/attachments/511546997979873282/717030857000353873/image0-6.gif
 
-        let compliment = [
+        const compliment = [
             'https://media.discordapp.net/attachments/511546997979873282/717030857000353873/image0-6.gif', //this dude is fucking
             'https://tenor.com/view/reddit-wholesome-redditor-heckin-chonker-big-chungus-gif-18690103', //wholesome redditor
         ]
 
-        let insult = [
+        const insult = [
             'https://tenor.com/view/dies-dies-of-cringe-dies-from-cringe-meme-dr-strange-dr-strange2-gif-25621125', //dies from cringe
             'https://tenor.com/view/your-mom-your-mother-megamind-megamind-laughter-gif-23851574', // megamind your mother.
             'https://tenor.com/view/i-know-your-ip-address-we-know-your-ip-address-im-outside-your-house-meme-memes-gif-23579728', // maccas happy meal ip address
@@ -179,13 +179,13 @@ type: ${type}
             'https://tenor.com/view/kys-gif-24272600', // capri sun kill urself
         ]
 
-        let ratio = [
+        const ratio = [
             'https://tenor.com/view/dont-care-didnt-ask-cope-_ratio-skill-issue-canceled-gif-24148064', //ratio guy goes into car
             'https://tenor.com/view/ratio-skill-issue-skill-issue-ur-bald-gif-23967610', //nerd emoji
             'https://tenor.com/view/ratiobozo-ratio-gif-23500921', //dog smiley wtf
             'https://tenor.com/view/ratio-didnt-ask-you-fell-off-cope-dont-know-what-youre-talking-about-gif-23606778',
         ]
-        let reactiontoinf = [
+        const reactiontoinf = [
             'https://tenor.com/view/kumala-la-kumala-mrtti-gif-25688572'
 
         ]

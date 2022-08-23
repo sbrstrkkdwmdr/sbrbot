@@ -353,7 +353,7 @@ function timeToMs(str: string) {
                 seconds = parseInt(str.split('.')[0]);
             }
         }
-        let ms = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
+        const ms = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
         return ms;
 
     } else {

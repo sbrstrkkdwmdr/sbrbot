@@ -10,7 +10,7 @@ module.exports = {
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
 
         if (message != null) {
-            let username = args.join(' ')
+            const username = args.join(' ')
             if (!args[0]) return message.reply({ content: 'Please enter a username or ID', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 .catch(error => { });
 
@@ -24,26 +24,26 @@ module.exports = {
 
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess\n\n`, 'utf-8')
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nusername: ${username}\n`)
-                let endofcommand = new Date().getTime();
-                let timeelapsed = endofcommand - currentDate.getTime();
+                const endofcommand = new Date().getTime();
+                const timeelapsed = endofcommand - currentDate.getTime();
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
 
             } catch (error) {
-                let affectedRows = await userdata.update({
+                const affectedRows = await userdata.update({
                     osuname: username,
                     mode: 'osu',
                 }, { where: { userid: message.author.id } })
                 if (affectedRows > 0) {
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess\n\n`, 'utf-8')
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nusername: ${username}`)
-                    let endofcommand = new Date().getTime();
-                    let timeelapsed = endofcommand - currentDate.getTime();
+                    const endofcommand = new Date().getTime();
+                    const timeelapsed = endofcommand - currentDate.getTime();
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                     return message.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
                         .catch(error => { });
                 }
-                let endofcommand = new Date().getTime();
-                let timeelapsed = endofcommand - currentDate.getTime();
+                const endofcommand = new Date().getTime();
+                const timeelapsed = endofcommand - currentDate.getTime();
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                 return message.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
                     .catch(error => { });
@@ -59,9 +59,9 @@ module.exports = {
             user: ${interaction.options.getString('user')}
             mode: ${interaction.options.getString('mode')}
             `)
-            let username = interaction.options.getString('user');
-            let mode = interaction.options.getString('mode') + '';
-            let skin = interaction.options.getString('skin');
+            const username = interaction.options.getString('user');
+            const mode = interaction.options.getString('mode') + '';
+            const skin = interaction.options.getString('skin');
             if (mode.length < 1 && !skin) {
                 try {
                     await userdata.create({
@@ -74,26 +74,26 @@ module.exports = {
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess - Interaction ID: ${interaction.id}\n\n`, 'utf-8')
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
 
-                    let endofcommand = new Date().getTime();
-                    let timeelapsed = endofcommand - currentDate.getTime();
+                    const endofcommand = new Date().getTime();
+                    const timeelapsed = endofcommand - currentDate.getTime();
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                 } catch (error) {
-                    let affectedRows = await userdata.update({
+                    const affectedRows = await userdata.update({
                         osuname: username,
                         mode: 'osu',
                     }, { where: { userid: interaction.member.user.id } })
                     if (affectedRows > 0) {
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
-                        let endofcommand = new Date().getTime();
-                        let timeelapsed = endofcommand - currentDate.getTime();
+                        const endofcommand = new Date().getTime();
+                        const timeelapsed = endofcommand - currentDate.getTime();
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                         return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
                             .catch(error => { });
 
                     }
-                    let endofcommand = new Date().getTime();
-                    let timeelapsed = endofcommand - currentDate.getTime();
+                    const endofcommand = new Date().getTime();
+                    const timeelapsed = endofcommand - currentDate.getTime();
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                     return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
                         .catch(error => { });
@@ -111,27 +111,27 @@ module.exports = {
 
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
-                    let endofcommand = new Date().getTime();
-                    let timeelapsed = endofcommand - currentDate.getTime();
+                    const endofcommand = new Date().getTime();
+                    const timeelapsed = endofcommand - currentDate.getTime();
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
 
                 } catch (error) {
-                    let affectedRows = await userdata.update({
+                    const affectedRows = await userdata.update({
                         osuname: username,
                         mode: mode,
                     }, { where: { userid: interaction.member.user.id } })
                     if (affectedRows > 0) {
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
-                        let endofcommand = new Date().getTime();
-                        let timeelapsed = endofcommand - currentDate.getTime();
+                        const endofcommand = new Date().getTime();
+                        const timeelapsed = endofcommand - currentDate.getTime();
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                         return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
                             .catch(error => { });
 
                     }
-                    let endofcommand = new Date().getTime();
-                    let timeelapsed = endofcommand - currentDate.getTime();
+                    const endofcommand = new Date().getTime();
+                    const timeelapsed = endofcommand - currentDate.getTime();
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                     return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
                         .catch(error => { });
@@ -152,12 +152,12 @@ module.exports = {
 
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
-                    let endofcommand = new Date().getTime();
-                    let timeelapsed = endofcommand - currentDate.getTime();
+                    const endofcommand = new Date().getTime();
+                    const timeelapsed = endofcommand - currentDate.getTime();
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
 
                 } catch (error) {
-                    let affectedRows = await userdata.update({
+                    const affectedRows = await userdata.update({
                         osuname: username,
                         mode: mode,
                         skin: skin
@@ -165,15 +165,15 @@ module.exports = {
                     if (affectedRows > 0) {
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nsuccess - ${interaction.id}\n\n`, 'utf-8')
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Information\nusername: ${username}\nmode: ${mode}`)
-                        let endofcommand = new Date().getTime();
-                        let timeelapsed = endofcommand - currentDate.getTime();
+                        const endofcommand = new Date().getTime();
+                        const timeelapsed = endofcommand - currentDate.getTime();
                         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                         return interaction.reply({ content: 'updated the database', allowedMentions: { repliedUser: false } })
                             .catch(error => { });
 
                     }
-                    let endofcommand = new Date().getTime();
-                    let timeelapsed = endofcommand - currentDate.getTime();
+                    const endofcommand = new Date().getTime();
+                    const timeelapsed = endofcommand - currentDate.getTime();
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
                     return interaction.reply({ content: 'failed to update the database', allowedMentions: { repliedUser: false } })
                         .catch(error => { });

@@ -7,7 +7,7 @@ module.exports = {
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let i: number;
         let command: string;
-        let fullCommandList = new Discord.EmbedBuilder()
+        const fullCommandList = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.hex)
             .setTitle('Command List')
             .setDescription('use `/help <command>` to get more info on a command')
@@ -99,14 +99,14 @@ command: ${command}
 `, 'utf-8')
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-        let useEmbeds = []
+        const useEmbeds = []
         if (command != null) {
-            let fetchcmd = command.toString()
-            let commandInfo = new Discord.EmbedBuilder()
+            const fetchcmd = command.toString()
+            const commandInfo = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.info.hex)
             if (commandhelp.cmds.find(obj => obj.name == args[0])) {
 
-                let res = commandhelp.cmds.find(obj => obj.name == args[0])
+                const res = commandhelp.cmds.find(obj => obj.name == args[0])
 
                 let desc = ''
                 desc += res.description + "\n"
@@ -117,7 +117,7 @@ command: ${command}
                     desc += `\nSlash Command: \`${res.slashusage}\``
                 }
 
-                let opts = res.options
+                const opts = res.options
                 let opttxt = '';
                 for (i = 0; i < opts.length; i++) {
                     opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
@@ -133,7 +133,7 @@ command: ${command}
                 commandInfo.setDescription(desc)
 
             } else if (commandhelp.othercmds.find(obj => obj.name == args[0])) {
-                let res = commandhelp.othercmds.find(obj => obj.name == args[0])
+                const res = commandhelp.othercmds.find(obj => obj.name == args[0])
 
                 let desc = ''
                 desc += res.description + "\n"
@@ -144,7 +144,7 @@ command: ${command}
                     desc += `\nSlash Command: \`${res.slashusage}\``
                 }
 
-                let opts = res.options
+                const opts = res.options
                 let opttxt = '';
                 for (i = 0; i < opts.length; i++) {
                     opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
@@ -159,7 +159,7 @@ command: ${command}
                 commandInfo.setTitle("Command info for: " + res.name)
                 commandInfo.setDescription(desc)
             } else if (commandhelp.osucmds.find(obj => obj.name == args[0])) {
-                let res = commandhelp.osucmds.find(obj => obj.name == args[0])
+                const res = commandhelp.osucmds.find(obj => obj.name == args[0])
 
 
                 let desc = ''
@@ -171,7 +171,7 @@ command: ${command}
                     desc += `\nSlash Command: \`${res.slashusage}\``
                 }
 
-                let opts = res.options
+                const opts = res.options
                 let opttxt = '';
                 for (i = 0; i < opts.length; i++) {
                     opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
@@ -188,7 +188,7 @@ command: ${command}
 
             }
             else if (commandhelp.admincmds.find(obj => obj.name == args[0])) {
-                let res = commandhelp.admincmds.find(obj => obj.name == args[0])
+                const res = commandhelp.admincmds.find(obj => obj.name == args[0])
 
 
                 let desc = ''
@@ -200,7 +200,7 @@ command: ${command}
                     desc += `\nSlash Command: \`${res.slashusage}\``
                 }
 
-                let opts = res.options
+                const opts = res.options
                 let opttxt = '';
                 for (i = 0; i < opts.length; i++) {
                     opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
@@ -217,7 +217,7 @@ command: ${command}
 
             } else if (commandhelp.links.find(obj => obj.name == args[0])) {
 
-                let res = commandhelp.links.find(obj => obj.name == args[0])
+                const res = commandhelp.links.find(obj => obj.name == args[0])
 
 
                 let desc = ''
@@ -226,7 +226,7 @@ command: ${command}
                     desc += `\nUsage: ${res.usage}`
                 }
 
-                let opts = res.options
+                const opts = res.options
                 let opttxt = '';
                 for (i = 0; i < opts.length; i++) {
                     opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
@@ -241,7 +241,7 @@ command: ${command}
                 commandInfo.setTitle("Command info for: " + res.name)
                 commandInfo.setDescription(desc)
             } else if (commandhelp.musiccmds.find(obj => obj.name == args[0])) {
-                let res = commandhelp.musiccmds.find(obj => obj.name == args[0])
+                const res = commandhelp.musiccmds.find(obj => obj.name == args[0])
 
 
                 let desc = ''
@@ -253,7 +253,7 @@ command: ${command}
                     desc += `\nSlash Command: \`${res.slashusage}\``
                 }
 
-                let opts = res.options
+                const opts = res.options
                 let opttxt = '';
                 for (i = 0; i < opts.length; i++) {
                     opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
