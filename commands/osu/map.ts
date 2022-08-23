@@ -17,8 +17,8 @@ module.exports = {
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides) {
         //let absoluteID = new Date().getTime()
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token = JSON.parse(accessN).access_token;
+        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token;
         let buttons;
         let prevmap;
         let mapid;
@@ -92,35 +92,35 @@ cmd ID: ${absoluteID}
                 maptitleq = args.join(' ').split('"')[1]
             }
         }
-        if(overrides != null){
+        if (overrides != null) {
             buttons = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-map-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('⬅')
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigLeftArrow-map-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('⬅')
                 /* .setLabel('Start') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-map-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('◀')
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`LeftArrow-map-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('◀')
                 /* .setLabel('Previous') */,
-                /*                 new Discord.ButtonBuilder()
-                                    .setCustomId('Middle-map')
-                                    .setStyle('Primary')
-                                    .setLabel('🔍')
-                                , */
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-map-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('▶')
+                    /*                 new Discord.ButtonBuilder()
+                                        .setCustomId('Middle-map')
+                                        .setStyle('Primary')
+                                        .setLabel('🔍')
+                                    , */
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`RightArrow-map-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('▶')
                 /* .setLabel('Next') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-map-${message.author.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('➡')
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigRightArrow-map-${message.author.id}`)
+                        .setStyle('Primary')
+                        .setEmoji('➡')
                 /* .setLabel('End') */,
-            );
+                );
             mapmods = overrides.mods;
             mapid = overrides.id;
             detailed = overrides.detailed;
@@ -218,13 +218,13 @@ button: ${button}
                 );
             curuid = interaction.member.user.id
 
-            let urlnohttp = message.embeds[0].url.split('https://')[1];
+            const urlnohttp = message.embeds[0].url.split('https://')[1];
             //osu.ppy.sh/beatmapsets/setid#gamemode/id
-            let setid = urlnohttp.split('/')[2].split('#')[0];
-            let curid = urlnohttp.split('/')[3];
+            const setid = urlnohttp.split('/')[2].split('#')[0];
+            const curid = urlnohttp.split('/')[3];
             mapid = curid;
-            let lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
-            let bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
+            const lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
+            const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
             /* let bmsdata: osuApiTypes.Beatmapset = await fetch(lookupurl, {
                 method: 'GET',
                 headers: {
@@ -248,7 +248,7 @@ button: ${button}
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
-                            .catch(error => { });
+                            .catch();
 
                     }
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -261,11 +261,11 @@ node-fetch error: ${error}
                     return;
                 }); */
             fs.writeFileSync(`debugosu/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
-            let bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
+            const bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
             fs.writeFileSync(`debugosu/command-map=bmstosr=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
 
             //get which part of the array the current map is in
-            let curmapindex = bmstosr.findIndex(x => x.id == curid);
+            const curmapindex = bmstosr.findIndex(x => x.id == curid);
             if (button == `RightArrow`) {
                 if (curmapindex == bmstosr.length - 1) {
                     mapid = curid;
@@ -350,7 +350,7 @@ Options:
 `, 'utf-8')
 
         if (maptitleq == null) {
-            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}?`;
+            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}?`;
 
             mapdata = await osufunc.apiget('map_get', `${mapid}`)
             /* mapdata = await fetch(mapurl, {
@@ -375,7 +375,7 @@ Options:
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
-                            .catch(error => { });
+                            .catch();
 
                     }
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -390,7 +390,7 @@ node-fetch error: ${error}
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
 
             try {
-                let mapper = mapdata.beatmapset.creator
+                const mapper = mapdata.beatmapset.creator
             } catch (error) {
                 try {
                     if (mapdata.authentication) {
@@ -409,7 +409,7 @@ Error - authentication
 
                 }
                 obj.reply({ content: 'Error - map not found', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
+                    .catch();
 
                 return;
             }
@@ -417,8 +417,8 @@ Error - authentication
         }
 
         if (maptitleq != null) {
-            let mapnameurl = `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${cmdchecks.toHexadecimal(maptitleq)}&s=any`
-            let mapidtest = await osufunc.apiget('mapset_search', `${maptitleq}`)
+            const mapnameurl = `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${cmdchecks.toHexadecimal(maptitleq)}&s=any`
+            const mapidtest = await osufunc.apiget('mapset_search', `${maptitleq}`)
             /* let mapidtest = await fetch(mapnameurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -441,7 +441,7 @@ Error - authentication
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
-                            .catch(error => { });
+                            .catch();
 
                     }
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -474,8 +474,8 @@ Error - authentication
             }
 
             if (mapidtest.length == 0) {
-                obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: \"' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                    .catch(error => { });
+                obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                    .catch();
 
                 return;
             }
@@ -490,8 +490,8 @@ Error - map not found
 params: ${maptitleq}
 ${error}
 ----------------------------------------------------`)
-                obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: \"' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                    .catch(error => { });
+                obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                    .catch();
 
                 return;
             }
@@ -520,7 +520,7 @@ ${error}
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
-                            .catch(error => { });
+                            .catch();
 
                     }
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -535,7 +535,7 @@ node-fetch error: ${error}
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
             try {
-                let mapper = mapdata.beatmapset.creator
+                const mapper = mapdata.beatmapset.creator
             } catch (error) {
                 let ifid = ''
                 if (!isNaN(mapid)) {
@@ -562,7 +562,7 @@ Error - authentication
                 params: ${mapid} | ${maptitleq}
                 ----------------------------------------------------`)
                 obj.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                    .catch(error => { });
+                    .catch();
 
                 return;
             }
@@ -575,10 +575,9 @@ Error - authentication
             mapmods = osumodcalc.OrderMods(mapmods.toUpperCase());
         }
         let statusimg = emojis.rankedstatus.graveyard;
-        ;
         if (interaction != null && message == null) {
             obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
-                .catch(error => { });
+                .catch();
 
         }
         switch (mapdata.status) {
@@ -594,7 +593,7 @@ Error - authentication
         }
         fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapid }), null, 2));
 
-        let allvals = osumodcalc.calcValues(
+        const allvals = osumodcalc.calcValues(
             mapdata.cs,
             mapdata.ar,
             mapdata.accuracy,
@@ -603,8 +602,8 @@ Error - authentication
             mapdata.hit_length,
             mapmods
         )
-        let fixedmods = mapmods.replace('TD', '')
-
+/*         const fixedmods = mapmods.replace('TD', '')
+ */
         let modissue = ''
         if (mapmods.includes('TD')) {
             modissue = '\ncalculations aren\'t supported for TD'
@@ -640,7 +639,7 @@ Error - pp calculation failed
 ${error}
 ----------------------------------------------------`)
             ppissue = 'Error - pp could not be calculated';
-            let tstmods = mapmods.toUpperCase();
+            const tstmods = mapmods.toUpperCase();
 
             if (tstmods.includes('EZ') || tstmods.includes('HR')) {
                 ppissue += '\nInvalid mod combinations: EZ + HR';
@@ -661,16 +660,14 @@ ${error}
             }
         }
 
-        let mapname: string;
-        let artist: string
+        const mapname = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})`;
 
-        mapname = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})`;
-        artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})`;
+        const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})`;
 
-        let maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
-        let mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapdata.beatmapset.creator)}/osu`;
+        const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
+        const mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapdata.beatmapset.creator)}/osu`;
 
-        let mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
+        const mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
         /* let mapperdata: osuApiTypes.User = await fetch(mapperurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
@@ -693,7 +690,7 @@ ${error}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
-                        .catch(error => { });
+                        .catch();
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -707,11 +704,11 @@ node-fetch error: ${error}
             }); */
         fs.writeFileSync(`./debugosu/command-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
 
-        let strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
+        const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
         fs.writeFileSync(`./debugosu/command-map=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))
-        let mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
+        const mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
 
-        let Embed = new Discord.EmbedBuilder()
+        const Embed = new Discord.EmbedBuilder()
             .setColor(0x91ff9a)
             .setTitle(maptitle)
             .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
@@ -805,18 +802,18 @@ node-fetch error: ${error}
                 Embed.setColor(colours.diffcolour[0].hex)
                 break;
         }
-        let embeds = [Embed];
+        const embeds = [Embed];
 
         if (detailed == true) {
-            let failval = mapdata.failtimes.fail;
-            let exitval = mapdata.failtimes.exit;
-            let numofval = [];
+            const failval = mapdata.failtimes.fail;
+            const exitval = mapdata.failtimes.exit;
+            const numofval = [];
             for (let i = 0; i < failval.length; i++) {
                 numofval.push(i)
             }
 
-            let passurl = await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits');
-            let passEmbed = new Discord.EmbedBuilder()
+            const passurl = await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits');
+            const passEmbed = new Discord.EmbedBuilder()
                 .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
                 .setImage(`${passurl}`);
             await embeds.push(passEmbed);
@@ -829,7 +826,7 @@ node-fetch error: ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
-                .catch(error => { });
+                .catch();
 
         }
         if (interaction != null && message == null) {
@@ -839,7 +836,7 @@ node-fetch error: ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
-                .catch(error => { });
+                .catch();
 
         }
         if (button) {
@@ -849,7 +846,7 @@ node-fetch error: ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
-                .catch(error => { });
+                .catch();
 
         }
 
