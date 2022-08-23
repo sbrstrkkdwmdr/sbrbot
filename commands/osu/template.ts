@@ -11,14 +11,18 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 module.exports = {
     name: 'COMMANDNAME',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+        let commanduser;
+
+
         if (message != null && interaction == null && button == null) {
+            commanduser = message.author;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
 COMMAND EVENT - COMMANDNAME (message)
 ${currentDate} | ${currentDateISO}
 recieved COMMANDNAME command
-requested by ${message.author.id} AKA ${message.author.tag}
+requested by ${commanduser.id} AKA ${commanduser.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
@@ -27,13 +31,14 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null && message == null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
 COMMAND EVENT - COMMANDNAME (interaction)
 ${currentDate} | ${currentDateISO}
 recieved COMMANDNAME command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+requested by ${commanduser.id} AKA ${commanduser.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
@@ -42,17 +47,41 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (button != null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
 COMMAND EVENT - COMMANDNAME (interaction)
 ${currentDate} | ${currentDateISO}
 recieved COMMANDNAME command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+requested by ${commanduser.id} AKA ${commanduser.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
         }
+
+        const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                    /* .setLabel('Start') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('◀'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                    /* .setLabel('Next') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                    /* .setLabel('End') */,
+            );
         //OPTIONS==============================================================================================================================================================================================
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
@@ -61,6 +90,7 @@ ID: ${absoluteID}
 
 ----------------------------------------------------
 `, 'utf-8')
+
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
 

@@ -14,7 +14,7 @@ module.exports = {
         //let absoluteID = new Date().getTime()
 /*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         const access_token = JSON.parse(accessN).access_token; */
-        let buttons;
+        let commanduser;
 
         let user = null;
         let id = null;
@@ -41,6 +41,7 @@ module.exports = {
         }
 
         if (message != null && button == null) {
+            commanduser = message.author;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -51,34 +52,7 @@ requested by ${message.author.id} AKA ${message.author.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-scores-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-scores-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-scores')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-scores-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-scores-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
+
             user = args.join(' ')
             if (!args[0]) {
                 user = null
@@ -93,6 +67,7 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -103,34 +78,6 @@ requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-scores-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-scores-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-scores')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-scores-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-scores-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
             user = interaction.options.getString('username');
             id = interaction.options.getNumber('id');
             sort = interaction.options.getString('sort');
@@ -142,6 +89,7 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (button != null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -153,34 +101,6 @@ cmd ID: ${absoluteID}
 button: ${button}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-scores-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-scores-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-scores')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-scores-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-scores-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                /* .setLabel('End') */,
-                );
             page = 0;
             user = message.embeds[0].author.name
             id = message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]
@@ -227,6 +147,30 @@ button: ${button}
                 page = parseInt((message.embeds[0].footer.text).split('/')[1].split('\n')[0])
             }
         }
+
+        const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-scores-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                    /* .setLabel('Start') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-scores-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('◀'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-scores-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                    /* .setLabel('Next') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-scores-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                    /* .setLabel('End') */,
+            );
+
         if (user == null || message.mentions.users.size > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {

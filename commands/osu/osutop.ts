@@ -14,7 +14,7 @@ module.exports = {
         //let absoluteID = new Date().getTime()
 /*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         const access_token = JSON.parse(accessN).access_token; */
-        let buttons;
+        let commanduser;
 
         let user = null;
         let mode = null;
@@ -29,6 +29,7 @@ module.exports = {
         let curuid;
 
         if (message != null && button == null) {
+            commanduser = message.author;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -39,34 +40,6 @@ requested by ${message.author.id} AKA ${message.author.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-osutop-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-osutop-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-osutop')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-osutop-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-osutop-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
             curuid = message.author.id
 
             user = args.join(' ')
@@ -88,6 +61,7 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -98,34 +72,6 @@ requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-osutop-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-osutop-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-osutop')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-osutop-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-osutop-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
             curuid = interaction.member.user.id
 
             user = interaction.options.getString('user')
@@ -143,6 +89,7 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (button != null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -154,34 +101,6 @@ cmd ID: ${absoluteID}
 button: ${button}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-osutop-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-osutop-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-osutop')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-osutop-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-osutop-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                /* .setLabel('End') */,
-                );
             curuid = interaction.member.user.id
 
             user = message.embeds[0].title.split('Top plays of ')[1]
@@ -256,6 +175,28 @@ button: ${button}
                 detailed = false;
             }
         }
+        const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-osutop-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                    /* .setLabel('Start') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-osutop-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('◀'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-osutop-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                    /* .setLabel('Next') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-osutop-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                    /* .setLabel('End') */,
+            );
 
 
         if (user == null || message.mentions.users.size > 0) {

@@ -13,9 +13,9 @@ module.exports = {
     name: 'rs',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token; */
-        let buttons;
+        /*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+                const access_token = JSON.parse(accessN).access_token; */
+        let commanduser;
 
         let user = null;
         let page = 1;
@@ -24,35 +24,17 @@ module.exports = {
         let searchid;
 
         if (message != null && button == null) {
-            fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-rs-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-rs-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-rs')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-rs-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-rs-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
+            commanduser = message.author;
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - rs (message)
+${currentDate} | ${currentDateISO}
+recieved rs command
+requested by ${commanduser.id} AKA ${commanduser.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             user = args.join(' ');
             page = 0;
             mode = null;
@@ -68,36 +50,17 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null) {
-            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-rs-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-rs-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-rs')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-rs-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-rs-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
+            commanduser = interaction.member.user;
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - rs (interaction)
+${currentDate} | ${currentDateISO}
+recieved rs command
+requested by ${commanduser.id} AKA ${commanduser.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             user = interaction.options.getString('user');
             page = interaction.options.getNumber('page');
             mode = interaction.options.getString('mode');
@@ -108,35 +71,17 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         if (button != null) {
-            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (button)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-rs-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-rs-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-rs')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-rs-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-rs-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                /* .setLabel('End') */,
-                );
+            commanduser = interaction.member.user;
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - rs (interaction)
+${currentDate} | ${currentDateISO}
+recieved rs command
+requested by ${commanduser.id} AKA ${commanduser.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
             user =
                 message.embeds[0].title.includes('play for') ?
                     message.embeds[0].title.split('most recent play for ')[1].split(' | ')[0] :
@@ -171,6 +116,30 @@ module.exports = {
             }
             searchid == interaction.member.user.id;
         }
+
+        const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-rs-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                    /* .setLabel('Start') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-rs-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('◀'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-rs-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                    /* .setLabel('Next') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-rs-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                    /* .setLabel('End') */,
+            );
+
         if (user == null || message.mentions.users.size > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
@@ -363,15 +332,15 @@ node-fetch error: ${error}
             // const hittime = curbm.hit_length
             // let totalstr;
 
-/*             const values = osumodcalc.calcValues(
-                curbm.cs,
-                curbm.ar,
-                curbm.accuracy,
-                curbm.drain,
-                curbm.bpm,
-                curbm.hit_length,
-                osumodcalc.OrderMods(curscore.mods.join(''))
-            ); */
+            /*             const values = osumodcalc.calcValues(
+                            curbm.cs,
+                            curbm.ar,
+                            curbm.accuracy,
+                            curbm.drain,
+                            curbm.bpm,
+                            curbm.hit_length,
+                            osumodcalc.OrderMods(curscore.mods.join(''))
+                        ); */
 
             // const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(curbm.id)}?`;
 
@@ -536,7 +505,7 @@ node-fetch error: ${error}
                     rsgrade = emojis.grades.XH
                     break;
             }
-            let totaldiff: string; 
+            let totaldiff: string;
             let hitlist: string;
             switch (curscore.mode) {
                 case 'osu': default:

@@ -13,9 +13,9 @@ module.exports = {
     name: 'map',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides) {
         //let absoluteID = new Date().getTime()
-/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        /*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
         const access_token = JSON.parse(accessN).access_token; */
-        let buttons;
+        let commanduser;
         let prevmap;
         let mapid;
         let mapmods;
@@ -37,6 +37,7 @@ module.exports = {
         }
 
         if (message != null && button == null && overrides == null) {
+            commanduser = message.author;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -47,34 +48,6 @@ requested by ${message.author.id} AKA ${message.author.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-map-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-map-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-map')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-map-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-map-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
             curuid = message.author.id
 
             if (!isNaN(args[0])) {
@@ -89,34 +62,7 @@ cmd ID: ${absoluteID}
             }
         }
         if (overrides != null) {
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-map-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-map-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-map')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-map-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-map-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                /* .setLabel('End') */,
-                );
+            commanduser = message.author;
             mapmods = overrides.mods;
             mapid = overrides.id;
             detailed = overrides.detailed;
@@ -125,6 +71,7 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -135,34 +82,6 @@ requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-map-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-map-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-map')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-map-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-map-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
             curuid = interaction.member.user.id
 
             mapid = interaction.options.getInteger('id');
@@ -173,6 +92,7 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (button != null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -184,34 +104,6 @@ cmd ID: ${absoluteID}
 button: ${button}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-map-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-map-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-map')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-map-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-map-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                /* .setLabel('End') */,
-                );
             curuid = interaction.member.user.id
 
             const urlnohttp = message.embeds[0].url.split('https://')[1];
@@ -219,43 +111,7 @@ button: ${button}
             const setid = urlnohttp.split('/')[2].split('#')[0];
             const curid = urlnohttp.split('/')[3];
             mapid = curid;
-            // const lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
             const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
-            /* let bmsdata: osuApiTypes.Beatmapset = await fetch(lookupurl, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }).then(res => res.json() as any)
-                .catch(error => {
-                    if (button == null) {
-                        try {
-                            message.edit({
-                                content: 'Error',
-                                allowedMentions: { repliedUser: false },
-                            })
-
-                        } catch (err) {
-
-                        }
-                    } else {
-                        obj.reply({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch();
-
-                    }
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                    return;
-                }); */
             fs.writeFileSync(`debugosu/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
             const bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
             fs.writeFileSync(`debugosu/command-map=bmstosr=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
@@ -314,7 +170,28 @@ node-fetch error: ${error}
             }
             mapid = prevmap.id;
         }
-
+        const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-map-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                /* .setLabel('Start') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-map-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('◀'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-map-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                /* .setLabel('Next') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-map-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                /* .setLabel('End') */,
+            );
         if (detailed == true) {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
@@ -598,8 +475,8 @@ Error - authentication
             mapdata.hit_length,
             mapmods
         )
-/*         const fixedmods = mapmods.replace('TD', '')
- */
+        /*         const fixedmods = mapmods.replace('TD', '')
+         */
         let modissue = ''
         if (mapmods.includes('TD')) {
             modissue = '\ncalculations aren\'t supported for TD'

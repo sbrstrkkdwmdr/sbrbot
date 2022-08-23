@@ -12,54 +12,26 @@ module.exports = {
     name: 'firsts',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token; */
-        let buttons;
-
+        /*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+                const access_token = JSON.parse(accessN).access_token; */
+        let commanduser;
         let user = '';
         let searchid = 1;
         let mode = null;
         let page = 0;
 
         if (message != null && button == null) {
+            commanduser = message.author;
             fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`,
                 `
 ----------------------------------------------------
 COMMAND EVENT - firsts (message)
 ${currentDate} | ${currentDateISO}
 recieved firsts command
-requested by ${message.author.id} AKA ${message.author.tag}
+requested by ${commanduser.id} AKA ${commanduser.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-firsts-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-firsts-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-firsts')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-firsts-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-firsts-${message.author.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
             user = await args.join(' ');
             searchid = await message.author.id
             if (message.mentions.users.size > 0) {
@@ -94,44 +66,17 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`,
                 `
 ----------------------------------------------------
 COMMAND EVENT - firsts (interaction)
 ${currentDate} | ${currentDateISO}
 recieved firsts command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+requested by ${commanduser.id} AKA ${commanduser.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                    /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-cmd')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-cmd-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                    /* .setLabel('End') */,
-                );
             user = await interaction.options.getString('user');
             mode = await interaction.options.getString('mode');
 
@@ -164,45 +109,18 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (button != null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`,
                 `
 ----------------------------------------------------
 COMMAND EVENT - firsts (button)
 ${currentDate} | ${currentDateISO}
 recieved firsts command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
+requested by ${commanduser.id} AKA ${commanduser.tag}
 cmd ID: ${absoluteID}
 button: ${button}
 ----------------------------------------------------
 `, 'utf-8')
-            buttons = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-firsts-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('⬅')
-                /* .setLabel('Start') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-firsts-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('◀')
-                /* .setLabel('Previous') */,
-                    /*                 new Discord.ButtonBuilder()
-                                        .setCustomId('Middle-firsts')
-                                        .setStyle('Primary')
-                                        .setLabel('🔍')
-                                    , */
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-firsts-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('▶')
-                /* .setLabel('Next') */,
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-firsts-${interaction.user.id}`)
-                        .setStyle('Primary')
-                        .setEmoji('➡')
-                /* .setLabel('End') */,
-                );
             user = message.embeds[0].title.split('for ')[1]
             mode = message.embeds[0].description.split('\n')[1]
             page = 0;
@@ -243,7 +161,28 @@ button: ${button}
         if (page > 0) {
             page--
         }
-
+        const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-firsts-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                /* .setLabel('Start') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-firsts-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('◀'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-firsts-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                /* .setLabel('Next') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-firsts-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                /* .setLabel('End') */,
+            );
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
@@ -256,45 +195,8 @@ Options:
 ----------------------------------------------------
 `, 'utf-8')
 
-
-
-        //const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
-        /* const osudata:osuApiTypes.User = await fetch(userinfourl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        })
-            .then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
 
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            }) */
         fs.writeFileSync(`debugosu/command-firsts=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
@@ -315,42 +217,8 @@ Error - authentication
                 .catch();
 
         }
-        //const userfirstsurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/firsts?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
         const firstscoresdata: osuApiTypes.Score[] = await osufunc.apiget('firsts', `${osudata.id}`, `${mode}`)
-        /*         const firstscoresdata:osuApiTypes.Score[] = await fetch(userfirstsurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
 
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            }) */
         fs.writeFileSync(`debugosu/command-firsts=firstscoresdata=${obj.guildId}.json`, JSON.stringify(firstscoresdata, null, 2))
 
         const firstsEmbed = new Discord.EmbedBuilder()
@@ -422,13 +290,13 @@ node-fetch error: ${error}
                     break;
             }
 
-/*             const fmods: string[] = curscore.mods
-            let ifmods: string = '';
-            if (!fmods) {
-                ifmods = ''
-            } else {
-                ifmods = '+' + fmods.join('').toUpperCase()
-            } */
+            /*             const fmods: string[] = curscore.mods
+                        let ifmods: string = '';
+                        if (!fmods) {
+                            ifmods = ''
+                        } else {
+                            ifmods = '+' + fmods.join('').toUpperCase()
+                        } */
 
             let pptxt: string;
             const ppcalcing = await osufunc.scorecalc(

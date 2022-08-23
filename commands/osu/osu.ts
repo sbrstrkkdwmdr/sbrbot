@@ -15,8 +15,7 @@ module.exports = {
         //let absoluteID = new Date().getTime()
         /*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
                 const access_token = JSON.parse(accessN).access_token; */
-        const buttons = new Discord.ActionRowBuilder();
-
+        let commanduser;
         //args 
         let user;
         let searchid;
@@ -26,6 +25,7 @@ module.exports = {
         let mtns = 0;
 
         if (message != null && button == null) {
+            commanduser = message.author;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -36,7 +36,7 @@ requested by ${message.author.id} AKA ${message.author.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-            curuid = message.author.id
+            curuid = commanduser.id
 
             user = args.join(' ')
             searchid = message.author.id
@@ -54,6 +54,7 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -64,7 +65,7 @@ requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-            curuid = interaction.member.user.id
+            curuid = commanduser.id
 
             user = interaction.options.getString('user');
             mode = interaction.options.getString('mode');
@@ -76,6 +77,7 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (button != null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -87,7 +89,7 @@ cmd ID: ${absoluteID}
 button: ${button}
 ----------------------------------------------------
 `, 'utf-8')
-            curuid = interaction.member.user.id
+            curuid = commanduser.id
             if (message.embeds[0].fields[0]) {
                 detailed = true
             }
@@ -101,6 +103,28 @@ button: ${button}
                 detailed = false;
             }
         }
+        const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-osu-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                    /* .setLabel('Start') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-osu-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('◀'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-osu-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                    /* .setLabel('Next') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-osu-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                    /* .setLabel('End') */,
+            );
         if (user == null || user.includes('<') || mtns > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
