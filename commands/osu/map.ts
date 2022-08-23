@@ -11,14 +11,10 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'map',
-    description: 'template text\n' +
-        'Command: `sbr-command-name`\n' +
-        'Options: \n' +
-        '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides) {
         //let absoluteID = new Date().getTime()
-        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token;
+/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token; */
         let buttons;
         let prevmap;
         let mapid;
@@ -390,7 +386,7 @@ node-fetch error: ${error}
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
 
             try {
-                const mapper = mapdata.beatmapset.creator
+                mapdata.beatmapset.creator
             } catch (error) {
                 try {
                     if (mapdata.authentication) {
@@ -535,7 +531,7 @@ node-fetch error: ${error}
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
             try {
-                const mapper = mapdata.beatmapset.creator
+                mapdata.beatmapset.creator
             } catch (error) {
                 let ifid = ''
                 if (!isNaN(mapid)) {

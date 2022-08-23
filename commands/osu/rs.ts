@@ -11,14 +11,10 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'rs',
-    description: 'template text\n' +
-        'Command: `sbr-command-name`\n' +
-        'Options: \n' +
-        '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token;
+/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token; */
         let buttons;
 
         let user = null;
@@ -180,13 +176,13 @@ module.exports = {
             findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                    .catch(error => { });
+                    .catch();
 
             } else {
                 user = findname.get('osuname')
                 if (user.length < 1) {
                     return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch(error => { });
+                        .catch();
 
                 }
             }
@@ -222,7 +218,7 @@ module.exports = {
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-                .catch(error => { });
+                .catch();
 
         }
         // const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
@@ -249,7 +245,7 @@ module.exports = {
             return obj.channel.send(
                 'Error - no user found'
             )
-                .catch(error => { });
+                .catch();
 
         }
         let findname;
@@ -320,7 +316,7 @@ module.exports = {
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
-                    .catch(error => { });
+                    .catch();
 
             }
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -349,7 +345,7 @@ node-fetch error: ${error}
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
-                        .catch(error => { });
+                        .catch();
 
                 }
                 if (message && button == null) {
@@ -359,7 +355,7 @@ node-fetch error: ${error}
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
-                        .catch(error => { });
+                        .catch();
 
                 }
                 return;
@@ -403,7 +399,7 @@ node-fetch error: ${error}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
-                        .catch(error => { });
+                        .catch();
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -562,7 +558,7 @@ node-fetch error: ${error}
             }
             let rspp: string | number = 0;
             let ppissue: any = '';
-            const ppiffc = NaN;
+            // const ppiffc = NaN;
             let ppcalcing
             try {
                 ppcalcing = await osufunc.scorecalc(
@@ -705,7 +701,7 @@ ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') + ' | ' : ''}
                 components: [buttons],
                 failIfNotExists: true
             })
-                .catch(error => { });
+                .catch();
 
         }
         if (message && button == null) {
@@ -715,7 +711,7 @@ ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') + ' | ' : ''}
                 components: [buttons],
                 failIfNotExists: true
             })
-                .catch(error => { });
+                .catch();
 
         }
         if (button != null) {
@@ -725,7 +721,7 @@ ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') + ' | ' : ''}
                 components: [buttons],
                 failIfNotExists: true
             })
-                .catch(error => { });
+                .catch();
 
         }
 

@@ -10,14 +10,10 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'osutop',
-    description: 'template text\n' +
-        'Command: `sbr-command-name`\n' +
-        'Options: \n' +
-        '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token;
+/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token; */
         let buttons;
 
         let user = null;
@@ -268,7 +264,7 @@ button: ${button}
                 user = findname.get('osuname');
             } else {
                 return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
+                    .catch();
 
             }
         }
@@ -347,7 +343,7 @@ Options:
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
-                        .catch(error => { });
+                        .catch();
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -418,7 +414,7 @@ Error - authentication
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
-                        .catch(error => { });
+                        .catch();
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -433,7 +429,7 @@ node-fetch error: ${error}
         fs.writeFileSync(`debugosu/command-otop=osutopdataPreSort=${obj.guildId}`, JSON.stringify(osutopdataPreSort, null, 2))
 
         try {
-            const usernametesting = osutopdataPreSort[0].user.username
+            osutopdataPreSort[0].user.username
         } catch (error) {
             console.log(error)
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -443,7 +439,7 @@ node-fetch error: ${error}
             Error - no scores found
             ----------------------------------------------------`)
             return obj.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false } })
-                .catch(error => { });
+                .catch();
 
         }
         let filtereddata = osutopdataPreSort;
@@ -537,8 +533,7 @@ node-fetch error: ${error}
             filterinfo += `\ncompact mode`
         }
         try {
-            const usernamefortests = osutopdata[0].user.username
-
+            osutopdata[0].user.username
         } catch (error) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
@@ -549,7 +544,7 @@ params: ${sort} | ${reverse} | ${mods} | ${mapper}
 ${error}
 ----------------------------------------------------`)
             return obj.reply({ content: 'no plays found for the options given', allowedMentions: { repliedUser: false } })
-                .catch(error => { });
+                .catch();
 
         }
         const topEmbed = new Discord.EmbedBuilder()
@@ -821,7 +816,7 @@ ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
-                .catch(error => { });
+                .catch();
 
         } else {
             message.edit({
@@ -830,7 +825,7 @@ ${error}
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
-                .catch(error => { });
+                .catch();
 
         }
 

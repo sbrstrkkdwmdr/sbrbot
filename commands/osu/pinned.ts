@@ -10,14 +10,10 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'pinned',
-    description: 'template text\n' +
-        'Command: `sbr-command-name`\n' +
-        'Options: \n' +
-        '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token;
+/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token; */
         let buttons;
 
         let user = null;
@@ -182,7 +178,7 @@ button: ${button}
                 user = findname.get('osuname');
             } else {
                 return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                    .catch(error => { });
+                    .catch();
 
             }
         }
@@ -241,7 +237,7 @@ Options:
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
-                        .catch(error => { });
+                        .catch();
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -276,7 +272,7 @@ Error - authentication
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-            .catch(error => { });
+            .catch();
 
             return;
         }
@@ -305,7 +301,7 @@ Error - authentication
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
-                    .catch(error => { });
+                    .catch();
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -473,7 +469,7 @@ ${mode}`
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
-                .catch(error => { });
+                .catch();
 
         } else {
             message.edit({
@@ -481,7 +477,7 @@ ${mode}`
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
-            .catch(error => { });
+            .catch();
 
         }
 

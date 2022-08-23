@@ -11,14 +11,10 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'osu',
-    description: 'template text\n' +
-        'Command: `sbr-command-name`\n' +
-        'Options: \n' +
-        '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token;
+/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token; */
         const buttons = new Discord.ActionRowBuilder();
 
         //args 
@@ -111,7 +107,7 @@ button: ${button}
                 user = findname.get('osuname');
             } else {
                 return interaction.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
+                    .catch();
 
             }
         }
@@ -186,7 +182,7 @@ Options:
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
-                        .catch(error => { });
+                        .catch();
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -318,7 +314,7 @@ Error - authentication
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
-                    .catch(error => { });
+                    .catch();
 
             }
             const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
@@ -500,7 +496,7 @@ ${onlinestatus}
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
-                    .catch(error => { });
+                    .catch();
             } else {
                 obj.reply({
                     embeds: useEmbeds,
@@ -508,7 +504,7 @@ ${onlinestatus}
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
-                    .catch(error => { });
+                    .catch();
             }
         }
         if (message != null && interaction == null && button == null) {
@@ -518,7 +514,7 @@ ${onlinestatus}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-                .catch(error => { });
+                .catch();
 
         }
         if (button != null) {
@@ -528,7 +524,7 @@ ${onlinestatus}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-                .catch(error => { });
+                .catch();
         }
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `

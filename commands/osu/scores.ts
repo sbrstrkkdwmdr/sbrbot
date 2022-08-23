@@ -10,14 +10,10 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'scores',
-    description: 'template text\n' +
-        'Command: `sbr-command-name`\n' +
-        'Options: \n' +
-        '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token;
+/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token; */
         let buttons;
 
         let user = null;
@@ -235,13 +231,15 @@ button: ${button}
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
-                    .catch(error => { });
+                    .catch()
+;
 
             } else {
                 user = findname.get('osuname')
                 if (user.length < 1) {
                     return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
-                        .catch(error => { });
+                        .catch()
+;
 
                 }
             }
@@ -301,7 +299,8 @@ Options:
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
-                        .catch(error => { });
+                        .catch()
+;
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -342,7 +341,8 @@ Error - authentication
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
-                    .catch(error => { });
+                    .catch()
+;
 
             } else {
                 return message.edit({
@@ -350,7 +350,8 @@ Error - authentication
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
-                    .catch(error => { });
+                    .catch()
+;
 
             }
         }
@@ -383,7 +384,7 @@ Error - authentication
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
-                        .catch(error => { });
+                        .catch();
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -405,7 +406,7 @@ node-fetch error: ${error}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-                .catch(error => { });
+                .catch();
 
         }
         if (reverse != true) {
@@ -537,7 +538,7 @@ node-fetch error: ${error}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
-                        .catch(error => { });
+                        .catch();
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -684,7 +685,8 @@ node-fetch error: ${error}
                     failIfNotExists: true,
                     components: [buttons]
                 })
-                    .catch(error => { });
+                    .catch()
+;
 
             } else {
                 message.edit({
@@ -694,7 +696,8 @@ node-fetch error: ${error}
                     failIfNotExists: true,
                     components: [buttons]
                 })
-                    .catch(error => { });
+                    .catch()
+;
 
             }
         }

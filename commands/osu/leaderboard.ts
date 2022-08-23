@@ -10,14 +10,10 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'leaderboard',
-    description: 'template text\n' +
-        'Command: `sbr-command-name`\n' +
-        'Options: \n' +
-        '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token;
+/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token; */
         let buttons;
         let prevmap;
         let i: number;
@@ -240,7 +236,7 @@ mods: ${mods}
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
-                        .catch(error => { });
+                        .catch();
 
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -260,7 +256,6 @@ node-fetch error: ${error}
         try {
             title = mapdata.beatmapset.title != mapdata.beatmapset.title_unicode ? `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})` : mapdata.beatmapset.title
             artist = mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist
-
         } catch (error) {
             if (mapdata.authentication) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -270,7 +265,7 @@ cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
                 obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                    .catch(error => { });
+                    .catch();
 
                 return;
             }
@@ -311,7 +306,7 @@ ${error}
                              allowedMentions: { repliedUser: false },
                              failIfNotExists: true
                          })
-                             .catch(error => { });
+                             .catch();
  
                      }
                      fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -328,7 +323,7 @@ ${error}
             try {
                 if (lbdataf.authentication) {
                     obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch(error => { });
+                        .catch();
 
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                         `
@@ -406,12 +401,12 @@ ${hitlist}
 
             if (button == null) {
                 obj.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                    .catch(error => { });
+                    .catch();
 
                 fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
             } else {
                 message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                    .catch(error => { });
+                    .catch();
 
             }
         } else {
@@ -437,7 +432,7 @@ ${hitlist}
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
-                            .catch(error => { });
+                            .catch();
 
                     }
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -459,7 +454,7 @@ cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
                     obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch(error => { });
+                        .catch();
                     return;
                 }
             } catch (error) {
@@ -518,13 +513,13 @@ Error - authentication
 
             if (button == null) {
                 obj.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                    .catch(error => { });
+                    .catch();
 
                 fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
 
             } else {
                 message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
-                    .catch(error => { });
+                    .catch();
 
             }
         }
