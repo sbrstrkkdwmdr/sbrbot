@@ -119,6 +119,8 @@ type: ${type}
             'https://media.discordapp.net/attachments/999722639390163065/1006556693267763280/attachment-5.gif', //im allergic to girls
             'https://tenor.com/view/tails-speech-bubble-soup-gif-26158321', //tails speech bubble soup
             'https://media.discordapp.net/attachments/792190772257488936/987347301863403630/cock.gif', //cock water
+            'https://media.discordapp.net/attachments/844739553504002048/1007857842113478697/djaskldjklasdasdjklasdjklasjkld.gif', //cpod missanalyser
+            'https://media.discordapp.net/attachments/751502560132726875/967567781451149373/crillerowo.gif', //miss anal (troll)
         ]
         const reaction = [
             'https://tenor.com/view/jerma-jerma985-burger-eating-tucker-carson-gif-22054018', // jerma eating
