@@ -122,7 +122,6 @@ Error: ${error}
 `, 'utf-8')
         }
 
-        let ftstr: string;
         let general;
         let diff;
         try {
@@ -195,7 +194,7 @@ Error: ${error}
 ----------------------------------------------------
 `, 'utf-8')
         }
-        ftstr = `${artist} - ${title} [${version}] //${creator} ${mods ? `+${mods}` : ''}`
+        const ftstr = `${artist} - ${title} [${version}] //${creator} ${mods ? `+${mods}` : ''}`
         let hitobjs;
         try {
             hitobjs = map.split('[HitObjects]')[1].split('\n')

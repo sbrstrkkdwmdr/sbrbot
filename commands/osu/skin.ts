@@ -15,8 +15,7 @@ module.exports = {
             if (message.mentions.users.size > 0) {
                 searchid = message.mentions.users.first().id
             }
-            let findname;
-            findname = await userdata.findOne({ where: { userid: searchid } })
+            const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 return message.reply({ content: 'Error - user not found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                     .catch(error => { });

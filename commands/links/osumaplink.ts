@@ -36,7 +36,6 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
         const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
-        let overrides: object;
         const mapmods: string = 
             message.content.includes('+') ?
                 messagenohttp.split('+')[1] : 'NM';
@@ -100,7 +99,7 @@ cmd ID: ${absoluteID}
             }
         }
 
-        overrides = {
+        const overrides = {
             mods: mapmods,
             id: mapid,
             detailed: false,

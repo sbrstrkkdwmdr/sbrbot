@@ -4,9 +4,7 @@ import colours = require('../../configs/colours');
 module.exports = {
     name: 'checkperms',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        let user;
-        let member;
-        let permissions;
+        let user; 
 
         if (message != null && interaction == null && button == null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -55,8 +53,8 @@ userID: ${user.id}
         }
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-        member = obj.guild.members.cache.get(user.id)
-        permissions = member.permissions.toArray().join(' **|** ').replace('ADMINISTRATOR', '***!!!ADMINISTRATOR!!!***')
+        const member = obj.guild.members.cache.get(user.id)
+        const permissions = member.permissions.toArray().join(' **|** ').replace('ADMINISTRATOR', '***!!!ADMINISTRATOR!!!***')
 
         const embed = new Discord.EmbedBuilder()
             .setTitle(`Permissions for \`${user.username}\``)
