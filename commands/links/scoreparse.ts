@@ -26,9 +26,9 @@ cmd ID: ${absoluteID}
 `, 'utf-8')
 
         const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
-        let scorelink: any;
-        let scoremode: any;
-        let scoreid: any;
+        let scorelink: string;
+        let scoremode: string;
+        let scoreid: number | string;
         try {
             scorelink = messagenohttp.split('/scores/')[1]
             scoremode = scorelink.split('/')[0]
@@ -38,40 +38,8 @@ cmd ID: ${absoluteID}
         }
 
 
-        const scoreurl = `https://osu.ppy.sh/api/v2/scores/${cmdchecks.toHexadecimal(scoremode)}/${cmdchecks.toHexadecimal(scoreid)}`
-        const scoredata:osuApiTypes.Score = await fetch(scoreurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch(error => { });
-
-                }
-                fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-            })
-
+        // const scoreurl = `https://osu.ppy.sh/api/v2/scores/${cmdchecks.toHexadecimal(scoremode)}/${cmdchecks.toHexadecimal(scoreid)}`
+        const scoredata: osuApiTypes.Score = await osufunc.apiget('score', `${scoreid}`, `${scoremode}`)
         try {
             scoredata.beatmap.id
         } catch (error) {
@@ -88,50 +56,19 @@ Error: ${error}
         fs.writeFileSync(`debugosu/link-scoreparse=scoredata=${message.guildId}.json`, JSON.stringify(scoredata, null, 2));
         fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
             ;
-        const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(scoredata.beatmap.id)}`
+        // const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(scoredata.beatmap.id)}`
 
-            ;
+        ;
         (async () => {
             try {
-                const ranking = scoredata.rank.toUpperCase()
+                scoredata.rank.toUpperCase()
             } catch (error) {
                 return message.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
                     .catch(error => { });
 
 
             }
-            const mapdata = await fetch(mapurl, {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }).then(res => res.json() as any)
-                .catch(error => {
-                    if (button == null) {
-                        try {
-                            message.edit({
-                                content: 'Error',
-                                allowedMentions: { repliedUser: false },
-                            })
-                        } catch (err) {
-
-                        }
-                    } else {
-                        obj.reply({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch(error => { });
-
-                    }
-                    fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                        `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                })
+            const mapdata = await osufunc.apiget('map', `${scoredata.beatmap.id}`)
             fs.appendFileSync('debugosu/link-scoreparse=map.json', JSON.stringify(mapdata, null, 2));
 
             const ranking = scoredata.rank ? scoredata.rank : 'f'
@@ -175,10 +112,11 @@ Error: ${error}
 
             const mode = scoredata.mode
             let ppfc: any;
-            let hitlist: any;
-            let fcacc: any;
+            let hitlist: string;
+            let fcacc: number;
             let ppiffc: any;
-            let ppissue: any;
+            let ppissue: string;
+
             if (mode == 'osu') {
                 hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
                 fcacc = osucalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy

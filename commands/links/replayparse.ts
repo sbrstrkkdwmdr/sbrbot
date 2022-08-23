@@ -37,80 +37,18 @@ cmd ID: ${absoluteID}
         }
         fs.writeFileSync(`debugosu/link-replay=replay=${message.guildId}.json`, JSON.stringify(replay, null, 2))
 
-        const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/lookup?checksum=${cmdchecks.toHexadecimal(replay.beatmapMD5)}`
-        const mapdata = await fetch(mapurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch(error => { });
-
-                }
-                fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-            })
+        // const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/lookup?checksum=${cmdchecks.toHexadecimal(replay.beatmapMD5)}`
+        const mapdata:osuApiTypes.Beatmap = await osufunc.apiget('map_get_md5', replay.beatmapMD5)
 
         fs.writeFileSync(`debugosu/link-replay=mapdata=${message.guildId}.json`, JSON.stringify(mapdata, null, 2))
         fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
 
-        const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(replay.playerName)}`
+        // const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(replay.playerName)}`
 
-        const osudata = await fetch(userurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch(error => { });
-
-                }
-                fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-            })
+        const osudata:osuApiTypes.User = await osufunc.apiget('user', `${replay.playerName}`)
 
         fs.writeFileSync(`debugosu/link-replay=osudata=${message.guildId}.json`, JSON.stringify(osudata, null, 2))
-        let userid: any;
+        let userid: string | number;
         try {
             userid = osudata.id
         } catch (err) {
@@ -118,7 +56,7 @@ Error: ${error}
             console.log(err)
             return
         }
-        let mapbg: any;
+        let mapbg: string;
         let mapcombo: string | number;
         let fulltitle: string;
         let mapdataid: string;
@@ -137,56 +75,19 @@ Error: ${error}
         }
 
         const mods = replay.mods
-        let ifmods: any;
+        let ifmods: string;
         if (mods != 0) {
             ifmods = `+${osucalc.ModIntToString(mods)}`
         } else {
             ifmods = ''
         }
         const gameMode = replay.gameMode
-        let accuracy: any;
-
-        const score = {
-            beatmap_id: mapdata.id,
-            score: '6795149',
-            maxcombo: `${mapdata.max_combo}`,
-            count50: `${replay.number_50s}`,
-            count100: `${replay.number_100s}`,
-            count300: `${replay.number_300s}`,
-            countmiss: `0`,
-            countkatu: `${replay.katus}`,
-            countgeki: `${replay.gekis}`,
-            perfect: '1',
-            enabled_mods: replay.mods,
-            user_id: osudata.id,
-            date: '2022-02-08 05:24:54',
-            rank: 'A',
-
-            score_id: '4057765057'
-        }
-        const scorenofc = {
-            beatmap_id: mapdata.id,
-            score: '6795149',
-            maxcombo: `${mapdata.max_combo}`,
-            count50: `${replay.number_50s}`,
-            count100: `${replay.number_100s}`,
-            count300: `${replay.number_300s}`,
-            countmiss: `${replay.misses}`,
-            countkatu: `${replay.katus}`,
-            countgeki: `${replay.gekis}`,
-            perfect: '0',
-            enabled_mods: `${replay.mods}`,
-            user_id: '15222484',
-            date: '2022-02-08 05:24:54',
-            rank: 'A',
-
-            score_id: '4057765057'
-        }
-        let xpp: any;
-        let hitlist: any;
-        let fcacc: any;
+        let accuracy: number;
+        let xpp: object;
+        let hitlist: string;
+        let fcacc: number;
         let ppiffc: any;
-        let ppissue: any;
+        let ppissue: string;
         let totalhits = 0
 
         switch (gameMode) {
@@ -252,7 +153,7 @@ Error: ${error}
         }
 
         const lifebar = replay.life_bar.split('|')
-        const lifebarF: any[] = []
+        const lifebarF = []
         for (let i = 0; i < lifebar.length; i++) {
             lifebarF.push(lifebar[i].split(',')[0])
         }

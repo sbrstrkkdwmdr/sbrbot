@@ -529,7 +529,7 @@ node-fetch error: ${error}
                     return;
                 }); */
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
-            fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
+            fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapidtest2[0].id }), null, 2));
             try {
                 mapdata.beatmapset.creator
             } catch (error) {
@@ -845,7 +845,7 @@ node-fetch error: ${error}
                 .catch();
 
         }
-
+        fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------

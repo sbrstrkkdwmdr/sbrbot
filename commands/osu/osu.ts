@@ -13,8 +13,8 @@ module.exports = {
     name: 'osu',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token; */
+        /*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+                const access_token = JSON.parse(accessN).access_token; */
         const buttons = new Discord.ActionRowBuilder();
 
         //args 
@@ -215,8 +215,7 @@ Error - authentication
         }
 
 
-        let findname;
-        findname = await userdata.findOne({ where: { osuname: user } })
+        const findname = await userdata.findOne({ where: { osuname: user } })
         if (findname != null) {
             switch (mode) {
                 case 'osu':
@@ -257,7 +256,6 @@ Error - authentication
                     })
                     break;
             }
-        } else {
         }
 
         const osustats = osudata.statistics;
@@ -387,7 +385,7 @@ Error - authentication
 
             // const usertopurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/best?mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`;
 
-            const osutopdata:osuApiTypes.Score[] = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
+            const osutopdata: osuApiTypes.Score[] = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
             /* const osutopdata: osuApiTypes.Score[] = await fetch(usertopurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -398,23 +396,22 @@ Error - authentication
 
             // const mostplayedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/beatmapsets/most_played`
 
-            const mostplayeddata:osuApiTypes.BeatmapPlaycount[] = await osufunc.apiget('most_played', `${osudata.id}`)
-           /*  const mostplayeddata: osuApiTypes.BeatmapPlaycount[] = await fetch(mostplayedurl, {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }).then(res => res.json() as any) */
+            const mostplayeddata: osuApiTypes.BeatmapPlaycount[] = await osufunc.apiget('most_played', `${osudata.id}`)
+            /*  const mostplayeddata: osuApiTypes.BeatmapPlaycount[] = await fetch(mostplayedurl, {
+                 headers: {
+                     'Authorization': `Bearer ${access_token}`
+                 }
+             }).then(res => res.json() as any) */
             fs.writeFileSync(`debugosu/command-osu=mostplayeddata=${obj.guildId}.json`, JSON.stringify(mostplayeddata, null, 2))
 
             const highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
             const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
-            let avgpp;
             let totalpp = 0;
             for (let i2 = 0; i2 < osutopdata.length; i2++) {
                 totalpp += osutopdata[i2].pp
             }
-            avgpp = (totalpp / osutopdata.length).toFixed(2)
+            const avgpp = (totalpp / osutopdata.length).toFixed(2)
             let mostplaytxt = ``
             for (let i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
                 const bmpc = mostplayeddata[i2]
@@ -442,13 +439,13 @@ ${onlinestatus}`,
                     inline: true
                 }
             ])
-                osuEmbed.addFields([{
-                    name: 'Most Played Beatmaps',
-                    value: mostplaytxt != `` ? mostplaytxt : 'No data',
-                    inline: false
-                }]
-                )
-            
+            osuEmbed.addFields([{
+                name: 'Most Played Beatmaps',
+                value: mostplaytxt != `` ? mostplaytxt : 'No data',
+                inline: false
+            }]
+            )
+
 
             osuEmbed.addFields([
                 {

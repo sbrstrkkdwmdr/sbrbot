@@ -159,7 +159,7 @@ module.exports = {
                     page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))
                 }
                 list = true
-                if (((message.embeds[0].description).split('Page: ')[1].split('/')[0]) == NaN || ((message.embeds[0].description).split('Page: ')[1].split('/')[0]) == 'NaN') {
+                if (isNaN((message.embeds[0].description).split('Page: ')[1].split('/')[0]) || ((message.embeds[0].description).split('Page: ')[1].split('/')[0]) == 'NaN') {
                     page = 1
                 }
             } else {
@@ -172,8 +172,7 @@ module.exports = {
             searchid == interaction.member.user.id;
         }
         if (user == null || message.mentions.users.size > 0) {
-            let findname;
-            findname = await userdata.findOne({ where: { userid: searchid } })
+            const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                     .catch();
@@ -248,8 +247,7 @@ module.exports = {
                 .catch();
 
         }
-        let findname;
-        findname = await userdata.findOne({ where: { osuname: user } })
+        const findname = await userdata.findOne({ where: { osuname: user } })
         if (findname != null) {
             switch (mode) {
                 case 'osu':
@@ -290,7 +288,7 @@ module.exports = {
                     })
                     break;
             }
-        } else { }
+        }
         // const recentplayurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/recent?include_fails=1&mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`
 
         const rsdata: osuApiTypes.Score[] = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
@@ -362,10 +360,10 @@ node-fetch error: ${error}
             }
             const curbm = curscore.beatmap
             const curbms = curscore.beatmapset
-            const hittime = curbm.hit_length
-            let totalstr;
+            // const hittime = curbm.hit_length
+            // let totalstr;
 
-            const values = osumodcalc.calcValues(
+/*             const values = osumodcalc.calcValues(
                 curbm.cs,
                 curbm.ar,
                 curbm.accuracy,
@@ -373,7 +371,7 @@ node-fetch error: ${error}
                 curbm.bpm,
                 curbm.hit_length,
                 osumodcalc.OrderMods(curscore.mods.join(''))
-            );
+            ); */
 
             // const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(curbm.id)}?`;
 
@@ -612,8 +610,6 @@ node-fetch error: ${error}
                 ppissue = 'Error - pp calculator could not fetch beatmap'
             }
             let fcflag = '**FC**'
-            if (curscore.perfect) {
-            }
             if (curscore.accuracy != 100) {
                 fcflag = `**${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
             }
@@ -651,7 +647,7 @@ node-fetch error: ${error}
                 .addFields([
                     {
                         name: 'MAP DETAILS',
-                        value: `[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} \n${totaldiff}⭐ | ${curscore.mode}`,
+                        value: `[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} \n${totaldiff}⭐ | ${curscore.mode}`,
                         inline: false
                     },
                     {
@@ -678,7 +674,7 @@ node-fetch error: ${error}
                 txt +=
                     `**${1 + i + page * 20} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>**
 [${curscore.beatmapset.title}](https://osu.ppy.sh/b/${curscore.beatmap.id}) | [score link](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})
-${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') + ' | ' : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${curscore.rank}
+${curscore.mods.length > 0 ? '+' + curscore.mods.join('') + ' | ' : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${curscore.rank}
 `
             }
             if (txt == '') {

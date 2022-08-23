@@ -66,8 +66,7 @@ cmd ID: ${absoluteID}
                 searchid = message.mentions.users.first().id
             }
             if (user.length < 1 || message.mentions.users.size > 0) {
-                let findname;
-                findname = await userdata.findOne({ where: { userid: searchid } })
+                const findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
@@ -138,8 +137,7 @@ cmd ID: ${absoluteID}
 
 
             if (user.length < 1) {
-                let findname;
-                findname = await userdata.findOne({ where: { userid: searchid } })
+                const findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
@@ -219,8 +217,7 @@ button: ${button}
                 page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
             }
             if (user.length < 1) {
-                let findname;
-                findname = await userdata.findOne({ where: { userid: searchid } })
+                const findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname != null) {
                     user = findname.get('osuname');
                 } else {
@@ -451,7 +448,7 @@ node-fetch error: ${error}
                 null, false
             )
             if (curscore.accuracy != 1) {
-                if (curscore.pp == null || curscore.pp == NaN) {
+                if (curscore.pp == null || isNaN(curscore.pp)) {
                     pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
                 } else {
                     pptxt = `${curscore.pp.toFixed(2)}pp`
@@ -461,7 +458,7 @@ node-fetch error: ${error}
                 }
                 pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`
             } else {
-                if (curscore.pp == null || curscore.pp == NaN) {
+                if (curscore.pp == null || isNaN(curscore.pp)) {
                     pptxt =
                         `${await ppcalcing[0].pp.toFixed(2)}pp`
                 } else {

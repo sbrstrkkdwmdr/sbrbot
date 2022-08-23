@@ -5,12 +5,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     const guildID = config.testGuildID;
     const guild = client.guilds.cache.get(guildID);
     let commands;
-    const settoguild = 0
+/*     let settoguild = 0
     if (settoguild == 1 && guild) {
         commands = guild.commands
-    } else {
+    } else { */
         commands = client.application?.commands
-    }
+    //}
 
     commands?.set([{
         name: 'ping',

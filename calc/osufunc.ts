@@ -37,7 +37,7 @@ function modemappers(arr) {
 export {
     modemods, modemappers
 };
-export { mapcalc, scorecalc, straincalc, graph, mapcalclocal, straincalclocal, apiget };
+export { mapcalc, scorecalc, straincalc, graph, mapcalclocal, straincalclocal, apiget, updateToken };
 
 
 
@@ -657,11 +657,17 @@ async function apiget(type: string, mainparam: string, params?: string, version?
             case 'map_get': case 'map':
                 url += `beatmaps/${mainparam}`
                 break;
+            case 'map_get_md5':
+                url += `beatmaps/lookup?checksum=${mainparam}`
+                break;
             case 'mapset_get': case 'mapset':
                 url += `beatmapsets/${mainparam}`
                 break;
             case 'mapset_search':
                 url += `beatmapsets/search?q=${mainparam}&s=any`
+                break;
+            case 'score_get': case 'score':
+                url += `scores/${params ?? 'osu'}/${mainparam}`
                 break;
             case 'scores_get_best': case 'osutop': case 'best':
                 url += `users/${mainparam}/scores/best?mode=${params}&limit=100&offset=0`
@@ -726,3 +732,6 @@ async function apiget(type: string, mainparam: string, params?: string, version?
 }
 
 
+async function updateToken(clientId:string, clientSecret:string){
+
+}

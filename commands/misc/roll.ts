@@ -4,9 +4,8 @@ import colours = require('../../configs/colours');
 module.exports = {
     name: 'roll',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        let roll: any;
-        let maxnum: any;
-        let minnum: any;
+        let maxnum: number = 0;
+        let minnum: number = 0;
         if (message != null && interaction == null && button == null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
@@ -22,10 +21,7 @@ cmd ID: ${absoluteID}
             if (!args[0]) {
                 maxnum = 100;
             }
-            minnum = parseFloat(args[1]);
-            if (!args[1]) {
-                minnum = 0;
-            }
+            minnum = parseFloat(args[1]) || 0;
         }
 
         //==============================================================================================================================================================================================
@@ -43,10 +39,10 @@ cmd ID: ${absoluteID}
 `, 'utf-8')
             maxnum = interaction.options.getNumber('max');
             minnum = interaction.options.getNumber('min');
-            if(maxnum == null){
+            if (maxnum == null) {
                 maxnum = 100;
             }
-            if(minnum == null){
+            if (minnum == null) {
                 minnum = 0;
             }
         }
@@ -75,15 +71,8 @@ minnum: ${minnum}
 ----------------------------------------------------
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-        let limitlen = maxnum.toString().length - 2;
-        if(limitlen < 0){
-            limitlen = 0;
-        }
-        if(maxnum == 100){
-            limitlen = 0;
-        }
-        roll = `${((Math.random() * (maxnum - minnum + 1)) + minnum).toFixed(limitlen)}`;
-
+        const rdm = (Math.random() * (maxnum - minnum)) + minnum;
+        const roll = `${Math.round(rdm)}`; 
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
         obj.reply({

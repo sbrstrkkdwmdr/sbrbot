@@ -172,8 +172,7 @@ button: ${button}
             }
         }
         if (user == null || message.mentions.users.size > 0) {
-            let findname;
-            findname = await userdata.findOne({ where: { userid: searchid } })
+            const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 user = findname.get('osuname');
             } else {
@@ -429,7 +428,7 @@ ${mode}`
                     null, false
                 )
                 if (curscore.accuracy != 1) {
-                    if (curscore.pp == null || curscore.pp == NaN) {
+                    if (curscore.pp == null || isNaN(curscore.pp)) {
                         pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
                     } else {
                         pptxt = `${curscore.pp.toFixed(2)}pp`
@@ -439,7 +438,7 @@ ${mode}`
                     }
                     pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`
                 } else {
-                    if (curscore.pp == null || curscore.pp == NaN) {
+                    if (curscore.pp == null || isNaN(curscore.pp)) {
                         pptxt =
                             `${await ppcalcing[0].pp.toFixed(2)}pp`
                     } else {

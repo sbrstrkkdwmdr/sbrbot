@@ -3,12 +3,13 @@ import fs = require('fs');
 import osuapiext = require('osu-api-extended');
 import osumodcalc = require('osumodcalculator');
 import fetch from 'node-fetch';
+import { OAuth } from './configs/osuApiTypes';
 
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
 
     //update oauth access token
-    setInterval(() => {
-        fetch('https://osu.ppy.sh/oauth/token', {
+    setInterval(async () => {
+        const newtoken: OAuth = await fetch('https://osu.ppy.sh/oauth/token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -22,20 +23,20 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             })
 
         }).then(res => res.json() as any)
-            .then(res => {
-                fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
-                fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
-            }
-            ).catch(error => {
+            .catch(error => {
                 fs.appendFileSync(`logs/updates.log`,
                     `
-            ----------------------------------------------------
-            ERROR
-            node-fetch error: ${error}
-            ----------------------------------------------------
-            `, 'utf-8')
-                return;
+        ----------------------------------------------------
+        ERROR
+        node-fetch error: ${error}
+        ----------------------------------------------------
+        `, 'utf-8')
             });
+        if (newtoken.access_token) {
+            fs.writeFileSync('configs/osuauth.json', JSON.stringify(newtoken))
+            fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
+        }
+
     }, 1 * 60 * 1000);
 
     //clear maps folder

@@ -374,8 +374,7 @@ Error - authentication
 
         }
         try {
-            let findname;
-            findname = await userdata.findOne({ where: { osuname: user } })
+            const findname = await userdata.findOne({ where: { osuname: user } })
             if (findname != null) {
                 await userdata.update({
                     osupp: osudata.statistics.pp,
@@ -384,8 +383,7 @@ Error - authentication
                 }, {
                     where: { osuname: user }
                 })
-            } else {
-            }
+            } 
         } catch (error) {
 
         }
@@ -764,12 +762,11 @@ ${error}
             const highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
             const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
-            let avgpp;
             let totalpp = 0;
             for (let i2 = 0; i2 < osutopdata.length; i2++) {
                 totalpp += osutopdata[i2].pp
             }
-            avgpp = (totalpp / osutopdata.length).toFixed(2)
+            const avgpp = (totalpp / osutopdata.length).toFixed(2)
             let hittype: string;
             if (mode == 'osu') {
                 hittype = `hit300/hit100/hit50/miss`

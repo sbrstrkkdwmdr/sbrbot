@@ -86,130 +86,137 @@ id: ${id}
 
         switch (type) {
             case 'user':
-                let userfind: any = 'User not found'
-                client.guilds.cache.forEach(guild => {
-                    if (guild.members.cache.has(id)) {
-                        userfind = guild.members.cache.get(id)//.user.tag
-                        let up = 'null or offline status';
-                        if (userfind.presence) {
-                            up = '';
-                            for (let i = 0; i < userfind.presence.activities.length; i++) {
-                                /*                                     up += `
-                                                                ${userfind.presence.status}
-                                                                ${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].name : ''}
-                                                                ${userfind.presence.activities.length > 0 ? 'Activity Type: [' + userfind.presence.activities[i].type + '](https://discord.com/developers/docs/topics/gateway#activity-object-activity-types)': ''}
-                                                                \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
-                                                                ` */
-                                let t
-                                switch (userfind.presence.activities[i].type) {
-                                    case 0:
-                                        t = 'Playing'
-                                        break;
-                                    case 1:
-                                        t = 'Streaming'
-                                        break;
-                                    case 2:
-                                        t = 'Listening'
-                                        break;
-                                    case 3:
-                                        t = 'Watching'
-                                        break;
-                                    case 4:
-                                        t = 'Custom Status'
-                                        break;
-                                    case 5:
-                                        t = 'Competing in'
-                                        break;
-                                    default:
-                                        t = 'Unknown Activity Type'
-                                        break;
+                {
+                    let userfind: any = 'User not found'
+                    client.guilds.cache.forEach(guild => {
+                        if (guild.members.cache.has(id)) {
+                            userfind = guild.members.cache.get(id)//.user.tag
+                            let up = 'null or offline status';
+                            if (userfind.presence) {
+                                up = '';
+                                for (let i = 0; i < userfind.presence.activities.length; i++) {
+                                    /*                                     up += `
+                                                                    ${userfind.presence.status}
+                                                                    ${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].name : ''}
+                                                                    ${userfind.presence.activities.length > 0 ? 'Activity Type: [' + userfind.presence.activities[i].type + '](https://discord.com/developers/docs/topics/gateway#activity-object-activity-types)': ''}
+                                                                    \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
+                                                                    ` */
+                                    let t
+                                    switch (userfind.presence.activities[i].type) {
+                                        case 0:
+                                            t = 'Playing'
+                                            break;
+                                        case 1:
+                                            t = 'Streaming'
+                                            break;
+                                        case 2:
+                                            t = 'Listening'
+                                            break;
+                                        case 3:
+                                            t = 'Watching'
+                                            break;
+                                        case 4:
+                                            t = 'Custom Status'
+                                            break;
+                                        case 5:
+                                            t = 'Competing in'
+                                            break;
+                                        default:
+                                            t = 'Unknown Activity Type'
+                                            break;
 
-                                }
-                                up += `
+                                    }
+                                    up += `
                             ${t} ${userfind.presence.activities.length > 0 && t != 'Custom Status' ? `\`${userfind.presence.activities[i].name}\`` : ''}
                             \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
                             `
+                                }
                             }
-                        }
 
-                        Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`)
-                        Embedr.setThumbnail(`${userfind.user.avatarURL()}`);
-                        Embedr.setDescription(
-                            `ID: ${userfind.user.id}
+                            Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`)
+                            Embedr.setThumbnail(`${userfind.user.avatarURL()}`);
+                            Embedr.setDescription(
+                                `ID: ${userfind.user.id}
                             Status: ${up}
                             Account creation date: ${userfind.user.createdAt}
                             Bot: ${userfind.user.bot}
                             Flags: ${userfind.user.flags.toArray().join(',')}
                             `);
-                        return;
-                    }
-                })
+                            return;
+                        }
+                    })
+                }
                 break;
             case 'guild':
-                let guildfind: any = 'No guild found'
-                client.guilds.cache.forEach(guild => {
-                    if (guild.id == id) {
-                        guildfind = guild
-                        Embedr.setTitle(`${guildfind.name}`);
-                        if (guildfind.iconURL()) {
-                            Embedr.setThumbnail(`${guildfind.iconURL()}`);
-                        }
-                        if (guildfind.bannerURL()) {
-                            Embedr.setImage(`${guildfind.bannerURL()}`);
-                        }
-                        Embedr.setDescription(`
+                {
+                    let guildfind: any = 'No guild found'
+                    client.guilds.cache.forEach(guild => {
+                        if (guild.id == id) {
+                            guildfind = guild
+                            Embedr.setTitle(`${guildfind.name}`);
+                            if (guildfind.iconURL()) {
+                                Embedr.setThumbnail(`${guildfind.iconURL()}`);
+                            }
+                            if (guildfind.bannerURL()) {
+                                Embedr.setImage(`${guildfind.bannerURL()}`);
+                            }
+                            Embedr.setDescription(`
                         ID: ${guildfind.id}
                         Owner: <@${guildfind.ownerId}>
                         Total user count: ${guildfind.members.cache.size}
                         Total channel count: ${guildfind.channels.cache.size}
                         Creation date: ${guildfind.createdAt}
                         `)
-                        return;
-                    }
-                })
+                            return;
+                        }
+                    })
+                }
                 break;
             case 'channel':
-                let channelfind: any = 'Channel not found'
-                client.guilds.cache.forEach(guild => {
-                    if (guild.channels.cache.has(id)) {
-                        channelfind = guild.channels.cache.get(id)
-                        Embedr.setTitle(`Channel: #${channelfind.name}`);
-                        if (guild.iconURL()) {
-                            Embedr.setThumbnail(`${guild.iconURL()}`);
-                        }
-                        Embedr.setDescription(`
+                {
+                    let channelfind: any = 'Channel not found'
+                    client.guilds.cache.forEach(guild => {
+                        if (guild.channels.cache.has(id)) {
+                            channelfind = guild.channels.cache.get(id)
+                            Embedr.setTitle(`Channel: #${channelfind.name}`);
+                            if (guild.iconURL()) {
+                                Embedr.setThumbnail(`${guild.iconURL()}`);
+                            }
+                            Embedr.setDescription(`
                         ID: ${channelfind.id}
                         Topic: ${channelfind.topic}
                         [Type: ${channelfind.type}](https://discord-api-types.dev/api/discord-api-types-v10/enum/ChannelType)
                         Parent: ${channelfind.parent ? channelfind.parent.name : 'No parent'} ${channelfind.parent ? '| ' + channelfind.parent.id + ' | Type ' + channelfind.parent.type : ''}
                         Guild: ${guild.name} | ${guild.id}
                         `)
-                        return;
-                    }
-                })
-
+                            return;
+                        }
+                    })
+                }
                 break;
             case 'role':
-                let rolefind: any = 'No role found'
-                client.guilds.cache.forEach(guild => {
-                    if (guild.roles.cache.has(id)) {
-                        rolefind = guild.roles.cache.get(id)
-                        Embedr.setTitle(`Role: ${rolefind.name}`);
-                        if (guild.iconURL()) {
-                            Embedr.setThumbnail(`${guild.iconURL()}`);
-                        }
-                        Embedr.setDescription(`
+                {
+                    let rolefind: any = 'No role found'
+                    client.guilds.cache.forEach(guild => {
+                        if (guild.roles.cache.has(id)) {
+                            rolefind = guild.roles.cache.get(id)
+                            Embedr.setTitle(`Role: ${rolefind.name}`);
+                            if (guild.iconURL()) {
+                                Embedr.setThumbnail(`${guild.iconURL()}`);
+                            }
+                            Embedr.setDescription(`
                         ID: ${rolefind.id}
                         Colour: [${rolefind.color ? rolefind.color : 'null'}](https://discord.js.org/#/docs/discord.js/main/class/Role?scrollTo=color)
                         Emoji: ${rolefind.unicodeEmoji ? rolefind.unicodeEmoji : 'null'}
                         Guild: ${guild.name} | ${guild.id}
                         `)
-                        Embedr.setColor(rolefind.color);
-                        return;
-                    }
-                })
+                            Embedr.setColor(rolefind.color);
+                            return;
+                        }
+                    })
+                }
                 break;
-            case 'emoji':
+            case 'emoji': {
                 let emojifind: any = 'No emoji found'
                 client.guilds.cache.forEach(guild => {
                     if (guild.emojis.cache.has(id)) {
@@ -226,6 +233,7 @@ id: ${id}
                         return;
                     }
                 })
+            }
                 break;
             default:
                 Embedr.setTitle('Invalid search parameters')
