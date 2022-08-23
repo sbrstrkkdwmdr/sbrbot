@@ -265,7 +265,7 @@ Options:
 
 
 
-        const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
+        //const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
         /* const osudata:osuApiTypes.User = await fetch(userinfourl, {
             headers: {
@@ -322,7 +322,7 @@ Error - authentication
                 .catch(error => { });
 
         }
-        const userfirstsurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/firsts?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
+        //const userfirstsurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/firsts?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
         const firstscoresdata: osuApiTypes.Score[] = await osufunc.apiget('firsts', `${osudata.id}`, `${mode}`)
         /*         const firstscoresdata:osuApiTypes.Score[] = await fetch(userfirstsurl, {
             headers: {

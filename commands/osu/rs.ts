@@ -225,8 +225,7 @@ module.exports = {
                 .catch(error => { });
 
         }
-        const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
-
+        // const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
         /* await fetch(userinfourl, {
             headers: {
@@ -296,7 +295,7 @@ module.exports = {
                     break;
             }
         } else { }
-        const recentplayurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/recent?include_fails=1&mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`
+        // const recentplayurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/recent?include_fails=1&mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`
 
         const rsdata: osuApiTypes.Score[] = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
         /* await fetch(recentplayurl, {
@@ -380,7 +379,7 @@ node-fetch error: ${error}
                 osumodcalc.OrderMods(curscore.mods.join(''))
             );
 
-            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(curbm.id)}?`;
+            // const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(curbm.id)}?`;
 
             const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${curbm.id}`)
             /* const mapdata: osuApiTypes.Beatmap = await fetch(mapurl, {

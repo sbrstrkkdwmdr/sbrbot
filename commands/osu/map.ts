@@ -223,7 +223,7 @@ button: ${button}
             const setid = urlnohttp.split('/')[2].split('#')[0];
             const curid = urlnohttp.split('/')[3];
             mapid = curid;
-            const lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
+            // const lookupurl = `https://osu.ppy.sh/api/v2/beatmapsets/${cmdchecks.toHexadecimal(setid)}`;
             const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
             /* let bmsdata: osuApiTypes.Beatmapset = await fetch(lookupurl, {
                 method: 'GET',
@@ -350,7 +350,7 @@ Options:
 `, 'utf-8')
 
         if (maptitleq == null) {
-            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}?`;
+            // const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}?`;
 
             mapdata = await osufunc.apiget('map_get', `${mapid}`)
             /* mapdata = await fetch(mapurl, {
@@ -417,7 +417,7 @@ Error - authentication
         }
 
         if (maptitleq != null) {
-            const mapnameurl = `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${cmdchecks.toHexadecimal(maptitleq)}&s=any`
+            // const mapnameurl = `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${cmdchecks.toHexadecimal(maptitleq)}&s=any`
             const mapidtest = await osufunc.apiget('mapset_search', `${maptitleq}`)
             /* let mapidtest = await fetch(mapnameurl, {
                 headers: {
@@ -496,7 +496,7 @@ ${error}
                 return;
             }
 
-            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapidtest2[0].id)}?`
+            // const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapidtest2[0].id)}?`
             mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
             /* mapdata = await fetch(mapurl, {
                 headers: {
@@ -665,7 +665,7 @@ ${error}
         const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})`;
 
         const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
-        const mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapdata.beatmapset.creator)}/osu`;
+        // const mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapdata.beatmapset.creator)}/osu`;
 
         const mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
         /* let mapperdata: osuApiTypes.User = await fetch(mapperurl, {

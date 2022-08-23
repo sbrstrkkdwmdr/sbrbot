@@ -277,7 +277,7 @@ Options:
     compact: ${compact}
 ----------------------------------------------------
 `, 'utf-8')
-        const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
+        //const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         /* const osudata: osuApiTypes.User = await fetch(userurl, {
             headers: {
@@ -359,7 +359,7 @@ Error - authentication
         } else {
             page = page - 1
         }
-        const scoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}/scores/users/${cmdchecks.toHexadecimal(osudata.id)}/all`
+        //const scoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}/scores/users/${cmdchecks.toHexadecimal(osudata.id)}/all`
         const scoredataPresort = await osufunc.apiget('user_get_scores_map', `${id}`, `${osudata.id}`)
         /*  const scoredataPresort = await fetch(scoreurl, {
             headers: {
@@ -513,7 +513,7 @@ node-fetch error: ${error}
         if (compact == true) {
             sortdata += `\nCompact mode`
         }
-        const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}`
+        //const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}`
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${id}`)
         /* const mapdata:osuApiTypes.Beatmap = await fetch(mapurl, {
             headers: {

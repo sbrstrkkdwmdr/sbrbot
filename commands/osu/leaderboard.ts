@@ -216,8 +216,7 @@ mods: ${mods}
 `, 'utf-8')
 
 
-        const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}`//?mode=osu`//?mods=${mods}`
-
+        //const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}`//?mode=osu`//?mods=${mods}`
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
         /* await fetch(mapurl, {
             headers: {
@@ -285,8 +284,7 @@ ${error}
         }
         fulltitle = `${artist} - ${title} [${mapdata.version}]`
         if (mods == null) {
-            const mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/scores`
-
+            //const mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/scores`
             const lbdataf: osuApiTypes.BeatmapScores = await osufunc.apiget('scores_get_map', `${mapid}`)
             /*  let lbdataf:osuApiTypes.BeatmapScores = await fetch(mapscoresurl, {
                  method: 'GET',
@@ -417,7 +415,7 @@ ${hitlist}
 
             }
         } else {
-            const oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${cmdchecks.toHexadecimal(mapid)}&mods=${cmdchecks.toHexadecimal(osumodcalc.ModStringToInt(osumodcalc.shortModName(mods)))}&limit=100`
+            //const oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${cmdchecks.toHexadecimal(mapid)}&mods=${cmdchecks.toHexadecimal(osumodcalc.ModStringToInt(osumodcalc.shortModName(mods)))}&limit=100`
 
             const lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1);
             /* let lbdata = await fetch(oldmsu) //uses apiv1 so im sticking with "any" type

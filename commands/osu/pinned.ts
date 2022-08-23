@@ -216,7 +216,7 @@ Options:
     page: ${page}
 ----------------------------------------------------
 `, 'utf-8')
-        const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
+        // const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         /* const osudata: osuApiTypes.User = await fetch(userurl, {
@@ -281,7 +281,7 @@ Error - authentication
             return;
         }
 
-        const userpinnedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/pinned?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
+        // const userpinnedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/pinned?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
         const pinnedscoresdata:osuApiTypes.Score[] = await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
         /* const pinnedscoresdata:osuApiTypes.Score[] = await fetch(userpinnedurl, {
             headers: {

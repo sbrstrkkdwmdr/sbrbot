@@ -161,7 +161,7 @@ Options:
     searchid: ${searchid}
 ----------------------------------------------------
 `, 'utf-8')
-        const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(await user)}/${cmdchecks.toHexadecimal(mode)}`
+        // const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(await user)}/${cmdchecks.toHexadecimal(mode)}`
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         /* const osudata: osuApiTypes.User = await fetch(userurl, {
@@ -389,7 +389,7 @@ Error - authentication
             chartrank.toFile('./debugosu/playerrankgraph.jpg')
             chartplay.toFile('./debugosu/playerplaygraph.jpg')
 
-            const usertopurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/best?mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`;
+            // const usertopurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/best?mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`;
 
             const osutopdata:osuApiTypes.Score[] = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
             /* const osutopdata: osuApiTypes.Score[] = await fetch(usertopurl, {
@@ -400,7 +400,7 @@ Error - authentication
             fs.writeFileSync(`debugosu/command-osu=osutopdata=${obj.guildId}.json`, JSON.stringify(osutopdata, null, 2))
 
 
-            const mostplayedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/beatmapsets/most_played`
+            // const mostplayedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/beatmapsets/most_played`
 
             const mostplayeddata:osuApiTypes.BeatmapPlaycount[] = await osufunc.apiget('most_played', `${osudata.id}`)
            /*  const mostplayeddata: osuApiTypes.BeatmapPlaycount[] = await fetch(mostplayedurl, {

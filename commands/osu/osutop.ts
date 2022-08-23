@@ -323,7 +323,7 @@ Options:
 
 ----------------------------------------------------
 `, 'utf-8')
-        const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
+        // const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         /* const osudata: osuApiTypes.User = await fetch(userurl, {
             headers: {
@@ -393,7 +393,7 @@ Error - authentication
         } catch (error) {
 
         }
-        const usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
+        // const usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
         const osutopdataPreSort: osuApiTypes.Score[] = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
         /* const osutopdataPreSort: osuApiTypes.Score[] = await fetch(usertopurl, {
             headers: {
