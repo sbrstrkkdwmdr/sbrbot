@@ -1,15 +1,15 @@
 import cmdconfig = require('./configs/commandopts')
 
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
-    
+
     const guildID = config.testGuildID;
-    const guild = client.guilds.cache.get(guildID);
-    let commands;
-/*     let settoguild = 0
-    if (settoguild == 1 && guild) {
-        commands = guild.commands
-    } else { */
-        commands = client.application?.commands
+    //const guild = client.guilds.cache.get(guildID);
+    //let commands;
+    /*     let settoguild = 0
+        if (settoguild == 1 && guild) {
+            commands = guild.commands
+        } else { */
+    const commands = client.application?.commands
     //}
 
     commands?.set([{
