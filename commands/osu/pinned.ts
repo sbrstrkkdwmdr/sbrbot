@@ -411,7 +411,7 @@ ${mode}`
                         `${curscore.beatmapset.artist} (${curscore.beatmapset.artist_unicode})`
                 const fulltitle = `${artist} - ${title} [${curscore.beatmap.version}]`
 
-                let pptxt: any;
+                let pptxt: string;
                 const ppcalcing = await osufunc.scorecalc(
                     curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
                     curscore.mode,

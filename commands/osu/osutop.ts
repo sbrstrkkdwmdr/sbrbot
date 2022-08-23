@@ -572,7 +572,7 @@ ${error}
                 const combo = curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
                 const ranking = curscore.rank.toUpperCase()
-                let grade: any;
+                let grade: string;
                 switch (ranking) {
                     case 'F':
                         grade = 'F'
@@ -618,7 +618,7 @@ ${error}
                     hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
                 }
                 const topmods = curscore.mods
-                let ifmods: any;
+                let ifmods: string;
 
                 if (!topmods || topmods.join('') == '' || topmods == null || topmods == undefined) {
                     ifmods = ''
@@ -655,9 +655,7 @@ ${error}
                 let trueppindex: number;
                 const indexdata = osutopdata.sort((a, b) => b.pp - a.pp)
 
-                if (sort == 'pp') {
-                }
-                else {
+                if(sort != 'pp') {
                     trueppindex = await indexdata.indexOf(curscore)
                     ifnopp = await `(#${trueppindex + 1})`
                     if (reverse == false || reverse == null) {
@@ -806,8 +804,6 @@ ${error}
             **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
         `, inline: true
             }])
-        } else {
-
         }
         if (button == null) {
             obj.reply({

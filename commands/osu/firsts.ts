@@ -377,7 +377,7 @@ node-fetch error: ${error}
             const curscore = firstscoresdata[i + (page * 5)]
             if (!curscore) break;
             const ranking = curscore.rank.toUpperCase()
-            let grade: any;
+            let grade: string;
             switch (ranking) {
                 case 'F':
                     grade = emojis.grades.F
@@ -425,15 +425,15 @@ node-fetch error: ${error}
                     break;
             }
 
-            const fmods: any = curscore.mods
-            let ifmods: any = '';
+/*             const fmods: string[] = curscore.mods
+            let ifmods: string = '';
             if (!fmods) {
                 ifmods = ''
             } else {
                 ifmods = '+' + fmods.join('').toUpperCase()
-            }
+            } */
 
-            let pptxt: any;
+            let pptxt: string;
             const ppcalcing = await osufunc.scorecalc(
                 curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
                 curscore.mode,

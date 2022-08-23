@@ -617,7 +617,7 @@ Error - authentication
                 mapimg = emojis.gamemodes.mania;
                 break;
         }
-        let ppComputed: any;
+        let ppComputed: object;
         let ppissue: string;
         let totaldiff;
         try {

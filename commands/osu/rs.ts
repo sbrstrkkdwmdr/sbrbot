@@ -538,10 +538,8 @@ node-fetch error: ${error}
                     rsgrade = emojis.grades.XH
                     break;
             }
-            let totaldiff: any;
-            let pp: any;
-            let ppfc: any;
-            let hitlist: any;
+            let totaldiff: string; 
+            let hitlist: string;
             switch (curscore.mode) {
                 case 'osu': default:
                     hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
@@ -557,7 +555,7 @@ node-fetch error: ${error}
                     break;
             }
             let rspp: string | number = 0;
-            let ppissue: any = '';
+            let ppissue: string = '';
             // const ppiffc = NaN;
             let ppcalcing
             try {
