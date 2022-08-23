@@ -87,7 +87,7 @@ number: ${num}
                     .addField('**Formula**', 'c>f = convert celcius to fahrenheit', false)
                     .addField('**math stuff idk**', '* = multiply\n/ = divide\n- = subtract\n+ = add\n^ = power', false)
                     ; */
-        let EmbedList = new Discord.EmbedBuilder()
+        const EmbedList = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.hex)
             .setTitle('List of measurements')
             /*             .addField('Temperature', `c (celsius), f (fahnrenheit), k (kelvin)`, false)
@@ -130,7 +130,7 @@ number: ${num}
 
             ])
             ;
-        let siEmbed = new Discord.EmbedBuilder()
+        const siEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.hex)
             .setTitle('List of SI prefixes')
             .addFields([
@@ -169,7 +169,7 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
                     inline: false
                 }
             ]);
-        let embedres = new Discord.EmbedBuilder()
+        const embedres = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.hex)
             .setDescription('⠀');
 

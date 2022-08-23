@@ -24,8 +24,8 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
 
-        let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
-        let user = messagenohttp.split('/')[2]
+        const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
+        const user = messagenohttp.split('/')[2]
         fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - osuuserlink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!profile link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
         const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
@@ -50,8 +50,8 @@ Error: ${error}
         }
         fs.writeFileSync(`debugosu/link-osu=osu=${message.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {
-            let osustats = osudata.statistics
-            let grades = osustats.grade_counts
+            const osustats = osudata.statistics
+            const grades = osustats.grade_counts
 
             let playerrank = osudata.statistics.global_rank || ''//.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             let countryrank = osudata.statistics.country_rank || ''//.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -67,9 +67,9 @@ Error: ${error}
                 countryrank = countryrank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
 
-            let playerlasttoint: any = new Date(osudata.last_visit)
+            const playerlasttoint: any = new Date(osudata.last_visit)
 
-            let online = osudata.is_online;
+            const online = osudata.is_online;
 
             let isonline = `**${emojis.onlinestatus.offline} Offline**`
 
@@ -80,7 +80,7 @@ Error: ${error}
                 isonline = `**${emojis.onlinestatus.offline} Offline** | Last online <t:${playerlasttoint.getTime() / 1000}:R>`
             }
 
-            let prevnames = osudata.previous_usernames;
+            const prevnames = osudata.previous_usernames;
             let prevnameslist: any
             if (prevnames.length > 0) {
                 prevnameslist = '**Previous Usernames:** ' + prevnames.join(', ');
@@ -120,8 +120,8 @@ Error: ${error}
                 .catch(error => { });
 
             fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nsuccess\nID:${absoluteID}\n\n`, 'utf-8')
-            let endofcommand = new Date().getTime();
-            let timeelapsed = endofcommand - currentDate.getTime();
+            const endofcommand = new Date().getTime();
+            const timeelapsed = endofcommand - currentDate.getTime();
             fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nCommand Latency (osuuserlink) - ${timeelapsed}ms\nID:${absoluteID}\n`)
 
         } catch (error) {

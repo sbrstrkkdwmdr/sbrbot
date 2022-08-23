@@ -56,21 +56,21 @@ ID: ${absoluteID}
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        let starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString())
-        let trueping = obj.createdAt.getTime() - new Date().getTime() + 'ms'
+        const starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString())
+        const trueping = obj.createdAt.getTime() - new Date().getTime() + 'ms'
 
-        let uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
-        let uptimehours = Math.floor(uptime / 3600) >= 10 ? Math.floor(uptime / 3600) : '0' + Math.floor(uptime / 3600);
-        let uptimeminutes = Math.floor((uptime % 3600) / 60) >= 10 ? Math.floor((uptime % 3600) / 60) : '0' + Math.floor((uptime % 3600) / 60);
-        let uptimeseconds = Math.floor(uptime % 60) >= 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
-        let upandtime = `Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}`
+        const uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
+        const uptimehours = Math.floor(uptime / 3600) >= 10 ? Math.floor(uptime / 3600) : '0' + Math.floor(uptime / 3600);
+        const uptimeminutes = Math.floor((uptime % 3600) / 60) >= 10 ? Math.floor((uptime % 3600) / 60) : '0' + Math.floor((uptime % 3600) / 60);
+        const uptimeseconds = Math.floor(uptime % 60) >= 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
+        const upandtime = `Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}`
 
-        let totalusers: any = client.users.cache.size;
+        const totalusers: any = client.users.cache.size;
         let totalusersnobots: any;
-        let totalguilds: any = client.guilds.cache.size;
-        let commandssent: any = fs.existsSync('logs/totalcommands.txt') ? fs.readFileSync('logs/totalcommands.txt').length : '0';
+        const totalguilds: any = client.guilds.cache.size;
+        const commandssent: any = fs.existsSync('logs/totalcommands.txt') ? fs.readFileSync('logs/totalcommands.txt').length : '0';
 
-        let Embed = new Discord.EmbedBuilder()
+        const Embed = new Discord.EmbedBuilder()
             .setTitle(`${client.user.username} stats`)
             .setDescription(
                 `Client latency: ${Math.round(client.ws.ping)}ms

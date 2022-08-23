@@ -24,8 +24,8 @@ function isOwner(userid: number) {
  */
 function isAdmin(userid: number, guildid: number, client: any) {
     if (client.guilds.cache.has(guildid)) {
-        let curguild = client.guilds.cache.get(guildid)
-        let curmem = curguild.members.cache.has(userid) ? curguild.members.cache.get(userid) : null
+        const curguild = client.guilds.cache.get(guildid)
+        const curmem = curguild.members.cache.has(userid) ? curguild.members.cache.get(userid) : null
         if (curmem != null) {
             return true;
         }

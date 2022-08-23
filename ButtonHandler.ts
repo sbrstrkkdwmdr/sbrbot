@@ -22,7 +22,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         if (specid && specid != interaction.user.id) {
             interaction.deferUpdate();
             return;
-        };
+        }
         switch (command) {
             /*             case 'test':
                             if (button == 'BigLeftArrow') {

@@ -16,8 +16,8 @@ module.exports = {
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token = JSON.parse(accessN).access_token;
+        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token;
         let buttons;
 
         let user = '';
@@ -81,7 +81,7 @@ cmd ID: ${absoluteID}
                 }
             }
             if (mode == null && (!args[0] || message.mentions.users.size > 0)) {
-                let findname = await userdata.findOne({ where: { userid: searchid } })
+                const findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname == null) {
                     mode = 'osu'
                 } else {
@@ -153,7 +153,7 @@ cmd ID: ${absoluteID}
                 }
             }
             if (mode == null) {
-                let findname = await userdata.findOne({ where: { userid: searchid } })
+                const findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname == null) {
                     mode = 'osu'
                 } else {
@@ -234,7 +234,7 @@ button: ${button}
                 }
             }
             if (mode == null) {
-                let findname = await userdata.findOne({ where: { userid: searchid } })
+                const findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname == null) {
                     mode = 'osu'
                 } else {
@@ -321,8 +321,8 @@ Error - authentication
             return obj.channel.send('Error - no user found')
                 .catch(error => { });
 
-        };
-        let userfirstsurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/firsts?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
+        }
+        const userfirstsurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/firsts?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
         const firstscoresdata: osuApiTypes.Score[] = await osufunc.apiget('firsts', `${osudata.id}`, `${mode}`)
         /*         const firstscoresdata:osuApiTypes.Score[] = await fetch(userfirstsurl, {
             headers: {
@@ -360,7 +360,7 @@ node-fetch error: ${error}
             }) */
         fs.writeFileSync(`debugosu/command-firsts=firstscoresdata=${obj.guildId}.json`, JSON.stringify(firstscoresdata, null, 2))
 
-        let firstsEmbed = new Discord.EmbedBuilder()
+        const firstsEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.hex)
             .setTitle(`#1 scores for ${osudata.username}`)
             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
@@ -378,9 +378,9 @@ node-fetch error: ${error}
             ${mode}
             `);
         for (let i = 0; i < firstscoresdata.length && i < 5; i++) {
-            let curscore = firstscoresdata[i + (page * 5)]
+            const curscore = firstscoresdata[i + (page * 5)]
             if (!curscore) break;
-            let ranking = curscore.rank.toUpperCase()
+            const ranking = curscore.rank.toUpperCase()
             let grade: any;
             switch (ranking) {
                 case 'F':
@@ -410,9 +410,9 @@ node-fetch error: ${error}
                 case 'XH':
                     grade = emojis.grades.XH
                     break;
-            };
+            }
             let hitlist: string;
-            let hitstats = curscore.statistics
+            const hitstats = curscore.statistics
             switch (mode) {
                 case 'osu':
                 default:
@@ -429,7 +429,7 @@ node-fetch error: ${error}
                     break;
             }
 
-            let fmods: any = curscore.mods
+            const fmods: any = curscore.mods
             let ifmods: any = '';
             if (!fmods) {
                 ifmods = ''
@@ -438,7 +438,7 @@ node-fetch error: ${error}
             }
 
             let pptxt: any;
-            let ppcalcing = await osufunc.scorecalc(
+            const ppcalcing = await osufunc.scorecalc(
                 curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
                 curscore.mode,
                 curscore.beatmap.id,

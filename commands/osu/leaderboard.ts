@@ -16,8 +16,8 @@ module.exports = {
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token = JSON.parse(accessN).access_token;
+        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token;
         let buttons;
         let prevmap;
         let i: number;
@@ -79,7 +79,7 @@ cmd ID: ${absoluteID}
                         .setEmoji('➡')
                     /* .setLabel('End') */,
                 );
-            let mapid = args[0]
+            const mapid = args[0]
 
         }
 
@@ -216,9 +216,9 @@ mods: ${mods}
 `, 'utf-8')
 
 
-        let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}`//?mode=osu`//?mods=${mods}`
+        const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}`//?mode=osu`//?mods=${mods}`
 
-        let mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
+        const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
         /* await fetch(mapurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
@@ -285,9 +285,9 @@ ${error}
         }
         fulltitle = `${artist} - ${title} [${mapdata.version}]`
         if (mods == null) {
-            let mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/scores`
+            const mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/scores`
 
-            let lbdataf: osuApiTypes.BeatmapScores = await osufunc.apiget('scores_get_map', `${mapid}`)
+            const lbdataf: osuApiTypes.BeatmapScores = await osufunc.apiget('scores_get_map', `${mapid}`)
             /*  let lbdataf:osuApiTypes.BeatmapScores = await fetch(mapscoresurl, {
                  method: 'GET',
                  headers: {
@@ -343,10 +343,10 @@ Error - authentication
             } catch (error) {
 
             }
-            let lbdata = lbdataf.scores
+            const lbdata = lbdataf.scores
             fs.writeFileSync(`debugosu/command-leaderboard=lbdata=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
 
-            let lbEmbed = new Discord.EmbedBuilder()
+            const lbEmbed = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.scorelist.hex)
                 .setTitle(`Score leaderboard of ${fulltitle}`)
                 .setURL(`https://osu.ppy.sh/b/${mapid}`)
@@ -356,19 +356,19 @@ Error - authentication
             let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`
 
             for (i = 0; i < lbdata.length && i < 5; i++) {
-                let score = lbdata[i + (page * 5)]
+                const score = lbdata[i + (page * 5)]
                 if (!score) {
                     break;
                 }
-                let gamestats = score.statistics
+                const gamestats = score.statistics
 
-                let hitgeki = gamestats.count_geki
-                let hit300 = gamestats.count_300
-                let hitkatu = gamestats.count_katu
-                let hit100 = gamestats.count_100
-                let hit50 = gamestats.count_50
-                let miss = gamestats.count_miss
-                let mode = score.mode_int
+                const hitgeki = gamestats.count_geki
+                const hit300 = gamestats.count_300
+                const hitkatu = gamestats.count_katu
+                const hit100 = gamestats.count_100
+                const hit50 = gamestats.count_50
+                const miss = gamestats.count_miss
+                const mode = score.mode_int
                 let hitlist;
                 switch (mode) {
                     case 0: //std
@@ -417,9 +417,9 @@ ${hitlist}
 
             }
         } else {
-            let oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${cmdchecks.toHexadecimal(mapid)}&mods=${cmdchecks.toHexadecimal(osumodcalc.ModStringToInt(osumodcalc.shortModName(mods)))}&limit=100`
+            const oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${cmdchecks.toHexadecimal(mapid)}&mods=${cmdchecks.toHexadecimal(osumodcalc.ModStringToInt(osumodcalc.shortModName(mods)))}&limit=100`
 
-            let lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1);
+            const lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1);
             /* let lbdata = await fetch(oldmsu) //uses apiv1 so im sticking with "any" type
                 .then(res => res.json() as any)
                 .catch(error => {
@@ -467,7 +467,7 @@ Error - authentication
             } catch (error) {
             }
 
-            let lbEmbed = new Discord.EmbedBuilder()
+            const lbEmbed = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.scorelist.hex)
                 .setTitle(`Modded score leaderboard of ${fulltitle}`)
                 .setURL(`https://osu.ppy.sh/b/${mapid}`)
@@ -480,9 +480,9 @@ Error - authentication
             for (i = 0; i < (lbdata as any).length && i < 5; i++) {
                 let hitlist;
                 let acc;
-                let score = lbdata[i + (page * 5)]
+                const score = lbdata[i + (page * 5)]
                 if (!score) break;
-                let mode = mapdata.mode
+                const mode = mapdata.mode
                 switch (mode) {
                     case 'osu':
                         hitlist = `${score.count300}/${score.count100}/${score.count50}/${score.countmiss}`

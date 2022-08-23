@@ -35,9 +35,9 @@ requested by ${message.author.id} AKA ${message.author.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-        let messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
+        const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         let overrides: object;
-        let mapmods: string = 
+        const mapmods: string = 
             message.content.includes('+') ?
                 messagenohttp.split('+')[1] : 'NM';
         let mapid;

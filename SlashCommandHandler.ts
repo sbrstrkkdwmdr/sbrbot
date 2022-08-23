@@ -10,14 +10,14 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
     client.on('interactionCreate', async (interaction) => {
         if (!(interaction.type === InteractionType.ApplicationCommand)) return;
         //make a variable that is the current date
-        let currentDate = new Date()
-        let currentDateISO = new Date().toISOString()
-        let absoluteID = currentDate.getTime();
+        const currentDate = new Date()
+        const currentDateISO = new Date().toISOString()
+        const absoluteID = currentDate.getTime();
 
-        let message = null;
-        let args = null;
-        let button = null;
-        let obj = interaction;
+        const message = null;
+        const args = null;
+        const button = null;
+        const obj = interaction;
 
         if (!oncooldown.has(interaction.member.user.id)) {
             timeouttime = new Date().getTime() + 3000
@@ -29,7 +29,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 failIfNotExists: true,
                 ephemeral: true
             });
-        };
+        }
         if (!oncooldown.has(interaction.member.user.id)) {
             oncooldown.add(interaction.member.user.id);
             timeouttime = new Date().getTime()
@@ -38,7 +38,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }, 3000)
         }
         function getTimeLeft(timeout) {
-            let timeLeft = timeout - new Date().getTime();
+            const timeLeft = timeout - new Date().getTime();
             return Math.floor(timeLeft);
         }
 

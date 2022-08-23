@@ -17,8 +17,8 @@ module.exports = {
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token = JSON.parse(accessN).access_token;
+        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token;
         let buttons;
 
         let user = null;
@@ -201,7 +201,7 @@ module.exports = {
             }
         }
         if (mode == null) {
-            let findname = await userdata.findOne({ where: { userid: searchid } })
+            const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 mode = 'osu'
             } else {
@@ -225,7 +225,7 @@ module.exports = {
                 .catch(error => { });
 
         }
-        let userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
+        const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
         /* await fetch(userinfourl, {
@@ -296,7 +296,7 @@ module.exports = {
                     break;
             }
         } else { }
-        let recentplayurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/recent?include_fails=1&mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`
+        const recentplayurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/recent?include_fails=1&mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`
 
         const rsdata: osuApiTypes.Score[] = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
         /* await fetch(recentplayurl, {
@@ -336,12 +336,12 @@ node-fetch error: ${error}
 
         fs.writeFileSync(`debugosu/commands-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
 
-        let rsEmbed = new Discord.EmbedBuilder();
+        const rsEmbed = new Discord.EmbedBuilder();
 
         if (list != true) {
             rsEmbed.setColor(colours.embedColour.score.hex)
 
-            let curscore = rsdata[0 + page]
+            const curscore = rsdata[0 + page]
             if (!curscore || curscore == undefined || curscore == null) {
                 if (interaction && button == null) {
                     interaction.editReply(
@@ -365,12 +365,12 @@ node-fetch error: ${error}
                 }
                 return;
             }
-            let curbm = curscore.beatmap
-            let curbms = curscore.beatmapset
-            let hittime = curbm.hit_length
+            const curbm = curscore.beatmap
+            const curbms = curscore.beatmapset
+            const hittime = curbm.hit_length
             let totalstr;
 
-            let values = osumodcalc.calcValues(
+            const values = osumodcalc.calcValues(
                 curbm.cs,
                 curbm.ar,
                 curbm.accuracy,
@@ -380,7 +380,7 @@ node-fetch error: ${error}
                 osumodcalc.OrderMods(curscore.mods.join(''))
             );
 
-            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(curbm.id)}?`;
+            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(curbm.id)}?`;
 
             const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${curbm.id}`)
             /* const mapdata: osuApiTypes.Beatmap = await fetch(mapurl, {
@@ -421,7 +421,7 @@ node-fetch error: ${error}
 
             let accgr;
             let fcaccgr;
-            let gamehits = curscore.statistics;
+            const gamehits = curscore.statistics;
             switch (rsdata[0].mode) {
                 case 'osu': default:
                     accgr =
@@ -508,9 +508,9 @@ node-fetch error: ${error}
                 case 'mania':
                     totalhits = gamehits.count_geki + gamehits.count_300 + gamehits.count_katu + gamehits.count_100 + gamehits.count_50 + gamehits.count_miss;
             }
-            let curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
-            let guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
-            let curbmpasstime = Math.floor(guesspasspercentage / 100 * curbm.total_length);
+            const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
+            const guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
+            const curbmpasstime = Math.floor(guesspasspercentage / 100 * curbm.total_length);
 
             let rsgrade;
             switch (curscore.rank.toUpperCase()) {
@@ -563,7 +563,7 @@ node-fetch error: ${error}
             }
             let rspp: string | number = 0;
             let ppissue: any = '';
-            let ppiffc = NaN;
+            const ppiffc = NaN;
             let ppcalcing
             try {
                 ppcalcing = await osufunc.scorecalc(
@@ -629,22 +629,22 @@ node-fetch error: ${error}
                     `**${ppcalcing[1].pp.toFixed(2)}**pp IF ${fcaccgr.accuracy.toFixed(2)}% FC
                 **${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
             }
-            let title =
+            const title =
                 curbms.title == curbms.title_unicode ?
                     curbms.title :
                     `${curbms.title} (${curbms.title_unicode})`
-            let artist =
+            const artist =
                 curbms.artist == curbms.artist_unicode ?
                     curbms.artist :
                     `${curbms.artist} (${curbms.artist_unicode})`
-            let fulltitle = `${artist} - ${title} [${curbm.version}]`
+            const fulltitle = `${artist} - ${title} [${curbm.version}]`
             let trycount = 1
             for (let i = rsdata.length - 1; i > (page); i--) {
                 if (curbm.id == rsdata[i].beatmap.id) {
                     trycount++
                 }
             }
-            let trycountstr = `try #${trycount}`;
+            const trycountstr = `try #${trycount}`;
 
             rsEmbed
                 .setTitle(`#${page + 1} most recent play for ${curscore.user.username} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>`)
@@ -681,7 +681,7 @@ node-fetch error: ${error}
                 .setTitle(`Recent plays for ${osudata.username}`);
             let txt = '';
             for (let i = 0; i < rsdata.length - (page * 20) && i < 20; i++) {
-                let curscore = rsdata[i + page * 20]
+                const curscore = rsdata[i + page * 20]
                 txt +=
                     `**${1 + i + page * 20} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>**
 [${curscore.beatmapset.title}](https://osu.ppy.sh/b/${curscore.beatmap.id}) | [score link](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})
@@ -730,8 +730,8 @@ ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') + ' | ' : ''}
 
         }
 
-        let endofcommand = new Date().getTime();
-        let timeelapsed = endofcommand - currentDate.getTime();
+        const endofcommand = new Date().getTime();
+        const timeelapsed = endofcommand - currentDate.getTime();
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency - ${timeelapsed}ms\n`)
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, '\nsuccess\n\n', 'utf-8')
     }

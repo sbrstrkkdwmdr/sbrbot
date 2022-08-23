@@ -56,7 +56,7 @@ no options
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        let Embed = new Discord.EmbedBuilder()
+        const Embed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.hex)
             .setTitle('Important links and information')
             .setDescription(`

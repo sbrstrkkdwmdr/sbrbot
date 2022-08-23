@@ -67,7 +67,7 @@ ID: ${absoluteID}
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        let res = await fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${query}&cx=${config.google.cx}&key=${config.google.apiKey}&searchType=image`).catch(error => fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, "\n" + error));
+        const res = await fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${query}&cx=${config.google.cx}&key=${config.google.apiKey}&searchType=image`).catch(error => fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, "\n" + error));
 
         if (!res || res.status !== 200) {
             obj.reply({
@@ -78,7 +78,7 @@ ID: ${absoluteID}
                 .catch(error => { });
             return;
         }
-        let response = await res.json() as any;
+        const response = await res.json() as any;
         fs.writeFileSync(`debug/image${obj.guildId}.json`, JSON.stringify(response, null, 2))
 
         if (!response.items) {
@@ -96,25 +96,25 @@ ID: ${absoluteID}
             resimg += `\n\n<${response.items[i].link}>`
         }
 
-        let imageEmbed = new Discord.EmbedBuilder()
+        const imageEmbed = new Discord.EmbedBuilder()
             .setURL(`${'https://www.google.com/search?q=' + query}`)
             .setTitle(`IMAGE RESULTS FOR ${query}`)
             .setDescription(`(NOTE - links may be unsafe)\n${resimg}`)
             .setColor(colours.embedColour.query.hex)
 
-        let image1 = new Discord.EmbedBuilder()
+        const image1 = new Discord.EmbedBuilder()
             .setURL(`${'https://www.google.com/search?q=' + query.replaceAll(' ', '+')}`)
             .setImage(`${response.items[0].image.thumbnailLink}`)
-        let image2 = new Discord.EmbedBuilder()
+        const image2 = new Discord.EmbedBuilder()
             .setURL(`${'https://www.google.com/search?q=' + query.replaceAll(' ', '+')}`)
             .setImage(`${response.items[1].image.thumbnailLink}`)
-        let image3 = new Discord.EmbedBuilder()
+        const image3 = new Discord.EmbedBuilder()
             .setURL(`${'https://www.google.com/search?q=' + query.replaceAll(' ', '+')}`)
             .setImage(`${response.items[2].image.thumbnailLink}`)
-        let image4 = new Discord.EmbedBuilder()
+        const image4 = new Discord.EmbedBuilder()
             .setURL(`${'https://www.google.com/search?q=' + query.replaceAll(' ', '+')}`)
             .setImage(`${response.items[3].image.thumbnailLink}`)
-        let image5 = new Discord.EmbedBuilder()
+        const image5 = new Discord.EmbedBuilder()
             .setURL(`${'https://www.google.com/search?q=' + query.replaceAll(' ', '+')}`)
             .setImage(`${response.items[4].image.thumbnailLink}`)
 

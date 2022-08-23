@@ -17,9 +17,9 @@ module.exports = {
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token = JSON.parse(accessN).access_token;
-        let buttons = new Discord.ActionRowBuilder();
+        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token;
+        const buttons = new Discord.ActionRowBuilder();
 
         //args 
         let user;
@@ -106,7 +106,7 @@ button: ${button}
             }
         }
         if (user == null || user.includes('<') || mtns > 0) {
-            let findname = await userdata.findOne({ where: { userid: searchid } })
+            const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 user = findname.get('osuname');
             } else {
@@ -116,7 +116,7 @@ button: ${button}
             }
         }
         if (mode == null) {
-            let findname = await userdata.findOne({ where: { userid: searchid } })
+            const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 mode = 'osu'
             } else {
@@ -264,34 +264,34 @@ Error - authentication
         } else {
         }
 
-        let osustats = osudata.statistics;
-        let grades = osustats.grade_counts;
+        const osustats = osudata.statistics;
+        const grades = osustats.grade_counts;
 
-        let playerrank =
+        const playerrank =
             osudata.statistics.global_rank == null ?
                 '---' :
                 osudata.statistics.global_rank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             ;
-        let countryrank =
+        const countryrank =
             osudata.statistics.country_rank == null ?
                 '---' :
                 osudata.statistics.country_rank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
-        let onlinestatus = osudata.is_online == true ?
+        const onlinestatus = osudata.is_online == true ?
             `**${emojis.onlinestatus.online} Online**` :
             `**${emojis.onlinestatus.offline} Offline** | Last online <t:${(new Date(osudata.last_visit)).getTime() / 1000}:R>`
 
-        let prevnames = osudata.previous_usernames.length > 0 ?
+        const prevnames = osudata.previous_usernames.length > 0 ?
             '**Previous Usernames:** ' + osudata.previous_usernames.join(', ') :
             ''
             ;
 
-        let playcount = osustats.play_count == null ?
+        const playcount = osustats.play_count == null ?
             '---' :
             osustats.play_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
         //${osustats.level.current}.${osustats.level.progress.toFixed(2)}
-        let lvl = osustats.level.current != null ?
+        const lvl = osustats.level.current != null ?
             osustats.level.progress != null ?
                 `${osustats.level.current}.${osustats.level.progress.toFixed(2)}` :
                 `${osustats.level.current}` :
@@ -321,8 +321,8 @@ Error - authentication
                     .catch(error => { });
 
             }
-            let dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
-            let datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
+            const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
+            const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
 
             const chartplay = new chartjsimg()
                 .setConfig({
@@ -378,18 +378,18 @@ Error - authentication
             chartplay.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(450)
             chartrank.setBackgroundColor('color: rgb(0,0,0)').setWidth(1500).setHeight(600)
             chartrank.getShortUrl();
-            let ChartsEmbedRank = new Discord.EmbedBuilder()
+            const ChartsEmbedRank = new Discord.EmbedBuilder()
                 .setDescription('Click on the image to see the full chart')
                 .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
                 .setImage(`${await chartrank.getShortUrl()}`);
 
-            let ChartsEmbedPlay = new Discord.EmbedBuilder()
+            const ChartsEmbedPlay = new Discord.EmbedBuilder()
                 .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
                 .setImage(`${await chartplay.getShortUrl()}`);
             chartrank.toFile('./debugosu/playerrankgraph.jpg')
             chartplay.toFile('./debugosu/playerplaygraph.jpg')
 
-            let usertopurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/best?mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`;
+            const usertopurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/best?mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`;
 
             const osutopdata:osuApiTypes.Score[] = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
             /* const osutopdata: osuApiTypes.Score[] = await fetch(usertopurl, {
@@ -400,7 +400,7 @@ Error - authentication
             fs.writeFileSync(`debugosu/command-osu=osutopdata=${obj.guildId}.json`, JSON.stringify(osutopdata, null, 2))
 
 
-            let mostplayedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/beatmapsets/most_played`
+            const mostplayedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/beatmapsets/most_played`
 
             const mostplayeddata:osuApiTypes.BeatmapPlaycount[] = await osufunc.apiget('most_played', `${osudata.id}`)
            /*  const mostplayeddata: osuApiTypes.BeatmapPlaycount[] = await fetch(mostplayedurl, {
@@ -410,9 +410,9 @@ Error - authentication
             }).then(res => res.json() as any) */
             fs.writeFileSync(`debugosu/command-osu=mostplayeddata=${obj.guildId}.json`, JSON.stringify(mostplayeddata, null, 2))
 
-            let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            let maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
-            let minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
+            const highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
+            const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
             let avgpp;
             let totalpp = 0;
             for (let i2 = 0; i2 < osutopdata.length; i2++) {
@@ -421,7 +421,7 @@ Error - authentication
             avgpp = (totalpp / osutopdata.length).toFixed(2)
             let mostplaytxt = ``
             for (let i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
-                let bmpc = mostplayeddata[i2]
+                const bmpc = mostplayeddata[i2]
                 mostplaytxt += `\`${bmpc.count.toString() + ' plays'.padEnd(15, ' ')}\` | [${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id})\n`
             }
             osuEmbed.addFields([

@@ -87,7 +87,7 @@ User ID: ${curuserid}
             }
         } else {
             let guildname = 'null_name';
-            let logfiles = []
+            const logfiles = []
             if (client.guilds.cache.has(guildid)) {
                 guildname = client.guilds.cache.get(guildid).name;
             }

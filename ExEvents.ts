@@ -65,7 +65,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
 
     //status updates
-    let songsarr = [
+    const songsarr = [
         "Yomi Yori kikoyu, Koukoku no hi to Honoo no Shoujo [Kurushimi]",
         "FREEDOM DiVE [FOUR DiMENSIONS]",
         "A FOOL MOON NIGHT [Piggey's Destruction]",
@@ -85,7 +85,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         "The Big Black [WHO'S AFRAID OF THE BIG BLACK]"
     ]
 
-    let activityarr = [
+    const activityarr = [
         {
             name: "240BPM | sbr-help",
             type: 1,

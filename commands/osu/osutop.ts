@@ -16,8 +16,8 @@ module.exports = {
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         //let absoluteID = new Date().getTime()
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token = JSON.parse(accessN).access_token;
+        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token;
         let buttons;
 
         let user = null;
@@ -197,7 +197,7 @@ button: ${button}
                 if (message.embeds[0].description.includes('mods')) {
                     mods = message.embeds[0].description.split('mods: ')[1].split('\n')[0];
                 }
-                let sort1 = message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                const sort1 = message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
                         sort = 'score'
@@ -224,7 +224,7 @@ button: ${button}
                 }
 
 
-                let reverse1 = message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                const reverse1 = message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
                     reverse = true
                 } else {
@@ -263,7 +263,7 @@ button: ${button}
 
 
         if (user == null || message.mentions.users.size > 0) {
-            let findname = await userdata.findOne({ where: { userid: searchid } })
+            const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 user = findname.get('osuname');
             } else {
@@ -273,7 +273,7 @@ button: ${button}
             }
         }
         if (mode == null) {
-            let findname = await userdata.findOne({ where: { userid: searchid } })
+            const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 mode = findname.get('mode');
             } else {
@@ -323,7 +323,7 @@ Options:
 
 ----------------------------------------------------
 `, 'utf-8')
-        let userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
+        const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         /* const osudata: osuApiTypes.User = await fetch(userurl, {
             headers: {
@@ -393,7 +393,7 @@ Error - authentication
         } catch (error) {
 
         }
-        let usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
+        const usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
         const osutopdataPreSort: osuApiTypes.Score[] = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
         /* const osutopdataPreSort: osuApiTypes.Score[] = await fetch(usertopurl, {
             headers: {
@@ -433,7 +433,7 @@ node-fetch error: ${error}
         fs.writeFileSync(`debugosu/command-otop=osutopdataPreSort=${obj.guildId}`, JSON.stringify(osutopdataPreSort, null, 2))
 
         try {
-            let usernametesting = osutopdataPreSort[0].user.username
+            const usernametesting = osutopdataPreSort[0].user.username
         } catch (error) {
             console.log(error)
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -537,7 +537,7 @@ node-fetch error: ${error}
             filterinfo += `\ncompact mode`
         }
         try {
-            let usernamefortests = osutopdata[0].user.username
+            const usernamefortests = osutopdata[0].user.username
 
         } catch (error) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -552,7 +552,7 @@ ${error}
                 .catch(error => { });
 
         }
-        let topEmbed = new Discord.EmbedBuilder()
+        const topEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.hex)
             .setTitle(`Top plays of ${osutopdata[0].user.username}`)
             .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
@@ -561,22 +561,22 @@ ${error}
             topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 5)}\nmode: ${mode}\n`)
             for (let i = 0; i < 5 && i < osutopdata.length; i++) {
 
-                let scoreoffset = page * 5 + i
+                const scoreoffset = page * 5 + i
 
-                let curscore = osutopdata[scoreoffset]
+                const curscore = osutopdata[scoreoffset]
                 if (!curscore) {
                     break;
                 }
-                let score = curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let hitgeki = curscore.statistics.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let hit300 = curscore.statistics.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let hitkatu = curscore.statistics.count_katu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let hit100 = curscore.statistics.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let hit50 = curscore.statistics.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let miss = curscore.statistics.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let combo = curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                const score = curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                const hitgeki = curscore.statistics.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                const hit300 = curscore.statistics.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                const hitkatu = curscore.statistics.count_katu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                const hit100 = curscore.statistics.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                const hit50 = curscore.statistics.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                const miss = curscore.statistics.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                const combo = curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-                let ranking = curscore.rank.toUpperCase()
+                const ranking = curscore.rank.toUpperCase()
                 let grade: any;
                 switch (ranking) {
                     case 'F':
@@ -606,7 +606,7 @@ ${error}
                     case 'XH':
                         grade = emojis.grades.XH
                         break;
-                };
+                }
 
 
                 let hitlist = ''
@@ -622,7 +622,7 @@ ${error}
                 if (mode == 'mania') {
                     hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
                 }
-                let topmods = curscore.mods
+                const topmods = curscore.mods
                 let ifmods: any;
 
                 if (!topmods || topmods.join('') == '' || topmods == null || topmods == undefined) {
@@ -637,7 +637,7 @@ ${error}
                     scorenum = scoreoffset + 1
                 }
 
-                let ppflag = ''
+                const ppflag = ''
 
                 /* if(parseFloat(curscore.accuracy) != 1){
                     let ppcalcing = await osufunc.scorecalc(
@@ -658,7 +658,7 @@ ${error}
                 } */
                 let ifnopp = '';
                 let trueppindex: number;
-                let indexdata = osutopdata.sort((a, b) => b.pp - a.pp)
+                const indexdata = osutopdata.sort((a, b) => b.pp - a.pp)
 
                 if (sort == 'pp') {
                 }
@@ -746,8 +746,8 @@ ${error}
         } else {
             topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 9)}\nmode: ${mode}\n`)
             for (let i = 0; i < 9 && i < osutopdata.length; i++) {
-                let scoreoffset = page * 9 + i
-                let score = osutopdata[scoreoffset]
+                const scoreoffset = page * 9 + i
+                const score = osutopdata[scoreoffset]
                 if (!score) {
                     break;
                 }
@@ -768,9 +768,9 @@ ${error}
             }
         }
         if (detailed == true) {
-            let highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            let maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
-            let minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
+            const highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
+            const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
             let avgpp;
             let totalpp = 0;
             for (let i2 = 0; i2 < osutopdata.length; i2++) {

@@ -11,7 +11,7 @@ module.exports = {
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
 
         if (message != null && button == null) {
-            let buttons = new Discord.ActionRowBuilder()
+            const buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
                         .setCustomId(`BigLeftArrow-lb-${message.author.id}`)
@@ -40,7 +40,7 @@ module.exports = {
                     /* .setLabel('End') */,
                 );
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - lb (message)\n${currentDate} | ${currentDateISO}\n recieved server leaderboard command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
-            let gamemode = args[0];
+            const gamemode = args[0];
 
             let mode: string = '';
             if (!args[0]) {
@@ -58,20 +58,20 @@ module.exports = {
             if (gamemode == 'mania' || gamemode == 'm' || gamemode == '3' || gamemode == 'piano') {
                 mode = 'mania'
             }
-            let serverlb = new Discord.EmbedBuilder()
+            const serverlb = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.userlist.hex)
                 .setTitle(`server leaderboard for ${message.guild.name}`)
-            let userids = await userdata.findAll();
-            let useridsarraylen = await userdata.count();
+            const userids = await userdata.findAll();
+            const useridsarraylen = await userdata.count();
             let rtxt = `\n`;
-            let rarr: any = [];
+            const rarr: any = [];
 
             for (let i = 0; i < useridsarraylen; i++) {
-                let searchid = userids[i].dataValues.userid;
-                let guild = message.guild;
+                const searchid = userids[i].dataValues.userid;
+                const guild = message.guild;
                 guild.members.cache.forEach(async member => {
                     if (member.id == searchid) {
-                        let user = await userdata.findOne({ where: { userid: member.id } });
+                        const user = await userdata.findOne({ where: { userid: member.id } });
                         if (user != null && !rtxt.includes(`${member.user.id}`)) {
                             let acc: any;
                             let pp: any;
@@ -232,8 +232,8 @@ module.exports = {
                 message.reply({ content: '⠀', embeds: [serverlb], allowedMentions: { repliedUser: false }, failIfNotExists: true, components: [buttons] })
                     .catch(error => { });
 
-                let endofcommand = new Date().getTime();
-                let timeelapsed = endofcommand - currentDate.getTime();
+                const endofcommand = new Date().getTime();
+                const timeelapsed = endofcommand - currentDate.getTime();
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (message command => lb server) - ${timeelapsed}ms\n`)
             }, 2000) //setting the timeout alllows enough time for the array to be sorted
         }
@@ -242,7 +242,7 @@ module.exports = {
 
         if (interaction != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - lb (interaction)\n${currentDate} | ${currentDateISO}\n recieved server lb command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
-            let buttons = new Discord.ActionRowBuilder()
+            const buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
                         .setCustomId(`BigLeftArrow-lb-${interaction.member.user.id}`)
@@ -271,25 +271,25 @@ module.exports = {
                     /* .setLabel('End') */,
                 );
 
-            let mode = message.embeds[0].footer.text.split(' | ')[0].replaceAll(' ', '')
-            let pagef = message.embeds[0].footer.text.split(' | Page ')[1].split('/')[0]
+            const mode = message.embeds[0].footer.text.split(' | ')[0].replaceAll(' ', '')
+            const pagef = message.embeds[0].footer.text.split(' | Page ')[1].split('/')[0]
             let page
 
-            let serverlb = new Discord.EmbedBuilder()
+            const serverlb = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.userlist.hex)
                 .setTitle(`server leaderboard for ${message.guild.name}`)
                 .setFooter({ text: mode });
-            let userids = await userdata.findAll();
-            let useridsarraylen = await userdata.count();
+            const userids = await userdata.findAll();
+            const useridsarraylen = await userdata.count();
             let rtxt = `\n`;
-            let rarr: any = [];
+            const rarr: any = [];
 
             for (let i = 0; i < useridsarraylen; i++) {
-                let searchid = userids[i].dataValues.userid;
-                let guild = message.guild;
+                const searchid = userids[i].dataValues.userid;
+                const guild = message.guild;
                 guild.members.cache.forEach(async member => {
                     if (member.id == searchid) {
-                        let user = await userdata.findOne({ where: { userid: member.id } });
+                        const user = await userdata.findOne({ where: { userid: member.id } });
                         if (user != null && !rtxt.includes(`${member.user.id}`)) {
                             let acc: any;
                             let pp: any;
@@ -474,8 +474,8 @@ module.exports = {
                 message.edit({ content: '⠀', embeds: [serverlb], allowedMentions: { repliedUser: false }, failIfNotExists: true, components: [buttons] })
                     .catch(error => { });
 
-                let endofcommand = new Date().getTime();
-                let timeelapsed = endofcommand - currentDate.getTime();
+                const endofcommand = new Date().getTime();
+                const timeelapsed = endofcommand - currentDate.getTime();
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (interaction command => lb server) - ${timeelapsed}ms\n`)
             }, 2000) //setting the timeout alllows enough time for the array to be sorted
 

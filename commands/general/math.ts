@@ -74,8 +74,8 @@ num2: ${num2}
         let equation = 'null'
 
         if (type == 'basic') {
-            let string = args.join(' ')
-            let evalstr = eval(cmdchecks.toMath(string).toString().replaceAll('^', '**').replaceAll('pi', 'Math.PI').toString()).toString()
+            const string = args.join(' ')
+            const evalstr = eval(cmdchecks.toMath(string).toString().replaceAll('^', '**').replaceAll('pi', 'Math.PI').toString()).toString()
             equation = evalstr
         } else if (type == 'help') {
             equation = `-

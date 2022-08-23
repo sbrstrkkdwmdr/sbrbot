@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 /**
  * @type {Array}
  */
-let modeopts = [
+const modeopts = [
     { name: 'osu', value: 'osu' },
     { name: 'taiko', value: 'taiko' },
     { name: 'catch', value: 'fruits' },
@@ -12,7 +12,7 @@ let modeopts = [
 /**
  * @info what to sort plays by
  */
-let playsortopts = [
+const playsortopts = [
     { name: 'Performance points', value: 'pp' },
     { name: 'Score', value: 'score' },
     { name: 'Most recent', value: 'recent' },
@@ -21,7 +21,7 @@ let playsortopts = [
     { name: 'Misses', value: 'miss' },
     { name: 'Rank', value: 'rank' },
 ]
-let skincmdopts = [
+const skincmdopts = [
     { name: 'SaberStrikeCustom', value: '1' },
     { name: 'SaberStrikeCustom[v2]', value: '2' },
     { name: '『SaberStrike [Type X]』', value: '3' },
@@ -42,7 +42,7 @@ let skincmdopts = [
     { name: 'sbr『-hANOJI』', value: 'b7' }
 ]
 
-let mathcmdopts = [
+const mathcmdopts = [
     //{ name: 'Help', value: 'help' },
     { name: 'Square root', value: 'sqrt' },
     { name: 'Square', value: 'square' },
@@ -65,7 +65,7 @@ let mathcmdopts = [
 
 ]
 
-let conversionopts = [
+const conversionopts = [
     //https://www.ewh.ieee.org/soc/ias/pub-dept/abbreviation.pdf
 
     //help
@@ -114,7 +114,7 @@ let conversionopts = [
 
 ]
 
-let gifopts = [
+const gifopts = [
     { name: 'cry about it', value: 'cry about it' },
     { name: 'speaking', value: 'speech bubble' },
     { name: 'chad speaking', value: 'chad speak' },
@@ -133,7 +133,7 @@ let gifopts = [
 ]
 
 
-let timezoneopts = [
+const timezoneopts = [
     { name: 'Abidjan (Africa, Côte d’Ivoire/Ivory Coast)', value: 'Africa/Abidjan' },
     { name: 'Accra (Africa, Ghana)', value: 'Africa/Accra' },
     { name: 'Algiers (Africa, Algeria)', value: 'Africa/Algiers' },
@@ -513,7 +513,7 @@ let timezoneopts = [
 
 //
 
-let useridsortopts = [
+const useridsortopts = [
     {
         name: 'username',
         description: 'username or ID works (mode name if set to mode)',
@@ -549,7 +549,7 @@ let useridsortopts = [
     }
 ]
 
-let useroffsetmodeopts = [
+const useroffsetmodeopts = [
     {
         name: 'user',
         description: 'the username or id',
@@ -571,7 +571,7 @@ let useroffsetmodeopts = [
         choices: modeopts
     }
 ]
-let rsopts = [
+const rsopts = [
     {
         name: 'user',
         description: 'the username or id',

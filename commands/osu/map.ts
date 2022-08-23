@@ -400,7 +400,7 @@ node-fetch error: ${error}
 cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
-                        let ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
+                        const ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
                         obj.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true })
 
                         return;
@@ -464,7 +464,7 @@ node-fetch error: ${error}
 cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
-                    let ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
+                    const ifid = 'oauth token is invalid. Token will be refreshed automatically in one minute.'
                     message.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true })
 
                     return;
@@ -496,7 +496,7 @@ ${error}
                 return;
             }
 
-            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapidtest2[0].id)}?`
+            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapidtest2[0].id)}?`
             mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
             /* mapdata = await fetch(mapurl, {
                 headers: {

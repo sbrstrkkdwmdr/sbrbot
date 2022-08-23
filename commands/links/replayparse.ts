@@ -13,8 +13,8 @@ module.exports = {
     name: 'replayparse',
     description: 'replayparse',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token = JSON.parse(accessN).access_token;
+        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token;
 
         fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
             `
@@ -37,7 +37,7 @@ cmd ID: ${absoluteID}
         }
         fs.writeFileSync(`debugosu/link-replay=replay=${message.guildId}.json`, JSON.stringify(replay, null, 2))
 
-        let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/lookup?checksum=${cmdchecks.toHexadecimal(replay.beatmapMD5)}`
+        const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/lookup?checksum=${cmdchecks.toHexadecimal(replay.beatmapMD5)}`
         const mapdata = await fetch(mapurl, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
@@ -136,17 +136,17 @@ Error: ${error}
             mapdataid = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png'
         }
 
-        let mods = replay.mods
+        const mods = replay.mods
         let ifmods: any;
         if (mods != 0) {
             ifmods = `+${osucalc.ModIntToString(mods)}`
         } else {
             ifmods = ''
         }
-        let gameMode = replay.gameMode
+        const gameMode = replay.gameMode
         let accuracy: any;
 
-        let score = {
+        const score = {
             beatmap_id: mapdata.id,
             score: '6795149',
             maxcombo: `${mapdata.max_combo}`,
@@ -164,7 +164,7 @@ Error: ${error}
 
             score_id: '4057765057'
         }
-        let scorenofc = {
+        const scorenofc = {
             beatmap_id: mapdata.id,
             score: '6795149',
             maxcombo: `${mapdata.max_combo}`,
@@ -218,7 +218,7 @@ Error: ${error}
                 totalhits = replay.gekis + replay.number_300s + replay.katus + replay.number_100s + replay.number_50s + replay.misses
                 break;
         }
-        let failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true
+        const failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true
 
         try {
             xpp = await osufunc.scorecalc(
@@ -251,14 +251,14 @@ Error: ${error}
 
         }
 
-        let lifebar = replay.life_bar.split('|')
-        let lifebarF: any[] = []
+        const lifebar = replay.life_bar.split('|')
+        const lifebarF: any[] = []
         for (let i = 0; i < lifebar.length; i++) {
             lifebarF.push(lifebar[i].split(',')[0])
         }
         lifebarF.shift()
 
-        let dataLabel = ['Start']
+        const dataLabel = ['Start']
 
         for (let i = 0; i < lifebarF.length; i++) {
             dataLabel.push('')
@@ -305,8 +305,8 @@ Error: ${error}
             })
         chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250)
         await chart.toFile('./debugosu/replaygraph.jpg')
-        let graphul = await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay')
-        let Embed = new Discord.EmbedBuilder()
+        const graphul = await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay')
+        const Embed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.score.hex)
             .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
             .setTitle(`Replay`)
@@ -324,8 +324,8 @@ Error: ${error}
         message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
             .catch(error => { });
 
-        let endofcommand = new Date().getTime();
-        let timeelapsed = endofcommand - currentDate.getTime();
+        const endofcommand = new Date().getTime();
+        const timeelapsed = endofcommand - currentDate.getTime();
         fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nCommand Latency (replay parse) - ${timeelapsed}ms\nID:${absoluteID}\n`)
 
 

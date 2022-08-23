@@ -13,16 +13,16 @@ module.exports = {
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        let accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        let access_token = JSON.parse(accessN).access_token;
+        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+        const access_token = JSON.parse(accessN).access_token;
 
         if (message != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (message)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
-            let embed = new Discord.EmbedBuilder()
+            const embed = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.score.hex)
 
                 ;
-            let x = args.join(' ');
+            const x = args.join(' ');
             let mapid;
             let prevmap;
             if (args[0] && !isNaN(args[0])) {
@@ -60,7 +60,7 @@ module.exports = {
             try {
                 combo = x.includes('combo') ? x.split('combo=')[1].split(' ')[0] : 'e';
             } catch { }
-            let mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}?`
+            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}?`
             const mapdata = await fetch(mapurl, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
@@ -110,13 +110,13 @@ node-fetch error: ${error}
                 combo = mapdata.max_combo;
             }
 
-            let simplay = await osufunc.scorecalc(mods, 'osu', mapid, null, null, null, null, null, parseFloat(miss), parseFloat(acc), parseFloat(combo), null, 0, null, false);
-            let mapcalc = await osufunc.mapcalc(mods, 'osu', mapid, 0);
+            const simplay = await osufunc.scorecalc(mods, 'osu', mapid, null, null, null, null, null, parseFloat(miss), parseFloat(acc), parseFloat(combo), null, 0, null, false);
+            const mapcalc = await osufunc.mapcalc(mods, 'osu', mapid, 0);
 
             fs.writeFileSync(`./debugosu/command-simulate=playcalc=${obj.guildId}.json`, JSON.stringify(simplay, null, 2));
 
             try {
-                let test = simplay[0].pp
+                const test = simplay[0].pp
             } catch (error) {
                 embed
                     .setTitle('There was an error calculating your play')
@@ -170,7 +170,7 @@ SS: ${mapcalc[0].pp.toFixed(2)}pp   | 95: ${mapcalc[5].pp.toFixed(2)}pp\`
         if (interaction != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - COMMANDNAME (interaction)\n${currentDate} | ${currentDateISO}\n recieved COMMANDNAME command\nrequested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}`, 'utf-8')
 
-            let buttons = new Discord.ActionRowBuilder()
+            const buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
                         .setCustomId(`BigLeftArrow-simplay-${interaction.user.id}`)

@@ -66,9 +66,9 @@ options: ${options}
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        let pollEmbedDefault = new Discord.EmbedBuilder()
+        const pollEmbedDefault = new Discord.EmbedBuilder()
             .setDescription('✅ for yes\n❌ for no');
-        let react = [
+        const react = [
             '🇦',
             '🇧',
             '🇨',
@@ -98,7 +98,7 @@ options: ${options}
         ]
         let i: number;
         let curtxt: string;
-        let optsarr = options.split('+')
+        const optsarr = options.split('+')
         let optstxt = '';
         for (i = 0; i < optsarr.length && i < 20; i++) {
             if (optsarr[i].length > 150) {

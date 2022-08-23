@@ -5,8 +5,8 @@ module.exports = {
     name: 'debug',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let command;
-        let debugfiles = [];
-        let readfiles = fs.readdirSync('debugosu')
+        const debugfiles = [];
+        const readfiles = fs.readdirSync('debugosu')
 
         if (message != null && interaction == null && button == null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,

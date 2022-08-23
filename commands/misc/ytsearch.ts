@@ -82,8 +82,8 @@ query: ${query}
                 .catch(error => { });
 
         }
-        let vids = searching.videos
-        let embed = new Discord.EmbedBuilder()
+        const vids = searching.videos
+        const embed = new Discord.EmbedBuilder()
             .setTitle(`Results for ${query}`)
             .setColor(colours.embedColour.query.hex)
             ;
