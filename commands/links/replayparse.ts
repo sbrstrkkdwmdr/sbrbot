@@ -13,10 +13,8 @@ module.exports = {
     name: 'replayparse',
     description: 'replayparse',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token;
 
-        fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
 LINK PARSE EVENT - replay parse
@@ -27,8 +25,8 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
         //console.log('true')
-        fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - replayparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
-        let replay: any;
+        fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nLINK DETECT EVENT - replayparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
+        let replay;
         try {
             replay = replayparse.parseReplay('./files/replay.osr')
         } catch (err) {
@@ -36,15 +34,10 @@ cmd ID: ${absoluteID}
             return
         }
         fs.writeFileSync(`debugosu/link-replay=replay=${message.guildId}.json`, JSON.stringify(replay, null, 2))
-
-        // const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/lookup?checksum=${cmdchecks.toHexadecimal(replay.beatmapMD5)}`
         const mapdata:osuApiTypes.Beatmap = await osufunc.apiget('map_get_md5', replay.beatmapMD5)
 
         fs.writeFileSync(`debugosu/link-replay=mapdata=${message.guildId}.json`, JSON.stringify(mapdata, null, 2))
         fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
-
-        // const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(replay.playerName)}`
-
         const osudata:osuApiTypes.User = await osufunc.apiget('user', `${replay.playerName}`)
 
         fs.writeFileSync(`debugosu/link-replay=osudata=${message.guildId}.json`, JSON.stringify(osudata, null, 2))
@@ -148,7 +141,7 @@ cmd ID: ${absoluteID}
             }]
             // ppiffc = NaN
             ppissue = 'Error - pp calculator could not fetch beatmap'
-            fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
+            fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
 
         }
 
@@ -227,7 +220,7 @@ cmd ID: ${absoluteID}
 
         const endofcommand = new Date().getTime();
         const timeelapsed = endofcommand - currentDate.getTime();
-        fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nCommand Latency (replay parse) - ${timeelapsed}ms\nID:${absoluteID}\n`)
+        fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nCommand Latency (replay parse) - ${timeelapsed}ms\nID:${absoluteID}\n`)
 
 
     }

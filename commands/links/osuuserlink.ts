@@ -26,8 +26,12 @@ cmd ID: ${absoluteID}
 
         const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
         const user = messagenohttp.split('/')[2]
-        fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - osuuserlink\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!profile link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
-        const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
+        const overrides = {
+            user: user,
+        }
+
+        client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
+        /*         const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
         try {
             if (osudata.authentication) {
@@ -128,7 +132,7 @@ Error: ${error}
             message.reply({ content: 'no osu! profile found\nNo user found with the name/id `' + user + '`', allowedMentions: { repliedUser: false } })
                 .catch(error => { });
 
-        }
+        } */
 
 
     }

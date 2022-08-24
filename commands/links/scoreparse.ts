@@ -12,9 +12,7 @@ module.exports = {
     name: 'scoreparse',
     description: 'scoreparse',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token;
-        fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
 LINK PARSE EVENT - score parse
@@ -37,8 +35,6 @@ cmd ID: ${absoluteID}
             return;
         }
 
-
-        // const scoreurl = `https://osu.ppy.sh/api/v2/scores/${cmdchecks.toHexadecimal(scoremode)}/${cmdchecks.toHexadecimal(scoreid)}`
         const scoredata: osuApiTypes.Score = await osufunc.apiget('score', `${scoreid}`, `${scoremode}`)
         try {
             scoredata.beatmap.id
@@ -54,9 +50,8 @@ cmd ID: ${absoluteID}
 
 
         fs.writeFileSync(`debugosu/link-scoreparse=scoredata=${message.guildId}.json`, JSON.stringify(scoredata, null, 2));
-        fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nLINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
+        fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nLINK DETECT EVENT - scoreparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
             ;
-        // const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(scoredata.beatmap.id)}`
         (async () => {
             try {
                 scoredata.rank.toUpperCase()
@@ -144,7 +139,7 @@ cmd ID: ${absoluteID}
                     pp: 0.000
                 }]
                 ppissue = 'Error - pp calculator could not fetch beatmap'
-                fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
+                fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
 
             }
 
@@ -195,7 +190,7 @@ cmd ID: ${absoluteID}
             fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: scoredata.beatmap.id }), null, 2));
             const endofcommand = new Date().getTime();
             const timeelapsed = endofcommand - currentDate.getTime();
-            fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, `\nCommand Latency (score parse) - ${timeelapsed}ms\nID:${absoluteID}\n`)
+            fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nCommand Latency (score parse) - ${timeelapsed}ms\nID:${absoluteID}\n`)
         })();
 
     }

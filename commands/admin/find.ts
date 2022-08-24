@@ -149,7 +149,7 @@ id: ${id}
                 break;
             case 'guild':
                 {
-                    let guildfind: any = 'No guild found'
+                    let guildfind;
                     client.guilds.cache.forEach(guild => {
                         if (guild.id == id) {
                             guildfind = guild
@@ -174,7 +174,7 @@ id: ${id}
                 break;
             case 'channel':
                 {
-                    let channelfind: any = 'Channel not found'
+                    let channelfind;
                     client.guilds.cache.forEach(guild => {
                         if (guild.channels.cache.has(id)) {
                             channelfind = guild.channels.cache.get(id)
@@ -196,7 +196,7 @@ id: ${id}
                 break;
             case 'role':
                 {
-                    let rolefind: any = 'No role found'
+                    let rolefind;
                     client.guilds.cache.forEach(guild => {
                         if (guild.roles.cache.has(id)) {
                             rolefind = guild.roles.cache.get(id)
@@ -217,7 +217,7 @@ id: ${id}
                 }
                 break;
             case 'emoji': {
-                let emojifind: any = 'No emoji found'
+                let emojifind;
                 client.guilds.cache.forEach(guild => {
                     if (guild.emojis.cache.has(id)) {
                         emojifind = guild.emojis.cache.get(id)

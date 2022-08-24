@@ -11,7 +11,7 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'osu',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides) {
         let commanduser;
         let user;
         let searchid;
@@ -100,14 +100,22 @@ button: ${button}
             }
         }
 
+        if(overrides != null){
+            user = overrides.user;
+            mode = 'osu';
+            detailed = false;
+        }
+
         //OPTIONS==============================================================================================================================================================================================
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
-ID: ${absoluteID}
+cmd ID: ${absoluteID}
 Options: 
     user: ${user}
+    mode: ${mode}
     detailed: ${detailed}
+    searchid: ${searchid}
 ----------------------------------------------------
 `, 'utf-8')
 

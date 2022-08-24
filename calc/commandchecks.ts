@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import fetch from 'node-fetch';
+import Discord = require('discord.js');
 const config = require('../configs/config.json')
 /**
  * 
@@ -22,10 +23,10 @@ function isOwner(userid: number) {
  * @param client client object
  * @returns true if user is admin in the current guild
  */
-function isAdmin(userid: number, guildid: number, client: any) {
-    if (client.guilds.cache.has(guildid)) {
-        const curguild = client.guilds.cache.get(guildid)
-        const curmem = curguild.members.cache.has(userid) ? curguild.members.cache.get(userid) : null
+function isAdmin(userid: number, guildid: number, client: Discord.Client) {
+    if (client.guilds.cache.has(`${guildid}`)) {
+        const curguild = client.guilds.cache.get(`${guildid}`)
+        const curmem = curguild.members.cache.has(`${userid}`) ? curguild.members.cache.get(`${userid}`) : null
         if (curmem != null) {
             return true;
         }
@@ -145,7 +146,7 @@ const audiofiletype: string[] = [
  * @param {string} filename the name of the file as a discord attachment (including extension)
  * @returns whether or not a file is a video
  */
-function checkisvideo(filename: any) {
+function checkisvideo(filename: Discord.Attachment) {
     for (let i = 0; i < vidfiletypes.length; i++) {
         if (filename.url.indexOf(vidfiletypes[i], filename.url.length - vidfiletypes.length) !== -1) {
             return true;
@@ -160,7 +161,7 @@ function checkisvideo(filename: any) {
  * @param {string} filename the name of the file as a discord attachment (including extension) 
  * @returns whether or not a file is a video
  */
-function checkisimage(filename: any) {
+function checkisimage(filename: Discord.Attachment) {
     for (let i = 0; i < imgfiletype.length; i++) {
         if (filename.url.indexOf(imgfiletype[i], filename.url.length - imgfiletype.length) !== -1) {
             return true;

@@ -282,7 +282,7 @@ module.exports = {
             const userids = await userdata.findAll();
             const useridsarraylen = await userdata.count();
             let rtxt = `\n`;
-            const rarr: any = [];
+            const rarr = [];
 
             for (let i = 0; i < useridsarraylen; i++) {
                 const searchid = userids[i].dataValues.userid;

@@ -205,7 +205,7 @@ fetch('https://osu.ppy.sh/oauth/token', {
         scope: 'public'
     })
 
-}).then(res => res.json() as any)
+}).then(res => res.json())
     .then(res => {
         fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
         fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
