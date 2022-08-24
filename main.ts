@@ -131,13 +131,22 @@ const userdata = sequelize.define('userdata', {
 })
 
 client.once('ready', () => {
-    userdata.sync()
-    console.log('Ready!');
-    //get time between now and initdate
+    userdata.sync();
     const timetostart = new Date().getTime() - initdate.getTime()
-    console.log(`Boot time: ${timetostart}ms`)
-
-    fs.appendFileSync('logs/general.log', `\n\n\nBOT IS NOW ONLINE\n${new Date()} | ${new Date().toISOString()}\n\n\n`, 'utf-8');
+    const initlog = `
+===================================================================
+BOT IS NOW ONLINE
+-------------------------------------------------------------------
+Boot time: ${timetostart}ms
+Current Time: ${new Date().toLocaleString()}
+Current Time (epoch, ms): ${new Date().getTime()}
+Current Time (ISO): ${new Date().toISOString()}
+Current Client: ${client.user.tag} 
+Current Client ID: ${client.user.id}
+====================================================================
+`
+console.log(initlog)
+    fs.appendFileSync('logs/general.log', `\n\n\n${initlog}\n\n\n`, 'utf-8');
 
     const oncooldown = new Set();
 
@@ -215,3 +224,4 @@ node-fetch error: ${error}
     });
 fs.writeFileSync('debug/starttime.txt', (new Date()).toString())
 export { };
+
