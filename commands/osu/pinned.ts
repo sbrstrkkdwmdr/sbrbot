@@ -11,9 +11,6 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 module.exports = {
     name: 'pinned',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        //let absoluteID = new Date().getTime()
-/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token; */
         let commanduser;
 
         let user = null;
@@ -112,6 +109,18 @@ button: ${button}
                 .setEmoji('➡')
                 /* .setLabel('End') */,
         );
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+Options:
+    user: ${user}
+    page: ${page}
+----------------------------------------------------
+`, 'utf-8')
+
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         if (user == null || message.mentions.users.size > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
@@ -153,43 +162,8 @@ Options:
     page: ${page}
 ----------------------------------------------------
 `, 'utf-8')
-        // const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
-        /* const osudata: osuApiTypes.User = await fetch(userurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            }); */
         fs.writeFileSync(`debugosu/command-pinned=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
 
         try {
@@ -218,42 +192,7 @@ Error - authentication
             return;
         }
 
-        // const userpinnedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/pinned?mode=${cmdchecks.toHexadecimal(mode)}&limit=100`
         const pinnedscoresdata:osuApiTypes.Score[] = await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
-        /* const pinnedscoresdata:osuApiTypes.Score[] = await fetch(userpinnedurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                    .catch();
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            }); */
         fs.writeFileSync(`debugosu/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
 
         const pinnedEmbed = new Discord.EmbedBuilder()

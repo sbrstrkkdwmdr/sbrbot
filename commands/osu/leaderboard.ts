@@ -11,9 +11,6 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 module.exports = {
     name: 'leaderboard',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        //let absoluteID = new Date().getTime()
-        /*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-                const access_token = JSON.parse(accessN).access_token; */
         let commanduser;
         let prevmap;
         let i: number;
@@ -105,6 +102,17 @@ button: ${button}
 
             }
         }
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Options: 
+    mapid: ${mapid}
+    page: ${page}
+    mods: ${mods1}
+----------------------------------------------------
+`, 'utf-8')
+
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
@@ -141,54 +149,9 @@ button: ${button}
         } else {
             page--
         }
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Options: 
-mapid: ${mapid}
-page: ${page}
-mods: ${mods}
-----------------------------------------------------
-`, 'utf-8')
 
 
-        //const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}`//?mode=osu`//?mods=${mods}`
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
-        /* await fetch(mapurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            }) */
         fs.writeFileSync(`debugosu/command-leaderboard=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
 
         let title = 'n';
@@ -220,45 +183,7 @@ ${error}
         }
         fulltitle = `${artist} - ${title} [${mapdata.version}]`
         if (mods == null) {
-            //const mapscoresurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}/scores`
             const lbdataf: osuApiTypes.BeatmapScores = await osufunc.apiget('scores_get_map', `${mapid}`)
-            /*  let lbdataf:osuApiTypes.BeatmapScores = await fetch(mapscoresurl, {
-                 method: 'GET',
-                 headers: {
-                     Authorization: `Bearer ${access_token}`,
-                     "Content-Type": "application/json",
-                     Accept: "application/json"
-                 }
-             }).then(res => res.json() as any)
-                 .catch(error => {
-                     if (button == null) {
-                         try {
-                             message.edit({
-                                 content: 'Error',
-                                 allowedMentions: { repliedUser: false },
-                             })
- 
-                         } catch (err) {
- 
-                         }
-                     } else {
-                         obj.reply({
-                             content: 'Error',
-                             allowedMentions: { repliedUser: false },
-                             failIfNotExists: true
-                         })
-                             .catch();
- 
-                     }
-                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                         `
- ----------------------------------------------------
- cmd ID: ${absoluteID}
- node-fetch error: ${error}
- ----------------------------------------------------
- `, 'utf-8')
-                     return;
-                 }) */
             fs.writeFileSync(`debugosu/command-leaderboard=lbdataf=${obj.guildId}.json`, JSON.stringify(lbdataf, null, 2))
 
             try {
@@ -351,40 +276,7 @@ ${hitlist}
 
             }
         } else {
-            //const oldmsu = `https://osu.ppy.sh/api/get_scores?k=${config.osuApiKey}&b=${cmdchecks.toHexadecimal(mapid)}&mods=${cmdchecks.toHexadecimal(osumodcalc.ModStringToInt(osumodcalc.shortModName(mods)))}&limit=100`
-
             const lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1);
-            /* let lbdata = await fetch(oldmsu) //uses apiv1 so im sticking with "any" type
-                .then(res => res.json() as any)
-                .catch(error => {
-                    if (button == null) {
-                        try {
-                            message.edit({
-                                content: 'Error',
-                                allowedMentions: { repliedUser: false },
-                            })
-
-                        } catch (err) {
-
-                        }
-                    } else {
-                        obj.reply({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch();
-
-                    }
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    node-fetch error: ${error}
-    ----------------------------------------------------
-    `, 'utf-8')
-                    return;
-                }) */
             fs.writeFileSync(`debugosu/command-leaderboard=lbdata_apiv1=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
             try {
                 if (lbdata.authentication) {

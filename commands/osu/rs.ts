@@ -12,9 +12,6 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 module.exports = {
     name: 'rs',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        //let absoluteID = new Date().getTime()
-        /*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-                const access_token = JSON.parse(accessN).access_token; */
         let commanduser;
 
         let user = null;
@@ -87,7 +84,7 @@ cmd ID: ${absoluteID}
                     message.embeds[0].title.split('most recent play for ')[1].split(' | ')[0] :
                     message.embeds[0].title.split('plays for ')[1]
             try {
-                mode = message.embeds[0].fields[0].value.split(' | ')[1]
+                mode = message.embeds[0].fields[0].value.split(' | ')[1].split('\n')[0]
             } catch (error) {
                 mode = message.embeds[0].footer.text.split('gamemode: ')[1]
             }
@@ -116,6 +113,22 @@ cmd ID: ${absoluteID}
             }
             searchid == interaction.member.user.id;
         }
+
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+Options:
+    user: ${user}
+    page: ${page}
+    mode: ${mode}
+    list: ${list}
+----------------------------------------------------
+`, 'utf-8')
+
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
 
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
@@ -189,13 +202,7 @@ cmd ID: ${absoluteID}
                 .catch();
 
         }
-        // const userinfourl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
-        /* await fetch(userinfourl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any) */
         fs.writeFileSync(`debugosu/commands-rs=user=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
@@ -258,10 +265,8 @@ cmd ID: ${absoluteID}
                     break;
             }
         }
-        // const recentplayurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/recent?include_fails=1&mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`
-
         const rsdata: osuApiTypes.Score[] = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
-    
+
 
         fs.writeFileSync(`debugosu/commands-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
 
@@ -299,7 +304,7 @@ cmd ID: ${absoluteID}
             // const hittime = curbm.hit_length
             // let totalstr;
 
-           
+
             const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${curbm.id}`)
             fs.writeFileSync(`debugosu/commands-rs=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
 
@@ -538,7 +543,12 @@ cmd ID: ${absoluteID}
                 .addFields([
                     {
                         name: 'MAP DETAILS',
-                        value: `[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} \n${totaldiff}⭐ | ${curscore.mode}`,
+                        value:
+                            `
+[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
+${totaldiff}⭐ | ${curscore.mode}
+${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
+                        `,
                         inline: false
                     },
                     {

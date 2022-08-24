@@ -11,9 +11,6 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 module.exports = {
     name: 'firsts',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        //let absoluteID = new Date().getTime()
-        /*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-                const access_token = JSON.parse(accessN).access_token; */
         let commanduser;
         let user = '';
         let searchid = 1;

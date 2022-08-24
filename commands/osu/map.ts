@@ -12,9 +12,6 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 module.exports = {
     name: 'map',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides) {
-        //let absoluteID = new Date().getTime()
-        /*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token; */
         let commanduser;
         let prevmap;
         let mapid;
@@ -223,43 +220,8 @@ Options:
 `, 'utf-8')
 
         if (maptitleq == null) {
-            // const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}?`;
 
             mapdata = await osufunc.apiget('map_get', `${mapid}`)
-            /* mapdata = await fetch(mapurl, {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }).then(res => res.json() as any)
-                .catch(error => {
-                    if (button == null) {
-                        try {
-                            message.edit({
-                                content: 'Error',
-                                allowedMentions: { repliedUser: false },
-                            })
-
-                        } catch (err) {
-
-                        }
-                    } else {
-                        obj.reply({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch();
-
-                    }
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                    return;
-                }); */
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
 
             try {
@@ -290,42 +252,7 @@ Error - authentication
         }
 
         if (maptitleq != null) {
-            // const mapnameurl = `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${cmdchecks.toHexadecimal(maptitleq)}&s=any`
             const mapidtest = await osufunc.apiget('mapset_search', `${maptitleq}`)
-            /* let mapidtest = await fetch(mapnameurl, {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }).then(res => res.json() as any) //type is undocumented so it's set to any for now
-                .catch(error => {
-                    if (button == null) {
-                        try {
-                            message.edit({
-                                content: 'Error',
-                                allowedMentions: { repliedUser: false },
-                            })
-
-                        } catch (err) {
-
-                        }
-                    } else {
-                        obj.reply({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch();
-
-                    }
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                    return;
-                }) */
             fs.writeFileSync(`debugosu/command-map=mapidtest=${obj.guildId}.json`, JSON.stringify(mapidtest, null, 2))
                 ;
             let mapidtest2;
@@ -369,42 +296,7 @@ ${error}
                 return;
             }
 
-            // const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapidtest2[0].id)}?`
             mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
-            /* mapdata = await fetch(mapurl, {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }).then(res => res.json() as any)
-                .catch(error => {
-                    if (button == null) {
-                        try {
-                            message.edit({
-                                content: 'Error',
-                                allowedMentions: { repliedUser: false },
-                            })
-
-                        } catch (err) {
-
-                        }
-                    } else {
-                        obj.reply({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch();
-
-                    }
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                    return;
-                }); */
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapidtest2[0].id }), null, 2));
             try {
@@ -429,11 +321,11 @@ Error - authentication
                 }
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
-                ----------------------------------------------------
-                cmd ID: ${absoluteID}
-                Error - map not found
-                params: ${mapid} | ${maptitleq}
-                ----------------------------------------------------`)
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - map not found
+params: ${mapid} | ${maptitleq}
+----------------------------------------------------`)
                 obj.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true })
                     .catch();
 
@@ -475,8 +367,6 @@ Error - authentication
             mapdata.hit_length,
             mapmods
         )
-        /*         const fixedmods = mapmods.replace('TD', '')
-         */
         let modissue = ''
         if (mapmods.includes('TD')) {
             modissue = '\ncalculations aren\'t supported for TD'
@@ -538,43 +428,8 @@ ${error}
         const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})`;
 
         const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
-        // const mapperurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(mapdata.beatmapset.creator)}/osu`;
 
         const mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
-        /* let mapperdata: osuApiTypes.User = await fetch(mapperurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            }); */
         fs.writeFileSync(`./debugosu/command-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
 
         const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)

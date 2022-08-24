@@ -11,9 +11,6 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 module.exports = {
     name: 'osutop',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        //let absoluteID = new Date().getTime()
-/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token; */
         let commanduser;
 
         let user = null;
@@ -175,6 +172,27 @@ button: ${button}
                 detailed = false;
             }
         }
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+Options:
+    user: ${user}
+    mode: ${mode}
+    sort: ${sort}
+    reverse: ${reverse}
+    page: ${page}
+    mapper: ${mapper}
+    mods: ${mods}
+    detailed: ${detailed}
+    compact: ${compact}
+----------------------------------------------------
+`, 'utf-8')
+
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
@@ -260,42 +278,7 @@ Options:
 
 ----------------------------------------------------
 `, 'utf-8')
-        // const userurl = `https://osu.ppy.sh/api/v2/users/${user}/osu`;
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
-        /* const osudata: osuApiTypes.User = await fetch(userurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            }); */
         fs.writeFileSync(`debugosu/command-otop=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
 
         try {
@@ -324,47 +307,11 @@ Error - authentication
                 }, {
                     where: { osuname: user }
                 })
-            } 
+            }
         } catch (error) {
 
         }
-        // const usertopurl = `https://osu.ppy.sh/api/v2/users/${osudata.id}/scores/best?mode=${mode}&limit=100&offset=0`;
         const osutopdataPreSort: osuApiTypes.Score[] = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-        /* const osutopdataPreSort: osuApiTypes.Score[] = await fetch(usertopurl, {
-            headers: {
-                Authorization: `Bearer ${access_token}`
-            }
-        }
-        ).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            }); */
         fs.writeFileSync(`debugosu/command-otop=osutopdataPreSort=${obj.guildId}`, JSON.stringify(osutopdataPreSort, null, 2))
 
         try {
@@ -571,30 +518,11 @@ ${error}
                     scorenum = scoreoffset + 1
                 }
 
-                const ppflag = ''
-
-                /* if(parseFloat(curscore.accuracy) != 1){
-                    let ppcalcing = await osufunc.scorecalc(
-                        curscore.mods.join('').length > 1 ? curscore.mods.join('') : 'NM', 
-                        mode, 
-                        curscore.beatmap.id,
-                        hitgeki, hit300, hitkatu, hit100, hit50, miss,
-                        curscore.accuracy * 100, 
-                        curscore.max_combo,
-                        curscore.score,
-                        0
-                        )    
-                    if(curscore.perfect == false){
-                        ppflag += `${ppcalcing[1].pp.toFixed(2)}pp if FC\n` 
-                    }
-
-                    ppflag += `${ppcalcing[2].pp.toFixed(2)}pp if SS`
-                } */
                 let ifnopp = '';
                 let trueppindex: number;
                 const indexdata = osutopdata.sort((a, b) => b.pp - a.pp)
 
-                if(sort != 'pp') {
+                if (sort != 'pp') {
                     trueppindex = await indexdata.indexOf(curscore)
                     ifnopp = await `(#${trueppindex + 1})`
                     if (reverse == false || reverse == null) {
@@ -669,7 +597,6 @@ ${error}
                     **SCORE:** ${score} | x${combo} | ${Math.abs(curscore.accuracy * 100).toFixed(2)}% | ${grade}
                     \`${hitlist}\` | ${(curscore.pp).toFixed(2)}pp 
                     ${(curscore.weight.pp).toFixed(2)}pp (Weighted at **${(curscore.weight.percentage).toFixed(2)}%**)
-                    ${ppflag}
                     `,
                     inline: false
                 }])

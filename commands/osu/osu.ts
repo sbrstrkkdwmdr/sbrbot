@@ -12,11 +12,7 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 module.exports = {
     name: 'osu',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        //let absoluteID = new Date().getTime()
-        /*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-                const access_token = JSON.parse(accessN).access_token; */
         let commanduser;
-        //args 
         let user;
         let searchid;
         let mode = 'osu';
@@ -103,6 +99,20 @@ button: ${button}
                 detailed = false;
             }
         }
+
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+Options: 
+    user: ${user}
+    detailed: ${detailed}
+----------------------------------------------------
+`, 'utf-8')
+
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
@@ -181,43 +191,7 @@ Options:
     searchid: ${searchid}
 ----------------------------------------------------
 `, 'utf-8')
-        // const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(await user)}/${cmdchecks.toHexadecimal(mode)}`
-
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
-        /* const osudata: osuApiTypes.User = await fetch(userurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            }); */
         fs.writeFileSync(`debugosu/command-osu=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
@@ -407,25 +381,12 @@ Error - authentication
             chartrank.toFile('./debugosu/playerrankgraph.jpg')
             chartplay.toFile('./debugosu/playerplaygraph.jpg')
 
-            // const usertopurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/best?mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`;
 
             const osutopdata: osuApiTypes.Score[] = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-            /* const osutopdata: osuApiTypes.Score[] = await fetch(usertopurl, {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }).then(res => res.json() as any) */
             fs.writeFileSync(`debugosu/command-osu=osutopdata=${obj.guildId}.json`, JSON.stringify(osutopdata, null, 2))
 
-
-            // const mostplayedurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/beatmapsets/most_played`
-
             const mostplayeddata: osuApiTypes.BeatmapPlaycount[] = await osufunc.apiget('most_played', `${osudata.id}`)
-            /*  const mostplayeddata: osuApiTypes.BeatmapPlaycount[] = await fetch(mostplayedurl, {
-                 headers: {
-                     'Authorization': `Bearer ${access_token}`
-                 }
-             }).then(res => res.json() as any) */
+
             fs.writeFileSync(`debugosu/command-osu=mostplayeddata=${obj.guildId}.json`, JSON.stringify(mostplayeddata, null, 2))
 
             const highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

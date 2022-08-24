@@ -11,9 +11,6 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 module.exports = {
     name: 'scores',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        //let absoluteID = new Date().getTime()
-/*         const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
-        const access_token = JSON.parse(accessN).access_token; */
         let commanduser;
 
         let user = null;
@@ -147,7 +144,18 @@ button: ${button}
                 page = parseInt((message.embeds[0].footer.text).split('/')[1].split('\n')[0])
             }
         }
-
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+ID: ${absoluteID}
+Options:
+    username: ${user}
+    id: ${id}
+    sort: ${sort}
+    reverse: ${reverse}
+    compact: ${compact}
+----------------------------------------------------
+`, 'utf-8')
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
@@ -176,14 +184,14 @@ button: ${button}
             if (findname == null) {
                 return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                     .catch()
-;
+                    ;
 
             } else {
                 user = findname.get('osuname')
                 if (user.length < 1) {
                     return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
                         .catch()
-;
+                        ;
 
                 }
             }
@@ -219,43 +227,7 @@ Options:
     compact: ${compact}
 ----------------------------------------------------
 `, 'utf-8')
-        //const userurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(user)}/osu`
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
-        /* const osudata: osuApiTypes.User = await fetch(userurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch()
-;
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            }); */
         fs.writeFileSync(`debugosu/command-scores=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2));
 
         osudata.id
@@ -286,7 +258,7 @@ Error - authentication
                     failIfNotExists: true
                 })
                     .catch()
-;
+                    ;
 
             } else {
                 return message.edit({
@@ -295,7 +267,7 @@ Error - authentication
                     failIfNotExists: true
                 })
                     .catch()
-;
+                    ;
 
             }
         }
@@ -304,42 +276,7 @@ Error - authentication
         } else {
             page = page - 1
         }
-        //const scoreurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}/scores/users/${cmdchecks.toHexadecimal(osudata.id)}/all`
         const scoredataPresort = await osufunc.apiget('user_get_scores_map', `${id}`, `${osudata.id}`)
-        /*  const scoredataPresort = await fetch(scoreurl, {
-            headers: {
-                Authorization: `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            }); */
         fs.writeFileSync(`debugosu/command-scores=scoredataPresort=${obj.guildId}.json`, JSON.stringify(scoredataPresort, null, 2));
 
         let scoredata: osuApiTypes.Score[] = scoredataPresort.scores
@@ -458,42 +395,7 @@ node-fetch error: ${error}
         if (compact == true) {
             sortdata += `\nCompact mode`
         }
-        //const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(id)}`
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${id}`)
-        /* const mapdata:osuApiTypes.Beatmap = await fetch(mapurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any)
-            .catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            }) */
         fs.writeFileSync(`debugosu/command-scores=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2));
 
         const title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ?
@@ -630,7 +532,7 @@ node-fetch error: ${error}
                     components: [buttons]
                 })
                     .catch()
-;
+                    ;
 
             } else {
                 message.edit({
@@ -641,7 +543,7 @@ node-fetch error: ${error}
                     components: [buttons]
                 })
                     .catch()
-;
+                    ;
 
             }
         }
