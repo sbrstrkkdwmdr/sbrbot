@@ -109,10 +109,10 @@ cmd ID: ${absoluteID}
             }
 
             const mode = scoredata.mode
-            let ppfc: any;
+            // let ppfc: any;
             let hitlist: string;
             let fcacc: number;
-            let ppiffc: any;
+            // let ppiffc: any;
             let ppissue: string;
 
             if (mode == 'osu') {

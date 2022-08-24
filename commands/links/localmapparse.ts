@@ -23,7 +23,7 @@ requested by ${message.author.id} AKA ${message.author.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-        let map: any = ''
+        let map: string = ''
         if (fs.existsSync('./files/tempdiff.osu')) {
             map = fs.readFileSync('./files/tempdiff.osu', 'utf-8')
         } else {

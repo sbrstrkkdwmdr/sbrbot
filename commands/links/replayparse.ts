@@ -86,7 +86,7 @@ cmd ID: ${absoluteID}
         let xpp: object;
         let hitlist: string;
         let fcacc: number;
-        let ppiffc: any;
+        // let ppiffc: any;
         let ppissue: string;
         let totalhits = 0
 
@@ -146,7 +146,7 @@ cmd ID: ${absoluteID}
             {
                 pp: 0
             }]
-            ppiffc = NaN
+            // ppiffc = NaN
             ppissue = 'Error - pp calculator could not fetch beatmap'
             fs.appendFileSync(`logs/cmd/link${message.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
 

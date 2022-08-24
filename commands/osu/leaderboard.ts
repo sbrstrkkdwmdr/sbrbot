@@ -411,7 +411,7 @@ Error - authentication
 
             let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`
 
-            for (i = 0; i < (lbdata as any).length && i < 5; i++) {
+            for (i = 0; i < (lbdata).length && i < 5; i++) {
                 let hitlist;
                 let acc;
                 const score = lbdata[i + (page * 5)]

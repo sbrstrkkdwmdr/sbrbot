@@ -36,7 +36,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(message.guild.id)
 
-        let msgref: any = '';
+        let msgref: string = '';
 
         if (message.reference) {
             msgref += `

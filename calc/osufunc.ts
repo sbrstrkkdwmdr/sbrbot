@@ -320,7 +320,7 @@ async function scorecalc(
  * @returns the strains of a beatmap. times given in milliseconds
  */
 async function straincalc(mapid: number, mods: string, calctype: number, mode: string) {
-    let strains: any;
+    let strains;
     switch (calctype) {
         case 0: default:
             switch (mode) {
@@ -372,7 +372,7 @@ async function straincalclocal(path: string | null, mods: string, calctype: numb
     if (path == null) {
         path = './files/tempdiff.osu'
     }
-    let strains: any;
+    let strains;
     switch (calctype) {
         case 0: default:
             switch (mode) {
@@ -695,7 +695,7 @@ async function apiget(type: string, mainparam: string, params?: string, version?
                 break;
         }
     }
-    let data: any
+    let data;
     try {
         data = await fetch(url, {
             method: 'GET',
