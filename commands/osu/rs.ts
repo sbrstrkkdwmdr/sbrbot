@@ -261,40 +261,7 @@ cmd ID: ${absoluteID}
         // const recentplayurl = `https://osu.ppy.sh/api/v2/users/${cmdchecks.toHexadecimal(osudata.id)}/scores/recent?include_fails=1&mode=${cmdchecks.toHexadecimal(mode)}&limit=100&offset=0`
 
         const rsdata: osuApiTypes.Score[] = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
-        /* await fetch(recentplayurl, {
-            headers: {
-                'Authorization': `Bearer ${access_token}`
-            }
-        }).then(res => res.json() as any).catch(error => {
-            if (button == null) {
-                try {
-                    message.edit({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                    })
-
-
-                } catch (err) {
-
-                }
-            } else {
-                obj.reply({
-                    content: 'Error',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
-
-            }
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-            return;
-        }); */
+    
 
         fs.writeFileSync(`debugosu/commands-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
 
@@ -332,53 +299,8 @@ node-fetch error: ${error}
             // const hittime = curbm.hit_length
             // let totalstr;
 
-            /*             const values = osumodcalc.calcValues(
-                            curbm.cs,
-                            curbm.ar,
-                            curbm.accuracy,
-                            curbm.drain,
-                            curbm.bpm,
-                            curbm.hit_length,
-                            osumodcalc.OrderMods(curscore.mods.join(''))
-                        ); */
-
-            // const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(curbm.id)}?`;
-
+           
             const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${curbm.id}`)
-            /* const mapdata: osuApiTypes.Beatmap = await fetch(mapurl, {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }).then(res => res.json() as any).catch(error => {
-                if (button == null) {
-                    try {
-                        message.edit({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                        })
-
-                    } catch (err) {
-
-                    }
-                } else {
-                    obj.reply({
-                        content: 'Error',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-
-                }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-                return;
-            });
- */
             fs.writeFileSync(`debugosu/commands-rs=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
 
             let accgr;
@@ -578,13 +500,13 @@ node-fetch error: ${error}
                         NaN
                 ppissue = 'Error - pp calculator could not fetch beatmap'
             }
-            let fcflag = '**FC**'
+            let fcflag = 'FC'
             if (curscore.accuracy != 100) {
-                fcflag = `**${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
+                fcflag += `\n**${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
             }
             if (curscore.perfect == false) {
                 fcflag =
-                    `**${ppcalcing[1].pp.toFixed(2)}**pp IF ${fcaccgr.accuracy.toFixed(2)}% FC
+                    `\n**${ppcalcing[1].pp.toFixed(2)}**pp IF ${fcaccgr.accuracy.toFixed(2)}% FC
                 **${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
             }
             const title =
@@ -627,7 +549,7 @@ node-fetch error: ${error}
                     },
                     {
                         name: 'PP',
-                        value: `**${rspp}**pp \n${fcflag}\n${ppissue}`,
+                        value: `**${rspp}**pp ${fcflag}\n${ppissue}`,
                         inline: true
                     }
                 ])
