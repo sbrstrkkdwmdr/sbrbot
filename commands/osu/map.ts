@@ -445,7 +445,7 @@ ${error}
                 url: `https://osu.ppy.sh/u/${mapperdata.id}`,
                 iconURL: `https://a.ppy.sh/${mapperdata.id}`,
             })
-            .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`)
+            .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg` || `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
             .setImage(`${mapgraph}`)
             .addFields([
                 {

@@ -82,12 +82,14 @@ id: ${id}
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        const Embedr = new Discord.EmbedBuilder();
-
+        const Embedr = new Discord.EmbedBuilder()
+            .setTitle(`Error`)
+            .setThumbnail(`https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
+            .setDescription(`${type} does not exist or bot is not in the same guild as the ${type}`);
         switch (type) {
             case 'user':
                 {
-                    let userfind: any = 'User not found'
+                    let userfind;
                     client.guilds.cache.forEach(guild => {
                         if (guild.members.cache.has(id)) {
                             userfind = guild.members.cache.get(id)//.user.tag

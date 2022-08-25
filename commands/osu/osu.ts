@@ -200,7 +200,7 @@ Options:
 ----------------------------------------------------
 `, 'utf-8')
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
-        fs.writeFileSync(`debugosu/command-osu=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
+        fs.writeFileSync(`debugosu/command-osu=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -301,7 +301,7 @@ Error - authentication
             .setColor(colours.embedColour.user.hex)
             .setTitle(`${osudata.username}'s osu! profile`)
             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
-            .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
+            .setThumbnail(osudata?.avatar_url ? osudata.avatar_url : `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
 
         let useEmbeds = [];
         if (detailed == true) {
@@ -309,7 +309,7 @@ Error - authentication
                 .setColor(colours.embedColour.user.hex)
                 .setTitle(`${osudata.username}'s osu! profile`)
                 .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
-                .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
+                .setThumbnail(osudata?.avatar_url ? osudata.avatar_url : `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
                 .setDescription(`Loading...`);
 
             if (interaction != null && message == null) {
