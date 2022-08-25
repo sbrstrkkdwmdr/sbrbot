@@ -670,6 +670,7 @@ ${error}
                 .catch();
 
         }
+        fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------

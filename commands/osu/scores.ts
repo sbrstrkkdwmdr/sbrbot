@@ -618,7 +618,7 @@ Error - ${mapdata.error}
 
             }
         }
-
+        fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: id }), null, 2));
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
