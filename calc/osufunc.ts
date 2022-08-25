@@ -732,6 +732,34 @@ async function apiget(type: string, mainparam: string, params?: string, version?
 }
 
 
-async function updateToken(clientId:string, clientSecret:string){
+async function updateToken() {
+    const clientId = config.osuClientID
+    const clientSecret = config.osuClientSecret
+    const newtoken:osuApiTypes.OAuth = await fetch('https://osu.ppy.sh/oauth/token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        ,
+        body: JSON.stringify({
+            grant_type: 'client_credentials',
+            client_id: clientId,
+            client_secret: clientSecret,
+            scope: 'public'
+        })
 
+    }).then(res => res.json() as any)
+        .catch(error => {
+            fs.appendFileSync(`logs/updates.log`,
+                `
+    ----------------------------------------------------
+    ERROR
+    node-fetch error: ${error}
+    ----------------------------------------------------
+    `, 'utf-8')
+        });
+    if (newtoken.access_token) {
+        fs.writeFileSync('configs/osuauth.json', JSON.stringify(newtoken))
+        fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
+    }
 }

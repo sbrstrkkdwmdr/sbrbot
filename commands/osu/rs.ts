@@ -206,16 +206,22 @@ Options:
         fs.writeFileSync(`debugosu/commands-rs=user=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
-                setTimeout(() => {
-
-                    obj.channel.send({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-
-                }, 100)
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
                 return;
             }
         } catch (error) {
-
         }
+
         if (!osudata.id) {
             return obj.channel.send(
                 'Error - no user found'
@@ -265,10 +271,26 @@ Options:
                     break;
             }
         }
-        const rsdata: osuApiTypes.Score[] = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
-
-
+        const rsdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
         fs.writeFileSync(`debugosu/commands-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
+        try {
+            if (rsdata.authentication) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
+                return;
+            }
+        } catch (error) {
+        }
+
 
         const rsEmbed = new Discord.EmbedBuilder();
 
@@ -307,6 +329,23 @@ Options:
 
             const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${curbm.id}`)
             fs.writeFileSync(`debugosu/commands-rs=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+            try {
+                if (mapdata.authentication) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - authentication
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
+                    await osufunc.updateToken();
+                    return;
+                }
+            } catch (error) {
+            }
 
             let accgr;
             let fcaccgr;

@@ -8,7 +8,7 @@ import { OAuth } from './configs/osuApiTypes';
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
 
     //update oauth access token
-    setInterval(async () => {
+   /*  setInterval(async () => {
         const newtoken: OAuth = await fetch('https://osu.ppy.sh/oauth/token', {
             method: 'POST',
             headers: {
@@ -37,7 +37,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
         }
 
-    }, 1 * 60 * 1000);
+    }, 1 * 60 * 1000); */
 
     //clear maps folder
     try {

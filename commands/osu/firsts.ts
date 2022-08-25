@@ -203,8 +203,11 @@ Options:
 cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
-                obj.reply({ content: 'error - osu auth out of date', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
                 return;
             }
         } catch (error) {

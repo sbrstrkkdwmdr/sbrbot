@@ -154,13 +154,7 @@ Options:
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
         fs.writeFileSync(`debugosu/command-leaderboard=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
 
-        let title = 'n';
-        let fulltitle = 'n';
-        let artist = 'n';
         try {
-            title = mapdata.beatmapset.title != mapdata.beatmapset.title_unicode ? `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})` : mapdata.beatmapset.title
-            artist = mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist
-        } catch (error) {
             if (mapdata.authentication) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -168,19 +162,22 @@ Options:
 cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
-                obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                    .catch();
-
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
                 return;
             }
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - unknown
-${error}
-----------------------------------------------------`)
+        } catch (error) {
         }
+
+        let title = 'n';
+        let fulltitle = 'n';
+        let artist = 'n';
+        title = mapdata.beatmapset.title != mapdata.beatmapset.title_unicode ? `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})` : mapdata.beatmapset.title
+        artist = mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist
+
         fulltitle = `${artist} - ${title} [${mapdata.version}]`
         if (mods == null) {
             const lbdataf: osuApiTypes.BeatmapScores = await osufunc.apiget('scores_get_map', `${mapid}`)
@@ -188,19 +185,20 @@ ${error}
 
             try {
                 if (lbdataf.authentication) {
-                    obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                         `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - authentication
-----------------------------------------------------`)
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - authentication
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
+                    await osufunc.updateToken();
                     return;
                 }
             } catch (error) {
-
             }
             const lbdata = lbdataf.scores
             fs.writeFileSync(`debugosu/command-leaderboard=lbdata=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
@@ -282,12 +280,15 @@ ${hitlist}
                 if (lbdata.authentication) {
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                         `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - authentication
-----------------------------------------------------`)
-                    obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - authentication
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
+                    await osufunc.updateToken();
                     return;
                 }
             } catch (error) {

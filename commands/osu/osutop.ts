@@ -280,7 +280,6 @@ Options:
 `, 'utf-8')
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         fs.writeFileSync(`debugosu/command-otop=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
-
         try {
             if (osudata.authentication) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -289,13 +288,14 @@ Options:
 cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
-                obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-
-
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
                 return;
             }
         } catch (error) {
-
         }
         try {
             const findname = await userdata.findOne({ where: { osuname: user } })
@@ -311,9 +311,25 @@ Error - authentication
         } catch (error) {
 
         }
-        const osutopdataPreSort: osuApiTypes.Score[] = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
+        const osutopdataPreSort: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
         fs.writeFileSync(`debugosu/command-otop=osutopdataPreSort=${obj.guildId}`, JSON.stringify(osutopdataPreSort, null, 2))
-
+        try {
+            if (osutopdataPreSort.authentication) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
+                return;
+            }
+        } catch (error) {
+        }
         try {
             osutopdataPreSort[0].user.username
         } catch (error) {

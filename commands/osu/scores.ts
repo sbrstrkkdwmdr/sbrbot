@@ -230,7 +230,6 @@ Options:
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         fs.writeFileSync(`debugosu/command-scores=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2));
 
-        osudata.id
         try {
             if (osudata.authentication) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -240,15 +239,13 @@ cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
                 if (button == null) {
-                    obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-
-                } else {
-                    message.edit({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-
-                } return;
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
+                return;
             }
         } catch (error) {
-
         }
         if (!osudata.id) {
             if (button == null) {
@@ -276,8 +273,26 @@ Error - authentication
         } else {
             page = page - 1
         }
-        const scoredataPresort = await osufunc.apiget('user_get_scores_map', `${id}`, `${osudata.id}`)
+        const scoredataPresort: osuApiTypes.ScoreArrA = await osufunc.apiget('user_get_scores_map', `${id}`, `${osudata.id}`)
         fs.writeFileSync(`debugosu/command-scores=scoredataPresort=${obj.guildId}.json`, JSON.stringify(scoredataPresort, null, 2));
+        try {
+            if (scoredataPresort.authentication) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
+                return;
+            }
+        } catch (error) {
+        }
+
 
         let scoredata: osuApiTypes.Score[] = scoredataPresort.scores
         let sortdata = ''
@@ -397,6 +412,23 @@ Error - authentication
         }
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${id}`)
         fs.writeFileSync(`debugosu/command-scores=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2));
+        try {
+            if (mapdata.authentication) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
+                return;
+            }
+        } catch (error) {
+        }
 
         const title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ?
             mapdata.beatmapset.title :

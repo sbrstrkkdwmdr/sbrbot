@@ -100,7 +100,7 @@ button: ${button}
             }
         }
 
-        if(overrides != null){
+        if (overrides != null) {
             user = overrides.user;
             mode = 'osu';
             detailed = false;
@@ -209,15 +209,14 @@ Options:
 cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
-                return obj.reply({
-                    content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
+                return;
             }
         } catch (error) {
-
         }
 
 
@@ -390,11 +389,43 @@ Error - authentication
             chartplay.toFile('./debugosu/playerplaygraph.jpg')
 
 
-            const osutopdata: osuApiTypes.Score[] = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
+            const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
             fs.writeFileSync(`debugosu/command-osu=osutopdata=${obj.guildId}.json`, JSON.stringify(osutopdata, null, 2))
-
-            const mostplayeddata: osuApiTypes.BeatmapPlaycount[] = await osufunc.apiget('most_played', `${osudata.id}`)
-
+            try {
+                if (osutopdata.authentication) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - authentication
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
+                    await osufunc.updateToken();
+                    return;
+                }
+            } catch (error) {
+            }
+            const mostplayeddata: osuApiTypes.BeatmapPlaycount[] & osuApiTypes.Error = await osufunc.apiget('most_played', `${osudata.id}`)
+            try {
+                if (mostplayeddata.authentication) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - authentication
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
+                    await osufunc.updateToken();
+                    return;
+                }
+            } catch (error) {
+            }
             fs.writeFileSync(`debugosu/command-osu=mostplayeddata=${obj.guildId}.json`, JSON.stringify(mostplayeddata, null, 2))
 
             const highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

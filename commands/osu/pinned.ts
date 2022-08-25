@@ -72,7 +72,7 @@ requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
 cmd ID: ${absoluteID}
 button: ${button}
 ----------------------------------------------------
-`, 'utf-8') 
+`, 'utf-8')
             user = message.embeds[0].title.split('for ')[1]
             mode = message.embeds[0].description.split('\n')[1]
             page = 0;
@@ -88,27 +88,27 @@ button: ${button}
             }
         }
         const buttons = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-pinned-${commanduser.id}`)
-                .setStyle('Primary')
-                .setEmoji('⬅')
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-pinned-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
                 /* .setLabel('Start') */,
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-pinned-${commanduser.id}`)
-                .setStyle('Primary')
-                .setEmoji('◀'),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-pinned-${commanduser.id}`)
-                .setStyle('Primary')
-                .setEmoji('▶')
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-pinned-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('◀'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-pinned-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('▶')
                 /* .setLabel('Next') */,
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-pinned-${commanduser.id}`)
-                .setStyle('Primary')
-                .setEmoji('➡')
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-pinned-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('➡')
                 /* .setLabel('End') */,
-        );
+            );
         //OPTIONS==============================================================================================================================================================================================
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
@@ -165,7 +165,6 @@ Options:
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         fs.writeFileSync(`debugosu/command-pinned=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
-
         try {
             if (osudata.authentication) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -174,12 +173,14 @@ Options:
 cmd ID: ${absoluteID}
 Error - authentication
 ----------------------------------------------------`)
-                obj.reply({ content: 'Error - oauth token is invalid. Token will be refreshed automatically in one minute.', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
                 return;
             }
         } catch (error) {
-
         }
         if (!osudata.id) {
             obj.reply({
@@ -187,13 +188,31 @@ Error - authentication
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-            .catch();
+                .catch();
 
             return;
         }
 
-        const pinnedscoresdata:osuApiTypes.Score[] = await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
+        const pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
         fs.writeFileSync(`debugosu/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
+        try {
+            if (pinnedscoresdata.authentication) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
+                return;
+            }
+        } catch (error) {
+        }
+
 
         const pinnedEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.hex)
@@ -357,7 +376,7 @@ ${mode}`
                 allowedMentions: { repliedUser: false },
                 components: [buttons]
             })
-            .catch();
+                .catch();
 
         }
 

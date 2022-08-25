@@ -650,6 +650,14 @@ export type User = UserCompact & {
     website?: string | null,
 } & Error
 
+export type ScoreArrA = {
+    scores: Score[]
+} & Error
+
+
+export type BeatmapPlayCountArr = BeatmapPlaycount[] & Error
+
+
 //==============================================================================================================================================================================================
 
 export type UserGroup = {
