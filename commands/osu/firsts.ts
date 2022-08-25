@@ -17,6 +17,9 @@ module.exports = {
         let mode = null;
         let page = 0;
 
+        let isFirstPage = false;
+        let isLastPage = false;
+
         if (message != null && button == null) {
             commanduser = message.author;
             fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`,
@@ -31,19 +34,6 @@ cmd ID: ${absoluteID}
 `, 'utf-8')
             user = await args.join(' ');
             searchid = await message.author.id
-            if (message.mentions.users.size > 0) {
-                searchid = message.mentions.users.first().id
-            }
-            if (user.length < 1 || message.mentions.users.size > 0) {
-                const findname = await userdata.findOne({ where: { userid: searchid } })
-                if (findname != null) {
-                    user = findname.get('osuname');
-                } else {
-                    return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-
-                }
-            }
             if (mode == null && (!args[0] || message.mentions.users.size > 0)) {
                 const findname = await userdata.findOne({ where: { userid: searchid } })
                 if (findname == null) {
@@ -57,7 +47,7 @@ cmd ID: ${absoluteID}
             } else {
                 mode = 'osu'
             }
-
+            isFirstPage = true;
         }
 
         //==============================================================================================================================================================================================
@@ -76,31 +66,7 @@ cmd ID: ${absoluteID}
 `, 'utf-8')
             user = await interaction.options.getString('user');
             mode = await interaction.options.getString('mode');
-
-
-            if (user.length < 1) {
-                const findname = await userdata.findOne({ where: { userid: searchid } })
-                if (findname != null) {
-                    user = findname.get('osuname');
-                } else {
-                    return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-
-                }
-            }
-            if (mode == null) {
-                const findname = await userdata.findOne({ where: { userid: searchid } })
-                if (findname == null) {
-                    mode = 'osu'
-                } else {
-                    mode = findname.get('mode')
-                    if (mode.length < 1) {
-                        mode = 'osu'
-                    }
-                }
-            } else {
-                mode = 'osu'
-            }
+            isFirstPage = true;
         }
 
         //==============================================================================================================================================================================================
@@ -122,38 +88,53 @@ button: ${button}
             mode = message.embeds[0].description.split('\n')[1]
             page = 0;
             (message.embeds[0].description).split('/')[0].replace('Page ', '')
-            if (button == 'BigLeftArrow') {
-                page = 0
-            } else if (button == 'LeftArrow') {
-                page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', '')) - 1
-            } else if (button == 'RightArrow') {
-                page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', '')) + 1
-            } else if (button == 'BigRightArrow') {
-                page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
+            switch (button) {
+                case 'BigLeftArrow':
+                    page = 1
+                    break;
+                case 'LeftArrow':
+                    page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', '')) - 1
+                    break;
+                case 'RightArrow':
+                    page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', '')) + 1
+                    break;
+                case 'BigRightArrow':
+                    page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
+                    break;
+                case 'Refresh':
+                    page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', ''))
+                    break;
             }
-            if (user.length < 1) {
-                const findname = await userdata.findOne({ where: { userid: searchid } })
-                if (findname != null) {
-                    user = findname.get('osuname');
-                } else {
-                    return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
+            if (page < 2) {
+                isFirstPage = true;
+            }
+            if (page == parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])) {
+                isLastPage = true
+            }
 
-                }
-            }
-            if (mode == null) {
-                const findname = await userdata.findOne({ where: { userid: searchid } })
-                if (findname == null) {
-                    mode = 'osu'
-                } else {
-                    mode = findname.get('mode')
-                    if (mode.length < 1) {
-                        mode = 'osu'
-                    }
-                }
+        }
+        if (user.length < 1 || message.mentions.users.size > 0) {
+            const findname = await userdata.findOne({ where: { userid: searchid } })
+            if (findname != null) {
+                user = findname.get('osuname');
             } else {
-                mode = 'osu'
+                return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                    .catch();
+
             }
+        }
+        if (mode == null) {
+            const findname = await userdata.findOne({ where: { userid: searchid } })
+            if (findname == null) {
+                mode = 'osu'
+            } else {
+                mode = findname.get('mode')
+                if (mode.length < 1) {
+                    mode = 'osu'
+                }
+            }
+        } else {
+            mode = 'osu'
         }
         if (page > 0) {
             page--
@@ -164,21 +145,30 @@ button: ${button}
                     .setCustomId(`BigLeftArrow-firsts-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('⬅')
+                    .setDisabled(isFirstPage)
                 /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-firsts-${commanduser.id}`)
                     .setStyle('Primary')
-                    .setEmoji('◀'),
+                    .setEmoji('◀')
+                    .setDisabled(isFirstPage)
+                ,
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-firsts-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('▶')
+                    .setDisabled(isLastPage)
                 /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-firsts-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('➡')
+                    .setDisabled(isLastPage)
                 /* .setLabel('End') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-firsts-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁'),
             );
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `

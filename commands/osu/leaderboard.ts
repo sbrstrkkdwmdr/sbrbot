@@ -17,6 +17,9 @@ module.exports = {
         let mapid;
         let page = 0;
         let mods1;
+        let isFirstPage = false;
+        let isLastPage = false;
+
         if (fs.existsSync(`./debugosu/prevmap${obj.guildId}.json`)) {
             try {
                 prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap${obj.guildId}.json`, 'utf8'));
@@ -90,17 +93,29 @@ button: ${button}
                 mods1 = message.embeds[0].footer.text
             }
             page = 0
-            if (button == 'BigLeftArrow') {
-                page = 0
-            } else if (button == 'LeftArrow') {
-                page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
-            } else if (button == 'RightArrow') {
-                page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
-            } else if (button == 'BigRightArrow') {
-                page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
-            } /* else if (button == 'Middle') {
-
-            } */
+            switch (button) {
+                case 'BigLeftArrow':
+                    page = 1
+                    break;
+                case 'LeftArrow':
+                    page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
+                    break;
+                case 'RightArrow':
+                    page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
+                    break;
+                case 'BigRightArrow':
+                    page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
+                    break;
+                case 'Refresh':
+                    page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1])
+                    break;
+            }
+            if (page < 2) {
+                isFirstPage = true;
+            }
+            if (page == parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])) {
+                isLastPage = true;
+            }
         }
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
@@ -119,21 +134,31 @@ Options:
                     .setCustomId(`BigLeftArrow-leaderboard-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('⬅')
+                    .setDisabled(isFirstPage)
+
                 /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-leaderboard-${commanduser.id}`)
                     .setStyle('Primary')
-                    .setEmoji('◀'),
+                    .setEmoji('◀')
+                    .setDisabled(isFirstPage)
+                ,
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-leaderboard-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('▶')
+                    .setDisabled(isLastPage)
                 /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-leaderboard-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('➡')
+                    .setDisabled(isLastPage)
                 /* .setLabel('End') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-leaderboard-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁'),
             );
         if (!mapid) {
             mapid = prevmap.id

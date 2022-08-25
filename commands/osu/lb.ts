@@ -9,17 +9,20 @@ module.exports = {
         'Options: \n' +
         '    `--option-name`: `option-description`\n',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-
+        let isFirstPage = false;
+        let isLastPage = false;
+        let commanduser;
         if (message != null && button == null) {
+            commanduser = message.author
             const buttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-lb-${message.author.id}`)
+                        .setCustomId(`BigLeftArrow-lb-${commanduser.id}`)
                         .setStyle('Primary')
                         .setEmoji('⬅')
                     /* .setLabel('Start') */,
                     new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-lb-${message.author.id}`)
+                        .setCustomId(`LeftArrow-lb-${commanduser.id}`)
                         .setStyle('Primary')
                         .setEmoji('◀')
                     /* .setLabel('Previous') */,
@@ -29,15 +32,19 @@ module.exports = {
                                         .setLabel('🔍')
                                     , */
                     new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-lb-${message.author.id}`)
+                        .setCustomId(`RightArrow-lb-${commanduser.id}`)
                         .setStyle('Primary')
                         .setEmoji('▶')
                     /* .setLabel('Next') */,
                     new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-lb-${message.author.id}`)
+                        .setCustomId(`BigRightArrow-lb-${commanduser.id}`)
                         .setStyle('Primary')
                         .setEmoji('➡')
                     /* .setLabel('End') */,
+                    new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-lb-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁'),
                 );
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - lb (message)\n${currentDate} | ${currentDateISO}\n recieved server leaderboard command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             const gamemode = args[0];
@@ -438,7 +445,7 @@ module.exports = {
             // let another = rarr.sort((b, a) => b.rank - a.rank) //for some reason this doesn't sort even tho it does in testing
             switch (button) {
                 case 'BigLeftArrow':
-                    page = 0
+                    page = 1
                     break;
                 case 'LeftArrow':
                     page = parseInt(pagef) - 1

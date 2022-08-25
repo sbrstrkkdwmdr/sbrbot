@@ -25,6 +25,9 @@ module.exports = {
         let compact = false;
         let curuid;
 
+        let isFirstPage = false;
+        let isLastPage = false;
+
         if (message != null && button == null) {
             commanduser = message.author;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -149,15 +152,24 @@ button: ${button}
                     detailed = false
                 }
                 page = 0
-                if (button == 'BigLeftArrow') {
-                    page = 0
-                } else if (button == 'LeftArrow') {
-                    page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
-                } else if (button == 'RightArrow') {
-                    page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
-                } else if (button == 'BigRightArrow') {
-                    page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
+                switch (button) {
+                    case 'BigLeftArrow':
+                        page = 1
+                        break;
+                    case 'LeftArrow':
+                        page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
+                        break;
+                    case 'RightArrow':
+                        page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
+                        break;
+                    case 'BigRightArrow':
+                        page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
+                        break;
+                    case 'Refresh':
+                        page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1])
+                        break;
                 }
+
                 if (message.embeds[0].fields.length > 8) {
                     compact = true
                 } else {
@@ -170,6 +182,12 @@ button: ${button}
             }
             if (button == 'DetailDisable') {
                 detailed = false;
+            }
+            if (page < 2) {
+                isFirstPage = true;
+            }
+            if (page == parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])) {
+                isLastPage = true;
             }
         }
         //OPTIONS==============================================================================================================================================================================================
@@ -199,22 +217,32 @@ Options:
                     .setCustomId(`BigLeftArrow-osutop-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('⬅')
+                    .setDisabled(isFirstPage)
                     /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-osutop-${commanduser.id}`)
                     .setStyle('Primary')
-                    .setEmoji('◀'),
+                    .setEmoji('◀')
+                    .setDisabled(isFirstPage)
+                ,
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-osutop-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('▶')
+                    .setDisabled(isLastPage)
                     /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-osutop-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('➡')
+                    .setDisabled(isLastPage)
                     /* .setLabel('End') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-osutop-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁'),
             );
+        const buttons2 = new Discord.ActionRowBuilder()
 
 
         if (user == null || message.mentions.users.size > 0) {
@@ -244,7 +272,7 @@ Options:
             page = page - 1
         }
         if (detailed == true) {
-            buttons.addComponents(
+            buttons2.addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailDisable-osutop-${curuid}`)
                     .setStyle('Primary')
@@ -252,7 +280,7 @@ Options:
                 /* .setLabel('End') */
             )
         } else {
-            buttons.addComponents(
+            buttons2.addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailEnable-osutop-${curuid}`)
                     .setStyle('Primary')
@@ -717,7 +745,7 @@ ${error}
                 content: '⠀',
                 embeds: [topEmbed],
                 allowedMentions: { repliedUser: false },
-                components: [buttons]
+                components: [buttons, buttons2]
             })
                 .catch();
 
@@ -726,7 +754,7 @@ ${error}
                 content: '⠀',
                 embeds: [topEmbed],
                 allowedMentions: { repliedUser: false },
-                components: [buttons]
+                components: [buttons, buttons2]
             })
                 .catch();
 

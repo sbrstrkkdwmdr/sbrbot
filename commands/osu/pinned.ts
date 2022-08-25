@@ -18,6 +18,8 @@ module.exports = {
         let mode = 'osu';
         let page = 1;
 
+        let isFirstPage = false;
+        let isLastPage = false;
 
         if (message != null && button == null) {
             commanduser = message.author;
@@ -77,14 +79,28 @@ button: ${button}
             mode = message.embeds[0].description.split('\n')[1]
             page = 0;
             (message.embeds[0].description).split('/')[0].replace('Page ', '')
-            if (button == 'BigLeftArrow') {
-                page = 0
-            } else if (button == 'LeftArrow') {
-                page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', '')) - 1
-            } else if (button == 'RightArrow') {
-                page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', '')) + 1
-            } else if (button == 'BigRightArrow') {
-                page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
+            switch (button) {
+                case 'BigLeftArrow':
+                    page = 1
+                    break;
+                case 'LeftArrow':
+                    page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', '')) - 1
+                    break;
+                case 'RightArrow':
+                    page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', '')) + 1
+                    break;
+                case 'BigRightArrow':
+                    page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
+                    break;
+                case 'Refresh':
+                    page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', ''))
+                    break;
+            }
+            if (page < 2) {
+                isFirstPage = true;
+            }
+            if (page == parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])) {
+                isLastPage = true;
             }
         }
         const buttons = new Discord.ActionRowBuilder()
@@ -93,21 +109,30 @@ button: ${button}
                     .setCustomId(`BigLeftArrow-pinned-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('⬅')
+                    .setDisabled(isFirstPage)
                 /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-pinned-${commanduser.id}`)
                     .setStyle('Primary')
-                    .setEmoji('◀'),
+                    .setEmoji('◀')
+                    .setDisabled(isFirstPage)
+                ,
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-pinned-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('▶')
+                    .setDisabled(isLastPage)
                 /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-pinned-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('➡')
+                    .setDisabled(isLastPage)
                 /* .setLabel('End') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-pinned-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁'),
             );
         //OPTIONS==============================================================================================================================================================================================
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,

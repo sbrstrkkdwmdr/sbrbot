@@ -23,6 +23,9 @@ module.exports = {
 
         let prevmap;
 
+        let isFirstPage = false;
+        let isLastPage = false;
+
         if (fs.existsSync(`./debugosu/prevmap${obj.guildId}.json`)) {
             try {
                 prevmap = JSON.parse(fs.readFileSync(`./debugosu/prevmap${obj.guildId}.json`, 'utf8'));
@@ -134,14 +137,28 @@ button: ${button}
                 compact = true
             }
             page = 0
-            if (button == 'BigLeftArrow') {
-                page = 0
-            } else if (button == 'LeftArrow') {
-                page = parseInt((message.embeds[0].footer.text).split('/')[0].split('Page ')[1]) - 1
-            } else if (button == 'RightArrow') {
-                page = parseInt((message.embeds[0].footer.text).split('/')[0].split('Page ')[1]) + 1
-            } else if (button == 'BigRightArrow') {
-                page = parseInt((message.embeds[0].footer.text).split('/')[1].split('\n')[0])
+            switch (button) {
+                case 'BigLeftArrow':
+                    page = 1
+                    break;
+                case 'LeftArrow':
+                    page = parseInt((message.embeds[0].footer.text).split('/')[0].split('Page ')[1]) - 1
+                    break;
+                case 'RightArrow':
+                    page = parseInt((message.embeds[0].footer.text).split('/')[0].split('Page ')[1]) + 1
+                    break;
+                case 'BigRightArrow':
+                    page = parseInt((message.embeds[0].footer.text).split('/')[1].split('\n')[0])
+                    break;
+                case 'Refresh':
+                    page = parseInt((message.embeds[0].footer.text).split('/')[0].split('Page ')[1])
+                    break;
+            }
+            if (page < 2) {
+                isFirstPage = true;
+            }
+            if (page == parseInt((message.embeds[0].footer.text).split('/')[1].split('\n')[0])) {
+                isLastPage = true;
             }
         }
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -162,21 +179,30 @@ Options:
                     .setCustomId(`BigLeftArrow-scores-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('⬅')
+                    .setDisabled(isFirstPage)
                     /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-scores-${commanduser.id}`)
                     .setStyle('Primary')
-                    .setEmoji('◀'),
+                    .setEmoji('◀')
+                    .setDisabled(isFirstPage)
+                ,
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-scores-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('▶')
+                    .setDisabled(isLastPage)
                     /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-scores-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('➡')
+                    .setDisabled(isLastPage)
                     /* .setLabel('End') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-scores-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁'),
             );
 
         if (user == null || message.mentions.users.size > 0) {

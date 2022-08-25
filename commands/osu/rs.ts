@@ -19,6 +19,8 @@ module.exports = {
         let mode = null;
         let list = false;
         let searchid;
+        let isFirstPage = false;
+        let isLastPage = false;
 
         if (message != null && button == null) {
             commanduser = message.author;
@@ -42,6 +44,7 @@ cmd ID: ${absoluteID}
             if (!args[0]) {
                 user = null
             }
+            isFirstPage = true;
         }
 
         //==============================================================================================================================================================================================
@@ -90,25 +93,47 @@ cmd ID: ${absoluteID}
             }
             page = 0
             if (button == 'BigLeftArrow') {
-                page = 0
+                page = 1
             }
             if (message.embeds[0].title.includes('plays')) {
-                if (button == 'LeftArrow') {
-                    page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1
-                } else if (button == 'RightArrow') {
-                    page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1
-                } else if (button == 'BigRightArrow') {
-                    page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))
+                switch (button) {
+                    case 'LeftArrow':
+                        page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1
+                        break;
+                    case 'RightArrow':
+                        page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1
+                        break;
+                    case 'BigRightArrow':
+                        page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))
+                        break;
+                    case 'Refresh':
+                        page = parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[0])
+                        break;
                 }
                 list = true
                 if (isNaN((message.embeds[0].description).split('Page: ')[1].split('/')[0]) || ((message.embeds[0].description).split('Page: ')[1].split('/')[0]) == 'NaN') {
                     page = 1
                 }
+                if (page < 2) {
+                    isFirstPage = true;
+                }
+                if (page == parseInt((message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))) {
+                    isLastPage = true;
+                }
             } else {
-                if (button == 'LeftArrow') {
-                    page = parseInt((message.embeds[0].title).split(' ')[0].split('#')[1]) - 1
-                } else if (button == 'RightArrow') {
-                    page = parseInt((message.embeds[0].title).split(' ')[0].split('#')[1]) + 1
+                switch (button) {
+                    case 'LeftArrow':
+                        page = parseInt((message.embeds[0].title).split(' ')[0].split('#')[1]) - 1
+                        break;
+                    case 'RightArrow':
+                        page = parseInt((message.embeds[0].title).split(' ')[0].split('#')[1]) + 1
+                        break;
+                    case 'Refresh':
+                        page = parseInt((message.embeds[0].title).split(' ')[0].split('#')[1])
+                        break;
+                }
+                if (page < 2) {
+
                 }
             }
             searchid == interaction.member.user.id;
@@ -136,21 +161,29 @@ Options:
                     .setCustomId(`BigLeftArrow-rs-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('⬅')
+                    .setDisabled(isFirstPage)
                     /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-rs-${commanduser.id}`)
                     .setStyle('Primary')
-                    .setEmoji('◀'),
+                    .setEmoji('◀')
+                    .setDisabled(isFirstPage),
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-rs-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('▶')
+                    .setDisabled(isLastPage)
                     /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-rs-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('➡')
+                    .setDisabled(isLastPage)
                     /* .setLabel('End') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-rs-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁')
             );
 
         if (user == null || message.mentions.users.size > 0) {
@@ -322,6 +355,14 @@ Error - ${rsdata.error}
 
         if (list != true) {
             rsEmbed.setColor(colours.embedColour.score.hex)
+
+            if (button == 'BigRightArrow') {
+                page = rsdata.length - 1
+            }
+            if (page >= rsdata.length - 1){
+                buttons.components[2].setDisabled(true)
+                buttons.components[3].setDisabled(true)
+            }
 
             const curscore = rsdata[0 + page]
             if (!curscore || curscore == undefined || curscore == null) {
