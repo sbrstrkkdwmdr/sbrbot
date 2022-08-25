@@ -178,8 +178,6 @@ commmand: ${command}
                 */
                 return obj.reply({ content: 'Cannot send image debug file - contains sensitive information', allowedMentions: { repliedUser: false } })
                     .catch(error => { });
-                //message.channel.send({files: [`debug\\image.json`]})
-                break;
 
             case 'yt': case 'ytsearch':
                 /*
@@ -201,9 +199,9 @@ commmand: ${command}
                     .catch(error => { });
 
             }
-            if (button != null) {
+/*             if (button != null) {
 
-            }
+            } */
         }
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `

@@ -98,9 +98,9 @@ button: ${button}
                 page = parseInt((message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
             } else if (button == 'BigRightArrow') {
                 page = parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])
-            } else if (button == 'Middle') {
+            } /* else if (button == 'Middle') {
 
-            }
+            } */
         }
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
