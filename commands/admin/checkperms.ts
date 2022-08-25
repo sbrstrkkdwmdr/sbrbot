@@ -5,8 +5,9 @@ module.exports = {
     name: 'checkperms',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let user; 
-
+        let commanduser;
         if (message != null && interaction == null && button == null) {
+            commanduser = message.author;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -27,6 +28,7 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null && message == null) {
+            commanduser = interaction.member.user;
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -60,6 +62,11 @@ userID: ${user.id}
             .setTitle(`Permissions for \`${user.username}\``)
             .setDescription(`${permissions}`)
             .setColor(colours.embedColour.admin.hex)
+
+        if(!(cmdchecks.isAdmin(commanduser.id, obj.guildId, client) || cmdchecks.isOwner(commanduser.id))) {
+            embed.setTitle(`Error`)
+            embed.setDescription(`You do not have permission to use this command`)
+        }
 
         if (message != null) {
             message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })

@@ -28,7 +28,9 @@ function isAdmin(userid: number, guildid: number, client: Discord.Client) {
         const curguild = client.guilds.cache.get(`${guildid}`)
         const curmem = curguild.members.cache.has(`${userid}`) ? curguild.members.cache.get(`${userid}`) : null
         if (curmem != null) {
+            if(curmem.permissions.toArray().join(' ').includes('Administrator')) {
             return true;
+            }
         }
     }
     return false;
