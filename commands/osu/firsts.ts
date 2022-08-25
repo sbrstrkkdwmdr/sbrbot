@@ -210,6 +210,19 @@ Error - authentication
                 await osufunc.updateToken();
                 return;
             }
+            if (typeof osudata.error != 'undefined' && osudata.error == null) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - ${osudata.error}
+----------------------------------------------------`)
+                if (button == null) {
+                    await obj.reply({ content: `error - ${osudata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                return;
+            }
         } catch (error) {
         }
         if (!osudata.id) {
@@ -217,9 +230,39 @@ Error - authentication
                 .catch();
 
         }
-        const firstscoresdata: osuApiTypes.Score[] = await osufunc.apiget('firsts', `${osudata.id}`, `${mode}`)
-
+        const firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('firsts', `${osudata.id}`, `${mode}`)
         fs.writeFileSync(`debugosu/command-firsts=firstscoresdata=${obj.guildId}.json`, JSON.stringify(firstscoresdata, null, 2))
+        try {
+            if (firstscoresdata.authentication) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
+                return;
+            }
+            if (typeof firstscoresdata.error != 'undefined' && firstscoresdata.error == null) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - ${firstscoresdata.error}
+----------------------------------------------------`)
+                if (button == null) {
+                    await obj.reply({ content: `error - ${firstscoresdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                return;
+            }
+        } catch (error) {
+        }
+
 
         const firstsEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.hex)

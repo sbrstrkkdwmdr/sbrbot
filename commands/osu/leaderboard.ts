@@ -153,7 +153,6 @@ Options:
 
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
         fs.writeFileSync(`debugosu/command-leaderboard=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
-
         try {
             if (mapdata.authentication) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -169,15 +168,33 @@ Error - authentication
                 await osufunc.updateToken();
                 return;
             }
+            if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - ${mapdata.error}
+----------------------------------------------------`)
+                if (button == null) {
+                    obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                return;
+            }
         } catch (error) {
         }
 
         let title = 'n';
         let fulltitle = 'n';
         let artist = 'n';
-        title = mapdata.beatmapset.title != mapdata.beatmapset.title_unicode ? `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})` : mapdata.beatmapset.title
-        artist = mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist
-
+        try {
+            title = mapdata.beatmapset.title != mapdata.beatmapset.title_unicode ? `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})` : mapdata.beatmapset.title
+            artist = mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist
+        } catch (error) {
+            obj.reply({ content: 'error - map not found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                .catch();
+            return;
+        }
         fulltitle = `${artist} - ${title} [${mapdata.version}]`
         if (mods == null) {
             const lbdataf: osuApiTypes.BeatmapScores = await osufunc.apiget('scores_get_map', `${mapid}`)
@@ -196,6 +213,19 @@ Error - authentication
                             .catch();
                     }
                     await osufunc.updateToken();
+                    return;
+                }
+                if (typeof lbdataf.error != 'undefined' && lbdataf.error == null) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - ${lbdataf.error}
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        obj.reply({ content: `error - ${lbdataf.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
                     return;
                 }
             } catch (error) {

@@ -295,6 +295,19 @@ Error - authentication
                 await osufunc.updateToken();
                 return;
             }
+            if (typeof osudata.error != 'undefined' && osudata.error == null) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - ${osudata.error}
+----------------------------------------------------`)
+                if (button == null) {
+                    await obj.reply({ content: `error - ${osudata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                return;
+            }
         } catch (error) {
         }
         try {
@@ -326,6 +339,19 @@ Error - authentication
                         .catch();
                 }
                 await osufunc.updateToken();
+                return;
+            }
+            if (typeof osutopdataPreSort.error != 'undefined' && osutopdataPreSort.error == null) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - ${osutopdataPreSort.error}
+----------------------------------------------------`)
+                if (button == null) {
+                    await obj.reply({ content: `error - ${osutopdataPreSort.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
                 return;
             }
         } catch (error) {

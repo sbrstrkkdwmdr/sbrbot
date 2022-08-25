@@ -219,6 +219,19 @@ Error - authentication
                 await osufunc.updateToken();
                 return;
             }
+            if (typeof osudata.error != 'undefined' && osudata.error == null) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - ${osudata.error}
+----------------------------------------------------`)
+                if (button == null) {
+                    await obj.reply({ content: `error - ${osudata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                return;
+            }
         } catch (error) {
         }
 
@@ -288,6 +301,19 @@ Error - authentication
                 await osufunc.updateToken();
                 return;
             }
+            if (typeof rsdata.error != 'undefined' && rsdata.error == null) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - ${rsdata.error}
+----------------------------------------------------`)
+                if (button == null) {
+                    await obj.reply({ content: `error - ${rsdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                return;
+            }
         } catch (error) {
         }
 
@@ -342,6 +368,19 @@ Error - authentication
                             .catch();
                     }
                     await osufunc.updateToken();
+                    return;
+                }
+                if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - ${mapdata.error}
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
                     return;
                 }
             } catch (error) {

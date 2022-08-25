@@ -216,6 +216,19 @@ Error - authentication
                 await osufunc.updateToken();
                 return;
             }
+            if (osudata.error == null && typeof osudata.error != 'undefined') {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - ${osudata.error}
+----------------------------------------------------`)
+                if (button == null) {
+                    await obj.reply({ content: `error - ${osudata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                return;
+            }
         } catch (error) {
         }
 
@@ -406,6 +419,19 @@ Error - authentication
                     await osufunc.updateToken();
                     return;
                 }
+                if (typeof osutopdata.error != 'undefined' && osutopdata.error == null) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - ${osutopdata.error}
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        await obj.reply({ content: `error - ${osutopdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
+                    return;
+                }
             } catch (error) {
             }
             const mostplayeddata: osuApiTypes.BeatmapPlaycount[] & osuApiTypes.Error = await osufunc.apiget('most_played', `${osudata.id}`)
@@ -422,6 +448,19 @@ Error - authentication
                             .catch();
                     }
                     await osufunc.updateToken();
+                    return;
+                }
+                if (typeof mostplayeddata.error != 'undefined' && mostplayeddata.error == null) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - ${mostplayeddata.error}
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        await obj.reply({ content: `error - ${mostplayeddata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
                     return;
                 }
             } catch (error) {

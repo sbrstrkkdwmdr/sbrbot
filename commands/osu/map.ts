@@ -255,16 +255,28 @@ Options:
                     await osufunc.updateToken();
                     return;
                 }
+                if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - ${mapdata.error}
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
+                    return;
+                }
             } catch (error) {
             }
-            fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
         }
 
         if (maptitleq != null) {
             const mapidtest = await osufunc.apiget('mapset_search', `${maptitleq}`)
             fs.writeFileSync(`debugosu/command-map=mapidtest=${obj.guildId}.json`, JSON.stringify(mapidtest, null, 2))
             try {
-                if (mapdata.authentication) {
+                if (mapidtest.authentication) {
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                         `
     ----------------------------------------------------
@@ -276,6 +288,19 @@ Options:
                             .catch();
                     }
                     await osufunc.updateToken();
+                    return;
+                }
+                if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - ${mapdata.error}
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
                     return;
                 }
             } catch (error) {
@@ -307,7 +332,6 @@ ${error}
 
             mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
-            fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapidtest2[0].id }), null, 2));
             try {
                 if (mapdata.authentication) {
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -321,6 +345,19 @@ ${error}
                             .catch();
                     }
                     await osufunc.updateToken();
+                    return;
+                }
+                if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - ${mapdata.error}
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
                     return;
                 }
             } catch (error) {
@@ -344,8 +381,52 @@ params: ${mapid} | ${maptitleq}
 
                 return;
             }
-            fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
         }
+
+        try {
+            if (mapdata.authentication) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - authentication
+----------------------------------------------------`)
+                if (button == null) {
+                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                await osufunc.updateToken();
+                return;
+            }
+            if (mapdata.error) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - ${mapdata.error}
+----------------------------------------------------`)
+                if (button == null) {
+                    await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                return;
+            }
+            if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Error - ${mapdata.error}
+----------------------------------------------------`)
+                if (button == null) {
+                    await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                        .catch();
+                }
+                return;
+            }
+        } catch (error) {
+        }
+
         if (mapmods == null || mapmods == '') {
             mapmods = 'NM';
         }
@@ -369,7 +450,6 @@ params: ${mapid} | ${maptitleq}
                 statusimg = emojis.rankedstatus.loved;
                 break;
         }
-        fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapid }), null, 2));
 
         const allvals = osumodcalc.calcValues(
             mapdata.cs,
@@ -590,7 +670,6 @@ ${error}
                 .catch();
 
         }
-        fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
