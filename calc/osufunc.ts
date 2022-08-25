@@ -727,6 +727,7 @@ async function apiget(type: string, mainparam: string, params?: string, version?
                 } else {
                 }
             }) */
+    logCall(url)
     return data;
 
 }
@@ -735,7 +736,7 @@ async function apiget(type: string, mainparam: string, params?: string, version?
 async function updateToken() {
     const clientId = config.osuClientID
     const clientSecret = config.osuClientSecret
-    const newtoken:osuApiTypes.OAuth = await fetch('https://osu.ppy.sh/oauth/token', {
+    const newtoken: osuApiTypes.OAuth = await fetch('https://osu.ppy.sh/oauth/token', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -762,4 +763,12 @@ async function updateToken() {
         fs.writeFileSync('configs/osuauth.json', JSON.stringify(newtoken))
         fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
     }
+    logCall('https://osu.ppy.sh/oauth/token', 'Update token')
+}
+
+function logCall(data: string, title?: string) {
+    if (config.LogApiCalls == true) {
+        console.log((title ? title : 'Api call') + ': ' + data)
+    }
+    return;
 }
