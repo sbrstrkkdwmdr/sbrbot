@@ -10,13 +10,13 @@
         "commands/**/*",
         "configs/**/*",
         "other/**/*",
-        "test/*",
         "*.ts",
         "calc/*",
         "src/*"
     ],
     "exclude": [
-        "commands/tests/*"
+        "commands/tests/*",
+        "test/*",
     ]
     /*     "files": [
         "main.ts",
