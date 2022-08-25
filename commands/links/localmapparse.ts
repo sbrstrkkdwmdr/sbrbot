@@ -16,7 +16,7 @@ module.exports = {
         fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
             `
 ----------------------------------------------------
-LINK PARSE EVENT - local map parse
+COMMAND EVENT - map (file)
 ${currentDate} | ${currentDateISO}
 recieved \`.osu\` file
 requested by ${message.author.id} AKA ${message.author.tag}

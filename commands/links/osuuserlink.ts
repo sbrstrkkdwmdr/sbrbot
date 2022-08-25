@@ -16,7 +16,7 @@ module.exports = {
         fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
             `
 ----------------------------------------------------
-LINK PARSE EVENT - user link
+COMMAND EVENT - user (link)
 ${currentDate} | ${currentDateISO}
 recieved user link
 requested by ${message.author.id} AKA ${message.author.tag}

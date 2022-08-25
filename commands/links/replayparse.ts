@@ -17,7 +17,7 @@ module.exports = {
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
-LINK PARSE EVENT - replay parse
+COMMAND EVENT - replay parse (file)
 ${currentDate} | ${currentDateISO}
 recieved .osr file
 requested by ${message.author.id} AKA ${message.author.tag}
