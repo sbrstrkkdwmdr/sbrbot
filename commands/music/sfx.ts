@@ -7,8 +7,8 @@ module.exports = {
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction){
         if(message != null){
             const connection = voice.joinVoiceChannel({
-                channelId: 724514625005158404,
-                guildId: 724514625005158400,
+                channelId: '724514625005158404',
+                guildId: '724514625005158400',
                 adapterCreator: message.channel.guild.voiceAdapterCreator,
             })
             const player = voice.createAudioPlayer({
@@ -21,8 +21,8 @@ module.exports = {
 
             connection.subscribe(player);
         }
-        if(interaction != null){
+/*         if(interaction != null){
 
-        }
+        } */
     }
 }
