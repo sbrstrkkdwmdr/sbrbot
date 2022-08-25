@@ -178,7 +178,7 @@ function checkisimage(filename: Discord.Attachment) {
  * @param {string} filename the name of the file as a discord attachement (including extension)
  * @returns whether or not a file is a video
  */
-function checkisaudio(filename: any) {
+function checkisaudio(filename: Discord.Attachment) {
     for (let i = 0; i < audiofiletype.length; i++) {
         if (filename.url.indexOf(audiofiletype[i], filename.url.length - audiofiletype.length) !== -1) {
             return true;

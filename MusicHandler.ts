@@ -39,33 +39,35 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         const interaction = null;
         switch (command) {
             case 'play':
-                let url;
-                if (args[0] && args[0].includes('youtube.com')) {
-                    url = args[0];
-                } else {
-                    return message.reply({ content: 'Please use a valid youtube url', allowedMentions: { repliedUser: false }, failIfNotExists: true });
-                }
-                const ytid = url.split('v=')[1];
-                await yd.download(ytid, `${ytid}`);
-
-                yd.on('finished', (err, data) => {
-                    if (err) {
-                        console.log('fin error\n');
-                        console.log(err);
+                {
+                    let url;
+                    if (args[0] && args[0].includes('youtube.com')) {
+                        url = args[0];
                     } else {
-                        console.log(JSON.stringify(data, null, 2));
+                        return message.reply({ content: 'Please use a valid youtube url', allowedMentions: { repliedUser: false }, failIfNotExists: true });
                     }
-                })
-                yd.on('error', (error) => {
-                    if (error) {
-                        console.log('error\n');
-                        console.log(error);
-                    }
-                })
-                yd.on('progress', (progress) => {
-                    console.log(JSON.stringify(progress, null, 2));
-                })
-                songqueue.push(`./files/music/${ytid}.mp3`);
+                    const ytid = url.split('v=')[1];
+                    await yd.download(ytid, `${ytid}`);
+
+                    yd.on('finished', (err, data) => {
+                        if (err) {
+                            console.log('fin error\n');
+                            console.log(err);
+                        } else {
+                            console.log(JSON.stringify(data, null, 2));
+                        }
+                    })
+                    yd.on('error', (error) => {
+                        if (error) {
+                            console.log('error\n');
+                            console.log(error);
+                        }
+                    })
+                    yd.on('progress', (progress) => {
+                        console.log(JSON.stringify(progress, null, 2));
+                    })
+                    songqueue.push(`./files/music/${ytid}.mp3`);
+                }
                 break;
             case 'np':
                 break;
@@ -91,9 +93,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
         //console.log(songlength)
 
-/*         setInterval(() => {
-            player.play(discvoice.createAudioResource(songqueue[0]));
-
-        }, ) */
+        /*         setInterval(() => {
+                    player.play(discvoice.createAudioResource(songqueue[0]));
+        
+                }, ) */
     })
 }

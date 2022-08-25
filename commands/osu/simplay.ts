@@ -1,10 +1,12 @@
 import fs = require('fs');
-import osuapiext = require('osu-api-extended');
 import osumodcalc = require('osumodcalculator');
-import osufunc = require('../../calc/osufunc');
+import ppcalc = require('booba');
 import fetch from 'node-fetch';
+import emojis = require('../../configs/emojis');
+import osufunc = require('../../calc/osufunc');
 import cmdchecks = require('../../calc/commandchecks');
 import colours = require('../../configs/colours');
+import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'simplay',
@@ -43,74 +45,82 @@ module.exports = {
                 }
                 mapid = prevmap.id;
             }
-            let mods: any = 'NM';
-            let miss: any = 0;
-            let combo: any = 'e';
-            let acc: any = 100.00;
+            let mods: string;
+            let miss1: string;
+            let combo1: string;
+            let acc1: string;
+
+            let miss: number = 0;
+            let combo: number;
+            let acc: number = 100;
 
             try {
                 mods = x.includes('+') ? x.split('+')[1].split(' ')[0] : 'NM';
             } catch { }
             try {
-                miss = x.includes('miss') ? x.split('miss=')[1].split(' ')[0] : 0;
+                miss1 = x.includes('miss') ? x.split('miss=')[1].split(' ')[0] : 0;
             } catch { }
             try {
-                acc = x.includes('acc') ? x.split('acc=')[1].split(' ')[0] : 100.00;
+                acc1 = x.includes('acc') ? x.split('acc=')[1].split(' ')[0] : 100.00;
             } catch { }
             try {
-                combo = x.includes('combo') ? x.split('combo=')[1].split(' ')[0] : 'e';
+                combo1 = x.includes('combo') ? x.split('combo=')[1].split(' ')[0] : 'e';
             } catch { }
-            const mapurl = `https://osu.ppy.sh/api/v2/beatmaps/${cmdchecks.toHexadecimal(mapid)}?`
-            const mapdata = await fetch(mapurl, {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            })
-                .then(res => res.json() as any)
-                .catch(error => {
-                    if (button == null) {
-                        try {
-                            message.edit({
-                                content: 'Error',
-                                allowedMentions: { repliedUser: false },
-                            })
-
-                        } catch (err) {
-
-                        }
-                    } else {
-                        obj.reply({
-                            content: 'Error',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch(error => { });
-
-                    }
+            const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', mapid)
+            try {
+                if (mapdata.authentication) {
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                         `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - authentication
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
+                    await osufunc.updateToken();
                     return;
-                });
-
-            if (combo == 'e') {
-                combo = mapdata.max_combo;
+                }
+                if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
+                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                        `
+    ----------------------------------------------------
+    cmd ID: ${absoluteID}
+    Error - ${mapdata.error}
+    ----------------------------------------------------`)
+                    if (button == null) {
+                        await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                            .catch();
+                    }
+                    return;
+                }
+            } catch (error) {
             }
-            if (isNaN(parseFloat(miss))) {
+
+            if (combo1 == 'e') {
+                combo = mapdata.max_combo;
+            } else {
+                combo = parseInt(combo1);
+            }
+            if (isNaN(parseFloat(miss1))) {
                 miss = 0;
-            }
-            if (isNaN(parseFloat(acc))) {
-                acc = 100.00;
-            }
-            if (isNaN(parseFloat(combo))) {
-                combo = mapdata.max_combo;
+            } else {
+                miss = parseInt(miss1);
             }
 
-            const simplay = await osufunc.scorecalc(mods, 'osu', mapid, null, null, null, null, null, parseFloat(miss), parseFloat(acc), parseFloat(combo), null, 0, null, false);
+            if (isNaN(parseFloat(acc1))) {
+                acc = 100.00;
+            } else {
+                acc = parseFloat(acc1);
+            }
+            if (isNaN(parseFloat(combo1))) {
+                combo = mapdata.max_combo;
+            } else {
+                combo = parseInt(combo1);
+            }
+
+            const simplay = await osufunc.scorecalc(mods, 'osu', mapid, null, null, null, null, null, miss, acc, combo, null, 0, null, false);
             const mapcalc = await osufunc.mapcalc(mods, 'osu', mapid, 0);
 
             fs.writeFileSync(`./debugosu/command-simulate=playcalc=${obj.guildId}.json`, JSON.stringify(simplay, null, 2));
@@ -139,7 +149,7 @@ node-fetch error: ${error}
                     {
                         name: 'Map Details',
                         value: `
-                ${parseFloat(acc).toFixed(2)}% | ${miss}x miss | ${combo}x/**${simplay[0].maxCombo}x** 
+                ${acc.toFixed(2)}% | ${miss}x miss | ${combo}x/**${simplay[0].maxCombo}x** 
                 ${mods} | ${simplay[0].stars.toFixed(2)}⭐
                 CS${simplay[0].cs.toFixed(2)} AR${simplay[0].ar.toFixed(2)} HP${simplay[0].hp.toFixed(2)} OD${simplay[0].od.toFixed(2)}
                 `, inline: true

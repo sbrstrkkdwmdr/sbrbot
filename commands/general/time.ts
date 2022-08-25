@@ -100,8 +100,8 @@ ID: ${absoluteID}
 
         fs.writeFileSync('debug/timesince.txt', rn.toString())
 
-        let monthnum: any = rn.getUTCMonth()
-        let daynum: any = rn.getUTCDate()
+        let monthnum: number | string = rn.getUTCMonth()
+        let daynum: number | string = rn.getUTCDate()
         if (monthnum < 10) { monthnum = '0' + monthnum }
         if (daynum < 10) { daynum = '0' + daynum }
         const truedate = `${year}/${monthnum}/${daynum}`
@@ -117,8 +117,8 @@ ID: ${absoluteID}
         const relyear = rn.getFullYear()
         const reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`
 
-        let relmonthnum: any = rn.getMonth()
-        let reldaynum: any = rn.getDate()
+        let relmonthnum: number | string = rn.getMonth()
+        let reldaynum: number | string = rn.getDate()
         if (relmonthnum < 10) { relmonthnum = '0' + relmonthnum }
         if (reldaynum < 10) { reldaynum = '0' + reldaynum }
         const reltruedate = `${relyear}/${relmonthnum}/${reldaynum}`
@@ -223,7 +223,7 @@ ID: ${absoluteID}
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
-        if ((message != null && interaction != null) && button == null) {
+        if ((message != null || interaction != null) && button == null) {
             obj.reply({
                 content: '',
                 embeds: [Embed],
@@ -231,7 +231,7 @@ ID: ${absoluteID}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-            .catch(error => { });
+                .catch(error => { });
         }
         if (button != null) {
             message.edit({

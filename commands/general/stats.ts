@@ -1,6 +1,7 @@
 import cmdchecks = require('../../calc/commandchecks');
 import fs = require('fs');
 import colours = require('../../configs/colours');
+import DiscordTypes = require('discord.js');
 module.exports = {
     name: 'stats',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
@@ -65,10 +66,10 @@ ID: ${absoluteID}
         const uptimeseconds = Math.floor(uptime % 60) >= 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
         const upandtime = `Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}`
 
-        const totalusers: any = client.users.cache.size;
-        let totalusersnobots: any;
-        const totalguilds: any = client.guilds.cache.size;
-        const commandssent: any = fs.existsSync('logs/totalcommands.txt') ? fs.readFileSync('logs/totalcommands.txt').length : '0';
+        const totalusers: DiscordTypes.Collection<any, DiscordTypes.User> = client.users.cache.size;
+        let totalusersnobots: DiscordTypes.Collection<any, DiscordTypes.User>;
+        const totalguilds: DiscordTypes.Collector<any, DiscordTypes.Guild> = client.guilds.cache.size;
+        const commandssent: number = fs.existsSync('logs/totalcommands.txt') ? fs.readFileSync('logs/totalcommands.txt').length : 0;
 
         const Embed = new Discord.EmbedBuilder()
             .setTitle(`${client.user.username} stats`)

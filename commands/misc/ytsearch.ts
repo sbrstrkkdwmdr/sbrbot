@@ -7,7 +7,7 @@ module.exports = {
     name: 'ytsearch',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let i: number;
-        let query: any;
+        let query: string;
 
         if (message != null && interaction == null && button == null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,

@@ -10,7 +10,7 @@ module.exports = {
         if (message != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCOMMAND EVENT - skin (message)\n${currentDate} | ${currentDateISO}\n recieved get user skin command\nrequested by ${message.author.id} AKA ${message.author.tag}\nMessage content: ${message.content}`, 'utf-8')
             let searchid = message.author.id
-            let user: any;
+            // let user: any;
             let skin;
             if (message.mentions.users.size > 0) {
                 searchid = message.mentions.users.first().id
