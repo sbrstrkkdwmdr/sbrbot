@@ -37,10 +37,10 @@ module.exports = {
                 return;
             }
             if (mods.includes("HR")) {
-                baseCS *= 1.3 > 10 ? 10 : 1.3
-                baseAR *= 1.4 > 10 ? 10 : 1.4
-                baseOD *= 1.4 > 10 ? 10 : 1.4
-                baseHP *= 1.4 > 10 ? 10 : 1.4
+                baseCS = baseCS * 1.3 > 10 ? 10 : baseCS * 1.3
+                baseAR = baseAR * 1.4 > 10 ? 10 : baseAR * 1.4
+                baseOD = baseOD * 1.4 > 10 ? 10 : baseOD * 1.4
+                baseHP = baseHP * 1.4 > 10 ? 10 : baseHP * 1.4
             }
             if (mods.includes("EZ")) {
                 baseCS *= 0.5
