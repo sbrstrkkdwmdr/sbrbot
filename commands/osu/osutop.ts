@@ -28,18 +28,11 @@ module.exports = {
         let isFirstPage = false;
         let isLastPage = false;
 
+        let baseCommandType: string;
+
         if (message != null && button == null) {
             commanduser = message.author;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - osutop (message)
-${currentDate} | ${currentDateISO}
-recieved osutop command
-requested by ${message.author.id} AKA ${message.author.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'message';
             curuid = message.author.id
 
             user = args.join(' ')
@@ -62,16 +55,7 @@ cmd ID: ${absoluteID}
 
         if (interaction != null && button == null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - osutop (interaction)
-${currentDate} | ${currentDateISO}
-recieved osutop command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'interaction'
             curuid = interaction.member.user.id
 
             user = interaction.options.getString('user')
@@ -90,17 +74,7 @@ cmd ID: ${absoluteID}
 
         if (button != null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - osutop (button)
-${currentDate} | ${currentDateISO}
-recieved osutop command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
-cmd ID: ${absoluteID}
-button: ${button}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'button'
             curuid = interaction.member.user.id
 
             user = message.embeds[0].title.split('Top plays of ')[1]
@@ -190,6 +164,16 @@ button: ${button}
                 isLastPage = true;
             }
         }
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - osutop (${baseCommandType})
+${currentDate} | ${currentDateISO}
+recieved osutop command
+requested by ${commanduser.id} AKA ${commanduser.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
         //OPTIONS==============================================================================================================================================================================================
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
@@ -293,7 +277,7 @@ Options:
             `
 ----------------------------------------------------
 cmd ID: ${absoluteID}
-Options: 
+Options(2): 
     user: ${user}
     mapper: ${mapper}
     mods: ${mods}

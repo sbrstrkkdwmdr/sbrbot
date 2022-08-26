@@ -20,18 +20,11 @@ module.exports = {
         let curuid;
         let mtns = 0;
 
+        let baseCommandType:string;
+
         if (message != null && button == null) {
             commanduser = message.author;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - osu (message)
-${currentDate} | ${currentDateISO}
-recieved osu profile command
-requested by ${message.author.id} AKA ${message.author.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'message'
             curuid = commanduser.id
 
             user = args.join(' ')
@@ -51,16 +44,7 @@ cmd ID: ${absoluteID}
 
         if (interaction != null && button == null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - osu (interaction)
-${currentDate} | ${currentDateISO}
-recieved osu profile command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'interaction'
             curuid = commanduser.id
 
             user = interaction.options.getString('user');
@@ -74,17 +58,7 @@ cmd ID: ${absoluteID}
 
         if (button != null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - osu (button)
-${currentDate} | ${currentDateISO}
-recieved osu profile command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
-cmd ID: ${absoluteID}
-button: ${button}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'button'
             curuid = commanduser.id
             if (message.embeds[0].fields[0]) {
                 detailed = true
@@ -105,7 +79,16 @@ button: ${button}
             mode = 'osu';
             detailed = false;
         }
-
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        `
+----------------------------------------------------
+COMMAND EVENT - osu (${baseCommandType})
+${currentDate} | ${currentDateISO}
+recieved osu profile command
+requested by ${commanduser.id} AKA ${commanduser.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
         //OPTIONS==============================================================================================================================================================================================
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
@@ -191,8 +174,8 @@ Options:
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
-cmd ID: ${absoluteID}
-Options: 
+ID: ${absoluteID}
+Options(2): 
     user: ${user}
     mode: ${mode}
     detailed: ${detailed}

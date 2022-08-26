@@ -35,19 +35,11 @@ module.exports = {
         }
 
 
+        let baseCommandType:string;
 
         if (message != null && button == null) {
             commanduser = message.author;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - leaderboard (message)
-${currentDate} | ${currentDateISO}
-recieved map leaderboard command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'message'
             const mapid = args[0]
 
         }
@@ -56,16 +48,7 @@ cmd ID: ${absoluteID}
 
         if (interaction != null && button == null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - leaderboard (interaction)
-${currentDate} | ${currentDateISO}
-recieved map leaderboard command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'interaction'
 
             mapid = interaction.options.getInteger('id');
             page = interaction.options.getInteger('page');
@@ -77,17 +60,7 @@ cmd ID: ${absoluteID}
 
         if (button != null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - leaderboard (button)
-${currentDate} | ${currentDateISO}
-recieved map leaderboard command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-button: ${button}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'button'
             mapid = message.embeds[0].url.split('/b/')[1]
             if (message.embeds[0].footer) {
                 mods1 = message.embeds[0].footer.text
@@ -117,6 +90,17 @@ button: ${button}
                 isLastPage = true;
             }
         }
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - leaderboard (${baseCommandType})
+${currentDate} | ${currentDateISO}
+recieved map leaderboard command
+requested by ${commanduser.id} AKA ${commanduser.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------

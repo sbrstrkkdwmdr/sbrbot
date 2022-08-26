@@ -33,18 +33,11 @@ module.exports = {
             prevmap = { id: 32345 }
         }
 
+        let baseCommandType:string;
+
         if (message != null && button == null && overrides == null) {
             commanduser = message.author;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - map (message)
-${currentDate} | ${currentDateISO}
-recieved map command
-requested by ${message.author.id} AKA ${message.author.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'message'
             curuid = message.author.id
 
             if (!isNaN(args[0])) {
@@ -69,16 +62,7 @@ cmd ID: ${absoluteID}
 
         if (interaction != null && button == null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - map (interaction)
-${currentDate} | ${currentDateISO}
-recieved map command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'interaction'
             curuid = interaction.member.user.id
 
             mapid = interaction.options.getInteger('id');
@@ -90,17 +74,7 @@ cmd ID: ${absoluteID}
 
         if (button != null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - map (button)
-${currentDate} | ${currentDateISO}
-recieved map command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
-cmd ID: ${absoluteID}
-button: ${button}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'button'
             curuid = interaction.member.user.id
 
             const urlnohttp = message.embeds[0].url.split('https://')[1];
@@ -164,7 +138,16 @@ button: ${button}
                 detailed = false;
             }
         }
-
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        `
+----------------------------------------------------
+COMMAND EVENT - map (${baseCommandType})
+${currentDate} | ${currentDateISO}
+recieved map command
+requested by ${commanduser.id} AKA ${commanduser.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
         //==============================================================================================================================================================================================
         let mapdata: osuApiTypes.Beatmap
 

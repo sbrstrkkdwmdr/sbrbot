@@ -39,19 +39,10 @@ module.exports = {
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
             prevmap = { id: 32345 }
         }
-
+        let baseCommandType:string;
         if (message != null && button == null) {
             commanduser = message.author;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - scores (message)
-${currentDate} | ${currentDateISO}
-recieved scores command
-requested by ${message.author.id} AKA ${message.author.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'message'
 
             user = args.join(' ')
             if (!args[0]) {
@@ -68,16 +59,7 @@ cmd ID: ${absoluteID}
 
         if (interaction != null && button == null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - scores (interaction)
-${currentDate} | ${currentDateISO}
-recieved scores command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'interaction'
             user = interaction.options.getString('username');
             id = interaction.options.getNumber('id');
             sort = interaction.options.getString('sort');
@@ -90,17 +72,7 @@ cmd ID: ${absoluteID}
 
         if (button != null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - scores (button)
-${currentDate} | ${currentDateISO}
-recieved scores command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
-cmd ID: ${absoluteID}
-button: ${button}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'button'
             page = 0;
             user = message.embeds[0].author.name
             id = message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]
@@ -161,6 +133,17 @@ button: ${button}
                 isLastPage = true;
             }
         }
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                `
+----------------------------------------------------
+COMMAND EVENT - scores (${baseCommandType})
+${currentDate} | ${currentDateISO}
+recieved scores command
+requested by ${commanduser.id} AKA ${commanduser.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
@@ -244,8 +227,8 @@ Options:
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
-cmd ID: ${absoluteID}
-Options: 
+ID: ${absoluteID}
+Options(2): 
     user: ${user}
     id: ${id}
     sort: ${sort}

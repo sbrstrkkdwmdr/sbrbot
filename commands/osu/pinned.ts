@@ -21,18 +21,11 @@ module.exports = {
         let isFirstPage = false;
         let isLastPage = false;
 
+        let baseCommandType: string;
+
         if (message != null && button == null) {
             commanduser = message.author;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - pinned (message)
-${currentDate} | ${currentDateISO}
-recieved pinned command
-requested by ${message.author.id} AKA ${message.author.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'message'
             user = args.join(' ')
             searchid = message.author.id
             mode = null;
@@ -48,33 +41,14 @@ cmd ID: ${absoluteID}
 
         if (interaction != null && button == null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - pinned (interaction)
-${currentDate} | ${currentDateISO}
-recieved pinned command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'interaction'
         }
 
         //==============================================================================================================================================================================================
 
         if (button != null) {
             commanduser = interaction.member.user
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - pinned (button)
-${currentDate} | ${currentDateISO}
-recieved pinned command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
-cmd ID: ${absoluteID}
-button: ${button}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'button'
             user = message.embeds[0].title.split('for ')[1]
             mode = message.embeds[0].description.split('\n')[1]
             page = 0;
@@ -134,6 +108,17 @@ button: ${button}
                     .setStyle('Primary')
                     .setEmoji('🔁'),
             );
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+COMMAND EVENT - pinned (${baseCommandType})
+${currentDate} | ${currentDateISO}
+recieved pinned command
+requested by ${commanduser.id} AKA ${commanduser.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8');
         //OPTIONS==============================================================================================================================================================================================
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
@@ -180,8 +165,8 @@ Options:
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
-cmd ID: ${absoluteID}
-Options: 
+ID: ${absoluteID}
+Options(2): 
     user: ${user}
     mode: ${mode}
     page: ${page}

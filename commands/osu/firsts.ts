@@ -20,18 +20,11 @@ module.exports = {
         let isFirstPage = false;
         let isLastPage = false;
 
+        let baseCommandType: string;
+
         if (message != null && button == null) {
             commanduser = message.author;
-            fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - firsts (message)
-${currentDate} | ${currentDateISO}
-recieved firsts command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'message'
             user = await args.join(' ');
             searchid = await message.author.id
             if (mode == null && (!args[0] || message.mentions.users.size > 0)) {
@@ -54,16 +47,7 @@ cmd ID: ${absoluteID}
 
         if (interaction != null && button == null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - firsts (interaction)
-${currentDate} | ${currentDateISO}
-recieved firsts command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'interaction'
             user = await interaction.options.getString('user');
             mode = await interaction.options.getString('mode');
             isFirstPage = true;
@@ -73,17 +57,7 @@ cmd ID: ${absoluteID}
 
         if (button != null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${interaction.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - firsts (button)
-${currentDate} | ${currentDateISO}
-recieved firsts command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-button: ${button}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'button'
             user = message.embeds[0].title.split('for ')[1]
             mode = message.embeds[0].description.split('\n')[1]
             page = 0;
@@ -113,6 +87,17 @@ button: ${button}
             }
 
         }
+        fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`,
+            `
+----------------------------------------------------
+COMMAND EVENT - firsts (${baseCommandType})
+${currentDate} | ${currentDateISO}
+recieved firsts command
+requested by ${commanduser.id} AKA ${commanduser.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
+
         if (user.length < 1 || message.mentions.users.size > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {

@@ -22,18 +22,11 @@ module.exports = {
         let isFirstPage = false;
         let isLastPage = false;
 
+        let baseCommandType: string;
+
         if (message != null && button == null) {
             commanduser = message.author;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - rs (message)
-${currentDate} | ${currentDateISO}
-recieved rs command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'message'
             user = args.join(' ');
             page = 0;
             mode = null;
@@ -51,16 +44,7 @@ cmd ID: ${absoluteID}
 
         if (interaction != null && button == null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - rs (interaction)
-${currentDate} | ${currentDateISO}
-recieved rs command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'interaction'
             user = interaction.options.getString('user');
             page = interaction.options.getNumber('page');
             mode = interaction.options.getString('mode');
@@ -72,16 +56,7 @@ cmd ID: ${absoluteID}
 
         if (button != null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - rs (interaction)
-${currentDate} | ${currentDateISO}
-recieved rs command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'button'
             user =
                 message.embeds[0].title.includes('play for') ?
                     message.embeds[0].title.split('most recent play for ')[1].split(' | ')[0] :
@@ -138,6 +113,17 @@ cmd ID: ${absoluteID}
             }
             searchid == interaction.member.user.id;
         }
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        `
+----------------------------------------------------
+COMMAND EVENT - rs (${baseCommandType})
+${currentDate} | ${currentDateISO}
+recieved rs command
+requested by ${commanduser.id} AKA ${commanduser.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
 
         //OPTIONS==============================================================================================================================================================================================
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -359,7 +345,7 @@ Error - ${rsdata.error}
             if (button == 'BigRightArrow') {
                 page = rsdata.length - 1
             }
-            if (page >= rsdata.length - 1){
+            if (page >= rsdata.length - 1) {
                 buttons.components[2].setDisabled(true)
                 buttons.components[3].setDisabled(true)
             }
