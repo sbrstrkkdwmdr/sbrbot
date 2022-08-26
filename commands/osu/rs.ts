@@ -133,7 +133,7 @@ cmd ID: ${absoluteID}
                         break;
                 }
                 if (page < 2) {
-
+                    page == 1
                 }
             }
             searchid == interaction.member.user.id;
