@@ -406,6 +406,9 @@ ${mode}`
                 ])
             }
         }
+
+        fs.writeFileSync(`debugosu/prevuser${obj.guildId}.json`, JSON.stringify({ id: osudata.id }, null, 2))
+
         if (button == null) {
             obj.reply({
                 embeds: [pinnedEmbed],

@@ -611,6 +611,7 @@ Error - ${mapdata.error}
             }
             scoresEmbed.setDescription(scoretxt)
 
+            fs.writeFileSync(`debugosu/prevuser${obj.guildId}.json`, JSON.stringify({ id: osudata.id }, null, 2))
 
             if (!button) {
                 obj.reply({

@@ -652,7 +652,7 @@ Error - ${rsdata.error}
 
             rsEmbed
                 .setTitle(`#${page + 1} most recent play for ${curscore.user.username} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>`)
-                .setURL(`https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}`)
+                .setURL(`https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}`)
                 .setAuthor({
                     name: `${trycountstr}`,
                     url: `https://osu.ppy.sh/${osudata.id}`,
@@ -684,6 +684,11 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                 ])
 
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: curbm.id }), null, 2));
+            if (curscore.best_id != null) {
+                fs.writeFileSync(`debugosu/prevscore${obj.guildId}.json`, JSON.stringify({ id: curscore.best_id}, null, 2))
+            }
+            fs.writeFileSync(`debugosu/prevuser${obj.guildId}.json`, JSON.stringify({ id: osudata.id }, null, 2))
+
         } else if (list == true) {
             rsEmbed
                 .setColor(colours.embedColour.scorelist.hex)
@@ -705,7 +710,9 @@ ${curscore.mods.length > 0 ? '+' + curscore.mods.join('') + ' | ' : ''}${(cursco
             }
             rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 20)}\n` + txt)
             rsEmbed.setFooter({ text: `gamemode: ${rsdata[0].mode}` })
+
         }
+
 
         if (interaction && button == null) {
             obj.editReply({

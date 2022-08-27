@@ -505,6 +505,31 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         description: 'Displays the server leaderboard',
         dmPermission: false,
     },
+    {
+        name: 'compare',
+        description: 'Compares two users/scores',
+        dmPermission: false,
+        options: [
+            {
+                name: 'type',
+                description: 'The type of comparison',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.String,
+            }   ,
+            {
+                name: 'first',
+                description: 'The first user/score to compare',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.String,
+            },
+            {
+                name: 'second',
+                description: 'The second user/score to compare',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.String,
+            }
+        ]
+    },
     /* {
         name: 'osumodcalc',
         description: 'Calculates the values for a map based on the values given',

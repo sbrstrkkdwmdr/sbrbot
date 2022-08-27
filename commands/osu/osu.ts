@@ -21,7 +21,7 @@ module.exports = {
         let curuid;
         let mtns = 0;
 
-        let baseCommandType:string;
+        let baseCommandType: string;
 
         if (message != null && button == null) {
             commanduser = message.author;
@@ -73,7 +73,7 @@ module.exports = {
             if (button == 'DetailDisable') {
                 detailed = false;
             }
-            if (button == 'Refresh'){
+            if (button == 'Refresh') {
                 if (message.embeds[0].fields[0]) {
                     detailed = true
                 } else {
@@ -88,7 +88,7 @@ module.exports = {
             detailed = false;
         }
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-        `
+            `
 ----------------------------------------------------
 COMMAND EVENT - osu (${baseCommandType})
 ${currentDate} | ${currentDateISO}
@@ -281,8 +281,8 @@ Error - ${osudata.error}
 
         //${osustats.level.current}.${osustats.level.progress.toFixed(2)}
         const lvl = osustats.level.current != null ?
-            osustats.level.progress != null ?
-                `${osustats.level.current}.${osustats.level.progress.toFixed(2)}` :
+            osustats.level.progress != null && osustats.level.progress > 0 ?
+                `${osustats.level.current}.${Math.floor(osustats.level.progress)}` :
                 `${osustats.level.current}` :
             '---'
 
@@ -529,6 +529,8 @@ ${onlinestatus}
             useEmbeds = [osuEmbed]
         }
 
+        fs.writeFileSync(`debugosu/prevuser${obj.guildId}.json`, JSON.stringify({ id: osudata.id }, null, 2))
+
         if (interaction != null && message == null && button == null) {
             if (detailed == true) {
                 obj.editReply({
@@ -567,6 +569,9 @@ ${onlinestatus}
             })
                 .catch();
         }
+
+
+
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
