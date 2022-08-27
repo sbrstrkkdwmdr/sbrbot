@@ -2,7 +2,7 @@
 just an osu-centred discord bot
 
 ### Invite link
-Will be added once i finish this 
+Will be added once i get a server
 
 ### features
 osu! map/map leaderboard/profile/scores commands</br>
