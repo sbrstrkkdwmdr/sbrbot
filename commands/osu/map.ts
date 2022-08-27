@@ -84,23 +84,15 @@ module.exports = {
             mapid = curid;
             const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
             fs.writeFileSync(`debugosu/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
-            try {
-                if (bmsdata.authentication) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - authentication
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        message.edit({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    await osufunc.updateToken();
-                    return;
-                }
-            } catch (error) {
+            if (bmsdata?.error) {
+                obj.reply({
+                    content: `${bmsdata?.error ? bmsdata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+                return;
             }
+
             const bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
             fs.writeFileSync(`debugosu/command-map=bmstosr=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
 
@@ -231,74 +223,30 @@ Options:
 `, 'utf-8')
 
         if (maptitleq == null) {
-
             mapdata = await osufunc.apiget('map_get', `${mapid}`)
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
-            try {
-                if (mapdata.authentication) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - authentication
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    await osufunc.updateToken();
-                    return;
-                }
-                if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - ${mapdata.error}
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    return;
-                }
-            } catch (error) {
+            if (mapdata?.error) {
+                obj.reply({
+                    content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+                return;
             }
         }
 
         if (maptitleq != null) {
             const mapidtest = await osufunc.apiget('mapset_search', `${maptitleq}`)
             fs.writeFileSync(`debugosu/command-map=mapidtest=${obj.guildId}.json`, JSON.stringify(mapidtest, null, 2))
-            try {
-                if (mapidtest.authentication) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - authentication
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    await osufunc.updateToken();
-                    return;
-                }
-                if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - ${mapdata.error}
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    return;
-                }
-            } catch (error) {
+            if (mapidtest?.error) {
+                obj.reply({
+                    content: `${mapidtest?.error ? mapidtest?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+                return;
             }
+
             let mapidtest2;
 
             if (mapidtest.length == 0) {
@@ -326,36 +274,15 @@ ${error}
 
             mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
             fs.writeFileSync(`debugosu/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
-            try {
-                if (mapdata.authentication) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - authentication
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    await osufunc.updateToken();
-                    return;
-                }
-                if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - ${mapdata.error}
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    return;
-                }
-            } catch (error) {
+            if (mapdata?.error) {
+                obj.reply({
+                    content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+                return;
             }
+
             try {
                 mapdata.beatmapset.creator
             } catch (error) {
@@ -375,50 +302,6 @@ params: ${mapid} | ${maptitleq}
 
                 return;
             }
-        }
-
-        try {
-            if (mapdata.authentication) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - authentication
-----------------------------------------------------`)
-                if (button == null) {
-                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                await osufunc.updateToken();
-                return;
-            }
-            if (mapdata.error) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - ${mapdata.error}
-----------------------------------------------------`)
-                if (button == null) {
-                    await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                return;
-            }
-            if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - ${mapdata.error}
-----------------------------------------------------`)
-                if (button == null) {
-                    await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                return;
-            }
-        } catch (error) {
         }
 
         if (mapmods == null || mapmods == '') {
@@ -518,6 +401,14 @@ ${error}
 
         const mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
         fs.writeFileSync(`./debugosu/command-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
+        if (mapperdata?.error) {
+            obj.reply({
+                content: `${mapperdata?.error ? mapperdata?.error : 'Error: null'}`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+            return;
+        }
 
         const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
         fs.writeFileSync(`./debugosu/command-map=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))

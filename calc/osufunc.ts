@@ -705,31 +705,31 @@ async function apiget(type: string, mainparam: string, params?: string, version?
                 Accept: "application/json"
             }
         }).then(res => res.json())
+        
+        if (data?.authentication) {
+            await updateToken()
+            throw new Error('token expired. Updating token...')
+        }
+        if(typeof data?.error != 'undefined' && data?.error == null){
+            throw new Error('null')
+        }
+
     } catch (error) {
         data = {
-            error: true,
+            error,
             url: url,
             params: {
                 type: type,
                 mainparam: mainparam,
                 version: version,
             },
-            info: error
         }
         if (params) {
             data.params.params = params
         }
     }
-    /*         .then(res => {
-                console.log(res.status)
-                if (res.status > 199 && res.status < 300) {
-                    data = res.json() as any
-                } else {
-                }
-            }) */
     logCall(url)
     return data;
-
 }
 
 

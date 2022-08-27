@@ -147,11 +147,28 @@ Options(2):
                     .catch(error => {
                         throw new Error(`Api Error: user \`${first}\``)
                     });
+                if (firstuser?.error) {
+                    obj.reply({
+                        content: `${firstuser?.error ? firstuser?.error : 'Error: null'}`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: false,
+                    }).catch()
+                    return;
+                }
 
                 const seconduser: osuApiTypes.User = await osufunc.apiget('user', second)
                     .catch(error => {
                         throw new Error(`Api Error: user \`${second}\``)
                     });
+                if (seconduser?.error) {
+                    obj.reply({
+                        content: `${seconduser?.error ? seconduser?.error : 'Error: null'}`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: false,
+                    }).catch()
+                    return;
+                }
+
                 fs.writeFileSync(`debugosu/prevuser${obj.guildId}.json`, JSON.stringify({ id: firstuser.username }), 'utf8');
                 fs.writeFileSync(`debugosu/command-compare=firstuserdata=${obj.guildId}.json`, JSON.stringify(firstuser, null, 2), 'utf8');
                 fs.writeFileSync(`debugosu/command-compare=seconduserdata=${obj.guildId}.json`, JSON.stringify(seconduser, null, 2), 'utf8');
@@ -205,6 +222,22 @@ Options(2):
                                 throw new Error(`Api Error: score \`${second}\` not found`)
                             }) : prevscore;
                 ;
+                if (firstscore?.error) {
+                    obj.reply({
+                        content: `${firstscore?.error ? firstscore?.error : 'Error: null'}`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: false,
+                    }).catch()
+                    return;
+                }
+                if (secondscore?.error) {
+                    obj.reply({
+                        content: `${secondscore?.error ? secondscore?.error : 'Error: null'}`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: false,
+                    }).catch()
+                    return;
+                }
 
                 if (first == null) {
                     let testu;

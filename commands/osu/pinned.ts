@@ -183,36 +183,15 @@ Options(2):
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         fs.writeFileSync(`debugosu/command-pinned=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
-        try {
-            if (osudata.authentication) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - authentication
-----------------------------------------------------`)
-                if (button == null) {
-                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                await osufunc.updateToken();
-                return;
-            }
-            if (typeof osudata.error != 'undefined' && osudata.error == null) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - ${osudata.error}
-----------------------------------------------------`)
-                if (button == null) {
-                    await obj.reply({ content: `error - ${osudata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                return;
-            }
-        } catch (error) {
+        if (osudata?.error) {
+            obj.reply({
+                content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+            return;
         }
+
         if (!osudata.id) {
             obj.reply({
                 content: 'Error - user could not be found',
@@ -226,37 +205,14 @@ Error - ${osudata.error}
 
         const pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
         fs.writeFileSync(`debugosu/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
-        try {
-            if (pinnedscoresdata.authentication) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - authentication
-----------------------------------------------------`)
-                if (button == null) {
-                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                await osufunc.updateToken();
-                return;
-            }
-            if (typeof pinnedscoresdata.error != 'undefined' && pinnedscoresdata.error == null) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - ${pinnedscoresdata.error}
-----------------------------------------------------`)
-                if (button == null) {
-                    await obj.reply({ content: `error - ${pinnedscoresdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                return;
-            }
-        } catch (error) {
+        if (pinnedscoresdata?.error) {
+            obj.reply({
+                content: `${pinnedscoresdata?.error ? pinnedscoresdata?.error : 'Error: null'}`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+            return;
         }
-
 
         const pinnedEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.hex)

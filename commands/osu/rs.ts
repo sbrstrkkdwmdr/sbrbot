@@ -237,35 +237,13 @@ list: ${list}
 `, 'utf-8')
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
         fs.writeFileSync(`debugosu/command-rs=user=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
-        try {
-            if (osudata.authentication) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - authentication
-----------------------------------------------------`)
-                if (button == null) {
-                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                await osufunc.updateToken();
-                return;
-            }
-            if (typeof osudata.error != 'undefined' && osudata.error == null) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - ${osudata.error}
-----------------------------------------------------`)
-                if (button == null) {
-                    await obj.reply({ content: `error - ${osudata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                return;
-            }
-        } catch (error) {
+        if (osudata?.error) {
+            obj.reply({
+                content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+            return;
         }
 
         if (!osudata.id) {
@@ -319,37 +297,14 @@ Error - ${osudata.error}
         }
         const rsdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
         fs.writeFileSync(`debugosu/command-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
-        try {
-            if (rsdata.authentication) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - authentication
-----------------------------------------------------`)
-                if (button == null) {
-                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                await osufunc.updateToken();
-                return;
-            }
-            if (typeof rsdata.error != 'undefined' && rsdata.error == null) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - ${rsdata.error}
-----------------------------------------------------`)
-                if (button == null) {
-                    await obj.reply({ content: `error - ${rsdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                return;
-            }
-        } catch (error) {
+        if (rsdata?.error) {
+            obj.reply({
+                content: `${rsdata?.error ? rsdata?.error : 'Error: null'}`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+            return;
         }
-
 
         const rsEmbed = new Discord.EmbedBuilder();
 
@@ -396,35 +351,13 @@ Error - ${rsdata.error}
 
             const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${curbm.id}`)
             fs.writeFileSync(`debugosu/command-rs=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
-            try {
-                if (mapdata.authentication) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - authentication
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    await osufunc.updateToken();
-                    return;
-                }
-                if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - ${mapdata.error}
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        await obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    return;
-                }
-            } catch (error) {
+            if (mapdata?.error) {
+                obj.reply({
+                    content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+                return;
             }
 
             let accgr;
@@ -685,7 +618,7 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
 
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: curbm.id }), null, 2));
             if (curscore.best_id != null) {
-                fs.writeFileSync(`debugosu/prevscore${obj.guildId}.json`, JSON.stringify({ id: curscore.best_id}, null, 2))
+                fs.writeFileSync(`debugosu/prevscore${obj.guildId}.json`, JSON.stringify({ id: curscore.best_id }, null, 2))
             }
             fs.writeFileSync(`debugosu/prevuser${obj.guildId}.json`, JSON.stringify({ id: osudata.id }, null, 2))
 

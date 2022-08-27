@@ -172,35 +172,13 @@ Options(2):
 
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
         fs.writeFileSync(`debugosu/command-leaderboard=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
-        try {
-            if (mapdata.authentication) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - authentication
-----------------------------------------------------`)
-                if (button == null) {
-                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                await osufunc.updateToken();
-                return;
-            }
-            if (typeof mapdata.error != 'undefined' && mapdata.error == null) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - ${mapdata.error}
-----------------------------------------------------`)
-                if (button == null) {
-                    obj.reply({ content: `error - ${mapdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                return;
-            }
-        } catch (error) {
+        if (mapdata?.error) {
+            obj.reply({
+                content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+            return;
         }
 
         let title = 'n';
@@ -218,37 +196,15 @@ Error - ${mapdata.error}
         if (mods == null) {
             const lbdataf: osuApiTypes.BeatmapScores = await osufunc.apiget('scores_get_map', `${mapid}`)
             fs.writeFileSync(`debugosu/command-leaderboard=lbdataf=${obj.guildId}.json`, JSON.stringify(lbdataf, null, 2))
-
-            try {
-                if (lbdataf.authentication) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - authentication
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    await osufunc.updateToken();
-                    return;
-                }
-                if (typeof lbdataf.error != 'undefined' && lbdataf.error == null) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - ${lbdataf.error}
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        obj.reply({ content: `error - ${lbdataf.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    return;
-                }
-            } catch (error) {
+            if (lbdataf?.error) {
+                obj.reply({
+                    content: `${lbdataf?.error ? lbdataf?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+                return;
             }
+
             const lbdata = lbdataf.scores
             fs.writeFileSync(`debugosu/command-leaderboard=lbdata=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
 
@@ -325,22 +281,13 @@ ${hitlist}
         } else {
             const lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1);
             fs.writeFileSync(`debugosu/command-leaderboard=lbdata_apiv1=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
-            try {
-                if (lbdata.authentication) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - authentication
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    await osufunc.updateToken();
-                    return;
-                }
-            } catch (error) {
+            if (lbdata?.error) {
+                obj.reply({
+                    content: `${lbdata?.error ? lbdata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+                return;
             }
 
             const lbEmbed = new Discord.EmbedBuilder()

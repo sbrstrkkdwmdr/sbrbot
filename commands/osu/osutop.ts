@@ -40,7 +40,7 @@ module.exports = {
             mode = null;
             sort = 'pp';
             page = 1;
-            
+
             mapper = null;
             mods = null;
             detailed = false;
@@ -296,36 +296,15 @@ Options(2):
 `, 'utf-8')
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         fs.writeFileSync(`debugosu/command-otop=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
-        try {
-            if (osudata.authentication) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - authentication
-----------------------------------------------------`)
-                if (button == null) {
-                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                await osufunc.updateToken();
-                return;
-            }
-            if (typeof osudata.error != 'undefined' && osudata.error == null) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - ${osudata.error}
-----------------------------------------------------`)
-                if (button == null) {
-                    await obj.reply({ content: `error - ${osudata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                return;
-            }
-        } catch (error) {
+        if (osudata?.error) {
+            obj.reply({
+                content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+            return;
         }
+
         try {
             const findname = await userdata.findOne({ where: { osuname: user } })
             if (findname != null) {
@@ -340,38 +319,18 @@ Error - ${osudata.error}
         } catch (error) {
 
         }
+
         const osutopdataPreSort: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
         fs.writeFileSync(`debugosu/command-otop=osutopdataPreSort=${obj.guildId}`, JSON.stringify(osutopdataPreSort, null, 2))
-        try {
-            if (osutopdataPreSort.authentication) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - authentication
-----------------------------------------------------`)
-                if (button == null) {
-                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                await osufunc.updateToken();
-                return;
-            }
-            if (typeof osutopdataPreSort.error != 'undefined' && osutopdataPreSort.error == null) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - ${osutopdataPreSort.error}
-----------------------------------------------------`)
-                if (button == null) {
-                    await obj.reply({ content: `error - ${osutopdataPreSort.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                return;
-            }
-        } catch (error) {
+        if (osutopdataPreSort?.error) {
+            obj.reply({
+                content: `${osutopdataPreSort?.error ? osutopdataPreSort?.error : 'Error: null'}`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+            return;
         }
+
         try {
             osutopdataPreSort[0].user.username
         } catch (error) {

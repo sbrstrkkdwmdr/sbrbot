@@ -178,37 +178,14 @@ Options(2):
 `, 'utf-8')
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         fs.writeFileSync(`debugosu/command-osu=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
-        try {
-            if (osudata.authentication) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - authentication
-----------------------------------------------------`)
-                if (button == null) {
-                    obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                await osufunc.updateToken();
-                return;
-            }
-            if (osudata.error == null && typeof osudata.error != 'undefined') {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - ${osudata.error}
-----------------------------------------------------`)
-                if (button == null) {
-                    await obj.reply({ content: `error - ${osudata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                        .catch();
-                }
-                return;
-            }
-        } catch (error) {
+        if (osudata?.error) {
+            obj.reply({
+                content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+            return;
         }
-
 
         const findname = await userdata.findOne({ where: { osuname: user } })
         if (findname != null) {
@@ -381,67 +358,25 @@ Error - ${osudata.error}
 
             const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
             fs.writeFileSync(`debugosu/command-osu=osutopdata=${obj.guildId}.json`, JSON.stringify(osutopdata, null, 2))
-            try {
-                if (osutopdata.authentication) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - authentication
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    await osufunc.updateToken();
-                    return;
-                }
-                if (typeof osutopdata.error != 'undefined' && osutopdata.error == null) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - ${osutopdata.error}
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        await obj.reply({ content: `error - ${osutopdata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    return;
-                }
-            } catch (error) {
+            if (osutopdata?.error) {
+                obj.reply({
+                    content: `${osutopdata?.error ? osutopdata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+                return;
             }
+
             const mostplayeddata: osuApiTypes.BeatmapPlaycount[] & osuApiTypes.Error = await osufunc.apiget('most_played', `${osudata.id}`)
-            try {
-                if (mostplayeddata.authentication) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - authentication
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        obj.reply({ content: 'error - osu auth out of date. Updating token...', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    await osufunc.updateToken();
-                    return;
-                }
-                if (typeof mostplayeddata.error != 'undefined' && mostplayeddata.error == null) {
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                        `
-    ----------------------------------------------------
-    cmd ID: ${absoluteID}
-    Error - ${mostplayeddata.error}
-    ----------------------------------------------------`)
-                    if (button == null) {
-                        await obj.reply({ content: `error - ${mostplayeddata.error}`, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                            .catch();
-                    }
-                    return;
-                }
-            } catch (error) {
+            if (mostplayeddata?.error) {
+                obj.reply({
+                    content: `${mostplayeddata?.error ? mostplayeddata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+                return;
             }
+
             fs.writeFileSync(`debugosu/command-osu=mostplayeddata=${obj.guildId}.json`, JSON.stringify(mostplayeddata, null, 2))
 
             const secperplay = osudata?.statistics.play_time / parseFloat(playcount.replaceAll(',', ''))
