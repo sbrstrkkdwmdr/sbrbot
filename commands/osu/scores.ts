@@ -148,7 +148,7 @@ cmd ID: ${absoluteID}
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
-ID: ${absoluteID}
+cmd ID: ${absoluteID}
 Options:
     username: ${user}
     id: ${id}
@@ -235,7 +235,7 @@ Options:
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
-ID: ${absoluteID}
+cmd ID: ${absoluteID}
 Options(2): 
     user: ${user}
     id: ${id}

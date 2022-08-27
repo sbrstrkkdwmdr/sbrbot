@@ -129,7 +129,7 @@ cmd ID: ${absoluteID}
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
-ID: ${absoluteID}
+cmd ID: ${absoluteID}
 Options:
     user: ${user}
     page: ${page}
@@ -224,6 +224,17 @@ Options:
                 .catch();
 
         }
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Options(2):
+user: ${user}
+page: ${page}
+mode: ${mode}
+list: ${list}
+----------------------------------------------------
+`, 'utf-8')
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
         fs.writeFileSync(`debugosu/commands-rs=user=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {

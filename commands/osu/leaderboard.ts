@@ -159,7 +159,16 @@ Options:
         } else {
             page--
         }
-
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Options(2): 
+    mapid: ${mapid}
+    page: ${page}
+    mods: ${mods1}
+----------------------------------------------------
+`, 'utf-8')
 
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
         fs.writeFileSync(`debugosu/command-leaderboard=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
