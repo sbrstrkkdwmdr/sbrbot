@@ -8,6 +8,7 @@ import cmdchecks = require('../../calc/commandchecks');
 import chartjsimg = require('chartjs-to-image');
 import colours = require('../../configs/colours');
 import osuApiTypes = require('../../configs/osuApiTypes');
+import calc = require('../../calc/calculations');
 
 module.exports = {
     name: 'osu',
@@ -72,6 +73,13 @@ module.exports = {
             if (button == 'DetailDisable') {
                 detailed = false;
             }
+            if (button == 'Refresh'){
+                if (message.embeds[0].fields[0]) {
+                    detailed = true
+                } else {
+                    detailed = false
+                }
+            }
         }
 
         if (overrides != null) {
@@ -107,25 +115,11 @@ Options:
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-osu-${commanduser.id}`)
+                    .setCustomId(`Refresh-osu-${commanduser.id}`)
                     .setStyle('Primary')
-                    .setEmoji('⬅')
-                    /* .setLabel('Start') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-osu-${commanduser.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-osu-${commanduser.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('▶')
-                    /* .setLabel('Next') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-osu-${commanduser.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('➡')
-                    /* .setLabel('End') */,
+                    .setEmoji('🔁')
             );
+
         if (user == null || user.includes('<') || mtns > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
@@ -450,6 +444,8 @@ Error - ${osudata.error}
             }
             fs.writeFileSync(`debugosu/command-osu=mostplayeddata=${obj.guildId}.json`, JSON.stringify(mostplayeddata, null, 2))
 
+            const secperplay = osudata?.statistics.play_time / parseFloat(playcount.replaceAll(',', ''))
+
             const highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
             const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
@@ -467,11 +463,12 @@ Error - ${osudata.error}
                 {
                     name: 'Stats',
                     value:
-                        `**Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)\n
+                        `**Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)
 **pp:** ${osustats.pp}
 **Accuracy:** ${(osustats.hit_accuracy != null ? osustats.hit_accuracy : 0).toFixed(2)}%
 **Play Count:** ${playcount}
-**Level:** ${lvl}`,
+**Level:** ${lvl}
+**Total Play Time:** ${calc.secondsToTime(osudata?.statistics.play_time)} (${calc.secondsToTimeReadable(osudata?.statistics.play_time, true, false)})`,
                     inline: true
                 },
                 {
@@ -481,7 +478,8 @@ Error - ${osudata.error}
 ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
 **Followers:** ${osudata.follower_count}
 ${prevnames}
-${onlinestatus}`,
+${onlinestatus}
+**Avg time per play:** ${calc.secondsToTime(secperplay)}`,
                     inline: true
                 }
             ])
@@ -516,17 +514,17 @@ ${onlinestatus}`,
             useEmbeds = [osuEmbed, ChartsEmbedRank, ChartsEmbedPlay]
         } else {
             osuEmbed.setDescription(`
-**Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)\n
+**Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)
 **pp:** ${osustats.pp}
 **Accuracy:** ${(osustats.hit_accuracy != null ? osustats.hit_accuracy : 0).toFixed(2)}%
 **Play Count:** ${playcount}
 **Level:** ${lvl}
-${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
-
+${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}\n
 **Player joined** <t:${new Date(osudata.join_date).getTime() / 1000}:R>
 **Followers:** ${osudata.follower_count}
 ${prevnames}
 ${onlinestatus}
+**Total Play Time:** ${calc.secondsToTimeReadable(osudata?.statistics.play_time, true, false)}
             `)
             useEmbeds = [osuEmbed]
         }

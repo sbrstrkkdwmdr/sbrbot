@@ -364,23 +364,77 @@ function timeToMs(str: string) {
 /**
  * 
  * @param seconds seconds
+ * @param allowDays whether or not to use days
  * @returns the time in hh:mm:ss format
  */
-function secondsToTime(seconds: number) {
+function secondsToTime(seconds: number, allowDays?: boolean) {
     //1 * 60 * 60
     //assuming 6000 seconds
 
-    const hours = (seconds / 60 / 60 % 24 < 10 ? '0' + Math.floor(seconds / 60 / 60 % 24) : Math.floor(seconds / 60 / 60 % 24)).toString();
+    const days = Math.floor(seconds / 60 / 60 / 24).toString();
+    const hours =
+        allowDays == true ?
+            (seconds / 60 / 60 % 24 < 10 ? '0' + Math.floor(seconds / 60 / 60 % 24) : Math.floor(seconds / 60 / 60 % 24)).toString()
+            : (seconds / 60 / 60 < 10 ? '0' + Math.floor(seconds / 60 / 60) : Math.floor(seconds / 60 / 60)).toString();
     const minutes = seconds / 60 % 60 < 10 ? '0' + Math.floor(seconds / 60 % 60) : Math.floor(seconds / 60 % 60);
     const secs = seconds % 60 < 10 ? '0' + Math.floor(seconds % 60) : Math.floor(seconds % 60);
-
-    const str = parseInt(hours) > 0 ?
-        `${hours}:${minutes}:${secs}` :
-        `${minutes}:${secs}`;
-
+    let str;
+    if (allowDays == true) {
+        str =
+            parseInt(days) > 0 ?
+                `${days}:${hours}:${minutes}:${secs}` :
+                parseInt(hours) > 0 ?
+                    `${hours}:${minutes}:${secs}` :
+                    `${minutes}:${secs}`;
+    } else {
+        str = parseInt(hours) > 0 ?
+            `${hours}:${minutes}:${secs}` :
+            `${minutes}:${secs}`;
+    }
     return str;
 }
 
+function secondsToTimeReadable(seconds: number, allowDays?: boolean, showSeconds?: boolean) {
+    //1 * 60 * 60
+    //assuming 6000 seconds
+
+    const days = Math.floor(seconds / 60 / 60 / 24).toString();
+    const hours =
+        allowDays == true ?
+            (seconds / 60 / 60 % 24 < 10 ? '0' + Math.floor(seconds / 60 / 60 % 24) : Math.floor(seconds / 60 / 60 % 24)).toString()
+            : (seconds / 60 / 60 < 10 ? '0' + Math.floor(seconds / 60 / 60) : Math.floor(seconds / 60 / 60)).toString();
+    const minutes = seconds / 60 % 60 < 10 ? '0' + Math.floor(seconds / 60 % 60) : Math.floor(seconds / 60 % 60);
+    const secs = seconds % 60 < 10 ? '0' + Math.floor(seconds % 60) : Math.floor(seconds % 60);
+    let str;
+    if (allowDays == true) {
+        if (showSeconds == true) {
+            str =
+                parseInt(days) > 0 ?
+                    `${days}d ${hours}h ${minutes}m ${secs}s` :
+                    parseInt(hours) > 0 ?
+                        `${hours}d ${minutes}m ${secs}s` :
+                        `${minutes}m ${secs}s`;
+        } else {
+            str =
+                parseInt(days) > 0 ?
+                    `${days}d ${hours}h ${minutes}m` :
+                    parseInt(hours) > 0 ?
+                        `${hours}d ${minutes}m` :
+                        `${minutes}m`;
+        }
+    } else {
+        if (showSeconds == true) {
+            str = parseInt(hours) > 0 ?
+                `${hours}h ${minutes}m ${secs}s` :
+                `${minutes}m ${secs}s `;
+        } else {
+            str = parseInt(hours) > 0 ?
+                `${hours}h ${minutes}m` :
+                `${minutes}m`;
+        }
+    }
+    return str;
+}
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
 export {
@@ -390,6 +444,6 @@ export {
     to12htime, relto12htime,
     dayhuman, tomonthname,
     fixoffset, timeToMs,
-    secondsToTime
+    secondsToTime, secondsToTimeReadable
 };
 
