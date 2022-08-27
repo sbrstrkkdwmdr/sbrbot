@@ -35,7 +35,7 @@ module.exports = {
         }
 
 
-        let baseCommandType:string;
+        let baseCommandType: string;
 
         if (message != null && button == null) {
             commanduser = message.author;
@@ -91,7 +91,7 @@ module.exports = {
             }
         }
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
+            `
 ----------------------------------------------------
 COMMAND EVENT - leaderboard (${baseCommandType})
 ${currentDate} | ${currentDateISO}
@@ -111,15 +111,20 @@ Options:
     mods: ${mods1}
 ----------------------------------------------------
 `, 'utf-8')
-
         const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-leaderboard-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁'),
+            )
+        const pgbuttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-leaderboard-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('⬅')
                     .setDisabled(isFirstPage)
-
                 /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-leaderboard-${commanduser.id}`)
@@ -139,10 +144,6 @@ Options:
                     .setEmoji('➡')
                     .setDisabled(isLastPage)
                 /* .setLabel('End') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-leaderboard-${commanduser.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('🔁'),
             );
         if (!mapid) {
             mapid = prevmap.id
@@ -303,12 +304,12 @@ ${hitlist}
             lbEmbed.setDescription(`${scoretxt}`)
 
             if (button == null) {
-                obj.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                obj.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [pgbuttons, buttons] })
                     .catch();
 
                 fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
             } else {
-                message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [pgbuttons, buttons] })
                     .catch();
 
             }
@@ -383,15 +384,14 @@ ${hitlist}
                 scoretxt = 'Error - map is unranked'
             }
             lbEmbed.setDescription(`${scoretxt}`)
-
             if (button == null) {
-                obj.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                obj.reply({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [pgbuttons, buttons] })
                     .catch();
 
                 fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
 
             } else {
-                message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [buttons] })
+                message.edit({ embeds: [lbEmbed], allowedMentions: { repliedUser: false }, components: [pgbuttons, buttons] })
                     .catch();
 
             }

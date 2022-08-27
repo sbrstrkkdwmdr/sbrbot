@@ -124,7 +124,16 @@ cmd ID: ${absoluteID}
         if (page > 0) {
             page--
         }
+
         const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-firsts-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁'),
+            )
+
+        const pgbuttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-firsts-${commanduser.id}`)
@@ -150,10 +159,6 @@ cmd ID: ${absoluteID}
                     .setEmoji('➡')
                     .setDisabled(isLastPage)
                 /* .setLabel('End') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-firsts-${commanduser.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('🔁'),
             );
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
@@ -371,7 +376,7 @@ Error - ${firstscoresdata.error}
             message.edit({
                 embeds: [firstsEmbed],
                 allowedMentions: { repliedUser: false },
-                components: [buttons]
+                components: [pgbuttons, buttons]
             })
                 .catch();
 
@@ -381,7 +386,7 @@ Error - ${firstscoresdata.error}
                 embeds: [firstsEmbed],
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true,
-                components: [buttons]
+                components: [pgbuttons, buttons]
             })
                 .catch();
 

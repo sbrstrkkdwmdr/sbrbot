@@ -171,7 +171,7 @@ cmd ID: ${absoluteID}
             }
             mapid = prevmap.id;
         }
-        const buttons = new Discord.ActionRowBuilder()
+        const pgbuttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-map-${commanduser.id}`)
@@ -193,7 +193,7 @@ cmd ID: ${absoluteID}
                     .setEmoji('➡')
                 /* .setLabel('End') */,
             );
-        const buttons2 = new Discord.ActionRowBuilder().addComponents(
+        const buttons = new Discord.ActionRowBuilder().addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`Refresh-map-${commanduser.id}`)
                 .setStyle('Primary')
@@ -201,7 +201,7 @@ cmd ID: ${absoluteID}
     /* .setLabel('Start') */,
         )
         if (detailed == true) {
-            buttons2.addComponents(
+            buttons.addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailDisable-map-${curuid}`)
                     .setStyle('Primary')
@@ -209,7 +209,7 @@ cmd ID: ${absoluteID}
                 /* .setLabel('End') */,
             )
         } else {
-            buttons2.addComponents(
+            buttons.addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailEnable-map-${curuid}`)
                     .setStyle('Primary')
@@ -639,7 +639,7 @@ ${error}
                 content: "⠀",
                 embeds: embeds,
                 allowedMentions: { repliedUser: false },
-                components: [buttons, buttons2]
+                components: [pgbuttons, buttons]
             })
                 .catch();
 
@@ -649,7 +649,7 @@ ${error}
                 content: "⠀",
                 embeds: embeds,
                 allowedMentions: { repliedUser: false },
-                components: [buttons, buttons2]
+                components: [pgbuttons, buttons]
             })
                 .catch();
 
@@ -659,7 +659,7 @@ ${error}
                 content: "⠀",
                 embeds: embeds,
                 allowedMentions: { repliedUser: false },
-                components: [buttons, buttons2]
+                components: [pgbuttons, buttons]
             })
                 .catch();
 

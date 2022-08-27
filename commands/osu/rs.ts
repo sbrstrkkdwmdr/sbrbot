@@ -115,7 +115,7 @@ module.exports = {
         }
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-        `
+            `
 ----------------------------------------------------
 COMMAND EVENT - rs (${baseCommandType})
 ${currentDate} | ${currentDateISO}
@@ -140,8 +140,15 @@ Options:
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-
         const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-rs-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁'),
+            )
+
+        const pgbuttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-rs-${commanduser.id}`)
@@ -166,10 +173,6 @@ Options:
                     .setEmoji('➡')
                     .setDisabled(isLastPage)
                     /* .setLabel('End') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-rs-${commanduser.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('🔁')
             );
 
         if (user == null || message.mentions.users.size > 0) {
@@ -708,7 +711,7 @@ ${curscore.mods.length > 0 ? '+' + curscore.mods.join('') + ' | ' : ''}${(cursco
             obj.reply({
                 embeds: [rsEmbed],
                 allowedMentions: { repliedUser: false },
-                components: [buttons],
+                components: [pgbuttons, buttons],
                 failIfNotExists: true
             })
                 .catch();
@@ -718,7 +721,7 @@ ${curscore.mods.length > 0 ? '+' + curscore.mods.join('') + ' | ' : ''}${(cursco
             message.edit({
                 embeds: [rsEmbed],
                 allowedMentions: { repliedUser: false },
-                components: [buttons],
+                components: [pgbuttons, buttons],
                 failIfNotExists: true
             })
                 .catch();

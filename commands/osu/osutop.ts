@@ -40,6 +40,7 @@ module.exports = {
             mode = null;
             sort = 'pp';
             page = 1;
+            
             mapper = null;
             mods = null;
             detailed = false;
@@ -165,7 +166,7 @@ module.exports = {
             }
         }
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
+            `
 ----------------------------------------------------
 COMMAND EVENT - osutop (${baseCommandType})
 ${currentDate} | ${currentDateISO}
@@ -193,9 +194,18 @@ Options:
 `, 'utf-8')
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-
+        if (page < 2) {
+            isFirstPage = true;
+        }
         const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-osutop-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁'),
+            )
+
+        const pgbuttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-osutop-${commanduser.id}`)
@@ -221,13 +231,7 @@ Options:
                     .setEmoji('➡')
                     .setDisabled(isLastPage)
                     /* .setLabel('End') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-osutop-${commanduser.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('🔁'),
             );
-        const buttons2 = new Discord.ActionRowBuilder()
-
 
         if (user == null || message.mentions.users.size > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
@@ -256,7 +260,7 @@ Options:
             page = page - 1
         }
         if (detailed == true) {
-            buttons2.addComponents(
+            buttons.addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailDisable-osutop-${curuid}`)
                     .setStyle('Primary')
@@ -264,7 +268,7 @@ Options:
                 /* .setLabel('End') */
             )
         } else {
-            buttons2.addComponents(
+            buttons.addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailEnable-osutop-${curuid}`)
                     .setStyle('Primary')
@@ -729,7 +733,7 @@ ${error}
                 content: '⠀',
                 embeds: [topEmbed],
                 allowedMentions: { repliedUser: false },
-                components: [buttons, buttons2]
+                components: [pgbuttons, buttons]
             })
                 .catch();
 
@@ -738,7 +742,7 @@ ${error}
                 content: '⠀',
                 embeds: [topEmbed],
                 allowedMentions: { repliedUser: false },
-                components: [buttons, buttons2]
+                components: [pgbuttons, buttons]
             })
                 .catch();
 

@@ -39,11 +39,12 @@ module.exports = {
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: 32345 }), null, 2));
             prevmap = { id: 32345 }
         }
-        let baseCommandType:string;
+        let baseCommandType: string;
         if (message != null && button == null) {
             commanduser = message.author;
             baseCommandType = 'message'
-
+            page = 1
+            isFirstPage = true;
             user = args.join(' ')
             if (!args[0]) {
                 user = null
@@ -135,7 +136,7 @@ module.exports = {
         }
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
+            `
 ----------------------------------------------------
 COMMAND EVENT - scores (${baseCommandType})
 ${currentDate} | ${currentDateISO}
@@ -157,6 +158,14 @@ Options:
 ----------------------------------------------------
 `, 'utf-8')
         const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-scores-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁'),
+            )
+
+        const pgbuttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-scores-${commanduser.id}`)
@@ -182,11 +191,10 @@ Options:
                     .setEmoji('➡')
                     .setDisabled(isLastPage)
                     /* .setLabel('End') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-scores-${commanduser.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('🔁'),
             );
+        if (page < 2) {
+            isFirstPage = true;
+        }
 
         if (user == null || message.mentions.users.size > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
@@ -609,7 +617,7 @@ Error - ${mapdata.error}
                     embeds: [scoresEmbed],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true,
-                    components: [buttons]
+                    components: [pgbuttons, buttons]
                 })
                     .catch()
                     ;
@@ -620,7 +628,7 @@ Error - ${mapdata.error}
                     embeds: [scoresEmbed],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true,
-                    components: [buttons]
+                    components: [pgbuttons, buttons]
                 })
                     .catch()
                     ;

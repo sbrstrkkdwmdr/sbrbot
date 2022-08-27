@@ -28,6 +28,7 @@ module.exports = {
             baseCommandType = 'message'
             user = args.join(' ')
             searchid = message.author.id
+            isFirstPage = true;
             mode = null;
             if (message.mentions.users.size > 0) {
                 searchid = message.mentions.users.first().id
@@ -80,6 +81,14 @@ module.exports = {
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-pinned-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔁'),
+            )
+
+        const pgbuttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-pinned-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('⬅')
@@ -103,10 +112,6 @@ module.exports = {
                     .setEmoji('➡')
                     .setDisabled(isLastPage)
                 /* .setLabel('End') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-pinned-${commanduser.id}`)
-                    .setStyle('Primary')
-                    .setEmoji('🔁'),
             );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -131,6 +136,9 @@ Options:
 `, 'utf-8')
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+        if (page < 2) {
+            isFirstPage = true;
+        }
 
         if (user == null || message.mentions.users.size > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
@@ -402,7 +410,7 @@ ${mode}`
             obj.reply({
                 embeds: [pinnedEmbed],
                 allowedMentions: { repliedUser: false },
-                components: [buttons]
+                components: [pgbuttons, buttons]
             })
                 .catch();
 
@@ -410,7 +418,7 @@ ${mode}`
             message.edit({
                 embeds: [pinnedEmbed],
                 allowedMentions: { repliedUser: false },
-                components: [buttons]
+                components: [pgbuttons, buttons]
             })
                 .catch();
 
