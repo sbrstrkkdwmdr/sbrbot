@@ -712,7 +712,7 @@ ${curscore.mods.length > 0 ? '+' + curscore.mods.join('') + ' | ' : ''}${(cursco
                 content: '⠀',
                 embeds: [rsEmbed],
                 allowedMentions: { repliedUser: false },
-                components: [buttons],
+                components: [pgbuttons, buttons],
                 failIfNotExists: true
             })
                 .catch();
