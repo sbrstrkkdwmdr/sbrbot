@@ -91,30 +91,33 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
             //osu below
 
-            case 'osu':
+            case 'osu': case 'profile': case 'o':
                 client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'osuset':
                 client.osucmds.get('osuset').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
-            case 'osutop':
+            case 'osutop': case 'top':
                 client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
-            case 'map':
+            case 'map': case 'm':
                 client.osucmds.get('map').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
-            case 'rs':
+            case 'rs': case 'recent': case 'r':
                 client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
-            case 'scores':
+            case 'scores': case 'c':
                 client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
-            case 'leaderboard':
+            case 'leaderboard': case 'maplb': case 'mapleaderboard':
                 client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
-            case 'osumodcalc':
-                client.osucmds.get('osumodcalc').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+            case 'lb':
+                client.osucmds.get('lb').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
+            /*             case 'osumodcalc':
+                            client.osucmds.get('osumodcalc').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                            break; */
 
 
             //admin 
@@ -123,27 +126,27 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
             case 'checkperms':
                 if (cmdchecks.isAdmin(interaction.member.user.id, interaction.guildId, client) || cmdchecks.isOwner(interaction.member.user.id))
-                client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                    client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'servers':
                 if (cmdchecks.isAdmin(interaction.member.user.id, interaction.guildId, client) || cmdchecks.isOwner(interaction.member.user.id))
-                client.admincmds.get('servers').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                    client.admincmds.get('servers').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'leaveguild':
                 if (cmdchecks.isAdmin(interaction.member.user.id, interaction.guildId, client) || cmdchecks.isOwner(interaction.member.user.id))
-                client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                    client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'voice':
                 if (cmdchecks.isAdmin(interaction.member.user.id, interaction.guildId, client) || cmdchecks.isOwner(interaction.member.user.id))
-                client.admincmds.get('voice').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                    client.admincmds.get('voice').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'find':
                 if (cmdchecks.isAdmin(interaction.member.user.id, interaction.guildId, client) || cmdchecks.isOwner(interaction.member.user.id))
-                client.admincmds.get('find').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                    client.admincmds.get('find').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'log':
                 if (cmdchecks.isAdmin(interaction.member.user.id, interaction.guildId, client) || cmdchecks.isOwner(interaction.member.user.id))
-                client.admincmds.get('log').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                    client.admincmds.get('log').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'Links':
                 client.commands.get('info').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);

@@ -95,6 +95,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'ytsearch': case 'yt':
                 client.misccmds.get('ytsearch').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
+
             //osu commands below
             case 'firsts':
                 client.osucmds.get('firsts').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
@@ -167,7 +168,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 break;
             case 'purge':
                 if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))
-                client.admincmds.get('purge').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                    client.admincmds.get('purge').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
 
 

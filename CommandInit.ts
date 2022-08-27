@@ -241,6 +241,33 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
         ]
     },
+    {//alternate command for osu
+        name: 'o',
+        description: 'Displays the user\'s osu! profile',
+        dmPermission: false,
+        options: [
+            {
+                name: 'user',
+                description: 'The user to display the profile of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            },
+            {
+                name: 'detailed',
+                description: 'Displays extra information',
+                type: Discord.ApplicationCommandOptionType.Boolean,
+                required: false,
+                default: false
+            },
+            {
+                name: 'mode',
+                description: 'The mode to display the profile in',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: cmdconfig.modeopts
+            }
+        ]
+    },
     {
         name: 'osuset',
         description: 'Sets the user\'s osu! profile',
@@ -364,14 +391,53 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
         ]
     },
+    {//alternate command for map
+        name: 'm',
+        description: 'Displays the map info of the map',
+        dmPermission: false,
+        options: [
+            {
+                name: 'id',
+                description: 'The id of the map to display',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: false,
+                minValue: 1
+            },
+            {
+                name: 'mods',
+                description: 'The mods to display the map info of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            },
+            {
+                name: 'detailed',
+                description: 'Show all details',
+                type: Discord.ApplicationCommandOptionType.Boolean,
+                required: false,
+                default: false
+            }
+        ]
+    },
     {
         name: 'rs',
         description: 'Displays the user\'s most recent score',
         dmPermission: false,
         options: cmdconfig.rsopts
     },
+    {//alternate command for rs
+        name: 'recent',
+        description: 'Displays the user\'s most recent score',
+        dmPermission: false,
+        options: cmdconfig.rsopts
+    },
     {
         name: 'scores',
+        description: 'Displays the user\'s scores for a set map',
+        dmPermission: false,
+        options: cmdconfig.useridsortopts
+    },
+    {//alternate command for scores
+        name: 'c',
         description: 'Displays the user\'s scores for a set map',
         dmPermission: false,
         options: cmdconfig.useridsortopts
@@ -405,7 +471,41 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
         ]
     },
+    {//alternate command for leaderboard
+        name: 'maplb',
+        description: 'Displays the top five plays on a specific map',
+        dmPermission: false,
+        options: [
+            {
+                name: 'id',
+                description: 'The id of the map to display',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'page',
+                description: 'Which page to display',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+                default: 1,
+                minValue: 1,
+                maxValue: 20
+
+            },
+            {
+                name: 'mods',
+                description: 'What mods to sort',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.String
+            }
+        ]
+    },
     {
+        name: 'lb',
+        description: 'Displays the server leaderboard',
+        dmPermission: false,
+    },
+    /* {
         name: 'osumodcalc',
         description: 'Calculates the values for a map based on the values given',
         dmPermission: false,
@@ -459,7 +559,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         ]
 
 
-    },
+    }, */
 
     //below are admin related commands
     {
