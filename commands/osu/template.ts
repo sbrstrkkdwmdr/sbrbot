@@ -12,52 +12,25 @@ module.exports = {
     name: 'COMMANDNAME',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
         let commanduser;
-
+        let baseCommandType;
 
         if (message != null && interaction == null && button == null) {
             commanduser = message.author;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - COMMANDNAME (message)
-${currentDate} | ${currentDateISO}
-recieved COMMANDNAME command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'message';
         }
 
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null && message == null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - COMMANDNAME (interaction)
-${currentDate} | ${currentDateISO}
-recieved COMMANDNAME command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'interaction';
         }
 
         //==============================================================================================================================================================================================
 
         if (button != null) {
             commanduser = interaction.member.user;
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - COMMANDNAME (interaction)
-${currentDate} | ${currentDateISO}
-recieved COMMANDNAME command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            baseCommandType = 'button';
         }
 
         const buttons = new Discord.ActionRowBuilder()
@@ -82,6 +55,16 @@ cmd ID: ${absoluteID}
                     .setEmoji('➡')
                     /* .setLabel('End') */,
             );
+            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+COMMAND EVENT - COMMANDNAME (${baseCommandType})
+${currentDate} | ${currentDateISO}
+recieved COMMANDNAME command
+requested by ${commanduser.id} AKA ${commanduser.tag}
+cmd ID: ${absoluteID}
+----------------------------------------------------
+`, 'utf-8')
         //OPTIONS==============================================================================================================================================================================================
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
