@@ -16,9 +16,18 @@ module.exports = {
         let compareType = 'user';
         let first;
         let second;
-        const prevuser = (JSON.parse(fs.readFileSync(`debugosu/prevuser${obj.guildId}.json`, 'utf8')).id);
-        const prevscore = (JSON.parse(fs.readFileSync(`debugosu/prevscore${obj.guildId}.json`, 'utf8')).id);
-
+        let prevuser;
+        let prevscore;
+        try {
+            prevuser = (JSON.parse(fs.readFileSync(`debugosu/prevuser${obj.guildId}.json`, 'utf8')).id);
+        } catch (err) {
+            prevuser = 'peppy';
+        }
+        try {
+            prevscore = (JSON.parse(fs.readFileSync(`debugosu/prevscore${obj.guildId}.json`, 'utf8')).id);
+        } catch (err) {
+            prevscore = JSON.parse(fs.readFileSync('files/testScore.json', 'utf8'));
+        }
         if (message != null && interaction == null && button == null) {
             commanduser = message.author;
             baseCommandType = 'message';
@@ -189,10 +198,12 @@ Options(2):
             } else {
                 let firstscore: osuApiTypes.Score = null;
                 let fscoresarray: osuApiTypes.Score[] = null;
-                const secondscore: osuApiTypes.Score = await osufunc.apiget('score', second)
-                    .catch(error => {
-                        throw new Error(`Api Error: score \`${second}\` not found`)
-                    });
+                const secondscore: osuApiTypes.Score =
+                    second != prevscore ?
+                        await osufunc.apiget('score', second)
+                            .catch(error => {
+                                throw new Error(`Api Error: score \`${second}\` not found`)
+                            }) : prevscore;
                 ;
 
                 if (first == null) {
