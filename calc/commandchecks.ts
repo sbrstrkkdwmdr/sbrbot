@@ -5,8 +5,7 @@ const config = require('../configs/config.json')
 /**
  * 
  * @param {number} userid 
- * @returns boolean
- * @info checks whether or not the user is an owner
+ * @returns true if the user is an owner
  */
 function isOwner(userid: number) {
     for (let i = 0; i < config.ownerusers.length; i++) {

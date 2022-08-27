@@ -7,8 +7,10 @@ module.exports = {
         let command;
         const debugfiles = [];
         const readfiles = fs.readdirSync('debugosu')
+        let commanduser;
 
         if (message != null && interaction == null && button == null) {
+            commanduser = message.author
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -33,6 +35,7 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (interaction != null && button == null && message == null) {
+            commanduser = interaction.member.user
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -49,6 +52,7 @@ cmd ID: ${absoluteID}
         //==============================================================================================================================================================================================
 
         if (button != null) {
+            commanduser = interaction.member.user
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
@@ -70,6 +74,15 @@ commmand: ${command}
 ----------------------------------------------------
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+        if(!(cmdchecks.isAdmin(commanduser.id, obj.guild, client) || cmdchecks.isOwner(commanduser.id))) {
+            obj.reply({
+                content: 'Error - you do not have permission to use this command',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch(error => { });
+        }
+        
         switch (command) {
             case 'firsts':
                 for (let i = 0; i < readfiles.length; i++) {
@@ -189,7 +202,7 @@ commmand: ${command}
                 break;
         }
 
-        if (debugfiles.length > 0) {
+        if (debugfiles.length > 0 && debugfiles.length < 11) {
             if ((message != null || interaction != null) && button == null) {
                 obj.reply({
                     files: debugfiles,
