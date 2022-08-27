@@ -33,7 +33,7 @@ module.exports = {
             prevmap = { id: 32345 }
         }
 
-        let baseCommandType:string;
+        let baseCommandType: string;
 
         if (message != null && button == null && overrides == null) {
             commanduser = message.author;
@@ -137,9 +137,13 @@ module.exports = {
             if (button == 'DetailDisable') {
                 detailed = false;
             }
+            if (button == 'Refresh') {
+                mapid = curid;
+                detailed = message.embeds[0].fields[1].value.includes('aim') || message.embeds[0].fields[0].value.includes('ms')
+            }
         }
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-        `
+            `
 ----------------------------------------------------
 COMMAND EVENT - map (${baseCommandType})
 ${currentDate} | ${currentDateISO}
@@ -189,16 +193,23 @@ cmd ID: ${absoluteID}
                     .setEmoji('➡')
                 /* .setLabel('End') */,
             );
+        const buttons2 = new Discord.ActionRowBuilder().addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`Refresh-map-${commanduser.id}`)
+                .setStyle('Primary')
+                .setEmoji('🔁')
+    /* .setLabel('Start') */,
+        )
         if (detailed == true) {
-            buttons.addComponents(
+            buttons2.addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailDisable-map-${curuid}`)
                     .setStyle('Primary')
                     .setEmoji('ℹ')
-                /* .setLabel('End') */
+                /* .setLabel('End') */,
             )
         } else {
-            buttons.addComponents(
+            buttons2.addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailEnable-map-${curuid}`)
                     .setStyle('Primary')
@@ -628,7 +639,7 @@ ${error}
                 content: "⠀",
                 embeds: embeds,
                 allowedMentions: { repliedUser: false },
-                components: [buttons]
+                components: [buttons, buttons2]
             })
                 .catch();
 
@@ -638,7 +649,7 @@ ${error}
                 content: "⠀",
                 embeds: embeds,
                 allowedMentions: { repliedUser: false },
-                components: [buttons]
+                components: [buttons, buttons2]
             })
                 .catch();
 
@@ -648,7 +659,7 @@ ${error}
                 content: "⠀",
                 embeds: embeds,
                 allowedMentions: { repliedUser: false },
-                components: [buttons]
+                components: [buttons, buttons2]
             })
                 .catch();
 
