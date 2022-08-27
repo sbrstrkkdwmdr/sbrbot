@@ -60,9 +60,9 @@ cmd ID: ${absoluteID}
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
-COMMAND EVENT - COMMANDNAME (interaction)
+COMMAND EVENT - crash (interaction)
 ${currentDate} | ${currentDateISO}
-recieved COMMANDNAME command
+recieved crash command
 requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------

@@ -32,7 +32,7 @@ cmd ID: ${absoluteID}
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
-COMMAND EVENT - COMMANDNAME (interaction)
+COMMAND EVENT - checkperms (interaction)
 ${currentDate} | ${currentDateISO}
 recieved check permissions command
 requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}

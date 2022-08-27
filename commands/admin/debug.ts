@@ -12,9 +12,9 @@ module.exports = {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
-COMMAND EVENT - COMMANDNAME (message)
+COMMAND EVENT - debug (message)
 ${currentDate} | ${currentDateISO}
-recieved COMMANDNAME command
+recieved debug command
 requested by ${message.author.id} AKA ${message.author.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
@@ -36,9 +36,9 @@ cmd ID: ${absoluteID}
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
-COMMAND EVENT - COMMANDNAME (interaction)
+COMMAND EVENT - debug (interaction)
 ${currentDate} | ${currentDateISO}
-recieved COMMANDNAME command
+recieved debug command
 requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
@@ -52,9 +52,9 @@ cmd ID: ${absoluteID}
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                 `
 ----------------------------------------------------
-COMMAND EVENT - COMMANDNAME (interaction)
+COMMAND EVENT - debug (interaction)
 ${currentDate} | ${currentDateISO}
-recieved COMMANDNAME command
+recieved debug command
 requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
@@ -202,11 +202,22 @@ commmand: ${command}
 /*             if (button != null) {
 
             } */
+        } else {
+            if ((message != null || interaction != null) && button == null) {
+                obj.reply({
+                    content: 'No debug files found',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExits: true
+                })
+                    .catch(error => { });
+
+            }
         }
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 success
 ID: ${absoluteID}
+files: ${debugfiles}
 \n\n`, 'utf-8')
     }
 }

@@ -236,7 +236,7 @@ list: ${list}
 ----------------------------------------------------
 `, 'utf-8')
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
-        fs.writeFileSync(`debugosu/commands-rs=user=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
+        fs.writeFileSync(`debugosu/command-rs=user=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         try {
             if (osudata.authentication) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -318,7 +318,7 @@ Error - ${osudata.error}
             }
         }
         const rsdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
-        fs.writeFileSync(`debugosu/commands-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
+        fs.writeFileSync(`debugosu/command-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
         try {
             if (rsdata.authentication) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -395,7 +395,7 @@ Error - ${rsdata.error}
 
 
             const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${curbm.id}`)
-            fs.writeFileSync(`debugosu/commands-rs=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+            fs.writeFileSync(`debugosu/command-rs=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
             try {
                 if (mapdata.authentication) {
                     fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
