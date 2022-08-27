@@ -196,13 +196,42 @@ commmand: ${command}
                     allowedMentions: { repliedUser: false },
                     failIfNotExits: true
                 })
-                    .catch(error => { });
+                    .catch(error => { 
+                        console.log(error)
+                    });
 
             }
 /*             if (button != null) {
 
             } */
-        } else {
+        } else if (debugfiles.length >= 10 ) {
+            if ((message != null || interaction != null) && button == null) {
+                obj.reply({
+                    content: 'Too many debug files to send.\nSplitting into multiple messages...',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExits: true
+                }).catch(error => { });
+                //for every 10 files, make a new array and send it
+                
+                for (let i = 0; i < debugfiles.length; i++) {
+                    if (i % 10 == 0) {
+                        obj.channel.send({
+                            files: debugfiles.slice(i, i + 10),
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExits: true
+                        })
+                            .catch(error => { 
+                                console.log(error)
+                            });
+                    }
+                }
+
+            }
+/*             if (button != null) {
+
+            } */
+        }
+        else {
             if ((message != null || interaction != null) && button == null) {
                 obj.reply({
                     content: 'No debug files found',
