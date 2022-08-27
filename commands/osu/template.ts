@@ -69,7 +69,7 @@ cmd ID: ${absoluteID}
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
-ID: ${absoluteID}
+cmd ID: ${absoluteID}
 Options: 
 ----------------------------------------------------
 `, 'utf-8')
