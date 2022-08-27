@@ -329,7 +329,7 @@
                 <details>
                     <summary class="divCommandName" id="osu-compare">compare</summary>
                     <div class="divCommandDetails">
-                        <p>Compares two scores. <br>
+                        <p>Compares two scores/users. <br>
                             For the message command, the user's most recent score will be compared against the next most
                             recent
                             score
@@ -337,8 +337,9 @@
 
                         <pre>
                         Command: sbr-compare
-                  Slash Command: /compare [score id 1] [score id 2]
-                        Example: /compare 34242 23424324
+                  Slash Command: /compare [type] [first] [second]
+                        Example: /compare score 34242 23424324
+                        Example: /compare user 2 15222484
                     </pre>
                         <br><br>Options:
                         <table>
@@ -351,21 +352,29 @@
                                 <th>Default</th>
                             </tr>
                             <tr>
-                                <td>Score id 1</td>
+                                <td>Type</td>
+                                <td>String</td>
+                                <td>False</td>
+                                <td>The type of comparison to make</td>
+                                <td>score/user</td>
+                                <td>score</td>
+                            </tr>
+                            <tr>
+                                <td>First</td>
                                 <td>Integer</td>
                                 <td>Sometimes</td>
-                                <td>The id of the first score to compare</td>
+                                <td>The id of the first score/user to compare</td>
                                 <td>N/A</td>
-                                <td>User's most recent</td>
+                                <td>User's most recent(score)/user</td>
 
                             </tr>
                             <tr>
-                                <td>Score id 2</td>
+                                <td>Second</td>
                                 <td>Integer</td>
                                 <td>Sometimes</td>
-                                <td>The id of the second score to compare</td>
+                                <td>The id of the second score/user to compare</td>
                                 <td>N/A</td>
-                                <td>Most recent score requested</td>
+                                <td>Most recent score/user requested</td>
 
                             </tr>
                         </table>
