@@ -21,6 +21,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
             if (message.attachments.size > 0 && (message.attachments.every(a => checks.checkisvideo(a)) || message.attachments.every(a => checks.checkisimage(a)) || message.attachments.every(a => checks.checkisaudio(a) || message.content.has('http')))) {
                 message.delete()
+                    .catch()
 
                 const guild = client.guilds.cache.get(message.guild.id)
                 fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `\nmessageCreate event\n${currentDate} | ${currentDateISO}\n `);

@@ -98,7 +98,14 @@ filteruser: ${filteruser}
                                 message.delete().catch(error => { });
                             }
                         )
-                }).catch(error => { });
+                }).catch(error => {
+                    obj.reply({
+                        content: 'An error occured while trying to delete messages.',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                    return;
+                });
         } else {
             obj.channel.messages.fetch({ limit: totalmessagecount })
                 .then(messages => {
@@ -107,7 +114,14 @@ filteruser: ${filteruser}
                             message.delete().catch(error => { });
                         }
                     )
-                }).catch(error => { });
+                }).catch(error => {
+                    obj.reply({
+                        content: 'An error occured while trying to delete messages.',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                    return;
+                });
         }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================

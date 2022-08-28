@@ -16,7 +16,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let parse = null
 
         if (config.useScreenshotParse == true) {
-
+            //warning: uses a lot of memory
 
             const worker = tesseract.createWorker({
                 logger: m => {

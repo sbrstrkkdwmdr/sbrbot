@@ -4,7 +4,7 @@ import colours = require('../../configs/colours');
 module.exports = {
     name: 'checkperms',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        let user; 
+        let user;
         let commanduser;
         if (message != null && interaction == null && button == null) {
             commanduser = message.author;
@@ -46,7 +46,7 @@ cmd ID: ${absoluteID}
 
         if (button != null) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            `
+                `
 ----------------------------------------------------
 ID: ${absoluteID}
 userID: ${user.id}
@@ -55,17 +55,25 @@ userID: ${user.id}
         }
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-        const member = obj.guild.members.cache.get(user.id)
-        const permissions = member.permissions.toArray().join(' **|** ').replace('ADMINISTRATOR', '***!!!ADMINISTRATOR!!!***')
-
         const embed = new Discord.EmbedBuilder()
-            .setTitle(`Permissions for \`${user.username}\``)
-            .setDescription(`${permissions}`)
-            .setColor(colours.embedColour.admin.hex)
 
-        if(!(cmdchecks.isAdmin(commanduser.id, obj.guildId, client) || cmdchecks.isOwner(commanduser.id))) {
+        try {
+            const member = obj.guild.members.cache.get(user.id)
+            const permissions = member.permissions.toArray().join(' **|** ').replace('ADMINISTRATOR', '***!!!ADMINISTRATOR!!!***')
+
+            embed
+                .setTitle(`Permissions for \`${user.username}\``)
+                .setDescription(`${permissions}`)
+                .setColor(colours.embedColour.admin.hex)
+
+            if (!(cmdchecks.isAdmin(commanduser.id, obj.guildId, client) || cmdchecks.isOwner(commanduser.id))) {
+                embed.setTitle(`Error`)
+                embed.setDescription(`You do not have permission to use this command`)
+            }
+        } catch (error) { 
             embed.setTitle(`Error`)
-            embed.setDescription(`You do not have permission to use this command`)
+            embed.setDescription(`An error occured while trying to get the permissions for \`${user.username}\``)
+            embed.setColor(colours.embedColour.admin.hex)
         }
 
         if (message != null) {

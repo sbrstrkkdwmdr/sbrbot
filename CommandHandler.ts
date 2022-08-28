@@ -20,6 +20,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         if (oncooldown.has(message.author.id)) {
             setTimeout(() => {
                 message.delete()
+                .catch()
             }, 3000)
         }
         if (oncooldown.has(message.author.id)) {
