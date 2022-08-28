@@ -98,7 +98,7 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
 
-        if (user.length < 1 || message.mentions.users.size > 0) {
+        if (user.length < 1 || searchid != commanduser.id) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 user = findname.get('osuname');

@@ -233,7 +233,7 @@ Options:
                     /* .setLabel('End') */,
             );
 
-        if (user == null || message.mentions.users.size > 0) {
+        if (user == null || searchid != commanduser.id) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 user = findname.get('osuname');
