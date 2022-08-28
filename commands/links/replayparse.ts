@@ -1,46 +1,97 @@
-import fs = require('fs')
-import osucalc = require('osumodcalculator')
-import replayparse = require('osureplayparser')
-import fetch from 'node-fetch';
-import ppcalc = require('booba')
-import chartjsimg = require('chartjs-to-image');
 import cmdchecks = require('../../calc/commandchecks');
-import osufunc = require('../../calc/osufunc');
+import fs = require('fs');
+import calc = require('../../calc/calculations');
+import emojis = require('../../configs/emojis');
 import colours = require('../../configs/colours');
+import osufunc = require('../../calc/osufunc');
+import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../configs/osuApiTypes');
+import replayparse = require('osureplayparser')
+
 
 module.exports = {
     name: 'replayparse',
-    description: 'replayparse',
     async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+        let commanduser;
+        let baseCommandType;
+        let replay;
 
+        if (message != null && interaction == null && button == null) {
+            commanduser = message.author;
+            baseCommandType = 'message';
+        }
+
+        //==============================================================================================================================================================================================
+
+        if (interaction != null && button == null && message == null) {
+            commanduser = interaction.member.user;
+            baseCommandType = 'interaction';
+        }
+
+        //==============================================================================================================================================================================================
+
+        if (button != null) {
+            commanduser = interaction.member.user;
+            baseCommandType = 'button';
+        }
+
+        const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-replayparse-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('⬅')
+                    /* .setLabel('Start') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-replayparse-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('◀'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-replayparse-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('▶')
+                    /* .setLabel('Next') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-replayparse-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('➡')
+                    /* .setLabel('End') */,
+            );
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
-COMMAND EVENT - replay parse (file)
+COMMAND EVENT - replayparse (${baseCommandType})
 ${currentDate} | ${currentDateISO}
 recieved .osr file
-requested by ${message.author.id} AKA ${message.author.tag}
+requested by ${commanduser.id} AKA ${commanduser.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-        //console.log('true')
-        fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nLINK DETECT EVENT - replayparse\n${currentDate} ${currentDateISO}\n${message.author.username}#${message.author.discriminator} (${message.author.id}) used osu!score link: ${message.content}\nID:${absoluteID}\n`, 'utf-8')
-        let replay;
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+cmd ID: ${absoluteID}
+Options: 
+    none
+----------------------------------------------------
+`, 'utf-8')
+
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
         try {
             replay = replayparse.parseReplay('./files/replay.osr')
         } catch (err) {
             console.log(err)
-            return
+            return;
         }
-        fs.writeFileSync(`debugosu/link-replay=replay=${message.guildId}.json`, JSON.stringify(replay, null, 2))
-        const mapdata:osuApiTypes.Beatmap = await osufunc.apiget('map_get_md5', replay.beatmapMD5)
+        fs.writeFileSync(`debugosu/command-replay=replay=${message.guildId}.json`, JSON.stringify(replay, null, 2))
 
-        fs.writeFileSync(`debugosu/link-replay=mapdata=${message.guildId}.json`, JSON.stringify(mapdata, null, 2))
+        const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map_get_md5', replay.beatmapMD5)
+        fs.writeFileSync(`debugosu/command-replay=mapdata=${message.guildId}.json`, JSON.stringify(mapdata, null, 2))
         fs.writeFileSync(`./debugosu/prevmap${message.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
-        const osudata:osuApiTypes.User = await osufunc.apiget('user', `${replay.playerName}`)
 
-        fs.writeFileSync(`debugosu/link-replay=osudata=${message.guildId}.json`, JSON.stringify(osudata, null, 2))
+        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${replay.playerName}`)
+        fs.writeFileSync(`debugosu/command-replay=osudata=${message.guildId}.json`, JSON.stringify(osudata, null, 2))
         let userid: string | number;
         try {
             userid = osudata.id
@@ -70,7 +121,7 @@ cmd ID: ${absoluteID}
         const mods = replay.mods
         let ifmods: string;
         if (mods != 0) {
-            ifmods = `+${osucalc.ModIntToString(mods)}`
+            ifmods = `+${osumodcalc.ModIntToString(mods)}`
         } else {
             ifmods = ''
         }
@@ -86,29 +137,29 @@ cmd ID: ${absoluteID}
         switch (gameMode) {
             case 0:
                 hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
-                accuracy = osucalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, replay.misses).accuracy
-                fcacc = osucalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, 0).accuracy
+                accuracy = osumodcalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, replay.misses).accuracy
+                fcacc = osumodcalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, 0).accuracy
                 totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.misses
                 break;
             case 1:
 
                 hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.misses}`
-                accuracy = osucalc.calcgradeTaiko(replay.number_300s, replay.number_100s, replay.misses).accuracy
-                fcacc = osucalc.calcgradeTaiko(replay.number_300s, replay.number_100s, 0).accuracy
+                accuracy = osumodcalc.calcgradeTaiko(replay.number_300s, replay.number_100s, replay.misses).accuracy
+                fcacc = osumodcalc.calcgradeTaiko(replay.number_300s, replay.number_100s, 0).accuracy
                 totalhits = replay.number_300s + replay.number_100s + replay.misses
                 break;
             case 2:
 
                 hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
-                accuracy = osucalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, replay.misses).accuracy
-                fcacc = osucalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, 0).accuracy
+                accuracy = osumodcalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, replay.misses).accuracy
+                fcacc = osumodcalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, 0).accuracy
                 totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.katus + replay.misses
                 break;
             case 3:
 
                 hitlist = `${replay.gekis}/${replay.number_300s}/${replay.katus}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
-                accuracy = osucalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, replay.misses).accuracy
-                fcacc = osucalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, 0).accuracy
+                accuracy = osumodcalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, replay.misses).accuracy
+                fcacc = osumodcalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, 0).accuracy
                 totalhits = replay.gekis + replay.number_300s + replay.katus + replay.number_100s + replay.number_50s + replay.misses
                 break;
         }
@@ -116,8 +167,8 @@ cmd ID: ${absoluteID}
 
         try {
             xpp = await osufunc.scorecalc(
-                osucalc.ModIntToString(replay.mods),
-                osucalc.ModeIntToName(replay.gameMode),
+                osumodcalc.ModIntToString(replay.mods),
+                osumodcalc.ModeIntToName(replay.gameMode),
                 mapdata.id,
                 replay.gekis,
                 replay.number_300s,
@@ -161,45 +212,7 @@ cmd ID: ${absoluteID}
 
         dataLabel.push('end')
 
-        const chart = new chartjsimg()
-            .setConfig({
-                type: 'line',
-                data: {
-                    labels: dataLabel,
-                    datasets: [{
-                        label: 'Health',
-                        data: lifebarF,
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        borderWidth: 1,
-                        pointRadius: 0
-                    }]
-                },
-                options: {
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        xAxes: [
-                            {
-                                display: false
-                            }
-                        ],
-                        yAxes: [
-                            {
-                                display: true,
-                                type: 'linear',
-                                ticks: {
-                                    beginAtZero: true
-                                },
-                            }
-                        ]
-                    }
-                }
-            })
-        chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250)
-        await chart.toFile('./debugosu/replaygraph.jpg')
-        const graphul = await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay')
+        const chart = await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay')
         const Embed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.score.hex)
             .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
@@ -213,15 +226,37 @@ cmd ID: ${absoluteID}
                     ${ppissue}
                     `
             )
-            .setImage(`${await graphul}`);
+            .setImage(`${chart}`);
+        //SEND/EDIT MSG==============================================================================================================================================================================================
 
-        message.reply({ embeds: [Embed], allowedMentions: { repliedUser: false } })
-            .catch(error => { });
+        if ((message != null || interaction != null) && button == null) {
+            obj.reply({
+                embeds: [Embed],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch();
 
-        const endofcommand = new Date().getTime();
-        const timeelapsed = endofcommand - currentDate.getTime();
-        fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`, `\nCommand Latency (replay parse) - ${timeelapsed}ms\nID:${absoluteID}\n`)
+        }
+        if (button != null) {
+            message.edit({
+                content: '',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch();
+
+        }
 
 
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
     }
 }
