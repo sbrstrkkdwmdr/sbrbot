@@ -88,6 +88,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             case 'osu':
                 client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 interaction.deferUpdate();
+                break;
+            case 'test':
+                client.commands.get('test').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                interaction.deferUpdate();
+                break;
+
         }
         fs.appendFileSync('logs/totalcommands.txt', 'x')
 

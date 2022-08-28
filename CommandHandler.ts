@@ -20,7 +20,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         if (oncooldown.has(message.author.id)) {
             setTimeout(() => {
                 message.delete()
-                .catch()
+                    .catch()
             }, 3000)
         }
         if (oncooldown.has(message.author.id)) {
@@ -172,7 +172,9 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                     client.admincmds.get('purge').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
 
-
+            case 'test':
+                client.commands.get('test').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                break;
 
             // music
 
