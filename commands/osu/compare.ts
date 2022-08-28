@@ -221,7 +221,6 @@ Options(2):
                             .catch(error => {
                                 throw new Error(`Api Error: score \`${second}\` not found`)
                             }) : prevscore;
-                ;
                 if (firstscore?.error) {
                     obj.reply({
                         content: `${firstscore?.error ? firstscore?.error : 'Error: null'}`,
@@ -244,7 +243,7 @@ Options(2):
                     const findname = await userdata.findOne({ where: { userid: commanduser.id } })
                     if (findname != null) {
                         testu = findname.get('osuname');
-                        let testu2 = await osufunc.apiget('user', testu)
+                        const testu2 = await osufunc.apiget('user', testu)
                             .catch(error => {
                                 throw new Error(`Api Error: user \`${testu}\` not found`)
                             });
@@ -272,7 +271,7 @@ Options(2):
                         .replaceAll('FI', '').replaceAll('RD', '').replaceAll('HD', '')
 
                     //all of the mods in "secondmodfiltered" are in score.mods
-                    let altarray = fscoresarray.filter(score =>
+                    const altarray = fscoresarray.filter(score =>
                         secondmodfiltered == osumodcalc.OrderMods(score.mods.join(''))
                             .replaceAll('HD', '').replaceAll('NF', '').replaceAll('SO', '')
                             .replaceAll('SD', '').replaceAll('PF', '').replaceAll('TD', '')

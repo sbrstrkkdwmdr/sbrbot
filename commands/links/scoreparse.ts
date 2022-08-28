@@ -92,7 +92,9 @@ Options:
         const scoredata: osuApiTypes.Score = await osufunc.apiget('score', `${scoreid}`, `${scoremode}`)
         try {
             if (typeof scoredata?.error != 'undefined') {
-                console.log(scoredata?.error)
+                obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
+                    .catch();
+                return;
             }
         } catch (error) {
         }
@@ -103,7 +105,7 @@ Options:
         } catch (error) {
             obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
                 .catch();
-                return;
+            return;
         }
         const mapdata = await osufunc.apiget('map', `${scoredata.beatmap.id}`)
         fs.appendFileSync('debugosu/command-scoreparse=map.json', JSON.stringify(mapdata, null, 2));

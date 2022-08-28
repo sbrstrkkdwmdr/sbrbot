@@ -81,7 +81,6 @@ Options:
         try {
             replay = replayparse.parseReplay('./files/replay.osr')
         } catch (err) {
-            console.log(err)
             return;
         }
         fs.writeFileSync(`debugosu/command-replay=replay=${message.guildId}.json`, JSON.stringify(replay, null, 2))
@@ -97,7 +96,6 @@ Options:
             userid = osudata.id
         } catch (err) {
             userid = 0
-            console.log(err)
             return
         }
         let mapbg: string;
