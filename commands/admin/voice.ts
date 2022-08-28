@@ -90,7 +90,7 @@ channel: ${channel ? `${channel.id} | ${channel.name}` : 'unused'}
 
                                 }
                             } catch (error) {
-                                ctx = `${guildMember.user.tag} is not in a voice channel`
+                                ctx = `There was an error trying to deafen/undeafen ${guildMember.user.tag}`
                             }
                             break;
                         case 'mute':
@@ -105,7 +105,7 @@ channel: ${channel ? `${channel.id} | ${channel.name}` : 'unused'}
 
                                 }
                             } catch (error) {
-                                ctx = `${guildMember.user.tag} is not in a voice channel`
+                                ctx = `There was an error trying to mute/unmute ${guildMember.user.tag}`
 
                             }
                             break;
@@ -114,7 +114,7 @@ channel: ${channel ? `${channel.id} | ${channel.name}` : 'unused'}
                                 guildMember.voice.disconnect(`Disconnected by ${interaction.member.user.id}`);
                                 ctx = `${guildMember.user.tag} has been disconnected`
                             } catch (error) {
-                                ctx = `${guildMember.user.tag} is not in a voice channel`
+                                ctx = `There was an error trying to disconnect ${guildMember.user.tag}`
                             }
                             break;
                         case 'move':
@@ -134,7 +134,7 @@ channel: ${channel ? `${channel.id} | ${channel.name}` : 'unused'}
 
                                     } catch (error) {
                                         console.log(error)
-                                        return ctx = `${guildMember.user.tag} is not in a voice channel`
+                                        ctx = `There was an error trying to move ${guildMember.user.tag} to ${channel.name}`
                                     }
                                 }
                             }
