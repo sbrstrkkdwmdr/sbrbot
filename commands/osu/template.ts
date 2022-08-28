@@ -88,7 +88,7 @@ Options:
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-                .catch(error => { });
+                .catch();
 
         }
         if (interaction != null && button == null && message == null) {
@@ -99,7 +99,7 @@ Options:
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-                .catch(error => { });
+                .catch();
 
         }
         if (button != null) {
@@ -110,7 +110,7 @@ Options:
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-                .catch(error => { });
+                .catch();
 
         }
 
