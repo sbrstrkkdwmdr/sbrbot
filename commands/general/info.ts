@@ -56,6 +56,14 @@ no options
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+        const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setLabel('Info')
+                    .setURL('https://sbrstrkkdwmdr.github.io/sbrbot/')
+                    .setStyle('Link')
+            )
+
         const Embed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.hex)
             .setTitle('Important links and information')
@@ -67,12 +75,10 @@ Coded in: TypeScript
 `)
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
-
         if ((message != null || interaction != null) && button == null) {
             obj.reply({
-                content: '',
                 embeds: [Embed],
-                files: [],
+                components: [buttons],
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
