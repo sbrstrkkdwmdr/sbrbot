@@ -214,15 +214,15 @@ Options:
         const Embed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.score.hex)
             .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
-            .setTitle(`Replay`)
+            .setTitle(`[${fulltitle}](${mapdataid}) ${ifmods}`)
             .setThumbnail(mapbg)
             .setDescription(
-                `[${fulltitle}](${mapdataid}) ${ifmods}
-                    ${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapcombo}x** | ${accuracy.toFixed(2)}%
-                    \`${hitlist}\`
-                    ${xpp[0].pp.toFixed(2)}pp | ${xpp[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC 
-                    ${ppissue}
-                    `
+                `
+${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapcombo}x** | ${accuracy.toFixed(2)}%
+\`${hitlist}\`
+${xpp[0].pp.toFixed(2)}pp | ${xpp[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC 
+${ppissue}
+`
             )
             .setImage(`${chart}`);
         //SEND/EDIT MSG==============================================================================================================================================================================================

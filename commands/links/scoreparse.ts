@@ -219,12 +219,12 @@ Options:
             .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.id}`)
             .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`)
             .setDescription(`
-                        ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade}
 
-                        \`${hitlist}\`
-                        ${scoredata.max_combo}x
-                        ${pptxt}\n${ppissue}
-                        `)
+\`${hitlist}\`
+${scoredata.max_combo}x
+${pptxt}\n${ppissue}
+`)
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
         if ((message != null || interaction != null) && button == null) {
