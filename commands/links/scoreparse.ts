@@ -107,7 +107,7 @@ Options:
                 .catch();
             return;
         }
-        const mapdata = await osufunc.apiget('map', `${scoredata.beatmap.id}`)
+        const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${scoredata.beatmap.id}`)
         fs.appendFileSync('debugosu/command-scoreparse=map.json', JSON.stringify(mapdata, null, 2));
 
         const ranking = scoredata.rank ? scoredata.rank : 'f'
@@ -219,10 +219,10 @@ Options:
             .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.id}`)
             .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`)
             .setDescription(`
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade}
-
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} | ${scoredata.mods.join('').length > 1 ? scoredata.mods.join('') : ''}
+${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 \`${hitlist}\`
-${scoredata.max_combo}x
+${scoredata.max_combo}x/**${mapdata.max_combo}x**
 ${pptxt}\n${ppissue}
 `)
         if (scoredata.best_id != null) {
