@@ -618,7 +618,7 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
 
             fs.writeFileSync(`./debugosu/prevmap${obj.guildId}.json`, JSON.stringify(({ id: curbm.id }), null, 2));
             if (curscore.best_id != null) {
-                fs.writeFileSync(`debugosu/prevscore${obj.guildId}.json`, JSON.stringify({ id: curscore.best_id }, null, 2))
+                fs.writeFileSync(`debugosu/prevscore${obj.guildId}.json`, JSON.stringify(curscore, null, 2))
             }
             fs.writeFileSync(`debugosu/prevuser${obj.guildId}.json`, JSON.stringify({ id: osudata.id }, null, 2))
 

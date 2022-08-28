@@ -225,6 +225,9 @@ ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade}
 ${scoredata.max_combo}x
 ${pptxt}\n${ppissue}
 `)
+        if (scoredata.best_id != null) {
+            fs.writeFileSync(`debugosu/prevscore${obj.guildId}.json`, JSON.stringify(scoredata, null, 2))
+        }
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
         if ((message != null || interaction != null) && button == null) {

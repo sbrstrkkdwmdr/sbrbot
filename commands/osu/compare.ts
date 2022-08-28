@@ -24,7 +24,7 @@ module.exports = {
             prevuser = 'peppy';
         }
         try {
-            prevscore = (JSON.parse(fs.readFileSync(`debugosu/prevscore${obj.guildId}.json`, 'utf8')).id);
+            prevscore = JSON.parse(fs.readFileSync(`debugosu/prevscore${obj.guildId}.json`, 'utf8'));
         } catch (err) {
             prevscore = JSON.parse(fs.readFileSync('files/testScore.json', 'utf8'));
         }
