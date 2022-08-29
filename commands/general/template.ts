@@ -7,48 +7,37 @@ import emojis = require('../../configs/emojis');
 module.exports = {
     name: 'COMMANDNAME',
     execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+        let commanduser;
+        let baseCommandType;
         if (message != null && interaction == null && button == null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
+            commanduser = message.author;
+            baseCommandType = 'message';
+        }
+
+        //==============================================================================================================================================================================================
+
+        if (interaction != null && button == null && message == null) {
+            commanduser = interaction.member.user;
+            baseCommandType = 'interaction';
+        }
+
+        //==============================================================================================================================================================================================
+
+        if (button != null) {
+            commanduser = interaction.member.user;
+            baseCommandType = 'button';
+        }
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        `
 ----------------------------------------------------
-COMMAND EVENT - COMMANDNAME (message)
+COMMAND EVENT - COMMANDNAME (${baseCommandType})
 ${currentDate} | ${currentDateISO}
 recieved COMMANDNAME command
 requested by ${message.author.id} AKA ${message.author.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
-        }
 
-        //==============================================================================================================================================================================================
-
-        if (interaction != null && button == null && message == null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - COMMANDNAME (interaction)
-${currentDate} | ${currentDateISO}
-recieved COMMANDNAME command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
-        }
-
-        //==============================================================================================================================================================================================
-
-        if (button != null) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-COMMAND EVENT - COMMANDNAME (interaction)
-${currentDate} | ${currentDateISO}
-recieved COMMANDNAME command
-requested by ${interaction.member.user.id} AKA ${interaction.member.user.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
-        }
         //OPTIONS==============================================================================================================================================================================================
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
