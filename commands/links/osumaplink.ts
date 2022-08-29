@@ -36,11 +36,10 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
         const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
-        const mapmods: string = 
+        const mapmods: string =
             message.content.includes('+') ?
                 messagenohttp.split('+')[1] : 'NM';
         let mapid;
-
         if (
             (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmapsets/') && messagenohttp.includes('#'))) ||
             (!messagenohttp.includes('/s/') && (messagenohttp.includes('/b/'))) ||
@@ -51,6 +50,9 @@ cmd ID: ${absoluteID}
                 if (messagenohttp.includes('beatmapsets')) {
 
                     idfirst = messagenohttp.split('#')[1].split('/')[1]
+                } else if (messagenohttp.includes('?')) {
+                    // osu.ppy.sh/beatmaps/4204?mode=osu
+                    idfirst = messagenohttp.split('beatmaps/')[1].split('?')[0]
                 }
                 else {
                     //make a variable that takes everything after the last '/'
