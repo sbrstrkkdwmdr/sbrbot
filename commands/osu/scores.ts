@@ -10,7 +10,7 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'scores',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides) {
         let commanduser;
 
         let user = null;
@@ -135,6 +135,12 @@ module.exports = {
             }
         }
 
+        if (overrides != null) {
+            if (overrides.page != null) {
+                page = overrides.page
+            }
+        }
+
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
@@ -180,6 +186,11 @@ Options:
                     .setDisabled(isFirstPage)
                 ,
                 new Discord.ButtonBuilder()
+                    .setCustomId(`Search-scores-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔍')
+                ,
+                new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-scores-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('▶')
@@ -194,9 +205,11 @@ Options:
             );
         if (page < 2) {
             isFirstPage = true;
+        } else {
+            isFirstPage = false;
         }
 
-        if (user == null || searchid != commanduser.id) {
+        if (user == null && searchid != commanduser.id) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })

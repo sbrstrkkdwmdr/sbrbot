@@ -10,7 +10,7 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'leaderboard',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides) {
         let commanduser;
         let prevmap;
         let i: number;
@@ -85,11 +85,20 @@ module.exports = {
             }
             if (page < 2) {
                 isFirstPage = true;
+            } else {
+                isFirstPage = false;
             }
             if (page == parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])) {
                 isLastPage = true;
             }
         }
+
+        if (overrides != null) {
+            if (overrides.page != null) {
+                page = overrides.page
+            }
+        }
+
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
@@ -131,6 +140,11 @@ Options:
                     .setStyle('Primary')
                     .setEmoji('◀')
                     .setDisabled(isFirstPage)
+                ,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Search-leaderboard-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔍')
                 ,
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-leaderboard-${commanduser.id}`)

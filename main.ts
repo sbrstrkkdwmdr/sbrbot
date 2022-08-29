@@ -54,6 +54,7 @@ client.osucmds = new Discord.Collection();
 client.admincmds = new Discord.Collection();
 client.musiccmds = new Discord.Collection();
 client.tstcmds = new Discord.Collection();
+client.buttons = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands/general').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of commandFiles) {
@@ -84,6 +85,12 @@ for (const file of admincommandFiles) {
     client.admincmds.set(admincommand.name, admincommand);
 }
 
+const buttons  = fs.readdirSync('./commands/buttons').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
+for (const file of buttons) {
+    const button = require(`./commands/buttons/${file}`);
+    client.buttons.set(button.name, button);
+}
+
 const musicCommandFiles = fs.readdirSync('./commands/music').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of musicCommandFiles) {
     const musiccommand = require(`./commands/music/${file}`)
@@ -94,6 +101,8 @@ for (const file of testCommandFiles) {
     const testcommand = require(`./test/${file}`)
     client.tstcmds.set(testcommand.name, testcommand)
 }
+
+
 
 const sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',

@@ -11,7 +11,7 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'rs',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides) {
         let commanduser;
 
         let user = null;
@@ -69,6 +69,7 @@ module.exports = {
             page = 0
             if (button == 'BigLeftArrow') {
                 page = 1
+                isFirstPage = true
             }
             if (message.embeds[0].title.includes('plays')) {
                 switch (button) {
@@ -113,6 +114,13 @@ module.exports = {
             }
             searchid == interaction.member.user.id;
         }
+
+        if (overrides != null) {
+            if (overrides.page != null) {
+                page = overrides.page
+            }
+        }
+
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
@@ -162,6 +170,11 @@ Options:
                     .setEmoji('◀')
                     .setDisabled(isFirstPage),
                 new Discord.ButtonBuilder()
+                    .setCustomId(`Search-rs-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔍')
+                ,
+                new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-rs-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('▶')
@@ -175,7 +188,7 @@ Options:
                     /* .setLabel('End') */,
             );
 
-        if (user == null || searchid != commanduser.id) {
+        if (user == null && searchid != commanduser.id) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname == null) {
                 return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
@@ -190,7 +203,11 @@ Options:
                 }
             }
         }
-
+        if (page < 2) {
+            isFirstPage = true;
+        } else {
+            isFirstPage = false;
+        }
         if (page == null) {
             page = 0
         } else {
@@ -315,8 +332,8 @@ list: ${list}
                 page = rsdata.length - 1
             }
             if (page >= rsdata.length - 1) {
-                buttons.components[2].setDisabled(true)
-                buttons.components[3].setDisabled(true)
+                pgbuttons.components[3].setDisabled(true)
+                pgbuttons.components[4].setDisabled(true)
             }
 
             const curscore = rsdata[0 + page]

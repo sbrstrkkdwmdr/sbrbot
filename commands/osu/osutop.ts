@@ -10,7 +10,7 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'osutop',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides) {
         let commanduser;
 
         let user = null;
@@ -165,6 +165,13 @@ module.exports = {
                 isLastPage = true;
             }
         }
+
+        if (overrides != null) {
+            if (overrides.page != null) {
+                page = overrides.page
+            }
+        }
+
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
@@ -196,6 +203,8 @@ Options:
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
         if (page < 2) {
             isFirstPage = true;
+        } else {
+            isFirstPage = false;
         }
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
@@ -220,6 +229,11 @@ Options:
                     .setDisabled(isFirstPage)
                 ,
                 new Discord.ButtonBuilder()
+                    .setCustomId(`Search-osutop-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔍')
+                ,
+                new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-osutop-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('▶')
@@ -232,17 +246,18 @@ Options:
                     .setDisabled(isLastPage)
                     /* .setLabel('End') */,
             );
-
-        if (user == null || searchid != commanduser.id) {
+        if (user == null && searchid != commanduser.id) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
+
             if (findname != null) {
                 user = findname.get('osuname');
             } else {
-                return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
+                obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                     .catch();
-
+                return;
             }
         }
+
         if (mode == null) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
@@ -251,6 +266,7 @@ Options:
                 mode = 'osu'
             }
         }
+
         if (!(mode == 'osu' || mode == 'taiko' || mode == 'fruits' || mode == 'mania')) {
             mode = 'osu'
         }
@@ -259,6 +275,7 @@ Options:
         } else {
             page = page - 1
         }
+
         if (detailed == true) {
             buttons.addComponents(
                 new Discord.ButtonBuilder()

@@ -10,7 +10,7 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'firsts',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides) {
         let commanduser;
         let user = '';
         let searchid = 1;
@@ -79,14 +79,27 @@ module.exports = {
                     page = parseInt((message.embeds[0].description).split('/')[0].replace('Page ', ''))
                     break;
             }
+            if (button == 'Search') {
+                page = interaction.fields.getTextInputValue('search')
+            }
+
             if (page < 2) {
                 isFirstPage = true;
+            } else {
+                isFirstPage = false;
             }
             if (page == parseInt((message.embeds[0].description).split('/')[1].split('\n')[0])) {
                 isLastPage = true
             }
 
         }
+
+        if (overrides != null) {
+            if (overrides.page != null) {
+                page = overrides.page
+            }
+        }
+
         fs.appendFileSync(`logs/cmd/commands${message.guildId}.log`,
             `
 ----------------------------------------------------
@@ -98,7 +111,7 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
 
-        if (user.length < 1 || searchid != commanduser.id) {
+        if (user.length < 1 && searchid != commanduser.id) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 user = findname.get('osuname');
@@ -146,6 +159,11 @@ cmd ID: ${absoluteID}
                     .setStyle('Primary')
                     .setEmoji('◀')
                     .setDisabled(isFirstPage)
+                ,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Search-firsts-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔍')
                 ,
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-firsts-${commanduser.id}`)

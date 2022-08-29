@@ -10,7 +10,7 @@ import osuApiTypes = require('../../configs/osuApiTypes');
 
 module.exports = {
     name: 'pinned',
-    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides) {
         let commanduser;
 
         let user = null;
@@ -78,6 +78,13 @@ module.exports = {
                 isLastPage = true;
             }
         }
+
+        if (overrides != null) {
+            if (overrides.page != null) {
+                page = overrides.page
+            }
+        }
+
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
@@ -99,6 +106,11 @@ module.exports = {
                     .setStyle('Primary')
                     .setEmoji('◀')
                     .setDisabled(isFirstPage)
+                ,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Search-pinned-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔍')
                 ,
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-pinned-${commanduser.id}`)
@@ -138,9 +150,11 @@ Options:
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
         if (page < 2) {
             isFirstPage = true;
+        } else {
+            isFirstPage = false;
         }
 
-        if (user == null || searchid != commanduser.id) {
+        if (user == null && searchid != commanduser.id) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 user = findname.get('osuname');

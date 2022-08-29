@@ -2,7 +2,7 @@ import fs = require('fs');
 import { ApplicationCommandOptionType, InteractionType } from 'discord.js';
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
     client.on('interactionCreate', interaction => {
-        if (interaction.type != InteractionType.MessageComponent) return;
+        if (!(interaction.type == InteractionType.MessageComponent || interaction.type == InteractionType.ModalSubmit)) return;
         if (interaction.applicationId != client.application.id) return;
         //console.log('received')
         //console.log(interaction.message.id)
@@ -19,14 +19,37 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         const command = interaction.customId.split('-')[1]
         const button = interaction.customId.split('-')[0]
         const specid = interaction.customId.split('-')[2]
+        let overrides = {
+            page: null,
+            mode: null,
+        }
         if (specid && specid != interaction.user.id) {
-            interaction.deferUpdate();
+            interaction.deferUpdate()
+                .catch(error => { });
             return;
         }
-        if(button == 'search'){
-            client.buttons.get('search').execute(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, interaction, command, args, message, obj);
-            // interaction.deferUpdate();
+
+        const PageOnlyCommands = ['firsts', 'leaderboard', 'osutop', 'pinned', 'rs', 'scores']
+        if (button == 'Search' && PageOnlyCommands.includes(command)) {
+            const menu = new Discord.ModalBuilder()
+                .setTitle('Test')
+                .setCustomId(`SearchMenu-${command}-${interaction.user.id}`)
+                .addComponents(new Discord.ActionRowBuilder()
+                    .addComponents(new Discord.TextInputBuilder()
+                        .setCustomId('SearchInput')
+                        .setLabel("What page do you want to go to?")
+                        .setStyle(Discord.TextInputStyle.Short)
+                    ));
+            interaction.showModal(menu)
+                .catch(error => { });
+
+            //client.buttons.get('search').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, command);
+            //                 interaction.deferUpdate()
+            // .catch(error => { });
             return;
+        }
+        if (button == 'SearchMenu' && PageOnlyCommands.includes(command)) {
+            overrides.page = interaction.fields.fields.at(0).value;
         }
         switch (command) {
             /*             case 'test':
@@ -55,48 +78,59 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                             )
                             break; */
             case 'leaderboard':
-                client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                interaction.deferUpdate();
+                client.osucmds.get('leaderboard').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
+                interaction.deferUpdate()
+                    .catch(error => { });
                 break;
             case 'osutop':
-                client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                interaction.deferUpdate();
+                client.osucmds.get('osutop').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
+                interaction.deferUpdate()
+                    .catch(error => { });
                 break;
             case 'rs':
-                client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                interaction.deferUpdate();
+                client.osucmds.get('rs').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
+                interaction.deferUpdate()
+                    .catch(error => { });
                 break;
             case 'lb':
-                client.osucmds.get('lb').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                interaction.deferUpdate();
+                client.osucmds.get('lb').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
+                interaction.deferUpdate()
+                    .catch(error => { });
                 break;
             case 'firsts':
-                client.osucmds.get('firsts').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                interaction.deferUpdate();
+                client.osucmds.get('firsts').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
+                interaction.deferUpdate()
+                    .catch(error => { });
                 break;
             case 'pinned':
-                client.osucmds.get('pinned').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                interaction.deferUpdate();
+                client.osucmds.get('pinned').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
+                interaction.deferUpdate()
+                    .catch(error => { });
                 break;
             case 'scores':
-                client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                interaction.deferUpdate();
+                client.osucmds.get('scores').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
+                interaction.deferUpdate()
+                    .catch(error => { });
                 break;
             case 'map':
-                client.osucmds.get('map').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                interaction.deferUpdate();
+                client.osucmds.get('map').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
+                interaction.deferUpdate()
+                    .catch(error => { });
                 break;
             case 'osumaplink':
-                client.links.get('osumaplink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                interaction.deferUpdate();
+                client.links.get('osumaplink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
+                interaction.deferUpdate()
+                    .catch(error => { });
                 break;
             case 'osu':
-                client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                interaction.deferUpdate();
+                client.osucmds.get('osu').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
+                interaction.deferUpdate()
+                    .catch(error => { });
                 break;
             case 'test':
-                client.commands.get('test').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
-                interaction.deferUpdate();
+                client.commands.get('test').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, overrides);
+                interaction.deferUpdate()
+                    .catch(error => { });
                 break;
 
         }
