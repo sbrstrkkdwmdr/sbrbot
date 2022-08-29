@@ -85,11 +85,11 @@ for (const file of admincommandFiles) {
     client.admincmds.set(admincommand.name, admincommand);
 }
 
-const buttons  = fs.readdirSync('./commands/buttons').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
-for (const file of buttons) {
-    const button = require(`./commands/buttons/${file}`);
-    client.buttons.set(button.name, button);
-}
+// const buttons  = fs.readdirSync('./commands/buttons').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
+// for (const file of buttons) {
+//     const button = require(`./commands/buttons/${file}`);
+//     client.buttons.set(button.name, button);
+// }
 
 const musicCommandFiles = fs.readdirSync('./commands/music').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of musicCommandFiles) {
