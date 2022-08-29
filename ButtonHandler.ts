@@ -23,6 +23,11 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             interaction.deferUpdate();
             return;
         }
+        if(button == 'search'){
+            client.buttons.get('search').execute(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, interaction, command, args, message, obj);
+            // interaction.deferUpdate();
+            return;
+        }
         switch (command) {
             /*             case 'test':
                             if (button == 'BigLeftArrow') {
