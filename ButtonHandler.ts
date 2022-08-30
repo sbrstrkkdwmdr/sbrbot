@@ -22,6 +22,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         let overrides = {
             page: null,
             mode: null,
+            sort: null,
         }
         if (specid && specid != interaction.user.id) {
             interaction.deferUpdate()
@@ -30,9 +31,10 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         }
 
         const PageOnlyCommands = ['firsts', 'leaderboard', 'osutop', 'pinned', 'rs', 'scores']
+        const ScoreSortCommands = ['firsts', 'leaderboard', 'osutop', 'pinned', 'scores']
         if (button == 'Search' && PageOnlyCommands.includes(command)) {
             const menu = new Discord.ModalBuilder()
-                .setTitle('Test')
+                .setTitle('Page')
                 .setCustomId(`SearchMenu-${command}-${interaction.user.id}`)
                 .addComponents(new Discord.ActionRowBuilder()
                     .addComponents(new Discord.TextInputBuilder()
@@ -48,8 +50,71 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             // .catch(error => { });
             return;
         }
+        if (button == 'Sort' && ScoreSortCommands.includes(command)) {
+            const menu = new Discord.ModalBuilder()
+                .setTitle('Sort')
+                .setCustomId(`SortMenu-${command}-${interaction.user.id}`)
+                .addComponents(new Discord.ActionRowBuilder()
+                    .addComponents(
+                        new Discord.SelectMenuiBuilder()
+                            .addComponents(
+                                new Discord.SelectMenuOptionBuilder()
+                                    .setDefault(true)
+                                    .setLabel('Performance points')
+                                    .setDescription('Sort by performance')
+                                    .setValue('pp'),
+                                new Discord.SelectMenuOptionBuilder()
+                                    .setDefault(false)
+                                    .setLabel('Score')
+                                    .setDescription('Sort by score')
+                                    .setValue('score'),
+                                new Discord.SelectMenuOptionBuilder()
+                                    .setDefault(false)
+                                    .setLabel('Most recent')
+                                    .setDescription('Sort by date')
+                                    .setValue('recent'),
+                                new Discord.SelectMenuOptionBuilder()
+                                    .setDefault(false)
+                                    .setLabel('Accuracy')
+                                    .setDescription('Sort by accuracy')
+                                    .setValue('acc'),
+                                new Discord.SelectMenuOptionBuilder()
+                                    .setDefault(false)
+                                    .setLabel('Combo')
+                                    .setDescription('Sort by combo')
+                                    .setValue('combo'),
+                                new Discord.SelectMenuOptionBuilder()
+                                    .setDefault(false)
+                                    .setLabel('Miss')
+                                    .setDescription('Sort by miss count')
+                                    .setValue('miss'),
+                                new Discord.SelectMenuOptionBuilder()
+                                    .setDefault(false)
+                                    .setLabel('Rank')
+                                    .setDescription('Sort by rank (SS/S/A/B/C/D)')
+                                    .setValue('rank')
+                            ),
+                        new Discord.SelectMenuiBuilder()
+                            .addComponents(
+                                new Discord.SelectMenuOptionBuilder()
+                                    .setDefault(true)
+                                    .setLabel('False')
+                                    .setDescription('Don\'t reverse sorting order')
+                                    .setValue(false),
+                                new Discord.SelectMenuOptionBuilder()
+                                    .setDefault(false)
+                                    .setLabel('True')
+                                    .setDescription('Reverse the sorting order')
+                                    .setValue(true)
+                            )
+                    )
+                )
+        }
         if (button == 'SearchMenu' && PageOnlyCommands.includes(command)) {
             overrides.page = interaction.fields.fields.at(0).value;
+        }
+        if (button == 'SortMenu' && ScoreSortCommands.includes(command)) {
+            overrides.sort = interaction.fields.fields.at(0).value;
         }
         switch (command) {
             /*             case 'test':
