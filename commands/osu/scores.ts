@@ -139,6 +139,12 @@ module.exports = {
             if (overrides.page != null) {
                 page = overrides.page
             }
+            if (overrides.sort != null) {
+                sort = overrides.sort
+            }
+            if (overrides.reverse != null) {
+                reverse = overrides.reverse
+            }
         }
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -169,6 +175,10 @@ Options:
                     .setCustomId(`Refresh-scores-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('🔁'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Sort-scores-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔀'),
             )
 
         const pgbuttons = new Discord.ActionRowBuilder()

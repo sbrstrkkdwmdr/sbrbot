@@ -170,6 +170,12 @@ module.exports = {
             if (overrides.page != null) {
                 page = overrides.page
             }
+            if (overrides.sort != null) {
+                sort = overrides.sort
+            }
+            if (overrides.reverse != null) {
+                reverse = eval(overrides.reverse)
+            }
         }
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -212,6 +218,10 @@ Options:
                     .setCustomId(`Refresh-osutop-${commanduser.id}`)
                     .setStyle('Primary')
                     .setEmoji('🔁'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Sort-osutop-${commanduser.id}`)
+                    .setStyle('Primary')
+                    .setEmoji('🔀'),
             )
 
         const pgbuttons = new Discord.ActionRowBuilder()

@@ -23,12 +23,17 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             page: null,
             mode: null,
             sort: null,
+            reverse: null,
         }
         if (specid && specid != interaction.user.id) {
             interaction.deferUpdate()
                 .catch(error => { });
             return;
         }
+
+        const errorEmbed = new Discord.EmbedBuilder()
+            .setTitle('Error - Button does not work')
+            .setDescription('Feature not yet implemented/supported')
 
         const PageOnlyCommands = ['firsts', 'leaderboard', 'osutop', 'pinned', 'rs', 'scores']
         const ScoreSortCommands = ['firsts', 'leaderboard', 'osutop', 'pinned', 'scores']
@@ -51,70 +56,97 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             return;
         }
         if (button == 'Sort' && ScoreSortCommands.includes(command)) {
-            const menu = new Discord.ModalBuilder()
-                .setTitle('Sort')
-                .setCustomId(`SortMenu-${command}-${interaction.user.id}`)
-                .addComponents(new Discord.ActionRowBuilder()
-                    .addComponents(
-                        new Discord.SelectMenuiBuilder()
-                            .addComponents(
-                                new Discord.SelectMenuOptionBuilder()
-                                    .setDefault(true)
-                                    .setLabel('Performance points')
-                                    .setDescription('Sort by performance')
-                                    .setValue('pp'),
-                                new Discord.SelectMenuOptionBuilder()
-                                    .setDefault(false)
-                                    .setLabel('Score')
-                                    .setDescription('Sort by score')
-                                    .setValue('score'),
-                                new Discord.SelectMenuOptionBuilder()
-                                    .setDefault(false)
-                                    .setLabel('Most recent')
-                                    .setDescription('Sort by date')
-                                    .setValue('recent'),
-                                new Discord.SelectMenuOptionBuilder()
-                                    .setDefault(false)
-                                    .setLabel('Accuracy')
-                                    .setDescription('Sort by accuracy')
-                                    .setValue('acc'),
-                                new Discord.SelectMenuOptionBuilder()
-                                    .setDefault(false)
-                                    .setLabel('Combo')
-                                    .setDescription('Sort by combo')
-                                    .setValue('combo'),
-                                new Discord.SelectMenuOptionBuilder()
-                                    .setDefault(false)
-                                    .setLabel('Miss')
-                                    .setDescription('Sort by miss count')
-                                    .setValue('miss'),
-                                new Discord.SelectMenuOptionBuilder()
-                                    .setDefault(false)
-                                    .setLabel('Rank')
-                                    .setDescription('Sort by rank (SS/S/A/B/C/D)')
-                                    .setValue('rank')
-                            ),
-                        new Discord.SelectMenuiBuilder()
-                            .addComponents(
-                                new Discord.SelectMenuOptionBuilder()
-                                    .setDefault(true)
-                                    .setLabel('False')
-                                    .setDescription('Don\'t reverse sorting order')
-                                    .setValue(false),
-                                new Discord.SelectMenuOptionBuilder()
-                                    .setDefault(false)
-                                    .setLabel('True')
-                                    .setDescription('Reverse the sorting order')
-                                    .setValue(true)
-                            )
-                    )
-                )
+            errorEmbed
+                .setDescription(
+                    `Feature not yet implemented/supported
+Select menus are not yet supported by discord API
+[see here for more details](https://github.com/discordjs/discord.js/discussions/8005#discussioncomment-2885164)
+`)
+            interaction.reply({
+                embeds: [errorEmbed],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true,
+                ephemeral: true
+            })
+                .catch(error => { });
+            return;
+            // const menu = new Discord.ModalBuilder()
+            //     .setTitle('Sort')
+            //     .setCustomId(`SortMenu-${command}-${interaction.user.id}`)
+            //     .setComponents(
+            //         new Discord.ActionRowBuilder()
+            //             .setComponents(
+            //                 new Discord.SelectMenuBuilder()
+            //                     .setCustomId(`SortType`)
+            //                     .setOptions(
+            //                         new Discord.SelectMenuOptionBuilder()
+            //                             .setDefault(true)
+            //                             .setLabel('Performance')
+            //                             .setDescription('Sort by performance')
+            //                             .setValue('pp'),
+            //                         new Discord.SelectMenuOptionBuilder()
+            //                             .setDefault(false)
+            //                             .setLabel('Score')
+            //                             .setDescription('Sort by score')
+            //                             .setValue('score'),
+            //                         new Discord.SelectMenuOptionBuilder()
+            //                             .setDefault(false)
+            //                             .setLabel('Recent')
+            //                             .setDescription('Sort by date')
+            //                             .setValue('recent'),
+            //                         new Discord.SelectMenuOptionBuilder()
+            //                             .setDefault(false)
+            //                             .setLabel('Accuracy')
+            //                             .setDescription('Sort by accuracy')
+            //                             .setValue('acc'),
+            //                         new Discord.SelectMenuOptionBuilder()
+            //                             .setDefault(false)
+            //                             .setLabel('Combo')
+            //                             .setDescription('Sort by combo')
+            //                             .setValue('combo'),
+            //                         new Discord.SelectMenuOptionBuilder()
+            //                             .setDefault(false)
+            //                             .setLabel('Miss')
+            //                             .setDescription('Sort by miss count')
+            //                             .setValue('miss'),
+            //                         new Discord.SelectMenuOptionBuilder()
+            //                             .setDefault(false)
+            //                             .setLabel('Rank')
+            //                             .setDescription('Sort by rank (SS/S/A/B/C/D)')
+            //                             .setValue('rank')
+            //                     ),
+            //                 new Discord.SelectMenuBuilder()
+            //                     .setCustomId(`isReverse`)
+            //                     .setOptions(
+            //                         new Discord.SelectMenuOptionBuilder()
+            //                             .setDefault(true)
+            //                             .setLabel('False')
+            //                             .setDescription('Don\'t reverse sorting order')
+            //                             .setValue('false'),
+            //                         new Discord.SelectMenuOptionBuilder()
+            //                             .setDefault(false)
+            //                             .setLabel('True')
+            //                             .setDescription('Reverse the sorting order')
+            //                             .setValue('true')
+            //                     )
+            //             )
+            //     )
+            // interaction.showModal(menu)
+            //     .catch(error => {
+            //         console.log(menu)
+            //         console.log(menu.components)
+            //         console.log(menu.components.data)
+            //         console.log(menu.components.components)
+            //         console.log(error)
+            //     });
+            // return;
         }
         if (button == 'SearchMenu' && PageOnlyCommands.includes(command)) {
             overrides.page = interaction.fields.fields.at(0).value;
         }
         if (button == 'SortMenu' && ScoreSortCommands.includes(command)) {
             overrides.sort = interaction.fields.fields.at(0).value;
+            overrides.reverse = interaction.fields.fields.at(1).value;
         }
         switch (command) {
             /*             case 'test':
