@@ -388,6 +388,12 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 type: Discord.ApplicationCommandOptionType.Boolean,
                 required: false,
                 default: false
+            },
+            {
+                name: 'name',
+                description: 'The name of the map to display',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
             }
         ]
     },

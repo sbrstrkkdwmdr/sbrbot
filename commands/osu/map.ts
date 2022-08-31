@@ -68,6 +68,7 @@ module.exports = {
             mapid = interaction.options.getInteger('id');
             mapmods = interaction.options.getString('mods');
             detailed = interaction.options.getBoolean('detailed');
+            maptitleq = interaction.options.getString('name');
         }
 
         //==============================================================================================================================================================================================
