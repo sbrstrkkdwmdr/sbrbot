@@ -701,23 +701,26 @@ async function apiget(type: string, mainparam: string, params?: string, version?
         }
     }
     let data;
+    let datafirst;
+    datafirst = await fetch(url, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json"
+        }
+    }).then(res => res.json())
+
     try {
-        data = await fetch(url, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${access_token}`,
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            }
-        }).then(res => res.json())
-        
-        if (data?.authentication) {
+
+        if (datafirst?.authentication) {
             await updateToken()
             throw new Error('token expired. Updating token...')
         }
-        if(typeof data?.error != 'undefined' && data?.error == null){
+        if (typeof datafirst?.error != 'undefined' && datafirst?.error == null && typeof datafirst?.error != 'object') {
             throw new Error('null')
         }
+        data = datafirst;
 
     } catch (error) {
         data = {
@@ -726,8 +729,10 @@ async function apiget(type: string, mainparam: string, params?: string, version?
             params: {
                 type: type,
                 mainparam: mainparam,
+                params: params,
                 version: version,
             },
+            apiData: datafirst
         }
         if (params) {
             data.params.params = params
