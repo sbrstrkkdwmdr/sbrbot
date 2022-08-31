@@ -161,9 +161,9 @@ Options:
             if (findname != null) {
                 user = findname.get('osuname');
             } else {
-                return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
+                obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                     .catch();
-
+                return;
             }
         }
         if (mode == null) {

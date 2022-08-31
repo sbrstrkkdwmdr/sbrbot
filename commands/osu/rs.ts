@@ -189,17 +189,16 @@ Options:
                     .setDisabled(isLastPage)
                     /* .setLabel('End') */,
             );
-
-            if (user == null || user.includes('<') || mtns > 0) {
-                const findname = await userdata.findOne({ where: { userid: searchid } })
-                if (findname != null) {
-                    user = findname.get('osuname');
-                } else {
-                    return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
-                        .catch();
-    
-                }
+        if (user == null || user.includes('<') || mtns > 0) {
+            const findname = await userdata.findOne({ where: { userid: searchid } })
+            if (findname != null) {
+                user = findname.get('osuname');
+            } else {
+                obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
+                    .catch();
+                return;
             }
+        }
         if (page < 2) {
             isFirstPage = true;
         } else {

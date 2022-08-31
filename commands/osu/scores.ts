@@ -226,9 +226,9 @@ Options:
             if (findname != null) {
                 user = findname.get('osuname');
             } else {
-                return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
+                obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                     .catch();
-
+                return;
             }
         }
         if (id == null) {
@@ -314,7 +314,7 @@ Options(2):
         let sortdata = ''
         try {
             scoredata.length < 1
-        } catch(error){
+        } catch (error) {
             return obj.reply({
                 content: 'Error - no scores found',
                 allowedMentions: { repliedUser: false },
