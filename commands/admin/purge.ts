@@ -3,8 +3,8 @@ import fs = require('fs');
 import colours = require('../../configs/colours');
 module.exports = {
     name: 'purge',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
-        let totalmessagecount;
+    async execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+        let totalmessagecount: number;
         let filteruser = null;
         let curuserid;
         if (message != null && interaction == null && button == null) {
@@ -28,7 +28,7 @@ cmd ID: ${absoluteID}
                 totalmessagecount = parseInt(args[2]);
             }
             if (message.mentions.users.size > 0) {
-                filteruser = message.mentions.users.first().id;
+                filteruser = message.mentions.users.first();
             }
         }
 
@@ -47,7 +47,7 @@ cmd ID: ${absoluteID}
 `, 'utf-8')
             totalmessagecount = interaction.options.getInteger('count');
             if (interaction.options.getString('filteruser') != null) {
-                filteruser = interaction.options.getString('filteruser');
+                filteruser = interaction.options.getUser('filteruser');
             }
         }
 
@@ -71,7 +71,7 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 ID: ${absoluteID}
 totalmessagecount: ${totalmessagecount}
-filteruser: ${filteruser}
+filteruser: ${filteruser?.id}
 ----------------------------------------------------
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -86,28 +86,35 @@ filteruser: ${filteruser}
                 .catch(error => { });
             return;
         }
-        if (message != null) {
-            message.delete();
-        }
+
         if (filteruser != null) {
-            obj.channel.messages.fetch({ limit: totalmessagecount })
-                .then(messages => {
-                    messages.filter(message => message.author.id == filteruser)
-                        .forEach(
-                            message => {
-                                message.delete().catch(error => { });
-                            }
-                        )
-                }).catch(error => {
+            let messagelist;
+            await obj.channel.messages.fetch({ limit: totalmessagecount })
+                .then(async messages => {
+                    messagelist = await messages.filter(message => message.author.id == filteruser.id)
+                })
+            await obj.channel.bulkDelete(messagelist).catch(error => {
+                try {
                     obj.reply({
                         content: 'An error occured while trying to delete messages.',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
                     return;
-                });
+                } catch {
+                    return;
+                }
+            });
         } else {
-            obj.channel.messages.fetch({ limit: totalmessagecount })
+            await obj.channel.bulkDelete(totalmessagecount).catch(error => {
+                obj.reply({
+                    content: 'An error occured while trying to delete messages.',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).catch()
+                return;
+            });
+            /* .fetch({ limit: totalmessagecount })
                 .then(messages => {
                     messages.forEach(
                         message => {
@@ -121,20 +128,14 @@ filteruser: ${filteruser}
                         failIfNotExists: true
                     }).catch()
                     return;
-                });
+                }); */
         }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
-        /*         if (message != null && interaction == null && button == null) {
-                    message.reply({
-                        content: '',
-                        embeds: [],
-                        files: [],
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                } */
+        if (message != null && interaction == null && button == null) {
+            message.delete().catch(error => { });
+        }
         if (interaction != null && button == null && message == null) {
             interaction.reply({
                 content: 'success',
