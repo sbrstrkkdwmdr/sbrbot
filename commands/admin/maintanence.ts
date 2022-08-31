@@ -28,7 +28,7 @@ module.exports = {
             baseCommandType = 'button';
         }
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-        `
+            `
 ----------------------------------------------------
 COMMAND EVENT - COMMANDNAME (${baseCommandType})
 ${currentDate} | ${currentDateISO}
@@ -39,16 +39,41 @@ cmd ID: ${absoluteID}
 `, 'utf-8')
 
         //OPTIONS==============================================================================================================================================================================================
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            `
-----------------------------------------------------
-ID: ${absoluteID}
-
-----------------------------------------------------
-`, 'utf-8')
+        /*         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
+        ----------------------------------------------------
+        ID: ${absoluteID}
+        
+        ----------------------------------------------------
+        `, 'utf-8') */
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-
+        if (cmdchecks.isOwner(commanduser.id) == false) {
+            if ((message != null || interaction != null) && button == null) {
+                obj.reply({
+                    content: 'You do not have permission to use this command.',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false
+                }).catch()
+            }
+        } else {
+            let curVal = fs.readFileSync('config/maintanence.txt', 'utf-8');
+            if (curVal == 'true') {
+                fs.writeFileSync('config/maintanence.txt', 'false');
+                obj.reply({
+                    content: 'Disabled maintanence mode.',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false
+                }).catch()
+            } else {
+                fs.writeFileSync('config/maintanence.txt', 'true');
+                obj.reply({
+                    content: 'Disabled maintanence mode.',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false
+                }).catch()
+            }
+        }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
 
