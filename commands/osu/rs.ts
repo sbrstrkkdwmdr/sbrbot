@@ -21,6 +21,7 @@ module.exports = {
         let searchid;
         let isFirstPage = false;
         let isLastPage = false;
+        let mtns = 0;
 
         let baseCommandType: string;
 
@@ -38,6 +39,7 @@ module.exports = {
                 user = null
             }
             isFirstPage = true;
+            mtns = message.mentions.size;
         }
 
         //==============================================================================================================================================================================================
@@ -188,21 +190,16 @@ Options:
                     /* .setLabel('End') */,
             );
 
-        if (user == null && searchid != commanduser.id) {
-            const findname = await userdata.findOne({ where: { userid: searchid } })
-            if (findname == null) {
-                return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                    .catch();
-
-            } else {
-                user = findname.get('osuname')
-                if (user.length < 1) {
-                    return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+            if (user == null || user.includes('<') || mtns > 0) {
+                const findname = await userdata.findOne({ where: { userid: searchid } })
+                if (findname != null) {
+                    user = findname.get('osuname');
+                } else {
+                    return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                         .catch();
-
+    
                 }
             }
-        }
         if (page < 2) {
             isFirstPage = true;
         } else {

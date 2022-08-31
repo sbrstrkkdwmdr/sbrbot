@@ -20,6 +20,7 @@ module.exports = {
         let compact = false;
         let searchid;
         let page = 1;
+        let mtns = 0;
 
         let prevmap;
 
@@ -54,6 +55,7 @@ module.exports = {
                 searchid = message.mentions.users.first().id
             }
             id = null
+            mtns = message.mentions.size;
         }
 
         //==============================================================================================================================================================================================
@@ -219,21 +221,14 @@ Options:
             isFirstPage = false;
         }
 
-        if (user == null && searchid != commanduser.id) {
+        if (user == null || user.includes('<') || mtns > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
-            if (findname == null) {
-                return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
-                    .catch()
-                    ;
-
+            if (findname != null) {
+                user = findname.get('osuname');
             } else {
-                user = findname.get('osuname')
-                if (user.length < 1) {
-                    return obj.reply({ content: 'Error - no username found', allowedMentions: { repliedUser: false } })
-                        .catch()
-                        ;
+                return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
+                    .catch();
 
-                }
             }
         }
         if (id == null) {
@@ -317,15 +312,25 @@ Options(2):
 
         let scoredata: osuApiTypes.Score[] = scoredataPresort.scores
         let sortdata = ''
-        if (scoredataPresort.scores.length < 1) {
+        try {
+            scoredata.length < 1
+        } catch(error){
             return obj.reply({
                 content: 'Error - no scores found',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
                 .catch();
-
         }
+        // if (scoredata.length < 1) {
+        //     return obj.reply({
+        //         content: 'Error - no scores found',
+        //         allowedMentions: { repliedUser: false },
+        //         failIfNotExists: true
+        //     })
+        //         .catch();
+
+        // }
         if (reverse != true) {
             switch (sort) {
                 case 'score':

@@ -16,6 +16,7 @@ module.exports = {
         let searchid = 1;
         let mode = null;
         let page = 0;
+        let mtns = 0;
 
         let isFirstPage = false;
         let isLastPage = false;
@@ -27,20 +28,14 @@ module.exports = {
             baseCommandType = 'message'
             user = await args.join(' ');
             searchid = await message.author.id
-            if (mode == null && (!args[0] || message.mentions.users.size > 0)) {
-                const findname = await userdata.findOne({ where: { userid: searchid } })
-                if (findname == null) {
-                    mode = 'osu'
-                } else {
-                    mode = findname.get('mode')
-                    if (mode.length < 1) {
-                        mode = 'osu'
-                    }
-                }
-            } else {
-                mode = 'osu'
+            if (message.mentions.users.size > 0) {
+                searchid = message.mentions.users.first().id
+            }
+            if (!args[0]) {
+                user = null;
             }
             isFirstPage = true;
+            mtns = message.mentions.size;
         }
 
         //==============================================================================================================================================================================================
@@ -111,18 +106,18 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `, 'utf-8')
 
-        if (user.length < 1 && searchid != commanduser.id) {
+        if (user == null || user.includes('<') || mtns > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 user = findname.get('osuname');
             } else {
-                return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                     .catch();
 
             }
         }
         if (mode == null) {
-            const findname = await userdata.findOne({ where: { userid: searchid } })
+            const findname = await userdata.findOne({ where: { osuname: user } })
             if (findname == null) {
                 mode = 'osu'
             } else {

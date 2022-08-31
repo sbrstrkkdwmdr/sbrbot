@@ -17,6 +17,7 @@ module.exports = {
         let searchid = null;
         let mode = 'osu';
         let page = 1;
+        let mtns = 0;
 
         let isFirstPage = false;
         let isLastPage = false;
@@ -36,6 +37,7 @@ module.exports = {
             if (!args[0]) {
                 user = null;
             }
+            mtns = message.mentions.size;
         }
 
         //==============================================================================================================================================================================================
@@ -154,12 +156,12 @@ Options:
             isFirstPage = false;
         }
 
-        if (user == null && searchid != commanduser.id) {
+        if (user == null || user.includes('<') || mtns > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
             if (findname != null) {
                 user = findname.get('osuname');
             } else {
-                return message.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                     .catch();
 
             }

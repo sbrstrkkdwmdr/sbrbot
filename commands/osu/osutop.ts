@@ -24,6 +24,7 @@ module.exports = {
         let reverse = false;
         let compact = false;
         let curuid;
+        let mtns = 0;
 
         let isFirstPage = false;
         let isLastPage = false;
@@ -50,6 +51,7 @@ module.exports = {
             if (!args[0]) {
                 user = null
             }
+            mtns = message.mentions.size;
         }
 
         //==============================================================================================================================================================================================
@@ -256,15 +258,14 @@ Options:
                     .setDisabled(isLastPage)
                     /* .setLabel('End') */,
             );
-        if (user == null && searchid != commanduser.id) {
+        if (user == null || user.includes('<') || mtns > 0) {
             const findname = await userdata.findOne({ where: { userid: searchid } })
-
             if (findname != null) {
                 user = findname.get('osuname');
             } else {
-                obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
+                return obj.reply({ content: 'no osu! username found', allowedMentions: { repliedUser: false } })
                     .catch();
-                return;
+
             }
         }
 
