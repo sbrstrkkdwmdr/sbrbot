@@ -1,10 +1,75 @@
 const checks = require('./calc/commandchecks')
 import fs = require('fs');
+import extypes = require('./configs/extratypes');
 //MOD LOGS N SHIT
 
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
 
     client.on('messageCreate', message => {
+        let currentGuildId = message.guildId
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.messageUpdates == false) {
+            return;
+        }
+
         if (message.channel.type == Discord.ChannelType.DM) {
             fs.appendFileSync('dm.log',
                 `Received a dm from ${message.author.id} | ${message.author.username}#${message.author.discriminator}
@@ -32,6 +97,69 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         //MESSAGE LOGGER
     })
     client.on('messageDelete', message => {
+        let currentGuildId = message.guildId
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.messageUpdates == false) {
+            return;
+        }
         if (message.author == null || message.author.username == null) return;
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
@@ -48,6 +176,69 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Guild Member ${message.author.username}#${message.author.discriminator}'s message has been deleted:\nID: ${message.id}\nURL: https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}\n Content:${message.content}\nMessage Type: ${message.type}\n${msgref}`)
     })
     client.on('messageUpdate', (oldMessage, newMessage) => {
+        let currentGuildId = oldMessage.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.messageUpdates == false) {
+            return;
+        }
         if (oldMessage == newMessage) return;
 
         const currentDate = new Date();
@@ -77,6 +268,69 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     //GUILD MEMBER LOGGER
     client.on('guildBanAdd', (ban) => {
+        let currentGuildId = ban.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(ban.guild.id)
@@ -84,6 +338,69 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Guild Member ${ban.user.username}#${ban.user.discriminator} (${ban.user.id}) was banned`)//by ${ban.client.user.username}#${ban.client.user.discriminator} (${ban.client.user.id})\n
     })
     client.on('guildBanRemove', (ban) => {
+        let currentGuildId = ban.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(ban.guild.id)
@@ -91,6 +408,69 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Guild Member ${ban.user.username}#${ban.user.discriminator} (${ban.user.id}) was unbanned\n`)//by ${ban.client.user.username}#${ban.client.user.discriminator} (${ban.client.user.id})
     })
     client.on('guildMemberRemove', (member) => {
+        let currentGuildId = member.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(member.guild.id)
@@ -98,6 +478,69 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Guild Member ${member.user.username}#${member.user.discriminator} (${member.user.id}) left the server or was kicked\n`)
     })
     client.on('guildMemberUpdate', (oldMember, newMember) => {
+        let currentGuildId = oldMember.guildId
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.userUpdates == false) {
+            return;
+        }
         if (oldMember == newMember) return;
 
         const currentDate = new Date();
@@ -130,6 +573,69 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         const currentDateISO = new Date().toISOString();
         client.guilds.cache.forEach(guild => {
             if (guild.members.cache.has(oldUser.id)) {
+                let currentGuildId = guild.id
+                let settings: extypes.guildSettings;
+                try {
+                    let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+                    settings = JSON.parse(settingsfile);
+                } catch (error) {
+                    let defaultSettings = {
+                        enabledModules: {
+                            admin: false,
+                            osu: true,
+                            general: true,
+                            links: true,
+                            misc: true,
+                            music: true,
+                        },
+                        admin: {
+                            basic: 'n',
+                            limited: false,
+                            channels: [],
+                            log: {
+                                messageUpdates: true,
+                                guildUpdates: true,
+                                channelUpdates: true,
+                                roleUpdates: true,
+                                emojiUpdates: true,
+                                userUpdates: true,
+                                presenceUpdates: false,
+                                voiceUpdates: true,
+                            }
+                        },
+                        osu: {
+                            basic: 'n',
+                            limited: false,
+                            channels: [],
+                            parseLinks: true,
+                            parseReplays: true,
+                            parseScreenshots: true,
+                        },
+                        general: {
+                            basic: 'n',
+                            limited: false,
+                            channels: []
+                        },
+                        misc: {
+                            basic: 'n',
+                            limited: false,
+                            channels: []
+                        },
+                        music: {
+                            basic: 'n',
+                            limited: false,
+                            channels: []
+                        }
+                    }
+                    fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+                    settings = defaultSettings
+                }
+                if (settings.enabledModules.admin == false) {
+                    return;
+                }
+                else if (settings.admin.log.userUpdates == false) {
+                    return;
+                }
                 fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `\nuserUpdate event\n${currentDate} | ${currentDateISO}\n `);
                 fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `User ${oldUser.username}#${oldUser.discriminator} (${oldUser.id}) has been updated:\n`)
                 if (oldUser.avatar != newUser.avatar) {
@@ -159,6 +665,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     //GENERAL GUILD UPDATE LOGGER
     client.on('channelCreate', (channel) => {
+        let currentGuildId = channel.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.channelUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(channel.guild.id)
@@ -205,6 +775,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         }
     })
     client.on('channelDelete', (channel) => {
+        let currentGuildId = channel.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.channelUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(channel.guild.id)
@@ -249,6 +883,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     client.on('channelUpdate', (oldChannel, newChannel) => {
+        let currentGuildId = oldChannel.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.channelUpdates == false) {
+            return;
+        }
+
         if (oldChannel == newChannel) return;
 
         const currentDate = new Date();
@@ -272,6 +970,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     client.on('emojiCreate', (emoji) => {
+        let currentGuildId = emoji.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.emojiUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(emoji.guild.id)
@@ -279,6 +1041,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Emoji ${emoji.name} (${emoji.id}) was created => ${emoji.url}\n`)
     })
     client.on('emojiDelete', (emoji) => {
+        let currentGuildId = emoji.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.emojiUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(emoji.guild.id)
@@ -286,6 +1112,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `\nEmoji ${emoji.name} (${emoji.id}) was deleted => ${emoji.url}\n`)
     })
     client.on('emojiUpdate', (oldEmoji, newEmoji) => {
+        let currentGuildId = oldEmoji.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.emojiUpdates == false) {
+            return;
+        }
+
         if (oldEmoji == newEmoji) return;
 
         const currentDate = new Date();
@@ -302,6 +1192,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     client.on('guildScheduledEventCreate', (guildScheduledEvent) => {
+        let currentGuildId = guildScheduledEvent.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(guildScheduledEvent.guild.id)
@@ -310,6 +1264,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     client.on('guildScheduledEventDelete', (guildScheduledEvent) => {
+        let currentGuildId = guildScheduledEvent.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(guildScheduledEvent.guild.id)
@@ -317,6 +1335,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Scheduled Event ${guildScheduledEvent.name} (${guildScheduledEvent.id}) was deleted\n`)
     })
     client.on('guildScheduledEventUpdate', (oldGuildScheduledEvent, newGuildScheduledEvent) => {
+        let currentGuildId = oldGuildScheduledEvent.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
+
         if (oldGuildScheduledEvent == newGuildScheduledEvent) return;
 
         const currentDate = new Date();
@@ -339,6 +1421,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     client.on('guildScheduledEventUserAdd', (guildScheduledEvent, user) => {
+        let currentGuildId = guildScheduledEvent.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(guildScheduledEvent.guild.id)
@@ -347,6 +1493,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     client.on('guildScheduledEventUserRemove', (guildScheduledEvent, user) => {
+        let currentGuildId = guildScheduledEvent.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(guildScheduledEvent.guild.id)
@@ -354,6 +1564,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `User ${user.username} (${user.id}) was removed from Scheduled Event ${guildScheduledEvent.name} (${guildScheduledEvent.id})\n`)
     })
     client.on('guildUnavailable', (guild) => {
+        
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guildlog = client.guilds.cache.get(guild.id)
@@ -361,6 +1572,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guildlog.id}.log`, `Guild ${guild.name} (${guild.id}) was unavailable\n`)
     })
     client.on('guildUpdate', (oldGuild, newGuild) => {
+        let currentGuildId = oldGuild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
+
         if (oldGuild == newGuild) return;
 
         const currentDate = new Date();
@@ -375,6 +1650,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
     })
     client.on('inviteCreate', (invite) => {
+        let currentGuildId = invite.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(invite.guild.id)
@@ -382,6 +1721,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Invite ${invite.code} was created (${invite.url})\n`)
     })
     client.on('inviteDelete', (invite) => {
+        let currentGuildId = invite.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(invite.guild.id)
@@ -390,6 +1793,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Invite ${invite.code} was deleted (${invite.url})\n`)
     })
     client.on('roleCreate', (role) => {
+        let currentGuildId = role.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.roleUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(role.guild.id)
@@ -397,6 +1864,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Role ${role.name} (${role.id}) was created\n`)
     })
     client.on('roleDelete', (role) => {
+        let currentGuildId = role.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.roleUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(role.guild.id)
@@ -404,6 +1935,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Role ${role.name} (${role.id}) was deleted\n`)
     })
     client.on('roleUpdate', (oldRole, newRole) => {
+        let currentGuildId = oldRole.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.roleUpdates == false) {
+            return;
+        }
+
         if (oldRole == newRole) return;
 
         const currentDate = new Date();
@@ -422,6 +2017,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         }
     })
     client.on('stageInstanceCreate', (stageInstance) => {
+        let currentGuildId = stageInstance.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(stageInstance.guild.id)
@@ -429,6 +2088,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Stage Instance ${stageInstance.topic} (${stageInstance.id}) was created in ${stageInstance.channel} (${stageInstance.channel.id})\n`)
     })
     client.on('stageInstanceDelete', (stageInstance) => {
+        let currentGuildId = stageInstance.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guild = client.guilds.cache.get(stageInstance.guild.id)
@@ -436,6 +2159,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Stage Instance ${stageInstance.topic} (${stageInstance.id}) was deleted in ${stageInstance.channel} (${stageInstance.channel.id})\n`)
     })
     client.on('stageInstanceUpdate', (oldStageInstance, newStageInstance) => {
+        let currentGuildId = oldStageInstance.guild.id
+        let settings: extypes.guildSettings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        if (settings.enabledModules.admin == false) {
+            return;
+        }
+        else if (settings.admin.log.guildUpdates == false) {
+            return;
+        }
+
         if (oldStageInstance == newStageInstance) return;
 
         const currentDate = new Date();
