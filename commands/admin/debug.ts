@@ -74,7 +74,7 @@ commmand: ${command}
 ----------------------------------------------------
 `, 'utf-8')
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-        if(!(cmdchecks.isAdmin(commanduser.id, obj.guild, client) || cmdchecks.isOwner(commanduser.id))) {
+        if (!(cmdchecks.isAdmin(commanduser.id, obj.guild, client) || cmdchecks.isOwner(commanduser.id))) {
             obj.reply({
                 content: 'Error - you do not have permission to use this command',
                 allowedMentions: { repliedUser: false },
@@ -82,25 +82,25 @@ commmand: ${command}
             })
                 .catch(error => { });
         }
-        
+
         switch (command) {
             case 'firsts':
                 for (let i = 0; i < readfiles.length; i++) {
-                    if (readfiles[i].startsWith('command-firsts')) {
+                    if (readfiles[i].includes(obj.guildId) && readfiles[i].startsWith('command-firsts')) {
                         debugfiles.push('debugosu\\' + readfiles[i])
                     }
                 }
                 break;
             case 'leaderboard': case 'maplb': case 'mapleaderboard':
                 for (let i = 0; i < readfiles.length; i++) {
-                    if (readfiles[i].startsWith('command-leaderboard')) {
+                    if (readfiles[i].includes(obj.guildId) && readfiles[i].startsWith('command-leaderboard')) {
                         debugfiles.push('debugosu\\' + readfiles[i])
                     }
                 }
                 break;
             case 'map': case 'm':
                 for (let i = 0; i < readfiles.length; i++) {
-                    if (readfiles[i].startsWith('command-map')) {
+                    if (readfiles[i].includes(obj.guildId) && readfiles[i].startsWith('command-map')) {
                         debugfiles.push('debugosu\\' + readfiles[i])
                     }
                 }
@@ -114,7 +114,7 @@ commmand: ${command}
                 link-setdata.json
                 */
                 for (let i = 0; i < readfiles.length; i++) {
-                    if (readfiles[i].startsWith('link-map')) {
+                    if (readfiles[i].includes(obj.guildId) && readfiles[i].startsWith('link-map')) {
                         debugfiles.push('debugosu\\' + readfiles[i])
                     }
                 }
@@ -124,49 +124,49 @@ commmand: ${command}
                 osu.json
                 */
                 for (let i = 0; i < readfiles.length; i++) {
-                    if (readfiles[i].startsWith('command-osu')) {
+                    if (readfiles[i].includes(obj.guildId) && readfiles[i].startsWith('command-osu')) {
                         debugfiles.push('debugosu\\' + readfiles[i])
                     }
                 }
                 break;
             case 'osuparse': case 'osulink':
                 for (let i = 0; i < readfiles.length; i++) {
-                    if (readfiles[i].startsWith('link-osu')) {
+                    if (readfiles[i].includes(obj.guildId) && readfiles[i].startsWith('link-osu')) {
                         debugfiles.push('debugosu\\' + readfiles[i])
                     }
                 }
                 break;
             case 'osutop':
                 for (let i = 0; i < readfiles.length; i++) {
-                    if (readfiles[i].startsWith('command-otop')) {
+                    if (readfiles[i].includes(obj.guildId) && readfiles[i].startsWith('command-otop')) {
                         debugfiles.push('debugosu\\' + readfiles[i])
                     }
                 }
                 break;
             case 'pinned':
                 for (let i = 0; i < readfiles.length; i++) {
-                    if (readfiles[i].startsWith('command-pinned')) {
+                    if (readfiles[i].includes(obj.guildId) && readfiles[i].startsWith('command-pinned')) {
                         debugfiles.push('debugosu\\' + readfiles[i])
                     }
                 }
                 break;
             case 'rs': case 'recent': case 'r':
                 for (let i = 0; i < readfiles.length; i++) {
-                    if (readfiles[i].startsWith('command-rs')) {
+                    if (readfiles[i].includes(obj.guildId) && readfiles[i].startsWith('command-rs')) {
                         debugfiles.push('debugosu\\' + readfiles[i])
                     }
                 }
                 break;
             case 'scores': case 'c':
                 for (let i = 0; i < readfiles.length; i++) {
-                    if (readfiles[i].startsWith('command-scores')) {
+                    if (readfiles[i].includes(obj.guildId) && readfiles[i].startsWith('command-scores')) {
                         debugfiles.push('debugosu\\' + readfiles[i])
                     }
                 }
                 break;
             case 'score': case 'scoreparse':
                 for (let i = 0; i < readfiles.length; i++) {
-                    if (readfiles[i].startsWith('link-scoreparse')) {
+                    if (readfiles[i].includes(obj.guildId) && readfiles[i].startsWith('link-scoreparse')) {
                         debugfiles.push('debugosu\\' + readfiles[i])
                     }
                 }
@@ -179,7 +179,7 @@ commmand: ${command}
                 link-replayuser.json
                 */
                 for (let i = 0; i < readfiles.length; i++) {
-                    if (readfiles[i].startsWith('link-replay')) {
+                    if (readfiles[i].includes(obj.guildId) && readfiles[i].startsWith('link-replay')) {
                         debugfiles.push('debugosu\\' + readfiles[i])
                     }
                 }
@@ -209,15 +209,15 @@ commmand: ${command}
                     allowedMentions: { repliedUser: false },
                     failIfNotExits: true
                 })
-                    .catch(error => { 
+                    .catch(error => {
                         console.log(error)
                     });
 
             }
-/*             if (button != null) {
-
-            } */
-        } else if (debugfiles.length >= 10 ) {
+            /*             if (button != null) {
+            
+                        } */
+        } else if (debugfiles.length >= 10) {
             if ((message != null || interaction != null) && button == null) {
                 obj.reply({
                     content: 'Too many debug files to send.\nSplitting into multiple messages...',
@@ -225,7 +225,7 @@ commmand: ${command}
                     failIfNotExits: true
                 }).catch(error => { });
                 //for every 10 files, make a new array and send it
-                
+
                 for (let i = 0; i < debugfiles.length; i++) {
                     if (i % 10 == 0) {
                         obj.channel.send({
@@ -233,16 +233,16 @@ commmand: ${command}
                             allowedMentions: { repliedUser: false },
                             failIfNotExits: true
                         })
-                            .catch(error => { 
+                            .catch(error => {
                                 console.log(error)
                             });
                     }
                 }
 
             }
-/*             if (button != null) {
-
-            } */
+            /*             if (button != null) {
+            
+                        } */
         }
         else {
             if ((message != null || interaction != null) && button == null) {
