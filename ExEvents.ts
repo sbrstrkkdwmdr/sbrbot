@@ -4,8 +4,9 @@ import osuapiext = require('osu-api-extended');
 import osumodcalc = require('osumodcalculator');
 import fetch from 'node-fetch';
 import { OAuth } from './configs/osuApiTypes';
+import Discord = require('discord.js');
 
-module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
+module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, config) => {
 
     //update oauth access token
    /*  setInterval(async () => {

@@ -1,9 +1,11 @@
 const checks = require('./calc/commandchecks')
 import fs = require('fs');
 import extypes = require('./configs/extratypes');
+import Discord = require('discord.js');
+
 //MOD LOGS N SHIT
 
-module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
+module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, config) => {
 
     client.on('messageCreate', message => {
         let currentGuildId = message.guildId
@@ -1564,7 +1566,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `User ${user.username} (${user.id}) was removed from Scheduled Event ${guildScheduledEvent.name} (${guildScheduledEvent.id})\n`)
     })
     client.on('guildUnavailable', (guild) => {
-        
+
         const currentDate = new Date();
         const currentDateISO = new Date().toISOString();
         const guildlog = client.guilds.cache.get(guild.id)

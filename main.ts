@@ -154,19 +154,19 @@ Current Client: ${client.user.tag}
 Current Client ID: ${client.user.id}
 ====================================================================
 `
-console.log(initlog)
+    console.log(initlog)
     fs.appendFileSync('logs/general.log', `\n\n\n${initlog}\n\n\n`, 'utf-8');
 
     const oncooldown = new Set();
 
-    CommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, oncooldown);
-    LinkHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    SlashCommandHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, oncooldown);
-    Moderator(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    CommandHandler(userdata, client, osuApiKey, osuClientID, osuClientSecret, config, oncooldown);
+    LinkHandler(userdata, client, osuApiKey, osuClientID, osuClientSecret, config);
+    SlashCommandHandler(userdata, client, osuApiKey, osuClientID, osuClientSecret, config, oncooldown);
+    Moderator(userdata, client, osuApiKey, osuClientID, osuClientSecret, config);
     //MusicHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
     ButtonHandler(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    CommandInit(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
-    ExEvents(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
+    CommandInit(userdata, client, osuApiKey, osuClientID, osuClientSecret, config);
+    ExEvents(userdata, client, osuApiKey, osuClientID, osuClientSecret, config);
     osutrack(userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config);
 
     (async () => {

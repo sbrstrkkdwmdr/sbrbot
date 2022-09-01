@@ -4,8 +4,9 @@ const { ApplicationCommandOptionType, InteractionType } = require('discord.js');
 const cmdconfig = require('./configs/commandopts');
 import cmdchecks = require('./calc/commandchecks');
 import extypes = require('./configs/extratypes');
+import Discord = require('discord.js');
 
-module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, oncooldown) => {
+module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, config, oncooldown) => {
 
     let timeouttime;
 

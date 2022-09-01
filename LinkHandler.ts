@@ -2,8 +2,9 @@ import fs = require('fs');
 const https = require('https');
 import tesseract = require('tesseract.js');
 import extypes = require('./configs/extratypes');
+import Discord = require('discord.js');
 
-module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
+module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, config) => {
     let imgParseCooldown = false
 
     client.on('messageCreate', async (message) => {

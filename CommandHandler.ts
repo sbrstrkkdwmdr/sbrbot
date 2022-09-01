@@ -1,7 +1,9 @@
 import fs = require('fs');
 import cmdchecks = require('./calc/commandchecks');
 import extypes = require('./configs/extratypes');
-module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, oncooldown) => {
+import Discord = require('discord.js');
+
+module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, config, oncooldown) => {
 
     let timeouttime;
 
