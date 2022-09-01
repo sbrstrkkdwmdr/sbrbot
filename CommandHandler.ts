@@ -46,6 +46,65 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
         const button = null;
         const obj = message;
         const overrides = null;
+
+        let currentGuildId = message.guildId
+        let settings;
+        try {
+            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile)
+        } catch (error) {
+            let defaultSettings = {
+                enabledModules: {
+                    admin: false,
+                    osu: true,
+                    general: true,
+                    links: true,
+                    misc: true,
+                    music: true,
+                },
+                admin: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    log: {
+                        messageUpdates: true,
+                        guildUpdates: true,
+                        channelUpdates: true,
+                        roleUpdates: true,
+                        emojiUpdates: true,
+                        userUpdates: true,
+                        presenceUpdates: false,
+                        voiceUpdates: true,
+                    }
+                },
+                osu: {
+                    basic: 'n',
+                    limited: false,
+                    channels: [],
+                    parseLinks: true,
+                    parseReplays: true,
+                    parseScreenshots: true,
+                },
+                general: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                },
+                misc: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []                    
+                },
+                music: {
+                    basic: 'n',
+                    limited: false,
+                    channels: []
+                }
+            }
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
+            settings = defaultSettings
+        }
+        
         switch (command) {
             case 'convert':
                 client.commands.get('convert').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
