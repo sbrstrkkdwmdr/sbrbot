@@ -1,6 +1,7 @@
 import fs = require('fs');
 const https = require('https');
 import tesseract = require('tesseract.js');
+import extypes = require('./configs/extratypes');
 
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
     let imgParseCooldown = false
@@ -17,7 +18,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
 
         let currentGuildId = message.guildId
-        let settings;
+        let settings: extypes.guildSettings;
         try {
             let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile)
@@ -62,7 +63,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 misc: {
                     basic: 'n',
                     limited: false,
-                    channels: []                    
+                    channels: []
                 },
                 music: {
                     basic: 'n',
@@ -74,7 +75,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             settings = defaultSettings
         }
 
-        if (config.useScreenshotParse == true) {
+        if (config.useScreenshotParse == true && settings.osu.parseScreenshots == true) {
             //warning: uses a lot of memory
 
             const worker = tesseract.createWorker({
@@ -142,6 +143,20 @@ progress: ${m.progress ? m.progress : 'none'}
             }
         }
         const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
+        if (messagenohttp.startsWith(x =>
+            'osu.ppy.sh/b/' || 'osu.ppy.sh/beatmaps/' || 'osu.ppy.sh/beatmapsets/' || 'osu.ppy.sh/s/'
+            || 'osu.ppy.sh/u/' || 'osu.ppy.sh/users/'
+        )) {
+            if (settings.enabledModules.osu == false || settings.osu.parseLinks == false) {
+                return;
+            } else if (settings.osu.limited == true) {
+                if (!settings.osu.channels.includes(obj.channelId)) {
+                    return;
+                }
+            } else {
+
+            }
+        }
         if (messagenohttp.startsWith('osu.ppy.sh/b/') || messagenohttp.startsWith('osu.ppy.sh/beatmaps/') || messagenohttp.startsWith('osu.ppy.sh/beatmapsets/') || messagenohttp.startsWith('osu.ppy.sh/s/') || parse != null) {
             const overrideID = null
             client.links.get('osumaplink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, parse, overrideID);
@@ -154,6 +169,16 @@ progress: ${m.progress ? m.progress : 'none'}
         }
 
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osr'))) {
+            if (settings.enabledModules.osu == false || settings.osu.parseReplays == false) {
+                return;
+            }
+            else if (settings.osu.limited == true) {
+                if (!settings.osu.channels.includes(obj.channelId)) {
+                    return;
+                }
+            } else {
+
+            }
             const attachosr = message.attachments.first().url
             const osrdlfile = fs.createWriteStream('./files/replay.osr')
             https.get(`${attachosr}`, function (response) {

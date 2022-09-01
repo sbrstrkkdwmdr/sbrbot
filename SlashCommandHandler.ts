@@ -3,6 +3,8 @@ import fs = require('fs');
 const { ApplicationCommandOptionType, InteractionType } = require('discord.js');
 const cmdconfig = require('./configs/commandopts');
 import cmdchecks = require('./calc/commandchecks');
+import extypes = require('./configs/extratypes');
+
 module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config, oncooldown) => {
 
     let timeouttime;
@@ -44,7 +46,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
 
 
         let currentGuildId = message.guildId
-        let settings;
+        let settings: extypes.guildSettings;
         try {
             let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile)
@@ -99,6 +101,70 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             }
             fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
             settings = defaultSettings
+        }
+
+        switch (interaction.commandName) {
+            case 'convert': case 'help': case 'math': case 'ping': case 'remind': case 'stats': case 'time': case 'info':
+                if (settings.enabledModules.general == false) {
+                    return;
+                }
+                else if (settings.general.limited == true) {
+                    if (!settings.general.channels.includes(obj.channelId)) {
+                        return;
+                    }
+                } else {
+
+                }
+                break;
+            case '8ball': case 'ask': case 'emojify': case 'gif': case 'image': case 'imagesearch': case 'poll': case 'vote': case 'roll': case 'say': case 'ytsearch': case 'yt':
+                if (settings.enabledModules.misc == false) {
+                    return;
+                }
+                else if (settings.misc.limited == true) {
+                    if (!settings.misc.channels.includes(obj.channelId)) {
+                        return;
+                    }
+                } else {
+
+                }
+                break;
+            case 'compare': case 'firsts': case 'map': case 'm': case 'rs': case 'recent': case 'r': case 'osu': case 'profile': case 'o': case 'osuset': case 'osutop': case 'top': case 'scores': case 'c': case 'leaderboard': case 'maplb': case 'mapleaderboard': case 'lb': case 'pinned': case 'skin': case 'simplay': case 'simulate': case 'whatif':
+                if (settings.enabledModules.osu == false) {
+                    return;
+                }
+                else if (settings.osu.limited == true) {
+                    if (!settings.osu.channels.includes(obj.channelId)) {
+                        return;
+                    }
+                } else {
+
+                }
+                break;
+            case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms': case 'leaveguild': case 'leave': case 'servers': case 'debug': case 'voice': case 'crash': case 'log': case 'find': case 'purge':
+                if (settings.enabledModules.admin == false) {
+                    return;
+                }
+                else if (settings.admin.limited == true) {
+                    if (!settings.admin.channels.includes(obj.channelId)) {
+                        return;
+                    }
+                } else {
+
+                }
+                break;
+            case 'play': case 'pause': case 'np': case 'skip': case 'queue': case 'resume':
+                if (settings.enabledModules.music == false) {
+                    return;
+                }
+                else if (settings.music.limited == true) {
+                    if (!settings.music.channels.includes(obj.channelId)) {
+                        return;
+                    }
+                } else {
+
+                }
+                break;
+
         }
 
         switch (interaction.commandName) {
