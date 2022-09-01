@@ -433,7 +433,8 @@ ${error}
                         `${basicvals}\n` +
                         `${totaldiff}⭐ ${emojis.mapobjs.bpm}${allvals.bpm}\n` +
                         `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
-                        `${emojis.mapobjs.total_length}${allvals.details.lengthFull}`,
+                        `${emojis.mapobjs.total_length}${allvals.details.lengthFull}` + 
+                        `${mapdata.max_combo}x combo`,
                     inline: true
                 },
                 {
