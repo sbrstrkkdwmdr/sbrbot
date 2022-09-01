@@ -1,6 +1,6 @@
-import cmdconfig = require('./configs/commandopts')
-
-module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSecret, config) => {
+import cmdconfig = require('./configs/commandopts');
+import Discord = require('discord.js');
+module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, config) => {
 
     const guildID = config.testGuildID;
     //const guild = client.guilds.cache.get(guildID);
@@ -521,7 +521,7 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
                 description: 'The type of comparison',
                 required: false,
                 type: Discord.ApplicationCommandOptionType.String,
-            }   ,
+            },
             {
                 name: 'first',
                 description: 'The first user/score to compare',
@@ -701,6 +701,400 @@ module.exports = (userdata, client, Discord, osuApiKey, osuClientID, osuClientSe
             },
         ]
     },
+    {
+        name: 'purge',
+        description: 'Purges a channel',
+        dmPermission: false,
+        options: [
+            {
+                name: 'count',
+                description: 'The amount of messages to purge',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: true,
+                minValue: 1,
+            },
+            {
+                name: 'user',
+                description: 'The user to purge messages from',
+                type: Discord.ApplicationCommandOptionType.User,
+                required: false,
+            }
+        ]
+    },
+    // {
+    //     name: 'settings',
+    //     description: 'Displays/edits the settings of a server',
+    //     dmPermission: false,
+    //     options: [
+    //         {
+    //             name: 'setting',
+    //             description: 'The setting to edit',
+    //             type: Discord.ApplicationCommandOptionType.SubcommandGroup,
+    //             options: [
+    //                 {
+    //                     name: 'admin',
+    //                     description: 'The admin setting to edit',
+    //                     type: Discord.ApplicationCommandOptionType.SubcommandGroup,
+    //                     required: false,
+    //                     options: [
+    //                         {
+    //                             name: 'basic',
+    //                             description: 'The basic setting to edit',
+    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
+    //                             required: false,
+    //                             options: [
+    //                                 {
+    //                                     name: 'enabled',
+    //                                     description: 'Whether or not admin commands are enabled',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'limited',
+    //                                     description: 'Whether or not to limit admin commands to specific channels',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                             ]
+    //                         },
+    //                         {
+    //                             name: 'channels',
+    //                             description: 'The channels to limit admin commands to',
+    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
+    //                             required: false,
+    //                             options: [
+    //                                 {
+    //                                     name: 'add',
+    //                                     description: 'Adds a channel to the list of channels to limit admin commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Channel,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'remove',
+    //                                     description: 'Removes a channel from the list of channels to limit admin commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Channel,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'clear',
+    //                                     description: 'Clears the list of channels to limit admin commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 }
+    //                             ]
+    //                         },
+    //                         {
+    //                             name: 'log',
+    //                             description: 'The log setting to edit',
+    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
+    //                             required: false,
+    //                             options: [
+    //                                 {
+    //                                     name: 'messages',
+    //                                     description: 'Whether or not to log messages edits/deletions',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'guild',
+    //                                     description: 'Whether or not to log guild events',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'channel',
+    //                                     description: 'Whether or not to log channel events',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'role',
+    //                                     description: 'Whether or not to log role events',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'emoji',
+    //                                     description: 'Whether or not to log emoji events',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'user',
+    //                                     description: 'Whether or not to log user events',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'voice',
+    //                                     description: 'Whether or not to log voice events',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'presence',
+    //                                     description: 'Whether or not to log user presence events',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 }
+    //                             ]
+    //                         }
+    //                     ]
+    //                 },
+    //                 {
+    //                     name: 'osu',
+    //                     description: 'The osu! setting to edit',
+    //                     type: Discord.ApplicationCommandOptionType.SubcommandGroup,
+    //                     required: false,
+    //                     options: [
+    //                         {
+    //                             name: 'basic',
+    //                             description: 'The basic setting to edit',
+    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
+    //                             required: false,
+    //                             options: [
+    //                                 {
+    //                                     name: 'enabled',
+    //                                     description: 'Whether or not osu! commands are enabled',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'limited',
+    //                                     description: 'Whether or not to limit the osu! commands to specific channels',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                             ]
+    //                         },
+    //                         {
+    //                             name: 'channels',
+    //                             description: 'The channels to limit osu! commands to',
+    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
+    //                             required: false,
+    //                             options: [
+    //                                 {
+    //                                     name: 'add',
+    //                                     description: 'Adds a channel to the list of channels to limit osu! commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Channel,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'remove',
+    //                                     description: 'Removes a channel from the list of channels to limit osu! commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Channel,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'clear',
+    //                                     description: 'Clears the list of channels to limit osu! commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 }
+    //                             ]
+    //                         },
+    //                         {
+    //                             name: 'parsing',
+    //                             description: 'The parsing setting to edit',
+    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
+    //                             required: false,
+    //                             options: [
+    //                                 {
+    //                                     name: 'parselinks',
+    //                                     description: 'Whether or not to parse osu! links',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'parsereplays',
+    //                                     description: 'Whether or not to parse osu! replays',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'parsescreenshots',
+    //                                     description: 'Whether or not to parse osu! screenshots',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 }
+    //                             ]
+    //                         }
+    //                     ]
+
+    //                 },
+    //                 {
+    //                     name: 'general',
+    //                     description: 'The setting to edit',
+    //                     type: Discord.ApplicationCommandOptionType.SubcommandGroup,
+    //                     required: false,
+    //                     options: [
+    //                         {
+    //                             name: 'basic',
+    //                             description: 'The basic setting to edit',
+    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
+    //                             required: false,
+    //                             options: [
+    //                                 {
+    //                                     name: 'enabled',
+    //                                     description: 'Whether or not general commands are enabled',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'limited',
+    //                                     description: 'Whether or not to limit general commands to specific channels',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                             ]
+    //                         },
+    //                         {
+    //                             name: 'channels',
+    //                             description: 'The channels to limit general commands to',
+    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
+    //                             required: false,
+    //                             options: [
+    //                                 {
+    //                                     name: 'add',
+    //                                     description: 'Adds a channel to the list of channels to limit general commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Channel,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'remove',
+    //                                     description: 'Removes a channel from the list of channels to limit general commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Channel,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'clear',
+    //                                     description: 'Clears the list of channels to limit general commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 }
+    //                             ]
+    //                         }
+    //                     ]
+    //                 },
+    //                 {
+    //                     name: 'misc',
+    //                     description: 'The misc setting to edit',
+    //                     type: Discord.ApplicationCommandOptionType.SubcommandGroup,
+    //                     required: false,
+    //                     options: [
+    //                         {
+    //                             name: 'basic',
+    //                             description: 'The basic setting to edit',
+    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
+    //                             required: false,
+    //                             options: [
+    //                                 {
+    //                                     name: 'enabled',
+    //                                     description: 'Whether or not misc commands are enabled',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'limited',
+    //                                     description: 'Whether or not to limit misc commands to specific channels',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                             ]
+    //                         },
+    //                         {
+    //                             name: 'channels',
+    //                             description: 'The channels to limit misc commands to',
+    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
+    //                             required: false,
+    //                             options: [
+    //                                 {
+    //                                     name: 'add',
+    //                                     description: 'Adds a channel to the list of channels to limit misc commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Channel,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'remove',
+    //                                     description: 'Removes a channel from the list of channels to limit misc commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Channel,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'clear',
+    //                                     description: 'Clears the list of channels to limit misc commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 }
+    //                             ]
+    //                         }
+    //                     ]
+    //                 },
+    //                 {
+    //                     name: 'music',
+    //                     description: 'The music setting to edit',
+    //                     type: Discord.ApplicationCommandOptionType.SubcommandGroup,
+    //                     required: false,
+    //                     options: [
+    //                         {
+    //                             name: 'basic',
+    //                             description: 'The basic setting to edit',
+    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
+    //                             required: false,
+    //                             options: [
+    //                                 {
+    //                                     name: 'enabled',
+    //                                     description: 'Whether or not music commands are enabled',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'limited',
+    //                                     description: 'Whether or not to limit music commands to specific channels',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 },
+    //                             ]
+    //                         },
+    //                         {
+    //                             name: 'channels',
+    //                             description: 'The channels to limit music commands to',
+    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
+    //                             required: false,
+    //                             options: [
+    //                                 {
+    //                                     name: 'add',
+    //                                     description: 'Adds a channel to the list of channels to limit music commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Channel,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'remove',
+    //                                     description: 'Removes a channel from the list of channels to limit music commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Channel,
+    //                                     required: false,
+    //                                 },
+    //                                 {
+    //                                     name: 'clear',
+    //                                     description: 'Clears the list of channels to limit music commands to',
+    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                                     required: false,
+    //                                 }
+    //                             ]
+    //                         }
+    //                     ]
+    //                 },
+    //                 {
+    //                     name: 'reset',
+    //                     description: 'Resets the settings of a server',
+    //                     type: Discord.ApplicationCommandOptionType.Boolean,
+    //                     required: false,
+    //                 }
+    //             ]
+    //         }
+    //     ]
+    // },
+
     {
         name: 'Bookmark',
         type: 3,
