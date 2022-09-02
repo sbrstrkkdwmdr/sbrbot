@@ -46,7 +46,7 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         }
 
 
-        const currentGuildId = message.guildId
+        const currentGuildId = interaction.guildId
         let settings: extypes.guildSettings;
         try {
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
