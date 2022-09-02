@@ -377,7 +377,6 @@ Error - pp calculation failed
 ${error}
 ----------------------------------------------------`)
             ppissue = 'Error - pp could not be calculated';
-            console.log(error)
             const tstmods = mapmods.toUpperCase();
 
             if (tstmods.includes('EZ') || tstmods.includes('HR')) {
