@@ -357,11 +357,15 @@ params: ${mapid} | ${maptitleq}
         }
         let ppComputed: object;
         let ppissue: string;
-        let totaldiff;
+        let totaldiff = mapdata.difficulty_rating;
         try {
             ppComputed = await osufunc.mapcalc(mapmods, mapdata.mode, mapdata.id, 0)
             ppissue = '';
-            totaldiff = ppComputed[0].stars.toFixed(2)
+            try {
+                totaldiff = ppComputed[0].stars.toFixed(2)
+            } catch (error) {
+                totaldiff = mapdata.difficulty_rating;
+            }
             fs.writeFileSync(`./debugosu/command-map=pp_calc=${obj.guildId}.json`, JSON.stringify(ppComputed, null, 2))
 
         } catch (error) {
@@ -373,6 +377,7 @@ Error - pp calculation failed
 ${error}
 ----------------------------------------------------`)
             ppissue = 'Error - pp could not be calculated';
+            console.log(error)
             const tstmods = mapmods.toUpperCase();
 
             if (tstmods.includes('EZ') || tstmods.includes('HR')) {
@@ -381,7 +386,128 @@ ${error}
             if ((tstmods.includes('DT') || tstmods.includes('NC')) && tstmods.includes('HT')) {
                 ppissue += '\nInvalid mod combinations: DT/NC + HT';
             }
-
+            ppComputed = [
+                {
+                    "mode": 0,
+                    "stars": 1.00,
+                    "pp": 0.0,
+                    "ppAcc": 0.0,
+                    "ppAim": 0.0,
+                    "ppFlashlight": 0.0,
+                    "ppSpeed": 0.0,
+                    "ppStrain": 0.0,
+                    "ar": 1,
+                    "cs": 1,
+                    "hp": 1,
+                    "od": 1,
+                    "bpm": 1,
+                    "clockRate": 1,
+                    "timePreempt": null,
+                    "greatHitWindow": 0,
+                    "nCircles": 0,
+                    "nSliders": 0
+                },
+                {
+                    "mode": 0,
+                    "stars": 1.00,
+                    "pp": 0.0,
+                    "ppAcc": 0.0,
+                    "ppAim": 0.0,
+                    "ppFlashlight": 0.0,
+                    "ppSpeed": 0.0,
+                    "ppStrain": 0.0,
+                    "ar": 1,
+                    "cs": 1,
+                    "hp": 1,
+                    "od": 1,
+                    "bpm": 1,
+                    "clockRate": 1,
+                    "timePreempt": null,
+                    "greatHitWindow": 0,
+                    "nCircles": 0,
+                    "nSliders": 0
+                },
+                {
+                    "mode": 0,
+                    "stars": 1.00,
+                    "pp": 0.0,
+                    "ppAcc": 0.0,
+                    "ppAim": 0.0,
+                    "ppFlashlight": 0.0,
+                    "ppSpeed": 0.0,
+                    "ppStrain": 0.0,
+                    "ar": 1,
+                    "cs": 1,
+                    "hp": 1,
+                    "od": 1,
+                    "bpm": 1,
+                    "clockRate": 1,
+                    "timePreempt": null,
+                    "greatHitWindow": 0,
+                    "nCircles": 0,
+                    "nSliders": 0
+                },
+                {
+                    "mode": 0,
+                    "stars": 1.00,
+                    "pp": 0.0,
+                    "ppAcc": 0.0,
+                    "ppAim": 0.0,
+                    "ppFlashlight": 0.0,
+                    "ppSpeed": 0.0,
+                    "ppStrain": 0.0,
+                    "ar": 1,
+                    "cs": 1,
+                    "hp": 1,
+                    "od": 1,
+                    "bpm": 1,
+                    "clockRate": 1,
+                    "timePreempt": null,
+                    "greatHitWindow": 0,
+                    "nCircles": 0,
+                    "nSliders": 0
+                },
+                {
+                    "mode": 0,
+                    "stars": 1.00,
+                    "pp": 0.0,
+                    "ppAcc": 0.0,
+                    "ppAim": 0.0,
+                    "ppFlashlight": 0.0,
+                    "ppSpeed": 0.0,
+                    "ppStrain": 0.0,
+                    "ar": 1,
+                    "cs": 1,
+                    "hp": 1,
+                    "od": 1,
+                    "bpm": 1,
+                    "clockRate": 1,
+                    "timePreempt": null,
+                    "greatHitWindow": 0,
+                    "nCircles": 0,
+                    "nSliders": 0
+                },
+                {
+                    "mode": 0,
+                    "stars": 1.00,
+                    "pp": 0.0,
+                    "ppAcc": 0.0,
+                    "ppAim": 0.0,
+                    "ppFlashlight": 0.0,
+                    "ppSpeed": 0.0,
+                    "ppStrain": 0.0,
+                    "ar": 1,
+                    "cs": 1,
+                    "hp": 1,
+                    "od": 1,
+                    "bpm": 1,
+                    "clockRate": 1,
+                    "timePreempt": null,
+                    "greatHitWindow": 0,
+                    "nCircles": 0,
+                    "nSliders": 0
+                },
+            ]
         }
         let basicvals = `CS${allvals.cs} AR${allvals.ar} OD${allvals.od} HP${allvals.hp}`;
         if (interaction) {
@@ -412,9 +538,53 @@ ${error}
         }
 
         const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
-        fs.writeFileSync(`./debugosu/command-map=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))
-        const mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
+        try {
+            fs.writeFileSync(`./debugosu/command-map=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))
+        } catch (error) {
+            fs.writeFileSync(`./debugosu/command-map=strains=${obj.guildId}.json`, JSON.stringify({ error: error }, null, 2))
+        }
+        let mapgraph;
+        if (strains) {
+            mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
+        } else {
+            mapgraph = null
+        }
+        let detailedmapdata = '-';
+        if (detailed == true) {
+            switch (mapdata.mode) {
+                case 'osu': {
+                    detailedmapdata = `SS: ${ppComputed[0].pp.toFixed(2)} | Aim:${ppComputed[0].ppAim.toFixed(2)} | Speed:${ppComputed[0].ppSpeed.toFixed(2)} | Acc: ${ppComputed[0].ppAcc.toFixed(2)} \n ` +
+                        `99: ${ppComputed[1].pp.toFixed(2)} | Aim:${ppComputed[1].ppAim.toFixed(2)} | Speed:${ppComputed[1].ppSpeed.toFixed(2)} | Acc: ${ppComputed[1].ppAcc.toFixed(2)} \n ` +
+                        `97: ${ppComputed[3].pp.toFixed(2)} | Aim:${ppComputed[3].ppAim.toFixed(2)} | Speed:${ppComputed[3].ppSpeed.toFixed(2)} | Acc: ${ppComputed[3].ppAcc.toFixed(2)} \n ` +
+                        `95: ${ppComputed[5].pp.toFixed(2)} | Aim:${ppComputed[5].ppAim.toFixed(2)} | Speed:${ppComputed[5].ppSpeed.toFixed(2)} | Acc: ${ppComputed[5].ppAcc.toFixed(2)} \n ` +
+                        `${modissue}\n${ppissue}`
+                }
+                case 'taiko': {
+                    detailedmapdata = `SS: ${ppComputed[0].pp.toFixed(2)} | Acc: ${ppComputed[0].ppAcc.toFixed(2)} | Strain: ${ppComputed[0].ppStrain.toFixed(2)} \n ` +
+                        `99: ${ppComputed[1].pp.toFixed(2)} | Acc: ${ppComputed[1].ppAcc.toFixed(2)} | Strain: ${ppComputed[1].ppStrain.toFixed(2)} \n ` +
+                        `97: ${ppComputed[3].pp.toFixed(2)} | Acc: ${ppComputed[3].ppAcc.toFixed(2)} | Strain: ${ppComputed[3].ppStrain.toFixed(2)} \n ` +
+                        `95: ${ppComputed[5].pp.toFixed(2)} | Acc: ${ppComputed[5].ppAcc.toFixed(2)} | Strain: ${ppComputed[5].ppStrain.toFixed(2)} \n ` +
+                        `${modissue}\n${ppissue}`
+                }
+                case 'fruits': {
+                    detailedmapdata = `SS: ${ppComputed[0].pp.toFixed(2)} \n ` +
+                        `99: ${ppComputed[1].pp.toFixed(2)} \n ` +
+                        `98: ${ppComputed[2].pp.toFixed(2)} \n ` +
+                        `97: ${ppComputed[3].pp.toFixed(2)} \n ` +
+                        `96: ${ppComputed[4].pp.toFixed(2)} \n ` +
+                        `95: ${ppComputed[5].pp.toFixed(2)} \n ` +
+                        `${modissue}\n${ppissue}`
+                }
+                case 'mania': {
+                    detailedmapdata = `SS: ${ppComputed[0].pp.toFixed(2)} | Acc: ${ppComputed[0].ppAcc.toFixed(2)} | Strain: ${ppComputed[0].ppStrain.toFixed(2)} \n ` +
+                        `99: ${ppComputed[1].pp.toFixed(2)} | Acc: ${ppComputed[1].ppAcc.toFixed(2)} | Strain: ${ppComputed[1].ppStrain.toFixed(2)} \n ` +
+                        `97: ${ppComputed[3].pp.toFixed(2)} | Acc: ${ppComputed[3].ppAcc.toFixed(2)} | Strain: ${ppComputed[3].ppStrain.toFixed(2)} \n ` +
+                        `95: ${ppComputed[5].pp.toFixed(2)} | Acc: ${ppComputed[5].ppAcc.toFixed(2)} | Strain: ${ppComputed[5].ppStrain.toFixed(2)} \n ` +
+                        `${modissue}\n${ppissue}`
+                }
 
+            }
+        }
         const Embed = new Discord.EmbedBuilder()
             .setColor(0x91ff9a)
             .setTitle(maptitle)
@@ -425,7 +595,6 @@ ${error}
                 iconURL: `https://a.ppy.sh/${mapperdata.id}`,
             })
             .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg` || `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
-            .setImage(`${mapgraph}`)
             .addFields([
                 {
                     name: 'MAP VALUES',
@@ -433,7 +602,7 @@ ${error}
                         `${basicvals}\n` +
                         `${totaldiff}⭐ ${emojis.mapobjs.bpm}${allvals.bpm}\n` +
                         `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
-                        `${emojis.mapobjs.total_length}${allvals.details.lengthFull}\n` + 
+                        `${emojis.mapobjs.total_length}${allvals.details.lengthFull}\n` +
                         `${mapdata.max_combo}x combo`,
                     inline: true
                 },
@@ -448,11 +617,7 @@ ${error}
                             `96: ${ppComputed[4].pp.toFixed(2)} \n ` +
                             `95: ${ppComputed[5].pp.toFixed(2)} \n ` +
                             `${modissue}\n${ppissue}` :
-                            `SS: ${ppComputed[0].pp.toFixed(2)} | Aim:${ppComputed[0].ppAim.toFixed(2)} | Speed:${ppComputed[0].ppSpeed.toFixed(2)} | Acc: ${ppComputed[0].ppAcc.toFixed(2)} \n ` +
-                            `99: ${ppComputed[1].pp.toFixed(2)} | Aim:${ppComputed[1].ppAim.toFixed(2)} | Speed:${ppComputed[1].ppSpeed.toFixed(2)} | Acc: ${ppComputed[1].ppAcc.toFixed(2)} \n ` +
-                            `97: ${ppComputed[3].pp.toFixed(2)} | Aim:${ppComputed[3].ppAim.toFixed(2)} | Speed:${ppComputed[3].ppSpeed.toFixed(2)} | Acc: ${ppComputed[3].ppAcc.toFixed(2)} \n ` +
-                            `95: ${ppComputed[5].pp.toFixed(2)} | Aim:${ppComputed[5].ppAim.toFixed(2)} | Speed:${ppComputed[5].ppSpeed.toFixed(2)} | Acc: ${ppComputed[5].ppAcc.toFixed(2)} \n ` +
-                            `${modissue}\n${ppissue}`
+                            detailedmapdata
                     ,
                     inline: true
                 },
@@ -481,6 +646,9 @@ ${error}
                     inline: false
                 }
             ])
+        if (mapgraph) {
+            Embed.setImage(`${mapgraph}`)
+        }
         switch (true) {
             case parseFloat(totaldiff.toString()) >= 8:
                 Embed.setColor(colours.diffcolour[7].hex)
