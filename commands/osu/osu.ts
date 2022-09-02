@@ -176,7 +176,7 @@ Options(2):
     searchid: ${searchid}
 ----------------------------------------------------
 `, 'utf-8')
-        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
+        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `${await mode}`)
         fs.writeFileSync(`debugosu/command-osu=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         if (osudata?.error) {
             obj.reply({
@@ -186,48 +186,10 @@ Options(2):
             }).catch()
             return;
         }
-
-        const findname = await userdata.findOne({ where: { osuname: user } })
-        if (findname != null) {
-            switch (mode) {
-                case 'osu':
-                default:
-                    await userdata.update({
-                        osupp: osudata.statistics.pp,
-                        osurank: osudata.statistics.global_rank,
-                        osuacc: osudata.statistics.hit_accuracy
-                    }, {
-                        where: { osuname: user }
-                    })
-                    break;
-                case 'taiko':
-                    await userdata.update({
-                        taikopp: osudata.statistics.pp,
-                        taikorank: osudata.statistics.global_rank,
-                        taikoacc: osudata.statistics.hit_accuracy
-                    }, {
-                        where: { osuname: user }
-                    })
-                    break;
-                case 'fruits':
-                    await userdata.update({
-                        fruitspp: osudata.statistics.pp,
-                        fruitsrank: osudata.statistics.global_rank,
-                        fruitsacc: osudata.statistics.hit_accuracy
-                    }, {
-                        where: { osuname: user }
-                    })
-                    break;
-                case 'mania':
-                    await userdata.update({
-                        maniapp: osudata.statistics.pp,
-                        maniarank: osudata.statistics.global_rank,
-                        maniaacc: osudata.statistics.hit_accuracy
-                    }, {
-                        where: { osuname: user }
-                    })
-                    break;
-            }
+        try {
+            osufunc.updateUserStats(osudata, mode, userdata)
+        } catch (error) {
+            console.log(error)
         }
 
         const osustats = osudata.statistics;

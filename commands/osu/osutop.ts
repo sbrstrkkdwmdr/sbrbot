@@ -334,18 +334,9 @@ Options(2):
         }
 
         try {
-            const findname = await userdata.findOne({ where: { osuname: user } })
-            if (findname != null) {
-                await userdata.update({
-                    osupp: osudata.statistics.pp,
-                    osurank: osudata.statistics.global_rank,
-                    osuacc: osudata.statistics.hit_accuracy
-                }, {
-                    where: { osuname: user }
-                })
-            }
+            osufunc.updateUserStats(osudata, mode, userdata)
         } catch (error) {
-
+            console.log(error)
         }
 
         const osutopdataPreSort: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
