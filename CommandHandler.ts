@@ -158,7 +158,6 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
                     }
                 } 
                 break;
-
         }
         switch (command) {
             case 'convert':
