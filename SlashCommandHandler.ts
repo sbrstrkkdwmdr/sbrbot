@@ -46,13 +46,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         }
 
 
-        let currentGuildId = message.guildId
+        const currentGuildId = message.guildId
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile)
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -113,9 +113,7 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
                     if (!settings.general.channels.includes(obj.channelId)) {
                         return;
                     }
-                } else {
-
-                }
+                } 
                 break;
             case '8ball': case 'ask': case 'emojify': case 'gif': case 'image': case 'imagesearch': case 'poll': case 'vote': case 'roll': case 'say': case 'ytsearch': case 'yt':
                 if (settings.enabledModules.misc == false) {
@@ -125,9 +123,7 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
                     if (!settings.misc.channels.includes(obj.channelId)) {
                         return;
                     }
-                } else {
-
-                }
+                } 
                 break;
             case 'compare': case 'firsts': case 'map': case 'm': case 'rs': case 'recent': case 'r': case 'osu': case 'profile': case 'o': case 'osuset': case 'osutop': case 'top': case 'scores': case 'c': case 'leaderboard': case 'maplb': case 'mapleaderboard': case 'lb': case 'pinned': case 'skin': case 'simplay': case 'simulate': case 'whatif':
                 if (settings.enabledModules.osu == false) {
@@ -137,9 +133,7 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
                     if (!settings.osu.channels.includes(obj.channelId)) {
                         return;
                     }
-                } else {
-
-                }
+                } 
                 break;
             case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms': case 'leaveguild': case 'leave': case 'servers': case 'debug': case 'voice': case 'crash': case 'log': case 'find': case 'purge':
                 if (settings.enabledModules.admin == false) {
@@ -149,9 +143,7 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
                     if (!settings.admin.channels.includes(obj.channelId)) {
                         return;
                     }
-                } else {
-
-                }
+                } 
                 break;
             case 'play': case 'pause': case 'np': case 'skip': case 'queue': case 'resume':
                 if (settings.enabledModules.music == false) {
@@ -161,9 +153,7 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
                     if (!settings.music.channels.includes(obj.channelId)) {
                         return;
                     }
-                } else {
-
-                }
+                } 
                 break;
 
         }

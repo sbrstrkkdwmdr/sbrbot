@@ -8,13 +8,13 @@ import Discord = require('discord.js');
 module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, config) => {
 
     client.on('messageCreate', message => {
-        let currentGuildId = message.guildId
+        const currentGuildId = message.guildId
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -99,13 +99,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         //MESSAGE LOGGER
     })
     client.on('messageDelete', message => {
-        let currentGuildId = message.guildId
+        const currentGuildId = message.guildId
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -178,13 +178,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Guild Member ${message.author.username}#${message.author.discriminator}'s message has been deleted:\nID: ${message.id}\nURL: https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}\n Content:${message.content}\nMessage Type: ${message.type}\n${msgref}`)
     })
     client.on('messageUpdate', (oldMessage, newMessage) => {
-        let currentGuildId = oldMessage.guild.id
+        const currentGuildId = oldMessage.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -270,13 +270,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
 
     //GUILD MEMBER LOGGER
     client.on('guildBanAdd', (ban) => {
-        let currentGuildId = ban.guild.id
+        const currentGuildId = ban.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -340,13 +340,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Guild Member ${ban.user.username}#${ban.user.discriminator} (${ban.user.id}) was banned`)//by ${ban.client.user.username}#${ban.client.user.discriminator} (${ban.client.user.id})\n
     })
     client.on('guildBanRemove', (ban) => {
-        let currentGuildId = ban.guild.id
+        const currentGuildId = ban.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -410,13 +410,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Guild Member ${ban.user.username}#${ban.user.discriminator} (${ban.user.id}) was unbanned\n`)//by ${ban.client.user.username}#${ban.client.user.discriminator} (${ban.client.user.id})
     })
     client.on('guildMemberRemove', (member) => {
-        let currentGuildId = member.guild.id
+        const currentGuildId = member.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -480,13 +480,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Guild Member ${member.user.username}#${member.user.discriminator} (${member.user.id}) left the server or was kicked\n`)
     })
     client.on('guildMemberUpdate', (oldMember, newMember) => {
-        let currentGuildId = oldMember.guildId
+        const currentGuildId = oldMember.guildId
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -575,13 +575,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         const currentDateISO = new Date().toISOString();
         client.guilds.cache.forEach(guild => {
             if (guild.members.cache.has(oldUser.id)) {
-                let currentGuildId = guild.id
+                const currentGuildId = guild.id
                 let settings: extypes.guildSettings;
                 try {
-                    let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+                    const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
                     settings = JSON.parse(settingsfile);
                 } catch (error) {
-                    let defaultSettings = {
+                    const defaultSettings = {
                         enabledModules: {
                             admin: false,
                             osu: true,
@@ -667,13 +667,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
 
     //GENERAL GUILD UPDATE LOGGER
     client.on('channelCreate', (channel) => {
-        let currentGuildId = channel.guild.id
+        const currentGuildId = channel.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -777,13 +777,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         }
     })
     client.on('channelDelete', (channel) => {
-        let currentGuildId = channel.guild.id
+        const currentGuildId = channel.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -885,13 +885,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
 
     })
     client.on('channelUpdate', (oldChannel, newChannel) => {
-        let currentGuildId = oldChannel.guild.id
+        const currentGuildId = oldChannel.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -972,13 +972,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
 
     })
     client.on('emojiCreate', (emoji) => {
-        let currentGuildId = emoji.guild.id
+        const currentGuildId = emoji.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1043,13 +1043,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Emoji ${emoji.name} (${emoji.id}) was created => ${emoji.url}\n`)
     })
     client.on('emojiDelete', (emoji) => {
-        let currentGuildId = emoji.guild.id
+        const currentGuildId = emoji.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1114,13 +1114,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `\nEmoji ${emoji.name} (${emoji.id}) was deleted => ${emoji.url}\n`)
     })
     client.on('emojiUpdate', (oldEmoji, newEmoji) => {
-        let currentGuildId = oldEmoji.guild.id
+        const currentGuildId = oldEmoji.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1194,13 +1194,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
 
     })
     client.on('guildScheduledEventCreate', (guildScheduledEvent) => {
-        let currentGuildId = guildScheduledEvent.guild.id
+        const currentGuildId = guildScheduledEvent.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1266,13 +1266,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
 
     })
     client.on('guildScheduledEventDelete', (guildScheduledEvent) => {
-        let currentGuildId = guildScheduledEvent.guild.id
+        const currentGuildId = guildScheduledEvent.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1337,13 +1337,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Scheduled Event ${guildScheduledEvent.name} (${guildScheduledEvent.id}) was deleted\n`)
     })
     client.on('guildScheduledEventUpdate', (oldGuildScheduledEvent, newGuildScheduledEvent) => {
-        let currentGuildId = oldGuildScheduledEvent.guild.id
+        const currentGuildId = oldGuildScheduledEvent.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1423,13 +1423,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
 
     })
     client.on('guildScheduledEventUserAdd', (guildScheduledEvent, user) => {
-        let currentGuildId = guildScheduledEvent.id
+        const currentGuildId = guildScheduledEvent.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1495,13 +1495,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
 
     })
     client.on('guildScheduledEventUserRemove', (guildScheduledEvent, user) => {
-        let currentGuildId = guildScheduledEvent.id
+        const currentGuildId = guildScheduledEvent.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1574,13 +1574,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guildlog.id}.log`, `Guild ${guild.name} (${guild.id}) was unavailable\n`)
     })
     client.on('guildUpdate', (oldGuild, newGuild) => {
-        let currentGuildId = oldGuild.id
+        const currentGuildId = oldGuild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1652,13 +1652,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
 
     })
     client.on('inviteCreate', (invite) => {
-        let currentGuildId = invite.guild.id
+        const currentGuildId = invite.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1723,13 +1723,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Invite ${invite.code} was created (${invite.url})\n`)
     })
     client.on('inviteDelete', (invite) => {
-        let currentGuildId = invite.guild.id
+        const currentGuildId = invite.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1795,13 +1795,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Invite ${invite.code} was deleted (${invite.url})\n`)
     })
     client.on('roleCreate', (role) => {
-        let currentGuildId = role.guild.id
+        const currentGuildId = role.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1866,13 +1866,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Role ${role.name} (${role.id}) was created\n`)
     })
     client.on('roleDelete', (role) => {
-        let currentGuildId = role.guild.id
+        const currentGuildId = role.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -1937,13 +1937,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Role ${role.name} (${role.id}) was deleted\n`)
     })
     client.on('roleUpdate', (oldRole, newRole) => {
-        let currentGuildId = oldRole.guild.id
+        const currentGuildId = oldRole.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -2019,13 +2019,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         }
     })
     client.on('stageInstanceCreate', (stageInstance) => {
-        let currentGuildId = stageInstance.guild.id
+        const currentGuildId = stageInstance.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -2090,13 +2090,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Stage Instance ${stageInstance.topic} (${stageInstance.id}) was created in ${stageInstance.channel} (${stageInstance.channel.id})\n`)
     })
     client.on('stageInstanceDelete', (stageInstance) => {
-        let currentGuildId = stageInstance.guild.id
+        const currentGuildId = stageInstance.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
@@ -2161,13 +2161,13 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         fs.appendFileSync(`./logs/moderator/${guild.id}.log`, `Stage Instance ${stageInstance.topic} (${stageInstance.id}) was deleted in ${stageInstance.channel} (${stageInstance.channel.id})\n`)
     })
     client.on('stageInstanceUpdate', (oldStageInstance, newStageInstance) => {
-        let currentGuildId = oldStageInstance.guild.id
+        const currentGuildId = oldStageInstance.guild.id
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
                 enabledModules: {
                     admin: false,
                     osu: true,
