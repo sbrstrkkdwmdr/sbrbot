@@ -362,7 +362,7 @@ params: ${mapid} | ${maptitleq}
             ppComputed = await osufunc.mapcalc(mapmods, mapdata.mode, mapdata.id, 0)
             ppissue = '';
             try {
-                totaldiff = ppComputed[0].stars.toFixed(2)
+                totaldiff = ppComputed[0].stars?.toFixed(2)
             } catch (error) {
                 totaldiff = mapdata.difficulty_rating;
             }
@@ -511,9 +511,9 @@ ${error}
         let basicvals = `CS${allvals.cs} AR${allvals.ar} OD${allvals.od} HP${allvals.hp}`;
         if (detailed == true) {
             basicvals =
-                `CS${allvals.cs} (${allvals.details.csRadius.toFixed(2)}r)
-                AR${allvals.ar}  (${allvals.details.arMs.toFixed(2)}ms)
-                OD${allvals.od} (300: ${allvals.details.odMs.hitwindow_300.toFixed(2)}ms 100: ${allvals.details.odMs.hitwindow_100.toFixed(2)}ms 50:  ${allvals.details.odMs.hitwindow_50.toFixed(2)}ms)
+                `CS${allvals.cs} (${allvals.details.csRadius?.toFixed(2)}r)
+                AR${allvals.ar}  (${allvals.details.arMs?.toFixed(2)}ms)
+                OD${allvals.od} (300: ${allvals.details.odMs.hitwindow_300?.toFixed(2)}ms 100: ${allvals.details.odMs.hitwindow_100?.toFixed(2)}ms 50:  ${allvals.details.odMs.hitwindow_50?.toFixed(2)}ms)
                 HP${allvals.hp}`
         }
 
@@ -548,38 +548,54 @@ ${error}
         if (detailed == true) {
             switch (mapdata.mode) {
                 case 'osu': {
-                    detailedmapdata = `SS: ${ppComputed[0].pp.toFixed(2)} | Aim:${ppComputed[0].ppAim.toFixed(2)} | Speed:${ppComputed[0].ppSpeed.toFixed(2)} | Acc: ${ppComputed[0].ppAcc.toFixed(2)} \n ` +
-                        `99: ${ppComputed[1].pp.toFixed(2)} | Aim:${ppComputed[1].ppAim.toFixed(2)} | Speed:${ppComputed[1].ppSpeed.toFixed(2)} | Acc: ${ppComputed[1].ppAcc.toFixed(2)} \n ` +
-                        `97: ${ppComputed[3].pp.toFixed(2)} | Aim:${ppComputed[3].ppAim.toFixed(2)} | Speed:${ppComputed[3].ppSpeed.toFixed(2)} | Acc: ${ppComputed[3].ppAcc.toFixed(2)} \n ` +
-                        `95: ${ppComputed[5].pp.toFixed(2)} | Aim:${ppComputed[5].ppAim.toFixed(2)} | Speed:${ppComputed[5].ppSpeed.toFixed(2)} | Acc: ${ppComputed[5].ppAcc.toFixed(2)} \n ` +
+                    detailedmapdata = `SS: ${ppComputed[0].pp?.toFixed(2)} | Aim: ${ppComputed[0].ppAim?.toFixed(2)} | Speed: ${ppComputed[0].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} \n ` +
+                        `99: ${ppComputed[1].pp?.toFixed(2)} | Aim: ${ppComputed[1].ppAim?.toFixed(2)} | Speed: ${ppComputed[1].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} \n ` +
+                        `97: ${ppComputed[3].pp?.toFixed(2)} | Aim: ${ppComputed[3].ppAim?.toFixed(2)} | Speed: ${ppComputed[3].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} \n ` +
+                        `95: ${ppComputed[5].pp?.toFixed(2)} | Aim: ${ppComputed[5].ppAim?.toFixed(2)} | Speed: ${ppComputed[5].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} \n ` +
                         `${modissue}\n${ppissue}`
                 }
+                break;
                 case 'taiko': {
-                    detailedmapdata = `SS: ${ppComputed[0].pp.toFixed(2)} | Acc: ${ppComputed[0].ppAcc.toFixed(2)} | Strain: ${ppComputed[0].ppStrain.toFixed(2)} \n ` +
-                        `99: ${ppComputed[1].pp.toFixed(2)} | Acc: ${ppComputed[1].ppAcc.toFixed(2)} | Strain: ${ppComputed[1].ppStrain.toFixed(2)} \n ` +
-                        `97: ${ppComputed[3].pp.toFixed(2)} | Acc: ${ppComputed[3].ppAcc.toFixed(2)} | Strain: ${ppComputed[3].ppStrain.toFixed(2)} \n ` +
-                        `95: ${ppComputed[5].pp.toFixed(2)} | Acc: ${ppComputed[5].ppAcc.toFixed(2)} | Strain: ${ppComputed[5].ppStrain.toFixed(2)} \n ` +
+                    detailedmapdata = `SS: ${ppComputed[0].pp?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} | Strain: ${ppComputed[0].ppStrain?.toFixed(2)} \n ` +
+                        `99: ${ppComputed[1].pp?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} | Strain: ${ppComputed[1]?.ppStrain?.toFixed(2)} \n ` +
+                        `97: ${ppComputed[3].pp?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} | Strain: ${ppComputed[3]?.ppStrain?.toFixed(2)} \n ` +
+                        `95: ${ppComputed[5].pp?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} | Strain: ${ppComputed[5]?.ppStrain?.toFixed(2)} \n ` +
                         `${modissue}\n${ppissue}`
                 }
+                break;
                 case 'fruits': {
-                    detailedmapdata = `SS: ${ppComputed[0].pp.toFixed(2)} \n ` +
-                        `99: ${ppComputed[1].pp.toFixed(2)} \n ` +
-                        `98: ${ppComputed[2].pp.toFixed(2)} \n ` +
-                        `97: ${ppComputed[3].pp.toFixed(2)} \n ` +
-                        `96: ${ppComputed[4].pp.toFixed(2)} \n ` +
-                        `95: ${ppComputed[5].pp.toFixed(2)} \n ` +
+                    detailedmapdata = `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
+                        `99: ${ppComputed[1].pp?.toFixed(2)} \n ` +
+                        `98: ${ppComputed[2].pp?.toFixed(2)} \n ` +
+                        `97: ${ppComputed[3].pp?.toFixed(2)} \n ` +
+                        `96: ${ppComputed[4].pp?.toFixed(2)} \n ` +
+                        `95: ${ppComputed[5].pp?.toFixed(2)} \n ` +
                         `${modissue}\n${ppissue}`
                 }
+                break;
                 case 'mania': {
-                    detailedmapdata = `SS: ${ppComputed[0].pp.toFixed(2)} | Acc: ${ppComputed[0].ppAcc.toFixed(2)} | Strain: ${ppComputed[0].ppStrain.toFixed(2)} \n ` +
-                        `99: ${ppComputed[1].pp.toFixed(2)} | Acc: ${ppComputed[1].ppAcc.toFixed(2)} | Strain: ${ppComputed[1].ppStrain.toFixed(2)} \n ` +
-                        `97: ${ppComputed[3].pp.toFixed(2)} | Acc: ${ppComputed[3].ppAcc.toFixed(2)} | Strain: ${ppComputed[3].ppStrain.toFixed(2)} \n ` +
-                        `95: ${ppComputed[5].pp.toFixed(2)} | Acc: ${ppComputed[5].ppAcc.toFixed(2)} | Strain: ${ppComputed[5].ppStrain.toFixed(2)} \n ` +
+                    detailedmapdata = `SS: ${ppComputed[0].pp?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} | Strain: ${ppComputed[0].ppStrain?.toFixed(2)} \n ` +
+                        `99: ${ppComputed[1].pp?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} | Strain: ${ppComputed[1].ppStrain?.toFixed(2)} \n ` +
+                        `97: ${ppComputed[3].pp?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} | Strain: ${ppComputed[3].ppStrain?.toFixed(2)} \n ` +
+                        `95: ${ppComputed[5].pp?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} | Strain: ${ppComputed[5].ppStrain?.toFixed(2)} \n ` +
                         `${modissue}\n${ppissue}`
                 }
+                break;
 
             }
         }
+
+        const exMapDetails = `${mapdata.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} plays | ${mapdata.beatmapset.play_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} mapset plays | ${mapdata.passcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} passes | ${mapdata.beatmapset.favourite_count} favourites\n` +
+            `Submitted <t: ${new Date(mapdata.beatmapset.submitted_date).getTime() / 1000}:R> | Last updated <t: ${new Date(mapdata.beatmapset.last_updated).getTime() / 1000}:R>
+        ${mapdata.status == 'ranked' ?
+                `Ranked <t: ${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
+            }${mapdata.status == 'approved' || mapdata.status == 'qualified' ?
+                `Approved/Qualified <t: ${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
+            }${mapdata.status == 'loved' ?
+                `Loved <t: ${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
+            }\n` +
+            `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`
+
         const Embed = new Discord.EmbedBuilder()
             .setColor(0x91ff9a)
             .setTitle(maptitle)
@@ -605,12 +621,12 @@ ${error}
                     name: 'PP',
                     value:
                         detailed != true ?
-                            `SS: ${ppComputed[0].pp.toFixed(2)} \n ` +
-                            `99: ${ppComputed[1].pp.toFixed(2)} \n ` +
-                            `98: ${ppComputed[2].pp.toFixed(2)} \n ` +
-                            `97: ${ppComputed[3].pp.toFixed(2)} \n ` +
-                            `96: ${ppComputed[4].pp.toFixed(2)} \n ` +
-                            `95: ${ppComputed[5].pp.toFixed(2)} \n ` +
+                            `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
+                            `99: ${ppComputed[1].pp?.toFixed(2)} \n ` +
+                            `98: ${ppComputed[2].pp?.toFixed(2)} \n ` +
+                            `97: ${ppComputed[3].pp?.toFixed(2)} \n ` +
+                            `96: ${ppComputed[4].pp?.toFixed(2)} \n ` +
+                            `95: ${ppComputed[5].pp?.toFixed(2)} \n ` +
                             `${modissue}\n${ppissue}` :
                             detailedmapdata
                     ,
@@ -626,16 +642,9 @@ ${error}
                 {
                     name: 'MAP DETAILS',
                     value: `${statusimg} | ${mapimg} \n ` +
-                        `${mapdata.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} plays | ${mapdata.beatmapset.play_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} mapset plays | ${mapdata.passcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} passes | ${mapdata.beatmapset.favourite_count} favourites\n` +
-                        `Submitted <t:${new Date(mapdata.beatmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(mapdata.beatmapset.last_updated).getTime() / 1000}:R>
-                        ${mapdata.status == 'ranked' ?
-                            `Ranked <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
-                        }${mapdata.status == 'approved' || mapdata.status == 'qualified' ?
-                            `Approved/Qualified <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
-                        }${mapdata.status == 'loved' ?
-                            `Loved <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
-                        }\n` +
-                        `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`
+`${detailed == true ?
+exMapDetails
+: ''}`
 
                     ,
                     inline: false
