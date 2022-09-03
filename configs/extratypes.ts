@@ -23,6 +23,7 @@ type config = {
 }
 
 type guildSettings = {
+    serverName: string,
     prefix: string,
     enabledModules: {
         admin: boolean,

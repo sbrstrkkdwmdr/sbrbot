@@ -24,7 +24,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile)
         } catch (error) {
-            const defaultSettings = {
+            const defaultSettings: extypes.guildSettings = {
+                serverName: message.guild.name,
                 prefix: 'sbr-',
                 enabledModules: {
                     admin: false,
