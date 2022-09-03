@@ -9,6 +9,7 @@
     "include": [
         "commands/**/*",
         "config/**/*",
-        "src/**/*"
+        "src/**/*",
+        "*"
     ]
 }
