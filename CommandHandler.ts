@@ -15,7 +15,6 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         const args = message.content.slice(config.prefix.length).split(/ +/);
         const command = args.shift().toLowerCase();
 
-        if (!message.content.startsWith(config.prefix)) return; //the return is so if its just prefix nothing happens
         if (message.author.bot && !(message.author.id == '755220989494951997' || message.author.id == '777125560869978132')) return;
         if (!oncooldown.has(message.author.id)) {
             timeouttime = new Date().getTime() + 3000
@@ -108,6 +107,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
             settings = defaultSettings
         }
+        if (!(message.content.startsWith(config.prefix) || message.content.startsWith(settings.prefix))) return; //the return is so if its just prefix nothing happens
+
         switch (command) {
             case 'convert': case 'help': case 'math': case 'ping': case 'remind': case 'stats': case 'time': case 'info':
                 if (settings.enabledModules.general == false) {

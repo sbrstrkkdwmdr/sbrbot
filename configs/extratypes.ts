@@ -23,6 +23,7 @@ type config = {
 }
 
 type guildSettings = {
+    prefix: string,
     enabledModules: {
         admin: boolean,
         osu: boolean,
