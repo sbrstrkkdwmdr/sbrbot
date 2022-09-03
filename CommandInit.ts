@@ -723,6 +723,28 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
     },
     // {
     //     name: 'settings',
+    //     description: 'Opens the settings menu',
+    //     dmPermission: false,
+    //     options: [
+    //         {
+    //             name: 'setting',
+    //             description: 'The setting to change',
+    //             type: Discord.ApplicationCommandOptionType.String,
+    //             required: true,
+    //             choices: [
+    //                 { name: 'Prefix', value: 'prefix' },
+    //                 { name: 'admin', value: 'admin' },
+    //                 { name: 'osu', value: 'osu' },
+    //                 { name: 'general', value: 'general' },
+    //                 { name: 'misc', value: 'misc' },
+    //                 { name: 'music', value: 'music' },
+    //             ]
+    //         }
+    //     ]
+    // },
+    
+    // {
+    //     name: 'settings',
     //     description: 'Displays/edits the settings of a server',
     //     dmPermission: false,
     //     options: [

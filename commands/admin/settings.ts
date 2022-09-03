@@ -23,7 +23,39 @@ module.exports = {
         if (interaction != null && button == null && message == null) {
             commanduser = interaction.member.user;
             baseCommandType = 'interaction';
-            commandToEdit = interaction.options
+            const commandModal = new Discord.ModalBuilder()
+                .setTitle(`${interaction.options.getString('setting')} settings for ${interaction.guild.name}`)
+                .setCustomId(`${interaction.options.getString('setting')}-settings-${commanduser.id}`)
+            switch (interaction.options.getString('setting')) {
+                case 'prefix': {
+                    commandModal
+                        .addComponents(
+                            new Discord.ActionRowBuilder()
+                                .addComponents(
+                                    new Discord.TextInputBuilder()
+                                        .setCustomId('prefix-input')
+                                        .setPlaceholder('sbr-')
+                                        .setMinLength(1)
+                                        .setMaxLength(10)
+                                        .setStyle(Discord.TextInputStyle.Short)
+                                )
+                        )
+                }
+                    break;
+                case 'admin': {
+                    commandModal
+                        .addComponents(
+                            new Discord.ActionRowBuilder()
+                                .addComponents(
+
+                            )
+                        )
+                } break;
+                case 'osu': { } break;
+                case 'general': { } break;
+                case 'misc': { } break;
+                case 'music': { } break;
+            }
         }
 
         //==============================================================================================================================================================================================
