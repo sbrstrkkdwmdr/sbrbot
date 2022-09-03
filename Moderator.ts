@@ -14,56 +14,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -105,56 +57,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -184,56 +88,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -276,56 +132,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -346,56 +154,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -416,56 +176,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -486,56 +198,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -581,56 +245,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
                     const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
                     settings = JSON.parse(settingsfile);
                 } catch (error) {
-                    const defaultSettings = {
-                        enabledModules: {
-                            admin: false,
-                            osu: true,
-                            general: true,
-                            links: true,
-                            misc: true,
-                            music: true,
-                        },
-                        admin: {
-                            basic: 'n',
-                            limited: false,
-                            channels: [],
-                            log: {
-                                messageUpdates: true,
-                                guildUpdates: true,
-                                channelUpdates: true,
-                                roleUpdates: true,
-                                emojiUpdates: true,
-                                userUpdates: true,
-                                presenceUpdates: false,
-                                voiceUpdates: true,
-                            }
-                        },
-                        osu: {
-                            basic: 'n',
-                            limited: false,
-                            channels: [],
-                            parseLinks: true,
-                            parseReplays: true,
-                            parseScreenshots: true,
-                        },
-                        general: {
-                            basic: 'n',
-                            limited: false,
-                            channels: []
-                        },
-                        misc: {
-                            basic: 'n',
-                            limited: false,
-                            channels: []
-                        },
-                        music: {
-                            basic: 'n',
-                            limited: false,
-                            channels: []
-                        }
-                    }
-                    fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-                    settings = defaultSettings
+                    fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+                    settings = extypes.defaultSettings
                 }
                 if (settings.enabledModules.admin == false) {
                     return;
@@ -673,56 +289,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -783,56 +351,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -891,56 +411,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -978,56 +450,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1049,56 +473,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1120,56 +496,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1200,56 +528,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1272,56 +552,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1343,56 +575,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1429,56 +613,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1501,56 +637,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1580,56 +668,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1658,56 +698,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1729,56 +721,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1801,56 +745,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1872,56 +768,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -1943,56 +791,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -2025,56 +825,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -2096,56 +848,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
@@ -2167,56 +871,8 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            const defaultSettings = {
-                enabledModules: {
-                    admin: false,
-                    osu: true,
-                    general: true,
-                    links: true,
-                    misc: true,
-                    music: true,
-                },
-                admin: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    log: {
-                        messageUpdates: true,
-                        guildUpdates: true,
-                        channelUpdates: true,
-                        roleUpdates: true,
-                        emojiUpdates: true,
-                        userUpdates: true,
-                        presenceUpdates: false,
-                        voiceUpdates: true,
-                    }
-                },
-                osu: {
-                    basic: 'n',
-                    limited: false,
-                    channels: [],
-                    parseLinks: true,
-                    parseReplays: true,
-                    parseScreenshots: true,
-                },
-                general: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                misc: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                },
-                music: {
-                    basic: 'n',
-                    limited: false,
-                    channels: []
-                }
-            }
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaultSettings, null, 2), 'utf-8')
-            settings = defaultSettings
+            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(extypes.defaultSettings, null, 2), 'utf-8')
+            settings = extypes.defaultSettings
         }
         if (settings.enabledModules.admin == false) {
             return;
