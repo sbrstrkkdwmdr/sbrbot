@@ -18,13 +18,14 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         let parse = null
 
 
-        let currentGuildId = message.guildId
+        const currentGuildId = message.guildId
         let settings: extypes.guildSettings;
         try {
-            let settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile)
         } catch (error) {
-            let defaultSettings = {
+            const defaultSettings = {
+                prefix: 'sbr-',
                 enabledModules: {
                     admin: false,
                     osu: true,

@@ -57,6 +57,7 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             settings = JSON.parse(settingsfile);
         } catch (error) {
             const defaultSettings = {
+                prefix: 'sbr-',
                 enabledModules: {
                     admin: false,
                     osu: true,
