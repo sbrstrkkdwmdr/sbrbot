@@ -56,33 +56,49 @@ client.musiccmds = new Discord.Collection();
 client.tstcmds = new Discord.Collection();
 client.buttons = new Discord.Collection();
 
+const commandStruct = {
+    commands: new Discord.Collection(),
+    misccmds: new Discord.Collection(),
+    links: new Discord.Collection(),
+    osucmds: new Discord.Collection(),
+    admincmds: new Discord.Collection(),
+    musiccmds: new Discord.Collection(),
+    tstcmds: new Discord.Collection(),
+    buttons: new Discord.Collection(),
+}
+
 const commandFiles = fs.readdirSync('./commands/general').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of commandFiles) {
     const command = require(`./commands/general/${file}`);
     client.commands.set(command.name, command);
+    commandStruct.commands.set(command.name, command);
 }
 const miscCommandFiles = fs.readdirSync('./commands/misc').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of miscCommandFiles) {
     const command = require(`./commands/misc/${file}`);
     client.misccmds.set(command.name, command);
+    commandStruct.misccmds.set(command.name, command);
 }
 
 const linkFiles = fs.readdirSync('./commands/links').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of linkFiles) {
     const link = require(`./commands/links/${file}`);
     client.links.set(link.name, link);
+    commandStruct.links.set(link.name, link);
 }
 
 const osuFiles = fs.readdirSync('./commands/osu').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of osuFiles) {
     const osu = require(`./commands/osu/${file}`);
     client.osucmds.set(osu.name, osu);
+    commandStruct.osucmds.set(osu.name, osu);
 }
 
 const admincommandFiles = fs.readdirSync('./commands/admin').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of admincommandFiles) {
     const admincommand = require(`./commands/admin/${file}`);
     client.admincmds.set(admincommand.name, admincommand);
+    commandStruct.admincmds.set(admincommand.name, admincommand);
 }
 
 // const buttons  = fs.readdirSync('./commands/buttons').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
@@ -93,13 +109,15 @@ for (const file of admincommandFiles) {
 
 const musicCommandFiles = fs.readdirSync('./commands/music').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of musicCommandFiles) {
-    const musiccommand = require(`./commands/music/${file}`)
-    client.musiccmds.set(musiccommand.name, musiccommand)
+    const musiccommand = require(`./commands/music/${file}`);
+    client.musiccmds.set(musiccommand.name, musiccommand);
+    commandStruct.musiccmds.set(musiccommand.name, musiccommand);
 }
 const testCommandFiles = fs.readdirSync('./test').filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 for (const file of testCommandFiles) {
-    const testcommand = require(`./test/${file}`)
-    client.tstcmds.set(testcommand.name, testcommand)
+    const testcommand = require(`./test/${file}`);
+    client.tstcmds.set(testcommand.name, testcommand);
+    commandStruct.tstcmds.set(testcommand.name, testcommand);
 }
 
 
