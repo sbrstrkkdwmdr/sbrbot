@@ -783,50 +783,54 @@ function logCall(data: string, title?: string) {
 }
 
 async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase: any) {
-    let findname = await sqlDatabase.findOne({ where: { osuname: user.username } });
-    if (findname == null) {
-        findname = await sqlDatabase.findOne({ where: { osuname: user.id } });
-    }
-    if (findname != null) {
-        switch (mode) {
-            case 'osu':
-            default:
-                await sqlDatabase.update({
-                    osupp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
-                    osurank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
-                    osuacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0,
-                }, {
-                    where: { osuname: user }
-                })
-                break;
-            case 'taiko':
-                await sqlDatabase.update({
-                    taikopp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
-                    taikorank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
-                    taikoacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0
-                }, {
-                    where: { osuname: user }
-                })
-                break;
-            case 'fruits':
-                await sqlDatabase.update({
-                    fruitspp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
-                    fruitsrank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
-                    fruitsacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0
-                }, {
-                    where: { osuname: user }
-                })
-                break;
-            case 'mania':
-                await sqlDatabase.update({
-                    maniapp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
-                    maniarank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
-                    maniaacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0
-                }, {
-                    where: { osuname: user }
-                })
-                break;
+    try {
+        let findname = await sqlDatabase.findOne({ where: { osuname: user.username } });
+        if (findname == null) {
+            findname = await sqlDatabase.findOne({ where: { osuname: user.id } });
         }
+        if (findname != null) {
+            switch (mode) {
+                case 'osu':
+                default:
+                    await sqlDatabase.update({
+                        osupp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
+                        osurank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
+                        osuacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0,
+                    }, {
+                        where: { osuname: user }
+                    })
+                    break;
+                case 'taiko':
+                    await sqlDatabase.update({
+                        taikopp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
+                        taikorank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
+                        taikoacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0
+                    }, {
+                        where: { osuname: user }
+                    })
+                    break;
+                case 'fruits':
+                    await sqlDatabase.update({
+                        fruitspp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
+                        fruitsrank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
+                        fruitsacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0
+                    }, {
+                        where: { osuname: user }
+                    })
+                    break;
+                case 'mania':
+                    await sqlDatabase.update({
+                        maniapp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
+                        maniarank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
+                        maniaacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0
+                    }, {
+                        where: { osuname: user }
+                    })
+                    break;
+            }
+        }
+    } catch(error){
+        console.log('Error updating user stats: ' + error)
     }
     return;
 }
