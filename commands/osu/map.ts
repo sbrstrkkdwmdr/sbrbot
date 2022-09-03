@@ -509,20 +509,16 @@ ${error}
             ]
         }
         let basicvals = `CS${allvals.cs} AR${allvals.ar} OD${allvals.od} HP${allvals.hp}`;
-        if (interaction) {
-            if (detailed == true) {
-                basicvals =
-                    `CS${allvals.cs} (${allvals.details.csRadius.toFixed(2)}r)
+        if (detailed == true) {
+            basicvals =
+                `CS${allvals.cs} (${allvals.details.csRadius.toFixed(2)}r)
                 AR${allvals.ar}  (${allvals.details.arMs.toFixed(2)}ms)
                 OD${allvals.od} (300: ${allvals.details.odMs.hitwindow_300.toFixed(2)}ms 100: ${allvals.details.odMs.hitwindow_100.toFixed(2)}ms 50:  ${allvals.details.odMs.hitwindow_50.toFixed(2)}ms)
                 HP${allvals.hp}`
-            }
         }
 
-        const mapname = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})`;
-
-        const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})`;
-
+        const mapname = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
+        const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
         const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
 
         const mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)

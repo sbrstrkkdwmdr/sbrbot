@@ -447,12 +447,8 @@ Options(2):
             return;
         }
 
-        const title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ?
-            mapdata.beatmapset.title :
-            `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})`
-        const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ?
-            mapdata.beatmapset.artist :
-            `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})`
+        const title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
+        const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
 
         const scoresEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.hex)
