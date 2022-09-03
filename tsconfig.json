@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "lib": [
+            "ES2021"
+        ],
+        "resolveJsonModule": true
+    },
+    "include": [
+        "commands/**/*",
+        "config/**/*",
+        "src/**/*"
+    ]
+}
