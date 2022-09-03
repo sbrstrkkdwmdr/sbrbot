@@ -1,0 +1,28 @@
+{
+    "token": "string",
+    "prefix": "string",
+    "osuClientID": "https://osu.ppy.sh/home/account/edit#new-oauth-application",
+    "osuClientSecret": "https://osu.ppy.sh/home/account/edit#new-oauth-application",
+    "osuApiKey": "https://osu.ppy.sh/p/api",
+    "testGuildID": "guild id",
+    "ownerusers": [
+        "id1",
+        "id2"
+    ],
+    "fileblockedusers": [
+        "id1"
+    ],
+    "google": {
+        "apiKey": "https://programmablesearchengine.google.com/cse/all",
+        "cx": ""
+    },
+    "youtube": {
+        "apiKey": "WIP"
+    },
+    "twitch": {
+        "clientID": "WIP",
+        "clientSecret": "WIP"
+    },
+    "useScreenshotParse": false,
+    "LogApiCalls": false
+}

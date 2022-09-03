@@ -9,3 +9,13 @@ prevmap.json
 files/replay.osr
 debug/
 *.bat
+logs/
+files/music/
+files/ffmpegbin
+files/maps
+*.js
+!setup.js
+*.traineddata
+files/tempdiff.osu
+*OLD.ts
+configs/guilds/
