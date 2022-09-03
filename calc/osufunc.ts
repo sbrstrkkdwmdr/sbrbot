@@ -829,8 +829,8 @@ async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase
                     break;
             }
         }
-    } catch(error){
-        console.log('Error updating user stats: ' + error)
+    } catch (error) {
+        console.log(`Error updating user stats for ${user?.username}: ` + error)
     }
     return;
 }
