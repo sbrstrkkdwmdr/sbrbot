@@ -1,2 +1,152 @@
+import fs = require('fs');
+import osuapiext = require('osu-api-extended');
+import osumodcalc = require('osumodcalculator');
+import fetch from 'node-fetch';
+import osuapitypes = require('./src/types/osuApiTypes');
+import extypes = require('./src/types/extraTypes');
+import Discord = require('discord.js');
+
 module.exports = (userdata, client, config, oncooldown) => {
+
+
+    //map clearing
+    try {
+        fs.readdirSync('files/maps').forEach(file => {
+            fs.unlinkSync('files/maps/' + file)
+        }
+        )
+        fs.appendFileSync('logs/updates.log', '\nmaps folder cleared at ' + new Date().toLocaleString() + '\n')
+    } catch (error) {
+        fs.appendFileSync('logs/updates.log', '\n' + new Date().toLocaleString() + '\n' + error + '\n')
+    }
+
+    setInterval(() => {
+        try {
+            fs.readdirSync('files/maps').forEach(file => {
+                fs.unlinkSync('files/maps/' + file)
+            }
+            )
+            fs.appendFileSync('logs/updates.log', '\nmaps folder cleared at ' + new Date().toLocaleString() + '\n')
+        } catch (error) {
+            fs.appendFileSync('logs/updates.log', '\n' + new Date().toLocaleString() + '\n' + error + '\n')
+        }
+    }
+        , 60 * 60 * 1000);
+
+    //status updates
+    const songsarr = [
+        "Yomi Yori kikoyu, Koukoku no hi to Honoo no Shoujo [Kurushimi]",
+        "FREEDOM DiVE [FOUR DiMENSIONS]",
+        "A FOOL MOON NIGHT [Piggey's Destruction]",
+        "Sidetracked Day [Infinity Inside]",
+        "Cirno's Perfect Math Class [TAG4]",
+        "Glorious Crown [FOUR DIMENSIONS]",
+        "Made of Fire [Oni]",
+        "小さな恋のうた (Synth Rock Cover) [Together]",
+        "C18H27NO3(extend) [Pure Darkness]",
+        "BLUE DRAGON [Blue Dragon]",
+        "-ERROR [Drowning]",
+        "Remote Control [Insane] +HDDT",
+        "Usatei 2011 [Ozzy's Extra]",
+        "Chocomint's made of fire hddt 98.54 full combo",
+        "Ascension to Heaven [Death] +HDDTHR",
+        "Can't Defeat Airman [Holy Shit! It's Airman!!!]",
+        "The Big Black [WHO'S AFRAID OF THE BIG BLACK]"
+    ]
+
+    const activityarr = [
+        {
+            name: "240BPM | sbr-help",
+            type: 1,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: songsarr[Math.floor(Math.random() * songsarr.length)] + " | sbr-help",//"Yomi Yori kikoyu, Koukoku no hi to Honoo no Shoujo | sbr-help",
+            type: 2,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: "dt farm maps | sbr-help",
+            type: 0,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: "nothing in particular | sbr-help",
+            type: 3,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: "no mod farm maps | sbr-help",
+            type: 0,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: "hr | sbr-help",
+            type: 0,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: songsarr[Math.floor(Math.random() * songsarr.length)] + " | sbr-help",
+            type: 0,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: "you | sbr-help",
+            type: 3,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        }
+    ]
+
+    client.user.setPresence({
+        activities: [activityarr[0]],
+        status: 'dnd',
+        afk: false
+    });
+    setInterval(() => {
+        client.user.setPresence({
+            activities: [activityarr[Math.floor(Math.random() * activityarr.length)]],
+            status: 'dnd',
+            afk: false
+        });
+    }, 60 * 1000);
+
+
+    client.on('messageCreate', async (message) => {
+
+        const currentGuildId = message.guildId
+        let settings: extypes.guildSettings;
+        let prefix: string;
+        try {
+            const settingsfile = fs.readFileSync(`./config/guilds/${currentGuildId}.json`, 'utf-8')
+            settings = JSON.parse(settingsfile);
+            prefix = settings.prefix
+        } catch (error) {
+            prefix = config.prefix
+        }
+
+        if (
+            typeof prefix === 'undefined' ||
+            prefix === null ||
+            prefix === ''
+        ) {
+            prefix = config.prefix;
+        }
+
+        //if message mentions bot and no other args given, return prefix
+        if (message.mentions.users.size > 0) {
+            if (message.mentions.users.first().id == client.user.id && message.content.replaceAll(' ', '').length == (`<@${client.user.id}>`).length) {
+                return message.reply({ content: `Prefix is \`${prefix}\``, allowedMentions: { repliedUser: false } })
+            }
+        }
+
+        //if message is a cooldown message, delete it after 3 seconds
+        if (message.content.startsWith('You\'re on cooldown') && message.author.id == client.user.id) {
+            setTimeout(() => {
+                message.delete()
+                    .catch(err => {
+                    })
+            }, 3000)
+        }
+    })
+
 }

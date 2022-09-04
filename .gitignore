@@ -1,6 +1,7 @@
 node_modules/
 debug/
 logs/
+config/
 *.log
 config/config.json
 test/
