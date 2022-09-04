@@ -15,34 +15,7 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         const args = message.content.slice(config.prefix.length).split(/ +/);
         const command = args.shift().toLowerCase();
 
-        if (message.author.bot && !(message.author.id == '755220989494951997' || message.author.id == '777125560869978132')) return;
-        if (!oncooldown.has(message.author.id)) {
-            timeouttime = new Date().getTime() + 3000
-        }
-        if (oncooldown.has(message.author.id)) {
-            setTimeout(() => {
-                message.delete()
-                    .catch()
-            }, 3000)
-        }
-        if (oncooldown.has(message.author.id)) {
-            message.reply({
-                content: `You're on cooldown!\nTry again in ${getTimeLeft(timeouttime) / 1000}s`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true,
-                ephemeral: true
-            });
-            return;
-        }
-        if (!oncooldown.has(message.author.id)) {
-            oncooldown.add(message.author.id);
-            setTimeout(() => {
-                oncooldown.delete(message.author.id)
-            }, 3000)
-        }
-        function getTimeLeft(timeout) {
-            return (timeout - new Date().getTime());
-        }
+        if (message.author.bot && !message.author.id == client.user.id) return;
 
         const interaction = null;
         const button = null;
@@ -109,6 +82,33 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             settings = defaultSettings
         }
         if (!(message.content.startsWith(config.prefix) || message.content.startsWith(settings.prefix))) return; //the return is so if its just prefix nothing happens
+        if (!oncooldown.has(message.author.id)) {
+            timeouttime = new Date().getTime() + 3000
+        }
+        if (oncooldown.has(message.author.id)) {
+            setTimeout(() => {
+                message.delete()
+                    .catch()
+            }, 3000)
+        }
+        if (oncooldown.has(message.author.id)) {
+            message.reply({
+                content: `You're on cooldown!\nTry again in ${getTimeLeft(timeouttime) / 1000}s`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true,
+                ephemeral: true
+            });
+            return;
+        }
+        if (!oncooldown.has(message.author.id)) {
+            oncooldown.add(message.author.id);
+            setTimeout(() => {
+                oncooldown.delete(message.author.id)
+            }, 3000)
+        }
+        function getTimeLeft(timeout) {
+            return (timeout - new Date().getTime());
+        }
 
         switch (command) {
             case 'convert': case 'help': case 'math': case 'ping': case 'remind': case 'stats': case 'time': case 'info':
