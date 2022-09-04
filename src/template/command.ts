@@ -6,60 +6,63 @@ import colours = require('../consts/colours');
 import osufunc = require('../../src/osufunc');
 import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
-
+import Discord = require('discord.js');
 
 module.exports = {
     name: 'COMMANDNAME',
-    execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj) {
+    execute(commandType, obj, button, config, client, absoluteID, currentDate) {
         let commanduser;
         let baseCommandType;
 
-        if (message != null && interaction == null && button == null) {
-            commanduser = message.author;
-            baseCommandType = 'message';
-        }
 
+
+        switch (commandType) {
+            case 'message': {
+                commanduser = obj.author;
+            }
+                break;
+            //==============================================================================================================================================================================================
+            case 'interaction': {
+                commanduser = obj.member.user;
+            }
+                //==============================================================================================================================================================================================
+
+                break;
+            case 'button': {
+                commanduser = obj.member.user;
+            }
+                break;
+        }
         //==============================================================================================================================================================================================
 
-        if (interaction != null && button == null && message == null) {
-            commanduser = interaction.member.user;
-            baseCommandType = 'interaction';
-        }
-
-        //==============================================================================================================================================================================================
-
-        if (button != null) {
-            commanduser = interaction.member.user;
-            baseCommandType = 'button';
-        }
-
-        const buttons = new Discord.ActionRowBuilder()
+        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
-                    .setStyle('Primary')
+                    .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅')
-                    /* .setLabel('Start') */,
+                /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
-                    .setStyle('Primary')
+                    .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
-                    .setStyle('Primary')
+                    .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶')
-                    /* .setLabel('Next') */,
+                /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
-                    .setStyle('Primary')
+                    .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡')
-                    /* .setLabel('End') */,
+                /* .setLabel('End') */,
             );
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
 COMMAND EVENT - COMMANDNAME (${baseCommandType})
-${currentDate} | ${currentDateISO}
+${currentDate} | ${currentDate.toISOString()}
 recieved COMMANDNAME command
 requested by ${commanduser.id} AKA ${commanduser.tag}
 cmd ID: ${absoluteID}
@@ -79,42 +82,44 @@ Options:
 
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
+        switch (commandType) {
+            case 'message': {
+                obj.reply({
+                    content: '',
+                    embeds: [],
+                    files: [],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+                break;
+            //==============================================================================================================================================================================================
+            case 'interaction': {
+                obj.reply({
+                    content: '',
+                    embeds: [],
+                    files: [],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+                //==============================================================================================================================================================================================
 
-        if (message != null && interaction == null && button == null) {
-            message.reply({
-                content: '',
-                embeds: [],
-                files: [],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
-                .catch();
-
+                break;
+            case 'button': {
+                obj.edit({
+                    content: '',
+                    embeds: [],
+                    files: [],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+                break;
         }
-        if (interaction != null && button == null && message == null) {
-            interaction.reply({
-                content: '',
-                embeds: [],
-                files: [],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
-                .catch();
-
-        }
-        if (button != null) {
-            message.edit({
-                content: '',
-                embeds: [],
-                files: [],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
-                .catch();
-
-        }
-
-
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
