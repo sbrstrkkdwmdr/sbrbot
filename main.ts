@@ -141,14 +141,14 @@ Current Client ID: ${client.user.id}
 
     const oncooldown = new Set();
 
-    commandHandler(userdata, client, config, config, oncooldown);
-    linkHandler(userdata, client, config, config, oncooldown);
-    moderator(userdata, client, config, config, oncooldown);
-    musicHandler(userdata, client, config, config, oncooldown);
-    buttonHandler(userdata, client, config, config, oncooldown);
-    commandInit(userdata, client, config, config, oncooldown);
-    exEvents(userdata, client, config, config, oncooldown);
-    osutrack(userdata, client, config, config, oncooldown);
+    commandHandler(userdata, client, config, oncooldown);
+    linkHandler(userdata, client, config, oncooldown);
+    moderator(userdata, client, config, oncooldown);
+    musicHandler(userdata, client, config, oncooldown);
+    buttonHandler(userdata, client, config, oncooldown);
+    commandInit(userdata, client, config, oncooldown);
+    exEvents(userdata, client, config, oncooldown);
+    osutrack(userdata, client, config, oncooldown);
 
     (async () => {
         if (!fs.existsSync(`./logs`)) {

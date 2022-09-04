@@ -4,3 +4,4 @@ logs/
 *.log
 config/config.json
 test/
+*.sqlite
