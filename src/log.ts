@@ -4,7 +4,6 @@ function commandLog(commandname: string, baseCommandType: string, absoluteID: nu
 ----------------------------------------------------
 COMMAND EVENT - ${commandname} (${baseCommandType})
 ${currentDate} | ${currentDate.toISOString()}
-recieved COMMANDNAME command
 requested by ${commanduser.id} AKA ${commanduser.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
