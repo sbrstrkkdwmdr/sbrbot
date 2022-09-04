@@ -10,7 +10,7 @@ import Discord = require('discord.js');
 
 module.exports = {
     name: 'COMMANDNAME',
-    execute(commandType, obj, button, config, client, absoluteID, currentDate) {
+    execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides) {
         let commanduser;
         let baseCommandType;
 
@@ -32,6 +32,9 @@ module.exports = {
                 commanduser = obj.member.user;
             }
                 break;
+        }
+        if (overrides != null) {
+
         }
         //==============================================================================================================================================================================================
 
