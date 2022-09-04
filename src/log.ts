@@ -15,10 +15,15 @@ function optsLog(absoluteID, options) {
 ----------------------------------------------------
 cmd ID: ${absoluteID}
 Options: `
+let optslog = ''
     for (let i = 0; i < options.length; i++) {
-        firstlog += `${options[i].name}: ${options[i].value}
+        optslog += `${options[i].name}: ${options[i].value}
 `
     }
+if(options.length < 1){
+    optslog = '\nNo options provided'
+}
+    firstlog += optslog
     firstlog += `\n----------------------------------------------------`
     return firstlog;
 }

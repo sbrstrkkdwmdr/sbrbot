@@ -122,22 +122,23 @@ const userdata = sequelize.define('userdata', {
 });
 
 client.once('ready', () => {
+    const currentDate = new Date();
+
     userdata.sync();
-    const timetostart = new Date().getTime() - initdate.getTime()
+    const timetostart = currentDate.getTime() - initdate.getTime()
     const initlog = `
 ===================================================================
 BOT IS NOW ONLINE
 -------------------------------------------------------------------
 Boot time: ${timetostart}ms
-Current Time: ${new Date().toLocaleString()}
-Current Time (epoch, ms): ${new Date().getTime()}
-Current Time (ISO): ${new Date().toISOString()}
+Current Time: ${currentDate.toLocaleString()}
+Current Time (epoch, ms): ${currentDate.getTime()}
+Current Time (ISO): ${currentDate.toISOString()}
 Current Client: ${client.user.tag} 
 Current Client ID: ${client.user.id}
 ====================================================================
 `
     console.log(initlog)
-    fs.appendFileSync('logs/general.log', `\n\n\n${initlog}\n\n\n`, 'utf-8');
 
     const oncooldown = new Set();
 
@@ -150,24 +151,28 @@ Current Client ID: ${client.user.id}
     exEvents(userdata, client, config, oncooldown);
     osutrack(userdata, client, config, oncooldown);
 
-    (async () => {
-        if (!fs.existsSync(`./logs`)) {
-            console.log(`Creating logs folder`);
-            fs.mkdirSync(`./logs`);
-        }
-        if (!fs.existsSync(`./logs/gen`)) {
-            console.log(`Creating logs/gen folder`);
-            fs.mkdirSync(`./logs/gen`);
-        }
-        if (!fs.existsSync(`./logs/cmd`)) {
-            console.log(`Creating logs/cmd folder`);
-            fs.mkdirSync(`./logs/cmd`);
-        }
-        if (!fs.existsSync(`./logs/moderator`)) {
-            console.log(`Creating logs/moderator folder`);
-            fs.mkdirSync(`./logs/moderator`);
-        }
 
+    if (!fs.existsSync(`./debug`)) {
+        console.log(`Creating debug folder`);
+        fs.mkdirSync(`./debug`);
+    }
+    if (!fs.existsSync(`./logs`)) {
+        console.log(`Creating logs folder`);
+        fs.mkdirSync(`./logs`);
+    }
+    if (!fs.existsSync(`./logs/gen`)) {
+        console.log(`Creating logs/gen folder`);
+        fs.mkdirSync(`./logs/gen`);
+    }
+    if (!fs.existsSync(`./logs/cmd`)) {
+        console.log(`Creating logs/cmd folder`);
+        fs.mkdirSync(`./logs/cmd`);
+    }
+    if (!fs.existsSync(`./logs/moderator`)) {
+        console.log(`Creating logs/moderator folder`);
+        fs.mkdirSync(`./logs/moderator`);
+    }
+    (async () => {
         await client.guilds.cache.forEach(guild => {
             if (!fs.existsSync(`./logs/moderator/${guild.id}.log`)) {
                 console.log(`Creating moderator log for ${guild.name}`);
@@ -178,39 +183,44 @@ Current Client ID: ${client.user.id}
         }
         )
     })();
+
+    // setTimeout(() => {
+        fs.appendFileSync('logs/general.log', `\n\n\n${initlog}\n\n\n`, 'utf-8');
+
+        fs.writeFileSync('debug/starttime.txt', currentDate.toString());
+        fetch('https://osu.ppy.sh/oauth/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+            ,
+            body: JSON.stringify({
+                grant_type: 'client_credentials',
+                client_id: config.osuClientID,
+                client_secret: config.osuClientSecret,
+                scope: 'public'
+            })
+
+        }).then(res => res.json())
+            .then(res => {
+                fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
+                fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
+
+            }
+            )
+            .catch(error => {
+                fs.appendFileSync(`logs/updates.log`,
+                    `
+        ----------------------------------------------------
+        ERROR
+        node-fetch error: ${error}
+        ----------------------------------------------------
+        `, 'utf-8')
+                return;
+            });
+    // }, 1000);
 });
 client.login(config.token)
-fetch('https://osu.ppy.sh/oauth/token', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-    ,
-    body: JSON.stringify({
-        grant_type: 'client_credentials',
-        client_id: config.osuClientID,
-        client_secret: config.osuClientSecret,
-        scope: 'public'
-    })
-
-}).then(res => res.json())
-    .then(res => {
-        fs.writeFileSync('configs/osuauth.json', JSON.stringify(res))
-        fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
-
-    }
-    )
-    .catch(error => {
-        fs.appendFileSync(`logs/updates.log`,
-            `
-----------------------------------------------------
-ERROR
-node-fetch error: ${error}
-----------------------------------------------------
-`, 'utf-8')
-        return;
-    });
-fs.writeFileSync('debug/starttime.txt', (new Date()).toString())
 
 export { };
 
