@@ -4,7 +4,7 @@ import extypes = require('./src/types/extratypes');
 import defaults = require('./src/consts/defaults');
 import Discord = require('discord.js');
 
-module.exports = (userdata, client, config, oncooldown) => {
+module.exports = (userdata, client, commandStruct, config, oncooldown) => {
     let timeouttime;
 
     client.on('messageCreate', async (message) => {
@@ -16,10 +16,10 @@ module.exports = (userdata, client, config, oncooldown) => {
         const currentGuildId = message.guildId
         let settings: extypes.guildSettings;
         try {
-            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./config/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile);
         } catch (error) {
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaults.defaultGuildSettings, null, 2), 'utf-8')
+            fs.writeFileSync(`./config/guilds/${currentGuildId}.json`, JSON.stringify(defaults.defaultGuildSettings, null, 2), 'utf-8')
             settings = defaults.defaultGuildSettings;
         }
 
@@ -102,10 +102,10 @@ module.exports = (userdata, client, config, oncooldown) => {
         const currentGuildId = interaction.guildId
         let settings: extypes.guildSettings;
         try {
-            const settingsfile = fs.readFileSync(`./configs/guilds/${currentGuildId}.json`, 'utf-8')
+            const settingsfile = fs.readFileSync(`./config/guilds/${currentGuildId}.json`, 'utf-8')
             settings = JSON.parse(settingsfile)
         } catch (error) {
-            fs.writeFileSync(`./configs/guilds/${currentGuildId}.json`, JSON.stringify(defaults.defaultGuildSettings, null, 2), 'utf-8')
+            fs.writeFileSync(`./config/guilds/${currentGuildId}.json`, JSON.stringify(defaults.defaultGuildSettings, null, 2), 'utf-8')
             settings = defaults.defaultGuildSettings;
         }
         execCommand(interaction.commandName, 'interaction', interaction, null, button, absoluteID, currentDate, interaction.member.user.id);
@@ -114,140 +114,140 @@ module.exports = (userdata, client, config, oncooldown) => {
     function execCommand(command: string, commandType: string, obj: any, overrides: any, button, absoluteID, currentDate, userid: any) {
         switch (command) {
             case 'convert':
-                client.commands.get('convert').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.commands.get('convert').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'help':
-                client.commands.get('help').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.commands.get('help').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'math':
-                client.commands.get('math').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.commands.get('math').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'ping':
-                client.commands.get('ping').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.commands.get('ping').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'remind':
-                client.commands.get('remind').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.commands.get('remind').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'stats':
-                client.commands.get('stats').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.commands.get('stats').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'time':
-                client.commands.get('time').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.commands.get('time').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'info':
-                client.commands.get('info').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.commands.get('info').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
 
             case '8ball': case 'ask':
-                client.misccmds.get('8ball').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.misccmds.get('8ball').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'emojify':
-                client.misccmds.get('emojify').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.misccmds.get('emojify').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break
             case 'gif':
-                client.misccmds.get('gif').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.misccmds.get('gif').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'image': case 'imagesearch':
-                client.misccmds.get('image').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.misccmds.get('image').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'poll': case 'vote':
-                client.misccmds.get('poll').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.misccmds.get('poll').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'roll':
-                client.misccmds.get('roll').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.misccmds.get('roll').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'say':
-                client.misccmds.get('say').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.misccmds.get('say').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'ytsearch': case 'yt':
-                client.misccmds.get('ytsearch').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.misccmds.get('ytsearch').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
 
             //osu commands below
             case 'firsts':
-                client.osucmds.get('firsts').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.osucmds.get('firsts').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'map': case 'm':
-                client.osucmds.get('map').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.osucmds.get('map').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'rs': case 'recent': case 'r':
-                client.osucmds.get('rs').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.osucmds.get('rs').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'osu': case 'profile': case 'o':
-                client.osucmds.get('osu').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.osucmds.get('osu').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'osuset':
-                client.osucmds.get('osuset').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.osucmds.get('osuset').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'osutop': case 'top':
-                client.osucmds.get('osutop').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.osucmds.get('osutop').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'scores': case 'c':
-                client.osucmds.get('scores').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.osucmds.get('scores').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'leaderboard': case 'maplb': case 'mapleaderboard':
-                client.osucmds.get('leaderboard').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.osucmds.get('leaderboard').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'lb':
-                client.osucmds.get('lb').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.osucmds.get('lb').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'pinned':
-                client.osucmds.get('pinned').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.osucmds.get('pinned').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'skin':
-                client.osucmds.get('skin').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.osucmds.get('skin').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'simplay': case 'simulate':
-                client.osucmds.get('simplay').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.osucmds.get('simplay').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
 
             //admincmds below
             case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    client.admincmds.get('checkperms').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                    commandStruct.admincmds.get('checkperms').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 }
                 break;
             case 'leaveguild': case 'leave':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    client.admincmds.get('leaveguild').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                    commandStruct.admincmds.get('leaveguild').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 };
                 break;
             case 'servers':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    client.admincmds.get('servers').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                    commandStruct.admincmds.get('servers').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 };
                 break;
             case 'debug':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    client.admincmds.get('debug').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                    commandStruct.admincmds.get('debug').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 };
                 break;
             case 'voice':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    client.admincmds.get('voice').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                    commandStruct.admincmds.get('voice').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 };
                 break;
             case 'crash':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    client.admincmds.get('crash').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                    commandStruct.admincmds.get('crash').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 };
                 break;
             case 'log':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    client.admincmds.get('log').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                    commandStruct.admincmds.get('log').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 };
                 break;
             case 'find':
-                client.admincmds.get('find').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.admincmds.get('find').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
             case 'purge':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    client.admincmds.get('purge').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                    commandStruct.admincmds.get('purge').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 };
                 break;
 
             case 'test':
-                client.commands.get('test').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
+                commandStruct.commands.get('test').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides)
                 break;
 
             // music

@@ -1,2 +1,2 @@
-module.exports = (userdata, client, config, oncooldown) => {
+module.exports = (userdata, client, commandStruct, config, oncooldown) => {
 }

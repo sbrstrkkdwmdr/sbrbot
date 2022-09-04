@@ -17,7 +17,7 @@ const commandInit = require('./commandInit');
 const exEvents = require('./exEvents');
 const osutrack = require('./src/osutrack');
 
-const config:extypes.config = require('./config/config.json');
+const config: extypes.config = require('./config/config.json');
 
 
 const client = new Client({
@@ -141,11 +141,11 @@ Current Client ID: ${client.user.id}
 
     const oncooldown = new Set();
 
-    commandHandler(userdata, client, config, oncooldown);
-    linkHandler(userdata, client, config, oncooldown);
+    commandHandler(userdata, client, commandStruct, config, oncooldown);
+    linkHandler(userdata, client, commandStruct, config, oncooldown);
     moderator(userdata, client, config, oncooldown);
-    musicHandler(userdata, client, config, oncooldown);
-    buttonHandler(userdata, client, config, oncooldown);
+    musicHandler(userdata, client, commandStruct, config, oncooldown);
+    buttonHandler(userdata, client, commandStruct, config, oncooldown);
     commandInit(userdata, client, config, oncooldown);
     exEvents(userdata, client, config, oncooldown);
     osutrack(userdata, client, config, oncooldown);

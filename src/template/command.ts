@@ -7,6 +7,7 @@ import osufunc = require('../../src/osufunc');
 import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
+import log = require('../../src/log');
 
 module.exports = {
     name: 'COMMANDNAME',
@@ -62,23 +63,18 @@ module.exports = {
             );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            `
-----------------------------------------------------
-COMMAND EVENT - COMMANDNAME (${baseCommandType})
-${currentDate} | ${currentDate.toISOString()}
-recieved COMMANDNAME command
-requested by ${commanduser.id} AKA ${commanduser.tag}
-cmd ID: ${absoluteID}
-----------------------------------------------------
-`, 'utf-8')
+            log.commandLog(
+                'COMMANDNAME',
+                commandType,
+                absoluteID,
+                commanduser
+            ), 'utf-8')
         //OPTIONS==============================================================================================================================================================================================
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Options: 
-----------------------------------------------------
-`, 'utf-8')
+            log.optsLog(
+                absoluteID,
+                []
+            ), 'utf-8')
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
