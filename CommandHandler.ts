@@ -257,35 +257,42 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
                     client.admincmds.get('checkperms').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'leaveguild': case 'leave':
-                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))
-                    client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id)) {
+                    client.admincmds.get('leaveguild').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj)
+                };
                 break;
             case 'servers':
-                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))
-                    client.admincmds.get('servers').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id)) {
+                    client.admincmds.get('servers').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj)
+                };
                 break;
             case 'debug':
-                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))
-                    client.admincmds.get('debug').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id)) {
+                    client.admincmds.get('debug').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj)
+                };
                 break;
             case 'voice':
-                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))
-                    client.admincmds.get('voice').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id)) {
+                    client.admincmds.get('voice').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj)
+                };
                 break;
             case 'crash':
-                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))
-                    client.admincmds.get('crash').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id)) {
+                    client.admincmds.get('crash').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj)
+                };
                 break;
             case 'log':
-                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))
-                    client.admincmds.get('log').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id)) {
+                    client.admincmds.get('log').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj)
+                };
                 break;
             case 'find':
                 client.admincmds.get('find').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
                 break;
             case 'purge':
-                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id))
-                    client.admincmds.get('purge').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+                if (cmdchecks.isAdmin(message.author.id, message.guildId, client) || cmdchecks.isOwner(message.author.id)) {
+                    client.admincmds.get('purge').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj)
+                };
                 break;
 
             case 'test':
