@@ -259,6 +259,8 @@ module.exports = (userdata, client, config, oncooldown) => {
                 break;
 
         }
+        
+        fs.appendFileSync('logs/totalcommands.txt', 'x');
         return;
     }
 }
