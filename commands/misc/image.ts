@@ -3,6 +3,7 @@ import fs = require('fs');
 import calc = require('../../src/calc');
 import emojis = require('../../src/consts/emojis');
 import colours = require('../../src/consts/colours');
+import colourfunc = require('../../src/colourcalc');
 import osufunc = require('../../src/osufunc');
 import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
@@ -10,6 +11,7 @@ import extypes = require('../../src/types/extraTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import fetch from 'node-fetch';
+
 
 module.exports = {
     name: 'image',
@@ -130,7 +132,7 @@ module.exports = {
             .setURL(`${'https://www.google.com/search?q=' + query}`)
             .setTitle(`IMAGE RESULTS FOR ${query}`)
             .setDescription(`(NOTE - links may be unsafe)\n${resimg}`)
-            .setColor(1)
+            .setColor(colourfunc.rgbtodec(colourfunc.hextorgb(colours.embedColour.query.hex)))
         const useEmbeds = [imageEmbed];
 
         for (let i = 0; i < 5; i++) {

@@ -3,6 +3,7 @@ import fs = require('fs');
 import calc = require('../../src/calc');
 import emojis = require('../../src/consts/emojis');
 import colours = require('../../src/consts/colours');
+import colourfunc = require('../../src/colourcalc');
 import osufunc = require('../../src/osufunc');
 import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');

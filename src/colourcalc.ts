@@ -1,3 +1,8 @@
+/**
+ * 
+ * @param str string formatted as #rrggbb
+ * @returns r,g,b as string
+ */
 function hextorgb(str: string) {
     // #0000FF = 0,0,255
     // #FFFFFF = 255,255,255
@@ -13,6 +18,12 @@ function hextorgb(str: string) {
     const rgb = `${r},${g},${b}`;
     return rgb;
 }
+
+/**
+ * 
+ * @param str string formatted as r,g,b
+ * @returns decimal value of rgb
+ */
 function rgbtodec(str: string) {
     //000,000,255 = 255
     //255,255,255 = 16777215
@@ -30,3 +41,4 @@ function rgbtodec(str: string) {
 }
 
 export { hextorgb, rgbtodec };
+
