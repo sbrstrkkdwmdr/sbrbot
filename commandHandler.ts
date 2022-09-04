@@ -111,7 +111,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
         execCommand(interaction.commandName, 'interaction', interaction, null, button, absoluteID, currentDate, interaction.member.user.id, args);
     });
 
-    function execCommand(command: string, commandType: string, obj: any, overrides: any, button, absoluteID, currentDate, userid: any, args: string[]) {
+    function execCommand(command: string, commandType: string, obj: any, overrides: any, button, absoluteID: number, currentDate, userid: any, args: string[]) {
         switch (command) {
             case 'convert':
                 commandStruct.commands.get('convert').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides)
@@ -259,7 +259,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
                 break;
 
         }
-        
+
         fs.appendFileSync('logs/totalcommands.txt', 'x');
         return;
     }
