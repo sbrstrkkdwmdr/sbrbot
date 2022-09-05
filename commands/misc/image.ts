@@ -132,7 +132,7 @@ module.exports = {
             .setURL(`${'https://www.google.com/search?q=' + query}`)
             .setTitle(`IMAGE RESULTS FOR ${query}`)
             .setDescription(`(NOTE - links may be unsafe)\n${resimg}`)
-            .setColor(colourfunc.rgbtodec(colourfunc.hextorgb(colours.embedColour.query.hex)))
+            .setColor(colours.embedColour.query.dec);
         const useEmbeds = [imageEmbed];
 
         for (let i = 0; i < 5; i++) {
@@ -147,7 +147,7 @@ module.exports = {
             case 'message': {
                 obj.reply({
                     content: '',
-                    embeds: [useEmbeds],
+                    embeds: useEmbeds,
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -161,7 +161,7 @@ module.exports = {
             case 'interaction': {
                 obj.reply({
                     content: '',
-                    embeds: [useEmbeds],
+                    embeds: useEmbeds,
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true

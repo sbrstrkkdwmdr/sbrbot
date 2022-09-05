@@ -1,3 +1,4 @@
+import colourcalc = require('../colourcalc');
 const diffcolour = [
     {
         decimal: '5554943',
@@ -61,36 +62,37 @@ const diffcolour = [
 const embedColour = {
     score: {
         hex: '#DF7FFF',
-        dec: '',
+        dec: colourcalc.hexToDec('#DF7FFF'),
     },
     scorelist: {
         hex: '#8A7FFF',
-        dec: '',
+        dec: colourcalc.hexToDec('#8A7FFF'),
     },
     user: {
         hex: '#16D8FF',
-        dec: '',
+        dec: colourcalc.hexToDec('#16D8FF'),
     },
     userlist: {
         hex: '#0099FF',
-        dec: '',
+        dec: colourcalc.hexToDec('#0099FF'),
     },
     query: {
         hex: '#000099',
-        dec: '',
+        dec: colourcalc.hexToDec('#000099'),
     },
     admin: {
         hex: '#BF9AB2',
-        dec: ''
+        dec: colourcalc.hexToDec('#BF9AB2'),
     },
     info: {
         hex: '#9AAAC0',
-        dec: ''
+        dec: colourcalc.hexToDec('#9AAAC0'),
     },
     misc: {
         hex: '#91BC5C',
-        dec: '',
+        dec: colourcalc.hexToDec('#91BC5C'),
     },
 }
 
 export { diffcolour, embedColour };
+

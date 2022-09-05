@@ -144,7 +144,7 @@ module.exports = {
                 actualOpts.push(pollOpts[i])
             }
         }
-        let optsToTxt: string;
+        let optsToTxt: string = '';
         const curReactions: string[] = [];
         for (let i = 0; i < actualOpts.length && i < 26; i++) {
             if (actualOpts[i] == 'yes') {

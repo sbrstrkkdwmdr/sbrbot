@@ -3,7 +3,7 @@
  * @param str string formatted as #rrggbb
  * @returns r,g,b as string
  */
-function hextorgb(str: string) {
+function hexToRgb(str: string) {
     // #0000FF = 0,0,255
     // #FFFFFF = 255,255,255
     // #FF0000 = 255,0,0
@@ -18,7 +18,7 @@ function hextorgb(str: string) {
     const rgb = `${r},${g},${b}`;
     return rgb;
 }
-function rgbtohex(str: string) {
+function rgbToHex(str: string) {
     //255,255,255 = #FFFFFF
     //255,0,0 = #FF0000
     //0,255,0 = #00FF00
@@ -36,7 +36,7 @@ function rgbtohex(str: string) {
  * @param str string formatted as r,g,b
  * @returns decimal value of rgb
  */
-function rgbtodec(str: string) {
+function rgbToDec(str: string) {
     //000,000,255 = 255
     //255,255,255 = 16777215
     //255,000,000 = 16711680
@@ -57,7 +57,7 @@ function rgbtodec(str: string) {
  * @param num number to be converted to rgb 
  * @returns rgb string
  */
-function dectorgb(num: number) {
+function decToRgb(num: number) {
     //16777215 = 255,255,255
     //16711680 = 255,0,0
     //65280 = 0,255,0
@@ -74,7 +74,7 @@ function dectorgb(num: number) {
  * @param num decimal number to be converted to hex 
  * @returns string formatted as #rrggbb
  */
-function dectohex(num: number) {
+function decToHex(num: number) {
     //16777215 = #FFFFFF
     //16711680 = #FF0000
     //65280 = #00FF00
@@ -88,7 +88,7 @@ function dectohex(num: number) {
  * @param str string formatted as #rrggbb
  * @returns decimal value of hex
  */
-function hextodec(str: string) {
+function hexToDec(str: string) {
     // #0000FF = 255
     // #FFFFFF = 16777215
     // #FF0000 = 16711680
@@ -102,4 +102,5 @@ function hextodec(str: string) {
     return dec;
 }
 
-export { hextorgb, rgbtodec, dectorgb, dectohex, hextodec, rgbtohex };
+export { hexToRgb, rgbToHex, rgbToDec, decToRgb, decToHex, hexToDec };
+

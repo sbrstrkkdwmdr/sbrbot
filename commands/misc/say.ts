@@ -104,8 +104,8 @@ module.exports = {
         if (msg == def.chocoMOF) {
             channel.send({
                 embeds: [new Discord.EmbedBuilder()
-                    .setTitle('message')
                     .setDescription(msg)
+                    .setColor(colours.embedColour.info.dec)
                 ]
             })
         } else {
