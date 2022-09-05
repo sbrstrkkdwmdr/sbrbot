@@ -10,8 +10,10 @@ cmd ID: ${absoluteID}
 `;
 }
 function optsLog(absoluteID: number, options: { name: string, value: string }[]) {
+    const currentDate = new Date();
     let firstlog = `
 ----------------------------------------------------
+${currentDate} | ${currentDate.toISOString()}
 cmd ID: ${absoluteID}
 Options: `
     let optslog = ''
