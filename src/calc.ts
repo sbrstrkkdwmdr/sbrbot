@@ -436,6 +436,15 @@ function secondsToTimeReadable(seconds: number, allowDays?: boolean, showSeconds
     return str;
 }
 
+/**
+ * 
+ * @param str the string to convert
+ * @returns string with the first letter capitalised
+ */
+function toCapital(str:string){
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
 export {
     findHCF, findLCM,
@@ -444,6 +453,7 @@ export {
     to12htime, relto12htime,
     dayhuman, tomonthname,
     fixoffset, timeToMs,
-    secondsToTime, secondsToTimeReadable
+    secondsToTime, secondsToTimeReadable,
+    toCapital
 };
 

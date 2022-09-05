@@ -10,7 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 
 module.exports = {
-    name: 'COMMANDNAME',
+    name: 'ping',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
         let commanduser;
 
@@ -43,26 +43,26 @@ module.exports = {
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-ping-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-ping-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`RightArrow-ping-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-ping-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
-                'COMMANDNAME',
+                'ping',
                 commandType,
                 absoluteID,
                 commanduser
@@ -78,14 +78,29 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+        const trueping = `${calc.toCapital(commandType)} latency: ${obj.createdAt.getTime() - new Date().getTime()}ms`
+        const starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString())
+        const uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
+        const uptimehours = Math.floor(uptime / 3600) >= 10 ? Math.floor(uptime / 3600) : '0' + Math.floor(uptime / 3600);
+        const uptimeminutes = Math.floor((uptime % 3600) / 60) >= 10 ? Math.floor((uptime % 3600) / 60) : '0' + Math.floor((uptime % 3600) / 60);
+        const uptimeseconds = Math.floor(uptime % 60) >= 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
 
+        const frtxt =
+            `Client latency: ${client.ws.ping}ms
+${trueping}
+Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}
+`;
 
+        const pingEmbed = new Discord.EmbedBuilder()
+            .setTitle('Pong!')
+            .setColor(colours.embedColour.info.dec)
+            .setDescription(frtxt)
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
                     content: '',
-                    embeds: [],
+                    embeds: [pingEmbed],
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -99,7 +114,7 @@ module.exports = {
             case 'interaction': {
                 obj.reply({
                     content: '',
-                    embeds: [],
+                    embeds: [pingEmbed],
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
