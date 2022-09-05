@@ -158,8 +158,8 @@ module.exports = {
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
-            case 'message': {
-                obj.reply({
+            case 'message': case 'interaction': {
+                obj.channel.send({
                     content: '',
                     embeds: [pollEmbed],
                     files: [],
@@ -171,6 +171,13 @@ module.exports = {
                     }
                 })
                     .catch();
+                if (commandType == 'interaction') {
+                    obj.reply({
+                        content: '✔',
+                        allowedMentions: { repliedUser: false },
+                        ephemeral: true
+                    }).catch();
+                }
             }
                 break;
 
