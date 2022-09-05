@@ -6,15 +6,16 @@ import colours = require('../../src/consts/colours');
 import osufunc = require('../../src/osufunc');
 import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
+import extypes = require('../../src/types/extratypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import yts = require('yt-search');
 
 module.exports = {
     name: 'ytsearch',
-    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
+    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
         let commanduser;
-        let query:string;
+        let query: string;
 
         switch (commandType) {
             case 'message': {
@@ -30,7 +31,7 @@ module.exports = {
                 query = obj.options.getString('query');
             }
 
-            //==============================================================================================================================================================================================
+                //==============================================================================================================================================================================================
 
                 break;
             case 'button': {
@@ -80,11 +81,47 @@ module.exports = {
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.optsLog(
                 absoluteID,
-                []
+                [{
+                    name: 'Query',
+                    value: query
+                }]
             ), 'utf-8')
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+        if (!query || query.length < 1) {
+            return obj.reply({
+                content: 'Please provide a search query.',
+                ephemeral: true
+            })
+        }
+        const searchEmbed: Discord.EmbedBuilder = new Discord.EmbedBuilder()
+            .setTitle(`YouTube search results for: ${query}`)
+            .setColor(colours.embedColour.query.dec);
+
+        const initSearch: extypes.ytSearch = await yts.search(query);
+        fs.writeFileSync(`debug/command-ytsearch=ytsSearch=${obj.guildId}.json`, JSON.stringify(initSearch, null, 4), 'utf-8')
+
+
+        if (initSearch.videos.length < 1) {
+            searchEmbed.setDescription('No results found.')
+        } else {
+            const objs = initSearch.videos
+            for (let i = 0; i < 5 && i < objs.length; i++) {
+                const curItem = objs[i];
+                searchEmbed.addFields([
+                    {
+                        name: `#${i + 1}`,
+                        value: `[${curItem.title}](${curItem.url})
+Published by [${curItem.author.name}](${curItem.author.url}) ${curItem.ago}
+Duration: ${curItem.timestamp} (${curItem.duration.seconds}s)
+Description: \`${curItem.description}\`
+`,
+                        inline: false
+                    }
+                ])
+            }
+        }
 
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -92,7 +129,7 @@ module.exports = {
             case 'message': {
                 obj.reply({
                     content: '',
-                    embeds: [],
+                    embeds: [searchEmbed],
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -102,11 +139,11 @@ module.exports = {
                 break;
 
             //==============================================================================================================================================================================================
-           
+
             case 'interaction': {
                 obj.reply({
                     content: '',
-                    embeds: [],
+                    embeds: [searchEmbed],
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -114,7 +151,7 @@ module.exports = {
                     .catch();
             }
 
-            //==============================================================================================================================================================================================
+                //==============================================================================================================================================================================================
 
                 break;
             case 'button': {
@@ -131,7 +168,7 @@ module.exports = {
         }
 
 
-        
+
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------

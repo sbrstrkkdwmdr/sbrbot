@@ -111,6 +111,7 @@ module.exports = {
         }
 
         const response: extypes.imagesearches = await res.json() as any;
+        fs.writeFileSync(`debug/command-image=imageSearch=${obj.guildId}.json`, JSON.stringify(response, null, 4), 'utf-8')
 
         if (!response.items) {
             obj.reply({
@@ -129,8 +130,8 @@ module.exports = {
         }
 
         const imageEmbed = new Discord.EmbedBuilder()
-            .setURL(`${'https://www.google.com/search?q=' + query}`)
-            .setTitle(`IMAGE RESULTS FOR ${query}`)
+        .setURL(`${'https://www.google.com/search?q=' + query.replaceAll(' ', '+')}`)
+        .setTitle(`IMAGE RESULTS FOR ${query}`)
             .setDescription(`(NOTE - links may be unsafe)\n${resimg}`)
             .setColor(colours.embedColour.query.dec);
         const useEmbeds = [imageEmbed];

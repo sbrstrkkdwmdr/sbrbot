@@ -139,5 +139,61 @@ type googleSearchItem = {
     }
 }
 
-export { config, guildSettings, imagesearches }
+type ytSearch = {
+    all?: ytSearchItem[],
+    videos?: ytSearchVideo[],
+    live?: ytSearchLive[],
+    playlists?: ytSearchPlaylist[],
+    lists?: ytSearchList[],
+    channels?: ytSearchChannel[],
+    accounts?: ytSearchAccount[],
+}
+
+type ytSearchItem = ytSearchVideo | ytSearchChannel
+type ytSearchVideo = {
+    type: string,
+    videoId: string,
+    url: string,
+    title: string,
+    description: string,
+    image: string,
+    thumbnail: string,
+    seconds: number,
+    timestamp: string,
+    duration: {
+        seconds: number,
+        timestamp: string
+    },
+    ago: string,
+    views: number,
+    author: {
+        name: string,
+        url: string,
+    }
+}
+
+type ytSearchPlaylist = {
+    type: string,
+}
+
+type ytSearchChannel = {
+    type: string,
+    name: string,
+    url: string,
+    title: string,
+    image: string,
+    thumbnail: string,
+    videoCount: number,
+    videoCountLabel: string,
+    subCount: number,
+    subCountLabel: string,
+}
+
+type ytSearchLive = any//{}
+
+type ytSearchAccount = any
+
+type ytSearchList = any//{}
+
+export { config, guildSettings, imagesearches, googleSearchItem, ytSearch }
 
