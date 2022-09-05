@@ -15,11 +15,10 @@ function optsLog(absoluteID: number, options: { name: string, value: string }[])
 ----------------------------------------------------
 ${currentDate} | ${currentDate.toISOString()}
 cmd ID: ${absoluteID}
-Options: `
+Options: \n`;
     let optslog = ''
     for (let i = 0; i < options.length; i++) {
-        optslog += `${options[i].name}: ${options[i].value}
-`
+        optslog += `${options[i].name}: ${options[i].value}\n`
     }
     if (options.length < 1) {
         optslog = '\nNo options provided'

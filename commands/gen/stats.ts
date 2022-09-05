@@ -10,7 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 
 module.exports = {
-    name: 'COMMANDNAME',
+    name: 'stats',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
         let commanduser;
 
@@ -43,26 +43,26 @@ module.exports = {
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-stats-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-stats-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`RightArrow-stats-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-stats-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
-                'COMMANDNAME',
+                'stats',
                 commandType,
                 absoluteID,
                 commanduser
@@ -78,14 +78,40 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+        const starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString())
+        const trueping = obj.createdAt.getTime() - new Date().getTime() + 'ms'
 
+        const uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
+        const uptimehours = Math.floor(uptime / 3600) >= 10 ? Math.floor(uptime / 3600) : '0' + Math.floor(uptime / 3600);
+        const uptimeminutes = Math.floor((uptime % 3600) / 60) >= 10 ? Math.floor((uptime % 3600) / 60) : '0' + Math.floor((uptime % 3600) / 60);
+        const uptimeseconds = Math.floor(uptime % 60) >= 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
+        const upandtime = `Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}`
+
+        const totalusers: Discord.Collection<any, Discord.User> = client.users.cache.size;
+        let totalusersnobots: Discord.Collection<any, Discord.User>;
+        const totalguilds: Discord.Collector<any, Discord.Guild> = client.guilds.cache.size;
+        const commandssent: number = fs.existsSync('logs/totalcommands.txt') ? fs.readFileSync('logs/totalcommands.txt').length : 0;
+
+        const Embed = new Discord.EmbedBuilder()
+            .setTitle(`${client.user.username} stats`)
+            .setDescription(
+                `Client latency: ${Math.round(client.ws.ping)}ms
+Message Latency: ${trueping}
+${upandtime}
+Guilds: ${totalguilds}
+Users: ${totalusers}
+Commands sent: ${commandssent}
+Prefix: \`${config.prefix}\`
+Commands: https://sbrstrkkdwmdr.github.io/sbrbot/commands
+`
+            )
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
                     content: '',
-                    embeds: [],
+                    embeds: [Embed],
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -99,7 +125,7 @@ module.exports = {
             case 'interaction': {
                 obj.reply({
                     content: '',
-                    embeds: [],
+                    embeds: [Embed],
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
