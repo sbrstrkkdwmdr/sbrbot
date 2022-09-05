@@ -1,0 +1,13 @@
+on compile
+//main.ts
+import Discord = require('discord.js')
+import fetch from 'node-fetch'
+
+export { functionA }
+
+=>
+
+const Discord = require('discord.js')
+const fetch = require('node-fetch')
+
+module.exports { functionA }

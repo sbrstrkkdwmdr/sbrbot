@@ -8,3 +8,4 @@ test/
 *.sqlite
 replay.osr
 files/maps/
+*.js
