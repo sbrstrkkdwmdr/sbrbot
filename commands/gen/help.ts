@@ -11,7 +11,7 @@ import log = require('../../src/log');
 import info = require('../../src/consts/helpinfo');
 
 module.exports = {
-    name: 'COMMANDNAME',
+    name: 'help',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
         let commanduser;
 
@@ -85,19 +85,19 @@ module.exports = {
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-help-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-help-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`RightArrow-help-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-help-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );
@@ -299,7 +299,7 @@ module.exports = {
             case 'message': {
                 obj.reply({
                     content: '',
-                    embeds: [],
+                    embeds: useEmbeds,
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -313,7 +313,7 @@ module.exports = {
             case 'interaction': {
                 obj.reply({
                     content: '',
-                    embeds: [],
+                    embeds: useEmbeds,
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -327,7 +327,7 @@ module.exports = {
             case 'button': {
                 obj.edit({
                     content: '',
-                    embeds: [],
+                    embeds: useEmbeds,
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true

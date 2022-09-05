@@ -10,7 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 
 module.exports = {
-    name: 'COMMANDNAME',
+    name: 'convert',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
         let commanduser;
         let cat1;
@@ -64,19 +64,19 @@ module.exports = {
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-convert-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-convert-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`RightArrow-convert-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-convert-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );
@@ -824,12 +824,12 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
                 break;
             */
             default:
+                conv = 'Error'
+                convtype = 'Error'
+                eq = 'Invalid conversion or it hasn\'t been added yet'
+                formula = '`x`'
                 useEmbeds.push(EmbedList)
-                useEmbeds.push(
-                    new Discord.EmbedBuilder()
-                        .setTitle('Error')
-                        .setDescription('Invalid conversion or it hasn\'t been added yet')
-                )
+
         }
 
         embedres.setTitle(`${conv}`)
@@ -845,7 +845,7 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
                 inline: false
             }
         ])
-
+        useEmbeds.push(embedres)
         if (cat1 == 'help' || cat2 == 'help') {
             useEmbeds = [EmbedList];
         }
