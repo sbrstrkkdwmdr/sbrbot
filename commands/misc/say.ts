@@ -8,16 +8,20 @@ import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
+import def = require('../../src/consts/defaults');
 
 module.exports = {
     name: 'say',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
         let commanduser;
-        let baseCommandType;
+        let msg;
+        let channel;
 
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
+                channel = obj.channel;
+                msg = args.join(' ')
             }
                 break;
 
@@ -25,9 +29,14 @@ module.exports = {
 
             case 'interaction': {
                 commanduser = obj.member.user;
+                channel = obj.options.getChannel('channel');
+                if (channel == null || channel == undefined) {
+                    channel = obj.channel;
+                }
+                msg = obj.options.getString('message');
             }
 
-            //==============================================================================================================================================================================================
+                //==============================================================================================================================================================================================
 
                 break;
             case 'button': {
@@ -82,36 +91,41 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-
+        if (msg.length < 1) {
+            msg = def.chocoMOF
+        }
+        if (msg == def.chocoMOF) {
+            channel.send({
+                embeds: [new Discord.EmbedBuilder()
+                    .setTitle('message')
+                    .setDescription(msg)
+                ]
+            })
+        } else {
+            channel.send({ content: msg })
+        }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
-                obj.reply({
-                    content: '',
-                    embeds: [],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
             }
                 break;
 
             //==============================================================================================================================================================================================
-           
+
             case 'interaction': {
                 obj.reply({
-                    content: '',
+                    content: 'success!',
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
+                    failIfNotExists: true,
+                    ephemeral: true
                 })
                     .catch();
             }
 
-            //==============================================================================================================================================================================================
+                //==============================================================================================================================================================================================
 
                 break;
             case 'button': {
@@ -128,7 +142,7 @@ module.exports = {
         }
 
 
-        
+
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
