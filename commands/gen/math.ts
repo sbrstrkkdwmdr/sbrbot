@@ -82,7 +82,18 @@ module.exports = {
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.optsLog(
                 absoluteID,
-                []
+                [{
+                    name: 'type',
+                    value: type
+                },
+                {
+                    name: 'num1',
+                    value: num1
+                },
+                {
+                    name: 'num2',
+                    value: num2
+                }]
             ), 'utf-8')
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
