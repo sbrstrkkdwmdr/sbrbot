@@ -34,6 +34,8 @@ module.exports = {
 
             case 'interaction': {
                 commanduser = obj.member.user;
+                maxNum = obj.options.getNumber('max') ? Math.floor(obj.options.getNumber('max')) : 100;
+                minNum = obj.options.getNumber('min') ? Math.floor(obj.options.getNumber('min')) : 0;
             }
 
                 //==============================================================================================================================================================================================
@@ -86,11 +88,23 @@ module.exports = {
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.optsLog(
                 absoluteID,
-                []
+                [{
+                    name: 'Maximum number',
+                    value: maxNum
+                },
+                {
+                    name: 'Minimum number',
+                    value: minNum
+                }]
             ), 'utf-8')
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
+        if (isNaN(maxNum)) {
+            maxNum = 100;
+        }
+        if (isNaN(minNum)) {
+            minNum = 0
+        }
         const eq = Math.floor(Math.random() * (maxNum - minNum)) + minNum
 
         //SEND/EDIT MSG==============================================================================================================================================================================================

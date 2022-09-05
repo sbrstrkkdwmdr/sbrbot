@@ -86,7 +86,14 @@ module.exports = {
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.optsLog(
                 absoluteID,
-                []
+                [{
+                    name: 'Message',
+                    value: msg
+                },
+                {
+                    name: 'Channel',
+                    value: channel.id
+                }]
             ), 'utf-8')
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================

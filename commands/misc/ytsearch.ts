@@ -13,11 +13,12 @@ module.exports = {
     name: 'ytsearch',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
         let commanduser;
-        let baseCommandType;
+        let query:string;
 
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
+                query = args.join(' ');
             }
                 break;
 
@@ -25,6 +26,7 @@ module.exports = {
 
             case 'interaction': {
                 commanduser = obj.member.user;
+                query = obj.options.getString('query');
             }
 
             //==============================================================================================================================================================================================
