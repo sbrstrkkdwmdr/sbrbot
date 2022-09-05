@@ -10,7 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 
 module.exports = {
-    name: 'COMMANDNAME',
+    name: 'info',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
         let commanduser;
 
@@ -41,28 +41,16 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
-            );
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setLabel('Info')
+                .setURL('https://sbrstrkkdwmdr.github.io/sbrbot/')
+                .setStyle(Discord.ButtonStyle.Link)
+        );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
-                'COMMANDNAME',
+                'info',
                 commandType,
                 absoluteID,
                 commanduser
@@ -78,15 +66,24 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-
+        const Embed = new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.info.dec)
+            .setTitle('Important links and information')
+            .setDescription(`
+Prefix: ${config.prefix}
+Coded in: TypeScript
+[Github repo](https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts)
+[Creator](https://sbrstrkkdwmdr.github.io/sbr-web/)
+`)
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
                     content: '',
-                    embeds: [],
+                    embeds: [Embed],
                     files: [],
+                    components: [buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -99,8 +96,9 @@ module.exports = {
             case 'interaction': {
                 obj.reply({
                     content: '',
-                    embeds: [],
+                    embeds: [Embed],
                     files: [],
+                    components: [buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
