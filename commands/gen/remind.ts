@@ -10,13 +10,35 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 
 module.exports = {
-    name: 'COMMANDNAME',
+    name: 'remind',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
         let commanduser;
+
+        let time;
+        let remindertxt;
+        let sendtochannel;
+        let user;
 
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
+                time = args[0]
+                remindertxt = args.join(' ').replaceAll(args[0], '')
+                sendtochannel = true;
+                user = obj.author;
+
+                if (!args[0]) {
+                    return obj.reply({ content: 'Please specify a time', allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
+
+                }
+                if (!args[1]) {
+                    remindertxt = 'null'
+                }
+                if (!args[0].endsWith('d') && !args[0].endsWith('h') && !args[0].endsWith('m') && !args[0].endsWith('s') && !time.includes(':') && !time.includes('.')) {
+                    return obj.reply({ content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`', allowedMentions: { repliedUser: false } })
+                        .catch(error => { });
+                }
             }
                 break;
 
@@ -24,6 +46,16 @@ module.exports = {
 
             case 'interaction': {
                 commanduser = obj.member.user;
+
+                remindertxt = obj.options.getString('reminder');
+                time = obj.options.getString('time').replaceAll(' ', '');
+                sendtochannel = obj.options.getBoolean('sendinchannel');
+                user = obj.member.user;
+
+                if (!time.endsWith('d') && !time.endsWith('h') && !time.endsWith('m') && !time.endsWith('s') && !time.includes(':') && !time.includes('.')) {
+                    return obj.reply({ content: 'Incorrect time format: please use `d`, `h`, `m`, or `s`', ephemeral: true })
+                        .catch(error => { });
+                }
             }
 
                 //==============================================================================================================================================================================================
@@ -43,26 +75,26 @@ module.exports = {
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-remind-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-remind-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`RightArrow-remind-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-remind-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
-                'COMMANDNAME',
+                'remind',
                 commandType,
                 absoluteID,
                 commanduser
@@ -73,23 +105,56 @@ module.exports = {
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.optsLog(
                 absoluteID,
-                []
+                [{
+                    name: 'time',
+                    value: time
+                },
+                {
+                    name: 'reminder',
+                    value: remindertxt
+                },
+                {
+                    name: 'sendinchannel',
+                    value: sendtochannel
+                },
+                {
+                    name: 'user',
+                    value: user.id
+                }
+                ]
             ), 'utf-8')
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+        async function sendremind(reminder, time, obj, sendchannel, remindertxt, usersent) {
+            try {
+                if (sendchannel == true) {
+                    setTimeout(() => {
+                        obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` })
 
+                    }, calc.timeToMs(time));
+                }
+                else {
+                    setTimeout(() => {
+                        usersent.send({ embeds: [reminder] })
+
+                    }, calc.timeToMs(time));
+                }
+            } catch (error) {
+                console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
+            }
+        }
+        const reminder = new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.info.dec)
+            .setTitle('REMINDER')
+            .setDescription(`${remindertxt}`)
+
+        sendremind(reminder, time, obj, sendtochannel, remindertxt, user)
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
-                obj.reply({
-                    content: '',
-                    embeds: [],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                obj.react('✅')
                     .catch();
             }
                 break;
@@ -98,9 +163,8 @@ module.exports = {
 
             case 'interaction': {
                 obj.reply({
-                    content: '',
-                    embeds: [],
-                    files: [],
+                    content: 'success!',
+                    ephemeral: true,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
