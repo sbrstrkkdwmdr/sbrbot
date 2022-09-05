@@ -9,7 +9,7 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `;
 }
-function optsLog(absoluteID: number, options) {
+function optsLog(absoluteID: number, options: { name: string, value: string }[]) {
     let firstlog = `
 ----------------------------------------------------
 cmd ID: ${absoluteID}

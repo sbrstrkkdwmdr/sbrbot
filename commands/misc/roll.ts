@@ -90,11 +90,11 @@ module.exports = {
                 absoluteID,
                 [{
                     name: 'Maximum number',
-                    value: maxNum
+                    value: `${maxNum}`
                 },
                 {
                     name: 'Minimum number',
-                    value: minNum
+                    value: `${minNum}`
                 }]
             ), 'utf-8')
 

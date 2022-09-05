@@ -16,6 +16,7 @@ module.exports = {
         let pollTitle: string;
         let pollOpts: string[];
         let overrideEmojis: string[];
+        let pollOptsInit: string;
 
         switch (commandType) {
             case 'message': {
@@ -31,7 +32,7 @@ module.exports = {
             case 'interaction': {
                 commanduser = obj.member.user;
                 pollTitle = obj.options.getString('title')
-                const pollOptsInit = obj.options.getString('options')
+                pollOptsInit = obj.options.getString('options')
                 if (pollOptsInit.includes(',')) {
                     pollOpts = pollOptsInit.split(',')
                 }
@@ -102,7 +103,7 @@ module.exports = {
                 },
                 {
                     name: 'Options',
-                    value: pollOpts
+                    value: pollOptsInit
                 }]
             ), 'utf-8')
 
