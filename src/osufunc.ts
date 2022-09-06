@@ -820,8 +820,25 @@ export async function searchUser(searchid: string, userdata: any, findMode: bool
 }
 
 export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) {
-    const init = fs.readFileSync(`prev${type}${serverId}.json`)
-    return `${init}`
+    try {
+        const init = fs.readFileSync(`prev${type}${serverId}.json`)
+        return `${init}`
+    } catch (error) {
+        let data;
+        switch (type) {
+            case 'map':
+                data = '4204'
+                break;
+            case 'user':
+                data = '2'
+                break;
+            case 'score':
+                data = '4248255210'
+                break;
+        }
+        fs.writeFileSync(`prev${type}${serverId}.json`, data);
+        return data;
+    }
 }
 export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string, data: string) {
     fs.writeFileSync(`prev${type}${serverId}.json`, data);
