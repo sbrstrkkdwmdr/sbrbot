@@ -777,10 +777,42 @@ type apiGetStrings =
     'score_get' | 'score' |
     'scores_get_best' | 'osutop' | 'best' |
     'scores_get_first' | 'firsts' |
-    'scores_get_pinned' | 'pinned' | 
+    'scores_get_pinned' | 'pinned' |
     'scores_get_recent' | 'recent' |
     'scores_get_map' | 'maplb' |
 
     'user_get' | 'user' |
-    'user_get_most_played' | 'most_played' | 
+    'user_get_most_played' | 'most_played' |
     'user_get_scores_map'
+
+export async function searchUser(searchid: string, userdata: any, findMode: boolean) {
+    const findname = await userdata.findOne({ where: { userid: searchid } })
+    let user;
+    let errorValue;
+    let mode;
+    if (findname != null) {
+        user = findname.get('osuname');
+        errorValue = null
+        if (findMode == true) {
+            mode = findname.get('mode')
+            if (mode.length < 1 || mode == null) {
+                mode = 'osu'
+            }
+        } else {
+            mode = 'osu'
+        }
+        if(typeof user != 'string'){
+            errorValue = 'Username is incorrect type'
+        }
+    } else {
+        user = null
+        mode = 'osu'
+        errorValue = `no user found with id ${searchid}`
+    }
+    let object = {
+        username: user,
+        gamemode: mode,
+        error: errorValue,
+    }
+    return object;
+}
