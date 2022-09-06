@@ -558,7 +558,7 @@ async function mapcalclocal(
  * @param version 1 or 2. defaults to 2
  * @returns data
  */
-async function apiget(type: string, mainparam: string, params?: string, version?: number) {
+async function apiget(type: apiGetStrings, mainparam: string, params?: string, version?: number) {
     const baseurl = 'https://osu.ppy.sh/api'
     const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
     let access_token
@@ -762,3 +762,25 @@ async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase
     }
     return;
 }
+
+export async function getUser(username: string) {
+    return await apiget('user_get', username);
+}
+
+type apiGetStrings =
+    'map_search' |
+    'map_get' | 'map' |
+    'map_get_md5' |
+    'mapset_get' | 'mapset' |
+    'mapset_search' |
+
+    'score_get' | 'score' |
+    'scores_get_best' | 'osutop' | 'best' |
+    'scores_get_first' | 'firsts' |
+    'scores_get_pinned' | 'pinned' | 
+    'scores_get_recent' | 'recent' |
+    'scores_get_map' | 'maplb' |
+
+    'user_get' | 'user' |
+    'user_get_most_played' | 'most_played' | 
+    'user_get_scores_map'
