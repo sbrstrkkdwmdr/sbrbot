@@ -9,3 +9,4 @@ test/
 replay.osr
 files/maps/
 *.js
+config/osuauth.json

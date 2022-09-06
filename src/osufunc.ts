@@ -354,7 +354,7 @@ async function straincalclocal(path: string | null, mods: string, calctype: numb
  * @param secondYlabel label for second set of data
  * @returns graph url
  */
-async function graph(x: number[] | string[], y: number[], label: string, startzero?: boolean | null, reverse?: boolean | null, showlabelx?: boolean | null, showlabely?: boolean | null, fill?: boolean | null, settingsoverride?: string | null, displayLegend?: boolean, secondY?: number[], secondLabel?: string) {
+async function graph(x: number[] | string[], y: number[], label: string, startzero?: boolean | null, reverse?: boolean | null, showlabelx?: boolean | null, showlabely?: boolean | null, fill?: boolean | null, settingsoverride?: overrideGraph | null, displayLegend?: boolean, secondY?: number[], secondLabel?: string) {
 
     if (startzero == null || typeof startzero == 'undefined') {
         startzero = true
@@ -478,6 +478,8 @@ async function graph(x: number[] | string[], y: number[], label: string, startze
 
 }
 
+type overrideGraph = 'replay' | 'rank' | 'strains' | 'bar' | 'health'
+
 /**
  * 
  * @param mods 
@@ -560,7 +562,7 @@ async function mapcalclocal(
  */
 async function apiget(type: apiGetStrings, mainparam: string, params?: string, version?: number) {
     const baseurl = 'https://osu.ppy.sh/api'
-    const accessN = fs.readFileSync('configs/osuauth.json', 'utf-8');
+    const accessN = fs.readFileSync('config/osuauth.json', 'utf-8');
     let access_token
     try {
         access_token = JSON.parse(accessN).access_token;
