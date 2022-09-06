@@ -11,7 +11,7 @@ import log = require('../../src/log');
 
 module.exports = {
     name: 'stats',
-    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
+    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
 
         switch (commandType) {

@@ -11,7 +11,7 @@ import log = require('../../src/log');
 
 module.exports = {
     name: 'lb',
-    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
+    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
 
         let page;
@@ -43,7 +43,7 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-lb-${commanduser.id}`)

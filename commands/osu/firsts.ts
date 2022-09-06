@@ -27,7 +27,10 @@ module.exports = {
                 if (!args[0]) {
                     user = null
                 }
-                searchid = obj.mentions.size > 1 ? obj.mentions.cache.first() : obj.author.id
+                searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
+                if (args[0] && searchid == obj.author.id) {
+                    args.join(' ')
+                }
             }
                 break;
 
@@ -51,7 +54,7 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-firsts-${commanduser.id}`)

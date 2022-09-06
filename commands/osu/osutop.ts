@@ -11,7 +11,7 @@ import log = require('../../src/log');
 
 module.exports = {
     name: 'osutop',
-    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
+    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
 
         let user;
@@ -27,6 +27,10 @@ module.exports = {
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
+                searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
+                if (args[0] && searchid == obj.author.id) {
+                    args.join(' ')
+                }
             }
                 break;
 
@@ -50,7 +54,7 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-osutop-${commanduser.id}`)

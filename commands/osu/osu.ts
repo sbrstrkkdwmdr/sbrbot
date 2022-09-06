@@ -11,16 +11,25 @@ import log = require('../../src/log');
 
 module.exports = {
     name: 'osu',
-    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
+    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
 
-        let user;
+        let user = null;
         let detailed;
         let searchid;
 
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
+                searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
+                let msgcontent = args.join(' ')
+                if (args.join(' ').includes('detailed')) {
+                    detailed = true;
+                    msgcontent = msgcontent.replace('detailed', '')
+                }
+                if (args[0] && searchid == obj.author.id) {
+                    msgcontent
+                }
             }
                 break;
 
@@ -28,6 +37,7 @@ module.exports = {
 
             case 'interaction': {
                 commanduser = obj.member.user;
+
             }
 
                 //==============================================================================================================================================================================================
@@ -44,7 +54,7 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-osu-${commanduser.id}`)
@@ -63,6 +73,18 @@ module.exports = {
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );
+
+        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-osu-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('🔁'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Detailed-osu-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('📝'),
+            )
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
@@ -94,7 +116,9 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-
+            if(user == null){
+                user = await osufunc.searchUser(searchid, userdata, false)
+            }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {

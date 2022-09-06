@@ -13,7 +13,7 @@ import yts = require('yt-search');
 
 module.exports = {
     name: 'ytsearch',
-    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
+    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
         let query: string;
 

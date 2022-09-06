@@ -15,7 +15,7 @@ import fetch from 'node-fetch';
 
 module.exports = {
     name: 'image',
-    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
+    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
         let query;
         let iserr = false;

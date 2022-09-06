@@ -12,7 +12,7 @@ import info = require('../../src/consts/helpinfo');
 
 module.exports = {
     name: 'help',
-    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
+    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
 
         let command: string;

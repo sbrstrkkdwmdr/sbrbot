@@ -12,7 +12,7 @@ import def = require('../../src/consts/defaults');
 
 module.exports = {
     name: 'say',
-    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides) {
+    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
         let msg;
         let channel;
