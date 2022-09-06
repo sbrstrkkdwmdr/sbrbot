@@ -801,7 +801,7 @@ export async function searchUser(searchid: string, userdata: any, findMode: bool
         } else {
             mode = 'osu'
         }
-        if(typeof user != 'string'){
+        if (typeof user != 'string') {
             errorValue = 'Username is incorrect type'
         }
     } else {
@@ -815,4 +815,13 @@ export async function searchUser(searchid: string, userdata: any, findMode: bool
         error: errorValue,
     }
     return object;
+}
+
+export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) {
+    const init = fs.readFileSync(`prev${type}${serverId}.json`)
+    return `${init}`
+}
+export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string, data: string) {
+    fs.writeFileSync(`prev${type}${serverId}.json`, data);
+    return;
 }
