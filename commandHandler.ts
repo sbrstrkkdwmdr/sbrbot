@@ -186,7 +186,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
                 commandStruct.osucmds.get('scores').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
             case 'leaderboard': case 'maplb': case 'mapleaderboard':
-                commandStruct.osucmds.get('leaderboard').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                commandStruct.osucmds.get('maplb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
             case 'lb':
                 commandStruct.osucmds.get('lb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
