@@ -24,6 +24,9 @@ module.exports = {
         let mods;
         let searchid
 
+        let isFirstPage = false;
+        let isLastPage = false;
+
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
@@ -64,6 +67,10 @@ module.exports = {
                     .setCustomId(`LeftArrow-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Search-osutop-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('🔍'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
@@ -129,7 +136,13 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-
+        if (page < 2) {
+            isFirstPage = true;
+        }
+        if (page < 2) {
+            page = 1;
+        }
+        page--
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
