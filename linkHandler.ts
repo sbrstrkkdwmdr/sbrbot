@@ -144,7 +144,7 @@ progress: ${m.progress ? m.progress : 'none'}
                 response.pipe(osrdlfile);
             });
             setTimeout(() => {
-                client.links.get('replayparse').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides);
+                commandStruct.links.get('replayparse').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides);
             }, 1500)
         }
         if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
@@ -157,7 +157,7 @@ progress: ${m.progress ? m.progress : 'none'}
                 response.pipe(osudlfile);
             });
             setTimeout(() => {
-                client.links.get('localmapparse').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides);
+                commandStruct.links.get('localmapparse').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides);
             }, 1500)
         }
 
