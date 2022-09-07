@@ -11,7 +11,7 @@ import log = require('../../src/log');
 
 module.exports = {
     name: 'osuset',
-    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
+    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
 
         let name;
@@ -21,6 +21,7 @@ module.exports = {
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
+                name = args.join(' ');
             }
                 break;
 
@@ -28,6 +29,9 @@ module.exports = {
 
             case 'interaction': {
                 commanduser = obj.member.user;
+                name = obj.options.getString('user');
+                mode = obj.options.getString('mode');
+                skin = obj.options.getString('skin');
             }
 
                 //==============================================================================================================================================================================================
@@ -94,13 +98,51 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+        if (typeof name == 'undefined' || name == null) {
+            obj.reply({
+                content: 'Error - username undefined',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            });
+            return;
+        }
+        //+[------->++<]>++.-----------.+++++++++.-----.++++++++++.
 
+        let txt = 'null'
+
+        const findname = await userdata.findOne({ where: { userid: commanduser.id } })
+        if (findname == null) {
+            try {
+                await userdata.create({
+                    osuname: name,
+                    mode: mode ?? 'osu',
+                    skin: skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117'
+                })
+                txt = 'Updated the database'
+            } catch (error) {
+                txt = 'There was an error trying to update your settings'
+                log.errLog('Database error', error, `${absoluteID}`)
+            }
+        } else {
+            const affectedRows = await userdata.update({
+                osuname: name,
+                mode: mode ?? 'osu',
+                skin: skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117'
+            }, { where: { userid: commanduser.id } })
+
+            if (affectedRows > 0) {
+                txt = 'Updated the database'
+            } else {
+                txt = 'There was an error trying to update your settings'
+                log.errLog('Database error', affectedRows, `${absoluteID}`)
+            }
+        }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
-                    content: '',
+                    content: txt,
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },
@@ -114,7 +156,7 @@ module.exports = {
 
             case 'interaction': {
                 obj.reply({
-                    content: '',
+                    content: txt,
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },

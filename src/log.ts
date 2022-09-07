@@ -28,5 +28,15 @@ Options: \n`;
     return firstlog;
 }
 
-export { commandLog, optsLog };
+function errLog(errType: string, err:string, ID?:string){
+    let errorstring = `
+${ID ? 'ID: ' + ID : ''}
+Error: ${errType}
+Text: ${err}
+`
+
+
+}
+
+export { commandLog, optsLog, errLog };
 
