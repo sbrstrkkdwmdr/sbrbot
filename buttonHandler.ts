@@ -18,10 +18,12 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
         const specid = interaction.customId.split('-')[2]
         const commandType = 'button';
         let overrides = {
+            user: null,
             page: null,
             mode: null,
             sort: null,
             reverse: null,
+            ex: null,
         }
         if (specid && specid != interaction.user.id) {
             interaction.deferUpdate()

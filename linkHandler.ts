@@ -17,7 +17,15 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
         const obj = message
         let parse = null
         const commandType = 'link'
-        let overrides;
+
+        let overrides = {
+            user: null,
+            page: null,
+            mode: null,
+            sort: null,
+            reverse: null,
+            ex: null,
+        }
 
         const currentGuildId = message.guildId
         let settings: extypes.guildSettings;
@@ -111,14 +119,12 @@ progress: ${m.progress ? m.progress : 'none'}
         }
 
         if (messagenohttp.startsWith('osu.ppy.sh/b/') || messagenohttp.startsWith('osu.ppy.sh/beatmaps/') || messagenohttp.startsWith('osu.ppy.sh/beatmapsets/') || messagenohttp.startsWith('osu.ppy.sh/s/') || parse != null) {
-            const overrideID = null
-            client.links.get('osumaplink').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides);
+            overrides.ex = 'link'
+            commandStruct.osucmds.get('map').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides);
         }
         if (messagenohttp.startsWith('osu.ppy.sh/u/') || messagenohttp.startsWith('osu.ppy.sh/users/')) {
-            const user = messagenohttp.split('/')[2]
-            args = [user]
-            client.osucmds.get('osu').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides);
-            //client.links.get('osuuserlink').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj);
+            overrides.user = messagenohttp.split('/')[2]
+            commandStruct.osucmds.get('osu').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides);
         }
 
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osr'))) {
@@ -142,7 +148,7 @@ progress: ${m.progress ? m.progress : 'none'}
             }, 1500)
         }
         if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
-            client.links.get('scoreparse').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides);
+            commandStruct.osucmds.get('scoreparse').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides);
         }
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osu'))) {
             const attachosu = message.attachments.first().url

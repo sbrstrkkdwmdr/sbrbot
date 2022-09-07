@@ -101,9 +101,79 @@ module.exports = {
                 }
             }
                 break;
+
+            case 'link': {
+                commanduser = obj.author;
+
+                const messagenohttp = obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
+                mapmods =
+                    obj.content.includes('+') ?
+                        messagenohttp.split('+')[1] : 'NM';
+                mapid;
+                if (
+                    (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmapsets/') && messagenohttp.includes('#'))) ||
+                    (!messagenohttp.includes('/s/') && (messagenohttp.includes('/b/'))) ||
+                    (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmaps/')))
+                ) {
+                    let idfirst;
+                    try {
+                        if (messagenohttp.includes('beatmapsets')) {
+
+                            idfirst = messagenohttp.split('#')[1].split('/')[1]
+                        } else if (messagenohttp.includes('?')) {
+                            // osu.ppy.sh/beatmaps/4204?mode=osu
+                            idfirst = messagenohttp.split('beatmaps/')[1].split('?')[0]
+                        }
+                        else {
+                            //make a variable that takes everything after the last '/'
+                            idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1]
+                        }
+                        if (isNaN(idfirst)) {
+                            mapid = idfirst.split(' ')[0]
+                        } else {
+                            mapid = idfirst
+                        }
+                    } catch (error) {
+                        obj.reply({
+                            content: 'Please enter a valid beatmap link.',
+                            allowedMentions: { repliedUser: false }
+                        })
+                            .catch(error => { });
+                        return;
+                    }
+                } else {
+                    let setid = 910392;
+                    if (!messagenohttp.includes('/beatmapsets/')) {
+                        setid = messagenohttp.split('/s/')[1]
+
+                        if (isNaN(setid)) {
+                            setid = messagenohttp.split('/s/')[1].split(' ')[0]
+                        }
+                    } else if (!messagenohttp.includes('/s/')) {
+                        setid = messagenohttp.split('/beatmapsets/')[1]
+
+                        if (isNaN(setid)) {
+                            setid = messagenohttp.split('/s/')[1].split(' ')[0]
+                        }
+                    }
+                    const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
+                    try {
+                        mapid = bmsdata.beatmaps[0].id;
+                    } catch (error) {
+                        obj.reply({
+                            content: 'Please enter a valid beatmap link.',
+                            allowedMentions: {
+                                repliedUser: false
+                            }
+                        })
+                            .catch(error => { });
+                        return;
+                    }
+                }
+            }
+                break;
         }
         if (overrides != null) {
-
         }
 
         //==============================================================================================================================================================================================
@@ -606,6 +676,17 @@ ${error}
                 break;
             case 'button': {
                 obj.message.edit({
+                    content: '',
+                    embeds: embeds,
+                    components: [pgbuttons, buttons],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+                break;
+            case 'link': {
+                obj.reply({
                     content: '',
                     embeds: embeds,
                     components: [pgbuttons, buttons],
