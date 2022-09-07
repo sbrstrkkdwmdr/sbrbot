@@ -140,6 +140,9 @@ module.exports = {
             let cuser = await osufunc.searchUser(searchid, userdata, true);
             user = cuser.username;
             mode = cuser.gamemode;
+            if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
+                return;
+            }
         }
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `${await mode}`)
@@ -344,6 +347,7 @@ ${onlinestatus}
             useEmbeds = [osuEmbed]
         }
 
+        osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
 
 
         //SEND/EDIT MSG==============================================================================================================================================================================================

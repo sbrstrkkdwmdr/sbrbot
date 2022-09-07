@@ -540,13 +540,6 @@ const useridsortopts = [
         required: false,
         default: false
     },
-    {
-        name: 'compact',
-        description: 'Whether or not to show the compact version of the scores',
-        type: ApplicationCommandOptionType.Boolean,
-        required: false,
-        default: false
-    }
 ]
 
 const useroffsetmodeopts = [

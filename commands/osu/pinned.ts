@@ -11,14 +11,15 @@ import log = require('../../src/log');
 
 module.exports = {
     name: 'pinned',
-    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
+    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
 
         let user;
         let searchid;
         let page;
-        let sort;
-        let reverse;
+        let sort = 'pp';
+        let reverse = false;
+        let mode;
 
         let isFirstPage = false;
         let isLastPage = false;
@@ -27,9 +28,11 @@ module.exports = {
             case 'message': {
                 commanduser = obj.author;
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
-                if (args[0] && searchid == obj.author.id) {
-                    args.join(' ')
+                user = args.join(' ');
+                if (!args[0]) {
+                    user = null
                 }
+                page = 1;
             }
                 break;
 
@@ -37,6 +40,11 @@ module.exports = {
 
             case 'interaction': {
                 commanduser = obj.member.user;
+                searchid = obj.member.user.id;
+                user = obj.options.getString('user');
+                page = obj.options.getInteger('page');
+                sort = obj.options.getString('sort');
+                reverse = obj.options.getBoolean('reverse');
             }
 
                 //==============================================================================================================================================================================================
@@ -76,6 +84,13 @@ module.exports = {
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );
+        const buttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-pinned-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('🔁'),
+            )
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
@@ -124,13 +139,207 @@ module.exports = {
         }
         page--
 
+        if (user == null) {
+            let cuser = await osufunc.searchUser(searchid, userdata, true);
+            user = cuser.username;
+            if (mode == null) {
+                mode = cuser.gamemode;
+            }
+            if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
+                return;
+            }
+        }
+        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
+        fs.writeFileSync(`debug/command-pinned=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
+        if (osudata?.error) {
+            obj.reply({
+                content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+            return;
+        }
+
+        if (!osudata.id) {
+            obj.reply({
+                content: 'Error - user could not be found',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch();
+
+            return;
+        }
+
+        const pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
+        fs.writeFileSync(`debug/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
+        if (pinnedscoresdata?.error) {
+            obj.reply({
+                content: `${pinnedscoresdata?.error ? pinnedscoresdata?.error : 'Error: null'}`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+            return;
+        }
+
+        const pinnedEmbed = new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.scorelist.dec)
+            .setTitle(`Pinned scores for ${osudata.username}`)
+            .setURL(`https://osu.ppy.sh/u/${osudata.id}`)
+            .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
+            ;
+        if (pinnedscoresdata.length < 1) {
+            pinnedEmbed.setDescription('Error - no pinned scores found')
+        } else {
+            pinnedEmbed.setDescription(`Page ${page + 1}/${Math.ceil(pinnedscoresdata.length / 5)}
+${mode}`
+            )
+            for (let i = 0; i < 5 && i < pinnedscoresdata.length; i++) {
+                const curscore = pinnedscoresdata[i + page * 5]
+                if (!curscore) break;
+                let grade;
+                switch (pinnedscoresdata[i].rank.toUpperCase()) {
+                    case 'F':
+                        grade = emojis.grades.F
+                        break;
+                    case 'D':
+                        grade = emojis.grades.D
+                        break;
+                    case 'C':
+                        grade = emojis.grades.C
+                        break;
+                    case 'B':
+                        grade = emojis.grades.B
+                        break;
+                    case 'A':
+                        grade = emojis.grades.A
+                        break;
+                    case 'S':
+                        grade = emojis.grades.S
+                        break;
+                    case 'SH':
+                        grade = emojis.grades.SH
+                        break;
+                    case 'X':
+                        grade = emojis.grades.X
+                        break;
+                    case 'XH':
+                        grade = emojis.grades.XH
+                        break;
+                }
+                let hitlist: string;
+                const hitstats = curscore.statistics
+                switch (mode) {
+                    case 'osu':
+                    default:
+                        hitlist = (`${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
+                        ${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
+                        ${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
+                        ${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        `).replaceAll(' ', '').replaceAll('\n', '')
+                        break;
+                    case 'taiko':
+                        hitlist =
+                            (`${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
+                        ${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
+                        ${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        `).replaceAll(' ', '').replaceAll('\n', '')
+                        break;
+                    case 'fruits':
+                        hitlist = (`${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
+                        ${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
+                        ${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
+                        ${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        `).replaceAll(' ', '').replaceAll('\n', '')
+                        break;
+                    case 'mania':
+                        hitlist =
+                            (`${hitstats.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        ${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        ${hitstats.count_katu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        ${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        ${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        ${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        `).replaceAll(' ', '').replaceAll('\n', '')
+                        break;
+                }
+                const ifmods =
+                    curscore.mods.join('').length > 1 ?
+                        '+' + curscore.mods.join('').toUpperCase() :
+                        ''
+                const title =
+                    curscore.beatmapset.title == curscore.beatmapset.title_unicode ?
+                        curscore.beatmapset.title :
+                        `${curscore.beatmapset.title} (${curscore.beatmapset.title_unicode})`
+
+                const artist =
+                    curscore.beatmapset.artist == curscore.beatmapset.artist_unicode ?
+                        curscore.beatmapset.artist :
+                        `${curscore.beatmapset.artist} (${curscore.beatmapset.artist_unicode})`
+                const fulltitle = `${artist} - ${title} [${curscore.beatmap.version}]`
+
+                let pptxt: string;
+                const ppcalcing = await osufunc.scorecalc(
+                    curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
+                    curscore.mode,
+                    curscore.beatmap.id,
+                    hitstats.count_geki,
+                    hitstats.count_300,
+                    hitstats.count_katu,
+                    hitstats.count_100,
+                    hitstats.count_50,
+                    hitstats.count_miss,
+                    curscore.accuracy,
+                    curscore.max_combo,
+                    curscore.score,
+                    0,
+                    null, false
+                )
+                if (curscore.accuracy != 1) {
+                    if (curscore.pp == null || isNaN(curscore.pp)) {
+                        pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
+                    } else {
+                        pptxt = `${curscore.pp.toFixed(2)}pp`
+                    }
+                    if (curscore.perfect == false) {
+                        pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`
+                    }
+                    pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`
+                } else {
+                    if (curscore.pp == null || isNaN(curscore.pp)) {
+                        pptxt =
+                            `${await ppcalcing[0].pp.toFixed(2)}pp`
+                    } else {
+                        pptxt =
+                            `${curscore.pp.toFixed(2)}pp`
+                    }
+                }
+                fs.writeFileSync(`debug/command-pinned=ppcalc=${obj.guildId}`, JSON.stringify(ppcalcing, null, 2))
+
+                pinnedEmbed.addFields([
+                    {
+                        name: `#${i + 1 + page * 5}`,
+                        value: `
+                        [${fulltitle}](https://osu.ppy.sh/b/${curscore.beatmap.id})
+                        ${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+                        \`${hitlist}\`
+                        ${pptxt}
+                        `,
+                        inline: false
+                    }
+                ])
+            }
+        }
+        osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
+
+
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
                     content: '',
-                    embeds: [],
-                    files: [],
+                    embeds: [pinnedEmbed],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -143,8 +352,8 @@ module.exports = {
             case 'interaction': {
                 obj.reply({
                     content: '',
-                    embeds: [],
-                    files: [],
+                    embeds: [pinnedEmbed],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })

@@ -650,7 +650,6 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
             throw new Error('null')
         }
         data = datafirst;
-
     } catch (error) {
         data = {
             error,
@@ -821,7 +820,7 @@ export async function searchUser(searchid: string, userdata: any, findMode: bool
 
 export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) {
     try {
-        const init = fs.readFileSync(`prev${type}${serverId}.json`)
+        const init = fs.readFileSync(`debug/prev${type}${serverId}.json`)
         return `${init}`
     } catch (error) {
         let data;
@@ -836,11 +835,17 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
                 data = '4248255210'
                 break;
         }
-        fs.writeFileSync(`prev${type}${serverId}.json`, data);
+        fs.writeFileSync(`debug/prev${type}${serverId}.json`, data);
         return data;
     }
 }
 export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string, data: string) {
     fs.writeFileSync(`prev${type}${serverId}.json`, data);
+    return;
+}
+
+export function debug(data:any, type:string, name:string, serverId:string|number, params:string){
+    const pars = params.replaceAll(',','=');
+    fs.writeFileSync(`debug/${type}-${name}=${pars}_${serverId}.json`, JSON.stringify(data, null, 2));
     return;
 }

@@ -355,13 +355,6 @@ module.exports = (userdata, client, config, oncooldown) => {
                 required: false,
                 default: false
             },
-            {
-                name: 'compact',
-                description: 'Whether or not to show the compact version of the top plays',
-                type: Discord.ApplicationCommandOptionType.Boolean,
-                required: false,
-                default: false
-            }
         ]
     },
     {

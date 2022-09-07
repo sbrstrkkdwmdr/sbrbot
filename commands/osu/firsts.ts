@@ -32,9 +32,6 @@ module.exports = {
                     user = null
                 }
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
-                if (args[0] && searchid == obj.author.id) {
-                    args.join(' ')
-                }
                 page = 0
             }
                 break;
@@ -122,10 +119,8 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        if (page < 2) {
+        if (page < 2 || typeof page != 'number') {
             isFirstPage = true;
-        }
-        if (page < 2) {
             page = 1;
         }
         page--

@@ -171,7 +171,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
                 commandStruct.osucmds.get('map').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
             case 'rs': case 'recent': case 'r':
-                commandStruct.osucmds.get('rs').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                commandStruct.osucmds.get('recent').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
             case 'osu': case 'profile': case 'o':
                 commandStruct.osucmds.get('osu').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
