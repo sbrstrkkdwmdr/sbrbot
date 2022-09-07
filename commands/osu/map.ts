@@ -243,7 +243,7 @@ ${error}
             mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
             fs.writeFileSync(`debug/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
             if (mapdata?.error) {
-                if(commandType != 'button') obj.reply({
+                if (commandType != 'button') obj.reply({
                     content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: false,
@@ -571,6 +571,8 @@ ${error}
                 .setImage(`${passurl}`);
             await embeds.push(passEmbed);
         }
+
+        osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {

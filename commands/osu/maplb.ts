@@ -274,8 +274,7 @@ ${hitlist}
                 //@ts-ignore
                 pgbuttons.components[4].setDisabled(true)
             }
-            fs.writeFileSync(`./debug/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
-
+            osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
         } else {
             const lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1);
             fs.writeFileSync(`debug/command-leaderboard=lbdata_apiv1=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
@@ -338,6 +337,8 @@ ${hitlist}
                 scoretxt = 'Error - map is unranked'
             }
             lbEmbed.setDescription(`${scoretxt}`)
+
+            osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
 
             if (page >= (lbdata.length / 5) - 1) {
                 //@ts-ignore

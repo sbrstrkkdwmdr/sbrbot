@@ -548,11 +548,11 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                 pgbuttons.components[3].setDisabled(true)
             }
 
-            fs.writeFileSync(`./debug/prevmap${obj.guildId}.json`, JSON.stringify(({ id: curbm.id }), null, 2));
+            osufunc.writePreviousId('map', obj.guildId, `${curbm.id}`)
             if (curscore.best_id != null) {
-                fs.writeFileSync(`debug/prevscore${obj.guildId}.json`, JSON.stringify(curscore, null, 2))
+                osufunc.writePreviousId('score', obj.guildId, `${curscore}`)
             }
-            fs.writeFileSync(`debug/prevuser${obj.guildId}.json`, JSON.stringify({ id: osudata.id }, null, 2))
+            osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`)
 
         } else if (list == true) {
             rsEmbed

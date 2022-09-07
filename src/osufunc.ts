@@ -832,7 +832,8 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
                 data = '2'
                 break;
             case 'score':
-                data = '4248255210'
+                const x = require('template/score.json')
+                data = JSON.stringify(x, null, 2)
                 break;
         }
         fs.writeFileSync(`previous/${type}${serverId}.json`, data);
@@ -840,12 +841,16 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
     }
 }
 export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string, data: string) {
-    fs.writeFileSync(`previous/${type}${serverId}.json`, data);
+    if (type == 'score') {
+        fs.writeFileSync(`previous/${type}${serverId}.json`, JSON.stringify(data, null, 2));
+    } else {
+        fs.writeFileSync(`previous/${type}${serverId}.json`, data);
+    }
     return;
 }
 
-export function debug(data:any, type:string, name:string, serverId:string|number, params:string){
-    const pars = params.replaceAll(',','=');
+export function debug(data: any, type: string, name: string, serverId: string | number, params: string) {
+    const pars = params.replaceAll(',', '=');
     fs.writeFileSync(`debug/${type}-${name}=${pars}_${serverId}.json`, JSON.stringify(data, null, 2));
     return;
 }

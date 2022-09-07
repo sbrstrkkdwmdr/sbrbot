@@ -351,6 +351,7 @@ ${pptxt}
             pgbuttons.components[4].setDisabled(true)
         }
 
+        osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
