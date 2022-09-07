@@ -54,35 +54,71 @@ module.exports = {
                 break;
             case 'button': {
                 commanduser = obj.member.user;
+                user =
+                    obj.message.embeds[0].title.includes('play for') ?
+                        obj.message.embeds[0].title.split('most recent play for ')[1].split(' | ')[0] :
+                        obj.message.embeds[0].title.split('plays for ')[1]
+                try {
+                    mode = obj.message.embeds[0].fields[0].value.split(' | ')[1].split('\n')[0]
+                } catch (error) {
+                    mode = obj.message.embeds[0].footer.text.split('gamemode: ')[1]
+                }
+                page = 0
+                if (button == 'BigLeftArrow') {
+                    page = 1
+                    isFirstPage = true
+                }
+                if (obj.message.embeds[0].title.includes('plays')) {
+                    switch (button) {
+                        case 'LeftArrow':
+                            page = parseInt((obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1
+                            break;
+                        case 'RightArrow':
+                            page = parseInt((obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1
+                            break;
+                        case 'BigRightArrow':
+                            page = parseInt((obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))
+                            break;
+                        case 'Refresh':
+                            page = parseInt((obj.message.embeds[0].description).split('Page: ')[1].split('/')[0])
+                            break;
+                    }
+                    list = true
+                    if (isNaN((obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) || ((obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) == 'NaN') {
+                        page = 1
+                    }
+                    if (page < 2) {
+                        isFirstPage = true;
+                    }
+                    if (page == parseInt((obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))) {
+                        isLastPage = true;
+                    }
+                } else {
+                    switch (button) {
+                        case 'LeftArrow':
+                            page = parseInt((obj.message.embeds[0].title).split(' ')[0].split('#')[1]) - 1
+                            break;
+                        case 'RightArrow':
+                            page = parseInt((obj.message.embeds[0].title).split(' ')[0].split('#')[1]) + 1
+                            break;
+                        case 'Refresh':
+                            page = parseInt((obj.message.embeds[0].title).split(' ')[0].split('#')[1])
+                            break;
+                    }
+                    if (page < 2) {
+                        page == 1
+                    }
+                }
             }
                 break;
         }
         if (overrides != null) {
-
+            if (overrides.page != null) {
+                page = overrides.page
+            }
         }
 
         //==============================================================================================================================================================================================
-
-        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-recent-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-recent-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-recent-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-recent-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
-            );
-
 
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
@@ -139,13 +175,37 @@ module.exports = {
                 return;
             }
         }
-
+        if (mode == null) {
+            mode = 'osu'
+        }
         if (page < 2 || typeof page != 'number') {
             isFirstPage = true;
             page = 1;
         }
         page--
-
+        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-recent-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('⬅')
+                    .setDisabled(isFirstPage),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-recent-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('◀')
+                    .setDisabled(isFirstPage),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-recent-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('▶')
+                    .setDisabled(isLastPage),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-recent-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('➡')
+                    .setDisabled(isLastPage),
+            );
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
         fs.writeFileSync(`debug/command-rs=user=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         if (osudata?.error) {
@@ -481,6 +541,13 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                     }
                 ])
 
+            if (page >= rsdata.length - 1) {
+                //@ts-ignore
+                pgbuttons.components[2].setDisabled(true)
+                //@ts-ignore
+                pgbuttons.components[3].setDisabled(true)
+            }
+
             fs.writeFileSync(`./debug/prevmap${obj.guildId}.json`, JSON.stringify(({ id: curbm.id }), null, 2));
             if (curscore.best_id != null) {
                 fs.writeFileSync(`debug/prevscore${obj.guildId}.json`, JSON.stringify(curscore, null, 2))
@@ -509,6 +576,12 @@ ${curscore.mods.length > 0 ? '+' + curscore.mods.join('') + ' | ' : ''}${(cursco
             rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 20)}\n` + txt)
             rsEmbed.setFooter({ text: `gamemode: ${rsdata[0].mode}` })
 
+            if (page >= Math.ceil(rsdata.length / 20)) {
+                //@ts-ignore
+                pgbuttons.components[2].setDisabled(true)
+                //@ts-ignore
+                pgbuttons.components[3].setDisabled(true)
+            }
         }
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
 
@@ -543,7 +616,7 @@ ${curscore.mods.length > 0 ? '+' + curscore.mods.join('') + ' | ' : ''}${(cursco
 
                 break;
             case 'button': {
-                obj.edit({
+                obj.message.edit({
                     content: '',
                     embeds: [rsEmbed],
                     components: [pgbuttons, buttons],

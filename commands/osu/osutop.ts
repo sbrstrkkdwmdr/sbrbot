@@ -68,38 +68,104 @@ module.exports = {
                 break;
             case 'button': {
                 commanduser = obj.member.user;
+
+                user = obj.message.embeds[0].title.split('Top plays of ')[1]
+
+                if (obj.message.embeds[0].description) {
+                    if (obj.message.embeds[0].description.includes('mapper')) {
+                        mapper = obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
+                    }
+                    if (obj.message.embeds[0].description.includes('mods')) {
+                        mods = obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
+                    }
+                    const sort1 = obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                    switch (true) {
+                        case sort1.includes('score'):
+                            sort = 'score'
+                            break;
+                        case sort1.includes('acc'):
+                            sort = 'acc'
+                            break;
+                        case sort1.includes('pp'):
+                            sort = 'pp'
+                            break;
+                        case sort1.includes('old'): case sort1.includes('recent'):
+                            sort = 'recent'
+                            break;
+                        case sort1.includes('combo'):
+                            sort = 'combo'
+                            break;
+                        case sort1.includes('miss'):
+                            sort = 'miss'
+                            break;
+                        case sort1.includes('rank'):
+                            sort = 'rank'
+                            break;
+
+                    }
+
+
+                    const reverse1 = obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                    if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
+                        reverse = true
+                    } else {
+                        reverse = false
+                    }
+
+                    if (obj.message.embeds[0].fields.length == 7 || obj.message.embeds[0].fields.length == 11) {
+                        detailed = true
+                    } else {
+                        detailed = false
+                    }
+                    page = 0
+                    switch (button) {
+                        case 'BigLeftArrow':
+                            page = 1
+                            break;
+                        case 'LeftArrow':
+                            page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
+                            break;
+                        case 'RightArrow':
+                            page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
+                            break;
+                        case 'BigRightArrow':
+                            page = parseInt((obj.message.embeds[0].description).split('/')[1].split('\n')[0])
+                            break;
+                        case 'Refresh':
+                            page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1])
+                            break;
+                    }
+
+                    mode = obj.message.embeds[0].description.split('mode: ')[1].split('\n')[0]
+                }
+                if (button == 'DetailEnable') {
+                    detailed = true;
+                }
+                if (button == 'DetailDisable') {
+                    detailed = false;
+                }
+                if (page < 2) {
+                    isFirstPage = true;
+                }
+                if (page == parseInt((obj.message.embeds[0].description).split('/')[1].split('\n')[0])) {
+                    isLastPage = true;
+                }
             }
                 break;
         }
         if (overrides != null) {
-
+            if (overrides.page != null) {
+                page = overrides.page
+            }
+            if (overrides.sort != null) {
+                sort = overrides.sort
+            }
+            if (overrides.reverse != null) {
+                reverse = overrides.reverse === true;
+            }
         }
 
         //==============================================================================================================================================================================================
-
-        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-osutop-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-osutop-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`Search-osutop-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔍'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-osutop-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-osutop-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
-            );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
@@ -184,6 +250,9 @@ module.exports = {
                 return;
             }
         }
+        if (mode == null) {
+            mode = 'osu'
+        }
 
         if (detailed == true) {
             buttons.addComponents(
@@ -202,6 +271,34 @@ module.exports = {
                 /* .setLabel('End') */
             )
         }
+
+        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-osutop-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('⬅')
+                    .setDisabled(isFirstPage),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-osutop-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('◀')
+                    .setDisabled(isFirstPage),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Search-osutop-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('🔍'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-osutop-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('▶')
+                    .setDisabled(isLastPage),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-osutop-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('➡')
+                    .setDisabled(isLastPage),
+            );
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         fs.writeFileSync(`debug/command-otop=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
@@ -347,6 +444,11 @@ ${error}
                 .catch();
 
         }
+
+        if (page >= Math.ceil(osutopdata.length / 5)) {
+            page = Math.ceil(osutopdata.length / 5) - 1
+        }
+
         const topEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`Top plays of ${osutopdata[0].user.username}`)
@@ -563,13 +665,19 @@ ${error}
 
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
 
+        if (page >= (osutopdata.length / 5) - 1) {
+            //@ts-ignore
+            pgbuttons.components[3].setDisabled(true)
+            //@ts-ignore
+            pgbuttons.components[4].setDisabled(true)
+        }
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
                     content: '',
                     embeds: [topEmbed],
-                    files: [],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -594,10 +702,10 @@ ${error}
 
                 break;
             case 'button': {
-                obj.edit({
+                obj.message.edit({
                     content: '',
-                    embeds: [],
-                    files: [],
+                    embeds: [topEmbed],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })

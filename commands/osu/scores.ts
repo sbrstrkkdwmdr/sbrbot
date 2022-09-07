@@ -55,38 +55,79 @@ module.exports = {
                 break;
             case 'button': {
                 commanduser = obj.member.user;
+                page = 0;
+                user = obj.message.embeds[0].author.name
+                mapid = obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]
+                const sorting = obj.message.embeds[0].description.split('Sorted by:')[1].split('\n')[0].toLowerCase()
+                switch (true) {
+                    default: case sorting.includes('recent'): case sorting.includes('old'):
+                        sort = 'recent'
+                        break;
+                    case sorting.includes('pp'):
+                        sort = 'pp'
+                        break;
+                    case sorting.includes('acc'):
+                        sort = 'acc'
+                        break;
+                    case sorting.includes('combo'):
+                        sort = 'combo'
+                        break;
+                    case sorting.includes('score'):
+                        sort = 'score'
+                        break;
+                    case sorting.includes('miss'):
+                        sort = 'miss'
+                        break;
+                    case sorting.includes('rank'):
+                        sort = 'rank'
+                        break;
+                }
+                if (sorting.includes('lowest') || sorting.includes('old') || sorting.includes('most miss')) {
+                    reverse = true
+                } else {
+                    reverse = false
+                }
+                page = 0
+                switch (button) {
+                    case 'BigLeftArrow':
+                        page = 1
+                        break;
+                    case 'LeftArrow':
+                        page = parseInt((obj.message.embeds[0].footer.text).split('/')[0].split('Page ')[1]) - 1
+                        break;
+                    case 'RightArrow':
+                        page = parseInt((obj.message.embeds[0].footer.text).split('/')[0].split('Page ')[1]) + 1
+                        break;
+                    case 'BigRightArrow':
+                        page = parseInt((obj.message.embeds[0].footer.text).split('/')[1].split('\n')[0])
+                        break;
+                    case 'Refresh':
+                        page = parseInt((obj.message.embeds[0].footer.text).split('/')[0].split('Page ')[1])
+                        break;
+                }
+                if (page < 2) {
+                    isFirstPage = true;
+                }
+                if (page == parseInt((obj.message.embeds[0].footer.text).split('/')[1].split('\n')[0])) {
+                    isLastPage = true;
+                }
             }
                 break;
         }
         if (overrides != null) {
-
+            if (overrides.page != null) {
+                page = overrides.page
+            }
+            if (overrides.sort != null) {
+                sort = overrides.sort
+            }
+            if (overrides.reverse != null) {
+                reverse = overrides.reverse
+            }
         }
 
         //==============================================================================================================================================================================================
 
-        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-scores-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-scores-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`Search-scores-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔍'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-scores-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-scores-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
-            );
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
@@ -146,6 +187,34 @@ module.exports = {
         }
         page--
 
+        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`BigLeftArrow-scores-${commanduser.id}`)
+                .setStyle(Discord.ButtonStyle.Primary)
+                .setEmoji('⬅')
+                .setDisabled(isFirstPage),
+            new Discord.ButtonBuilder()
+                .setCustomId(`LeftArrow-scores-${commanduser.id}`)
+                .setStyle(Discord.ButtonStyle.Primary)
+                .setEmoji('◀')
+                .setDisabled(isFirstPage),
+            new Discord.ButtonBuilder()
+                .setCustomId(`Search-scores-${commanduser.id}`)
+                .setStyle(Discord.ButtonStyle.Primary)
+                .setEmoji('🔍'),
+            new Discord.ButtonBuilder()
+                .setCustomId(`RightArrow-scores-${commanduser.id}`)
+                .setStyle(Discord.ButtonStyle.Primary)
+                .setEmoji('▶')
+                .setDisabled(isLastPage),
+            new Discord.ButtonBuilder()
+                .setCustomId(`BigRightArrow-scores-${commanduser.id}`)
+                .setStyle(Discord.ButtonStyle.Primary)
+                .setEmoji('➡')
+                .setDisabled(isLastPage),
+        );
+
         if (user == null) {
             let cuser = await osufunc.searchUser(searchid, userdata, true);
             user = cuser.username;
@@ -180,7 +249,7 @@ module.exports = {
                     ;
 
             } else {
-                return obj.edit({
+                return obj.message.edit({
                     content: 'Error - no user found',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -342,6 +411,7 @@ module.exports = {
         const title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
         const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
 
+
         const scoresEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`${artist} - ${title} [${mapdata.version}]`)
@@ -354,6 +424,11 @@ module.exports = {
         } else {
             scoretxt += sortdata + '\n\n'
             scoresEmbed.setFooter({ text: `Page ${page + 1}/${Math.ceil(scoredata.length / 5)}` })
+
+            if(page >= Math.ceil(scoredata.length / 5)) {
+                page = Math.ceil(scoredata.length / 5) - 1
+            }
+
             for (let i = 0; i < scoredata.length && i < 5; i++) {
                 const curscore = scoredata[i + page * 5]
                 if (!curscore) {
@@ -456,6 +531,13 @@ module.exports = {
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
         osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
 
+        if (page >= (scoredata.length / 5) - 1) {
+            //@ts-ignore
+            pgbuttons.components[3].setDisabled(true)
+            //@ts-ignore
+            pgbuttons.components[4].setDisabled(true)
+        }
+
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
@@ -487,10 +569,10 @@ module.exports = {
 
                 break;
             case 'button': {
-                obj.edit({
+                obj.message.edit({
                     content: '',
-                    embeds: [],
-                    files: [],
+                    embeds: [scoresEmbed],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })

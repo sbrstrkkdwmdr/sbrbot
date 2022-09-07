@@ -48,38 +48,49 @@ module.exports = {
                 break;
             case 'button': {
                 commanduser = obj.member.user;
+                user = obj.message.embeds[0].title.split('for ')[1]
+                mode = cmdchecks.toAlphaNum(obj.message.embeds[0].description.split('\n')[1])
+                page = 0;
+                (obj.message.embeds[0].description).split('/')[0].replace('Page ', '')
+                switch (button) {
+                    case 'BigLeftArrow':
+                        page = 1
+                        break;
+                    case 'LeftArrow':
+                        page = parseInt((obj.message.embeds[0].description).split('/')[0].replace('Page ', '')) - 1
+                        break;
+                    case 'RightArrow':
+                        page = parseInt((obj.message.embeds[0].description).split('/')[0].replace('Page ', '')) + 1
+                        break;
+                    case 'BigRightArrow':
+                        page = parseInt((obj.message.embeds[0].description).split('/')[1].split('\n')[0])
+                        break;
+                    case 'Refresh':
+                        page = parseInt((obj.message.embeds[0].description).split('/')[0].replace('Page ', ''))
+                        break;
+                }
+                if (button == 'Search') {
+                    page = obj.fields.getTextInputValue('search')
+                }
+
+                if (page < 2) {
+                    isFirstPage = true;
+                } else {
+                    isFirstPage = false;
+                }
+                if (page == parseInt((obj.message.embeds[0].description).split('/')[1].split('\n')[0])) {
+                    isLastPage = true
+                }
             }
                 break;
         }
         if (overrides != null) {
-
+            if (overrides.page != null) {
+                page = overrides.page
+            }
         }
 
         //==============================================================================================================================================================================================
-
-        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-firsts-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-firsts-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`Search-firsts-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔍'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-firsts-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-firsts-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
-            );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
@@ -114,6 +125,10 @@ module.exports = {
                     name: 'Reverse',
                     value: reverse
                 },
+                {
+                    name: 'Mode',
+                    value: mode
+                }
                 ]
             ), 'utf-8')
 
@@ -125,6 +140,43 @@ module.exports = {
         }
         page--
 
+        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-firsts-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('⬅')
+                    .setDisabled(isFirstPage)
+                ,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-firsts-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('◀')
+                    .setDisabled(isFirstPage)
+                ,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Search-firsts-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('🔍'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-firsts-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('▶')
+                    .setDisabled(isLastPage)
+                ,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-firsts-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('➡')
+                    .setDisabled(isLastPage)
+                ,
+            );
+        const buttons = new Discord.ActionRowBuilder().addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`Refresh-firsts-${commanduser.id}`)
+                .setStyle(Discord.ButtonStyle.Primary)
+                .setEmoji('🔁'),
+        )
         if (user == null) {
             let cuser = await osufunc.searchUser(searchid, userdata, true);
             user = cuser.username;
@@ -171,10 +223,15 @@ module.exports = {
 
             return;
         }
+        if (page >= Math.ceil(firstscoresdata.length / 5)) {
+            page = Math.ceil(firstscoresdata.length / 5) - 1
+        }
+
+
         firstsEmbed.setDescription(
             `Page ${page + 1}/${Math.ceil(firstscoresdata.length / 5)}
-            ${mode}
-            `);
+${mode}
+`);
         for (let i = 0; i < firstscoresdata.length && i < 5; i++) {
             const curscore = firstscoresdata[i + (page * 5)]
             if (!curscore) break;
@@ -276,16 +333,24 @@ module.exports = {
             firstsEmbed.addFields([{
                 name: `#${i + 1 + (page * 5)}`,
                 value: `
-                [${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id})
-                **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
-                ${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
-                \`${hitlist}\`
-                ${pptxt}
-                `,
+[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id})
+**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
+${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+\`${hitlist}\`
+${pptxt}
+`,
                 inline: false
             }])
 
         }
+
+        if (page >= (firstscoresdata.length / 5) - 1) {
+            //@ts-ignore
+            pgbuttons.components[3].setDisabled(true)
+            //@ts-ignore
+            pgbuttons.components[4].setDisabled(true)
+        }
+
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
@@ -293,7 +358,7 @@ module.exports = {
                 obj.reply({
                     content: '',
                     embeds: [firstsEmbed],
-                    components: [pgbuttons],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -307,7 +372,7 @@ module.exports = {
                 obj.reply({
                     content: '',
                     embeds: [firstsEmbed],
-                    components: [pgbuttons],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -318,10 +383,10 @@ module.exports = {
 
                 break;
             case 'button': {
-                obj.edit({
+                obj.message.edit({
                     content: '',
-                    embeds: [],
-                    files: [],
+                    embeds: [firstsEmbed],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })

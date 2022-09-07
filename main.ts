@@ -156,6 +156,10 @@ Current Client ID: ${client.user.id}
         console.log(`Creating debug folder`);
         fs.mkdirSync(`./debug`);
     }
+    if (!fs.existsSync(`./previous`)) {
+        console.log(`Creating previous IDs folder`);
+        fs.mkdirSync(`./previous`);
+    }
     if (!fs.existsSync(`./logs`)) {
         console.log(`Creating logs folder`);
         fs.mkdirSync(`./logs`);

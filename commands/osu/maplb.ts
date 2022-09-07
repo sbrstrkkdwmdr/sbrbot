@@ -25,7 +25,7 @@ module.exports = {
             case 'message': {
                 commanduser = obj.author;
                 mapid = args[0]
-                if(isNaN(mapid)) {
+                if (isNaN(mapid)) {
                     mapid = undefined;
                 }
                 if (args.join(' ').includes('+')) {
@@ -48,11 +48,43 @@ module.exports = {
                 break;
             case 'button': {
                 commanduser = obj.member.user;
+                mapid = obj.message.embeds[0].url.split('/b/')[1]
+                if (obj.message.embeds[0].footer) {
+                    mapmods = obj.message.embeds[0].footer.text
+                }
+                page = 0
+                switch (button) {
+                    case 'BigLeftArrow':
+                        page = 1
+                        break;
+                    case 'LeftArrow':
+                        page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
+                        break;
+                    case 'RightArrow':
+                        page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
+                        break;
+                    case 'BigRightArrow':
+                        page = parseInt((obj.message.embeds[0].description).split('/')[1].split('\n')[0])
+                        break;
+                    case 'Refresh':
+                        page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1])
+                        break;
+                }
+                if (page < 2) {
+                    isFirstPage = true;
+                } else {
+                    isFirstPage = false;
+                }
+                if (page == parseInt((obj.message.embeds[0].description).split('/')[1].split('\n')[0])) {
+                    isLastPage = true;
+                }
             }
                 break;
         }
         if (overrides != null) {
-
+            if (overrides.page != null) {
+                page = overrides.page
+            }
         }
 
         //==============================================================================================================================================================================================
@@ -173,6 +205,10 @@ module.exports = {
             const lbdata = lbdataf.scores
             fs.writeFileSync(`debug/command-leaderboard=lbdata=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
 
+
+            if (page >= Math.ceil(lbdata.length / 5)) {
+                page = Math.ceil(lbdata.length / 5) - 1
+            }
             lbEmbed
                 .setColor(colours.embedColour.scorelist.dec)
                 .setTitle(`Score leaderboard of ${fulltitle}`)
@@ -232,7 +268,12 @@ ${hitlist}
                 scoretxt = 'Error - map is unranked'
             }
             lbEmbed.setDescription(`${scoretxt}`)
-
+            if (page >= (lbdata.length / 5) - 1) {
+                //@ts-ignore
+                pgbuttons.components[3].setDisabled(true)
+                //@ts-ignore
+                pgbuttons.components[4].setDisabled(true)
+            }
             fs.writeFileSync(`./debug/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
 
         } else {
@@ -297,7 +338,15 @@ ${hitlist}
                 scoretxt = 'Error - map is unranked'
             }
             lbEmbed.setDescription(`${scoretxt}`)
+
+            if (page >= (lbdata.length / 5) - 1) {
+                //@ts-ignore
+                pgbuttons.components[3].setDisabled(true)
+                //@ts-ignore
+                pgbuttons.components[4].setDisabled(true)
+            }
         }
+
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
@@ -317,8 +366,8 @@ ${hitlist}
             case 'interaction': {
                 obj.reply({
                     content: '',
-                    embeds: [],
-                    files: [],
+                    embeds: [lbEmbed],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -329,10 +378,10 @@ ${hitlist}
 
                 break;
             case 'button': {
-                obj.edit({
+                obj.message.edit({
                     content: '',
-                    embeds: [],
-                    files: [],
+                    embeds: [lbEmbed],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })

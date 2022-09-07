@@ -604,19 +604,19 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
                 url += `scores/${params ?? 'osu'}/${mainparam}`
                 break;
             case 'scores_get_best': case 'osutop': case 'best':
-                url += `users/${mainparam}/scores/best?mode=${params}&limit=100&offset=0`
+                url += `users/${mainparam}/scores/best?mode=${params ?? 'osu'}&limit=100&offset=0`
                 break;
             case 'scores_get_first': case 'firsts':
-                url += `users/${mainparam}/scores/firsts?mode=${params}&limit=100`
+                url += `users/${mainparam}/scores/firsts?mode=${params ?? 'osu'}&limit=100`
                 break;
             case 'scores_get_map': case 'maplb':
                 url += `beatmaps/${mainparam}/scores`
                 break;
             case 'scores_get_pinned': case 'pinned':
-                url += `users/${mainparam}/scores/pinned?mode=${params}&limit=100`
+                url += `users/${mainparam}/scores/pinned?mode=${params ? params : 'osu'}&limit=100`
                 break;
             case 'scores_get_recent': case 'recent':
-                url += `users/${mainparam}/scores/recent?include_fails=1&mode=${params}&limit=100&offset=0`
+                url += `users/${mainparam}/scores/recent?include_fails=1&mode=${params ? params : 'osu'}&limit=100&offset=0`
                 break;
             case 'user_get': case 'user':
                 url += `users/${mainparam}/${params ? params : 'osu'}`
@@ -820,7 +820,7 @@ export async function searchUser(searchid: string, userdata: any, findMode: bool
 
 export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) {
     try {
-        const init = fs.readFileSync(`debug/prev${type}${serverId}.json`)
+        const init = fs.readFileSync(`previous/${type}${serverId}.json`)
         return `${init}`
     } catch (error) {
         let data;
@@ -835,12 +835,12 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
                 data = '4248255210'
                 break;
         }
-        fs.writeFileSync(`debug/prev${type}${serverId}.json`, data);
+        fs.writeFileSync(`previous/${type}${serverId}.json`, data);
         return data;
     }
 }
 export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string, data: string) {
-    fs.writeFileSync(`prev${type}${serverId}.json`, data);
+    fs.writeFileSync(`previous/${type}${serverId}.json`, data);
     return;
 }
 

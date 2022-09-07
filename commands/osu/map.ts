@@ -51,21 +51,13 @@ module.exports = {
                 break;
             case 'button': {
                 commanduser = obj.member.user;
-                const urlnohttp = obj.embeds[0].url.split('https://')[1];
+                const urlnohttp = obj.message.embeds[0].url.split('https://')[1];
                 //osu.ppy.sh/beatmapsets/setid#gamemode/id
                 const setid = urlnohttp.split('/')[2].split('#')[0];
                 const curid = urlnohttp.split('/')[3];
                 mapid = curid;
                 const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
                 fs.writeFileSync(`debug/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
-                if (bmsdata?.error) {
-                    obj.reply({
-                        content: `${bmsdata?.error ? bmsdata?.error : 'Error: null'}`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: false,
-                    }).catch()
-                    return;
-                }
 
                 const bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
                 fs.writeFileSync(`debug/command-map=bmstosr=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
@@ -93,10 +85,10 @@ module.exports = {
                     mapid = bmstosr[0].id;
                 }
 
-                if (obj.embeds[0].fields[1].value.includes('aim') || obj.embeds[0].fields[0].value.includes('ms')) {
+                if (obj.message.embeds[0].fields[1].value.includes('aim') || obj.message.embeds[0].fields[0].value.includes('ms')) {
                     detailed = true
                 }
-                mapmods = obj.embeds[0].title.split('+')[1];
+                mapmods = obj.message.embeds[0].title.split('+')[1];
                 if (button == 'DetailEnable') {
                     detailed = true;
                 }
@@ -105,7 +97,7 @@ module.exports = {
                 }
                 if (button == 'Refresh') {
                     mapid = curid;
-                    detailed = obj.embeds[0].fields[1].value.includes('aim') || obj.embeds[0].fields[0].value.includes('ms')
+                    detailed = obj.message.embeds[0].fields[1].value.includes('aim') || obj.message.embeds[0].fields[0].value.includes('ms')
                 }
             }
                 break;
@@ -586,7 +578,7 @@ ${error}
                 obj.reply({
                     content: '',
                     embeds: embeds,
-                    files: [],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -600,7 +592,7 @@ ${error}
                 obj.reply({
                     content: '',
                     embeds: embeds,
-                    files: [],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -611,10 +603,10 @@ ${error}
 
                 break;
             case 'button': {
-                obj.edit({
+                obj.message.edit({
                     content: '',
                     embeds: embeds,
-                    files: [],
+                    components: [pgbuttons, buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })

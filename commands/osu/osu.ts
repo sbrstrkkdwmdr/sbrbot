@@ -48,7 +48,25 @@ module.exports = {
                 break;
             case 'button': {
                 commanduser = obj.member.user;
+                if (obj.message.embeds[0].fields[0]) {
+                    detailed = true
+                }
 
+                //user =  message.embeds[0].title.split('\'s')[0]
+                user = obj.message.embeds[0].url.split('users/')[1]
+                if (button == 'DetailEnable') {
+                    detailed = true;
+                }
+                if (button == 'DetailDisable') {
+                    detailed = false;
+                }
+                if (button == 'Refresh') {
+                    if (obj.message.embeds[0].fields[0]) {
+                        detailed = true
+                    } else {
+                        detailed = false
+                    }
+                }
             }
                 break;
         }
@@ -144,11 +162,14 @@ module.exports = {
                 return;
             }
         }
+        if (mode == null) {
+            mode = 'osu'
+        }
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `${await mode}`)
         fs.writeFileSync(`debug/command-osu=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         if (osudata?.error) {
-            obj.reply({
+            if (commandType != 'button') obj.reply({
                 content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: false,
@@ -210,7 +231,7 @@ module.exports = {
                 .setDescription(`Loading...`);
 
             if (commandType == 'interaction') {
-                obj.reply({
+                if (commandType != 'button') obj.reply({
                     embeds: [loading],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -223,26 +244,20 @@ module.exports = {
 
             const chartplay = await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true);
             const chartrank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank');
-        
-            chartplay.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(450)
-            chartrank.setBackgroundColor('color: rgb(0,0,0)').setWidth(1500).setHeight(600)
-            chartrank.getShortUrl();
+
             const ChartsEmbedRank = new Discord.EmbedBuilder()
                 .setDescription('Click on the image to see the full chart')
                 .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
-                .setImage(`${await chartrank.getShortUrl()}`);
+                .setImage(`${chartrank}`);
 
             const ChartsEmbedPlay = new Discord.EmbedBuilder()
                 .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
-                .setImage(`${await chartplay.getShortUrl()}`);
-            chartrank.toFile('./debug/playerrankgraph.jpg')
-            chartplay.toFile('./debug/playerplaygraph.jpg')
-
+                .setImage(`${chartplay}`);
 
             const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
             fs.writeFileSync(`debug/command-osu=osutopdata=${obj.guildId}.json`, JSON.stringify(osutopdata, null, 2))
             if (osutopdata?.error) {
-                obj.reply({
+                if (commandType != 'button') obj.reply({
                     content: `${osutopdata?.error ? osutopdata?.error : 'Error: null'}`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: false,
@@ -252,7 +267,7 @@ module.exports = {
 
             const mostplayeddata: osuApiTypes.BeatmapPlaycount[] & osuApiTypes.Error = await osufunc.apiget('most_played', `${osudata.id}`)
             if (mostplayeddata?.error) {
-                obj.reply({
+                if (commandType != 'button') obj.reply({
                     content: `${mostplayeddata?.error ? mostplayeddata?.error : 'Error: null'}`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: false,
@@ -382,10 +397,10 @@ ${onlinestatus}
 
                 break;
             case 'button': {
-                obj.edit({
+                obj.message.edit({
                     content: '',
-                    embeds: [],
-                    files: [],
+                    embeds: useEmbeds,
+                    components: [buttons],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
