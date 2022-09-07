@@ -11,12 +11,18 @@ import log = require('../../src/log');
 
 module.exports = {
     name: 'skin',
-    execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
+    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
+        let string: string;
+        let searchid: string;
 
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
+                searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
+
+                string = args.join(' ')
+
             }
                 break;
 
@@ -24,6 +30,10 @@ module.exports = {
 
             case 'interaction': {
                 commanduser = obj.member.user;
+                string = obj.options.getString('string')
+                if (!string) {
+                    string = obj.options.getUser('user');
+                }
             }
 
                 //==============================================================================================================================================================================================
@@ -77,14 +87,47 @@ module.exports = {
             ), 'utf-8')
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+        let userF;
+        let findType: 'string' | 'id'
+        switch (true) {
+            case (searchid != commanduser.id): {
+                findType = 'id'
+            }
+                break;
+            case (string != null): {
+                findType = 'string'
+            }
+                break;
+            default: {
+                findType = 'id'
+            }
+        }
 
-
+        if (findType == 'id') {
+            userF = await userdata.findOne({
+                where: {
+                    userid: commanduser.id
+                }
+            })
+        } else {
+            userF = await userdata.findOne({
+                where: {
+                    osuname: string
+                }
+            })
+        }
+        let skinstring;
+        if (userF) {
+            skinstring = `${userF.get('skin')}`
+        } else {
+            skinstring = `User is not saved in the database`
+        }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
-                    content: '',
+                    content: skinstring,
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },
@@ -98,7 +141,7 @@ module.exports = {
 
             case 'interaction': {
                 obj.reply({
-                    content: '',
+                    content: skinstring,
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },

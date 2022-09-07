@@ -27,13 +27,39 @@ function isAdmin(userid: number, guildid: number, client: Discord.Client) {
         const curguild = client.guilds.cache.get(`${guildid}`)
         const curmem = curguild.members.cache.has(`${userid}`) ? curguild.members.cache.get(`${userid}`) : null
         if (curmem != null) {
-            if(curmem.permissions.toArray().join(' ').includes('Administrator')) {
-            return true;
+            if (curmem.permissions.toArray().join(' ').includes('Administrator')) {
+                return true;
             }
         }
     }
     return false;
 }
+
+/**
+ * 
+ * @param mentions mentions cache
+ * @param type user/channel/role
+ * @returns ID of first mention
+ */
+function getMentionId(mentions: any, type: 'user' | 'channel' | 'role') {
+    let x = null;
+    switch (type) {
+        case 'user': {
+            x = mentions.users.cache.first().id;
+        }
+            break;
+        case 'channel': {
+            x = mentions.channels.cache.first().id;
+        }
+            break;
+        case 'role': {
+            x = mentions.roles.cache.first().id;
+        }
+            break;
+    }
+    return x;
+}
+
 /**
  * 
  * @param {string} cmd 
