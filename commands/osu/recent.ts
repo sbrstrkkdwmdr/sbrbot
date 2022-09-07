@@ -513,7 +513,7 @@ module.exports = {
                 .setURL(`https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}`)
                 .setAuthor({
                     name: `${trycountstr}`,
-                    url: `https://osu.ppy.sh/${osudata.id}`,
+                    url: `https://osu.ppy.sh/u/${osudata.id}`,
                     iconURL: `https://a.ppy.sh/${osudata.id}`
                 })
                 .setThumbnail(`${curbms.covers.list}`)
