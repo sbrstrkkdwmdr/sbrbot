@@ -107,6 +107,16 @@ module.exports = {
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         const scoredata: osuApiTypes.Score = await osufunc.apiget('score', `${scoreid}`, `${scoremode}`)
+        if (scoredata?.error) {
+            if (commandType != 'button') {
+                obj.reply({
+                    content: `${scoredata?.error ? scoredata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).catch()
+            }
+            return;
+        }
         try {
             if (typeof scoredata?.error != 'undefined') {
                 obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
@@ -126,6 +136,16 @@ module.exports = {
         }
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${scoredata.beatmap.id}`)
         fs.appendFileSync('debug/command-scoreparse=map.json', JSON.stringify(mapdata, null, 2));
+
+        if (mapdata?.error) {
+            if (commandType != 'button') {
+                obj.reply({
+                    content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+        }
 
         const ranking = scoredata.rank ? scoredata.rank : 'f'
         let scoregrade = emojis.grades.F

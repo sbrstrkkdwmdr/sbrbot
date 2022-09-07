@@ -58,7 +58,9 @@ module.exports = {
                 mapid = curid;
                 const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
                 fs.writeFileSync(`debug/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
-
+                if (bmsdata?.error) {
+                    return;
+                }
                 const bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
                 fs.writeFileSync(`debug/command-map=bmstosr=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
 
@@ -157,6 +159,15 @@ module.exports = {
                         }
                     }
                     const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
+                    if(bmsdata?.error){
+                        if (commandType != 'button'){
+                            obj.reply({
+                                content: `${bmsdata?.error ? bmsdata?.error : 'Error: null'} `,
+                                allowedMentions: { repliedUser: false}, 
+                                failIfNotExists: true
+                            })
+                        }
+                    }
                     try {
                         mapid = bmsdata.beatmaps[0].id;
                     } catch (error) {
@@ -313,11 +324,13 @@ ${error}
             mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
             fs.writeFileSync(`debug/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
             if (mapdata?.error) {
-                if (commandType != 'button') obj.reply({
-                    content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: false,
-                }).catch()
+                if (commandType != 'button' && commandType != 'link') {
+                    obj.reply({
+                        content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: false,
+                    }).catch()
+                }
                 return;
             }
 
@@ -467,11 +480,13 @@ ${error}
         const mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
         fs.writeFileSync(`./debug/command-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
         if (mapperdata?.error) {
-            obj.reply({
-                content: `${mapperdata?.error ? mapperdata?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
+            if (commandType != 'button') {
+                obj.reply({
+                    content: `${mapperdata?.error ? mapperdata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+            }
             return;
         }
 
