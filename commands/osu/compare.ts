@@ -362,7 +362,7 @@ Second: \`${second}\`
             case 'message': {
                 obj.reply({
                     content: '',
-                    embeds: [],
+                    embeds: Embeds,
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -376,7 +376,7 @@ Second: \`${second}\`
             case 'interaction': {
                 obj.reply({
                     content: '',
-                    embeds: [],
+                    embeds: Embeds,
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
