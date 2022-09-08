@@ -124,7 +124,7 @@ export async function scoreList(
     for (let i = 0; i < 5 && i < newData.length; i++) {
         const scoreoffset = page * 5 + i
         const curscore = newData[scoreoffset]
-        
+
         if (!curscore) {
             break;
         }
@@ -396,7 +396,18 @@ ${pptxt}
 
 }
 
-export function score(score: osuapitypes.Score) { }
+export function score(score: osuapitypes.Score, map: osuapitypes.Beatmap, detailed: boolean) {
+
+    let fields;
+
+    if (detailed) {
+        //like rs
+    } else {
+        //like scoreparse
+    }
+
+    return fields;
+}
 
 export function user() { }
 
