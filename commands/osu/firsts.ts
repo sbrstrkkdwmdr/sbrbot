@@ -8,6 +8,7 @@ import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
+import embedStuff = require('../../src/embed');
 
 module.exports = {
     name: 'firsts',
@@ -199,6 +200,14 @@ module.exports = {
 
         }
 
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+        }
+
         const firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('firsts', `${osudata.id}`, `${mode}`)
         fs.writeFileSync(`debug/command-firsts=firstscoresdata=${obj.guildId}.json`, JSON.stringify(firstscoresdata, null, 2))
         if (firstscoresdata?.error) {
@@ -227,122 +236,15 @@ module.exports = {
             page = Math.ceil(firstscoresdata.length / 5) - 1
         }
 
+        const scoresarg = await embedStuff.scoreList(firstscoresdata, false, false, page, true, true, 'recent', 'recent', null, null, reverse)
 
+        for (let i = 0; i < scoresarg.fields.length; i++) {
+            firstsEmbed.addFields([scoresarg.fields[i]])
+        }
         firstsEmbed.setDescription(
             `Page ${page + 1}/${Math.ceil(firstscoresdata.length / 5)}
 ${mode}
 `);
-        for (let i = 0; i < firstscoresdata.length && i < 5; i++) {
-            const curscore = firstscoresdata[i + (page * 5)]
-            if (!curscore) break;
-            const ranking = curscore.rank.toUpperCase()
-            let grade: string;
-            switch (ranking) {
-                case 'F':
-                    grade = emojis.grades.F
-                    break;
-                case 'D':
-                    grade = emojis.grades.D
-                    break;
-                case 'C':
-                    grade = emojis.grades.C
-                    break;
-                case 'B':
-                    grade = emojis.grades.B
-                    break;
-                case 'A':
-                    grade = emojis.grades.A
-                    break;
-                case 'S':
-                    grade = emojis.grades.S
-                    break;
-                case 'SH':
-                    grade = emojis.grades.SH
-                    break;
-                case 'X':
-                    grade = emojis.grades.X
-                    break;
-                case 'XH':
-                    grade = emojis.grades.XH
-                    break;
-            }
-            let hitlist: string;
-            const hitstats = curscore.statistics
-            switch (mode) {
-                case 'osu':
-                default:
-                    hitlist = `${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-                    break;
-                case 'taiko':
-                    hitlist = `${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-                    break;
-                case 'fruits':
-                    hitlist = `${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-                    break;
-                case 'mania':
-                    hitlist = `${hitstats.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_katu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-                    break;
-            }
-
-            /*             const fmods: string[] = curscore.mods
-                        let ifmods: string = '';
-                        if (!fmods) {
-                            ifmods = ''
-                        } else {
-                            ifmods = '+' + fmods.join('').toUpperCase()
-                        } */
-
-            let pptxt: string;
-            const ppcalcing = await osufunc.scorecalc(
-                curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
-                curscore.mode,
-                curscore.beatmap.id,
-                hitstats.count_geki,
-                hitstats.count_300,
-                hitstats.count_katu,
-                hitstats.count_100,
-                hitstats.count_50,
-                hitstats.count_miss,
-                curscore.accuracy,
-                curscore.max_combo,
-                curscore.score,
-                0,
-                null, false
-            )
-            if (curscore.accuracy != 1) {
-                if (curscore.pp == null || isNaN(curscore.pp)) {
-                    pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
-                } else {
-                    pptxt = `${curscore.pp.toFixed(2)}pp`
-                }
-                if (curscore.perfect == false) {
-                    pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`
-                }
-                pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`
-            } else {
-                if (curscore.pp == null || isNaN(curscore.pp)) {
-                    pptxt =
-                        `${await ppcalcing[0].pp.toFixed(2)}pp`
-                } else {
-                    pptxt =
-                        `${curscore.pp.toFixed(2)}pp`
-                }
-            }
-            fs.writeFileSync(`debug/command-firsts=ppcalc=${obj.guildId}`, JSON.stringify(ppcalcing, null, 2))
-
-            firstsEmbed.addFields([{
-                name: `#${i + 1 + (page * 5)}`,
-                value: `
-[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id})
-**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
-${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
-\`${hitlist}\`
-${pptxt}
-`,
-                inline: false
-            }])
-
-        }
 
         if (page >= (firstscoresdata.length / 5) - 1) {
             //@ts-ignore
@@ -370,14 +272,17 @@ ${pptxt}
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-                obj.reply({
-                    content: '',
-                    embeds: [firstsEmbed],
-                    components: [pgbuttons, buttons],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+                setTimeout(() => {
+
+                    obj.editReply({
+                        content: '',
+                        embeds: [firstsEmbed],
+                        components: [pgbuttons, buttons],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }, 1000);
             }
 
                 //==============================================================================================================================================================================================

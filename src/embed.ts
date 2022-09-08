@@ -16,7 +16,10 @@ export async function scoreList(
     filteredMapper: string,
     filteredMods: string,
     reverse: boolean,
+    mapidOverride?: number,
 ) {
+
+
 
     let filtereddata = scores.slice()
     let filterinfo = '';
@@ -121,7 +124,7 @@ export async function scoreList(
     for (let i = 0; i < 5 && i < newData.length; i++) {
         const scoreoffset = page * 5 + i
         const curscore = newData[scoreoffset]
-
+        
         if (!curscore) {
             break;
         }
@@ -132,6 +135,8 @@ export async function scoreList(
                 trueIndex = ''
             }
         }
+
+        let mapid = mapidOverride ? mapidOverride : curscore.beatmap.id;
 
         if (detailed === true) {
             const ranking = curscore.rank.toUpperCase()
@@ -196,7 +201,7 @@ export async function scoreList(
             const ppcalcing = await osufunc.scorecalc(
                 curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
                 curscore.mode,
-                curscore.beatmap.id,
+                mapid,
                 hitstats.count_geki,
                 hitstats.count_300,
                 hitstats.count_katu,
@@ -319,14 +324,14 @@ ${weighted}
             if (!tempMods || tempMods.join('') == '' || tempMods == null || tempMods == undefined) {
                 ifmods = ''
             } else {
-                ifmods = '+' + tempMods.toString().replaceAll(",", '')
+                ifmods = '+' + osumodcalc.OrderMods(tempMods.join(''))
             }
 
             let pptxt: string;
             const ppcalcing = await osufunc.scorecalc(
                 curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
                 curscore.mode,
-                curscore.beatmap.id,
+                mapid,
                 hitstats.count_geki,
                 hitstats.count_300,
                 hitstats.count_katu,
@@ -373,7 +378,7 @@ ${pptxt}
                 inline: false
             })
             scoresAsArrStr.push(
-                `\n#${i + 1 + (page * 5)} | [${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id})
+                `\n#${showtitle}
 **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
 ${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 \`${hitlist}\`

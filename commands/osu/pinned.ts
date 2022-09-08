@@ -8,6 +8,7 @@ import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
+import embedStuff = require('../../src/embed');
 
 module.exports = {
     name: 'pinned',
@@ -204,6 +205,14 @@ module.exports = {
             return;
         }
 
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+        }
+
         const pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
         fs.writeFileSync(`debug/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
         if (pinnedscoresdata?.error) {
@@ -231,140 +240,11 @@ module.exports = {
             pinnedEmbed.setDescription(`Page ${page + 1}/${Math.ceil(pinnedscoresdata.length / 5)}
 ${mode}`
             )
-            for (let i = 0; i < 5 && i < pinnedscoresdata.length; i++) {
-                const curscore = pinnedscoresdata[i + page * 5]
-                if (!curscore) break;
-                let grade;
-                switch (pinnedscoresdata[i].rank.toUpperCase()) {
-                    case 'F':
-                        grade = emojis.grades.F
-                        break;
-                    case 'D':
-                        grade = emojis.grades.D
-                        break;
-                    case 'C':
-                        grade = emojis.grades.C
-                        break;
-                    case 'B':
-                        grade = emojis.grades.B
-                        break;
-                    case 'A':
-                        grade = emojis.grades.A
-                        break;
-                    case 'S':
-                        grade = emojis.grades.S
-                        break;
-                    case 'SH':
-                        grade = emojis.grades.SH
-                        break;
-                    case 'X':
-                        grade = emojis.grades.X
-                        break;
-                    case 'XH':
-                        grade = emojis.grades.XH
-                        break;
-                }
-                let hitlist: string;
-                const hitstats = curscore.statistics
-                switch (mode) {
-                    case 'osu':
-                    default:
-                        hitlist = (`${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
-                        ${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
-                        ${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
-                        ${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        `).replaceAll(' ', '').replaceAll('\n', '')
-                        break;
-                    case 'taiko':
-                        hitlist =
-                            (`${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
-                        ${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
-                        ${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        `).replaceAll(' ', '').replaceAll('\n', '')
-                        break;
-                    case 'fruits':
-                        hitlist = (`${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
-                        ${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
-                        ${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/
-                        ${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        `).replaceAll(' ', '').replaceAll('\n', '')
-                        break;
-                    case 'mania':
-                        hitlist =
-                            (`${hitstats.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        ${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        ${hitstats.count_katu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        ${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        ${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        ${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        `).replaceAll(' ', '').replaceAll('\n', '')
-                        break;
-                }
-                const ifmods =
-                    curscore.mods.join('').length > 1 ?
-                        '+' + curscore.mods.join('').toUpperCase() :
-                        ''
-                const title =
-                    curscore.beatmapset.title == curscore.beatmapset.title_unicode ?
-                        curscore.beatmapset.title :
-                        `${curscore.beatmapset.title} (${curscore.beatmapset.title_unicode})`
 
-                const artist =
-                    curscore.beatmapset.artist == curscore.beatmapset.artist_unicode ?
-                        curscore.beatmapset.artist :
-                        `${curscore.beatmapset.artist} (${curscore.beatmapset.artist_unicode})`
-                const fulltitle = `${artist} - ${title} [${curscore.beatmap.version}]`
+            const scorearg = await embedStuff.scoreList(pinnedscoresdata, false, false, page, true, false, 'recent', 'recent', null, null, false);
 
-                let pptxt: string;
-                const ppcalcing = await osufunc.scorecalc(
-                    curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
-                    curscore.mode,
-                    curscore.beatmap.id,
-                    hitstats.count_geki,
-                    hitstats.count_300,
-                    hitstats.count_katu,
-                    hitstats.count_100,
-                    hitstats.count_50,
-                    hitstats.count_miss,
-                    curscore.accuracy,
-                    curscore.max_combo,
-                    curscore.score,
-                    0,
-                    null, false
-                )
-                if (curscore.accuracy != 1) {
-                    if (curscore.pp == null || isNaN(curscore.pp)) {
-                        pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
-                    } else {
-                        pptxt = `${curscore.pp.toFixed(2)}pp`
-                    }
-                    if (curscore.perfect == false) {
-                        pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`
-                    }
-                    pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`
-                } else {
-                    if (curscore.pp == null || isNaN(curscore.pp)) {
-                        pptxt =
-                            `${await ppcalcing[0].pp.toFixed(2)}pp`
-                    } else {
-                        pptxt =
-                            `${curscore.pp.toFixed(2)}pp`
-                    }
-                }
-                fs.writeFileSync(`debug/command-pinned=ppcalc=${obj.guildId}`, JSON.stringify(ppcalcing, null, 2))
-
-                pinnedEmbed.addFields([
-                    {
-                        name: `#${i + 1 + page * 5}`,
-                        value: `
-                        [${fulltitle}](https://osu.ppy.sh/b/${curscore.beatmap.id})
-                        ${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
-                        \`${hitlist}\`
-                        ${pptxt}
-                        `,
-                        inline: false
-                    }
-                ])
+            for (let i = 0; i < scorearg.fields.length; i++) {
+                pinnedEmbed.addFields([scorearg.fields[i]])
             }
         }
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
@@ -393,14 +273,17 @@ ${mode}`
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-                obj.reply({
-                    content: '',
-                    embeds: [pinnedEmbed],
-                    components: [pgbuttons, buttons],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+                setTimeout(() => {
+
+                    obj.editReply({
+                        content: '',
+                        embeds: [pinnedEmbed],
+                        components: [pgbuttons, buttons],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }, 1000);
             }
 
                 //==============================================================================================================================================================================================

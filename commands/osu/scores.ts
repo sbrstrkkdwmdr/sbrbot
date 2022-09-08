@@ -8,6 +8,7 @@ import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
+import embedStuff = require('../../src/embed');
 
 module.exports = {
     name: 'scores',
@@ -17,7 +18,7 @@ module.exports = {
         let user;
         let searchid;
         let mapid;
-        let sort = 'recent';
+        let sort: any = 'recent';
         let reverse = false;
         let page = 1;
 
@@ -188,32 +189,32 @@ module.exports = {
         page--
 
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-scores-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('⬅')
-                .setDisabled(isFirstPage),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-scores-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('◀')
-                .setDisabled(isFirstPage),
-            new Discord.ButtonBuilder()
-                .setCustomId(`Search-scores-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('🔍'),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-scores-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('▶')
-                .setDisabled(isLastPage),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-scores-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('➡')
-                .setDisabled(isLastPage),
-        );
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-scores-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('⬅')
+                    .setDisabled(isFirstPage),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-scores-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('◀')
+                    .setDisabled(isFirstPage),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Search-scores-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('🔍'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-scores-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('▶')
+                    .setDisabled(isLastPage),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-scores-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('➡')
+                    .setDisabled(isLastPage),
+            );
 
         if (user == null) {
             let cuser = await osufunc.searchUser(searchid, userdata, true);
@@ -236,6 +237,14 @@ module.exports = {
                 failIfNotExists: false,
             }).catch()
             return;
+        }
+
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
         }
 
         if (!osudata.id) {
@@ -287,114 +296,6 @@ module.exports = {
             })
                 .catch();
         }
-        // if (scoredata.length < 1) {
-        //     return obj.reply({
-        //         content: 'Error - no scores found',
-        //         allowedMentions: { repliedUser: false },
-        //         failIfNotExists: true
-        //     })
-        //         .catch();
-
-        // }
-        if (reverse != true) {
-            switch (sort) {
-                case 'score':
-                    scoredata = scoredataPresort.scores.sort(
-                        (a, b) =>
-                            b.score - a.score
-                    )
-                    sortdata += 'Sorted by: score'
-                    break;
-                case 'acc':
-                    scoredata = scoredataPresort.scores.sort(
-                        (a, b) =>
-                            b.accuracy - a.accuracy
-                    )
-                    sortdata += 'Sorted by: accuracy'
-                    break;
-                case 'pp':
-                    scoredata = scoredataPresort.scores.sort(
-                        (a, b) =>
-                            b.pp - a.pp
-                    )
-                    sortdata += 'Sorted by: pp'
-                    break;
-                case 'recent': default:
-                    scoredata = scoredataPresort.scores.sort(
-                        (a, b) =>
-                            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-                    )
-                    sortdata += 'Sorted by: most recent'
-                    break;
-                case 'combo':
-                    scoredata = scoredataPresort.scores.sort(
-                        (a, b) =>
-                            b.max_combo - a.max_combo
-                    )
-                    sortdata += 'Sorted by: max combo'
-                    break;
-                case 'miss':
-                    scoredata = scoredataPresort.scores.sort(
-                        (a, b) =>
-                            a.statistics.count_miss - b.statistics.count_miss
-                    )
-                    sortdata += 'Sorted by: least misses'
-                    break;
-                case 'rank':
-                    scoredata = scoredataPresort.scores.sort((a, b) => a.rank.localeCompare(b.rank))
-                    sortdata += `\nsorted by rank`
-                    break;
-            }
-        } else {
-            switch (sort) {
-                case 'score':
-                    scoredata = scoredataPresort.scores.sort(
-                        (a, b) =>
-                            a.score - b.score
-                    )
-                    sortdata += 'Sorted by: lowest score'
-                    break;
-                case 'acc':
-                    scoredata = scoredataPresort.scores.sort(
-                        (a, b) =>
-                            a.accuracy - b.accuracy
-                    )
-                    sortdata += 'Sorted by: lowest accuracy'
-                    break;
-                case 'pp':
-                    scoredata = scoredataPresort.scores.sort(
-                        (a, b) =>
-                            a.pp - b.pp
-                    )
-                    sortdata += 'Sorted by: lowest pp'
-                    break;
-                case 'recent': default:
-                    scoredata = scoredataPresort.scores.sort(
-                        (a, b) =>
-                            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-                    )
-                    sortdata += 'Sorted by: oldest'
-                    break;
-                case 'combo':
-                    scoredata = scoredataPresort.scores.sort(
-                        (a, b) =>
-                            a.max_combo - b.max_combo
-                    )
-                    sortdata += 'Sorted by: min combo'
-                    break;
-                case 'miss':
-                    scoredata = scoredataPresort.scores.sort(
-                        (a, b) =>
-                            b.statistics.count_miss - a.statistics.count_miss
-                    )
-                    sortdata += 'Sorted by: most misses'
-                    break;
-                case 'rank':
-                    scoredata = scoredataPresort.scores.sort((a, b) => b.rank.localeCompare(a.rank))
-                    sortdata += `\nsorted by rank`
-                    break;
-            }
-        }
         fs.writeFileSync(`debug/command-scores=scoredata=${obj.guildId}.json`, JSON.stringify(scoredata, null, 2));
 
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
@@ -425,105 +326,14 @@ module.exports = {
             scoretxt += sortdata + '\n\n'
             scoresEmbed.setFooter({ text: `Page ${page + 1}/${Math.ceil(scoredata.length / 5)}` })
 
-            if(page >= Math.ceil(scoredata.length / 5)) {
+            if (page >= Math.ceil(scoredata.length / 5)) {
                 page = Math.ceil(scoredata.length / 5) - 1
             }
 
-            for (let i = 0; i < scoredata.length && i < 5; i++) {
-                const curscore = scoredata[i + page * 5]
-                if (!curscore) {
-                    break;
-                }
+            const scorearg = await embedStuff.scoreList(scoredata, false, false, page, false, false, sort, sort, null, null, reverse, mapdata.id)
 
-                const scorestats = curscore.statistics
-                let hitlist = ''
-                switch (curscore.mode) {
-                    case 'osu': default:
-                        hitlist = `${scorestats.count_300}/${scorestats.count_100}/${scorestats.count_50}/${scorestats.count_miss}`
-                        break;
-                    case 'taiko':
-                        hitlist = `${scorestats.count_300}/${scorestats.count_50}/${scorestats.count_miss}`
-                        break;
-                    case 'fruits':
-                        hitlist = `${scorestats.count_300}/${scorestats.count_100}/${scorestats.count_50}/${scorestats.count_miss}`
-                        break;
-                    case 'mania':
-                        hitlist = `${scorestats.count_geki}/${scorestats.count_300}/${scorestats.count_katu}/${scorestats.count_100}/${scorestats.count_50}/${scorestats.count_miss}`
-                        break;
-                }
-                let grade;
-                switch (curscore.rank) {
-                    case 'F':
-                        grade = emojis.grades.F
-                        break;
-                    case 'D':
-                        grade = emojis.grades.D
-                        break;
-                    case 'C':
-                        grade = emojis.grades.C
-                        break;
-                    case 'B':
-                        grade = emojis.grades.B
-                        break;
-                    case 'A':
-                        grade = emojis.grades.A
-                        break;
-                    case 'S':
-                        grade = emojis.grades.S
-                        break;
-                    case 'SH':
-                        grade = emojis.grades.SH
-                        break;
-                    case 'X':
-                        grade = emojis.grades.X
-                        break;
-                    case 'XH':
-                        grade = emojis.grades.XH
-                        break;
-                }
-                const ppcalcing = await osufunc.scorecalc(
-                    curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
-                    curscore.mode,
-                    mapdata.id,
-                    scorestats.count_geki,
-                    scorestats.count_300,
-                    scorestats.count_katu,
-                    scorestats.count_100,
-                    scorestats.count_50,
-                    scorestats.count_miss,
-                    curscore.accuracy,
-                    curscore.max_combo,
-                    curscore.score,
-                    0,
-                    null, false
-                )
-                let pptxt;
-                if (curscore.accuracy != 1) {
-                    if (curscore.pp == null || isNaN(curscore.pp)) {
-                        pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
-                    } else {
-                        pptxt = `${curscore.pp.toFixed(2)}pp`
-                    }
-                    if (curscore.perfect == false) {
-                        pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`
-                    }
-                    pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`
-                } else {
-                    if (curscore.pp == null || isNaN(curscore.pp)) {
-                        pptxt =
-                            `${await ppcalcing[0].pp.toFixed(2)}pp`
-                    } else {
-                        pptxt =
-                            `${curscore.pp.toFixed(2)}pp`
-                    }
-                }
-                scoretxt +=
-                    `**[Score #${i + 1 + page * 5}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}) ${curscore.mods.join('').length > 1 ? '+' + curscore.mods.join('') : ''}** <t:${new Date(curscore.created_at).getTime() / 1000}:R>
-                    ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
-                    \`${hitlist}\` | ${curscore.max_combo}x/**${mapdata.max_combo}x**
-                    ${pptxt}
-                    `
-                fs.writeFileSync(`debug/command-scores=pp_calc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2))
+            for (let i = 0; i < scoredata.length && i < 5; i++) {
+                scoresEmbed.addFields([scorearg.fields[i]])
             }
         }
         scoresEmbed.setDescription(scoretxt)
@@ -555,14 +365,16 @@ module.exports = {
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-                obj.reply({
-                    content: '',
-                    embeds: [scoresEmbed],
-                    components: [pgbuttons, buttons],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+                setTimeout(() => {
+                    obj.editReply({
+                        content: '',
+                        embeds: [scoresEmbed],
+                        components: [pgbuttons, buttons],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }, 1000);
             }
 
                 //==============================================================================================================================================================================================

@@ -8,6 +8,7 @@ import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
+import embedStuff = require('../../src/embed');
 
 module.exports = {
     name: 'osutop',
@@ -342,11 +343,18 @@ module.exports = {
                 .catch();
 
         }
+
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+        }
+
         let filtereddata = osutopdataPreSort;
-        let filterinfo = '';
         if (mapper != null) {
             filtereddata = osutopdataPreSort.filter(array => array.beatmapset.creator.toLowerCase() == mapper.toLowerCase())
-            filterinfo += `\nmapper: ${mapper}`
         }
         let calcmods = osumodcalc.OrderMods(mods + '')
         if (calcmods.length < 1) {
@@ -355,75 +363,57 @@ module.exports = {
         }
         if (mods != null && !mods.includes('any')) {
             filtereddata = osutopdataPreSort.filter(array => array.mods.toString().replaceAll(',', '') == calcmods)
-            filterinfo += `\nmods: ${mods}`
         }
         if (mods != null && mods.includes('any')) {
             filtereddata = osutopdataPreSort.filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods))
-            filterinfo += `\nmods: ${mods}`
         }
         let osutopdata = filtereddata;
         if (reverse == false || reverse == null) {
             switch (sort) {
                 case 'score':
                     osutopdata = filtereddata.sort((a, b) => b.score - a.score)
-                    filterinfo += `\nsorted by score`
                     break;
                 case 'acc':
                     osutopdata = filtereddata.sort((a, b) => b.accuracy - a.accuracy)
-                    filterinfo += `\nsorted by highest accuracy`
                     break;
                 case 'pp': default:
                     osutopdata = filtereddata.sort((a, b) => b.pp - a.pp)
-                    filterinfo += `\nsorted by highest pp`
-                    sort = 'pp'
                     break;
                 case 'recent':
                     osutopdata = filtereddata.sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
-                    filterinfo += `\nsorted by most recent`
                     break;
                 case 'combo':
                     osutopdata = filtereddata.sort((a, b) => b.max_combo - a.max_combo)
-                    filterinfo += `\nsorted by highest combo`
                     break;
                 case 'miss':
                     osutopdata = filtereddata.sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
-                    filterinfo += `\nsorted by least misses`
                     break;
                 case 'rank':
                     osutopdata = filtereddata.sort((a, b) => a.rank.localeCompare(b.rank))
-                    filterinfo += `\nsorted by rank`
                     break;
             }
         } else {
             switch (sort) {
                 case 'score':
                     osutopdata = filtereddata.sort((a, b) => a.score - b.score)
-                    filterinfo += `\nsorted by lowest score`
                     break;
                 case 'acc':
                     osutopdata = filtereddata.sort((a, b) => a.accuracy - b.accuracy)
-                    filterinfo += `\nsorted by lowest accuracy`
                     break;
                 case 'pp': default:
                     osutopdata = filtereddata.sort((a, b) => a.pp - b.pp)
-                    filterinfo += `\nsorted by lowest pp`
-                    sort = 'pp'
                     break;
                 case 'recent':
                     osutopdata = filtereddata.sort((a, b) => parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
-                    filterinfo += `\nsorted by oldest`
                     break;
                 case 'combo':
                     osutopdata = filtereddata.sort((a, b) => a.max_combo - b.max_combo)
-                    filterinfo += `\nsorted by lowest combo`
                     break;
                 case 'miss':
                     osutopdata = filtereddata.sort((a, b) => b.statistics.count_miss - a.statistics.count_miss)
-                    filterinfo += `\nsorted by most misses`
                     break;
                 case 'rank':
                     osutopdata = filtereddata.sort((a, b) => b.rank.localeCompare(a.rank))
-                    filterinfo += `\nsorted by lowest rank`
                     break;
             }
         }
@@ -449,174 +439,27 @@ ${error}
             page = Math.ceil(osutopdata.length / 5) - 1
         }
 
+
+
         const topEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`Top plays of ${osutopdata[0].user.username}`)
             .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
             .setURL(`https://osu.ppy.sh/users/${osutopdata[0].user.id}`)
-        topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 5)}\nmode: ${mode}\n`)
-        for (let i = 0; i < 5 && i < osutopdata.length; i++) {
 
-            const scoreoffset = page * 5 + i
-
-            const curscore = osutopdata[scoreoffset]
-            if (!curscore) {
-                break;
-            }
-            const score = curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            const hitgeki = curscore.statistics.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            const hit300 = curscore.statistics.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            const hitkatu = curscore.statistics.count_katu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            const hit100 = curscore.statistics.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            const hit50 = curscore.statistics.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            const miss = curscore.statistics.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            const combo = curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-            const ranking = curscore.rank.toUpperCase()
-            let grade: string;
-            switch (ranking) {
-                case 'F':
-                    grade = 'F'
-                    break;
-                case 'D':
-                    grade = emojis.grades.D
-                    break;
-                case 'C':
-                    grade = emojis.grades.C
-                    break;
-                case 'B':
-                    grade = emojis.grades.B
-                    break;
-                case 'A':
-                    grade = emojis.grades.A
-                    break;
-                case 'S':
-                    grade = emojis.grades.S
-                    break;
-                case 'SH':
-                    grade = emojis.grades.SH
-                    break;
-                case 'X':
-                    grade = emojis.grades.X
-                    break;
-                case 'XH':
-                    grade = emojis.grades.XH
-                    break;
-            }
-
-
-            let hitlist = ''
-            if (mode == 'osu') {
-                hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
-            }
-            if (mode == 'taiko') {
-                hitlist = `${hit300}/${hit100}/${miss}`
-            }
-            if (mode == 'fruits' || mode == 'catch') {
-                hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
-            }
-            if (mode == 'mania') {
-                hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
-            }
-            const topmods = curscore.mods
-            let ifmods: string;
-
-            if (!topmods || topmods.join('') == '' || topmods == null || topmods == undefined) {
-                ifmods = ''
-            } else {
-                ifmods = '+' + topmods.toString().replaceAll(",", '')
-            }
-            let scorenum;
-            if (reverse == true) {
-                scorenum = osutopdata.length - scoreoffset
-            } else {
-                scorenum = scoreoffset + 1
-            }
-
-            let ifnopp = '';
-            let trueppindex: number;
-            const indexdata = osutopdata.sort((a, b) => b.pp - a.pp)
-
-            if (sort != 'pp') {
-                trueppindex = await indexdata.indexOf(curscore)
-                ifnopp = await `(#${trueppindex + 1})`
-                if (reverse == false || reverse == null) {
-                    switch (sort) {
-                        case 'score':
-                            osutopdata = filtereddata.sort((a, b) => b.score - a.score)
-                            filterinfo += `\nsorted by score`
-                            break;
-                        case 'acc':
-                            osutopdata = filtereddata.sort((a, b) => b.accuracy - a.accuracy)
-                            filterinfo += `\nsorted by highest accuracy`
-                            break;
-                        case 'pp': default:
-                            osutopdata = filtereddata.sort((a, b) => b.pp - a.pp)
-                            filterinfo += `\nsorted by highest pp`
-                            break;
-                        case 'recent':
-                            osutopdata = filtereddata.sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
-                            filterinfo += `\nsorted by most recent`
-                            break;
-                        case 'combo':
-                            osutopdata = filtereddata.sort((a, b) => b.max_combo - a.max_combo)
-                            filterinfo += `\nsorted by highest combo`
-                            break;
-                        case 'miss':
-                            osutopdata = filtereddata.sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
-                            filterinfo += `\nsorted by least misses`
-                            break;
-                        case 'rank':
-                            osutopdata = filtereddata.sort((a, b) => a.rank.localeCompare(b.rank))
-                            filterinfo += `\nsorted by rank`
-                            break;
-                    }
-                } else {
-                    switch (sort) {
-                        case 'score':
-                            osutopdata = filtereddata.sort((a, b) => a.score - b.score)
-                            filterinfo += `\nsorted by lowest score`
-                            break;
-                        case 'acc':
-                            osutopdata = filtereddata.sort((a, b) => a.accuracy - b.accuracy)
-                            filterinfo += `\nsorted by lowest accuracy`
-                            break;
-                        case 'pp': default:
-                            osutopdata = filtereddata.sort((a, b) => a.pp - b.pp)
-                            filterinfo += `\nsorted by lowest pp`
-                            break;
-                        case 'recent':
-                            osutopdata = filtereddata.sort((a, b) => parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
-                            filterinfo += `\nsorted by oldest`
-                            break;
-                        case 'combo':
-                            osutopdata = filtereddata.sort((a, b) => a.max_combo - b.max_combo)
-                            filterinfo += `\nsorted by lowest combo`
-                            break;
-                        case 'miss':
-                            osutopdata = filtereddata.sort((a, b) => b.statistics.count_miss - a.statistics.count_miss)
-                            filterinfo += `\nsorted by most misses`
-                            break;
-                        case 'rank':
-                            osutopdata = filtereddata.sort((a, b) => b.rank.localeCompare(a.rank))
-                            filterinfo += `\nsorted by lowest rank`
-                            break;
-                    }
-                } //added this cos it keeps re-sorting back to pp
-            }
-            topEmbed.addFields([{
-                name: `#${scorenum} ${ifnopp}`,
-                value: `
-                    [**${curscore.beatmapset.title} [${curscore.beatmap.version}]**](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}
-                    **Score set ** <t:${new Date(curscore.created_at).getTime() / 1000}:R>
-                    **SCORE:** ${score} | x${combo} | ${Math.abs(curscore.accuracy * 100).toFixed(2)}% | ${grade}
-                    \`${hitlist}\` | ${(curscore.pp).toFixed(2)}pp 
-                    ${(curscore.weight.pp).toFixed(2)}pp (Weighted at **${(curscore.weight.percentage).toFixed(2)}%**)
-                    `,
-                inline: false
-            }])
-
+        let showtrue = false;
+        if (sort != 'pp') {
+            showtrue = true;
         }
+
+        const scoresarg = await embedStuff.scoreList(osutopdata, detailed, true, page, true, showtrue, sort, 'pp', mapper, mods, reverse)
+        for (let i = 0; scoresarg.fields.length > i; i++) {
+            topEmbed.addFields(scoresarg.fields[i])
+        }
+        const filterinfo = scoresarg.filter
+
+        topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 5)}\nmode: ${mode}\n`)
+
 
         if (detailed == true) {
             const highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -688,14 +531,16 @@ ${error}
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-                obj.reply({
-                    content: '',
-                    embeds: [topEmbed],
-                    components: [pgbuttons, buttons],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+                setTimeout(() => {
+                    obj.editReply({
+                        content: '',
+                        embeds: [topEmbed],
+                        components: [pgbuttons, buttons],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }, 1000);
             }
 
                 //==============================================================================================================================================================================================
