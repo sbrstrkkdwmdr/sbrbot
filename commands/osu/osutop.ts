@@ -245,6 +245,13 @@ module.exports = {
                 mode = cuser.gamemode;
             }
             if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
+                if(commandType != 'button'){
+                    obj.reply({
+                        content: 'User not found',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
                 return;
             }
         }

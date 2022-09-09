@@ -221,7 +221,17 @@ module.exports = {
         if (user == null) {
             let cuser = await osufunc.searchUser(searchid, userdata, true);
             user = cuser.username;
+            if (mode == null) {
+                mode = cuser.gamemode;
+            }
             if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
+                if(commandType != 'button'){
+                    obj.reply({
+                        content: 'User not found',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
                 return;
             }
         }
