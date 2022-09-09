@@ -164,6 +164,9 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
                 break;
 
             //osu commands below
+            case 'compare':
+                commandStruct.osucmds.get('compare').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                break;
             case 'firsts':
                 commandStruct.osucmds.get('firsts').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
@@ -253,7 +256,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
             // music
 
             // WIP
-            case 'compare': case 'whatif': case 'play': case 'pause': case 'np': case 'wip': case 'skip': case 'queue': case 'resume':
+            case 'whatif': case 'play': case 'pause': case 'np': case 'wip': case 'skip': case 'queue': case 'resume':
                 obj.reply({ content: 'This command is currently under development. Will be added later.', allowedMentions: { repliedUser: false } })
                     .catch()
                 break;

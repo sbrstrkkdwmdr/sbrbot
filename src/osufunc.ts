@@ -861,3 +861,34 @@ export function debug(data: any, type: string, name: string, serverId: string | 
     fs.writeFileSync(`debug/${type}-${name}=${pars}_${serverId}.json`, JSON.stringify(data, null, 2));
     return;
 }
+
+export function matchScores(initScore: osuApiTypes.Score, scoreList: osuApiTypes.Score[]){
+    //filter out so scores are only from the same map
+    const mapScores = scoreList.slice().filter(score => score.beatmap.id == initScore.beatmap.id)
+
+    //filter out so scores are only from the same user
+    const userScores = mapScores.slice().filter(score => score.user.id == initScore.user.id)
+
+    //filter out so scores are only from the same gamemode
+    const modeScores = userScores.slice().filter(score => score.mode == initScore.mode)
+
+    //filter out so scores are only from the same mods (excluding HD, SO, NF, TD)
+    let modScores = modeScores.slice().filter(score => score.mods == initScore.mods)
+
+    let filteredMods = initScore.mods.join('').replace('NC', 'DT').split(/.{1,2}/g)
+    
+    if (initScore.mods.includes('HD') || initScore.mods.includes('SO') || initScore.mods.includes('NF') || initScore.mods.includes('TD') || initScore.mods.includes('SD') || initScore.mods.includes('PF')) { 
+        filteredMods = initScore.mods.join('').replace('HD', '').replace('SO', '').replace('NF', '').replace('TD', '').replace('SD', '').replace('PF', '').split(/.{1,2}/g)
+        // if(initScore.mods.includes('DT')){
+            
+        // }
+    }
+
+    modScores = modScores.slice().filter(score => score.mods.join('').replace('NC', 'DT').split(/.{1,2}/g).sort().join('') == filteredMods.sort().join(''))
+
+    if(initScore.mods.length == 0){
+        modScores = modeScores.slice().filter(score => score.mods.length == 0)
+    }    
+
+    return modScores;
+}

@@ -10,7 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 
 module.exports = {
-    name: 'COMMANDNAME',
+    name: 'compare',
     async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
 
@@ -54,26 +54,26 @@ module.exports = {
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-compare-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-compare-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`RightArrow-compare-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-compare-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
-                'COMMANDNAME',
+                'compare',
                 commandType,
                 absoluteID,
                 commanduser
@@ -102,8 +102,14 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        const prevscore = osufunc.getPreviousId('score', `${obj.guildId}`);
-        const prevuser = osufunc.getPreviousId('user', `${obj.guildId}`);
+        let sendthething = false;
+
+        const prevscore: osuApiTypes.Score = osufunc.getPreviousId('score', `${obj.guildId}`);
+        const prevuser: osuApiTypes.User = osufunc.getPreviousId('user', `${obj.guildId}`);
+
+        let firstScore: osuApiTypes.Score = prevscore;
+        let secondScore: osuApiTypes.Score = prevscore;
+
         switch (compareType) {
             case 'user': {
                 if (!first && second) {
@@ -119,20 +125,17 @@ module.exports = {
             }
                 break;
             case 'score': {
-                if (!first || first == null) {
-                    first = prevscore
-                }
-                if (!second || second == null) {
-                    second = prevscore
-                }
-                if (!first && !second) {
-                    first = null
-                    second = prevscore
-                }
+
             }
                 break;
         }
 
+
+        obj.reply({
+            content: 'Loading...',
+            allowedMentions: { repliedUser: false },
+            failIfNotExists: true
+        }).catch()
 
         const Embeds = [];
         try {
@@ -171,9 +174,9 @@ module.exports = {
                     return;
                 }
 
-                fs.writeFileSync(`debugosu/prevuser${obj.guildId}.json`, JSON.stringify({ id: firstuser.username }), 'utf8');
-                fs.writeFileSync(`debugosu/command-compare=firstuserdata=${obj.guildId}.json`, JSON.stringify(firstuser, null, 2), 'utf8');
-                fs.writeFileSync(`debugosu/command-compare=seconduserdata=${obj.guildId}.json`, JSON.stringify(seconduser, null, 2), 'utf8');
+                fs.writeFileSync(`debug/prevuser${obj.guildId}.json`, JSON.stringify({ id: firstuser.username }), 'utf8');
+                fs.writeFileSync(`debug/command-compare=firstuserdata=${obj.guildId}.json`, JSON.stringify(firstuser, null, 2), 'utf8');
+                fs.writeFileSync(`debug/command-compare=seconduserdata=${obj.guildId}.json`, JSON.stringify(seconduser, null, 2), 'utf8');
 
                 const uEmbed = new Discord.EmbedBuilder()
                     .setColor(colours.embedColour.userlist.dec)
@@ -204,112 +207,96 @@ module.exports = {
                         {
                             name: `**Difference**`,
                             value:
-                                `**Rank:** ${firstuser.statistics.global_rank - seconduser.statistics.global_rank}
-**pp:** ${firstuser?.statistics.pp - seconduser?.statistics.pp}
+                                `**Rank:** ${(firstuser.statistics.global_rank - seconduser.statistics.global_rank).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+**pp:** ${(firstuser?.statistics.pp - seconduser?.statistics.pp).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
 **Accuracy:** ${((firstuser.statistics.hit_accuracy != null ? firstuser.statistics.hit_accuracy : 0) - (seconduser.statistics.hit_accuracy != null ? seconduser.statistics.hit_accuracy : 0)).toFixed(2)}%
-**Playcount:** ${firstuser.statistics.play_count - seconduser.statistics.play_count}
-**Level:** ${firstuser.statistics.level.current - seconduser.statistics.level.current}
+**Playcount:** ${`${firstuser.statistics.play_count - seconduser.statistics.play_count}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+**Level:** ${(firstuser.statistics.level.current - seconduser.statistics.level.current).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
 `,
                         }
                     ])
                     ;
                 Embeds.push(uEmbed);
+                sendthething = true;
+
             } else {
-                let firstscore: osuApiTypes.Score = null;
-                let fscoresarray: osuApiTypes.Score[] = null;
-                const secondscore: osuApiTypes.Score =
-                    second != prevscore ?
-                        await osufunc.apiget('score', second)
-                            .catch(error => {
-                                throw new Error(`Api Error: score \`${second}\` not found`)
-                            }) : prevscore;
-                if (firstscore?.error) {
-                    obj.reply({
-                        content: `${firstscore?.error ? firstscore?.error : 'Error: null'}`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: false,
-                    }).catch()
-                    return;
-                }
-                if (secondscore?.error) {
-                    obj.reply({
-                        content: `${secondscore?.error ? secondscore?.error : 'Error: null'}`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: false,
-                    }).catch()
-                    return;
-                }
 
+                let secondScoresArray: osuApiTypes.Score[] = [];
                 if (first == null) {
-                    let testu;
-                    const findname = await userdata.findOne({ where: { userid: commanduser.id } })
-                    if (findname != null) {
-                        testu = findname.get('osuname');
-                        const testu2 = await osufunc.apiget('user', testu)
-                            .catch(error => {
-                                throw new Error(`Api Error: user \`${testu}\` not found`)
-                            });
-                        fscoresarray = await osufunc.apiget('user_get_scores_map', `${secondscore.beatmap.id}`, `${testu2.id}`)
-                            .catch(error => {
-                                throw new Error(`Api Error: beatmap \`${secondscore.beatmap.id}\` or user ${testu2.id} not found`)
-                            });
-                    } else {
-                        firstscore = await osufunc.apiget('score', second)
-                            .catch(error => {
-                                throw new Error(`Api Error: score \`${second}\` not found`)
-                            });
-                    }
+                    //do nothing
                 } else {
-                    firstscore = await osufunc.apiget('score', first)
-                        .catch(error => {
-                            throw new Error(`Api Error: score \`${second}\` not found`)
-                        });
+                    firstScore = await osufunc.apiget('score', first)
+                }
+                if (second == null) {
+                    //get current 
+                } else {
+                    secondScore = await osufunc.apiget('score', second)
+                }
+                if (first == null && second == null) {
+                    firstScore = prevscore
+
+                    //get current user id, then find their scores on the same map as the previous score
+
+                    let cuser = await osufunc.searchUser(commanduser.id, userdata, true);
+                    // user = cuser.username;
+                    // mode = cuser.gamemode;
+                    if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
+                        if (commandType != 'button') {
+                            obj.reply({
+                                content: 'User not found',
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            }).catch()
+                        }
+                        return;
+                    }
+                    const osudata = await osufunc.apiget('user', cuser.username);
+                    if (osudata?.error) {
+                        if (commandType != 'button') obj.reply({
+                            content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: false,
+                        }).catch()
+                        return;
+                    }
+                    let secondScoresArrayInt: any = await osufunc.apiget('user_get_scores_map', `${prevscore.beatmap.id}`, `${osudata.id}`)
+                    secondScoresArray = secondScoresArrayInt.scores
+                    let match = await osufunc.matchScores(firstScore, secondScoresArray).sort(
+                        (a, b) => b.score - a.score
+                    )
+                    secondScore = match.length > 0 ? match[0] : secondScoresArray.length > 0 ? secondScoresArray.slice().sort((a, b) => b.score - a.score)[0] : prevscore;
                 }
 
-                if (fscoresarray != null) {
-                    const secondmodfiltered = osumodcalc.OrderMods(secondscore.mods.join(''))
-                        .replaceAll('HD', '').replaceAll('NF', '').replaceAll('SO', '')
-                        .replaceAll('SD', '').replaceAll('PF', '').replaceAll('TD', '')
-                        .replaceAll('FI', '').replaceAll('RD', '').replaceAll('HD', '')
 
-                    //all of the mods in "secondmodfiltered" are in score.mods
-                    const altarray = fscoresarray.filter(score =>
-                        secondmodfiltered == osumodcalc.OrderMods(score.mods.join(''))
-                            .replaceAll('HD', '').replaceAll('NF', '').replaceAll('SO', '')
-                            .replaceAll('SD', '').replaceAll('PF', '').replaceAll('TD', '')
-                            .replaceAll('FI', '').replaceAll('RD', '').replaceAll('HD', '')
-                    );
-                    firstscore = altarray[0];
-                }
 
                 const sEmbed = new Discord.EmbedBuilder()
                     .setColor(colours.embedColour.scorelist.dec)
-                    .setTitle(`Comparing two scores on ${firstscore.beatmapset.title} [${firstscore.beatmap.version}]`)
-                    .setURL(`https://osu.ppy.sh/beatmapsets/${firstscore.beatmapset.id}#osu/${firstscore.beatmap.id}`)
+                    .setTitle(`Comparing two scores on ${firstScore.beatmapset.title} [${firstScore.beatmap.version}]`)
+                    .setURL(`https://osu.ppy.sh/beatmapsets/${firstScore.beatmapset.id}#osu/${firstScore.beatmap.id}`)
                     .addFields([
                         {
-                            name: `**${firstscore.user.username}**`,
+                            name: `**${firstScore.user.username}**`,
                             value:
-                                `**Score:** ${`${firstscore.score}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**pp:** ${`${firstscore.pp}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**Accuracy:** ${(firstscore.accuracy * 100).toFixed(2)}%
-**Combo:** ${firstscore.max_combo}x/${firstscore.beatmap.max_combo}x
-**Hits:** ${firstscore.statistics.count_300}/${firstscore.statistics.count_100}/${firstscore.statistics.count_50}/${firstscore.statistics.count_miss}
-**Mods:** ${firstscore.mods.join('')}
-**URL:** https://osu.ppy.sh/scores/osu/${firstscore.best_id ? firstscore.best_id : firstscore.id}
+                                `**Score:** ${`${firstScore.score}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+**pp:** ${`${firstScore.pp}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+**Accuracy:** ${(firstScore.accuracy * 100).toFixed(2)}%
+**Combo:** ${firstScore.max_combo}x/${firstScore.beatmap.max_combo}x
+**Hits:** ${firstScore.statistics.count_300}/${firstScore.statistics.count_100}/${firstScore.statistics.count_50}/${firstScore.statistics.count_miss}
+**Mods:** ${firstScore.mods.join('')}
+**URL:** https://osu.ppy.sh/scores/osu/${firstScore.best_id ?? firstScore.id}
 `,
                             inline: true,
                         },
                         {
-                            name: `**${secondscore.user.username}**`,
+                            name: `**${secondScore.user.username}**`,
                             value:
-                                `**Score:** ${`${secondscore.score}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**pp:** ${`${secondscore.pp}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**Accuracy:** ${(secondscore.accuracy * 100).toFixed(2)}%
-**Combo:** ${secondscore.max_combo}x/${secondscore.beatmap.max_combo}x
-**Hits:** ${secondscore.statistics.count_300}/${secondscore.statistics.count_100}/${secondscore.statistics.count_50}/${secondscore.statistics.count_miss}
-**Mods:** ${secondscore.mods.join('')}
-**URL:** https://osu.ppy.sh/scores/osu/${secondscore.best_id ? secondscore.best_id : secondscore.id}
+                                `**Score:** ${`${secondScore.score}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+**pp:** ${`${secondScore.pp}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+**Accuracy:** ${(secondScore.accuracy * 100).toFixed(2)}%
+**Combo:** ${secondScore.max_combo}x/${secondScore.beatmap.max_combo}x
+**Hits:** ${secondScore.statistics.count_300}/${secondScore.statistics.count_100}/${secondScore.statistics.count_50}/${secondScore.statistics.count_miss}
+**Mods:** ${secondScore.mods.join('')}
+**URL:** https://osu.ppy.sh/scores/osu/${secondScore.best_id ? secondScore.best_id : secondScore.id}
 `,
                             inline: true,
 
@@ -317,16 +304,17 @@ module.exports = {
                         {
                             name: `**Difference**`,
                             value:
-                                `**Score:** ${firstscore.score - secondscore.score}
-**pp:** ${firstscore.pp - secondscore.pp}
-**Accuracy:** ${(firstscore.accuracy * 100 - secondscore.accuracy * 100).toFixed(2)}%
-**Combo:** ${firstscore.max_combo - secondscore.max_combo}x
-**Hits:** ${firstscore.statistics.count_300 - secondscore.statistics.count_300}/${firstscore.statistics.count_100 - secondscore.statistics.count_100}/${firstscore.statistics.count_50 - secondscore.statistics.count_50}/${firstscore.statistics.count_miss - secondscore.statistics.count_miss}
+                                `**Score:** ${firstScore.score - secondScore.score}
+**pp:** ${firstScore.pp - secondScore.pp}
+**Accuracy:** ${(firstScore.accuracy * 100 - secondScore.accuracy * 100).toFixed(2)}%
+**Combo:** ${firstScore.max_combo - secondScore.max_combo}x
+**Hits:** ${firstScore.statistics.count_300 - secondScore.statistics.count_300}/${firstScore.statistics.count_100 - secondScore.statistics.count_100}/${firstScore.statistics.count_50 - secondScore.statistics.count_50}/${firstScore.statistics.count_miss - secondScore.statistics.count_miss}
 `
                         }
                     ])
                     ;
-                Embeds.push(sEmbed);
+                Embeds.push(await sEmbed);
+                sendthething = true;
             }
         } catch (error) {
             if (compareType == 'user') {
@@ -358,56 +346,62 @@ Second: \`${second}\`
         }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
-        switch (commandType) {
-            case 'message': {
-                obj.reply({
-                    content: '',
-                    embeds: Embeds,
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
-            }
-                break;
+        function send() {
+            if (sendthething == false) {
+                send()
+            } else {
+                switch (commandType) {
+                    case 'message': {
+                        obj.reply({
+                            content: '',
+                            embeds: Embeds,
+                            files: [],
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                            .catch();
+                    }
+                        break;
 
-            //==============================================================================================================================================================================================
+                    //==============================================================================================================================================================================================
 
-            case 'interaction': {
-                obj.reply({
-                    content: '',
-                    embeds: Embeds,
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
-            }
+                    case 'interaction': {
+                        obj.reply({
+                            content: '',
+                            embeds: Embeds,
+                            files: [],
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                            .catch();
+                    }
 
-                //==============================================================================================================================================================================================
+                        //==============================================================================================================================================================================================
 
-                break;
-            case 'button': {
-                obj.edit({
-                    content: '',
-                    embeds: [],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
-            }
-                break;
-        }
+                        break;
+                    case 'button': {
+                        obj.edit({
+                            content: '',
+                            embeds: [],
+                            files: [],
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                            .catch();
+                    }
+                        break;
+                }
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            `
+                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                    `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
 \n\n`, 'utf-8')
+            }
+        }
     }
 }
