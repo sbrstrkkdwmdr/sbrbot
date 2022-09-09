@@ -130,7 +130,7 @@ export async function scoreList(
         }
         if (showTruePosition && sort != truePosType) {
             if (curscore.id != truePosArr[scoreoffset].id) {
-                trueIndex = await truePosArr.indexOf(curscore)
+                trueIndex = await truePosArr.indexOf(curscore) + 1
             } else {
                 trueIndex = ''
             }
