@@ -556,11 +556,17 @@ async function mapcalclocal(
 /**
  * 
  * @param type type of api call to make
+ * @param mainparam main parameter to pass to api
  * @param params separate each param with +
  * @param version 1 or 2. defaults to 2
+ * @param callNum number of times this function has been called (used for recursion/error handling)
  * @returns data
  */
-async function apiget(type: apiGetStrings, mainparam: string, params?: string, version?: number) {
+async function apiget(type: apiGetStrings, mainparam: string, params?: string, version?: number, callNum?: number) {
+    if (!callNum) callNum = 0;
+    if (callNum > 5) throw new Error('Too many calls to api');
+
+
     const baseurl = 'https://osu.ppy.sh/api'
     const accessN = fs.readFileSync('config/osuauth.json', 'utf-8');
     let access_token
@@ -644,7 +650,8 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
 
         if (datafirst?.authentication) {
             await updateToken()
-            throw new Error('token expired. Updating token...')
+            datafirst = await apiget(type, mainparam, params, version, callNum + 1)
+            //throw new Error('token expired. Updating token...')
         }
         if (typeof datafirst?.error != 'undefined' && datafirst?.error == null && typeof datafirst?.error != 'object') {
             throw new Error('null')
@@ -698,7 +705,7 @@ async function updateToken() {
     `, 'utf-8')
         });
     if (newtoken.access_token) {
-        fs.writeFileSync('configs/osuauth.json', JSON.stringify(newtoken))
+        fs.writeFileSync('config/osuauth.json', JSON.stringify(newtoken))
         fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
     }
     logCall('https://osu.ppy.sh/oauth/token', 'Update token')
