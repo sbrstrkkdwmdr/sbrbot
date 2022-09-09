@@ -300,62 +300,7 @@ module.exports = (userdata, client, config, oncooldown) => {
         name: 'osutop',
         description: 'Displays the top plays of the user',
         dmPermission: false,
-        options: [
-            {
-                name: 'user',
-                description: 'The user to display the top plays of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            },
-            {
-                name: 'mode',
-                description: 'The mode to display the top plays of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-                choices: cmdconfig.modeopts
-            },
-            {
-                name: 'sort',
-                description: 'The sort to display the top plays of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-                choices: cmdconfig.playsortopts
-            },
-            {
-                name: 'reverse',
-                description: 'If true, the top plays will be displayed in reverse',
-                type: Discord.ApplicationCommandOptionType.Boolean,
-                required: false,
-            },
-            {
-                name: 'page',
-                description: 'The page to display the top plays of',
-                type: Discord.ApplicationCommandOptionType.Integer,
-                required: false,
-                default: 1,
-                minValue: 1,
-                maxValue: 20
-            },
-            {
-                name: 'mapper',
-                description: 'Filter the top plays to show maps from this mapper',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            },
-            {
-                name: 'mods',
-                description: 'Filter the top plays to show only plays with these mods',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            },
-            {
-                name: 'detailed',
-                description: 'Show all details',
-                type: Discord.ApplicationCommandOptionType.Boolean,
-                required: false,
-                default: false
-            },
-        ]
+        options: cmdconfig.playArrayOpts
     },
     {
         name: 'map',
@@ -440,6 +385,18 @@ module.exports = (userdata, client, config, oncooldown) => {
         description: 'Displays the user\'s scores for a set map',
         dmPermission: false,
         options: cmdconfig.useridsortopts
+    },
+    {
+        name: 'firsts',
+        description: 'Displays the user\'s #1 scores',
+        dmPermission: false,
+        options: cmdconfig.playArrayOpts
+    },
+    {
+        name: 'pinned',
+        description: 'Displays the user\'s pinned scores',
+        dmPermission: false,
+        options: cmdconfig.playArrayOpts
     },
     {
         name: 'leaderboard',

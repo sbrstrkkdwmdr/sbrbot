@@ -18,9 +18,14 @@ module.exports = {
         let user;
         let searchid;
         let mapid;
-        let sort: any = 'recent';
-        let reverse = false;
         let page = 1;
+
+        let scoredetailed = false;
+        let sort:any = 'recent';
+        let reverse = false;
+        let mode = 'osu';
+        let filteredMapper = null;
+        let filteredMods = null;
 
         let isFirstPage = false;
         let isLastPage = false;
@@ -330,7 +335,7 @@ module.exports = {
                 page = Math.ceil(scoredata.length / 5) - 1
             }
 
-            const scorearg = await embedStuff.scoreList(scoredata, false, false, page, false, false, sort, sort, null, null, reverse, mapdata.id)
+            const scorearg = await embedStuff.scoreList(scoredata, scoredetailed, false, page, false, false, sort, sort, filteredMapper, filteredMods, reverse, mapdata.id)
 
             for (let i = 0; i < scoredata.length && i < 5; i++) {
                 scoresEmbed.addFields([scorearg.fields[i]])

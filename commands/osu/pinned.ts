@@ -17,10 +17,14 @@ module.exports = {
 
         let user;
         let searchid;
-        let page;
-        let sort = 'pp';
+        let page = 0;
+
+        let scoredetailed = false;
+        let sort: any = 'recent';
         let reverse = false;
-        let mode;
+        let mode = 'osu';
+        let filteredMapper = null;
+        let filteredMods = null;
 
         let isFirstPage = false;
         let isLastPage = false;
@@ -44,8 +48,12 @@ module.exports = {
                 searchid = obj.member.user.id;
                 user = obj.options.getString('user');
                 page = obj.options.getInteger('page');
+                scoredetailed = obj.options.getBoolean('detailed');
                 sort = obj.options.getString('sort');
                 reverse = obj.options.getBoolean('reverse');
+                mode = obj.options.getString('mode') ?? 'osu';
+                filteredMapper = obj.options.getString('mapper');
+                filteredMods = obj.options.getString('mods');
             }
 
                 //==============================================================================================================================================================================================
@@ -133,6 +141,22 @@ module.exports = {
                         name: 'Reverse',
                         value: reverse
                     },
+                    {
+                        name: 'Mode',
+                        value: mode
+                    },
+                    {
+                        name: 'Filtered Mapper',
+                        value: filteredMapper
+                    },
+                    {
+                        name: 'Filtered Mods',
+                        value: filteredMods
+                    },
+                    {
+                        name: 'Detailed',
+                        value: scoredetailed
+                    }
                 ]
             ), 'utf-8')
 
@@ -241,7 +265,7 @@ module.exports = {
 ${mode}`
             )
 
-            const scorearg = await embedStuff.scoreList(pinnedscoresdata, false, false, page, true, false, 'recent', 'recent', null, null, false);
+            const scorearg = await embedStuff.scoreList(pinnedscoresdata, scoredetailed, false, page, true, true, sort, 'recent', filteredMapper, filteredMods, false);
 
             for (let i = 0; i < scorearg.fields.length; i++) {
                 pinnedEmbed.addFields([scorearg.fields[i]])

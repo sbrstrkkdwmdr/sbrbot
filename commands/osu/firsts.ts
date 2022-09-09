@@ -18,9 +18,13 @@ module.exports = {
         let user;
         let searchid;
         let page = 0;
-        let sort = 'recent';
+
+        let scoredetailed = false;
+        let sort: any = 'recent';
         let reverse = false;
         let mode = 'osu';
+        let filteredMapper = null;
+        let filteredMods = null;
 
         let isFirstPage = false;
         let isLastPage = false;
@@ -33,6 +37,7 @@ module.exports = {
                     user = null
                 }
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
+
                 page = 0
             }
                 break;
@@ -42,6 +47,13 @@ module.exports = {
             case 'interaction': {
                 commanduser = obj.member.user;
                 user = obj.options.getString('user');
+                page = obj.options.getInteger('page');
+                scoredetailed = obj.options.getBoolean('detailed');
+                sort = obj.options.getString('sort');
+                reverse = obj.options.getBoolean('reverse');
+                mode = obj.options.getString('mode') ?? 'osu';
+                filteredMapper = obj.options.getString('mapper');
+                filteredMods = obj.options.getString('mods');
             }
 
                 //==============================================================================================================================================================================================
@@ -106,30 +118,43 @@ module.exports = {
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.optsLog(
                 absoluteID,
-                [{
-                    name: 'User',
-                    value: user
-                },
-                {
-                    name: 'Search ID',
-                    value: searchid
-                },
-                {
-                    name: 'Page',
-                    value: page
-                },
-                {
-                    name: 'Sort',
-                    value: sort
-                },
-                {
-                    name: 'Reverse',
-                    value: reverse
-                },
-                {
-                    name: 'Mode',
-                    value: mode
-                }
+                [
+                    {
+                        name: 'User',
+                        value: user
+                    },
+                    {
+                        name: 'Search ID',
+                        value: searchid
+                    },
+                    {
+                        name: 'Page',
+                        value: page
+                    },
+                    {
+                        name: 'Sort',
+                        value: sort
+                    },
+                    {
+                        name: 'Reverse',
+                        value: reverse
+                    },
+                    {
+                        name: 'Mode',
+                        value: mode
+                    },
+                    {
+                        name: 'Filtered Mapper',
+                        value: filteredMapper
+                    },
+                    {
+                        name: 'Filtered Mods',
+                        value: filteredMods
+                    },
+                    {
+                        name: 'Detailed',
+                        value: scoredetailed
+                    }
                 ]
             ), 'utf-8')
 
@@ -236,7 +261,7 @@ module.exports = {
             page = Math.ceil(firstscoresdata.length / 5) - 1
         }
 
-        const scoresarg = await embedStuff.scoreList(firstscoresdata, false, false, page, true, true, 'recent', 'recent', null, null, reverse)
+        const scoresarg = await embedStuff.scoreList(firstscoresdata, scoredetailed, false, page, true, true, sort, 'recent', filteredMapper, filteredMods, reverse)
 
         for (let i = 0; i < scoresarg.fields.length; i++) {
             firstsEmbed.addFields([scoresarg.fields[i]])

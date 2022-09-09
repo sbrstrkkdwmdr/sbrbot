@@ -513,12 +513,70 @@ const timezoneopts = [
 
 //
 
+const playArrayOpts = [
+    {
+        name: 'user',
+        description: 'The user to display the plays of',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+    },
+    {
+        name: 'mode',
+        description: 'The mode to display the plays of',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+        default: 'osu',
+        choices: modeopts
+    },
+    {
+        name: 'sort',
+        description: 'What to sort plays by',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+        choices: playsortopts
+    },
+    {
+        name: 'reverse',
+        description: 'If true, plays will be displayed in reverse',
+        type: Discord.ApplicationCommandOptionType.Boolean,
+        required: false,
+    },
+    {
+        name: 'page',
+        description: 'The page to display',
+        type: Discord.ApplicationCommandOptionType.Integer,
+        required: false,
+        default: 1,
+        minValue: 1,
+        maxValue: 20
+    },
+    {
+        name: 'mapper',
+        description: 'Filter plays to show maps from this mapper',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+    },
+    {
+        name: 'mods',
+        description: 'Filter plays to show only plays with these mods',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+    },
+    {
+        name: 'detailed',
+        description: 'Show all details',
+        type: Discord.ApplicationCommandOptionType.Boolean,
+        required: false,
+        default: false
+    }
+]
+
 const useridsortopts = [
     {
-        name: 'username',
-        description: 'username or ID works (mode name if set to mode)',
+        name: 'user',
+        description: 'The user to display the top plays of',
+        type: Discord.ApplicationCommandOptionType.String,
         required: false,
-        type: ApplicationCommandOptionType.String,
     },
     {
         name: 'id',
@@ -528,18 +586,39 @@ const useridsortopts = [
     },
     {
         name: 'sort',
-        description: 'what to sort plays by. defaults to most recent',
+        description: 'The sort to display the top plays of',
+        type: Discord.ApplicationCommandOptionType.String,
         required: false,
-        type: ApplicationCommandOptionType.String,
         choices: playsortopts
     },
     {
         name: 'reverse',
-        description: 'If true, the plays will be displayed in reverse',
-        type: ApplicationCommandOptionType.Boolean,
+        description: 'If true, the top plays will be displayed in reverse',
+        type: Discord.ApplicationCommandOptionType.Boolean,
+        required: false,
+    },
+    {
+        name: 'page',
+        description: 'The page to display the top plays of',
+        type: Discord.ApplicationCommandOptionType.Integer,
+        required: false,
+        default: 1,
+        minValue: 1,
+        maxValue: 20
+    },
+    {
+        name: 'mods',
+        description: 'Filter the top plays to show only plays with these mods',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+    },
+    {
+        name: 'detailed',
+        description: 'Show all details',
+        type: Discord.ApplicationCommandOptionType.Boolean,
         required: false,
         default: false
-    },
+    }
 ]
 
 const useroffsetmodeopts = [
@@ -595,5 +674,5 @@ const rsopts = [
 ]
 
 
-export { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts };
+export { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts, playArrayOpts };
 
