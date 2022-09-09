@@ -28,11 +28,11 @@ module.exports = {
                 commanduser = obj.author;
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
                 user = args.join(' ');
-                page = 0;
-                mode = null;
-                if (!args[0]) {
+                if (!args[0] || args[0].includes(searchid)) {
                     user = null
                 }
+                page = 0;
+                mode = null;
                 isFirstPage = true;
 
             }

@@ -32,12 +32,11 @@ module.exports = {
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
+                searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
                 user = args.join(' ');
-                if (!args[0]) {
+                if (!args[0] || args[0].includes(searchid)) {
                     user = null
                 }
-                searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
-
                 page = 0
             }
                 break;

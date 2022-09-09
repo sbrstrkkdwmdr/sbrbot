@@ -23,13 +23,14 @@ module.exports = {
             case 'message': {
                 commanduser = obj.author;
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
-                let msgcontent = args.join(' ')
-                if (args.join(' ').includes('detailed')) {
-                    detailed = true;
-                    msgcontent = msgcontent.replace('detailed', '')
-                }
-                if (args[0] && searchid == obj.author.id) {
-                    msgcontent
+                // let msgcontent = args.join(' ')
+                // if (args.join(' ').includes('detailed')) {
+                //     detailed = true;
+                //     msgcontent = msgcontent.replace('detailed', '')
+                // }
+                user = args.join(' ');
+                if (!args[0] || args[0].includes(searchid)) {
+                    user = null
                 }
             }
                 break;

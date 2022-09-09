@@ -32,10 +32,10 @@ module.exports = {
             case 'message': {
                 commanduser = obj.author;
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
-                if (args[0] && searchid == obj.author.id) {
-                    args.join(' ')
+                user = args.join(' ');
+                if (!args[0] || args[0].includes(searchid)) {
+                    user = null
                 }
-                user = args.join(' ')
                 mode = null;
                 sort = 'pp';
                 page = 1;
@@ -43,9 +43,6 @@ module.exports = {
                 mapper = null;
                 mods = null;
                 detailed = false;
-                if (!args[0]) {
-                    user = null
-                }
             }
                 break;
 
