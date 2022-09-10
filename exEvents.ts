@@ -152,6 +152,19 @@ module.exports = (userdata, client, config, oncooldown, guildSettings) => {
 
     //create settings for new guilds
     client.on('guildCreate', async (guild) => {
+        try {
+            await guildSettings.create({
+                guildId: guild.id,
+                guildnanme: guild.name,
+                prefix: config.prefix,
+                osuParseLinks: true,
+                osuParseScreenshots: true,
+                enableMusic: true,
+                enableAdmin: true,
+            })
+        } catch (error) { 
+
+        }
     })
     setInterval(() => {
         client.guilds.cache.forEach(async (guild) => {
