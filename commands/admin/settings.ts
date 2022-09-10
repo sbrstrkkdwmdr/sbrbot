@@ -13,7 +13,6 @@ module.exports = {
     name: 'COMMANDNAME',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
-        let baseCommandType;
 
         switch (commandType) {
             case 'message': {
