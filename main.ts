@@ -121,6 +121,34 @@ const userdata = sequelize.define('userdata', {
     }
 });
 
+const guildSettings = sequelize.define('guildSettings', {
+    guildid: {
+        type: Sequelize.INTEGER,
+        unique: true
+    },
+    guildname: Sequelize.TEXT,
+    prefix: {
+        type: Sequelize.STRING,
+        defaultValue: 'sbr-',
+    },
+    osuParseLinks: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+    },
+    osuParseScreenshots: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+    },
+    enableMusic: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+    },
+    enableAdmin: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+    }
+});
+
 client.once('ready', () => {
     const currentDate = new Date();
 
@@ -142,13 +170,13 @@ Current Client ID: ${client.user.id}
 
     const oncooldown = new Set();
 
-    commandHandler(userdata, client, commandStruct, config, oncooldown);
-    linkHandler(userdata, client, commandStruct, config, oncooldown);
-    moderator(userdata, client, config, oncooldown);
+    commandHandler(userdata, client, commandStruct, config, oncooldown, guildSettings);
+    linkHandler(userdata, client, commandStruct, config, oncooldown, guildSettings);
+    moderator(userdata, client, config, oncooldown, guildSettings);
     musicHandler(userdata, client, commandStruct, config, oncooldown);
     buttonHandler(userdata, client, commandStruct, config, oncooldown);
     commandInit(userdata, client, config, oncooldown);
-    exEvents(userdata, client, config, oncooldown);
+    exEvents(userdata, client, config, oncooldown, guildSettings);
     osutrack(userdata, client, config, oncooldown);
 
 

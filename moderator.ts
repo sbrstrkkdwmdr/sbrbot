@@ -1,4 +1,4 @@
-module.exports = (userdata, client, config, oncooldown) => {
+module.exports = (userdata, client, config, oncooldown, guildSettings) => {
+
+
 }
-
-

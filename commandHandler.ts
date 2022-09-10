@@ -4,7 +4,7 @@ import extypes = require('./src/types/extratypes');
 import defaults = require('./src/consts/defaults');
 import Discord = require('discord.js');
 
-module.exports = (userdata, client, commandStruct, config, oncooldown) => {
+module.exports = (userdata, client, commandStruct, config, oncooldown, guildSettings) => {
     let timeouttime;
 
     client.on('messageCreate', async (message) => {

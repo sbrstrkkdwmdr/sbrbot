@@ -6,7 +6,7 @@ import osuapitypes = require('./src/types/osuApiTypes');
 import extypes = require('./src/types/extraTypes');
 import Discord = require('discord.js');
 
-module.exports = (userdata, client, config, oncooldown) => {
+module.exports = (userdata, client, config, oncooldown, guildSettings) => {
 
 
     //map clearing
@@ -148,5 +148,27 @@ module.exports = (userdata, client, config, oncooldown) => {
             }, 3000)
         }
     })
+
+
+    //create settings for new guilds
+    client.on('guildCreate', async (guild) => {
+    })
+    setInterval(() => {
+        client.guilds.cache.forEach(async (guild) => {
+            try {
+                await guildSettings.create({
+                    guildId: guild.id,
+                    guildnanme: guild.name,
+                    prefix: config.prefix,
+                    osuParseLinks: true,
+                    osuParseScreenshots: true,
+                    enableMusic: true,
+                    enableAdmin: true,
+                })
+            } catch (error) { 
+
+            }
+        })
+    }, 10 * 60 * 1000);
 
 }
