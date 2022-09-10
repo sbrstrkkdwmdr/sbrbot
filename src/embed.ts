@@ -108,6 +108,11 @@ export async function scoreList(
                 break;
         }
     }
+
+    if (page >= Math.ceil(newData.length / 5)) {
+        page = Math.ceil(newData.length / 5) - 1
+    }
+
     let scoresAsArrStr = [];
     let scoresAsFields = [];
 
@@ -391,7 +396,10 @@ ${pptxt}
     return {
         string: scoresAsArrStr,
         fields: scoresAsFields,
-        filter: filterinfo
+        filter: filterinfo,
+        maxPages: Math.ceil(newData.length / 5),
+        isFirstPage: page == 0,
+        isLastPage: page >= Math.ceil(newData.length / 5) - 1
     }
 
 }

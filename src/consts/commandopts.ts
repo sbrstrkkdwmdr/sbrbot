@@ -607,12 +607,6 @@ const useridsortopts = [
         maxValue: 20
     },
     {
-        name: 'mods',
-        description: 'Filter the top plays to show only plays with these mods',
-        type: Discord.ApplicationCommandOptionType.String,
-        required: false,
-    },
-    {
         name: 'detailed',
         description: 'Show all details',
         type: Discord.ApplicationCommandOptionType.Boolean,

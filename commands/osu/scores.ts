@@ -21,14 +21,11 @@ module.exports = {
         let page = 1;
 
         let scoredetailed = false;
-        let sort:any = 'recent';
+        let sort: any = 'recent';
         let reverse = false;
         let mode = 'osu';
         let filteredMapper = null;
         let filteredMods = null;
-
-        let isFirstPage = false;
-        let isLastPage = false;
 
         switch (commandType) {
             case 'message': {
@@ -61,58 +58,86 @@ module.exports = {
                 page = 0;
                 user = obj.message.embeds[0].author.name
                 mapid = obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]
-                const sorting = obj.message.embeds[0].description.split('Sorted by:')[1].split('\n')[0].toLowerCase()
-                switch (true) {
-                    default: case sorting.includes('recent'): case sorting.includes('old'):
-                        sort = 'recent'
-                        break;
-                    case sorting.includes('pp'):
-                        sort = 'pp'
-                        break;
-                    case sorting.includes('acc'):
-                        sort = 'acc'
-                        break;
-                    case sorting.includes('combo'):
-                        sort = 'combo'
-                        break;
-                    case sorting.includes('score'):
-                        sort = 'score'
-                        break;
-                    case sorting.includes('miss'):
-                        sort = 'miss'
-                        break;
-                    case sorting.includes('rank'):
-                        sort = 'rank'
-                        break;
+                if (obj.message.embeds[0].description) {
+                    if (obj.message.embeds[0].description.includes('mapper')) {
+                        filteredMapper = obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
+                    }
+                    if (obj.message.embeds[0].description.includes('mods')) {
+                        filteredMods = obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
+                    }
+                    const sort1 = obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                    switch (true) {
+                        case sort1.includes('score'):
+                            sort = 'score'
+                            break;
+                        case sort1.includes('acc'):
+                            sort = 'acc'
+                            break;
+                        case sort1.includes('pp'):
+                            sort = 'pp'
+                            break;
+                        case sort1.includes('old'): case sort1.includes('recent'):
+                            sort = 'recent'
+                            break;
+                        case sort1.includes('combo'):
+                            sort = 'combo'
+                            break;
+                        case sort1.includes('miss'):
+                            sort = 'miss'
+                            break;
+                        case sort1.includes('rank'):
+                            sort = 'rank'
+                            break;
+
+                    }
+
+
+                    const reverse1 = obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                    if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
+                        reverse = true
+                    } else {
+                        reverse = false
+                    }
+                    page = 0
+                    switch (button) {
+                        case 'BigLeftArrow':
+                            page = 1
+                            break;
+                        case 'LeftArrow':
+                            page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
+                            break;
+                        case 'RightArrow':
+                            page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
+                            break;
+                        case 'BigRightArrow':
+                            page = parseInt((obj.message.embeds[0].description).split('/')[1].split('\n')[0])
+                            break;
+                        case 'Refresh':
+                            page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1])
+                            break;
+                    }
+                    mode = obj.message.embeds[0].description.split('mode: ')[1].split('\n')[0]
                 }
-                if (sorting.includes('lowest') || sorting.includes('old') || sorting.includes('most miss')) {
-                    reverse = true
-                } else {
-                    reverse = false
-                }
+                const pageParsed =
+                    parseInt((obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
                 page = 0
                 switch (button) {
                     case 'BigLeftArrow':
                         page = 1
                         break;
                     case 'LeftArrow':
-                        page = parseInt((obj.message.embeds[0].footer.text).split('/')[0].split('Page ')[1]) - 1
+                        page = pageParsed - 1
                         break;
                     case 'RightArrow':
-                        page = parseInt((obj.message.embeds[0].footer.text).split('/')[0].split('Page ')[1]) + 1
+                        page = pageParsed + 1
                         break;
                     case 'BigRightArrow':
-                        page = parseInt((obj.message.embeds[0].footer.text).split('/')[1].split('\n')[0])
+                        page = parseInt((obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
+
                         break;
-                    case 'Refresh':
-                        page = parseInt((obj.message.embeds[0].footer.text).split('/')[0].split('Page ')[1])
+                    default:
+                        page = pageParsed
                         break;
-                }
-                if (page < 2) {
-                    isFirstPage = true;
-                }
-                if (page == parseInt((obj.message.embeds[0].footer.text).split('/')[1].split('\n')[0])) {
-                    isLastPage = true;
                 }
             }
                 break;
@@ -182,10 +207,7 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        if (page < 2) {
-            isFirstPage = true;
-        }
-        if (page < 2) {
+        if (page < 2 || typeof page != 'number' || isNaN(page)) {
             page = 1;
         }
         page--
@@ -196,12 +218,12 @@ module.exports = {
                     .setCustomId(`BigLeftArrow-scores-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅')
-                    .setDisabled(isFirstPage),
+                    .setDisabled(false),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-scores-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀')
-                    .setDisabled(isFirstPage),
+                    .setDisabled(false),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-scores-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
@@ -210,12 +232,12 @@ module.exports = {
                     .setCustomId(`RightArrow-scores-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶')
-                    .setDisabled(isLastPage),
+                    .setDisabled(false),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-scores-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡')
-                    .setDisabled(isLastPage),
+                    .setDisabled(false),
             );
 
         if (user == null) {
@@ -225,7 +247,7 @@ module.exports = {
                 mode = cuser.gamemode;
             }
             if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-                if(commandType != 'button'){
+                if (commandType != 'button') {
                     obj.reply({
                         content: 'User not found',
                         allowedMentions: { repliedUser: false },
@@ -331,29 +353,38 @@ module.exports = {
             .setThumbnail(`${mapdata.beatmapset.covers['list@2x']}`)
             .setAuthor({ name: `${osudata.username}`, url: `https://osu.ppy.sh/u/${osudata.id}`, iconURL: `https://a.ppy.sh/${osudata.id}` })
             .setURL(`https://osu.ppy.sh/b/${mapid}`)
-        let scoretxt = ''
-        if (!scoredata || scoredata.length < 1) {
-            scoretxt = 'Error - no scores found'
+
+        scoresEmbed.setFooter({ text: `Page ${page + 1}/${Math.ceil(scoredata.length / 5)}` })
+
+        if (page >= Math.ceil(scoredata.length / 5)) {
+            page = Math.ceil(scoredata.length / 5) - 1
+        }
+
+        const scoresarg = await embedStuff.scoreList(scoredata, scoredetailed, false, page, false, false, sort, sort, filteredMapper, filteredMods, reverse, mapdata.id)
+        scoresEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\nmode: ${mode}\n`)
+        if (scoresarg.fields.length == 0) {
+            scoresEmbed.addFields([{
+                name: 'Error',
+                value: 'No scores found',
+                inline: false
+            }])
         } else {
-            scoretxt += sortdata + '\n\n'
-            scoresEmbed.setFooter({ text: `Page ${page + 1}/${Math.ceil(scoredata.length / 5)}` })
-
-            if (page >= Math.ceil(scoredata.length / 5)) {
-                page = Math.ceil(scoredata.length / 5) - 1
-            }
-
-            const scorearg = await embedStuff.scoreList(scoredata, scoredetailed, false, page, false, false, sort, sort, filteredMapper, filteredMods, reverse, mapdata.id)
-
             for (let i = 0; i < scoredata.length && i < 5; i++) {
-                scoresEmbed.addFields([scorearg.fields[i]])
+                scoresEmbed.addFields([scoresarg.fields[i]])
             }
         }
-        scoresEmbed.setDescription(scoretxt)
+
 
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
         osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
 
-        if (page >= (scoredata.length / 5) - 1) {
+        if (scoresarg.isFirstPage) {
+            //@ts-ignore
+            pgbuttons.components[0].setDisabled(true)
+            //@ts-ignore
+            pgbuttons.components[1].setDisabled(true)
+        }
+        if (scoresarg.isLastPage) {
             //@ts-ignore
             pgbuttons.components[3].setDisabled(true)
             //@ts-ignore

@@ -25,9 +25,6 @@ module.exports = {
         let mods;
         let searchid
 
-        let isFirstPage = false;
-        let isLastPage = false;
-
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
@@ -115,25 +112,26 @@ module.exports = {
                     } else {
                         detailed = false
                     }
+                    const pageParsed =
+                        parseInt((obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
                     page = 0
                     switch (button) {
                         case 'BigLeftArrow':
                             page = 1
                             break;
                         case 'LeftArrow':
-                            page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
+                            page = pageParsed - 1
                             break;
                         case 'RightArrow':
-                            page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
+                            page = pageParsed + 1
                             break;
                         case 'BigRightArrow':
-                            page = parseInt((obj.message.embeds[0].description).split('/')[1].split('\n')[0])
+                            page = parseInt((obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
                             break;
-                        case 'Refresh':
-                            page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1])
+                        default:
+                            page = pageParsed
                             break;
                     }
-
                     mode = obj.message.embeds[0].description.split('mode: ')[1].split('\n')[0]
                 }
                 if (button == 'DetailEnable') {
@@ -141,12 +139,6 @@ module.exports = {
                 }
                 if (button == 'DetailDisable') {
                     detailed = false;
-                }
-                if (page < 2) {
-                    isFirstPage = true;
-                }
-                if (page == parseInt((obj.message.embeds[0].description).split('/')[1].split('\n')[0])) {
-                    isLastPage = true;
                 }
             }
                 break;
@@ -220,8 +212,7 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        if (page < 2 || typeof page != 'number') {
-            isFirstPage = true;
+        if (page < 2 || typeof page != 'number' || isNaN(page)) {
             page = 1;
         }
         page--
@@ -245,7 +236,7 @@ module.exports = {
                 mode = cuser.gamemode;
             }
             if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-                if(commandType != 'button'){
+                if (commandType != 'button') {
                     obj.reply({
                         content: 'User not found',
                         allowedMentions: { repliedUser: false },
@@ -283,12 +274,12 @@ module.exports = {
                     .setCustomId(`BigLeftArrow-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅')
-                    .setDisabled(isFirstPage),
+                    .setDisabled(false),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀')
-                    .setDisabled(isFirstPage),
+                    .setDisabled(false),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
@@ -297,12 +288,12 @@ module.exports = {
                     .setCustomId(`RightArrow-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶')
-                    .setDisabled(isLastPage),
+                    .setDisabled(false),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡')
-                    .setDisabled(isLastPage),
+                    .setDisabled(false),
             );
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
@@ -322,11 +313,11 @@ module.exports = {
             console.log(error)
         }
 
-        const osutopdataPreSort: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-        fs.writeFileSync(`debug/command-otop=osutopdataPreSort=${obj.guildId}`, JSON.stringify(osutopdataPreSort, null, 2))
-        if (osutopdataPreSort?.error) {
+        const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
+        fs.writeFileSync(`debug/command-otop=osutopdata=${obj.guildId}`, JSON.stringify(osutopdata, null, 2))
+        if (osutopdata?.error) {
             obj.reply({
-                content: `${osutopdataPreSort?.error ? osutopdataPreSort?.error : 'Error: null'}`,
+                content: `${osutopdata?.error ? osutopdata?.error : 'Error: null'}`,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: false,
             }).catch()
@@ -334,7 +325,7 @@ module.exports = {
         }
 
         try {
-            osutopdataPreSort[0].user.username
+            osutopdata[0].user.username
         } catch (error) {
             console.log(error)
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -356,94 +347,16 @@ module.exports = {
             }).catch()
         }
 
-        let filtereddata = osutopdataPreSort;
-        if (mapper != null) {
-            filtereddata = osutopdataPreSort.filter(array => array.beatmapset.creator.toLowerCase() == mapper.toLowerCase())
-        }
-        let calcmods = osumodcalc.OrderMods(mods + '')
-        if (calcmods.length < 1) {
-            calcmods = 'NM'
-            mods = null
-        }
-        if (mods != null && !mods.includes('any')) {
-            filtereddata = osutopdataPreSort.filter(array => array.mods.toString().replaceAll(',', '') == calcmods)
-        }
-        if (mods != null && mods.includes('any')) {
-            filtereddata = osutopdataPreSort.filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods))
-        }
-        let osutopdata = filtereddata;
-        if (reverse == false || reverse == null) {
-            switch (sort) {
-                case 'score':
-                    osutopdata = filtereddata.sort((a, b) => b.score - a.score)
-                    break;
-                case 'acc':
-                    osutopdata = filtereddata.sort((a, b) => b.accuracy - a.accuracy)
-                    break;
-                case 'pp': default:
-                    osutopdata = filtereddata.sort((a, b) => b.pp - a.pp)
-                    break;
-                case 'recent':
-                    osutopdata = filtereddata.sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
-                    break;
-                case 'combo':
-                    osutopdata = filtereddata.sort((a, b) => b.max_combo - a.max_combo)
-                    break;
-                case 'miss':
-                    osutopdata = filtereddata.sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
-                    break;
-                case 'rank':
-                    osutopdata = filtereddata.sort((a, b) => a.rank.localeCompare(b.rank))
-                    break;
-            }
-        } else {
-            switch (sort) {
-                case 'score':
-                    osutopdata = filtereddata.sort((a, b) => a.score - b.score)
-                    break;
-                case 'acc':
-                    osutopdata = filtereddata.sort((a, b) => a.accuracy - b.accuracy)
-                    break;
-                case 'pp': default:
-                    osutopdata = filtereddata.sort((a, b) => a.pp - b.pp)
-                    break;
-                case 'recent':
-                    osutopdata = filtereddata.sort((a, b) => parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
-                    break;
-                case 'combo':
-                    osutopdata = filtereddata.sort((a, b) => a.max_combo - b.max_combo)
-                    break;
-                case 'miss':
-                    osutopdata = filtereddata.sort((a, b) => b.statistics.count_miss - a.statistics.count_miss)
-                    break;
-                case 'rank':
-                    osutopdata = filtereddata.sort((a, b) => b.rank.localeCompare(a.rank))
-                    break;
-            }
-        }
         fs.writeFileSync(`debug/command-otop=osutopdata=${obj.guildId}`, JSON.stringify(osutopdata, null, 2))
 
-        try {
-            osutopdata[0].user.username
-        } catch (error) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - no scores found (filtered)
-params: ${sort} | ${reverse} | ${mods} | ${mapper}
-${error}
-----------------------------------------------------`)
-            return obj.reply({ content: 'no plays found for the options given', allowedMentions: { repliedUser: false } })
-                .catch();
-
+        let showtrue = false;
+        if (sort != 'pp') {
+            showtrue = true;
         }
 
         if (page >= Math.ceil(osutopdata.length / 5)) {
             page = Math.ceil(osutopdata.length / 5) - 1
         }
-
-
 
         const topEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.dec)
@@ -451,18 +364,19 @@ ${error}
             .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
             .setURL(`https://osu.ppy.sh/users/${osutopdata[0].user.id}`)
 
-        let showtrue = false;
-        if (sort != 'pp') {
-            showtrue = true;
-        }
-
         const scoresarg = await embedStuff.scoreList(osutopdata, detailed, true, page, true, showtrue, sort, 'pp', mapper, mods, reverse)
-        for (let i = 0; scoresarg.fields.length > i; i++) {
-            topEmbed.addFields(scoresarg.fields[i])
+        topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\nmode: ${mode}\n`)
+        if (scoresarg.fields.length == 0) {
+            topEmbed.addFields([{
+                name: 'Error',
+                value: 'No scores found',
+                inline: false
+            }])
+        } else {
+            for (let i = 0; scoresarg.fields.length > i; i++) {
+                topEmbed.addFields(scoresarg.fields[i])
+            }
         }
-        const filterinfo = scoresarg.filter
-
-        topEmbed.setDescription(`${filterinfo}\nPage: ${page + 1}/${Math.ceil(osutopdata.length / 5)}\nmode: ${mode}\n`)
 
 
         if (detailed == true) {
@@ -512,7 +426,13 @@ ${error}
 
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
 
-        if (page >= (osutopdata.length / 5) - 1) {
+        if (scoresarg.isFirstPage) {
+            //@ts-ignore
+            pgbuttons.components[0].setDisabled(true)
+            //@ts-ignore
+            pgbuttons.components[1].setDisabled(true)
+        }
+        if (scoresarg.isLastPage) {
             //@ts-ignore
             pgbuttons.components[3].setDisabled(true)
             //@ts-ignore
