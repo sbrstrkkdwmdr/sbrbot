@@ -214,7 +214,8 @@ Options:
         const Embed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.score.hex)
             .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
-            .setTitle(`[${fulltitle}](${mapdataid}) ${ifmods}`)
+            .setTitle(`[${fulltitle}] ${ifmods}`)
+            .setURL(`${mapdataid}`)
             .setThumbnail(mapbg)
             .setDescription(
                 `
