@@ -256,10 +256,10 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             // music
 
             // WIP
-            case 'whatif': case 'play': case 'pause': case 'np': case 'wip': case 'skip': case 'queue': case 'resume':
-                obj.reply({ content: 'This command is currently under development. Will be added later.', allowedMentions: { repliedUser: false } })
-                    .catch()
-                break;
+            // case 'whatif': case 'play': case 'pause': case 'np': case 'wip': case 'skip': case 'queue': case 'resume':
+            //     obj.reply({ content: 'This command is currently under development. Will be added later.', allowedMentions: { repliedUser: false } })
+            //         .catch()
+            //     break;
 
         }
 
