@@ -40,8 +40,7 @@ module.exports = {
         if (message != null && button == null) {
             commanduser = message.author;
             baseCommandType = 'message'
-            const mapid = args[0]
-
+            mapid = args[0]
         }
 
         //==============================================================================================================================================================================================
