@@ -193,6 +193,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
             }
         });
         subscription = connection.subscribe(player);
+        console.log('subscribed')
     }
 
     async function disconnect(connectionf: DiscVoice.VoiceConnection) {
@@ -204,11 +205,17 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
         player.play(DiscVoice.createAudioResource(resource));
         console.log(resource)
         queue.push(resource.replace('files/songs/', '').replace('.mp3', ''));
+        voiceConnect(channelId);
+        // const channel = client.channels.cache.get(channelId);
+        // channel.send({
+        //     content: 'Now playing: ' + queue[0],
+        //     allowedMentions: { repliedUser: false },
+        //     failIfNotExists: true
+        // })
         try {
             await DiscVoice.entersState(player, DiscVoice.AudioPlayerStatus.Playing, 5_000);
             // The player has entered the Playing state within 5 seconds
-            console.log('Playback has started!');
-            voiceConnect(channelId);
+            console.log('Playback has started!');            
         } catch (error) {
             // The player has not entered the Playing state and either:
             // 1) The 'error' event has been emitted and should be handled
@@ -220,6 +227,11 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
     async function quitPlayer() {
         player.stop();
         subscription.unsubscribe();
+    }
+
+    async function queueEnd(){
+        //delete first element from array
+        queue.shift();
     }
 
     // connection.on(DiscVoice.VoiceConnectionStatus.Ready, (oldState, newState) => {
