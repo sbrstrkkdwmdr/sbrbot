@@ -15,6 +15,16 @@ module.exports = {
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
 
+        const initModal = new Discord.SelectMenuBuilder()
+            .addOptions(
+                new Discord.SelectMenuOptionBuilder()
+                    .setLabel('General')
+                    .setValue('gen'),
+                    new Discord.SelectMenuOptionBuilder()
+                    .setLabel('osu')
+                    .setValue('osu')
+            )
+
         let command: string;
         const fullCommandList = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.dec)
