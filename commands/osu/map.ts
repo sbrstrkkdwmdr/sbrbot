@@ -159,11 +159,11 @@ module.exports = {
                         }
                     }
                     const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
-                    if(bmsdata?.error){
-                        if (commandType != 'button'){
+                    if (bmsdata?.error) {
+                        if (commandType != 'button') {
                             obj.reply({
                                 content: `${bmsdata?.error ? bmsdata?.error : 'Error: null'} `,
-                                allowedMentions: { repliedUser: false}, 
+                                allowedMentions: { repliedUser: false },
                                 failIfNotExists: true
                             })
                         }
@@ -189,25 +189,25 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        const pgbuttons = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-map-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-map-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-map-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-map-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
-            );
+        // const pgbuttons = new Discord.ActionRowBuilder()
+        //     .addComponents(
+        //         new Discord.ButtonBuilder()
+        //             .setCustomId(`BigLeftArrow-map-${commanduser.id}`)
+        //             .setStyle(Discord.ButtonStyle.Primary)
+        //             .setEmoji('⬅'),
+        //         new Discord.ButtonBuilder()
+        //             .setCustomId(`LeftArrow-map-${commanduser.id}`)
+        //             .setStyle(Discord.ButtonStyle.Primary)
+        //             .setEmoji('◀'),
+        //         new Discord.ButtonBuilder()
+        //             .setCustomId(`RightArrow-map-${commanduser.id}`)
+        //             .setStyle(Discord.ButtonStyle.Primary)
+        //             .setEmoji('▶'),
+        //         new Discord.ButtonBuilder()
+        //             .setCustomId(`BigRightArrow-map-${commanduser.id}`)
+        //             .setStyle(Discord.ButtonStyle.Primary)
+        //             .setEmoji('➡'),
+        //     );
         const buttons = new Discord.ActionRowBuilder().addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`Refresh-map-${commanduser.id}`)
@@ -270,6 +270,10 @@ module.exports = {
         }
         let mapdata: osuApiTypes.Beatmap;
 
+        const diffButtons = [];
+
+        const inputModal = new Discord.SelectMenuBuilder()
+
         //get beatmap data
         if (maptitleq == null) {
             mapdata = await osufunc.apiget('map_get', `${mapid}`)
@@ -281,6 +285,24 @@ module.exports = {
                     failIfNotExists: false,
                 }).catch()
                 return;
+            }
+            const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${mapdata.beatmapset_id}`)
+
+            const inputModalOpts = []
+            if (bmsdata.beatmaps.length < 2 || typeof bmsdata.beatmaps == 'undefined') {
+                // no options
+                inputModalOpts.push(
+                    new Discord.SelectMenuOptionBuilder()
+                        .setLabel(`${mapdata.beatmapset?.title} [${mapdata.version}] ${mapdata.difficulty_rating}⭐`)
+                        .setValue(`${mapdata.id}`)
+                )
+            } else {
+                for (let i = 0; i < bmsdata.beatmaps.length; i++) {
+                    const curmap = bmsdata.beatmaps[i]
+                    new Discord.SelectMenuOptionBuilder()
+                    .setLabel(`${curmap.beatmapset?.title} [${curmap.version}] ${curmap.difficulty_rating}s⭐`)
+                    .setValue(`${curmap.id}`)
+                }
             }
         }
 
@@ -353,6 +375,16 @@ params: ${mapid} | ${maptitleq}
 
                 return;
             }
+            const inputModalOpts = []
+            for (let i = 0; i < mapidtest.length; i++) {
+                const curmap: osuApiTypes.Beatmap = mapidtest[i]
+                inputModalOpts.push(
+                    new Discord.SelectMenuOptionBuilder()
+                        .setLabel(`${curmap.beatmapset?.title} [${curmap.version}] ${curmap.difficulty_rating}⭐`)
+                        .setValue(`${curmap.id}`)
+                )
+            }
+            inputModal.addOptions(inputModalOpts)
         }
 
         if (mapmods == null || mapmods == '') {
@@ -665,7 +697,7 @@ ${error}
                 obj.reply({
                     content: '',
                     embeds: embeds,
-                    components: [pgbuttons, buttons],
+                    components: [buttons, inputModal],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -679,7 +711,7 @@ ${error}
                 obj.reply({
                     content: '',
                     embeds: embeds,
-                    components: [pgbuttons, buttons],
+                    components: [buttons, inputModal],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -693,7 +725,7 @@ ${error}
                 obj.message.edit({
                     content: '',
                     embeds: embeds,
-                    components: [pgbuttons, buttons],
+                    components: [buttons, inputModal],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })

@@ -24,6 +24,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
             sort: null,
             reverse: null,
             ex: null,
+            id: null,
         }
         if (specid && specid != interaction.user.id) {
             interaction.deferUpdate()
@@ -59,6 +60,17 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
             // .catch(error => { });
             return;
         }
+        if (interaction.type == 'selectmenu renamethis var later') {
+            switch (command) {
+                case 'map':
+                    {
+                        overrides.id = interaction.values[0]
+                    }
+                    break;
+            }
+        }
+
+
         if (button == 'Sort' && ScoreSortCommands.includes(command)) {
             interaction.deferUpdate();
             return;
