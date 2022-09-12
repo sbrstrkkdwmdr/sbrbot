@@ -19,6 +19,10 @@ module.exports = {
         let maptitleq = null;
         let detailed = false;
 
+        let useComponents = [];
+        let overwriteModal = null;
+
+
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
@@ -186,6 +190,7 @@ module.exports = {
         }
         if (overrides != null) {
             mapid = overrides.id
+            overwriteModal = overrides.overwriteModal
         }
 
         //==============================================================================================================================================================================================
@@ -274,6 +279,8 @@ module.exports = {
         const diffButtons = [];
 
         const inputModal = new Discord.SelectMenuBuilder()
+            .setCustomId(`InputModal-map-${commanduser.id}`)
+            .setPlaceholder('Maps')
 
         //get beatmap data
         if (maptitleq == null) {
@@ -288,21 +295,41 @@ module.exports = {
                 return;
             }
             const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${mapdata.beatmapset_id}`)
+            fs.writeFileSync(`debug/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2))
 
-            const inputModalOpts = []
             if (bmsdata.beatmaps.length < 2 || typeof bmsdata.beatmaps == 'undefined') {
                 // no options
-                inputModalOpts.push(
+
+                const curmode = mapdata.mode_int
+
+                inputModal.addOptions(
                     new Discord.SelectMenuOptionBuilder()
-                        .setLabel(`${mapdata.beatmapset?.title} [${mapdata.version}] ${mapdata.difficulty_rating}⭐`)
+                        .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
+                            mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
+                                mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
+                                    mapdata.mode_int == 3 ? emojis.gamemodes.mania :
+                                        emojis.gamemodes.standard
+                            }`)
+                        .setLabel(`#${1}`)
+                        .setDescription(`${mapdata.version} ${mapdata.difficulty_rating}⭐`)
                         .setValue(`${mapdata.id}`)
                 )
             } else {
-                for (let i = 0; i < bmsdata.beatmaps.length; i++) {
-                    const curmap = bmsdata.beatmaps[i]
-                    new Discord.SelectMenuOptionBuilder()
-                    .setLabel(`${curmap.beatmapset?.title} [${curmap.version}] ${curmap.difficulty_rating}s⭐`)
-                    .setValue(`${curmap.id}`)
+                for (let i = 0; i < bmsdata.beatmaps.length && i < 25; i++) {
+                    const curmap = bmsdata.beatmaps.slice().sort((a, b) => b.difficulty_rating - a.difficulty_rating)[i]
+                    if (!curmap) break;
+                    inputModal.addOptions(
+                        new Discord.SelectMenuOptionBuilder()
+                            .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
+                                mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
+                                    mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
+                                        mapdata.mode_int == 3 ? emojis.gamemodes.mania :
+                                            emojis.gamemodes.standard
+                                }`)
+                            .setLabel(`#${i + 1} | ${bmsdata.title}`)
+                            .setDescription(`${curmap.version} ${curmap.difficulty_rating}⭐`)
+                            .setValue(`${curmap.id}`)
+                    )
                 }
             }
         }
@@ -328,7 +355,7 @@ module.exports = {
                 return;
             }
             try {
-                mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)
+                mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating)
             } catch (error) {
                 fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
                     `
@@ -343,6 +370,22 @@ ${error}
 
                 return;
             }
+            const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset }[] = [];
+
+            //push all beatmaps
+            for (let i = 0; i < mapidtest.beatmapsets.length; i++) {
+                if (!mapidtest.beatmapsets[i]) break;
+
+                for (let j = 0; j < mapidtest.beatmapsets[i].beatmaps.length; j++) {
+                    if (!mapidtest.beatmapsets[i].beatmaps[j]) break;
+                    allmaps.push({
+                        mode_int: mapidtest.beatmapsets[i].beatmaps[j].mode_int,
+                        map: mapidtest.beatmapsets[i].beatmaps[j],
+                        mapset: mapidtest.beatmapsets[i]
+                    })
+                }
+            }
+
 
             mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
             fs.writeFileSync(`debug/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
@@ -376,16 +419,24 @@ params: ${mapid} | ${maptitleq}
 
                 return;
             }
-            const inputModalOpts = []
-            for (let i = 0; i < mapidtest.length; i++) {
-                const curmap: osuApiTypes.Beatmap = mapidtest[i]
-                inputModalOpts.push(
+
+            for (let i = 0; i < allmaps.length && i < 25; i++) {
+                const curmap = allmaps[i]
+                // const curmapset = curmap.mapset
+                if (!curmap.map) break;
+                inputModal.addOptions(
                     new Discord.SelectMenuOptionBuilder()
-                        .setLabel(`${curmap.beatmapset?.title} [${curmap.version}] ${curmap.difficulty_rating}⭐`)
-                        .setValue(`${curmap.id}`)
+                        .setEmoji(`${curmap.mode_int == 0 ? emojis.gamemodes.standard :
+                            curmap.mode_int == 1 ? emojis.gamemodes.taiko :
+                                curmap.mode_int == 2 ? emojis.gamemodes.fruits :
+                                    curmap.mode_int == 3 ? emojis.gamemodes.mania :
+                                        emojis.gamemodes.standard
+                            }`)
+                        .setLabel(`#${i + 1} | ${curmap.mapset?.title} // ${curmap.mapset?.creator}`)
+                        .setDescription(`[${curmap.map.version}] ${curmap.map.difficulty_rating}⭐`)
+                        .setValue(`${curmap.map.id}`)
                 )
             }
-            inputModal.addOptions(inputModalOpts)
         }
 
         if (mapmods == null || mapmods == '') {
@@ -692,13 +743,28 @@ ${error}
 
         osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
 
+
+        // buttons.addComponents(inputModal)
+        useComponents.push(buttons);
+
+        const selectrow = new Discord.ActionRowBuilder()
+            .addComponents(inputModal)
+
+        // if(overwriteModal != null){
+        //    selectrow = overwriteModal
+        // }
+        if (!(inputModal.options.length < 1)) {
+            useComponents.push(selectrow);
+
+        }
+
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
                     content: '',
                     embeds: embeds,
-                    components: [buttons, inputModal],
+                    components: useComponents,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -712,7 +778,7 @@ ${error}
                 obj.reply({
                     content: '',
                     embeds: embeds,
-                    components: [buttons, inputModal],
+                    components: useComponents,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -726,7 +792,7 @@ ${error}
                 obj.message.edit({
                     content: '',
                     embeds: embeds,
-                    components: [buttons, inputModal],
+                    components: useComponents,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -737,7 +803,7 @@ ${error}
                 obj.reply({
                     content: '',
                     embeds: embeds,
-                    components: [pgbuttons, buttons],
+                    components: useComponents,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })

@@ -25,6 +25,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
             reverse: null,
             ex: null,
             id: null,
+            overwriteModal: null,
         }
         if (specid && specid != interaction.user.id) {
             interaction.deferUpdate()
@@ -157,6 +158,15 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
             overrides.sort = interaction.fields.fields.at(0).value;
             overrides.reverse = interaction.fields.fields.at(1).value;
         }
+        // console.log(interaction)
+        //if has select menu
+        if(button == 'InputModal'){
+            console.log(interaction.message.components[1].components[0])
+            overrides.id = interaction.values[0]
+            overrides.overwriteModal = interaction.message.components[1].components[0];
+        }
+
+
         switch (command) {
             /*             case 'test':
                             if (button == 'BigLeftArrow') {
