@@ -280,7 +280,7 @@ module.exports = {
 
         const inputModal = new Discord.SelectMenuBuilder()
             .setCustomId(`InputModal-map-${commanduser.id}`)
-            .setPlaceholder('Maps')
+            .setPlaceholder('Select a map')
 
         //get beatmap data
         if (maptitleq == null) {
@@ -747,15 +747,16 @@ ${error}
         // buttons.addComponents(inputModal)
         useComponents.push(buttons);
 
-        const selectrow = new Discord.ActionRowBuilder()
-            .addComponents(inputModal)
+        let frmod = inputModal;
+        if (overwriteModal != null) {
+            frmod = overwriteModal
+        }
 
-        // if(overwriteModal != null){
-        //    selectrow = overwriteModal
-        // }
+        const selectrow = new Discord.ActionRowBuilder()
+            .addComponents(frmod)
+
         if (!(inputModal.options.length < 1)) {
             useComponents.push(selectrow);
-
         }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================

@@ -160,10 +160,12 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
         }
         // console.log(interaction)
         //if has select menu
-        if(button == 'InputModal'){
-            console.log(interaction.message.components[1].components[0])
+        if (button == 'InputModal') {
+            // console.log(interaction.message.components[1].components[0])
             overrides.id = interaction.values[0]
-            overrides.overwriteModal = interaction.message.components[1].components[0];
+            if (interaction?.message?.components[1]?.components[0]) {
+                overrides.overwriteModal = interaction.message.components[1].components[0];
+            }
         }
 
 
