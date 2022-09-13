@@ -279,7 +279,7 @@ module.exports = {
         const diffButtons = [];
 
         const inputModal = new Discord.SelectMenuBuilder()
-            .setCustomId(`InputModal-map-${commanduser.id}`)
+            .setCustomId(`Select-map-${commanduser.id}`)
             .setPlaceholder('Select a map')
 
         //get beatmap data

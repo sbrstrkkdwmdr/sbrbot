@@ -61,13 +61,20 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
             // .catch(error => { });
             return;
         }
-        if (interaction.type == 'selectmenu renamethis var later') {
+        if (button.includes('Select')) {
             switch (command) {
                 case 'map':
                     {
                         overrides.id = interaction.values[0]
+                        if (interaction?.message?.components[1]?.components[0]) {
+                            overrides.overwriteModal = interaction.message.components[1].components[0];
+                        }
                     }
                     break;
+                case 'help':
+                    {
+                        overrides.ex = interaction.values[0]
+                    }
             }
         }
 
@@ -158,15 +165,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
             overrides.sort = interaction.fields.fields.at(0).value;
             overrides.reverse = interaction.fields.fields.at(1).value;
         }
-        // console.log(interaction)
-        //if has select menu
-        if (button == 'InputModal') {
-            // console.log(interaction.message.components[1].components[0])
-            overrides.id = interaction.values[0]
-            if (interaction?.message?.components[1]?.components[0]) {
-                overrides.overwriteModal = interaction.message.components[1].components[0];
-            }
-        }
 
 
         switch (command) {
@@ -245,6 +243,13 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
+
+            case 'help':
+                commandStruct.commands.get('help').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
+
             case 'test':
                 client.commands.get('test').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
                 interaction.deferUpdate()

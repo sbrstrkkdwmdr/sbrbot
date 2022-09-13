@@ -209,6 +209,18 @@ const othercmds = [
 
 const osucmds = [
     {
+        name: 'bws',
+        description: 'Returns the badge weighting for a player',
+        usage: 'bws <user>',
+        slashusage: '/bws [user]',
+        options: [
+            {
+                name: 'user',
+                description: '`string, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
+            }
+        ]
+    },
+    {
         name: 'compare',
         description: 'Compares two scores. If options are omitted, then the most recent score will be compared with the user\'s best score on that map',
         usage: 'compare',
@@ -286,6 +298,18 @@ const osucmds = [
             }
         ],
         aliases: 'm'
+    },
+    {
+        name: 'nochokes',
+        description: 'Retrieves all plays that are not chokes for a player',
+        usage: 'nochokes <user>',
+        slashusage: '/nochokes [user]',
+        options: [
+            {
+                name: 'user',
+                description: '`string, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
+            }
+        ]
     },
     {
         name: 'osu',
@@ -377,10 +401,26 @@ const osucmds = [
         ]
     },
     {
-        name: 'rs',
+        name: 'ppifrank',
+        description: 'Returns the pp if x rank or rank if x pp',
+        usage: 'ppifrank <value> <type>',
+        slashusage: '/ppifrank [value] [type]',
+        options: [
+            {
+                name: 'value',
+                description: '`float, required`. The value to set'
+            },
+            {
+                name: 'type',
+                description: '`string, optional`. The type of the value. Can be either pp or rank. Defaults to pp'
+            }
+        ]
+    },
+    {
+        name: 'recent',
         description: 'Retrieves the most recent score for the user',
-        usage: 'rs <user>',
-        slashusage: '/rs [user] [page] [mode] [list]',
+        usage: 'recent <user>',
+        slashusage: '/recent [user] [page] [mode] [list]',
         options: [
             {
                 name: 'user',
@@ -399,7 +439,7 @@ const osucmds = [
                 description: '`boolean, optional`. Shows the most 20 recent scores'
             }
         ],
-        aliases: 'recent, r'
+        aliases: 'rs, r'
     },
     {
         name: 'scores',
@@ -432,7 +472,7 @@ const osucmds = [
     },
     {
         name: 'simulate',
-        description: '',
+        description: 'simulates a play for a map',
         usage: 'simulate <id> +<mods> misses=<misses> acc=<accuracy> acc=<combo>',
         slashusage: '/simulate [id] [mods] [misses] [accuracy] [combo]',
         options: [
@@ -457,18 +497,14 @@ const osucmds = [
     },
     {
         name: 'whatif',
-        description: 'Returns the pp if x rank or rank if x pp',
-        usage: 'whatif <value> <type>',
-        slashusage: '/whatif [value] [type]',
+        description: 'Returns the player\'s total pp, rank etc. if they get an x pp score',
+        usage: 'whatif <value>',
+        slashusage: '/whatif [value]',
         options: [
             {
                 name: 'value',
-                description: '`float, required`. The value to set'
+                description: '`float, required`. The amount of pp'
             },
-            {
-                name: 'type',
-                description: '`string, optional`. The type of the value. Can be either pp or rank. Defaults to pp'
-            }
         ]
     }
 
@@ -676,3 +712,4 @@ const musiccmds = [
 
 //module.exports = { cmds, osucmds, admincmds, links, musiccmds }
 export { cmds, othercmds, osucmds, admincmds, links, musiccmds }
+
