@@ -8,6 +8,7 @@ import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
+import extypes = require('../../src/types/extratypes');
 
 module.exports = {
     name: 'lb',
@@ -137,33 +138,34 @@ module.exports = {
         let rtxt = `\n`;
         const rarr = [];
 
-        function thing() {
-            for (let i = 0; i < useridsarraylen; i++) {
-                const searchid = userids[i].dataValues.userid;
-                guild.members.cache.forEach(async member => {
-                    if (member.id == searchid) {
-                        const user = await userdata.findOne({ where: { userid: member.id } });
-                        if (user != null && !rtxt.includes(`${member.user.id}`)) {
-                            console.log(true)
-                            let acc: any;
-                            let pp: any;
-                            let rank: any;
-                            switch (mode) {
-                                case 'osu':
-                                default:
-                                    acc = user.get('osuacc');
+
+        for (let i = 0; i < useridsarraylen; i++) {
+            const user: extypes.dbUser = userids[i].dataValues;
+            guild.members.cache.forEach(async member => {
+                if (member.id == user.userid) {
+                    // console.log(userids[i])
+                    // const user = userids[i].dataValues;
+                    if (user != null && !rtxt.includes(`${member.user.id}`)) {
+                        let acc: any;
+                        let pp: any;
+                        let rank: any;
+                        switch (mode) {
+                            case 'osu':
+                            default:
+                                {
+                                    acc = user.osuacc
                                     if (isNaN(acc) || acc == null) {
                                         acc = 'null '
                                     } else {
-                                        acc = user.get('osuacc').toFixed(2)
+                                        acc = user.osuacc.toFixed(2)
                                     }
-                                    pp = user.get('osupp')
+                                    pp = user.osupp
                                     if (isNaN(pp) || pp == null) {
                                         pp = 'null '
                                     } else {
-                                        pp = Math.floor(user.get('osupp'))
+                                        pp = Math.floor(user.osupp)
                                     }
-                                    rank = user.get('osurank');
+                                    rank = user.osurank;
                                     if (isNaN(rank) || rank == null) {
                                         rank = 'null '
                                     }
@@ -172,7 +174,7 @@ module.exports = {
                                             discname:
                                                 ((member.displayName.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.displayName.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.displayName.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
                                             osuname:
-                                                (user.get('osuname').padEnd(17 - 2, ' ')).length > 15 ? user.get('osuname').substring(0, 12) + '...' : user.get('osuname').padEnd(17 - 2, ' '),
+                                                (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
                                             rank:
                                                 rank.toString().padEnd(10 - 2, ' ').substring(0, 8),
                                             acc:
@@ -181,21 +183,19 @@ module.exports = {
                                                 (pp.toString() + 'pp').padEnd(9 - 2, ' '),
                                         }
                                     )
-                                    break;
-                                case 'taiko':
-                                    acc = user.get('taikoacc');
+                                }
+                                break;
+                            case 'taiko':
+                                {
+                                    acc = user.taikoacc
                                     if (isNaN(acc) || acc == null) {
                                         acc = 'null '
-                                    } else {
-                                        acc = user.get('taikoacc').toFixed(2)
                                     }
-                                    pp = user.get('taikopp')
+                                    pp = user.taikopp
                                     if (isNaN(pp) || pp == null) {
                                         pp = 'null '
-                                    } else {
-                                        pp = Math.floor(user.get('taikopp'))
                                     }
-                                    rank = user.get('taikorank');
+                                    rank = user.taikorank;
                                     if (isNaN(rank) || rank == null) {
                                         rank = 'null '
                                     }
@@ -204,7 +204,7 @@ module.exports = {
                                             discname:
                                                 ((member.displayName.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.displayName.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.displayName.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
                                             osuname:
-                                                (user.get('osuname').padEnd(17 - 2, ' ')).length > 15 ? user.get('osuname').substring(0, 12) + '...' : user.get('osuname').padEnd(17 - 2, ' '),
+                                                (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
                                             rank:
                                                 rank.toString().padEnd(10 - 2, ' ').substring(0, 8),
                                             acc:
@@ -213,57 +213,23 @@ module.exports = {
                                                 (pp.toString() + 'pp').padEnd(9 - 2, ' '),
                                         }
                                     )
-                                    break;
-                                case 'fruits':
-                                    acc = user.get('fruitsacc');
+                                }
+                                break;
+                            case 'fruits':
+                                {
+                                    acc = user.fruitsacc
                                     if (isNaN(acc) || acc == null) {
                                         acc = 'null '
                                     } else {
-                                        acc = user.get('fruitsacc').toFixed(2)
+                                        acc = user.fruitsacc.toFixed(2)
                                     }
-                                    pp = user.get('fruitspp')
+                                    pp = user.fruitspp
                                     if (isNaN(pp) || pp == null) {
                                         pp = 'null '
                                     } else {
-                                        pp = Math.floor(user.get('fruitspp'))
+                                        pp = Math.floor(user.fruitspp)
                                     }
-                                    rank = user.get('fruitsrank');
-                                    if (isNaN(rank) || rank == null) {
-                                        rank = 'null '
-                                    }
-                                    rarr.push(
-                                        {
-                                            discname:
-                                                member.user ?
-                                                    ((member.user.username.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.user.username.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.user.username.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' ')
-                                                    :
-                                                    ((member.displayName.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.displayName.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.displayName.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' ')
-                                            ,
-                                            osuname:
-                                                (user.get('osuname').padEnd(17 - 2, ' ')).length > 15 ? user.get('osuname').substring(0, 12) + '...' : user.get('osuname').padEnd(17 - 2, ' '),
-                                            rank:
-                                                rank.toString().padEnd(10 - 2, ' ').substring(0, 8),
-                                            acc:
-                                                acc.toString(),
-                                            pp:
-                                                (pp.toString() + 'pp').padEnd(9 - 2, ' '),
-                                        }
-                                    )
-                                    break;
-                                case 'mania':
-                                    acc = user.get('maniaacc');
-                                    if (isNaN(acc) || acc == null) {
-                                        acc = 'null '
-                                    } else {
-                                        acc = user.get('maniaacc').toFixed(2)
-                                    }
-                                    pp = user.get('maniapp')
-                                    if (isNaN(pp) || pp == null) {
-                                        pp = 'null '
-                                    } else {
-                                        pp = Math.floor(user.get('maniapp'))
-                                    }
-                                    rank = user.get('maniarank');
+                                    rank = user.fruitsrank;
                                     if (isNaN(rank) || rank == null) {
                                         rank = 'null '
                                     }
@@ -272,106 +238,129 @@ module.exports = {
                                             discname:
                                                 ((member.displayName.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.displayName.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.displayName.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
                                             osuname:
-                                                (user.get('osuname').padEnd(17 - 2, ' ')).length > 15 ? user.get('osuname').substring(0, 12) + '...' : user.get('osuname').padEnd(17 - 2, ' '),
+                                                (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
                                             rank:
-                                                rank,
+                                                rank.toString().padEnd(10 - 2, ' ').substring(0, 8),
                                             acc:
                                                 acc.toString(),
                                             pp:
                                                 (pp.toString() + 'pp').padEnd(9 - 2, ' '),
                                         }
                                     )
-                                    break;
-                            }
+                                }
+                                break;
+                            case 'mania':
+                                {
+                                    acc = user.maniaacc
+                                    if (isNaN(acc) || acc == null) {
+                                        acc = 'null '
+                                    } else {
+                                        acc = user.maniaacc.toFixed(2)
+                                    }
+                                    pp = user.maniapp
+                                    if (isNaN(pp) || pp == null) {
+                                        pp = 'null '
+                                    } else {
+                                        pp = Math.floor(user.maniapp)
+                                    }
+                                    rank = user.maniarank;
+                                    if (isNaN(rank) || rank == null) {
+                                        rank = 'null '
+                                    }
+                                    rarr.push(
+                                        {
+                                            discname:
+                                                ((member.displayName.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.displayName.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.displayName.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
+                                            osuname:
+                                                (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
+                                            rank:
+                                                rank.toString().padEnd(10 - 2, ' ').substring(0, 8),
+                                            acc:
+                                                acc.toString(),
+                                            pp:
+                                                (pp.toString() + 'pp').padEnd(9 - 2, ' '),
+                                        }
+                                    )
+                                }
+                                break;
                         }
-
                     }
-                })
 
-            }
-            setTimeout(() => {
-                return 'heyy';
-            }, 3000);
+                }
+            })
+
         }
-        const x = await thing();
+
         let iterator = 0;
-        async function s() {
-            // console.log(iterator)
-            // console.log(x)
-            if (typeof x == 'string') {
-                const another = await rarr.slice().sort((b, a) => b.rank - a.rank) //for some reason this doesn't sort even tho it does in testing
-                console.log(rarr)
-                setTimeout(() => {  
-                    rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `
-                    for (let i = 0; i < rarr.length && i < 10; i++) {
-                        if (!another[i]) break;
-                        console.log(another[i])
-                        rtxt += `\n#${i + 1 + ')'.padEnd(5, ' ')} ${another[i].discname}   ${another[i].osuname}   ${another[i].rank.toString().padEnd(10 - 2, ' ').substring(0, 8)}   ${another[i].acc}%   ${another[i].pp}  `
-                    }
 
-                    rtxt += `\n\``
-                    serverlb.setDescription(rtxt);
-                    serverlb.setFooter({ text: mode + ` | Page 1/${Math.ceil(rarr.length / 10)}` });
-                    const endofcommand = new Date().getTime();
-                    const timeelapsed = endofcommand - currentDate.getTime();
-                    fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (message command => lb server) - ${timeelapsed}ms\n`)
-
-                    if (page++ >= Math.ceil(rarr.length / 10)) {
-                        pgbuttons.components[3].setDisabled(true)
-                        pgbuttons.components[4].setDisabled(true)
-                    }
-
-                    //SEND/EDIT MSG==============================================================================================================================================================================================
-                    switch (commandType) {
-                        case 'message': {
-                            obj.reply({
-                                content: '',
-                                embeds: [serverlb],
-                                components: [pgbuttons],
-                                allowedMentions: { repliedUser: false },
-                                failIfNotExists: true
-                            })
-                                .catch();
-                        }
-                            break;
-
-                        //==============================================================================================================================================================================================
-
-                        case 'interaction': {
-                            obj.reply({
-                                content: '',
-                                embeds: [serverlb],
-                                components: [pgbuttons],
-                                allowedMentions: { repliedUser: false },
-                                failIfNotExists: true
-                            })
-                                .catch();
-                        }
-
-                            //==============================================================================================================================================================================================
-
-                            break;
-                        case 'button': {
-                            obj.edit({
-                                content: '',
-                                embeds: [serverlb],
-                                components: [pgbuttons],
-                                allowedMentions: { repliedUser: false },
-                                failIfNotExists: true
-                            })
-                                .catch();
-                        }
-                            break;
-                    }
-                });
-            } else {
-                iterator++;
-                s();
-            }
+        const another = rarr.slice().sort((b, a) => b.rank - a.rank) //for some reason this doesn't sort even tho it does in testing
+        rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `
+        for (let i = 0; i < rarr.length && i < 10; i++) {
+            if (!another[i]) break;
+            rtxt += `\n#${i + 1 + ')'.padEnd(5, ' ')} ${another[i].discname}   ${another[i].osuname}   ${another[i].rank.toString().padEnd(10 - 2, ' ').substring(0, 8)}   ${another[i].acc}%   ${another[i].pp}  `
         }
-        s();
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            `
+
+        rtxt += `\n\``
+        serverlb.setDescription(rtxt);
+        serverlb.setFooter({ text: mode + ` | Page 1/${Math.ceil(rarr.length / 10)}` });
+        const endofcommand = new Date().getTime();
+        const timeelapsed = endofcommand - currentDate.getTime();
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (message command => lb server) - ${timeelapsed}ms\n`)
+
+        if(page <= 1){
+            pgbuttons.components[0].setDisabled(true)
+            pgbuttons.components[1].setDisabled(true)
+        }
+        if (page + 1 >= Math.ceil(rarr.length / 10)) {
+            pgbuttons.components[3].setDisabled(true)
+            pgbuttons.components[4].setDisabled(true)
+        }
+
+            //SEND/EDIT MSG==============================================================================================================================================================================================
+            switch(commandType) {
+            case 'message': {
+    obj.reply({
+        content: '',
+        embeds: [serverlb],
+        components: [pgbuttons],
+        allowedMentions: { repliedUser: false },
+        failIfNotExists: true
+    })
+        .catch();
+}
+break;
+
+            //==============================================================================================================================================================================================
+
+            case 'interaction': {
+    obj.reply({
+        content: '',
+        embeds: [serverlb],
+        components: [pgbuttons],
+        allowedMentions: { repliedUser: false },
+        failIfNotExists: true
+    })
+        .catch();
+}
+
+//==============================================================================================================================================================================================
+
+break;
+            case 'button': {
+    obj.edit({
+        content: '',
+        embeds: [serverlb],
+        components: [pgbuttons],
+        allowedMentions: { repliedUser: false },
+        failIfNotExists: true
+    })
+        .catch();
+}
+break;
+        }
+
+fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+    `
 ----------------------------------------------------
 success
 ID: ${absoluteID}

@@ -195,5 +195,26 @@ type ytSearchAccount = any
 
 type ytSearchList = any//{}
 
-export { config, guildSettings, imagesearches, googleSearchItem, ytSearch }
+
+type dbUser = {
+    id:number,
+    userid: number,
+    osuname: string,
+    mode: string,
+    osuacc: number,
+    osupp: number,
+    osurank: number,
+    taikoacc: number,
+    taikopp: number,
+    taikorank: number,
+    fruitsacc: number,
+    fruitspp: number,
+    fruitsrank: number,
+    maniaacc: number,
+    maniapp: number,
+    maniarank: number,
+}
+
+
+export { config, guildSettings, imagesearches, googleSearchItem, ytSearch, dbUser }
 
