@@ -49,7 +49,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         if (message.content.startsWith(settings.prefix)) usePrefix = settings.prefix;
 
         const args = message.content.slice(usePrefix.length).trim().split(/ +/g);
-        const command = args.shift().toLowerCase();
+        const command = args.shift().toLowerCase(); 
 
         if (!oncooldown.has(message.author.id) && cd.cooldownCommands.includes(command)) {
             timeouttime = new Date().getTime() + 3000
