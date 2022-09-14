@@ -49,7 +49,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         if (message.content.startsWith(settings.prefix)) usePrefix = settings.prefix;
 
         const args = message.content.slice(usePrefix.length).trim().split(/ +/g);
-        const command = args.shift().toLowerCase(); 
+        const command = args.shift().toLowerCase();
 
         if (!oncooldown.has(message.author.id) && cd.cooldownCommands.includes(command)) {
             timeouttime = new Date().getTime() + 3000
@@ -247,9 +247,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
 
             //admincmds below
             case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
-                if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    commandStruct.admincmds.get('checkperms').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                }
+                commandStruct.admincmds.get('checkperms').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
             case 'leaveguild': case 'leave':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
@@ -257,17 +255,16 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 };
                 break;
             case 'servers':
-                if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
+                if (checks.isOwner(userid)) {
                     commandStruct.admincmds.get('servers').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 };
                 break;
             case 'debug':
-                if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    commandStruct.admincmds.get('debug').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                };
+                commandStruct.admincmds.get('debug').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+
                 break;
             case 'crash':
-                if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
+                if (checks.isOwner(userid)) {
                     commandStruct.admincmds.get('crash').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 };
                 break;

@@ -10,7 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 
 module.exports = {
-    name: 'COMMANDNAME',
+    name: 'crash',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
         let baseCommandType;
@@ -27,7 +27,7 @@ module.exports = {
                 commanduser = obj.member.user;
             }
 
-            //==============================================================================================================================================================================================
+                //==============================================================================================================================================================================================
 
                 break;
             case 'button': {
@@ -44,21 +44,21 @@ module.exports = {
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-crash-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅')
                 /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-crash-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`RightArrow-crash-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶')
                 /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-crash-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡')
                 /* .setLabel('End') */,
@@ -66,7 +66,7 @@ module.exports = {
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
-                'COMMANDNAME',
+                'crash',
                 commandType,
                 absoluteID,
                 commanduser
@@ -82,7 +82,15 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+        console.log('executed crash command')
 
+        obj.reply()
+            .then(message => {
+                message.delete()
+                obj.reply()
+                obj.reply()
+                obj.reply()
+            })
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
@@ -99,7 +107,7 @@ module.exports = {
                 break;
 
             //==============================================================================================================================================================================================
-           
+
             case 'interaction': {
                 obj.reply({
                     content: '',
@@ -111,7 +119,7 @@ module.exports = {
                     .catch();
             }
 
-            //==============================================================================================================================================================================================
+                //==============================================================================================================================================================================================
 
                 break;
             case 'button': {
@@ -128,7 +136,7 @@ module.exports = {
         }
 
 
-        
+
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------

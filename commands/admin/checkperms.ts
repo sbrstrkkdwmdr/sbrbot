@@ -93,7 +93,10 @@ module.exports = {
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.optsLog(
                 absoluteID,
-                []
+                [{
+                    name: 'User',
+                    value: searchUser.id ?? commanduser.id
+                }]
             ), 'utf-8')
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -101,6 +104,13 @@ module.exports = {
         if (searchUser == null || typeof searchUser == 'undefined') {
             searchUser = commanduser;
         }
+        if (!(cmdchecks.isAdmin(commanduser.id, obj.guildId, client) || cmdchecks.isOwner(commanduser.id))) {
+            searchUser = commanduser;
+            console.log('er')
+        } else {
+            console.log('re')
+        }
+
 
         const embed = new Discord.EmbedBuilder()
         try {
