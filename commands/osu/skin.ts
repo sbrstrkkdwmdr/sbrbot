@@ -94,7 +94,7 @@ module.exports = {
                 findType = 'id'
             }
                 break;
-            case (string != null): {
+            case (string != null || string.length > 0): {
                 findType = 'string'
             }
                 break;
@@ -103,32 +103,31 @@ module.exports = {
             }
         }
 
+        const allUsers = await userdata.findAll()
+
         if (findType == 'id') {
-            userF = await userdata.findOne({
-                where: {
-                    userid: commanduser.id
-                }
-            })
+            userF = allUsers.find(user => user.id == searchid)
         } else {
-            userF = await userdata.findOne({
-                where: {
-                    osuname: string
-                }
-            })
+            userF = allUsers.find(user => user.osuname.toLowerCase().includes(string.toLowerCase()))
         }
         let skinstring;
         if (userF) {
-            skinstring = `${userF.get('skin')}`
+            skinstring = `${userF.dataValues.skin}`
         } else {
             skinstring = `User is not saved in the database`
         }
+
+        const embed = new Discord.EmbedBuilder()
+            .setTitle(`${userF.osuname}'s skin`)
+            .setDescription(skinstring)
+
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
-                    content: skinstring,
-                    embeds: [],
+                    content: '',
+                    embeds: [embed],
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -141,8 +140,8 @@ module.exports = {
 
             case 'interaction': {
                 obj.reply({
-                    content: skinstring,
-                    embeds: [],
+                    content: '',
+                    embeds: [embed],
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
