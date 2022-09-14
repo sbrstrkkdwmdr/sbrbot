@@ -115,14 +115,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings) => {
 
         const currentGuildId = message.guildId
         let settings: extypes.guildSettings;
-        let prefix: string;
-        try {
-            const settingsfile = fs.readFileSync(`./config/guilds/${currentGuildId}.json`, 'utf-8')
-            settings = JSON.parse(settingsfile);
-            prefix = settings.prefix
-        } catch (error) {
-            prefix = config.prefix
-        }
+        let prefix: string = config.prefix;
 
         if (
             typeof prefix === 'undefined' ||
@@ -135,7 +128,15 @@ module.exports = (userdata, client, config, oncooldown, guildSettings) => {
         //if message mentions bot and no other args given, return prefix
         if (message.mentions.users.size > 0) {
             if (message.mentions.users.first().id == client.user.id && message.content.replaceAll(' ', '').length == (`<@${client.user.id}>`).length) {
-                return message.reply({ content: `Prefix is \`${prefix}\``, allowedMentions: { repliedUser: false } })
+                let serverPrefix = 'null'
+                try {
+                    const curGuildSettings = await guildSettings.findOne({ where: { guildid: message.guildId } });
+                    settings = curGuildSettings.dataValues;
+                    serverPrefix = settings.prefix
+                } catch (error) {
+                    serverPrefix = config.prefix
+                }
+                return message.reply({ content: `Global prefix is \`${prefix}\`\nServer prefix is \`${serverPrefix}\``, allowedMentions: { repliedUser: false } })
             }
         }
 
