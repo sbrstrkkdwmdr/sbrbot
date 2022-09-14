@@ -125,7 +125,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         const currentGuildId = interaction.guildId
         let settings: extypes.guildSettings;
         try {
-            const curGuildSettings = await guildSettings.findOne({ where: { guildid: message.guildId } });
+            const curGuildSettings = await guildSettings.findOne({ where: { guildid: currentGuildId } });
             settings = curGuildSettings.dataValues;
         } catch (error) {
             try {
