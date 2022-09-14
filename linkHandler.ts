@@ -17,6 +17,9 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         const obj = message
         let parse = null
         const commandType = 'link'
+        if(!(message.content.startsWith('http') || message.content.includes('osu.') || message.attachments.size > 0)){
+            return;
+        }
 
         let overrides = {
             user: null,
@@ -30,13 +33,31 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         const currentGuildId = message.guildId
         let settings: extypes.guildSettings;
         try {
-            const settingsfile = fs.readFileSync(`./config/guilds/${currentGuildId}.json`, 'utf-8')
-            settings = JSON.parse(settingsfile)
+            const curGuildSettings = await guildSettings.findOne({ where: { guildid: message.guildId } });
+            settings = curGuildSettings.dataValues;
         } catch (error) {
-            fs.writeFileSync(`./config/guilds/${currentGuildId}.json`, JSON.stringify(defaults.defaultGuildSettings, null, 2), 'utf-8')
-            settings = defaults.defaultGuildSettings
+            try {
+                await guildSettings.create({
+                    guildid: message.guildId,
+                    guildname: message?.guild?.name ?? 'Unknown',
+                    prefix: 'sbr-',
+                    osuParseLinks: true,
+                    osuParseScreenshots: true,
+                    osuParseReplays: true,
+                })
+            } catch (error) {
+
+            }
+            settings = {
+                guildid: message.guildId,
+                guildname: message?.guild?.name ?? 'Unknown',
+                prefix: 'sbr-',
+                osuParseLinks: true,
+                osuParseScreenshots: true,
+                osuParseReplays: true,
+            };
         }
-        if (config.useScreenshotParse == true && settings.osu.parseScreenshots == true) {
+        if (config.useScreenshotParse == true && settings.osuParseScreenshots == true) {
             //warning: uses a lot of memory
 
             const worker = tesseract.createWorker({
@@ -105,18 +126,6 @@ progress: ${m.progress ? m.progress : 'none'}
         }
 
         const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
-        if (messagenohttp.startsWith(x =>
-            'osu.ppy.sh/b/' || 'osu.ppy.sh/beatmaps/' || 'osu.ppy.sh/beatmapsets/' || 'osu.ppy.sh/s/'
-            || 'osu.ppy.sh/u/' || 'osu.ppy.sh/users/'
-        )) {
-            if (settings.enabledModules.osu == false || settings.osu.parseLinks == false) {
-                return;
-            } else if (settings.osu.limited == true) {
-                if (!settings.osu.channels.includes(obj.channelId)) {
-                    return;
-                }
-            }
-        }
 
         if (messagenohttp.startsWith('osu.ppy.sh/b/') || messagenohttp.startsWith('osu.ppy.sh/beatmaps/') || messagenohttp.startsWith('osu.ppy.sh/beatmapsets/') || messagenohttp.startsWith('osu.ppy.sh/s/') || parse != null) {
             overrides.ex = 'link'
@@ -128,15 +137,8 @@ progress: ${m.progress ? m.progress : 'none'}
         }
 
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osr'))) {
-            if (settings.enabledModules.osu == false || settings.osu.parseReplays == false) {
+            if (settings.osuParseReplays == false) {
                 return;
-            }
-            else if (settings.osu.limited == true) {
-                if (!settings.osu.channels.includes(obj.channelId)) {
-                    return;
-                }
-            } else {
-
             }
             const attachosr = message.attachments.first().url
             const osrdlfile = fs.createWriteStream('./files/replay.osr')

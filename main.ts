@@ -138,20 +138,13 @@ const guildSettings = sequelize.define('guildSettings', {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
     },
-    enableMusic: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: true,
-    },
-    enableAdmin: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-    }
 });
 
 client.once('ready', () => {
     const currentDate = new Date();
 
     userdata.sync();
+    guildSettings.sync();
     const timetostart = currentDate.getTime() - initdate.getTime()
     const initlog = `
 ===================================================================

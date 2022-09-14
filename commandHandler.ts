@@ -3,6 +3,7 @@ import checks = require('./src/checks');
 import extypes = require('./src/types/extratypes');
 import defaults = require('./src/consts/defaults');
 import Discord = require('discord.js');
+import cd = require('./src/consts/cooldown');
 
 module.exports = (userdata, client, commandStruct, config, oncooldown, guildSettings) => {
     let timeouttime;
@@ -16,25 +17,50 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         const currentGuildId = message.guildId
         let settings: extypes.guildSettings;
         try {
-            const settingsfile = fs.readFileSync(`./config/guilds/${currentGuildId}.json`, 'utf-8')
-            settings = JSON.parse(settingsfile);
+            const curGuildSettings = await guildSettings.findOne({ where: { guildid: message.guildId } });
+            settings = curGuildSettings.dataValues;
         } catch (error) {
-            fs.writeFileSync(`./config/guilds/${currentGuildId}.json`, JSON.stringify(defaults.defaultGuildSettings, null, 2), 'utf-8')
-            settings = defaults.defaultGuildSettings;
+            try {
+                await guildSettings.create({
+                    guildid: message.guildId,
+                    guildname: message?.guild?.name ?? 'Unknown',
+                    prefix: 'sbr-',
+                    osuParseLinks: true,
+                    osuParseScreenshots: true,
+                    osuParseReplays: true,
+                })
+            } catch (error) {
+
+            }
+            settings = {
+                guildid: message.guildId,
+                guildname: message?.guild?.name ?? 'Unknown',
+                prefix: 'sbr-',
+                osuParseLinks: true,
+                osuParseScreenshots: true,
+                osuParseReplays: true,
+            };
         }
 
-        if (!(message.content.startsWith(config.prefix) || message.content.startsWith(settings.prefix))) return; //the return is so if its just prefix nothing happens
 
-        if (!oncooldown.has(message.author.id)) {
+        if (!(message.content.startsWith(config.prefix) || message.content.startsWith(settings.prefix))) return;
+
+        let usePrefix = config.prefix;
+        if (message.content.startsWith(settings.prefix)) usePrefix = settings.prefix;
+
+        const args = message.content.slice(usePrefix.length).trim().split(/ +/g);
+        const command = args.shift().toLowerCase();
+
+        if (!oncooldown.has(message.author.id) && cd.cooldownCommands.includes(command)) {
             timeouttime = new Date().getTime() + 3000
         }
-        if (oncooldown.has(message.author.id)) {
+        if (oncooldown.has(message.author.id) && cd.cooldownCommands.includes(command)) {
             setTimeout(() => {
                 message.delete()
                     .catch()
             }, 3000)
         }
-        if (oncooldown.has(message.author.id)) {
+        if (oncooldown.has(message.author.id) && cd.cooldownCommands.includes(command)) {
             message.reply({
                 content: `You're on cooldown!\nTry again in ${getTimeLeft(timeouttime) / 1000}s`,
                 allowedMentions: { repliedUser: false },
@@ -52,9 +78,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         function getTimeLeft(timeout) {
             return (timeout - new Date().getTime());
         }
-
-        const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-        const command = args.shift().toLowerCase();
 
         const interaction = null;
         const button = null;
@@ -75,10 +98,10 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         const button = null;
         const obj = interaction;
 
-        if (!oncooldown.has(interaction.member.user.id)) {
+        if (!oncooldown.has(interaction.member.user.id) && cd.cooldownCommands.includes(interaction.commandName)) {
             timeouttime = new Date().getTime() + 3000
         }
-        if (oncooldown.has(interaction.member.user.id)) {
+        if (oncooldown.has(interaction.member.user.id) && cd.cooldownCommands.includes(interaction.commandName)) {
             return interaction.reply({
                 content: `You're on cooldown!\nTry again in ${getTimeLeft(timeouttime) / 1000}s`,
                 allowedMentions: { repliedUser: false },
@@ -86,7 +109,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 ephemeral: true
             });
         }
-        if (!oncooldown.has(interaction.member.user.id)) {
+        if (!oncooldown.has(interaction.member.user.id) && cd.cooldownCommands.includes(interaction.commandName)) {
             oncooldown.add(interaction.member.user.id);
             timeouttime = new Date().getTime()
             setTimeout(() => {
@@ -102,11 +125,29 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         const currentGuildId = interaction.guildId
         let settings: extypes.guildSettings;
         try {
-            const settingsfile = fs.readFileSync(`./config/guilds/${currentGuildId}.json`, 'utf-8')
-            settings = JSON.parse(settingsfile)
+            const curGuildSettings = await guildSettings.findOne({ where: { guildid: message.guildId } });
+            settings = curGuildSettings.dataValues;
         } catch (error) {
-            fs.writeFileSync(`./config/guilds/${currentGuildId}.json`, JSON.stringify(defaults.defaultGuildSettings, null, 2), 'utf-8')
-            settings = defaults.defaultGuildSettings;
+            try {
+                await guildSettings.create({
+                    guildid: interaction.guildId,
+                    guildname: interaction?.guild?.name ?? 'Unknown',
+                    prefix: 'sbr-',
+                    osuParseLinks: true,
+                    osuParseScreenshots: true,
+                    osuParseReplays: true,
+                })
+            } catch (error) {
+                console.log(error)
+            }
+            settings = {
+                guildid: interaction.guildId,
+                guildname: interaction?.guild?.name ?? 'Unknown',
+                prefix: 'sbr-',
+                osuParseLinks: true,
+                osuParseScreenshots: true,
+                osuParseReplays: true,
+            };
         }
         execCommand(interaction.commandName, 'interaction', interaction, null, button, absoluteID, currentDate, interaction.member.user.id, args);
     });
@@ -225,28 +266,16 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                     commandStruct.admincmds.get('debug').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 };
                 break;
-            case 'voice':
-                if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    commandStruct.admincmds.get('voice').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                };
-                break;
             case 'crash':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
                     commandStruct.admincmds.get('crash').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 };
                 break;
-            case 'log':
-                if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    commandStruct.admincmds.get('log').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                };
-                break;
             case 'find':
                 commandStruct.admincmds.get('find').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
-            case 'purge':
-                if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    commandStruct.admincmds.get('purge').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                };
+            case 'prefix':
+                commandStruct.admincmds.get('prefix').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, guildSettings)
                 break;
 
             case 'test':
