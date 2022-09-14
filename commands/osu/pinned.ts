@@ -314,9 +314,6 @@ module.exports = {
                 pinnedEmbed.addFields([scoresarg.fields[i]])
             }
         }
-
-        osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
-
         if (scoresarg.isFirstPage) {
             //@ts-ignore
             pgbuttons.components[0].setDisabled(true)
@@ -328,6 +325,13 @@ module.exports = {
             pgbuttons.components[3].setDisabled(true)
             //@ts-ignore
             pgbuttons.components[4].setDisabled(true)
+        }
+
+        osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
+        try {
+            osufunc.updateUserStats(osudata, osudata.playmode, userdata)
+        } catch (error) {
+            console.log(error)
         }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================

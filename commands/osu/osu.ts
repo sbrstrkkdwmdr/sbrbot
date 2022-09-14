@@ -185,7 +185,7 @@ module.exports = {
             return;
         }
         try {
-            osufunc.updateUserStats(osudata, mode, userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, userdata)
         } catch (error) {
             console.log(error)
         }

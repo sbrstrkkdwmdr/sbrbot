@@ -324,7 +324,11 @@ module.exports = {
         }
 
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
-
+        try {
+            osufunc.updateUserStats(osudata, osudata.playmode, userdata)
+        } catch (error) {
+            console.log(error)
+        }
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {

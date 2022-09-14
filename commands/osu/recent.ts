@@ -591,7 +591,11 @@ ${curscore.mods.length > 0 ? '+' + curscore.mods.join('') + ' | ' : ''}${(cursco
             }
         }
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
-
+        try {
+            osufunc.updateUserStats(osudata, osudata.playmode, userdata)
+        } catch (error) {
+            console.log(error)
+        }
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {

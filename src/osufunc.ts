@@ -719,55 +719,60 @@ function logCall(data: string, title?: string) {
 }
 
 async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase: any) {
-    try {
-        let findname = await sqlDatabase.findOne({ where: { osuname: user.username } });
-        if (findname == null) {
-            findname = await sqlDatabase.findOne({ where: { osuname: user.id } });
-        }
-        if (findname != null) {
-            switch (mode) {
-                case 'osu':
-                default:
+    // try {
+    const allUsers = await sqlDatabase.findAll()
+    let findname = allUsers.find((u: any) => u.osuname.toLowerCase() == user.username.toLowerCase());
+
+    if (findname == null) {
+        findname = allUsers.find((u: any) => `${u.osuname}`.toLowerCase() == `${user.id}`.toLowerCase());
+    }
+    if (findname != null) {
+        switch (mode) {
+            case 'osu':
+            default:
+                {
+
                     await sqlDatabase.update({
                         osupp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
                         osurank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
                         osuacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0,
                     }, {
-                        where: { osuname: user }
+                        where: { osuname: findname.dataValues.osuname }
                     })
-                    break;
-                case 'taiko':
-                    await sqlDatabase.update({
-                        taikopp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
-                        taikorank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
-                        taikoacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0
-                    }, {
-                        where: { osuname: user }
-                    })
-                    break;
-                case 'fruits':
-                    await sqlDatabase.update({
-                        fruitspp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
-                        fruitsrank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
-                        fruitsacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0
-                    }, {
-                        where: { osuname: user }
-                    })
-                    break;
-                case 'mania':
-                    await sqlDatabase.update({
-                        maniapp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
-                        maniarank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
-                        maniaacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0
-                    }, {
-                        where: { osuname: user }
-                    })
-                    break;
-            }
+                }
+                break;
+            case 'taiko':
+                await sqlDatabase.update({
+                    taikopp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
+                    taikorank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
+                    taikoacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0
+                }, {
+                    where: { osuname: findname.dataValues.osuname }
+                })
+                break;
+            case 'fruits':
+                await sqlDatabase.update({
+                    fruitspp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
+                    fruitsrank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
+                    fruitsacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0
+                }, {
+                    where: { osuname: findname.dataValues.osuname }
+                })
+                break;
+            case 'mania':
+                await sqlDatabase.update({
+                    maniapp: !isNaN(user?.statistics?.pp) ? user?.statistics?.pp : 0,
+                    maniarank: !isNaN(user?.statistics?.global_rank) ? user?.statistics?.global_rank : 0,
+                    maniaacc: !isNaN(user?.statistics?.hit_accuracy) ? user?.statistics?.hit_accuracy : 0
+                }, {
+                    where: { osuname: findname.dataValues.osuname }
+                })
+                break;
         }
-    } catch (error) {
-        console.log(`Error updating user stats for ${user?.username}: ` + error)
     }
+    // } catch (error) {
+    //     console.log(`Error updating user stats for ${user?.username}: ` + error)
+    // }
     return;
 }
 
@@ -862,7 +867,7 @@ export function debug(data: any, type: string, name: string, serverId: string | 
     return;
 }
 
-export function matchScores(initScore: osuApiTypes.Score, scoreList: osuApiTypes.Score[]){
+export function matchScores(initScore: osuApiTypes.Score, scoreList: osuApiTypes.Score[]) {
     //filter out so scores are only from the same map
     const mapScores = scoreList.slice().filter(score => score.beatmap.id == initScore.beatmap.id)
 
@@ -876,19 +881,19 @@ export function matchScores(initScore: osuApiTypes.Score, scoreList: osuApiTypes
     let modScores = modeScores.slice().filter(score => score.mods == initScore.mods)
 
     let filteredMods = initScore.mods.join('').replace('NC', 'DT').split(/.{1,2}/g)
-    
-    if (initScore.mods.includes('HD') || initScore.mods.includes('SO') || initScore.mods.includes('NF') || initScore.mods.includes('TD') || initScore.mods.includes('SD') || initScore.mods.includes('PF')) { 
+
+    if (initScore.mods.includes('HD') || initScore.mods.includes('SO') || initScore.mods.includes('NF') || initScore.mods.includes('TD') || initScore.mods.includes('SD') || initScore.mods.includes('PF')) {
         filteredMods = initScore.mods.join('').replace('HD', '').replace('SO', '').replace('NF', '').replace('TD', '').replace('SD', '').replace('PF', '').split(/.{1,2}/g)
         // if(initScore.mods.includes('DT')){
-            
+
         // }
     }
 
     modScores = modScores.slice().filter(score => score.mods.join('').replace('NC', 'DT').split(/.{1,2}/g).sort().join('') == filteredMods.sort().join(''))
 
-    if(initScore.mods.length == 0){
+    if (initScore.mods.length == 0) {
         modScores = modeScores.slice().filter(score => score.mods.length == 0)
-    }    
+    }
 
     return modScores;
 }
