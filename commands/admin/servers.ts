@@ -10,7 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 
 module.exports = {
-    name: 'COMMANDNAME',
+    name: 'servers',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
         let baseCommandType;
@@ -27,7 +27,7 @@ module.exports = {
                 commanduser = obj.member.user;
             }
 
-            //==============================================================================================================================================================================================
+                //==============================================================================================================================================================================================
 
                 break;
             case 'button': {
@@ -44,21 +44,21 @@ module.exports = {
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-servers-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅')
                 /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-servers-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`RightArrow-servers-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶')
                 /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-servers-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡')
                 /* .setLabel('End') */,
@@ -66,7 +66,7 @@ module.exports = {
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
-                'COMMANDNAME',
+                'servers',
                 commandType,
                 absoluteID,
                 commanduser
@@ -82,38 +82,34 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+        const servers = (client.guilds.cache.map(guild => ` **${guild.name}** => \`${guild.id}\` | <@${guild.ownerId}> \`||\``)).join('')
+        const embed = new Discord.EmbedBuilder()
+            .setTitle('Guilds')
+            .setDescription(`${servers}`)
 
+
+        let rw:any = {
+            embeds: [embed],
+            allowedMentions: { repliedUser: false },
+            failIfNotExists: true
+        }
+        if (servers.length > 2000) {
+            fs.writeFileSync('debug/guilds.txt', servers, 'utf-8')
+            rw = {
+                files: ['./debug/guilds.txt'],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            }
+        }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
-            case 'message': {
-                obj.reply({
-                    content: '',
-                    embeds: [],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+            case 'message':case 'interaction': {
+                obj.reply(rw)
                     .catch();
             }
                 break;
 
-            //==============================================================================================================================================================================================
-           
-            case 'interaction': {
-                obj.reply({
-                    content: '',
-                    embeds: [],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
-            }
-
-            //==============================================================================================================================================================================================
-
-                break;
             case 'button': {
                 obj.edit({
                     content: '',
@@ -128,7 +124,7 @@ module.exports = {
         }
 
 
-        
+
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
