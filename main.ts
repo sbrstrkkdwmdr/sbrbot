@@ -48,7 +48,7 @@ const commandStruct = {
     links: new Discord.Collection(),
     osucmds: new Discord.Collection(),
     admincmds: new Discord.Collection(),
-    musiccmds: new Discord.Collection(),
+    // musiccmds: new Discord.Collection(),
     tstcmds: new Discord.Collection(),
     buttons: new Discord.Collection(),
 }
@@ -58,7 +58,7 @@ const miscCommandFiles = fs.readdirSync('./commands/misc').filter(file => file.e
 const linkCommandFiles = fs.readdirSync('./commands/links').filter(file => file.endsWith('.ts'));
 const osuCommandFiles = fs.readdirSync('./commands/osu').filter(file => file.endsWith('.ts'));
 const adminCommandFiles = fs.readdirSync('./commands/admin').filter(file => file.endsWith('.ts'));
-const musicCommandFiles = fs.readdirSync('./commands/music').filter(file => file.endsWith('.ts'));
+// const musicCommandFiles = fs.readdirSync('./commands/music').filter(file => file.endsWith('.ts'));
 
 
 for (const file of commandFiles) {
@@ -81,10 +81,10 @@ for (const file of adminCommandFiles) {
     const command = require(`./commands/admin/${file}`);
     commandStruct.admincmds.set(command.name, command);
 }
-for (const file of musicCommandFiles) {
-    const command = require(`./commands/music/${file}`);
-    commandStruct.musiccmds.set(command.name, command);
-}
+// for (const file of musicCommandFiles) {
+//     const command = require(`./commands/music/${file}`);
+//     commandStruct.musiccmds.set(command.name, command);
+// }
 
 const sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',

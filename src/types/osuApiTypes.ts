@@ -404,7 +404,7 @@ export type ForumTopic = {
     user_id: number,
 } & Error
 
-export type GameMode = 'osu' | 'taiko' | 'fruits' | 'mania' & Error
+export type GameMode = ('osu' | 'taiko' | 'fruits' | 'mania') & Error
 
 export type GithubUser = {
     display_name: string,
@@ -475,7 +475,7 @@ export type MultiplayerScoresCursor = {
     total_score: number,
 } & Error
 
-export type MultiplayerScoresSort = 'score_asc' | 'score_desc' & Error
+export type MultiplayerScoresSort = ('score_asc' | 'score_desc') & Error
 
 export type NewsPost = {
     author: string,
@@ -502,7 +502,7 @@ export type Notification = {
     details: NotificationEvent | object,
 } & Error
 
-export type RankingType = 'charts' | 'country' | 'performance' | 'score' & Error
+export type RankingType = ('charts' | 'country' | 'performance' | 'score') & Error
 
 export type Rankings = {
     beatmapsets?: Beatmapset[],
