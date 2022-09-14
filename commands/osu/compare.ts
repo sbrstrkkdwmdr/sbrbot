@@ -174,9 +174,11 @@ module.exports = {
                     return;
                 }
 
-                fs.writeFileSync(`debug/prevuser${obj.guildId}.json`, JSON.stringify({ id: firstuser.username }), 'utf8');
-                fs.writeFileSync(`debug/command-compare=firstuserdata=${obj.guildId}.json`, JSON.stringify(firstuser, null, 2), 'utf8');
-                fs.writeFileSync(`debug/command-compare=seconduserdata=${obj.guildId}.json`, JSON.stringify(seconduser, null, 2), 'utf8');
+                // fs.writeFileSync(`debug/prevuser${obj.guildId}.json`, JSON.stringify({ id: firstuser.username }), 'utf8');
+                // fs.writeFileSync(`debug/command-compare=firstuserdata=${obj.guildId}.json`, JSON.stringify(firstuser, null, 2), 'utf8');
+                // fs.writeFileSync(`debug/command-compare=seconduserdata=${obj.guildId}.json`, JSON.stringify(seconduser, null, 2), 'utf8');
+                osufunc.debug(firstuser, 'command', 'compare', obj.guildId, 'firstUserData');
+                osufunc.debug(seconduser, 'command', 'compare', obj.guildId, 'secondUserData');
 
                 const uEmbed = new Discord.EmbedBuilder()
                     .setColor(colours.embedColour.userlist.dec)
@@ -267,7 +269,8 @@ module.exports = {
                     secondScore = match.length > 0 ? match[0] : secondScoresArray.length > 0 ? secondScoresArray.slice().sort((a, b) => b.score - a.score)[0] : prevscore;
                 }
 
-
+                osufunc.debug(firstScore, 'command', 'compare', obj.guildId, 'firstScoreData');
+                osufunc.debug(secondScore, 'command', 'compare', obj.guildId, 'secondScoreData');
 
                 const sEmbed = new Discord.EmbedBuilder()
                     .setColor(colours.embedColour.scorelist.dec)

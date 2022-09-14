@@ -214,7 +214,9 @@ module.exports = {
                     .setDisabled(isLastPage),
             );
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
-        fs.writeFileSync(`debug/command-rs=user=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
+        // fs.writeFileSync(`debug/command-rs=user=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
+        osufunc.debug(osudata, 'command', 'recent', obj.guildId, 'osuData');
+
         if (osudata?.error) {
             obj.reply({
                 content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
@@ -238,7 +240,8 @@ module.exports = {
         }
 
         const rsdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
-        fs.writeFileSync(`debug/command-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
+        // fs.writeFileSync(`debug/command-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
+        osufunc.debug(rsdata, 'command', 'recent', obj.guildId, 'rsData');
         if (rsdata?.error) {
             obj.reply({
                 content: `${rsdata?.error ? rsdata?.error : 'Error: null'}`,
@@ -282,7 +285,8 @@ module.exports = {
 
 
             const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${curbm.id}`)
-            fs.writeFileSync(`debug/command-rs=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+            // fs.writeFileSync(`debug/command-rs=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+            osufunc.debug(mapdata, 'command', 'recent', obj.guildId, 'mapData');
             if (mapdata?.error) {
                 obj.reply({
                     content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
@@ -481,7 +485,8 @@ module.exports = {
                     curscore.pp ?
                         curscore.pp.toFixed(2) :
                         ppcalcing[0].pp.toFixed(2)
-                fs.writeFileSync(`debug/command-rs=pp_calc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2))
+                // fs.writeFileSync(`debug/command-rs=pp_calc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2))
+                osufunc.debug(ppcalcing, 'command', 'recent', obj.guildId, 'ppCalcing');
             } catch (error) {
                 rspp =
                     curscore.pp ?

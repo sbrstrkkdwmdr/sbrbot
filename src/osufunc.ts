@@ -863,7 +863,8 @@ export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string
 
 export function debug(data: any, type: string, name: string, serverId: string | number, params: string) {
     const pars = params.replaceAll(',', '=');
-    fs.writeFileSync(`debug/${type}-${name}=${pars}_${serverId}.json`, JSON.stringify(data, null, 2));
+    // fs.writeFileSync(`debug/${type}-${name}=${pars}_${serverId}.json`, JSON.stringify(data, null, 2));
+    fs.writeFileSync(`debug/${type}/${name}/${pars}_${serverId}.json`, JSON.stringify(data, null, 2))
     return;
 }
 

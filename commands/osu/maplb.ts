@@ -161,7 +161,9 @@ module.exports = {
         }
 
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
-        fs.writeFileSync(`debug/command-leaderboard=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+        // fs.writeFileSync(`debug/command-leaderboard=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+        osufunc.debug(mapdata, 'command', 'maplb', obj.guildId, 'mapData');
+
         if (mapdata?.error) {
             obj.reply({
                 content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
@@ -192,7 +194,9 @@ module.exports = {
 
         if (mods == null) {
             const lbdataf: osuApiTypes.BeatmapScores = await osufunc.apiget('scores_get_map', `${mapid}`)
-            fs.writeFileSync(`debug/command-leaderboard=lbdataf=${obj.guildId}.json`, JSON.stringify(lbdataf, null, 2))
+            // fs.writeFileSync(`debug/command-leaderboard=lbdataf=${obj.guildId}.json`, JSON.stringify(lbdataf, null, 2))
+            osufunc.debug(lbdataf, 'command', 'maplb', obj.guildId, 'lbDataF');
+
             if (lbdataf?.error) {
                 obj.reply({
                     content: `${lbdataf?.error ? lbdataf?.error : 'Error: null'}`,
@@ -203,7 +207,8 @@ module.exports = {
             }
 
             const lbdata = lbdataf.scores
-            fs.writeFileSync(`debug/command-leaderboard=lbdata=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
+            // fs.writeFileSync(`debug/command-leaderboard=lbdata=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
+            osufunc.debug(lbdata, 'command', 'maplb', obj.guildId, 'lbData');
 
 
             if (page >= Math.ceil(lbdata.length / 5)) {
@@ -277,7 +282,9 @@ ${hitlist}
             osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
         } else {
             const lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1);
-            fs.writeFileSync(`debug/command-leaderboard=lbdata_apiv1=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
+            // fs.writeFileSync(`debug/command-leaderboard=lbdata_apiv1=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
+            osufunc.debug(lbdata, 'command', 'maplb', obj.guildId, 'lbData');
+
             if (lbdata?.error) {
                 obj.reply({
                     content: `${lbdata?.error ? lbdata?.error : 'Error: null'}`,

@@ -61,12 +61,15 @@ module.exports = {
                 const curid = urlnohttp.split('/')[3];
                 mapid = curid;
                 const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
-                fs.writeFileSync(`debug/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
+                // fs.writeFileSync(`debug/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
+                osufunc.debug(bmsdata, 'command', 'map', obj.guildId, 'bmsData');
+
                 if (bmsdata?.error) {
                     return;
                 }
                 const bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
-                fs.writeFileSync(`debug/command-map=bmstosr=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
+                // fs.writeFileSync(`debug/command-map=bmstosr=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
+                osufunc.debug(bmstosr, 'command', 'map', obj.guildId, 'bmsToSr');
 
                 //get which part of the array the current map is in
                 const curmapindex = bmstosr.findIndex(x => x.id == curid);
@@ -285,7 +288,9 @@ module.exports = {
         //get beatmap data
         if (maptitleq == null) {
             mapdata = await osufunc.apiget('map_get', `${mapid}`)
-            fs.writeFileSync(`debug/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+            // fs.writeFileSync(`debug/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+            osufunc.debug(mapdata, 'command', 'map', obj.guildId, 'mapData');
+
             if (mapdata?.error) {
                 obj.reply({
                     content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
@@ -295,7 +300,8 @@ module.exports = {
                 return;
             }
             const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${mapdata.beatmapset_id}`)
-            fs.writeFileSync(`debug/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2))
+            // fs.writeFileSync(`debug/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2))
+            osufunc.debug(bmsdata, 'command', 'map', obj.guildId, 'bmsData');
 
             if (bmsdata.beatmaps.length < 2 || typeof bmsdata.beatmaps == 'undefined') {
                 // no options
@@ -336,7 +342,9 @@ module.exports = {
 
         if (maptitleq != null) {
             const mapidtest = await osufunc.apiget('mapset_search', `${maptitleq}`)
-            fs.writeFileSync(`debug/command-map=mapidtest=${obj.guildId}.json`, JSON.stringify(mapidtest, null, 2))
+            // fs.writeFileSync(`debug/command-map=mapidtest=${obj.guildId}.json`, JSON.stringify(mapidtest, null, 2))
+            osufunc.debug(mapidtest, 'command', 'map', obj.guildId, 'mapIdTestData');
+
             if (mapidtest?.error) {
                 obj.reply({
                     content: `${mapidtest?.error ? mapidtest?.error : 'Error: null'}`,
@@ -388,7 +396,8 @@ ${error}
 
 
             mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
-            fs.writeFileSync(`debug/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+            // fs.writeFileSync(`debug/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+            osufunc.debug(mapdata, 'command', 'map', obj.guildId, 'mapData');
             if (mapdata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
                     obj.reply({
@@ -500,7 +509,8 @@ params: ${mapid} | ${maptitleq}
             } catch (error) {
                 totaldiff = mapdata.difficulty_rating;
             }
-            fs.writeFileSync(`./debug/command-map=pp_calc=${obj.guildId}.json`, JSON.stringify(ppComputed, null, 2))
+            // fs.writeFileSync(`./debug/command-map=pp_calc=${obj.guildId}.json`, JSON.stringify(ppComputed, null, 2))
+            osufunc.debug(ppComputed, 'command', 'map', obj.guildId, 'ppCalc');
 
         } catch (error) {
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -562,7 +572,9 @@ ${error}
         const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
 
         const mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
-        fs.writeFileSync(`./debug/command-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
+        // fs.writeFileSync(`./debug/command-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
+        osufunc.debug(mapperdata, 'command', 'map', obj.guildId, 'mapperData');
+
         if (mapperdata?.error) {
             if (commandType != 'button') {
                 obj.reply({
@@ -576,9 +588,12 @@ ${error}
 
         const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
         try {
-            fs.writeFileSync(`./debug/command-map=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))
+            // fs.writeFileSync(`./debug/command-map=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))
+            osufunc.debug(strains, 'command', 'map', obj.guildId, 'strains');
+
         } catch (error) {
-            fs.writeFileSync(`./debug/command-map=strains=${obj.guildId}.json`, JSON.stringify({ error: error }, null, 2))
+            // fs.writeFileSync(`./debug/command-map=strains=${obj.guildId}.json`, JSON.stringify({ error: error }, null, 2))
+            osufunc.debug({ error: error }, 'command', 'map', obj.guildId, 'strains');
         }
         let mapgraph;
         if (strains) {

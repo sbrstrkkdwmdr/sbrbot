@@ -263,7 +263,8 @@ module.exports = {
 
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
-        fs.writeFileSync(`debug/command-scores=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2));
+        // fs.writeFileSync(`debug/command-scores=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2));
+        osufunc.debug(osudata, 'command', 'scores', obj.guildId, 'osuData');
         if (osudata?.error) {
             obj.reply({
                 content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
@@ -308,7 +309,8 @@ module.exports = {
             page = page - 1
         }
         const scoredataPresort: osuApiTypes.ScoreArrA = await osufunc.apiget('user_get_scores_map', `${mapid}`, `${osudata.id}`)
-        fs.writeFileSync(`debug/command-scores=scoredataPresort=${obj.guildId}.json`, JSON.stringify(scoredataPresort, null, 2));
+        // fs.writeFileSync(`debug/command-scores=scoredataPresort=${obj.guildId}.json`, JSON.stringify(scoredataPresort, null, 2));
+        osufunc.debug(scoredataPresort, 'command', 'scores', obj.guildId, 'scoreDataPresort');
         if (scoredataPresort?.error) {
             obj.reply({
                 content: `${scoredataPresort?.error ? scoredataPresort?.error : 'Error: null'}`,
@@ -330,10 +332,11 @@ module.exports = {
             })
                 .catch();
         }
-        fs.writeFileSync(`debug/command-scores=scoredata=${obj.guildId}.json`, JSON.stringify(scoredata, null, 2));
-
+        // fs.writeFileSync(`debug/command-scores=scoredata=${obj.guildId}.json`, JSON.stringify(scoredata, null, 2));
+        osufunc.debug(scoredata, 'command', 'scores', obj.guildId, 'scoreData');
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
-        fs.writeFileSync(`debug/command-scores=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2));
+        // fs.writeFileSync(`debug/command-scores=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2));
+        osufunc.debug(scoredata, 'command', 'scores', obj.guildId, 'mapData');
         if (mapdata?.error) {
             obj.reply({
                 content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,

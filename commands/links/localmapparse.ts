@@ -471,6 +471,7 @@ Error: ${error}
         }
 
         //fs.writeFileSync(`./debugosu/link-maplocal=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))
+        osufunc.debug(strains, 'fileparse', 'osu', obj.guildId, 'strains');
         try {
             mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
         } catch (error) {

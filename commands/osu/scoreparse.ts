@@ -126,7 +126,8 @@ module.exports = {
         } catch (error) {
         }
 
-        fs.writeFileSync(`debug/command-scoreparse=scoredata=${obj.guildId}.json`, JSON.stringify(scoredata, null, 2));
+        // fs.writeFileSync(`debug/command-scoreparse=scoredata=${obj.guildId}.json`, JSON.stringify(scoredata, null, 2));
+        osufunc.debug(scoredata, 'command', 'scoreparse', obj.guildId, 'scoreData');
         try {
             scoredata.rank.toUpperCase();
         } catch (error) {
@@ -209,7 +210,8 @@ module.exports = {
         try {
             ppcalcing = await osufunc.scorecalc(scoredata.mods.join('').length > 1 ? scoredata.mods.join('') : 'NM', scoredata.mode, scoredata.beatmap.id, gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss, scoredata.accuracy * 100, scoredata.max_combo, scoredata.score, 0, null, false)
             ppissue = ''
-            fs.writeFileSync(`debug/command-scoreparse=ppcalc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2));
+            // fs.writeFileSync(`debug/command-scoreparse=ppcalc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2));
+            osufunc.debug(ppcalcing, 'command', 'scoreparse', obj.guildId, 'ppCalcing');
         } catch (error) {
             ppcalcing = [{
                 pp: 0.000

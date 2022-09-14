@@ -88,14 +88,19 @@ module.exports = {
         } catch (err) {
             return;
         }
-        fs.writeFileSync(`debug/command-replay=replay=${obj.guildId}.json`, JSON.stringify(replay, null, 2))
+        // fs.writeFileSync(`debug/command-replay=replay=${obj.guildId}.json`, JSON.stringify(replay, null, 2))
+        osufunc.debug(replay, 'fileparse', 'replay', obj.guildId, 'replayData');
 
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map_get_md5', replay.beatmapMD5)
-        fs.writeFileSync(`debug/command-replay=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
-        fs.writeFileSync(`./debug/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
-
+        // fs.writeFileSync(`debug/command-replay=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
+        // fs.writeFileSync(`./debug/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
+        osufunc.debug(mapdata, 'fileparse', 'replay', obj.guildId, 'mapData');
+        if (mapdata?.id) {
+            typeof mapdata.id == 'number' ? osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`) : ''
+        }
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${replay.playerName}`)
-        fs.writeFileSync(`debug/command-replay=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
+        // fs.writeFileSync(`debug/command-replay=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
+        osufunc.debug(osudata, 'fileparse', 'replay', obj.guildId, 'osuData');
         let userid: string | number;
         try {
             userid = osudata.id

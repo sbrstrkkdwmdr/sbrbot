@@ -160,7 +160,7 @@ module.exports = {
             user = cuser.username;
             mode = cuser.gamemode;
             if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-                if(commandType != 'button'){
+                if (commandType != 'button') {
                     obj.reply({
                         content: 'User not found',
                         allowedMentions: { repliedUser: false },
@@ -175,7 +175,9 @@ module.exports = {
         }
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `${await mode}`)
-        fs.writeFileSync(`debug/command-osu=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
+        // fs.writeFileSync(`debug/command-osu=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
+        osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
+
         if (osudata?.error) {
             if (commandType != 'button') obj.reply({
                 content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
@@ -263,7 +265,9 @@ module.exports = {
                 .setImage(`${chartplay}`);
 
             const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-            fs.writeFileSync(`debug/command-osu=osutopdata=${obj.guildId}.json`, JSON.stringify(osutopdata, null, 2))
+            // fs.writeFileSync(`debug/command-osu=osutopdata=${obj.guildId}.json`, JSON.stringify(osutopdata, null, 2))
+            osufunc.debug(osutopdata, 'command', 'osu', obj.guildId, 'osuTopData');
+
             if (osutopdata?.error) {
                 if (commandType != 'button') obj.reply({
                     content: `${osutopdata?.error ? osutopdata?.error : 'Error: null'}`,
@@ -274,6 +278,9 @@ module.exports = {
             }
 
             const mostplayeddata: osuApiTypes.BeatmapPlaycount[] & osuApiTypes.Error = await osufunc.apiget('most_played', `${osudata.id}`)
+            // fs.writeFileSync(`debug/command-osu=mostplayeddata=${obj.guildId}.json`, JSON.stringify(mostplayeddata, null, 2))
+            osufunc.debug(mostplayeddata, 'command', 'osu', obj.guildId, 'mostPlayedData');
+
             if (mostplayeddata?.error) {
                 if (commandType != 'button') obj.reply({
                     content: `${mostplayeddata?.error ? mostplayeddata?.error : 'Error: null'}`,
@@ -282,9 +289,6 @@ module.exports = {
                 }).catch()
                 return;
             }
-
-            fs.writeFileSync(`debug/command-osu=mostplayeddata=${obj.guildId}.json`, JSON.stringify(mostplayeddata, null, 2))
-
             const secperplay = osudata?.statistics.play_time / parseFloat(playcount.replaceAll(',', ''))
 
             const highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

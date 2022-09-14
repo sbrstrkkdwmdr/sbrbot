@@ -250,7 +250,8 @@ module.exports = {
             mode = 'osu'
         }
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
-        fs.writeFileSync(`debug/command-pinned=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
+        // fs.writeFileSync(`debug/command-pinned=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
+        osufunc.debug(osudata, 'command', 'pinned', obj.guildId, 'osuData');
         if (osudata?.error) {
             obj.reply({
                 content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
@@ -280,7 +281,9 @@ module.exports = {
         }
 
         const pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
-        fs.writeFileSync(`debug/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
+        // fs.writeFileSync(`debug/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
+        osufunc.debug(pinnedscoresdata, 'command', 'pinned', obj.guildId, 'pinnedScoresData');
+
         if (pinnedscoresdata?.error) {
             obj.reply({
                 content: `${pinnedscoresdata?.error ? pinnedscoresdata?.error : 'Error: null'}`,
