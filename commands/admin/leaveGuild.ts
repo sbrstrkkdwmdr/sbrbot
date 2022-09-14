@@ -10,14 +10,15 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 
 module.exports = {
-    name: 'COMMANDNAME',
+    name: 'leaveguild',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
-        let baseCommandType;
+        let guildId;
 
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
+                guildId = obj.guildId;
             }
                 break;
 
@@ -25,9 +26,10 @@ module.exports = {
 
             case 'interaction': {
                 commanduser = obj.member.user;
+                guildId = obj.options.getString('guild') ?? obj.guildId;
             }
 
-            //==============================================================================================================================================================================================
+                //==============================================================================================================================================================================================
 
                 break;
             case 'button': {
@@ -44,21 +46,21 @@ module.exports = {
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-leaveguild-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅')
                 /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-leaveguild-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`RightArrow-leaveguild-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶')
                 /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-leaveguild-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡')
                 /* .setLabel('End') */,
@@ -66,7 +68,7 @@ module.exports = {
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
-                'COMMANDNAME',
+                'leaveguild',
                 commandType,
                 absoluteID,
                 commanduser
@@ -81,14 +83,26 @@ module.exports = {
             ), 'utf-8')
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-
+        if (cmdchecks.isOwner(commanduser.id)) {
+            const guild = client.guilds.cache.get(guildId);
+            if (guild) {
+                guild.leave();
+            }
+            return;
+        }
+        if (cmdchecks.isAdmin(commanduser.id, obj.guildId, client)) {
+            const guild = client.guilds.cache.get(obj.guildId);
+            if (guild) {
+                guild.leave();
+            }
+            return;
+        }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
-                    content: '',
+                    content: 'You are not allowed to use this command.',
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },
@@ -99,10 +113,10 @@ module.exports = {
                 break;
 
             //==============================================================================================================================================================================================
-           
+
             case 'interaction': {
                 obj.reply({
-                    content: '',
+                    content: 'You are not allowed to use this command.',
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },
@@ -111,7 +125,7 @@ module.exports = {
                     .catch();
             }
 
-            //==============================================================================================================================================================================================
+                //==============================================================================================================================================================================================
 
                 break;
             case 'button': {
@@ -128,7 +142,7 @@ module.exports = {
         }
 
 
-        
+
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             `
 ----------------------------------------------------
