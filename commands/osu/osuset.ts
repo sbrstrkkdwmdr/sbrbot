@@ -18,10 +18,31 @@ module.exports = {
         let mode;
         let skin;
 
+        let type;
+        let value;
+
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
                 name = args.join(' ');
+                switch (args[0]) {
+                    case 'mode':
+                        type = 'mode';
+                        value = args.join(' ').slice(type.length);
+                        break;
+                    case 'skin':
+                        type = 'skin';
+                        value = args.join(' ').slice(type.length);
+                        break;
+                    default:
+                        type = 'name';
+                        if (args[0] == 'name') {
+                            value = args.join(' ').slice(type.length);
+                        } else {
+                            value = args.join(' ');
+                        }
+                        break;
+                }
             }
                 break;
 
@@ -32,6 +53,7 @@ module.exports = {
                 name = obj.options.getString('user');
                 mode = obj.options.getString('mode');
                 skin = obj.options.getString('skin');
+                type = 'interaction';
             }
 
                 //==============================================================================================================================================================================================
@@ -92,7 +114,15 @@ module.exports = {
                 {
                     name: 'Skin',
                     value: skin
-                }
+                },
+                {
+                    name: 'Type',
+                    value: type
+                },
+                {
+                    name: 'Value',
+                    value: value
+                },
                 ]
             ), 'utf-8')
 
@@ -110,10 +140,50 @@ module.exports = {
 
         let txt = 'null'
 
+        let updateRows: any = {
+            userid: commanduser.id
+        }
+        switch (type) {
+            case 'name': {
+                updateRows = {
+                    userid: commanduser.id,
+                    osuname: value
+                }
+            }
+                break;
+            case 'mode': {
+                updateRows = {
+                    userid: commanduser.id,
+                    mode: value
+                }
+            }
+                break;
+            case 'mode': {
+                updateRows = {
+                    userid: commanduser.id,
+                    skin: value
+                }
+            }
+            case 'interaction': {
+                updateRows = {
+                    userid: commanduser.id,
+                    osuname: name
+                }
+                if (mode != null) {
+                    updateRows['mode'] = mode;
+                }
+                if (skin != null) {
+                    updateRows['skin'] = skin;
+                }
+            }
+                break;
+        }
+
         const findname = await userdata.findOne({ where: { userid: commanduser.id } })
         if (findname == null) {
             try {
                 await userdata.create({
+                    userid: commanduser.id,
                     osuname: name,
                     mode: mode ?? 'osu',
                     skin: skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117'
@@ -124,11 +194,7 @@ module.exports = {
                 log.errLog('Database error', error, `${absoluteID}`)
             }
         } else {
-            const affectedRows = await userdata.update({
-                osuname: name,
-                mode: mode ?? 'osu',
-                skin: skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117'
-            }, { where: { userid: commanduser.id } })
+            const affectedRows = await userdata.update(updateRows, { where: { userid: commanduser.id } })
 
             if (affectedRows > 0) {
                 txt = 'Updated the database'
