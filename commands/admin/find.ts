@@ -33,7 +33,7 @@ module.exports = {
                     type = 'role';
                     id = obj.mentions.roles.first().id
                 }
-                if(obj.content.includes('<:') && !isNaN(obj.content.split('<:')[1].split('>')[0].split(':')[1])) {
+                if (obj.content.includes('<:') && !isNaN(obj.content.split('<:')[1].split('>')[0].split(':')[1])) {
                     type = 'emoji';
                     id = obj.content.split('<:')[1].split('>')[0].split(':')[1]
                 }
@@ -108,10 +108,13 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+
+
         const Embedr = new Discord.EmbedBuilder()
             .setTitle(`Error`)
             .setThumbnail(`https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
             .setDescription(`${type} does not exist or bot is not in the same guild as the ${type}`);
+
         switch (type) {
             case 'user':
                 {
@@ -177,71 +180,83 @@ module.exports = {
                 break;
             case 'guild':
                 {
-                    let guildfind;
-                    client.guilds.cache.forEach(guild => {
-                        if (guild.id == id) {
-                            guildfind = guild
-                            Embedr.setTitle(`${guildfind.name}`);
-                            if (guildfind.iconURL()) {
-                                Embedr.setThumbnail(`${guildfind.iconURL()}`);
-                            }
-                            if (guildfind.bannerURL()) {
-                                Embedr.setImage(`${guildfind.bannerURL()}`);
-                            }
-                            Embedr.setDescription(`
+                    if (!(cmdchecks.isOwner(commanduser.id) || (id == obj.guildId && cmdchecks.isAdmin(commanduser.id, obj.guildId, client)))) {
+                        Embedr.setDescription('You don\'t have permissions to use this command')
+                    } else {
+                        let guildfind;
+                        client.guilds.cache.forEach(guild => {
+                            if (guild.id == id) {
+                                guildfind = guild
+                                Embedr.setTitle(`${guildfind.name}`);
+                                if (guildfind.iconURL()) {
+                                    Embedr.setThumbnail(`${guildfind.iconURL()}`);
+                                }
+                                if (guildfind.bannerURL()) {
+                                    Embedr.setImage(`${guildfind.bannerURL()}`);
+                                }
+                                Embedr.setDescription(`
                     ID: ${guildfind.id}
                     Owner: <@${guildfind.ownerId}>
                     Total user count: ${guildfind.members.cache.size}
                     Total channel count: ${guildfind.channels.cache.size}
                     Creation date: ${guildfind.createdAt}
                     `)
-                            return;
-                        }
-                    })
+                                return;
+                            }
+                        })
+                    }
                 }
                 break;
             case 'channel':
                 {
-                    let channelfind;
-                    client.guilds.cache.forEach(guild => {
-                        if (guild.channels.cache.has(id)) {
-                            channelfind = guild.channels.cache.get(id)
-                            Embedr.setTitle(`Channel: #${channelfind.name}`);
-                            if (guild.iconURL()) {
-                                Embedr.setThumbnail(`${guild.iconURL()}`);
-                            }
-                            Embedr.setDescription(`
+                    if (!(cmdchecks.isOwner(commanduser.id) || cmdchecks.isAdmin(commanduser.id, obj.guildId, client))) {
+                        Embedr.setDescription('You don\'t have permissions to use this command')
+                    } else {
+                        let channelfind;
+                        client.guilds.cache.forEach(guild => {
+                            if (guild.channels.cache.has(id)) {
+                                channelfind = guild.channels.cache.get(id)
+                                Embedr.setTitle(`Channel: #${channelfind.name}`);
+                                if (guild.iconURL()) {
+                                    Embedr.setThumbnail(`${guild.iconURL()}`);
+                                }
+                                Embedr.setDescription(`
                     ID: ${channelfind.id}
                     Topic: ${channelfind.topic}
                     [Type: ${channelfind.type}](https://discord-api-types.dev/api/discord-api-types-v10/enum/ChannelType)
                     Parent: ${channelfind.parent ? channelfind.parent.name : 'No parent'} ${channelfind.parent ? '| ' + channelfind.parent.id + ' | Type ' + channelfind.parent.type : ''}
                     Guild: ${guild.name} | ${guild.id}
                     `)
-                            return;
-                        }
-                    })
+                                return;
+                            }
+                        })
+                    }
                 }
                 break;
             case 'role':
                 {
-                    let rolefind;
-                    client.guilds.cache.forEach(guild => {
-                        if (guild.roles.cache.has(id)) {
-                            rolefind = guild.roles.cache.get(id)
-                            Embedr.setTitle(`Role: ${rolefind.name}`);
-                            if (guild.iconURL()) {
-                                Embedr.setThumbnail(`${guild.iconURL()}`);
-                            }
-                            Embedr.setDescription(`
+                    if (!(cmdchecks.isOwner(commanduser.id) || cmdchecks.isAdmin(commanduser.id, obj.guildId, client))) {
+                        Embedr.setDescription('You don\'t have permissions to use this command')
+                    } else {
+                        let rolefind;
+                        client.guilds.cache.forEach(guild => {
+                            if (guild.roles.cache.has(id)) {
+                                rolefind = guild.roles.cache.get(id)
+                                Embedr.setTitle(`Role: ${rolefind.name}`);
+                                if (guild.iconURL()) {
+                                    Embedr.setThumbnail(`${guild.iconURL()}`);
+                                }
+                                Embedr.setDescription(`
                     ID: ${rolefind.id}
                     Colour: [${rolefind.color ? rolefind.color : 'null'}](https://discord.js.org/#/docs/discord.js/main/class/Role?scrollTo=color)
                     Emoji: ${rolefind.unicodeEmoji ? rolefind.unicodeEmoji : 'null'}
                     Guild: ${guild.name} | ${guild.id}
                     `)
-                            Embedr.setColor(rolefind.color);
-                            return;
-                        }
-                    })
+                                Embedr.setColor(rolefind.color);
+                                return;
+                            }
+                        })
+                    }
                 }
                 break;
             case 'emoji': {
@@ -273,7 +288,7 @@ module.exports = {
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
-            case 'message': case 'interaction':{
+            case 'message': case 'interaction': {
                 obj.reply({
                     content: '',
                     embeds: [Embedr],

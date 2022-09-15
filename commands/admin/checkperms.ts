@@ -106,9 +106,7 @@ module.exports = {
         }
         if (!(cmdchecks.isAdmin(commanduser.id, obj.guildId, client) || cmdchecks.isOwner(commanduser.id))) {
             searchUser = commanduser;
-            console.log('er')
         } else {
-            console.log('re')
         }
 
 
