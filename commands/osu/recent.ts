@@ -8,6 +8,7 @@ import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
+import func = require('../../src/other');
 
 module.exports = {
     name: 'recent',
@@ -251,8 +252,12 @@ module.exports = {
             return;
         }
 
-        const rsEmbed = new Discord.EmbedBuilder();
-
+        const rsEmbed = new Discord.EmbedBuilder()
+            .setAuthor({
+                name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
+                url: `https://osu.ppy.sh/u/${osudata.id}`,
+                iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
+            });
         if (list != true) {
             rsEmbed.setColor(colours.embedColour.score.dec)
 

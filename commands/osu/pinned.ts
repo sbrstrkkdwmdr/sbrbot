@@ -9,6 +9,7 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import embedStuff = require('../../src/embed');
+import func = require('../../src/other');
 
 module.exports = {
     name: 'pinned',
@@ -302,7 +303,11 @@ module.exports = {
             .setTitle(`Pinned scores for ${osudata.username}`)
             .setURL(`https://osu.ppy.sh/u/${osudata.id}`)
             .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
-
+            .setAuthor({
+                name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
+                url: `https://osu.ppy.sh/u/${osudata.id}`,
+                iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
+            })
 
         const scoresarg = await embedStuff.scoreList(pinnedscoresdata, scoredetailed, false, page, true, true, sort, 'recent', filteredMapper, filteredMods, false);
         pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\nmode: ${mode}\n`)

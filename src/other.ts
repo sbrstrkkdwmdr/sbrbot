@@ -35,6 +35,26 @@ export function readAllFiles(directory: string) {
     return filesArr;
 }
 
+/**
+ * @info separates numbers ie 3000000 -> 3,000,000
+ * @param number 
+ * @param separator default is ,
+ * @returns string
+ */
+export function separateNum(number:string|number, separator?:string){
+    let cursep = ','
+    if(separator){
+        cursep = separator
+    }
+    let ans = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, cursep)
+    if(number.toString().includes('.')){
+    const init = number.toString().split('.')[0];
+    const after = number.toString().split('.')[1];
+    ans = init.replace(/\B(?=(\d{3})+(?!\d))/g, cursep) + `.${after}`
+    }
+    return ans;
+}
+
 export function flagImgUrl(string: string, ver?: 'osu') {
     let flagUrl: string = `https://osuflags.omkserver.nl/${string}`;
 return flagUrl;

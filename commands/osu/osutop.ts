@@ -9,6 +9,7 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import embedStuff = require('../../src/embed');
+import func = require('../../src/other');
 
 module.exports = {
     name: 'osutop',
@@ -366,7 +367,11 @@ module.exports = {
             .setTitle(`Top plays of ${osutopdata[0].user.username}`)
             .setThumbnail(`https://a.ppy.sh/${osutopdata[0].user.id}`)
             .setURL(`https://osu.ppy.sh/users/${osutopdata[0].user.id}`)
-
+            .setAuthor({
+                name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
+                url: `https://osu.ppy.sh/u/${osudata.id}`,
+                iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
+            })
         const scoresarg = await embedStuff.scoreList(osutopdata, detailed, true, page, true, showtrue, sort, 'pp', mapper, mods, reverse)
         topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\nmode: ${mode}\n`)
         if (scoresarg.fields.length == 0) {
@@ -383,7 +388,7 @@ module.exports = {
 
 
         if (detailed == true) {
-            const highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            const highestcombo = func.separateNum((osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo);
             const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
             const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
             let totalpp = 0;

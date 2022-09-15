@@ -9,6 +9,7 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import embedStuff = require('../../src/embed');
+import func = require('../../src/other');
 
 module.exports = {
     name: 'scores',
@@ -56,7 +57,7 @@ module.exports = {
             case 'button': {
                 commanduser = obj.member.user;
                 page = 0;
-                user = obj.message.embeds[0].author.name
+                user = obj.message.embeds[0].author.name.split(' (#')[0]
                 mapid = obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]
                 if (obj.message.embeds[0].description) {
                     if (obj.message.embeds[0].description.includes('mapper')) {
@@ -336,7 +337,7 @@ module.exports = {
         osufunc.debug(scoredata, 'command', 'scores', obj.guildId, 'scoreData');
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
         // fs.writeFileSync(`debug/command-scores=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2));
-        osufunc.debug(scoredata, 'command', 'scores', obj.guildId, 'mapData');
+        osufunc.debug(mapdata, 'command', 'scores', obj.guildId, 'mapData');
         if (mapdata?.error) {
             obj.reply({
                 content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
@@ -353,8 +354,14 @@ module.exports = {
         const scoresEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`${artist} - ${title} [${mapdata.version}]`)
-            .setThumbnail(`${mapdata.beatmapset.covers['list@2x']}`)
-            .setAuthor({ name: `${osudata.username}`, url: `https://osu.ppy.sh/u/${osudata.id}`, iconURL: `https://a.ppy.sh/${osudata.id}` })
+            .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
+            // .setImage(`${mapdata.beatmapset.covers['list@2x']}`)
+            .setImage(`${mapdata.beatmapset.covers['cover@2x']}`)
+            .setAuthor({
+                name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
+                url: `https://osu.ppy.sh/u/${osudata.id}`,
+                iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
+            })
             .setURL(`https://osu.ppy.sh/b/${mapid}`)
 
         scoresEmbed.setFooter({ text: `Page ${page + 1}/${Math.ceil(scoredata.length / 5)}` })

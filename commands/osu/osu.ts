@@ -8,6 +8,7 @@ import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
+import func = require('../../src/other');
 
 module.exports = {
     name: 'osu',
@@ -198,12 +199,12 @@ module.exports = {
         const playerrank =
             osudata.statistics.global_rank == null ?
                 '---' :
-                osudata.statistics.global_rank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            ;
+                func.separateNum(osudata.statistics.global_rank);
+        ;
         const countryrank =
             osudata.statistics.country_rank == null ?
                 '---' :
-                osudata.statistics.country_rank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                func.separateNum(osudata.statistics.country_rank);
 
         const onlinestatus = osudata.is_online == true ?
             `**${emojis.onlinestatus.online} Online**` :
@@ -216,7 +217,7 @@ module.exports = {
 
         const playcount = osustats.play_count == null ?
             '---' :
-            osustats.play_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            func.separateNum(osustats.play_count);
 
         //${osustats.level.current}.${osustats.level.progress.toFixed(2)}
         const lvl = osustats.level.current != null ?
@@ -291,7 +292,7 @@ module.exports = {
             }
             const secperplay = osudata?.statistics.play_time / parseFloat(playcount.replaceAll(',', ''))
 
-            const highestcombo = (osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            const highestcombo = func.separateNum((osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo);
             const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
             const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
             let totalpp = 0;
