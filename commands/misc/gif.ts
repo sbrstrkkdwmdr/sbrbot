@@ -150,6 +150,7 @@ module.exports = {
             'https://media.discordapp.net/attachments/1006667144555151390/1011218423637868594/attachment-18.gif', //when you see troll???!!
             'https://media.discordapp.net/attachments/1011582321511645264/1016887451295428679/yuyu_sin.gif', //yuyuko with the microphone
             'https://cdn.discordapp.com/attachments/1015133324114661436/1018411223450144832/20220910_235606.jpg', //fat ass peter griffin being moved with a forklift
+            'https://media.discordapp.net/attachments/1001881826824044615/1006829538908569631/D4994339-F98C-4CF2-A0CA-C805F3853E2A.gif', //googling googl
         ]
         const reaction = [
             'https://tenor.com/view/jerma-jerma985-burger-eating-tucker-carson-gif-22054018', // jerma eating

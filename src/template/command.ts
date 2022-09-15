@@ -12,7 +12,7 @@ import log = require('../../src/log');
 
 module.exports = {
     name: 'COMMANDNAME',
-    execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides) {
+    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
 
 
