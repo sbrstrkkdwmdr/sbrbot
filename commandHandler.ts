@@ -205,6 +205,9 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 break;
 
             //osu commands below
+            case 'bws':
+                commandStruct.osucmds.get('bws').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                break;      
             case 'compare':
                 commandStruct.osucmds.get('compare').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;

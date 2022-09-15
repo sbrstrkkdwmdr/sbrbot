@@ -114,18 +114,43 @@ module.exports = {
         for (const badge of osudata.badges) {
             badgecount++
         }
-        const bws = badgecount > 0 ? osudata.statistics.global_rank ** (0.9937 ** (badgecount ** 2)) : osudata.statistics.global_rank
+        function bwsF(badgenum: number) {
+            return badgenum > 0 ?
+                osudata.statistics.global_rank ** (0.9937 ** (badgenum ** 2)) :
+                osudata.statistics.global_rank
+
+        }
+        // const bws = badgecount > 0 ? osudata.statistics.global_rank ** (0.9937 ** (badgecount ** 2)) : osudata.statistics.global_rank
 
         const embed = new Discord.EmbedBuilder()
             .setAuthor({
-                name: `${osudata.username} (#${osudata?.statistics?.global_rank} | AU:${osudata?.statistics?.country_rank})`,
+                name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | ${osudata.country_code}:${func.separateNum(osudata?.statistics?.country_rank)} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
                 url: `https://osu.ppy.sh/u/${osudata.id}`,
-                iconURL: `${func.flagImgUrl(osudata.country_code)}`
+                iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
             })
             .setTitle(`Badge weighting for ${osudata.username}`)
             .setThumbnail(`${osudata?.avatar_url}`)
-            .setDescription(`${Math.floor(bws)}\nFormula: rank^(0.9937^badges^2)`)
-
+            .setDescription(
+                'Current number of badges: ' + badgecount
+            )
+            .addFields([
+                {
+                    name: `${badgecount == 1 ? badgecount + ' badge' : badgecount + ' badges'}`,
+                    value: `${Math.floor(bwsF(badgecount))}`,
+                    inline: true
+                },
+                {
+                    name: `${badgecount + 1 == 1 ? badgecount + 1 + ' badge' : badgecount + 1 + ' badges'}`,
+                    value: `${Math.floor(bwsF(badgecount + 1))}`,
+                    inline: true
+                },
+                {
+                    name: `${badgecount + 2} badges`,
+                    value: `${Math.floor(bwsF(badgecount + 2))}`,
+                    inline: true
+                },
+            ])
+        //\nFormula: rank^(0.9937^badges^2)
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
