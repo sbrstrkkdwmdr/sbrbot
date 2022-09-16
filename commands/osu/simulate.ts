@@ -13,6 +13,16 @@ module.exports = {
     name: 'simulate',
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
+        let mapid;
+        let mods;
+        let acc;
+        let combo;
+        let n300;
+        let n100;
+        let n50;
+        let nMiss;
+        let scoreId;
+
 
         switch (commandType) {
             case 'message': {
