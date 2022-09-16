@@ -9,7 +9,7 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
-
+import embedStuff = require('../../src/embed');
 module.exports = {
     name: 'recent',
     async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
@@ -59,11 +59,12 @@ module.exports = {
                     obj.message.embeds[0].title.includes('play for') ?
                         obj.message.embeds[0].title.split('most recent play for ')[1].split(' | ')[0] :
                         obj.message.embeds[0].title.split('plays for ')[1]
-                try {
-                    mode = obj.message.embeds[0].fields[0].value.split(' | ')[1].split('\n')[0]
-                } catch (error) {
+
+                mode = obj.message.embeds[0].fields[0].value.split(' | ')[1].split('\n')[0]
+                if (obj.message.embeds[0].footer) {
                     mode = obj.message.embeds[0].footer.text.split('gamemode: ')[1]
                 }
+
                 page = 0
                 if (button == 'BigLeftArrow') {
                     page = 1
@@ -191,7 +192,7 @@ module.exports = {
             page = 1;
         }
         page--
-        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        let pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-recent-${commanduser.id}`)
@@ -238,6 +239,15 @@ module.exports = {
             osufunc.updateUserStats(osudata, mode, userdata)
         } catch (error) {
             console.log(error)
+        }
+
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+                .catch()
         }
 
         const rsdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
@@ -572,33 +582,86 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
             osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`)
 
         } else if (list == true) {
+            pgbuttons = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigLeftArrow-recent-${commanduser.id}`)
+                        .setStyle(Discord.ButtonStyle.Primary)
+                        .setEmoji('⬅')
+                        .setDisabled(false),
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`LeftArrow-recent-${commanduser.id}`)
+                        .setStyle(Discord.ButtonStyle.Primary)
+                        .setEmoji('◀')
+                        .setDisabled(false),
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`Search-recent-${commanduser.id}`)
+                        .setStyle(Discord.ButtonStyle.Primary)
+                        .setEmoji('🔍'),
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`RightArrow-recent-${commanduser.id}`)
+                        .setStyle(Discord.ButtonStyle.Primary)
+                        .setEmoji('▶')
+                        .setDisabled(false),
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`BigRightArrow-recent-${commanduser.id}`)
+                        .setStyle(Discord.ButtonStyle.Primary)
+                        .setEmoji('➡')
+                        .setDisabled(false),
+                )
             rsEmbed
                 .setColor(colours.embedColour.scorelist.dec)
                 .setTitle(`Recent plays for ${osudata.username}`);
-            let txt = '';
-            for (let i = 0; i < rsdata.length - (page * 20) && i < 20; i++) {
-                const curscore = rsdata[i + page * 20]
-                txt +=
-                    `**${1 + i + page * 20} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>**
-[${curscore.beatmapset.title}](https://osu.ppy.sh/b/${curscore.beatmap.id}) | [score link](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})
-${curscore.mods.length > 0 ? '+' + curscore.mods.join('') + ' | ' : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${curscore.rank}
-`
+            const scoresarg = await embedStuff.scoreList(rsdata, false, false, page, true, false, 'recent', 'recent', null, null, false)
+            if (scoresarg.fields.length == 0) {
+                rsEmbed.addFields([{
+                    name: 'Error',
+                    value: 'No scores found',
+                    inline: false
+                }])
+            } else {
+                for (let i = 0; scoresarg.fields.length > i; i++) {
+                    rsEmbed.addFields(scoresarg.fields[i])
+                }
             }
-            if (txt == '') {
-                txt = 'No recent plays found'
-            }
-            if (txt.length > 4000) {
-                txt = txt.substring(0, 4000)
-            }
-            rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 20)}\n` + txt)
+            rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 5)}`)
             rsEmbed.setFooter({ text: `gamemode: ${rsdata[0].mode}` })
-
-            if (page >= Math.ceil(rsdata.length / 20)) {
+            if (scoresarg.isFirstPage) {
                 //@ts-ignore
-                pgbuttons.components[2].setDisabled(true)
+                pgbuttons.components[0].setDisabled(true)
+                //@ts-ignore
+                pgbuttons.components[1].setDisabled(true)
+            }
+            if (scoresarg.isLastPage) {
                 //@ts-ignore
                 pgbuttons.components[3].setDisabled(true)
+                //@ts-ignore
+                pgbuttons.components[4].setDisabled(true)
             }
+            //             let txt = '';
+            //             for (let i = 0; i < rsdata.length - (page * 20) && i < 20; i++) {
+            //                 const curscore = rsdata[i + page * 20]
+            //                 txt +=
+            //                     `**${1 + i + page * 20} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>**
+            // [${curscore.beatmapset.title}](https://osu.ppy.sh/b/${curscore.beatmap.id}) | [score link](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})
+            // ${curscore.mods.length > 0 ? '+' + curscore.mods.join('') + ' | ' : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${curscore.rank}
+            // `
+            //             }
+            //             if (txt == '') {
+            //                 txt = 'No recent plays found'
+            //             }
+            //             if (txt.length > 4000) {
+            //                 txt = txt.substring(0, 4000)
+            //             }
+            //             rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 20)}\n` + txt)
+            //             rsEmbed.setFooter({ text: `gamemode: ${rsdata[0].mode}` })
+
+            //             if (page >= Math.ceil(rsdata.length / 20)) {
+            //                 //@ts-ignore
+            //                 pgbuttons.components[2].setDisabled(true)
+            //                 //@ts-ignore
+            //                 pgbuttons.components[3].setDisabled(true)
+            //             }
         }
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
         try {
@@ -623,7 +686,7 @@ ${curscore.mods.length > 0 ? '+' + curscore.mods.join('') + ' | ' : ''}${(cursco
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-                obj.reply({
+                obj.editReply({
                     content: '',
                     embeds: [rsEmbed],
                     components: [pgbuttons, buttons],

@@ -36,7 +36,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
             .setTitle('Error - Button does not work')
             .setDescription('Feature not yet implemented/supported')
 
-        const PageOnlyCommands = ['firsts', 'maplb', 'osutop', 'pinned', 'rs', 'scores']
+        const PageOnlyCommands = ['firsts', 'maplb', 'osutop', 'pinned', 'recent', 'scores']
         const ScoreSortCommands = ['firsts', 'maplb', 'osutop', 'pinned', 'scores']
         if (button == 'Search' && PageOnlyCommands.includes(command)) {
             const menu = new Discord.ModalBuilder()
