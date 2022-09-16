@@ -252,14 +252,22 @@ module.exports = {
             }
         }
 
+        const osudata = await osufunc.apiget('user', `${scoredata.user.username}`);
+        osufunc.debug(osudata, 'command', 'scoreparse', obj.guildId, 'osuData')
+
         const scoreembed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.score.dec)
-            .setAuthor({ name: `${scoredata.user.username}`, iconURL: `https://a.ppy.sh/${scoredata.user.id}`, url: `https://osu.ppy.sh/users/${scoredata.user.id}` })
+            // .setAuthor({ name: `${scoredata.user.username}`, iconURL: `https://a.ppy.sh/${scoredata.user.id}`, url: `https://osu.ppy.sh/users/${scoredata.user.id}` })
+            .setAuthor({
+                name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
+                url: `https://osu.ppy.sh/u/${osudata.id}`,
+                iconURL: `https://a.ppy.sh/${osudata.id}`
+            })
             .setTitle(`${artist} - ${title}`)
             .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.id}`)
             .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`)
-            .setDescription(`
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} | ${scoredata.mods.join('').length > 1 ? scoredata.mods.join('') : ''}
+            .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + scoredata.mods.join('') : ''}
 ${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 \`${hitlist}\`
 ${scoredata.max_combo}x/**${mapdata.max_combo}x**

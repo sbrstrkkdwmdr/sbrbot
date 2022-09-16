@@ -124,7 +124,7 @@ module.exports = {
 
         const embed = new Discord.EmbedBuilder()
             .setAuthor({
-                name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | ${osudata.country_code}:${func.separateNum(osudata?.statistics?.country_rank)} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
+                name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
                 url: `https://osu.ppy.sh/u/${osudata.id}`,
                 iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
             })
