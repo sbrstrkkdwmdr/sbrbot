@@ -112,9 +112,18 @@ tr {
     padding: 10px;
 }
 
+th {
+    max-width: 175px;
+    min-width: 175px;
+    word-wrap: break-word;
+}
+
 td {
     border: 1px solid #ffffff;
     padding: 10px;
+    max-width: 175px;
+    min-width: 175px;
+    word-wrap: break-word;
 }
 
 summary {
