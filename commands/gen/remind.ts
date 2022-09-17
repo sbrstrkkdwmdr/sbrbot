@@ -24,7 +24,7 @@ module.exports = {
                 commanduser = obj.author;
                 time = args[0]
                 remindertxt = args.join(' ').replaceAll(args[0], '')
-                sendtochannel = true;
+                sendtochannel = false;
                 user = obj.author;
 
                 if (!args[0]) {
@@ -49,7 +49,9 @@ module.exports = {
 
                 remindertxt = obj.options.getString('reminder');
                 time = obj.options.getString('time').replaceAll(' ', '');
-                sendtochannel = obj.options.getBoolean('sendinchannel');
+                sendtochannel =
+                    (cmdchecks.isOwner(commanduser.id) || cmdchecks.isAdmin(commanduser.id, obj.guildId, client)) ?
+                        obj.options.getBoolean('sendinchannel') : false;
                 user = obj.member.user;
 
                 if (!time.endsWith('d') && !time.endsWith('h') && !time.endsWith('m') && !time.endsWith('s') && !time.includes(':') && !time.includes('.')) {
