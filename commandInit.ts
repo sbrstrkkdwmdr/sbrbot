@@ -486,6 +486,61 @@ module.exports = (userdata, client, config, oncooldown) => {
             }
         ]
     },
+    {
+        name: 'simulate',
+        description: 'Simulates a play on a map',
+        dmPermission: false,
+        options: [
+            {
+                name: 'id',
+                description: 'The id of the map',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'mods',
+                description: 'The mods to use',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.String,
+            },
+            {
+                name: 'accuracy',
+                description: 'The accuracy to use',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Number,
+            },
+            {
+                name: 'combo',
+                description: 'The maximum combo',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'n300',
+                description: 'The number of hit 300s',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'n100',
+                description: 'The number of hit 100s',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'n50',
+                description: 'The number of hit 50s',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'miss',
+                description: 'The number of misses',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+        ]
+    },
     /* {
         name: 'osumodcalc',
         description: 'Calculates the values for a map based on the values given',

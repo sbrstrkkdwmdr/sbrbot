@@ -245,7 +245,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 commandStruct.osucmds.get('skin').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
             case 'simplay': case 'simulate':
-                commandStruct.osucmds.get('simplay').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                commandStruct.osucmds.get('simulate').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
 
             //admincmds below
