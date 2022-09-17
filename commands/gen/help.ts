@@ -18,6 +18,12 @@ module.exports = {
 
         let commandCategory: string = 'default';
         let command: string;
+
+        // let maincmd = '`' + info.cmds.join('`,') + '`'
+        // let osucmd = '`' + info.osucmds.join('`,') + '`'
+        // let admincmd = '`' + info.admincmds.join('`,') + '`'
+        // let misccmd = '`' + info.othercmds.join('`,') + '`'
+        
         const fullCommandList = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.dec)
             .setTitle('Command List')
@@ -25,29 +31,24 @@ module.exports = {
             .addFields([
                 {
                     name: 'Main commands',
-                    value: "`convert`, `help`,  `ping`, `math`, `remind`, `stats`",
+                    value: '`' + info.cmds.map(x => x.name + '`,').join(' `'),
                     inline: false
                 },
                 {
                     name: 'osu! comands',
-                    value: "`compare`, `firsts`, `lb`, `leaderboard`(map), `map`, `osu`, `osuset`, `osutop`, `pinned`, `rs`, `scores`, `simulate`,`skin`, `whatif`",
+                    value: '`' + info.osucmds.map(x => x.name + '`,').join(' `'),
                     inline: false
                 },
                 {
                     name: 'Admin commands',
-                    value: "`checkperms`, `find`, `leaveguild`, `log`, `servers`, `voice`",
+                    value: '`' + info.admincmds.map(x => x.name + '`,').join(' `'),
                     inline: false
                 },
                 {
                     name: 'Other/misc commands',
-                    value: "`8ball`,  `gif`, `image`, `poll`, `roll`, `ytsearch`",
+                    value: '`' + info.othercmds.map(x => x.name + '`,').join(' `'),
                     inline: false
                 },
-                {
-                    name: 'WIP',
-                    value: "`play`, `np`, `skip`, `pause`, `queue`, `resume`",
-                    inline: false
-                }
             ])
             .setFooter({
                 text: 'Website: https://sbrstrkkdwmdr.github.io/sbrbot/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
@@ -189,7 +190,7 @@ module.exports = {
                 commandInfo.setDescription(desc)
             } else if (info.osucmds.find(obj => obj.name == fetchcmd)) {
                 commandCategory = 'osu';
-                
+
                 const res = info.osucmds.find(obj => obj.name == fetchcmd)
 
 
@@ -220,7 +221,7 @@ module.exports = {
             }
             else if (info.admincmds.find(obj => obj.name == fetchcmd)) {
                 commandCategory = 'admin';
-                
+
                 const res = info.admincmds.find(obj => obj.name == fetchcmd)
 
 
@@ -255,10 +256,10 @@ module.exports = {
                     case command.includes('gen'): {
                         commandInfo.setTitle("General Commands");
                         let desctxt = '';
-                        for(let i = 0; i < info.cmds.length; i++) {
+                        for (let i = 0; i < info.cmds.length; i++) {
                             desctxt += `\n\`${info.cmds[i].name}\`: ${info.cmds[i].description}`;
                         }
-                        if(desctxt == '') {
+                        if (desctxt == '') {
                             desctxt = 'No commands in this category';
                         }
                         commandInfo.setDescription(desctxt);
@@ -268,10 +269,10 @@ module.exports = {
                     case command.includes('osu'): {
                         commandInfo.setTitle("osu! Commands");
                         let desctxt = '';
-                        for(let i = 0; i < info.osucmds.length; i++) {
+                        for (let i = 0; i < info.osucmds.length; i++) {
                             desctxt += `\n\`${info.osucmds[i].name}\`: ${info.osucmds[i].description}`;
                         }
-                        if(desctxt == '') {
+                        if (desctxt == '') {
                             desctxt = 'No commands in this category';
                         }
                         commandInfo.setDescription(desctxt);
@@ -281,10 +282,10 @@ module.exports = {
                     case command.includes('admin'): {
                         commandInfo.setTitle("Admin Commands");
                         let desctxt = '';
-                        for(let i = 0; i < info.admincmds.length; i++) {
+                        for (let i = 0; i < info.admincmds.length; i++) {
                             desctxt += `\n\`${info.admincmds[i].name}\`: ${info.admincmds[i].description}`;
                         }
-                        if(desctxt == '') {
+                        if (desctxt == '') {
                             desctxt = 'No commands in this category';
                         }
                         commandInfo.setDescription(desctxt);
@@ -294,10 +295,10 @@ module.exports = {
                     case command.includes('misc'): {
                         commandInfo.setTitle("General Commands");
                         let desctxt = ''
-                        for(let i = 0; i < info.othercmds.length; i++) {
+                        for (let i = 0; i < info.othercmds.length; i++) {
                             desctxt += `\n\`${info.othercmds[i].name}\`: ${info.othercmds[i].description}`;
                         }
-                        if(desctxt == '') {
+                        if (desctxt == '') {
                             desctxt = 'No commands in this category';
                         }
                         commandInfo.setDescription(desctxt);
@@ -322,7 +323,7 @@ module.exports = {
                     inputMenu.addOptions(
                         new Discord.SelectMenuOptionBuilder()
                             .setEmoji('📜')
-                            .setLabel(`#${i+1}`)
+                            .setLabel(`#${i + 1}`)
                             .setDescription(info.cmds[i].name)
                             .setValue(info.cmds[i].name)
                     )
@@ -334,7 +335,7 @@ module.exports = {
                     inputMenu.addOptions(
                         new Discord.SelectMenuOptionBuilder()
                             .setEmoji('📜')
-                            .setLabel(`#${i+1}`)
+                            .setLabel(`#${i + 1}`)
                             .setDescription(info.osucmds[i].name)
                             .setValue(info.osucmds[i].name)
                     )
@@ -347,7 +348,7 @@ module.exports = {
                         inputMenu.addOptions(
                             new Discord.SelectMenuOptionBuilder()
                                 .setEmoji('📜')
-                                .setLabel(`#${i+1}`)
+                                .setLabel(`#${i + 1}`)
                                 .setDescription(info.admincmds[i].name)
                                 .setValue(info.admincmds[i].name)
                         )
@@ -359,7 +360,7 @@ module.exports = {
                     inputMenu.addOptions(
                         new Discord.SelectMenuOptionBuilder()
                             .setEmoji('📜')
-                            .setLabel(`#${i+1}`)
+                            .setLabel(`#${i + 1}`)
                             .setDescription(info.othercmds[i].name)
                             .setValue(info.othercmds[i].name)
                     )

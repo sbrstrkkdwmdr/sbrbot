@@ -14,11 +14,20 @@ const template = [
     }
 ]
 
-const cmds = [
+type commandInfo = {
+    name: string,
+    description: string,
+    usage?: string,
+    slashusage?: string,
+    options: { name: string, description: string }[],
+    aliases?: string
+}
+
+const cmds: commandInfo[] = [
     {
         name: 'convert',
         description: 'Converts one value to another',
-        usage: 'convert <from> <to> <number>',
+        usage: 'convert [from] [to] [number]',
         slashusage: '/convert [from] [to] [number]',
         options: [
             {
@@ -38,7 +47,7 @@ const cmds = [
     {
         name: 'help',
         description: 'Returns all commands or information of a specific command',
-        usage: 'help <command>',
+        usage: 'help [command]',
         slashusage: '/help [command]',
         options: [
             {
@@ -56,7 +65,7 @@ const cmds = [
     {
         name: 'math',
         description: 'Solves a simple math problem',
-        usage: 'math <problem>',
+        usage: 'math [problem]',
         slashusage: '/math [type] [num1] [num2]',
         options: [
             {
@@ -88,12 +97,12 @@ const cmds = [
     {
         name: 'remind',
         description: 'Sends a reminder to the user',
-        usage: 'remind <time> <reminder>',
+        usage: 'remind [time] [reminder]',
         slashusage: '/remind [reminder] [time]',
         options: [
             {
                 name: 'time',
-                description: '`string, required`. How long to wait to send the reminder. \nFormat: <number><type> i.e 2d3h1m6s\ntypes: `d`(days) `h`(hours) `m`(minutes) `s`(seconds)'
+                description: '`string, required`. How long to wait to send the reminder. \nFormat: [number][type] i.e 2d3h1m6s\ntypes: `d`(days) `h`(hours) `m`(minutes) `s`(seconds)'
             },
             {
                 name: 'reminder',
@@ -114,7 +123,7 @@ const cmds = [
     }
 ]
 
-const othercmds = [
+const othercmds: commandInfo[] = [
     {
         name: '8ball',
         description: 'Responds with a yes or no or maybe answer',
@@ -126,7 +135,7 @@ const othercmds = [
     {
         name: 'gif',
         description: 'Sends a random gif based on the type given',
-        usage: 'gif <type>',
+        usage: 'gif [type]',
         slashusage: '/gif [type]',
         options: [
             {
@@ -138,7 +147,7 @@ const othercmds = [
     {
         name: 'image',
         description: 'Searches the Google API and returns the first five results',
-        usage: 'image <query>',
+        usage: 'image [query]',
         slashusage: '/image [query]',
         options: [
             {
@@ -166,7 +175,7 @@ const othercmds = [
     {
         name: 'roll',
         description: 'Returns between 1-100 or the given number',
-        usage: 'roll <number>',
+        usage: 'roll [number]',
         slashusage: '/roll [number]',
         options: [
             {
@@ -178,7 +187,7 @@ const othercmds = [
     {
         name: 'say',
         description: 'Sends a message',
-        usage: 'say <message>',
+        usage: 'say [message]',
         slashusage: '/say [channel] [message]',
         options: [
             {
@@ -188,14 +197,14 @@ const othercmds = [
 
             {
                 name: 'channel',
-                description: '`channel, optional`. The channel to send the message to. <#ChannelId>. If omited, sends the message to the current channel'
+                description: '`channel, optional`. The channel to send the message to. [#ChannelId]. If omited, sends the message to the current channel'
             }
         ]
     },
     {
         name: 'ytsearch',
         description: 'Searches the YouTube API and returns the first five results',
-        usage: 'ytsearch <query>',
+        usage: 'ytsearch [query]',
         slashusage: '/ytsearch [query]',
         options: [
             {
@@ -207,11 +216,11 @@ const othercmds = [
 ]
 
 
-const osucmds = [
+const osucmds: commandInfo[] = [
     {
         name: 'bws',
         description: 'Returns the badge weighting for a player',
-        usage: 'bws <user>',
+        usage: 'bws [user]',
         slashusage: '/bws [user]',
         options: [
             {
@@ -240,7 +249,7 @@ const osucmds = [
     {
         name: 'firsts',
         description: 'Retrieves all #1 scores for a player',
-        usage: 'firsts <user>',
+        usage: 'firsts [user]',
         options: [
             {
                 name: 'user/mention',
@@ -256,7 +265,7 @@ const osucmds = [
     {
         name: 'leaderboard',
         description: 'Retrieves the top 5 plays on a beatmap',
-        usage: 'leaderboard <id>',
+        usage: 'leaderboard [id]',
         slashusage: '/leaderboard [id] [page] [mods]',
         options: [
             {
@@ -277,7 +286,7 @@ const osucmds = [
     {
         name: 'map',
         description: 'Retrieves the information of a map',
-        usage: 'map "title" <id> +<mods>',
+        usage: 'map "title" [id] +[mods]',
         slashusage: '/map [id] [mods] [detailed]',
         options: [
             {
@@ -302,7 +311,7 @@ const osucmds = [
     {
         name: 'nochokes',
         description: 'Retrieves all plays that are not chokes for a player',
-        usage: 'nochokes <user>',
+        usage: 'nochokes [user]',
         slashusage: '/nochokes [user]',
         options: [
             {
@@ -314,7 +323,7 @@ const osucmds = [
     {
         name: 'osu',
         description: 'Retrieves the information of an osu! profile',
-        usage: 'osu <username>',
+        usage: 'osu [username]',
         slashusage: '/osu [username] [detailed]',
         options: [
             {
@@ -331,7 +340,7 @@ const osucmds = [
     {
         name: 'osuset',
         description: 'Sets the user\'s name for osu! commands (bancho only)',
-        /*         usage: 'osuset <username>', */
+        /*         usage: 'osuset [username]', */
         slashusage: '/osuset [username] [mode]',
         options: [
             {
@@ -347,7 +356,7 @@ const osucmds = [
     {
         name: 'osutop',
         description: 'Retrieves the top 5 plays for the user',
-        usage: 'osutop <user>',
+        usage: 'osutop [user]',
         slashusage: '/osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [compact]',
         options: [
             {
@@ -392,7 +401,7 @@ const osucmds = [
     {
         name: 'pinned',
         description: 'Retrieves a user\'s pinned scores',
-        usage: 'pinned <user>',
+        usage: 'pinned [user]',
         options: [
             {
                 name: 'user',
@@ -403,7 +412,7 @@ const osucmds = [
     {
         name: 'ppifrank',
         description: 'Returns the pp if x rank or rank if x pp',
-        usage: 'ppifrank <value> <type>',
+        usage: 'ppifrank [value] [type]',
         slashusage: '/ppifrank [value] [type]',
         options: [
             {
@@ -419,7 +428,7 @@ const osucmds = [
     {
         name: 'recent',
         description: 'Retrieves the most recent score for the user',
-        usage: 'recent <user>',
+        usage: 'recent [user]',
         slashusage: '/recent [user] [page] [mode] [list]',
         options: [
             {
@@ -444,7 +453,7 @@ const osucmds = [
     {
         name: 'scores',
         description: 'Retrieves the user\'s score for a set map',
-        usage: 'scores <user> <id>',
+        usage: 'scores [user] [id]',
         slashusage: '/scores [user] [id] [sort] [reverse] [compact]',
         options: [
             {
@@ -473,8 +482,8 @@ const osucmds = [
     {
         name: 'simulate',
         description: 'simulates a play for a map',
-        usage: 'simulate <id> +<mods> misses=<misses> acc=<accuracy> acc=<combo>',
-        slashusage: '/simulate [id] [mods] [misses] [accuracy] [combo]',
+        usage: 'simulate [id] +[mods] misses=[misses] acc=[accuracy] combo=[combo] n300=[n300] n100=[n100] n50=[n50] miss=[misses] ',
+        slashusage: '/simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses]',
         options: [
             {
                 name: 'id',
@@ -485,20 +494,36 @@ const osucmds = [
                 description: '`string, optional`. The mods to apply on top of the map. Defaults to NM'
             },
             {
+                name: 'accuracy',
+                description: '`float, optional`. The accuracy for the play. Defaults to 100'
+            },
+            {
+                name: 'combo',
+                description: '`integer, optional`. The maximum combo for the play. Defaults to map max combo'
+            },
+            {
+                name: 'n300',
+                description: '`integer, optional`. Number of hit 300s.'
+            },
+            {
+                name: 'n100',
+                description: '`integer, optional`. Number of hit 100s.'
+            },
+            {
+                name: 'n50',
+                description: '`integer, optional`. Number of hit 50s.'
+            },
+            {
                 name: 'misses',
                 description: '`integer, optional`. The amount of misses for the play. Defaults to 0'
             },
-            {
-                name: 'accuracy',
-                description: '`float, optional`. The accuracy for the play. Defaults to 100'
-            }
         ],
         aliases: 'simplay'
     },
     {
         name: 'whatif',
         description: 'Returns the player\'s total pp, rank etc. if they get an x pp score',
-        usage: 'whatif <value>',
+        usage: 'whatif [value]',
         slashusage: '/whatif [value]',
         options: [
             {
@@ -510,11 +535,11 @@ const osucmds = [
 
 ]
 
-const admincmds = [
+const admincmds: commandInfo[] = [
     {
         name: 'checkperms',
         description: 'Retrieves all permissions of the requested user',
-        usage: 'checkperms <user>',
+        usage: 'checkperms [user]',
         slashusage: '/checkperms [user]',
         options: [
             {
@@ -527,7 +552,7 @@ const admincmds = [
     {
         name: 'find',
         description: 'Returns name from the id given',
-        usage: 'find <type> <id>',
+        usage: 'find [type] [id]',
         slashusage: '/find [type] [id]',
         options: [
             {
@@ -543,7 +568,7 @@ const admincmds = [
     {
         name: 'leaveguild',
         description: 'Leaves the guild. Requires permissions',
-        usage: 'leaveguild <id>',
+        usage: 'leaveguild [id]',
         slashusage: '/leaveguild [id]',
         options: [
             {
@@ -575,7 +600,7 @@ const admincmds = [
     {
         name: 'voice',
         description: 'Changes voice settings for a user',
-        usage: 'voice <user> <type> <channel>',
+        usage: 'voice [user] [type] [channel]',
         slashusage: '/voice [user] [type] [channel]',
         options: [
             {
@@ -598,7 +623,7 @@ const links = [
     {
         name: 'maplink',
         description: 'Returns information from a map link',
-        usage: '`https://osu.ppy.sh/b/<id>` or `https://osu.ppy.sh/s/<setid>#<gamemode>/<id>`',
+        usage: '`https://osu.ppy.sh/b/[id]` or `https://osu.ppy.sh/s/[setid]#[gamemode]/[id]`',
         params: [
             {
                 name: 'id',
@@ -613,12 +638,12 @@ const links = [
                 description: '`string, required`. The gamemode of the map. Only needed if using beatmapset link. Valid types are: "osu", "taiko", "fruits", "mania"'
             }
         ],
-        aliases: 'osu.ppy.sh/beatmaps/<id>, osu.ppy.sh/beatmapsets/<setid>#<gamemode>/<id>, osu.ppy.sh/s/<setid>, osu.ppy.sh/beatmapsets/<setid>'
+        aliases: 'osu.ppy.sh/beatmaps/[id], osu.ppy.sh/beatmapsets/[setid]#[gamemode]/[id], osu.ppy.sh/s/[setid], osu.ppy.sh/beatmapsets/[setid]'
     },
     {
         name: 'userlink',
         description: 'Returns information from a user link',
-        usage: '`https://osu.ppy.sh/u/<id/name>` or `https://osu.ppy.sh/users/<id/name>`',
+        usage: '`https://osu.ppy.sh/u/[id/name]` or `https://osu.ppy.sh/users/[id/name]`',
         params: [
             {
                 name: 'id/name',
@@ -629,7 +654,7 @@ const links = [
     {
         name: 'replayparse',
         description: 'Returns information from a replay file',
-        usage: '`<replay.osr>`',
+        usage: '`[replay.osr]`',
         params: [
             {
                 name: 'file',
@@ -640,7 +665,7 @@ const links = [
     {
         name: 'scoreparse',
         description: 'Returns information from a score link',
-        usage: '`https://osu.ppy.sh/scores/<gamemode>/<id>`',
+        usage: '`https://osu.ppy.sh/scores/[gamemode]/[id]`',
         params: [
             {
                 name: 'id',
@@ -655,61 +680,7 @@ const links = [
     }
 
 ]
-const musiccmds = [
-    {
-        name: 'np',
-        description: 'Retrieves the current song',
-        usage: 'np',
-        slashusage: '/np',
-        options: [],
-        aliases: 'nowplaying'
-    },
-    {
-        name: 'play',
-        description: 'Plays a song',
-        usage: 'play <url>',
-        slashusage: '/play [url]',
-        options: [
-            {
-                name: 'url',
-                description: '`string, required`. The url of the song to play'
-            }
-        ]
-    },
-    {
-        name: 'queue',
-        description: 'Retrieves the current queue',
-        usage: 'queue',
-        slashusage: '/queue',
-        options: [],
-        aliases: 'q'
-    },
-    {
-        name: 'resume',
-        description: 'Resumes the current song',
-        usage: 'resume',
-        slashusage: '/resume',
-        options: [],
-        aliases: 'unpause'
-    },
-    {
-        name: 'skip',
-        description: 'Skips the current song',
-        usage: 'skip',
-        slashusage: '/skip',
-        options: []
-    },
-    {
-        name: 'stop',
-        description: 'Stops the current song',
-        usage: 'stop',
-        slashusage: '/stop',
-        options: [],
-        aliases: 'pause'
-    }
-]
-
 
 //module.exports = { cmds, osucmds, admincmds, links, musiccmds }
-export { cmds, othercmds, osucmds, admincmds, links, musiccmds }
+export { cmds, othercmds, osucmds, admincmds, links }
 
