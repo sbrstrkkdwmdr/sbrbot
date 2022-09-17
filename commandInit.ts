@@ -328,7 +328,7 @@ module.exports = (userdata, client, config, oncooldown) => {
                 default: false
             },
             {
-                name: 'name',
+                name: 'query',
                 description: 'The name of the map to display',
                 type: Discord.ApplicationCommandOptionType.String,
                 required: false,

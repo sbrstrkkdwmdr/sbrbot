@@ -48,7 +48,7 @@ module.exports = {
                 mapid = obj.options.getInteger('id');
                 mapmods = obj.options.getString('mods');
                 detailed = obj.options.getBoolean('detailed');
-                maptitleq = obj.options.getString('name');
+                maptitleq = obj.options.getString('query');
             }
 
                 //==============================================================================================================================================================================================
