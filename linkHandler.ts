@@ -129,11 +129,11 @@ progress: ${m.progress ? m.progress : 'none'}
 
         if (messagenohttp.startsWith('osu.ppy.sh/b/') || messagenohttp.startsWith('osu.ppy.sh/beatmaps/') || messagenohttp.startsWith('osu.ppy.sh/beatmapsets/') || messagenohttp.startsWith('osu.ppy.sh/s/') || parse != null) {
             overrides.ex = 'link'
-            commandStruct.osucmds.get('map').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides);
+            commandStruct.osucmds.get('map').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
         }
         if (messagenohttp.startsWith('osu.ppy.sh/u/') || messagenohttp.startsWith('osu.ppy.sh/users/')) {
-            overrides.user = messagenohttp.split('/')[2]
-            commandStruct.osucmds.get('osu').execute(commandType, obj, button, config, client, absoluteID, currentDate, overrides);
+            // overrides.user = messagenohttp.split('/')[2]
+            commandStruct.osucmds.get('osu').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
         }
 
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osr'))) {

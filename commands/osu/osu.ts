@@ -71,6 +71,11 @@ module.exports = {
                 }
             }
                 break;
+            case 'link': {
+                commanduser = obj.author;
+                searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
+                user = obj.content.includes(' ') ? obj.content.replace('https://', '').replace('http://', '').replace('www.', '').split('/')[2].split(' ')[0] : obj.content.replace('https://', '').replace('http://', '').replace('www.', '').split('/')[2]
+            }
         }
         if (overrides != null) {
 
@@ -420,6 +425,20 @@ ${onlinestatus}
                     .catch();
             }
                 break;
+
+            //==============================================================================================================================================================================================
+
+            case 'link': {
+                obj.reply({
+                    content: '',
+                    embeds: useEmbeds,
+                    components: [buttons],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+            break;
         }
 
 
