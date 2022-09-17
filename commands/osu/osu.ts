@@ -49,6 +49,9 @@ module.exports = {
 
                 break;
             case 'button': {
+                if(!obj.message.embeds[0]){
+                    return;
+                }
                 commanduser = obj.member.user;
                 if (obj.message.embeds[0].fields[0]) {
                     detailed = true

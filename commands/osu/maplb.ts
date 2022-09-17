@@ -48,6 +48,9 @@ module.exports = {
 
                 break;
             case 'button': {
+                if(!obj.message.embeds[0]){
+                    return;
+                }
                 commanduser = obj.member.user;
                 mapid = obj.message.embeds[0].url.split('/b/')[1]
                 if (obj.message.embeds[0].footer) {

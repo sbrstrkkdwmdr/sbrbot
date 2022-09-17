@@ -63,6 +63,9 @@ module.exports = {
 
                 break;
             case 'button': {
+                if(!obj.message.embeds[0]){
+                    return;
+                }
                 commanduser = obj.member.user;
 
                 user = obj.message.embeds[0].title.split('Top plays of ')[1]

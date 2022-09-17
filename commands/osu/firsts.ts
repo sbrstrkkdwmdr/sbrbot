@@ -57,6 +57,10 @@ module.exports = {
 
                 break;
             case 'button': {
+                if(!obj.message.embeds[0]){
+                    return;
+                }
+
                 commanduser = obj.member.user;
                 user = obj.message.embeds[0].title.split('for ')[1]
                 mode = cmdchecks.toAlphaNum(obj.message.embeds[0].description.split('\n')[1])

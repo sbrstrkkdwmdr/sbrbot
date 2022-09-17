@@ -55,6 +55,9 @@ module.exports = {
 
                 break;
             case 'button': {
+                if(!obj.message.embeds[0]){
+                    return;
+                }
                 commanduser = obj.member.user;
                 const urlnohttp = obj.message.embeds[0].url.split('https://')[1];
                 //osu.ppy.sh/beatmapsets/setid#gamemode/id
