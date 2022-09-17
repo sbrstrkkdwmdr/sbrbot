@@ -55,7 +55,7 @@ module.exports = {
 
                 break;
             case 'button': {
-                if(!obj.message.embeds[0]){
+                if (!obj.message.embeds[0]) {
                     return;
                 }
                 commanduser = obj.member.user;
@@ -609,36 +609,36 @@ ${error}
         if (detailed == true) {
             switch (mapdata.mode) {
                 case 'osu': {
-                    detailedmapdata = `SS: ${ppComputed[0].pp?.toFixed(2)} | Aim: ${ppComputed[0].ppAim?.toFixed(2)} | Speed: ${ppComputed[0].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} \n ` +
-                        `99: ${ppComputed[1].pp?.toFixed(2)} | Aim: ${ppComputed[1].ppAim?.toFixed(2)} | Speed: ${ppComputed[1].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} \n ` +
-                        `97: ${ppComputed[3].pp?.toFixed(2)} | Aim: ${ppComputed[3].ppAim?.toFixed(2)} | Speed: ${ppComputed[3].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} \n ` +
-                        `95: ${ppComputed[5].pp?.toFixed(2)} | Aim: ${ppComputed[5].ppAim?.toFixed(2)} | Speed: ${ppComputed[5].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} \n ` +
+                    detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Aim: ${ppComputed[0].ppAim?.toFixed(2)} | Speed: ${ppComputed[0].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} \n ` +
+                        `**99**: ${ppComputed[1].pp?.toFixed(2)} | Aim: ${ppComputed[1].ppAim?.toFixed(2)} | Speed: ${ppComputed[1].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} \n ` +
+                        `**97**: ${ppComputed[3].pp?.toFixed(2)} | Aim: ${ppComputed[3].ppAim?.toFixed(2)} | Speed: ${ppComputed[3].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} \n ` +
+                        `**95**: ${ppComputed[5].pp?.toFixed(2)} | Aim: ${ppComputed[5].ppAim?.toFixed(2)} | Speed: ${ppComputed[5].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} \n ` +
                         `${modissue}\n${ppissue}`
                 }
                     break;
                 case 'taiko': {
-                    detailedmapdata = `SS: ${ppComputed[0].pp?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} | Strain: ${ppComputed[0].ppStrain?.toFixed(2)} \n ` +
-                        `99: ${ppComputed[1].pp?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} | Strain: ${ppComputed[1]?.ppStrain?.toFixed(2)} \n ` +
-                        `97: ${ppComputed[3].pp?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} | Strain: ${ppComputed[3]?.ppStrain?.toFixed(2)} \n ` +
-                        `95: ${ppComputed[5].pp?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} | Strain: ${ppComputed[5]?.ppStrain?.toFixed(2)} \n ` +
+                    detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} | Strain: ${ppComputed[0].ppStrain?.toFixed(2)} \n ` +
+                        `**99**: ${ppComputed[1].pp?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} | Strain: ${ppComputed[1]?.ppStrain?.toFixed(2)} \n ` +
+                        `**97**: ${ppComputed[3].pp?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} | Strain: ${ppComputed[3]?.ppStrain?.toFixed(2)} \n ` +
+                        `**95**: ${ppComputed[5].pp?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} | Strain: ${ppComputed[5]?.ppStrain?.toFixed(2)} \n ` +
                         `${modissue}\n${ppissue}`
                 }
                     break;
                 case 'fruits': {
-                    detailedmapdata = `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
-                        `99: ${ppComputed[1].pp?.toFixed(2)} \n ` +
-                        `98: ${ppComputed[2].pp?.toFixed(2)} \n ` +
-                        `97: ${ppComputed[3].pp?.toFixed(2)} \n ` +
-                        `96: ${ppComputed[4].pp?.toFixed(2)} \n ` +
-                        `95: ${ppComputed[5].pp?.toFixed(2)} \n ` +
+                    detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} \n ` +
+                        `**99**: ${ppComputed[1].pp?.toFixed(2)} \n ` +
+                        `**98**: ${ppComputed[2].pp?.toFixed(2)} \n ` +
+                        `**97**: ${ppComputed[3].pp?.toFixed(2)} \n ` +
+                        `**96**: ${ppComputed[4].pp?.toFixed(2)} \n ` +
+                        `**95**: ${ppComputed[5].pp?.toFixed(2)} \n ` +
                         `${modissue}\n${ppissue}`
                 }
                     break;
                 case 'mania': {
-                    detailedmapdata = `SS: ${ppComputed[0].pp?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} | Strain: ${ppComputed[0].ppStrain?.toFixed(2)} \n ` +
-                        `99: ${ppComputed[1].pp?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} | Strain: ${ppComputed[1].ppStrain?.toFixed(2)} \n ` +
-                        `97: ${ppComputed[3].pp?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} | Strain: ${ppComputed[3].ppStrain?.toFixed(2)} \n ` +
-                        `95: ${ppComputed[5].pp?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} | Strain: ${ppComputed[5].ppStrain?.toFixed(2)} \n ` +
+                    detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} | Strain: ${ppComputed[0].ppStrain?.toFixed(2)} \n ` +
+                        `**99**: ${ppComputed[1].pp?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} | Strain: ${ppComputed[1].ppStrain?.toFixed(2)} \n ` +
+                        `**97**: ${ppComputed[3].pp?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} | Strain: ${ppComputed[3].ppStrain?.toFixed(2)} \n ` +
+                        `**95**: ${ppComputed[5].pp?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} | Strain: ${ppComputed[5].ppStrain?.toFixed(2)} \n ` +
                         `${modissue}\n${ppissue}`
                 }
                     break;
@@ -646,14 +646,14 @@ ${error}
             }
         }
 
-        const exMapDetails = `${mapdata.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} plays | ${mapdata.beatmapset.play_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} mapset plays | ${mapdata.passcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} passes | ${mapdata.beatmapset.favourite_count} favourites\n` +
-            `Submitted <t: ${new Date(mapdata.beatmapset.submitted_date).getTime() / 1000}:R> | Last updated <t: ${new Date(mapdata.beatmapset.last_updated).getTime() / 1000}:R>
+        const exMapDetails = `${func.separateNum(mapdata.playcount)} plays | ${func.separateNum(mapdata.beatmapset.play_count)} mapset plays | ${func.separateNum(mapdata.passcount)} passes | ${func.separateNum(mapdata.beatmapset.favourite_count)} favourites\n` +
+            `Submitted <t:${new Date(mapdata.beatmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(mapdata.beatmapset.last_updated).getTime() / 1000}:R>
         ${mapdata.status == 'ranked' ?
-                `Ranked <t: ${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                `Ranked <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
             }${mapdata.status == 'approved' || mapdata.status == 'qualified' ?
                 `Approved/Qualified <t: ${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
             }${mapdata.status == 'loved' ?
-                `Loved <t: ${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                `Loved <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
             }\n` +
             `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`
 
