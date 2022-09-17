@@ -1,19 +1,4 @@
 //just a document for the help command
-const template = [
-    {
-        name: 'name',
-        description: 'description',
-        usage: 'usage for command using messageCreate event',
-        slashusage: 'usage for command using interactionCreate event',
-        options: [
-            {
-                name: 'option name',
-                description: 'description name'
-            }
-        ]
-    }
-]
-
 type commandInfo = {
     name: string,
     description: string,
@@ -23,664 +8,1189 @@ type commandInfo = {
     aliases?: string
 }
 
-const cmds: commandInfo[] = [
+const mods = [
+    'NM',
+    'NF',
+    'EZ',
+    'TD',
+    'HD',
+    'HR',
+    'SD',
+    'DT',
+    'RX',
+    'HT',
+    'NC',
+    'FL',
+    'AT',
+    'SO',
+    'AP',
+    'PF',
+    '1K',
+    '2K',
+    '3K',
+    '4K',
+    '5K',
+    '6K',
+    '7K',
+    '8K',
+    '9K',
+    'FI',
+    'RD',
+    'CN',
+    'TP',
+    'KC',
+    'S2', 'V2', 'SV2',
+    'MR'
+]
+
+const cmds = [
     {
         name: 'convert',
-        description: 'Converts one value to another',
-        usage: 'convert [from] [to] [number]',
+        description: 'Converts a number from one unit to another',
+        usage: 'sbr-convert [from] [to] [number]',
         slashusage: '/convert [from] [to] [number]',
+        examples: [
+            'sbr-convert km mi 10',
+            'sbr-convert k c 273.15',
+        ],
+        aliases: [],
         options: [
             {
                 name: 'from',
-                description: '`string, required`. What to convert the value from (ie km)'
+                type: 'string',
+                required: true,
+                description: 'The unit to convert from',
+                options: ['N/A'],
+                defaultValue: 'N/A'
             },
             {
                 name: 'to',
-                description: '`string, required`. What to convert the value to (ie miles)'
+                type: 'string',
+                required: true,
+                description: 'The unit to convert to',
+                options: [
+                    'celsius', 'fahrenheit', 'kelvin',
+                    'inches', 'feet', 'metres', 'miles',
+                    'seconds', 'minutes', 'hours', 'days', 'years',
+                    'fluid ounces', 'cups', 'pints', 'litres', 'gallons', 'cubic metres',
+                    'grams', 'Newtons(WIP)', 'kilograms(WIP)', 'ounces', 'pounds', 'metric tonnes',
+                    'help', 'SI units'
+                ],
+                defaultValue: 'N/A'
             },
             {
                 name: 'number',
-                description: '`number, required`. The value to convert'
+                type: 'float',
+                required: true,
+                description: 'The number to convert',
+                options: ['N/A'],
+                defaultValue: 'N/A'
             }
         ]
     },
     {
         name: 'help',
-        description: 'Returns all commands or information of a specific command',
-        usage: 'help [command]',
+        description: 'Shows a list of commands or information about a specific command',
+        usage: 'sbr-help [command]',
         slashusage: '/help [command]',
+        examples: [
+            'sbr-help',
+            'sbr-help convert',
+        ],
+        aliases: [],
         options: [
             {
                 name: 'command',
-                description: '`string, optional`. Which command to return the information of'
+                type: 'string',
+                required: false,
+                description: 'The command to get information about',
+                options: ['N/A'],
+                defaultValue: 'N/A'
             }
         ]
     },
     {
         name: 'info',
-        description: 'Returns information for the bot',
-        usage: 'info',
+        description: 'Shows information about the bot',
+        usage: 'sbr-info',
+        slashusage: 'null',
+        examples: [],
+        aliases: [],
         options: []
     },
     {
         name: 'math',
-        description: 'Solves a simple math problem',
-        usage: 'math [problem]',
+        description: 'Solves a math problem',
+        usage: 'sbr-math [problem]',
         slashusage: '/math [type] [num1] [num2]',
+        examples: [
+            'sbr-math 2+2',
+            '/math type:pythag num1:3 num2:4',
+        ],
+        aliases: [],
         options: [
             {
                 name: 'problem',
-                description: '`string, required`. The math equation to solve i.e `math 1-2+3/4`'
+                type: 'string',
+                required: 'true (if using message command)',
+                description: 'The math problem to solve',
+                options: [
+                    'non numerical characters are ignored (excluding pi)',
+                ],
+                defaultValue: 'N/A'
             },
             {
                 name: 'type',
-                description: '`string, required`. The type of equation to solve '
+                type: 'string',
+                required: 'true (if using slash command)',
+                description: 'The type of math problem',
+                options: [
+                    'square', 'square root',
+                    'factorial',
+                    'highest common factor', 'lowest common multiple',
+                    'approach rate +dt', 'approach rate +ht', 'approach rate(ms)',
+                    'circumference', 'area of a circle',
+                    'pythag',
+                    'conversion to significant figures',
+                    'od+dt', 'od+ht', 'od(ms)',
+                    'mod int to string'
+                ],
+                defaultValue: 'N/A'
             },
             {
                 name: 'num1',
-                description: '`number, required`. The first number to use in the equation'
+                type: 'float',
+                required: 'true (if using slash command)',
+                description: 'The first number',
+                options: ['N/A'],
+                defaultValue: 'N/A'
             },
             {
                 name: 'num2',
-                description: '`number, optional`. The second number to use in the equation'
+                type: 'float',
+                required: 'true (sometimes)',
+                description: 'The second number',
+                options: ['N/A'],
+                defaultValue: 'N/A'
             }
-        ],
-        aliases: 'solve'
+        ]
     },
     {
         name: 'ping',
         description: 'Pings the bot and returns the latency',
-        usage: 'ping',
+        usage: 'sbr-ping',
         slashusage: '/ping',
+        examples: [],
+        aliases: [],
         options: []
     },
     {
         name: 'remind',
-        description: 'Sends a reminder to the user',
-        usage: 'remind [time] [reminder]',
-        slashusage: '/remind [reminder] [time]',
+        description: 'Sets a reminder',
+        usage: 'sbr-reminder [time] [reminder]',
+        slashusage: '/reminder [time] [reminder] [sendinchannel]',
+        examples: [
+            'sbr-remind 1h30m30s reminder',
+            'sbr-remind 2:05 fc'
+        ],
+        aliases: [],
         options: [
             {
                 name: 'time',
-                description: '`string, required`. How long to wait to send the reminder. \nFormat: [number][type] i.e 2d3h1m6s\ntypes: `d`(days) `h`(hours) `m`(minutes) `s`(seconds)'
+                type: 'string',
+                required: true,
+                description: 'The time until the reminder',
+                options: [
+                    'format: [number][unit]',
+                    'units: s, m, h, d, w, y',
+                    'example: 1h30m30s'
+                ],
+                defaultValue: '0s'
             },
             {
                 name: 'reminder',
-                description: '`string, optional`. The reminder to set'
+                type: 'string',
+                required: false,
+                description: 'The reminder',
+                options: ['N/A'],
+                defaultValue: 'null'
             },
             {
                 name: 'sendinchannel',
-                description: '`boolean, optional`. Whether to send the reminder in the channel or in the DM'
+                type: 'boolean',
+                required: false,
+                description: 'Whether to send the reminder in the channel or in a DM. Admin only',
+                options: ['true', 'false'],
+                defaultValue: 'false'
             }
         ]
     },
     {
         name: 'stats',
-        description: 'Returns the bot statistics',
-        usage: 'stats',
+        description: 'Shows the bot\'s statistics',
+        usage: 'sbr-stats',
+        slashusage: 'null',
+        examples: [],
+        aliases: [],
         options: []
-
+    },
+    {
+        name: 'time',
+        description: 'Shows the current time in a specific timezone as well as UTC and the bot\'s timezone',
+        usage: 'sbr-time [timezone]',
+        slashusage: '/time [timezone]',
+        examples: [
+            'sbr-time',
+            'sbr-time Australia/Melbourne'
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'timezone',
+                type: 'string',
+                required: false,
+                description: 'The timezone to show the time in',
+                options: ['N/A'],
+                defaultValue: 'UTC'
+            }
+        ]
     }
 ]
 
-const othercmds: commandInfo[] = [
+const osucmds = [
     {
-        name: '8ball',
-        description: 'Responds with a yes or no or maybe answer',
-        usage: '8ball',
-        slashusage: '/8ball',
-        options: [],
-        aliases: 'ask'
+        name: 'bws',
+        description: 'Shows the badge weighted rank of a user',
+        usage: 'sbr-bws [user]',
+        slashusage: '/bws [user]',
+        examples: [
+            'sbr-bws',
+            'sbr-bws peppy',
+            'sbr-bws DigitalHypno'
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the badge weighting of',
+                options: ['N/A'],
+                defaultValue: 'your osu! username'
+            }
+        ]
     },
     {
-        name: 'gif',
-        description: 'Sends a random gif based on the type given',
-        usage: 'gif [type]',
-        slashusage: '/gif [type]',
+        name: 'compare',
+        description: 'Compares two users\' osu! stats/top plays/scores',
+        usage: 'sbr-compare [first] [second]',
+        slashusage: '/compare [type] [first] [second]',
+        examples: [
+            'sbr-compare',
+            'sbr-compare peppy SaberStrike',
+            '/compare type:score'
+        ],
+        aliases: [],
         options: [
             {
                 name: 'type',
-                description: '`string, optional`. What type to send'
+                type: 'string',
+                required: false,
+                description: 'The type of comparison',
+                options: [
+                    'score', 'user', 'top plays'
+                ],
+                default: 'user'
+            },
+            {
+                name: 'first',
+                type: 'string',
+                required: false,
+                description: 'The first user to compare',
+                options: ['N/A'],
+                defaultValue: 'your osu! username/most recent play'
+            },
+            {
+                name: 'second',
+                type: 'string',
+                required: false,
+                description: 'The second user to compare',
+                options: ['N/A'],
+                defaultValue: 'your osu! username/the most recent play in the guild'
+            }
+        ]
+    },
+    {
+        name: 'firsts',
+        description: 'Shows the #1 global scores of a user',
+        usage: 'sbr-firsts [user]',
+        slashusage: '/firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
+        examples: [
+            'sbr-firsts mrekk',
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the scores of',
+                options: ['N/A'],
+                defaultValue: 'your osu! username'
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode to show the scores in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu'
+            },
+            {
+                name: 'sort',
+                type: 'string',
+                required: false,
+                description: 'The sort order of the scores',
+                options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
+                defaultValue: 'recent'
+            },
+            {
+                name: 'reverse',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to reverse the sort order',
+                options: ['true', 'false'],
+                defaultValue: 'false'
+            },
+            {
+                name: 'page',
+                type: 'integer',
+                required: false,
+                description: 'The page of scores to show',
+                options: ['N/A'],
+                defaultValue: '1'
+            },
+            {
+                name: 'mapper',
+                type: 'string',
+                required: false,
+                description: 'The mapper to filter the scores by',
+                options: ['N/A'],
+                defaultValue: 'null'
+            },
+            {
+                name: 'mods',
+                type: 'string',
+                required: false,
+                description: 'The mods to filter the scores by',
+                options: mods,
+                defaultValue: 'null'
+            },
+            {
+                name: 'detailed',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to show detailed information about the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false'
+            }
+        ]
+    },
+    {
+        name: 'lb',
+        description: 'Shows the leaderboard of the current server',
+        usage: 'sbr-lb',
+        slashusage: '/lb',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'map',
+        description: 'Shows information about a beatmap',
+        usage: 'sbr-map "query" [id] +[mods]',
+        slashusage: '/map [query] [id] [mods] [detailed]',
+        examples: [
+            'sbr-map "kimi no shiranai monogatari"',
+            'sbr-map 3013912 +HDHR'
+        ],
+        aliases: ['m'],
+        options: [
+            {
+                name: 'query',
+                type: 'string',
+                required: false,
+                description: 'The map to search for',
+                options: ['N/A'],
+                defaultValue: 'null'
+            },
+            {
+                name: 'id',
+                type: 'integer',
+                required: false,
+                description: 'The map ID to search for',
+                options: ['N/A'],
+                defaultValue: 'the most recent map in the guild'
+            },
+            {
+                name: 'mods',
+                type: 'string',
+                required: false,
+                description: 'The mods to calculate the map with',
+                options: mods,
+                defaultValue: 'none'
+            },
+            {
+                name: 'detailed',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to show detailed information about the map',
+                options: ['true', 'false'],
+                defaultValue: 'false'
+            }
+        ]
+    },
+    {
+        name: 'maplb',
+        description: 'Shows the leaderboard of a map',
+        usage: 'sbr-maplb [id]',
+        slashusage: '/maplb [id] [page] [mods]',
+        examples: [],
+        aliases: ['leaderboard', 'mapleaderboard'],
+        options: [
+            {
+                name: 'id',
+                type: 'integer',
+                required: false,
+                description: 'The ID of the map to show the leaderboard of',
+                options: ['N/A'],
+                defaultValue: 'the most recent map in the guild'
+            },
+            {
+                name: 'page',
+                type: 'integer',
+                required: false,
+                description: 'The page of the leaderboard to show',
+                options: ['N/A'],
+                defaultValue: '1'
+            },
+            {
+                name: 'mods',
+                type: 'string',
+                required: false,
+                description: 'The mods to filter the leaderboard by',
+                options: mods,
+                defaultValue: 'none'
+            },
+        ]
+    },
+    {
+        name: 'nochokes',
+        description: 'Shows the user\'s top plays without chokes',
+        usage: 'sbr-nochokes [user]',
+        slashusage: '/nochokes [user]',
+        examples: [
+            'sbr-nochokes SaberStrike'
+        ],
+        aliases: ['nc'],
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the plays of',
+                options: ['N/A'],
+                defaultValue: 'your osu! username'
+            }
+        ]
+    },
+    {
+        name: 'osu',
+        description: 'Shows information about a user\'s osu! profile',
+        usage: 'sbr-osu [user]',
+        slashusage: '/osu [user] [detailed]',
+        aliases: ['o', 'profile'],
+        examples: [],
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the profile of',
+                options: ['N/A'],
+                defaultValue: 'your osu! username'
+            },
+            {
+                name: 'detailed',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to show detailed information about the user',
+                options: ['true', 'false'],
+                defaultValue: 'false'
+            }
+        ]
+    },
+    {
+        name: 'osuset',
+        description: 'Sets your osu! username/mode/skin',
+        usage: 'sbr-osuset [username]',
+        slashusage: '/osuset [username] [mode] [skin]',
+        examples: [],
+        aliases: [],
+        options: [
+            {
+                name: 'username',
+                type: 'string',
+                required: true,
+                description: 'The osu! username to set',
+                options: ['N/A'],
+                defaultValue: 'null'
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The osu! mode to set',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu'
+            },
+            {
+                name: 'skin',
+                type: 'string',
+                required: false,
+                description: 'The skin to set',
+                options: ['N/A'],
+                defaultValue: 'osu! default 2014'
+            }
+        ]
+    },
+    {
+        name: 'osutop',
+        description: 'Shows the top scores of a user',
+        usage: 'sbr-osutop [user]',
+        slashusage: '/osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
+        examples: [
+            'sbr-osutop',
+            '/osutop sort:recent'
+        ],
+        aliases: ['top'],
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the scores of',
+                options: ['N/A'],
+                defaultValue: 'your osu! username'
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode to show the scores in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu'
+            },
+            {
+                name: 'sort',
+                type: 'string',
+                required: false,
+                description: 'The sort order of the scores',
+                options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
+                defaultValue: 'pp'
+            },
+            {
+                name: 'reverse',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to reverse the sort order',
+                options: ['true', 'false'],
+                defaultValue: 'false'
+            },
+            {
+                name: 'page',
+                type: 'integer',
+                required: false,
+                description: 'The page of scores to show',
+                options: ['N/A'],
+                defaultValue: '1'
+            },
+            {
+                name: 'mapper',
+                type: 'string',
+                required: false,
+                description: 'The mapper to filter the scores by',
+                options: ['N/A'],
+                defaultValue: 'null'
+            },
+            {
+                name: 'mods',
+                type: 'string',
+                required: false,
+                description: 'The mods to filter the scores by',
+                options: mods,
+                defaultValue: 'null'
+            },
+            {
+                name: 'detailed',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to show detailed information about the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false'
+            }
+        ]
+    },
+    {
+        name: 'pinned',
+        description: 'Shows the pinned scores of a user',
+        usage: 'sbr-pinned [user]',
+        slashusage: '/pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
+        examples: [
+            'sbr-pinned mrekk',
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the scores of',
+                options: ['N/A'],
+                defaultValue: 'your osu! username'
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode to show the scores in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu'
+            },
+            {
+                name: 'sort',
+                type: 'string',
+                required: false,
+                description: 'The sort order of the scores',
+                options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
+                defaultValue: 'recent'
+            },
+            {
+                name: 'reverse',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to reverse the sort order',
+                options: ['true', 'false'],
+                defaultValue: 'false'
+            },
+            {
+                name: 'page',
+                type: 'integer',
+                required: false,
+                description: 'The page of scores to show',
+                options: ['N/A'],
+                defaultValue: '1'
+            },
+            {
+                name: 'mapper',
+                type: 'string',
+                required: false,
+                description: 'The mapper to filter the scores by',
+                options: ['N/A'],
+                defaultValue: 'null'
+            },
+            {
+                name: 'mods',
+                type: 'string',
+                required: false,
+                description: 'The mods to filter the scores by',
+                options: mods,
+                defaultValue: 'null'
+            },
+            {
+                name: 'detailed',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to show detailed information about the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false'
+            }
+        ]
+    },
+    {
+        name: 'ppifrank',
+        description: 'Shows the total pp if you are at a certain rank and vice versa',
+        usage: 'sbr-ppifrank [value] [type]',
+        slashusage: '/ppifrank [value] [type]',
+        examples: [],
+        aliases: [],
+        options: [
+            {
+                name: 'value',
+                type: 'integer',
+                required: true,
+                description: 'The value to use',
+                options: ['N/A'],
+                defaultValue: 'null'
+            },
+            {
+                name: 'type',
+                type: 'string',
+                required: false,
+                description: 'The type of value',
+                options: ['rank', 'pp'],
+                defaultValue: 'pp'
+            }
+        ]
+    },
+    {
+        name: 'recent',
+        description: 'Shows the recent score(s) of a user',
+        usage: 'sbr-recent [user]',
+        slashusage: '/recent [user] [page] [mode] [list]',
+        examples: [
+            'sbr-recent',
+            'sbr-rs',
+            '/recent list'
+        ],
+        aliases: ['rs', 'r'],
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the score(s) of',
+                options: ['N/A'],
+                defaultValue: 'your osu! username'
+            },
+            {
+                name: 'page',
+                type: 'integer',
+                required: false,
+                description: 'The page of scores to show',
+                options: ['N/A'],
+                defaultValue: '1'
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode to show the score(s) in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu'
+            },
+            {
+                name: 'list',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to show multiple scores. If false, only the most recent score will be shown',
+                options: ['true', 'false'],
+                defaultValue: 'false'
+            }
+        ]
+    },
+    {
+        name: 'scores',
+        description: 'Shows the scores of a user on a beatmap',
+        usage: 'sbr-scores [user] [id]',
+        slashusage: '/scores [user] [id] [sort] [reverse] [page] [detailed]',
+        examples: [
+            'sbr-scores saberstrike',
+            'sbr-c'
+        ],
+        aliases: ['c'],
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the scores of',
+                options: ['N/A'],
+                defaultValue: 'your osu! username'
+            },
+            {
+                name: 'id',
+                type: 'integer',
+                required: false,
+                description: 'The beatmap id to show the scores of',
+                options: ['N/A'],
+                defaultValue: 'The most recent map in the guild'
+            },
+            {
+                name: 'sort',
+                type: 'string',
+                required: false,
+                description: 'The sort order of the scores',
+                options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
+                defaultValue: 'recent'
+            },
+            {
+                name: 'reverse',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to reverse the sort order',
+                options: ['true', 'false'],
+                defaultValue: 'false'
+            },
+            {
+                name: 'page',
+                type: 'integer',
+                required: false,
+                description: 'The page of scores to show',
+                options: ['N/A'],
+                defaultValue: '1'
+            },
+            {
+                name: 'detailed',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to show detailed information about the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false'
+            }
+        ]
+    },
+    {
+        name: 'simulate',
+        description: 'Simulates a score on a beatmap',
+        usage: 'sbr-simulate [id] +[mods] misses=[misses] acc=[accuracy] combo=[combo] n300=[n300] n100=[n100] n50=[n50] miss=[misses]',
+        slashusage: '/simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses]',
+        examples: [
+            'sbr-simulate +HDHR misses=0 acc=97.86'
+        ],
+        aliases: ['sim', 'simplay'],
+        options: [
+            {
+                name: 'id',
+                type: 'integer',
+                required: false,
+                description: 'The beatmap id to simulate the score on',
+                options: ['N/A'],
+                defaultValue: 'The most recent map in the guild'
+            },
+            {
+                name: 'mods',
+                type: 'string',
+                required: false,
+                description: 'The mods to simulate the score with',
+                options: mods,
+                defaultValue: 'none'
+            },
+            {
+                name: 'accuracy',
+                type: 'float',
+                required: false,
+                description: 'The accuracy to simulate the score with',
+                options: ['0-100'],
+                defaultValue: '100'
+            },
+            {
+                name: 'combo',
+                type: 'integer',
+                required: false,
+                description: 'The maximum combo to simulate the score with',
+                options: ['N/A'],
+                defaultValue: 'map max combo'
+            },
+            {
+                name: 'n300',
+                type: 'integer',
+                required: false,
+                description: 'The number of hit 300s to simulate the score with',
+                options: ['N/A'],
+                defaultValue: 'calculated from accuracy'
+            },
+            {
+                name: 'n100',
+                type: 'integer',
+                required: false,
+                description: 'The number of hit 100s to simulate the score with',
+                options: ['N/A'],
+                defaultValue: 'calculated from accuracy'
+            },
+            {
+                name: 'n50',
+                type: 'integer',
+                required: false,
+                description: 'The number of hit 50s to simulate the score with',
+                options: ['N/A'],
+                defaultValue: 'calculated from accuracy'
+            },
+            {
+                name: 'misses',
+                type: 'integer',
+                required: false,
+                description: 'The number of misses to simulate the score with',
+                options: ['N/A'],
+                defaultValue: '0'
+            }
+        ]
+    },
+    {
+        name: 'whatif',
+        description: 'Shows user stats if you gain a certain amount of raw pp',
+        usage: 'sbr-whatif [user] [pp]',
+        slashusage: '/whatif [user] [pp]',
+        examples: [
+            'sbr-whatif 1000'
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the stats of',
+                options: ['N/A'],
+                defaultValue: 'your osu! username'
+            },
+            {
+                name: 'pp',
+                type: 'float',
+                required: true,
+                description: 'The amount of raw pp to gain',
+                options: ['N/A'],
+                defaultValue: '0'
+            }
+        ]
+    }
+]
+
+const othercmds = [
+    {
+        name: '8ball',
+        description: 'Returns a yes/no/maybe answer to a question',
+        usage: 'sbr-8ball ',
+        slashusage: '/8ball ',
+        examples: [
+            'sbr-8ball is this a good bot?'
+        ],
+        aliases: [],
+        options: [],
+    },
+    {
+        name: 'gif',
+        description: 'Sends a gif',
+        usage: 'sbr-gif [type]',
+        slashusage: '/gif [type]',
+        examples: [],
+        aliases: [],
+        options: [
+            {
+                name: 'type',
+                type: 'string',
+                required: true,
+                description: 'The type of gif to send',
+                options: [],
+                defaultValue: 'N/A'
             }
         ]
     },
     {
         name: 'image',
-        description: 'Searches the Google API and returns the first five results',
-        usage: 'image [query]',
+        description: 'Sends an image',
+        usage: 'sbr-image [query]',
         slashusage: '/image [query]',
+        examples: [],
+        aliases: [],
         options: [
             {
                 name: 'query',
-                description: '`string, required`. The parameters for the search'
+                type: 'string',
+                required: true,
+                description: 'The image to search for',
+                options: [],
+                defaultValue: 'N/A'
             }
         ]
     },
     {
         name: 'poll',
         description: 'Creates a poll',
-        usage: 'poll title',
-        slashusage: '/poll [title] [options]',
+        usage: 'sbr-poll [question]',
+        slashusage: '/poll [question] [options]',
+        examples: [
+            'sbr-poll djkfhgfbdkgbkfhdjgdkgd',
+            '/poll title:What is your favorite color? options:red+green+blue'
+        ],
+        aliases: [],
         options: [
             {
-                name: 'title',
-                description: '`string, required`. The title of the poll'
+                name: 'question',
+                type: 'string',
+                required: true,
+                description: 'The question/title of the poll',
+                options: [],
+                defaultValue: 'N/A'
             },
             {
                 name: 'options',
-                description: '`string, required`. The options of the poll. Each option should be separated with a `+`. Max limit of 26'
+                type: 'string',
+                required: false,
+                description: 'The options for the poll',
+                options: ['format: option1+option2+option3...'],
+                defaultValue: 'yes+no'
             }
         ]
     },
     {
         name: 'roll',
-        description: 'Returns between 1-100 or the given number',
-        usage: 'roll [number]',
-        slashusage: '/roll [number]',
+        description: 'Rolls a random number',
+        usage: 'sbr-roll [max] [min]',
+        slashusage: '/roll [max] [min]',
+        examples: [
+            'sbr-roll',
+            'sbr-roll 100 50'
+        ],
+        aliases: [],
         options: [
             {
-                name: 'number',
-                description: '`integer, optional`. The maximum number. If omitted, the max will be 100'
+                name: 'max',
+                type: 'integer',
+                required: false,
+                description: 'The maximum number to roll',
+                options: ['N/A'],
+                defaultValue: '100'
+            },
+            {
+                name: 'min',
+                type: 'integer',
+                required: false,
+                description: 'The minimum number to roll',
+                options: ['N/A'],
+                defaultValue: '1'
             }
         ]
     },
     {
         name: 'say',
         description: 'Sends a message',
-        usage: 'say [message]',
-        slashusage: '/say [channel] [message]',
+        usage: 'sbr-say [message]',
+        slashusage: '/say [message] [channel]',
+        examples: [
+            'sbr-say hello',
+        ],
+        aliases: [],
         options: [
             {
                 name: 'message',
-                description: '`string, required`. The message to send'
+                type: 'string',
+                required: true,
+                description: 'The message to send',
+                options: ['N/A'],
+                defaultValue: 'N/A'
             },
-
             {
                 name: 'channel',
-                description: '`channel, optional`. The channel to send the message to. [#ChannelId]. If omited, sends the message to the current channel'
+                type: 'channel',
+                required: false,
+                description: 'The channel to send the message in',
+                options: ['N/A'],
+                defaultValue: 'current channel'
             }
         ]
     },
     {
         name: 'ytsearch',
-        description: 'Searches the YouTube API and returns the first five results',
-        usage: 'ytsearch [query]',
+        description: 'Searches youtube for a video',
+        usage: 'sbr-ytsearch [query]',
         slashusage: '/ytsearch [query]',
+        examples: [
+            'sbr-ytsearch never gonna give you up'
+        ],
+        aliases: [],
         options: [
             {
                 name: 'query',
-                description: '`string, required`. The parameters for the search'
+                type: 'string',
+                required: true,
+                description: 'The video to search for',
+                options: ['N/A'],
+                defaultValue: 'N/A'
             }
         ]
     }
 ]
 
-
-const osucmds: commandInfo[] = [
-    {
-        name: 'bws',
-        description: 'Returns the badge weighting for a player',
-        usage: 'bws [user]',
-        slashusage: '/bws [user]',
-        options: [
-            {
-                name: 'user',
-                description: '`string, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
-            }
-        ]
-    },
-    {
-        name: 'compare',
-        description: 'Compares two scores. If options are omitted, then the most recent score will be compared with the user\'s best score on that map',
-        usage: 'compare',
-        slashusage: '/compare [score_id_1] [score_id_2]',
-        options: [
-            {
-                name: 'score_id_1',
-                description: 'The id of the first score to compare'
-            },
-            {
-                name: 'score_id_2',
-                description: 'The id of the second score to compare'
-            }
-        ]
-
-    },
-    {
-        name: 'firsts',
-        description: 'Retrieves all #1 scores for a player',
-        usage: 'firsts [user]',
-        options: [
-            {
-                name: 'user/mention',
-                description: '`string/integer, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
-            }
-        ]
-    },
-    {
-        name: 'lb',
-        description: 'Retrieves the osu! leaderboard for the server',
-        options: []
-    },
-    {
-        name: 'leaderboard',
-        description: 'Retrieves the top 5 plays on a beatmap',
-        usage: 'leaderboard [id]',
-        slashusage: '/leaderboard [id] [page] [mods]',
-        options: [
-            {
-                name: 'id',
-                description: '`integer, optional`. The id of the beatmap. If omitted, the previous map used will be used instead'
-            },
-            {
-                name: 'page',
-                description: '`integer, optional`. What page to show. 1-20'
-            },
-            {
-                name: 'mods',
-                description: '`string, optional`. Only show plays with these mods. Uses APIv1 so some values may be incorrect'
-            }
-        ],
-        aliases: 'maplb ,mapleaderboard'
-    },
-    {
-        name: 'map',
-        description: 'Retrieves the information of a map',
-        usage: 'map "title" [id] +[mods]',
-        slashusage: '/map [id] [mods] [detailed]',
-        options: [
-            {
-                name: 'title',
-                description: '`string, optional, message command only`. The title of the map to search. Must be placed between two "s.'
-            },
-            {
-                name: 'id',
-                description: '`integer, optional`. The id of the beatmap. If omitted, the previous map used will be used instead'
-            },
-            {
-                name: 'mods',
-                description: '`string, optional`. The mods to apply on top of the map'
-            },
-            {
-                name: 'detailed',
-                description: '`boolean, optional`. Whether to show the detailed information of the map (milliseconds, object radius)'
-            }
-        ],
-        aliases: 'm'
-    },
-    {
-        name: 'nochokes',
-        description: 'Retrieves all plays that are not chokes for a player',
-        usage: 'nochokes [user]',
-        slashusage: '/nochokes [user]',
-        options: [
-            {
-                name: 'user',
-                description: '`string, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
-            }
-        ]
-    },
-    {
-        name: 'osu',
-        description: 'Retrieves the information of an osu! profile',
-        usage: 'osu [username]',
-        slashusage: '/osu [username] [detailed]',
-        options: [
-            {
-                name: 'username',
-                description: '`string/integer/mention, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
-            },
-            {
-                name: 'detailed',
-                description: '`boolean, optional`. Whether to show the detailed information of the user (graph, avg pp, etc)'
-            }
-        ],
-        aliases: 'profile, o'
-    },
-    {
-        name: 'osuset',
-        description: 'Sets the user\'s name for osu! commands (bancho only)',
-        /*         usage: 'osuset [username]', */
-        slashusage: '/osuset [username] [mode]',
-        options: [
-            {
-                name: 'username',
-                description: '`string/integer, required`. The username or id of the user'
-            },
-            {
-                name: 'mode',
-                description: '`string, optional`. The mode of the user. Defaults to osu if omitted'
-            }
-        ],
-    },
-    {
-        name: 'osutop',
-        description: 'Retrieves the top 5 plays for the user',
-        usage: 'osutop [user]',
-        slashusage: '/osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [compact]',
-        options: [
-            {
-                name: 'user',
-                description: '`string/integer/mention, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
-            },
-            {
-                name: 'mode',
-                description: '`string, optional`. Which mode to fetch top plays from. If omitted, the database will search for the user\'s gamemode'
-            },
-            {
-                name: 'sort',
-                description: '`string, optional`. How to sort the plays by. If omitted, plays will be sorted by pp'
-            },
-            {
-                name: 'reverse',
-                description: '`boolean, optional`. Whether to reverse the order of the plays'
-            },
-            {
-                name: 'page',
-                description: '`integer, optional`. What page to show. 1-20'
-            },
-            {
-                name: 'mapper',
-                description: '`string, optional`. Filter to only show plays set on maps by this mapper'
-            },
-            {
-                name: 'mods',
-                description: '`string, optional`. Filter to only show plays set with these mods. Add the word "any" at the start to show mixed (mods:anyHDDT also shows ezhddt, hddthr etc.)'
-            },
-            {
-                name: 'detailed',
-                description: '`boolean, optional. Enables/Disables displaying extra details. Most common mapper, mod combo, max combo, min/avg/max pp'
-            },
-            {
-                name: 'compact',
-                description: '`boolean, optional. Enables/Disables compact mode. Displays only the map name, mods, accuracy and pp'
-            }
-        ],
-        aliases: 'top'
-    },
-    {
-        name: 'pinned',
-        description: 'Retrieves a user\'s pinned scores',
-        usage: 'pinned [user]',
-        options: [
-            {
-                name: 'user',
-                description: '`string/integer/mention, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
-            }
-        ]
-    },
-    {
-        name: 'ppifrank',
-        description: 'Returns the pp if x rank or rank if x pp',
-        usage: 'ppifrank [value] [type]',
-        slashusage: '/ppifrank [value] [type]',
-        options: [
-            {
-                name: 'value',
-                description: '`float, required`. The value to set'
-            },
-            {
-                name: 'type',
-                description: '`string, optional`. The type of the value. Can be either pp or rank. Defaults to pp'
-            }
-        ]
-    },
-    {
-        name: 'recent',
-        description: 'Retrieves the most recent score for the user',
-        usage: 'recent [user]',
-        slashusage: '/recent [user] [page] [mode] [list]',
-        options: [
-            {
-                name: 'user',
-                description: '`string/integer/mention, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
-            },
-            {
-                name: 'page',
-                description: '`integer, optional`. What page to show'
-            },
-            {
-                name: 'mode',
-                description: '`string, optional`. Which mode to fetch top plays from. If omitted, the database will search for the user\'s gamemode'
-            },
-            {
-                name: 'list',
-                description: '`boolean, optional`. Shows the most 20 recent scores'
-            }
-        ],
-        aliases: 'rs, r'
-    },
-    {
-        name: 'scores',
-        description: 'Retrieves the user\'s score for a set map',
-        usage: 'scores [user] [id]',
-        slashusage: '/scores [user] [id] [sort] [reverse] [compact]',
-        options: [
-            {
-                name: 'user',
-                description: '`string/integer/mention, optional`. The username or id of the user to retrieve. If omitted, the database will search for the user\'s name'
-            },
-            {
-                name: 'id',
-                description: '`integer, optional`. The id of the beatmap. If omitted, the previous map used will be used instead'
-            },
-            {
-                name: 'sort',
-                description: '`string, optional`. How to sort the plays by. If omitted, plays will be sorted by most recent'
-            },
-            {
-                name: 'reverse',
-                description: '`boolean, optional`. Whether to reverse the order of the plays'
-            },
-            {
-                name: 'compact',
-                description: '`boolean, optional. Enables/Disables compact mode. Displays only the mods, accuracy and pp'
-            }
-        ],
-        aliases: 'c'
-    },
-    {
-        name: 'simulate',
-        description: 'simulates a play for a map',
-        usage: 'simulate [id] +[mods] misses=[misses] acc=[accuracy] combo=[combo] n300=[n300] n100=[n100] n50=[n50] miss=[misses] ',
-        slashusage: '/simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses]',
-        options: [
-            {
-                name: 'id',
-                description: '`integer, optional`. The id of the beatmap. If omitted, the previous map used will be used instead'
-            },
-            {
-                name: 'mods',
-                description: '`string, optional`. The mods to apply on top of the map. Defaults to NM'
-            },
-            {
-                name: 'accuracy',
-                description: '`float, optional`. The accuracy for the play. Defaults to 100'
-            },
-            {
-                name: 'combo',
-                description: '`integer, optional`. The maximum combo for the play. Defaults to map max combo'
-            },
-            {
-                name: 'n300',
-                description: '`integer, optional`. Number of hit 300s.'
-            },
-            {
-                name: 'n100',
-                description: '`integer, optional`. Number of hit 100s.'
-            },
-            {
-                name: 'n50',
-                description: '`integer, optional`. Number of hit 50s.'
-            },
-            {
-                name: 'misses',
-                description: '`integer, optional`. The amount of misses for the play. Defaults to 0'
-            },
-        ],
-        aliases: 'simplay'
-    },
-    {
-        name: 'whatif',
-        description: 'Returns the player\'s total pp, rank etc. if they get an x pp score',
-        usage: 'whatif [value]',
-        slashusage: '/whatif [value]',
-        options: [
-            {
-                name: 'value',
-                description: '`float, required`. The amount of pp'
-            },
-        ]
-    }
-
-]
-
-const admincmds: commandInfo[] = [
+const admincmds = [
     {
         name: 'checkperms',
-        description: 'Retrieves all permissions of the requested user',
-        usage: 'checkperms [user]',
+        description: 'Checks the permissions of the user',
+        usage: 'sbr-checkperms [user]',
         slashusage: '/checkperms [user]',
+        examples: [
+            'sbr-checkperms @SSoB'
+        ],
+        aliases: ['perms'],
         options: [
             {
                 name: 'user',
-                description: '`user/mention, optional`. The user to retrieve the permissions of. If omitted, the user will be checked instead'
+                type: 'integer/user mention',
+                required: false,
+                description: 'The user to check the permissions of',
+                options: ['N/A'],
+                defaultValue: 'your discord account'
             }
-        ],
-        aliases: 'fetch perms, checkpermissions, permissions, perms'
+        ]
     },
     {
         name: 'find',
-        description: 'Returns name from the id given',
-        usage: 'find [type] [id]',
+        description: 'Finds a user/guild/channel/role/emoji in the database',
+        usage: 'sbr-find [type] [id]',
         slashusage: '/find [type] [id]',
+        examples: [
+            'sbr-find user 1234567890',
+            'sbr-find @SSoB'
+        ],
+        aliases: [],
         options: [
             {
                 name: 'type',
-                description: '`string, required`. The type of id to find. Valid types are: "user", "guild", "channel", "role", "emoji"'
+                type: 'string',
+                required: 'true (if id is not a mention)',
+                description: 'The type of object to find',
+                options: ['user', 'guild', 'channel', 'role', 'emoji'],
+                defaultValue: 'N/A'
             },
             {
                 name: 'id',
-                description: '`integer, required`. The id of the object to find'
-            }
+                type: 'integer/user mention/channel mention/role mention/emoji',
+                required: true,
+                description: 'The id of the object to find',
+                options: ['N/A'],
+                defaultValue: 'N/A'
+            },
         ]
     },
     {
         name: 'leaveguild',
-        description: 'Leaves the guild. Requires permissions',
-        usage: 'leaveguild [id]',
-        slashusage: '/leaveguild [id]',
-        options: [
-            {
-                name: 'id',
-                description: '`integer, optional`. The id of the guild to leave. If omitted, the guild the message is sent in is left'
-            }
+        description: 'Makes the bot leave a guild',
+        usage: 'sbr-leaveguild [guild]',
+        slashusage: '/leaveguild [guild]',
+        examples: [
+            'sbr-leaveguild 1234567890',
         ],
-        aliases: 'leave'
-    },
-    {
-        name: 'log',
-        description: 'Returns the logs for the current guild',
-        usage: 'log',
-        slashusage: '/log [guildid]',
+        aliases: ['leave'],
         options: [
             {
-                name: 'guildid',
-                description: '`integer, optional`. The id of the guild to retrieve the logs of. If omitted, the logs of the guild the message is sent in will be returned'
+                name: 'guild',
+                type: 'integer',
+                required: false,
+                description: 'The id of the guild to leave',
+                options: ['N/A'],
+                defaultValue: 'the guild the command was sent in'
             }
         ]
     },
     {
         name: 'servers',
-        description: 'Retrieves a list of all servers the bot is in',
-        usage: 'servers',
+        description: 'Shows the servers the bot is in',
+        usage: 'sbr-servers',
         slashusage: '/servers',
+        examples: [],
+        aliases: [],
         options: []
-    },
-    {
-        name: 'voice',
-        description: 'Changes voice settings for a user',
-        usage: 'voice [user] [type] [channel]',
-        slashusage: '/voice [user] [type] [channel]',
-        options: [
-            {
-                name: 'user',
-                description: '`user/mention, optional`. The user to change the voice settings of. If omitted, the message author will be used (message command only)'
-            },
-            {
-                name: 'type',
-                description: '`string, required`. The type of voice setting to change. Valid types are: "mute", "deafen", "move", "disconnect"'
-            },
-            {
-                name: 'channel',
-                description: '`integer/channel, optional`. The channel to move the user to.'
-            }
-        ]
     }
 ]
-
-const links = [
-    {
-        name: 'maplink',
-        description: 'Returns information from a map link',
-        usage: '`https://osu.ppy.sh/b/[id]` or `https://osu.ppy.sh/s/[setid]#[gamemode]/[id]`',
-        params: [
-            {
-                name: 'id',
-                description: '`integer, required`. The ID of the map'
-            },
-            {
-                name: 'setid',
-                description: '`integer, required`. The ID of the set. Only needed if using beatmapset link'
-            },
-            {
-                name: 'gamemode',
-                description: '`string, required`. The gamemode of the map. Only needed if using beatmapset link. Valid types are: "osu", "taiko", "fruits", "mania"'
-            }
-        ],
-        aliases: 'osu.ppy.sh/beatmaps/[id], osu.ppy.sh/beatmapsets/[setid]#[gamemode]/[id], osu.ppy.sh/s/[setid], osu.ppy.sh/beatmapsets/[setid]'
-    },
-    {
-        name: 'userlink',
-        description: 'Returns information from a user link',
-        usage: '`https://osu.ppy.sh/u/[id/name]` or `https://osu.ppy.sh/users/[id/name]`',
-        params: [
-            {
-                name: 'id/name',
-                description: '`integer/string, required`. The ID or username of the user'
-            }
-        ]
-    },
-    {
-        name: 'replayparse',
-        description: 'Returns information from a replay file',
-        usage: '`[replay.osr]`',
-        params: [
-            {
-                name: 'file',
-                description: '`.osr file, required`. The replay file to parse'
-            }
-        ]
-    },
-    {
-        name: 'scoreparse',
-        description: 'Returns information from a score link',
-        usage: '`https://osu.ppy.sh/scores/[gamemode]/[id]`',
-        params: [
-            {
-                name: 'id',
-                description: '`integer, required`. The ID of the score'
-            },
-            {
-                name: 'gamemode',
-                description: '`string, required`. The gamemode of the score. Valid types are: "osu", "taiko", "fruits", "mania"'
-            }
-        ],
-        aliases: '`'
-    }
-
-]
-
-//module.exports = { cmds, osucmds, admincmds, links, musiccmds }
-export { cmds, othercmds, osucmds, admincmds, links }
+export { cmds, othercmds, osucmds, admincmds }
 

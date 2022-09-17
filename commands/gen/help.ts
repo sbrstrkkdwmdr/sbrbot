@@ -23,7 +23,7 @@ module.exports = {
         // let osucmd = '`' + info.osucmds.join('`,') + '`'
         // let admincmd = '`' + info.admincmds.join('`,') + '`'
         // let misccmd = '`' + info.othercmds.join('`,') + '`'
-        
+
         const fullCommandList = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.dec)
             .setTitle('Command List')
@@ -129,6 +129,32 @@ module.exports = {
 
         const useEmbeds = []
 
+        function commandEmb(command, embed){
+            let desc = ''
+            desc += command.description + "\n"
+            if (command.usage) {
+                desc += `\nCommand: \`${config.prefix}${command.usage}\``
+            }
+            if (command.slashusage) {
+                desc += `\nSlash Command: \`${command.slashusage}\``
+            }
+
+            const opts = command.options
+            let opttxt = '';
+            for (let i = 0; i < opts.length; i++) {
+                opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
+
+            }
+            desc += "\n\n" + opttxt
+
+            if (command.aliases) {
+                desc += `\n\nAliases: ${command.aliases}`
+            }
+
+            embed.setTitle("Command info for: " + command.name)
+            embed.setDescription(desc)                
+        }
+
         if (command != null) {
             const fetchcmd = command.toString()
             const commandInfo = new Discord.EmbedBuilder()
@@ -136,120 +162,21 @@ module.exports = {
             if (info.cmds.find(obj => obj.name == fetchcmd)) {
                 commandCategory = 'gen';
                 const res = info.cmds.find(obj => obj.name == fetchcmd)
-
-                let desc = ''
-                desc += res.description + "\n"
-                if (res.usage) {
-                    desc += `\nCommand: \`${config.prefix}${res.usage}\``
-                }
-                if (res.slashusage) {
-                    desc += `\nSlash Command: \`${res.slashusage}\``
-                }
-
-                const opts = res.options
-                let opttxt = '';
-                for (let i = 0; i < opts.length; i++) {
-                    opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
-
-                }
-                desc += "\n\n" + opttxt
-
-                if (res.aliases) {
-                    desc += `\n\nAliases: ${res.aliases}`
-                }
-
-                commandInfo.setTitle("Command info for: " + res.name)
-                commandInfo.setDescription(desc)
-
-            } else if (info.othercmds.find(obj => obj.name == fetchcmd)) {
+                commandEmb(res, commandInfo)
+            } else if(info.othercmds.find(obj => obj.name == fetchcmd)){
                 commandCategory = 'misc';
                 const res = info.othercmds.find(obj => obj.name == fetchcmd)
-
-                let desc = ''
-                desc += res.description + "\n"
-                if (res.usage) {
-                    desc += `\nCommand: \`${config.prefix}${res.usage}\``
-                }
-                if (res.slashusage) {
-                    desc += `\nSlash Command: \`${res.slashusage}\``
-                }
-
-                const opts = res.options
-                let opttxt = '';
-                for (let i = 0; i < opts.length; i++) {
-                    opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
-
-                }
-                desc += "\n\n" + opttxt
-
-                if (res.aliases) {
-                    desc += `\n\nAliases: ${res.aliases}`
-                }
-
-                commandInfo.setTitle("Command info for: " + res.name)
-                commandInfo.setDescription(desc)
-            } else if (info.osucmds.find(obj => obj.name == fetchcmd)) {
+                commandEmb(res, commandInfo)
+            } else if(info.osucmds.find(obj => obj.name == fetchcmd)){
                 commandCategory = 'osu';
-
                 const res = info.osucmds.find(obj => obj.name == fetchcmd)
-
-
-                let desc = ''
-                desc += res.description + "\n"
-                if (res.usage) {
-                    desc += `\nCommand: \`${config.prefix}${res.usage}\``
-                }
-                if (res.slashusage) {
-                    desc += `\nSlash Command: \`${res.slashusage}\``
-                }
-
-                const opts = res.options
-                let opttxt = '';
-                for (let i = 0; i < opts.length; i++) {
-                    opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
-
-                }
-                desc += "\n\n" + opttxt
-
-                if (res.aliases) {
-                    desc += `\n\nAliases: ${res.aliases}`
-                }
-
-                commandInfo.setTitle("Command info for: " + res.name)
-                commandInfo.setDescription(desc)
-
-            }
-            else if (info.admincmds.find(obj => obj.name == fetchcmd)) {
+                commandEmb(res, commandInfo)
+            } else if(info.admincmds.find(obj => obj.name == fetchcmd)){
                 commandCategory = 'admin';
-
                 const res = info.admincmds.find(obj => obj.name == fetchcmd)
-
-
-                let desc = ''
-                desc += res.description + "\n"
-                if (res.usage) {
-                    desc += `\nCommand: \`${config.prefix}${res.usage}\``
-                }
-                if (res.slashusage) {
-                    desc += `\nSlash Command: \`${res.slashusage}\``
-                }
-
-                const opts = res.options
-                let opttxt = '';
-                for (let i = 0; i < opts.length; i++) {
-                    opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
-
-                }
-                desc += "\n\n" + opttxt
-
-                if (res.aliases) {
-                    desc += `\n\nAliases: ${res.aliases}`
-                }
-
-                commandInfo.setTitle("Command info for: " + res.name)
-                commandInfo.setDescription(desc)
-
+                commandEmb(res, commandInfo)
             }
+
 
             if (command.includes('CategoryMenu')) {
                 switch (true) {
