@@ -66,6 +66,9 @@ async function mapcalc(
                 await osuapiext.tools.download.difficulty(mapid, 'files/maps/', mapid); //uses fs btw
             }
 
+            if(mods == null){
+               mods = 'NM' 
+            }
 
             mapscore = {
                 path: `files/maps/${mapid}.osu`,
@@ -161,6 +164,9 @@ async function scorecalc(
                     await osuapiext.tools.download.difficulty(mapid, 'files/maps/', mapid); //uses fs btw
                 }
 
+                if(mods == null){
+                    mods = 'NM' 
+                 }
 
                 let newacc = osumodcalc.calcgrade(hit300, hit100, hit50, 0).accuracy;
                 switch (gamemode) {
