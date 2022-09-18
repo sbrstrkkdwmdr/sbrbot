@@ -207,7 +207,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             //osu commands below
             case 'bws':
                 commandStruct.osucmds.get('bws').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                break;      
+                break;
             case 'compare':
                 commandStruct.osucmds.get('compare').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
@@ -220,7 +220,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'rs': case 'recent': case 'r':
                 commandStruct.osucmds.get('recent').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
-            case 'osu': case 'profile': case 'o':
+            case 'osu': case 'profile': case 'o': case 'user':
                 commandStruct.osucmds.get('osu').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
             case 'osuset':

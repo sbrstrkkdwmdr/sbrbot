@@ -527,6 +527,14 @@ const osucmds = [
                 description: 'Whether to show detailed information about the user',
                 options: ['true', 'false'],
                 defaultValue: 'false'
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The gamemode to show the stats of',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'your playmode'
             }
         ]
     },

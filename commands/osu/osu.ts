@@ -42,6 +42,7 @@ module.exports = {
                 commanduser = obj.member.user;
                 user = obj.options.getString('user');
                 detailed = obj.options.getBoolean('detailed');
+                mode = obj.options.getString('mode');
                 searchid = obj.member.user.id;
             }
 
@@ -49,7 +50,7 @@ module.exports = {
 
                 break;
             case 'button': {
-                if(!obj.message.embeds[0]){
+                if (!obj.message.embeds[0]) {
                     return;
                 }
                 commanduser = obj.member.user;
@@ -58,7 +59,10 @@ module.exports = {
                 }
 
                 //user =  message.embeds[0].title.split('\'s')[0]
-                user = obj.message.embeds[0].url.split('users/')[1]
+                //link = https://osu.ppy.sh/users/USERNAME/GAMEMODE
+                user = obj.message.embeds[0].url.split('users/')[1].split('/')[0]
+                mode = obj.message.embeds[0].url.split('users/')[1].split('/')[1]
+
                 if (button == 'DetailEnable') {
                     detailed = true;
                 }
@@ -142,6 +146,10 @@ module.exports = {
                 {
                     name: 'Detailed',
                     value: detailed
+                },
+                {
+                    name: 'Gamemode',
+                    value: mode
                 }
                 ]
             ), 'utf-8')
@@ -167,7 +175,9 @@ module.exports = {
         if (user == null) {
             let cuser = await osufunc.searchUser(searchid, userdata, true);
             user = cuser.username;
-            mode = cuser.gamemode;
+            if (mode == null) {
+                mode = cuser.gamemode;
+            }
             if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
                 if (commandType != 'button') {
                     obj.reply({
@@ -182,10 +192,15 @@ module.exports = {
         if (mode == null) {
             mode = 'osu'
         }
-
-        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `${await mode}`)
+        let osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `${mode}`)
         // fs.writeFileSync(`debug/command-osu=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
+
+        if(((commandType == 'interaction' && !obj?.options?.getString('mode')) || commandType == 'message') && osudata.playmode != 'osu'){
+            mode = osudata.playmode
+            osudata = await osufunc.apiget('user', `${user}`, `${mode}`);
+            osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
+        }
 
         if (osudata?.error) {
             if (commandType != 'button') obj.reply({
@@ -236,16 +251,16 @@ module.exports = {
 
         const osuEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.user.dec)
-            .setTitle(`${osudata.username}'s osu! profile`)
-            .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
+            .setTitle(`${osudata.username}'s ${mode} profile`)
+            .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode}`)
             .setThumbnail(osudata?.avatar_url ? osudata.avatar_url : `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
 
         let useEmbeds = [];
         if (detailed == true) {
             const loading = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.user.dec)
-                .setTitle(`${osudata.username}'s osu! profile`)
-                .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
+                .setTitle(`${osudata.username}'s ${mode} profile`)
+                .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode}`)
                 .setThumbnail(osudata?.avatar_url ? osudata.avatar_url : `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
                 .setDescription(`Loading...`);
 
@@ -441,7 +456,7 @@ ${onlinestatus}
                 })
                     .catch();
             }
-            break;
+                break;
         }
 
 
