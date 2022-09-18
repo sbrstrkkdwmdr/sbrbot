@@ -1,11 +1,28 @@
 //just a document for the help command
+// type commandInfo = {
+//     name: string,
+//     description: string,
+//     usage?: string,
+//     slashusage?: string,
+//     options: { name: string, description: string }[],
+//     aliases?: string
+// }
+
 type commandInfo = {
     name: string,
     description: string,
     usage?: string,
     slashusage?: string,
-    options: { name: string, description: string }[],
-    aliases?: string
+    examples: string[],
+    aliases?: string[]
+    options: { 
+        name: string, 
+        type: string,
+        required: any,
+        description: string ,
+        options: any[],
+        defaultValue: string
+    }[],
 }
 
 const mods = [
@@ -43,7 +60,7 @@ const mods = [
     'MR'
 ]
 
-const cmds = [
+const cmds:commandInfo[] = [
     {
         name: 'convert',
         description: 'Converts a number from one unit to another',
@@ -257,7 +274,7 @@ const cmds = [
     }
 ]
 
-const osucmds = [
+const osucmds:commandInfo[] = [
     {
         name: 'bws',
         description: 'Shows the badge weighted rank of a user',
@@ -300,7 +317,7 @@ const osucmds = [
                 options: [
                     'score', 'user', 'top plays'
                 ],
-                default: 'user'
+                defaultValue: 'user'
             },
             {
                 name: 'first',
@@ -455,7 +472,10 @@ const osucmds = [
         description: 'Shows the leaderboard of a map',
         usage: 'sbr-maplb [id]',
         slashusage: '/maplb [id] [page] [mods]',
-        examples: [],
+        examples: [
+            'sbr-maplb 32345',
+            '/maplb mods:HDHR'
+        ],
         aliases: ['leaderboard', 'mapleaderboard'],
         options: [
             {
@@ -508,9 +528,12 @@ const osucmds = [
         name: 'osu',
         description: 'Shows information about a user\'s osu! profile',
         usage: 'sbr-osu [user]',
-        slashusage: '/osu [user] [detailed]',
-        aliases: ['o', 'profile'],
-        examples: [],
+        slashusage: '/osu [user] [detailed] [mode]',
+        aliases: ['o', 'profile', 'user'],
+        examples: [
+            'sbr-osu mrekk',
+            '/osu detailed:true mode:taiko'
+        ],
         options: [
             {
                 name: 'user',
@@ -543,7 +566,10 @@ const osucmds = [
         description: 'Sets your osu! username/mode/skin',
         usage: 'sbr-osuset [username]',
         slashusage: '/osuset [username] [mode] [skin]',
-        examples: [],
+        examples: [
+            'sbr-osuset SaberStrike',
+            '/osuset username:SaberStrike mode:fruits skin:sbr v11'
+        ],
         aliases: [],
         options: [
             {
@@ -730,8 +756,11 @@ const osucmds = [
         description: 'Shows the total pp if you are at a certain rank and vice versa',
         usage: 'sbr-ppifrank [value] [type]',
         slashusage: '/ppifrank [value] [type]',
-        examples: [],
-        aliases: [],
+        examples: [
+            'sbr-ppifrank 20000',
+            '/ppifrank 2000 rank'
+        ],
+        aliases: ['rankifpp'],
         options: [
             {
                 name: 'value',
@@ -940,7 +969,8 @@ const osucmds = [
         usage: 'sbr-whatif [user] [pp]',
         slashusage: '/whatif [user] [pp]',
         examples: [
-            'sbr-whatif 1000'
+            'sbr-whatif 1000',
+            'sbr-whatif SaberStrike 300'
         ],
         aliases: [],
         options: [
@@ -964,7 +994,7 @@ const osucmds = [
     }
 ]
 
-const othercmds = [
+const othercmds:commandInfo[] = [
     {
         name: '8ball',
         description: 'Returns a yes/no/maybe answer to a question',
@@ -981,7 +1011,9 @@ const othercmds = [
         description: 'Sends a gif',
         usage: 'sbr-gif [type]',
         slashusage: '/gif [type]',
-        examples: [],
+        examples: [
+            '/gif type:cry about it'
+        ],
         aliases: [],
         options: [
             {
@@ -999,7 +1031,9 @@ const othercmds = [
         description: 'Sends an image',
         usage: 'sbr-image [query]',
         slashusage: '/image [query]',
-        examples: [],
+        examples: [
+            'sbr-image cat',
+        ],
         aliases: [],
         options: [
             {
@@ -1120,7 +1154,7 @@ const othercmds = [
     }
 ]
 
-const admincmds = [
+const admincmds:commandInfo[] = [
     {
         name: 'checkperms',
         description: 'Checks the permissions of the user',
@@ -1138,6 +1172,24 @@ const admincmds = [
                 description: 'The user to check the permissions of',
                 options: ['N/A'],
                 defaultValue: 'your discord account'
+            }
+        ]
+    },
+    {
+        name: 'debug',
+        description: 'Returns the debug files for a command',
+        usage: 'sbr-debug [command]',
+        slashusage: '/debug [command]',
+        examples: [],
+        aliases: [],
+        options: [
+            {
+                name: 'command',
+                type: 'string',
+                required: false,
+                description: 'The command',
+                options: [''],
+                defaultValue: 'N/A'
             }
         ]
     },
@@ -1191,6 +1243,24 @@ const admincmds = [
         ]
     },
     {
+        name: 'prefix',
+        description: 'Set\'s the prefix of the current server',
+        usage: 'sbr-prefix [prefix]',
+        slashusage: '/prefix [prefix]',
+        examples: ['sbr-prefix !'],
+        aliases: [],
+        options: [
+            {
+                name: 'prefix',
+                type: 'string',
+                required: true,
+                description: 'The prefix to set',
+                options: [],
+                defaultValue: 'N/A'
+            }
+        ]
+    },
+    {
         name: 'servers',
         description: 'Shows the servers the bot is in',
         usage: 'sbr-servers',
@@ -1200,5 +1270,6 @@ const admincmds = [
         options: []
     }
 ]
+
 export { cmds, othercmds, osucmds, admincmds }
 
