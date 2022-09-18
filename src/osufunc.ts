@@ -7,6 +7,8 @@ import fetch from 'node-fetch';
 import osuApiTypes = require('./types/osuApiTypes');
 import config = require('../config/config.json');
 import cmdchecks = require('./checks');
+// import Sequelize = require('sequelize');
+
 /**
  * 
  * @param {*} arr array of scores
@@ -828,7 +830,7 @@ export async function searchUser(searchid: string, userdata: any, findMode: bool
         mode = 'osu'
         errorValue = `no user found with id ${searchid}`
     }
-    let object = {
+    const object = {
         username: user,
         gamemode: mode,
         error: errorValue,
@@ -850,8 +852,7 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
                 data = '2'
                 break;
             case 'score':
-                const x = require('template/score.json')
-                data = JSON.stringify(x, null, 2)
+                data = JSON.stringify(require('template/score.json'), null, 2)
                 break;
         }
         fs.writeFileSync(`previous/${type}${serverId}.json`, data);

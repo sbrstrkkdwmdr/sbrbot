@@ -4,7 +4,7 @@ const initdate = new Date();
 import Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
 import fs = require('fs');
-const Sequelize = require('sequelize');
+import Sequelize = require('sequelize');
 import fetch from 'node-fetch';
 import extypes = require('./src/types/extratypes');
 
@@ -86,12 +86,15 @@ for (const file of adminCommandFiles) {
 //     commandStruct.musiccmds.set(command.name, command);
 // }
 
-const sequelize = new Sequelize('database', 'username', 'password', {
+const sequelize = new Sequelize.Sequelize('database', 'username', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
     logging: false,
     storage: 'database.sqlite',
 });
+
+
+
 const userdata = sequelize.define('userdata', {
     userid: {
         type: Sequelize.INTEGER,
