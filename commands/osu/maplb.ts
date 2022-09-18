@@ -48,7 +48,7 @@ module.exports = {
 
                 break;
             case 'button': {
-                if(!obj.message.embeds[0]){
+                if (!obj.message.embeds[0]) {
                     return;
                 }
                 commanduser = obj.member.user;
@@ -162,6 +162,14 @@ module.exports = {
 
         if (!mapid) {
             mapid = osufunc.getPreviousId('map', obj.guildId);
+        }
+
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowMentions: { repliedUser: false },
+                failIfNotExists: true
+            }).catch()
         }
 
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
@@ -376,14 +384,16 @@ ${hitlist}
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-                obj.reply({
-                    content: '',
-                    embeds: [lbEmbed],
-                    components: [pgbuttons, buttons],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+                setTimeout(() => {
+                    obj.reply({
+                        content: '',
+                        embeds: [lbEmbed],
+                        components: [pgbuttons, buttons],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }, 1000)
             }
 
                 //==============================================================================================================================================================================================

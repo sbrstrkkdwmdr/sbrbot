@@ -107,6 +107,14 @@ module.exports = {
             }
         }
 
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            }).catch()
+        }
+
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `osu`)
         osufunc.debug(osudata, 'command', 'bws', obj.guildId, 'osuData');
 
@@ -166,14 +174,16 @@ module.exports = {
                 break;
             //==============================================================================================================================================================================================
             case 'interaction': {
-                obj.reply({
-                    content: '',
-                    embeds: [embed],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+                setTimeout(() => {
+                    obj.editReply({
+                        content: '',
+                        embeds: [embed],
+                        files: [],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }, 1000)
             }
                 //==============================================================================================================================================================================================
 

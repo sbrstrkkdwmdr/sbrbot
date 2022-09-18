@@ -54,7 +54,7 @@ module.exports = {
 
                 break;
             case 'button': {
-                if(!obj.message.embeds[0]){
+                if (!obj.message.embeds[0]) {
                     return;
                 }
                 commanduser = obj.member.user;
@@ -689,14 +689,16 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-                obj.editReply({
-                    content: '',
-                    embeds: [rsEmbed],
-                    components: [pgbuttons, buttons],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+                setTimeout(() => {
+                    obj.editReply({
+                        content: '',
+                        embeds: [rsEmbed],
+                        components: [pgbuttons, buttons],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }, 1000)
             }
 
                 //==============================================================================================================================================================================================

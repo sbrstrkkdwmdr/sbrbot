@@ -196,7 +196,7 @@ module.exports = {
         // fs.writeFileSync(`debug/command-osu=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
 
-        if(((commandType == 'interaction' && !obj?.options?.getString('mode')) || commandType == 'message') && osudata.playmode != 'osu'){
+        if (((commandType == 'interaction' && !obj?.options?.getString('mode')) || commandType == 'message') && osudata.playmode != 'osu') {
             mode = osudata.playmode
             osudata = await osufunc.apiget('user', `${user}`, `${mode}`);
             osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
@@ -419,14 +419,16 @@ ${onlinestatus}
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-                obj.reply({
-                    content: '',
-                    embeds: useEmbeds,
-                    components: [buttons],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+                setTimeout(() => {
+                    obj.editReply({
+                        content: '',
+                        embeds: useEmbeds,
+                        components: [buttons],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }, 1000)
             }
 
                 //==============================================================================================================================================================================================

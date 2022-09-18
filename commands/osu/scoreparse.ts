@@ -127,6 +127,12 @@ module.exports = {
         } catch (error) {
         }
 
+        if (commandType == 'interaction') {
+            obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
+                .catch();
+
+        }
+
         // fs.writeFileSync(`debug/command-scoreparse=scoredata=${obj.guildId}.json`, JSON.stringify(scoredata, null, 2));
         osufunc.debug(scoredata, 'command', 'scoreparse', obj.guildId, 'scoreData');
         try {
@@ -294,14 +300,16 @@ ${pptxt}\n${ppissue}
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-                obj.reply({
-                    content: '',
-                    embeds: [],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+                setTimeout(() => {
+                    obj.reply({
+                        content: '',
+                        embeds: [],
+                        files: [],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }, 1000)
             }
 
                 //==============================================================================================================================================================================================

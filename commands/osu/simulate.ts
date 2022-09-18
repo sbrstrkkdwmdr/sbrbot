@@ -144,7 +144,11 @@ module.exports = {
         }
         // if(){}
 
+        if (commandType == 'interaction') {
+            obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
+                .catch();
 
+        }
 
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
         osufunc.debug(mapdata, 'command', 'map', obj.guildId, 'mapData');
@@ -251,14 +255,16 @@ ${emojis.mapobjs.total_length}${calc.secondsToTime(mapdata.total_length)}
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-                obj.reply({
-                    content: '',
-                    embeds: [scoreEmbed],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+                setTimeout(() => {
+                    obj.editReply({
+                        content: '',
+                        embeds: [scoreEmbed],
+                        files: [],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }, 1000)
             }
 
                 //==============================================================================================================================================================================================

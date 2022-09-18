@@ -20,7 +20,7 @@ module.exports = {
         let maptitleq = null;
         let detailed = false;
 
-        let useComponents = [];
+        const useComponents = [];
         let overwriteModal = null;
 
 
@@ -533,7 +533,7 @@ ${error}
             if ((tstmods.includes('DT') || tstmods.includes('NC')) && tstmods.includes('HT')) {
                 ppissue += '\nInvalid mod combinations: DT/NC + HT';
             }
-            let ppComputedTemp = {
+            const ppComputedTemp = {
                 "mode": 0,
                 "stars": 1.00,
                 "pp": 0.0,
@@ -795,7 +795,8 @@ ${error}
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-                obj.reply({
+                setTimeout(() => { 
+                obj.editReply({
                     content: '',
                     embeds: embeds,
                     components: useComponents,
@@ -803,6 +804,7 @@ ${error}
                     failIfNotExists: true
                 })
                     .catch();
+                }, 1000)
             }
 
                 //==============================================================================================================================================================================================

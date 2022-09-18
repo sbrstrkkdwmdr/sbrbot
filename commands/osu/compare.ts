@@ -131,12 +131,13 @@ module.exports = {
                 break;
         }
 
-
-        obj.reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        }).catch()
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            }).catch()
+        }
 
         const Embeds = [];
         try {
@@ -370,14 +371,16 @@ Second: \`${second}\`
                     //==============================================================================================================================================================================================
 
                     case 'interaction': {
-                        obj.reply({
-                            content: '',
-                            embeds: Embeds,
-                            files: [],
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch();
+                        setTimeout(() => {
+                            obj.reply({
+                                content: '',
+                                embeds: Embeds,
+                                files: [],
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            })
+                                .catch();
+                        }, 1000)
                     }
 
                         //==============================================================================================================================================================================================
