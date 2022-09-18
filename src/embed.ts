@@ -3,6 +3,7 @@ import osumodcalc = require('osumodcalculator');
 import emojis = require('./consts/emojis');
 import osufunc = require('./osufunc');
 import fs = require('fs');
+import func = require('./other');
 
 export async function scoreList(
     scores: osuapitypes.Score[],
@@ -180,16 +181,16 @@ export async function scoreList(
             switch (curscore.mode) {
                 case 'osu':
                 default:
-                    hitlist = `${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+                    hitlist = `${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_50)}/${func.separateNum(hitstats.count_miss)}`
                     break;
                 case 'taiko':
-                    hitlist = `${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+                    hitlist = `${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_miss)}`
                     break;
                 case 'fruits':
-                    hitlist = `${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+                    hitlist = `${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_50)}/${func.separateNum(hitstats.count_miss)}`
                     break;
                 case 'mania':
-                    hitlist = `${hitstats.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_katu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+                    hitlist = `${func.separateNum(hitstats.count_geki)}/${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_katu)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_50)}/${func.separateNum(hitstats.count_miss)}`
                     break;
             }
 
@@ -257,7 +258,7 @@ export async function scoreList(
                 value: `
 **${showtitle}**
 **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
-${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+${func.separateNum(curscore.score)} | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 \`${hitlist}\`
 ${pptxt} 
 ${weighted}
@@ -267,7 +268,7 @@ ${weighted}
             scoresAsArrStr.push(
                 `\n**#${i + 1 + (page * 5)} | [${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id})**
 **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
-${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+${func.separateNum(curscore.score)} | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 \`${hitlist}\`
 ${pptxt}
 ${weighted}
@@ -310,16 +311,16 @@ ${weighted}
             switch (curscore.mode) {
                 case 'osu':
                 default:
-                    hitlist = `${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+                    hitlist = `${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_50)}/${func.separateNum(hitstats.count_miss)}`
                     break;
                 case 'taiko':
-                    hitlist = `${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+                    hitlist = `${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_miss)}`
                     break;
                 case 'fruits':
-                    hitlist = `${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+                    hitlist = `${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_50)}/${func.separateNum(hitstats.count_miss)}`
                     break;
                 case 'mania':
-                    hitlist = `${hitstats.count_geki.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_300.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_katu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_100.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_50.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${hitstats.count_miss.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+                    hitlist = `${func.separateNum(hitstats.count_geki)}/${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_katu)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_50)}/${func.separateNum(hitstats.count_miss)}`
                     break;
             }
 
@@ -333,37 +334,32 @@ ${weighted}
             }
 
             let pptxt: string;
-            const ppcalcing = await osufunc.scorecalc(
-                curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
-                curscore.mode,
-                mapid,
-                hitstats.count_geki,
-                hitstats.count_300,
-                hitstats.count_katu,
-                hitstats.count_100,
-                hitstats.count_50,
-                hitstats.count_miss,
-                curscore.accuracy,
-                curscore.max_combo,
-                curscore.score,
-                0,
-                null, false
-            )
-            if (curscore.accuracy != 1) {
-                if (curscore.pp == null || isNaN(curscore.pp)) {
-                    pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
-                } else {
-                    pptxt = `${curscore.pp.toFixed(2)}pp`
-                }
+
+
+            if (curscore.pp == null || isNaN(curscore.pp)) {
+                const ppcalcing = await osufunc.scorecalc(
+                    curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
+                    curscore.mode,
+                    mapid,
+                    hitstats.count_geki,
+                    hitstats.count_300,
+                    hitstats.count_katu,
+                    hitstats.count_100,
+                    hitstats.count_50,
+                    hitstats.count_miss,
+                    curscore.accuracy,
+                    curscore.max_combo,
+                    curscore.score,
+                    0,
+                    null, false
+                )
+                pptxt =
+                    `${await ppcalcing[0].pp.toFixed(2)}pp`
             } else {
-                if (curscore.pp == null || isNaN(curscore.pp)) {
-                    pptxt =
-                        `${await ppcalcing[0].pp.toFixed(2)}pp`
-                } else {
-                    pptxt =
-                        `${curscore.pp.toFixed(2)}pp`
-                }
+                pptxt =
+                    `${curscore.pp.toFixed(2)}pp`
             }
+
             let showtitle: string;
 
             if (showMapTitle == true) {
@@ -377,7 +373,7 @@ ${weighted}
                 value: `
 **${showtitle}** **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
 ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
-\`${hitlist}\`${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x
+\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
 ${pptxt}
 `,
                 inline: false
@@ -385,7 +381,7 @@ ${pptxt}
             scoresAsArrStr.push(
                 `\n#${showtitle}
 **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
-${curscore.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${curscore.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+${func.separateNum(curscore.score)} | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 \`${hitlist}\`
 ${pptxt}
 `
