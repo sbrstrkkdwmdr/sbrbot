@@ -464,7 +464,10 @@ const osucommands = [
         description: 'Shows the leaderboard of a map',
         usage: 'sbr-maplb [id]',
         slashusage: '/maplb [id] [page] [mods]',
-        examples: [],
+        examples: [
+            'sbr-maplb 32345',
+            '/maplb mods:HDHR'
+        ],
         aliases: ['leaderboard', 'mapleaderboard'],
         options: [
             {
@@ -517,9 +520,12 @@ const osucommands = [
         name: 'osu',
         description: 'Shows information about a user\'s osu! profile',
         usage: 'sbr-osu [user]',
-        slashusage: '/osu [user] [detailed]',
-        aliases: ['o', 'profile'],
-        examples: [],
+        slashusage: '/osu [user] [detailed] [mode]',
+        aliases: ['o', 'profile', 'user'],
+        examples: [
+            'sbr-osu mrekk',
+            '/osu detailed:true mode:taiko'
+        ],
         options: [
             {
                 name: 'user',
@@ -552,7 +558,10 @@ const osucommands = [
         description: 'Sets your osu! username/mode/skin',
         usage: 'sbr-osuset [username]',
         slashusage: '/osuset [username] [mode] [skin]',
-        examples: [],
+        examples: [
+            'sbr-osuset SaberStrike',
+            '/osuset username:SaberStrike mode:fruits skin:sbr v11'
+        ],
         aliases: [],
         options: [
             {
@@ -739,8 +748,11 @@ const osucommands = [
         description: 'Shows the total pp if you are at a certain rank and vice versa',
         usage: 'sbr-ppifrank [value] [type]',
         slashusage: '/ppifrank [value] [type]',
-        examples: [],
-        aliases: [],
+        examples: [
+            'sbr-ppifrank 20000',
+            '/ppifrank 2000 rank'
+        ],
+        aliases: ['rankifpp'],
         options: [
             {
                 name: 'value',
@@ -949,7 +961,8 @@ const osucommands = [
         usage: 'sbr-whatif [user] [pp]',
         slashusage: '/whatif [user] [pp]',
         examples: [
-            'sbr-whatif 1000'
+            'sbr-whatif 1000',
+            'sbr-whatif SaberStrike 300'
         ],
         aliases: [],
         options: [
@@ -990,7 +1003,9 @@ const misccommands = [
         description: 'Sends a gif',
         usage: 'sbr-gif [type]',
         slashusage: '/gif [type]',
-        examples: [],
+        examples: [
+            '/gif type:cry about it'
+        ],
         aliases: [],
         options: [
             {
@@ -1008,7 +1023,9 @@ const misccommands = [
         description: 'Sends an image',
         usage: 'sbr-image [query]',
         slashusage: '/image [query]',
-        examples: [],
+        examples: [
+            'sbr-image cat',
+        ],
         aliases: [],
         options: [
             {
@@ -1151,6 +1168,24 @@ const admincommands = [
         ]
     },
     {
+        name: 'debug',
+        description: 'Returns the debug files for a command',
+        usage: 'sbr-debug [command]',
+        slashusage: '/debug [command]',
+        examples: [],
+        aliases: [],
+        options: [
+            {
+                name: 'command',
+                type: 'string',
+                required: false,
+                description: 'The command',
+                options: [''],
+                defaultValue: 'N/A'
+            }
+        ]
+    },
+    {
         name: 'find',
         description: 'Finds a user/guild/channel/role/emoji in the database',
         usage: 'sbr-find [type] [id]',
@@ -1196,6 +1231,24 @@ const admincommands = [
                 description: 'The id of the guild to leave',
                 options: ['N/A'],
                 defaultValue: 'the guild the command was sent in'
+            }
+        ]
+    },
+    {
+        name: 'prefix',
+        description: 'Set\'s the prefix of the current server',
+        usage: 'sbr-prefix [prefix]',
+        slashusage: '/prefix [prefix]',
+        examples: ['sbr-prefix !'],
+        aliases: [],
+        options: [
+            {
+                name: 'prefix',
+                type: 'string',
+                required: true,
+                description: 'The prefix to set',
+                options: [],
+                defaultValue: 'N/A'
             }
         ]
     },
