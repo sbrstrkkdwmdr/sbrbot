@@ -322,7 +322,19 @@ module.exports = {
             page = Math.ceil(firstscoresdata.length / 5) - 1
         }
 
-        const scoresarg = await embedStuff.scoreList(firstscoresdata, scoredetailed, false, page, true, true, sort, 'recent', filteredMapper, filteredMods, reverse)
+        const scoresarg = await embedStuff.scoreList({
+            scores: firstscoresdata,
+            detailed: scoredetailed,
+            showWeights: false,
+            page: page,
+            showMapTitle: true,
+            showTruePosition: true,
+            sort: sort,
+            truePosType: 'recent',
+            filteredMapper: filteredMapper,
+            filteredMods: filteredMods,
+            reverse: reverse
+        })
         firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\nmode: ${mode}\n`)
 
         if (scoresarg.fields.length == 0) {
@@ -331,6 +343,16 @@ module.exports = {
                 value: 'No scores found',
                 inline: false
             }])
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[0].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[1].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[2].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[3].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[4].setDisabled(true)
         } else {
             for (let i = 0; i < scoresarg.fields.length; i++) {
                 firstsEmbed.addFields([scoresarg.fields[i]])

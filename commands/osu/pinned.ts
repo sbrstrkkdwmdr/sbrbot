@@ -21,7 +21,7 @@ module.exports = {
         let page = 0;
 
         let scoredetailed = false;
-        let sort:embedStuff.scoreSort = 'recent';
+        let sort: embedStuff.scoreSort = 'recent';
         let reverse = false;
         let mode = 'osu';
         let filteredMapper = null;
@@ -326,7 +326,20 @@ module.exports = {
                 iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
             })
 
-        const scoresarg = await embedStuff.scoreList(pinnedscoresdata, scoredetailed, false, page, true, true, sort, 'recent', filteredMapper, filteredMods, false);
+        const scoresarg = await embedStuff.scoreList(
+            {
+                scores: pinnedscoresdata,
+                detailed: scoredetailed,
+                showWeights: false,
+                page: page,
+                showMapTitle: true,
+                showTruePosition: true,
+                sort: sort,
+                truePosType: 'recent',
+                filteredMapper: filteredMapper,
+                filteredMods: filteredMods,
+                reverse: false
+            });
         pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\nmode: ${mode}\n`)
         if (scoresarg.fields.length == 0) {
             pinnedEmbed.addFields([{
@@ -334,6 +347,16 @@ module.exports = {
                 value: 'No scores found',
                 inline: false
             }])
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[0].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[1].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[2].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[3].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[4].setDisabled(true)
         } else {
             for (let i = 0; i < scoresarg.fields.length; i++) {
                 pinnedEmbed.addFields([scoresarg.fields[i]])

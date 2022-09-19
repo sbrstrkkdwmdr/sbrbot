@@ -9,6 +9,7 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
+import embedStuff = require('../../src/embed');
 
 module.exports = {
     name: 'maplb',
@@ -53,8 +54,11 @@ module.exports = {
                 }
                 commanduser = obj.member.user;
                 mapid = obj.message.embeds[0].url.split('/b/')[1]
-                if (obj.message.embeds[0].footer) {
-                    mapmods = obj.message.embeds[0].footer.text
+                // if (obj.message.embeds[0].footer) {
+                //     mapmods = obj.message.embeds[0].footer.text
+                // }
+                if (obj.message.embeds[0].title.includes('+')) {
+                    mapmods = obj.message.embeds[0].title.split('+')[1]
                 }
                 page = 0
                 switch (button) {
@@ -219,13 +223,6 @@ module.exports = {
             }
 
             const lbdata = lbdataf.scores
-            // fs.writeFileSync(`debug/command-leaderboard=lbdata=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
-            osufunc.debug(lbdata, 'command', 'maplb', obj.guildId, 'lbData');
-
-
-            if (page >= Math.ceil(lbdata.length / 5)) {
-                page = Math.ceil(lbdata.length / 5) - 1
-            }
             lbEmbed
                 .setColor(colours.embedColour.scorelist.dec)
                 .setTitle(`Score leaderboard of ${fulltitle}`)
@@ -233,64 +230,74 @@ module.exports = {
                 .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`)
                 ;
 
-            let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`
-
-            for (let i = 0; i < lbdata.length && i < 5; i++) {
-                const score = lbdata[i + (page * 5)]
-                if (!score) {
-                    break;
-                }
-                const gamestats = score.statistics
-
-                const hitgeki = gamestats.count_geki
-                const hit300 = gamestats.count_300
-                const hitkatu = gamestats.count_katu
-                const hit100 = gamestats.count_100
-                const hit50 = gamestats.count_50
-                const miss = gamestats.count_miss
-                const mode = score.mode_int
-                let hitlist;
-                switch (mode) {
-                    case 0: //std
-                        hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
-                        break;
-                    case 1: //taiko
-                        hitlist = `${hit300}/${hit100}/${miss}`
-                        break;
-                    case 2: //catch/fruits
-                        hitlist = `${hit300}/${hit100}/${hit50}/${miss}`
-                        break;
-                    case 3: //mania
-                        hitlist = `${hitgeki}/${hit300}/${hitkatu}/${hit100}/${hit50}/${miss}`
-                        break;
-                }
-                let ifmods: string = ''
-                if (score.mods.length > 0) {
-                    ifmods = `+${score.mods.join('')} |`
-                }
-
-                scoretxt += `
-**[Score #${i + (page * 5) + 1}](https://osu.ppy.sh/scores/${score.mode}/${score.id}) | [${score.user.username}](https://osu.ppy.sh/u/${score.user.id})**
-Score set <t:${new Date(score.created_at).getTime() / 1000}:R>
-${(score.accuracy * 100).toFixed(2)}% | ${score.rank} | ${score.pp}pp
-${ifmods} ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.max_combo}x/**${mapdata.max_combo}x**
-${hitlist}
-`
-            }
-
-            if (lbdata.length < 1 || scoretxt.length < 10) {
+            let scoretxt: string;
+            if (lbdata.length < 1) {
                 scoretxt = 'Error - no scores found '
             }
             if (mapdata.status == 'graveyard' || mapdata.status == 'pending') {
                 scoretxt = 'Error - map is unranked'
             }
-            lbEmbed.setDescription(`${scoretxt}`)
-            if (page >= (lbdata.length / 5) - 1) {
+
+            if (page >= Math.ceil(lbdata.length / 5)) {
+                page = Math.ceil(lbdata.length / 5) - 1
+            }
+
+            // fs.writeFileSync(`debug/command-leaderboard=lbdata=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
+            osufunc.debug(lbdata, 'command', 'maplb', obj.guildId, 'lbData');
+
+            const scoresarg = await embedStuff.scoreList({
+                scores: lbdata,
+                detailed: false,
+                showWeights: false,
+                page: page,
+                showMapTitle: false,
+                showTruePosition: false,
+                sort: 'score',
+                truePosType: 'score',
+                filteredMapper: null,
+                filteredMods: null,
+                reverse: false,
+                mapidOverride: mapdata.id
+            })
+            
+            if (scoresarg.fields.length == 0) {
+                lbEmbed.addFields([{
+                    name: 'Error',
+                    value: 'No scores found',
+                    inline: false
+                }]);
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[0].setDisabled(true)
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[1].setDisabled(true)
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[2].setDisabled(true)
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[3].setDisabled(true)
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[4].setDisabled(true)
+
+            } else {
+                for (let i = 0; i < scoresarg.fields.length; i++) {
+                    lbEmbed.addFields([scoresarg.fields[i]])
+                }
+            }
+
+            lbEmbed.setDescription(`Page: ${page+1}/${Math.ceil(scoresarg.maxPages)}`)
+
+            if (scoresarg.isFirstPage) {
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[0].setDisabled(true)
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[1].setDisabled(true)
+            }
+            if (scoresarg.isLastPage) {
                 //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[3].setDisabled(true)
                 //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[4].setDisabled(true)
             }
+
             osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
         } else {
             const lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1);
@@ -308,10 +315,10 @@ ${hitlist}
 
             lbEmbed
                 .setColor(colours.embedColour.scorelist.dec)
-                .setTitle(`Modded score leaderboard of ${fulltitle}`)
+                .setTitle(`Modded score leaderboard of ${fulltitle} + ${mods}`)
                 .setURL(`https://osu.ppy.sh/b/${mapid}`)
                 .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`)
-                .setFooter({ text: `mods: ${mods}` })
+                // .setFooter({ text: `mods: ${mods}` })
                 ;
 
             let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`
@@ -358,6 +365,13 @@ ${hitlist}
             lbEmbed.setDescription(`${scoretxt}`)
 
             osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
+
+            if (page <= 1) {
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[0].setDisabled(true)
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[1].setDisabled(true)
+            }
 
             if (page >= (lbdata.length / 5) - 1) {
                 //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder

@@ -6,21 +6,35 @@ import fs = require('fs');
 import func = require('./other');
 
 export async function scoreList(
-    scores: osuapitypes.Score[],
-    detailed: boolean,
-    showWeights: boolean,
-    page: number,
-    showMapTitle: boolean,
-    showTruePosition: boolean,
-    sort: scoreSort,
-    truePosType: scoreSort,
-    filteredMapper: string,
-    filteredMods: string,
-    reverse: boolean,
-    mapidOverride?: number,
+    asObj: {
+        scores: osuapitypes.Score[],
+        detailed: boolean,
+        showWeights: boolean,
+        page: number,
+        showMapTitle: boolean,
+        showTruePosition: boolean,
+        sort: scoreSort,
+        truePosType: scoreSort,
+        filteredMapper: string,
+        filteredMods: string,
+        reverse: boolean,
+        mapidOverride?: number,
+    }
 ) {
 
-
+    const scores = asObj.scores
+    const detailed = asObj.detailed
+    const showWeights = asObj.showWeights
+    let page = asObj.page
+    const showMapTitle = asObj.showMapTitle
+    const showTruePosition = asObj.showTruePosition
+    let sort = asObj.sort
+    const truePosType = asObj.truePosType
+    const filteredMapper = asObj.filteredMapper
+    let filteredMods = asObj.filteredMods
+    const reverse = asObj.reverse
+    const mapidOverride = asObj.mapidOverride
+    
 
     let filtereddata = scores.slice()
     let filterinfo = '';
@@ -142,7 +156,7 @@ export async function scoreList(
             }
         }
 
-        const mapid = mapidOverride?? curscore.beatmap.id;
+        const mapid = mapidOverride ?? curscore.beatmap.id;
 
         if (detailed === true) {
             const ranking = curscore.rank.toUpperCase()

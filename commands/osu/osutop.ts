@@ -375,7 +375,20 @@ module.exports = {
                 url: `https://osu.ppy.sh/u/${osudata.id}`,
                 iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
             })
-        const scoresarg = await embedStuff.scoreList(osutopdata, detailed, true, page, true, showtrue, sort, 'pp', mapper, mods, reverse)
+        const scoresarg = await embedStuff.scoreList(
+            {
+                scores: osutopdata,
+                detailed: detailed,
+                showWeights: true,
+                page: page,
+                showMapTitle: true,
+                showTruePosition: showtrue,
+                sort: sort,
+                truePosType: 'pp',
+                filteredMapper: mapper,
+                filteredMods: mods,
+                reverse: reverse
+            })
         topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\nmode: ${mode}\n`)
         if (scoresarg.fields.length == 0) {
             topEmbed.addFields([{
@@ -383,6 +396,16 @@ module.exports = {
                 value: 'No scores found',
                 inline: false
             }])
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[0].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[1].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[2].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[3].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+            pgbuttons.components[4].setDisabled(true)
         } else {
             for (let i = 0; scoresarg.fields.length > i; i++) {
                 topEmbed.addFields(scoresarg.fields[i])

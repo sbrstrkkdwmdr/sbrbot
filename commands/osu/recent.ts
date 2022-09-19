@@ -629,13 +629,36 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
             rsEmbed
                 .setColor(colours.embedColour.scorelist.dec)
                 .setTitle(`Recent plays for ${osudata.username}`);
-            const scoresarg = await embedStuff.scoreList(rsdata, false, false, page, true, false, 'recent', 'recent', null, null, false)
+            const scoresarg = await embedStuff.scoreList(
+                {
+                    scores: rsdata,
+                    detailed: false,
+                    showWeights: false,
+                    page: page,
+                    showMapTitle: true,
+                    showTruePosition: false,
+                    sort: 'recent',
+                    truePosType: 'recent',
+                    filteredMapper: null,
+                    filteredMods: null,
+                    reverse: false
+                })
             if (scoresarg.fields.length == 0) {
                 rsEmbed.addFields([{
                     name: 'Error',
                     value: 'No scores found',
                     inline: false
                 }])
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[0].setDisabled(true)
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[1].setDisabled(true)
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[2].setDisabled(true)
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[3].setDisabled(true)
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+                pgbuttons.components[4].setDisabled(true)
             } else {
                 for (let i = 0; scoresarg.fields.length > i; i++) {
                     rsEmbed.addFields(scoresarg.fields[i])
