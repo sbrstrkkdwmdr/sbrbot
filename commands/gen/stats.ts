@@ -34,9 +34,7 @@ module.exports = {
             }
                 break;
         }
-        if (overrides != null) {
 
-        }
 
         //==============================================================================================================================================================================================
 
@@ -88,7 +86,7 @@ module.exports = {
         const upandtime = `Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}`
 
         const totalusers: Discord.Collection<any, Discord.User> = client.users.cache.size;
-        let totalusersnobots: Discord.Collection<any, Discord.User>;
+        // let totalusersnobots: Discord.Collection<any, Discord.User>;
         const totalguilds: Discord.Collector<any, Discord.Guild> = client.guilds.cache.size;
         const commandssent: number = fs.existsSync('logs/totalcommands.txt') ? fs.readFileSync('logs/totalcommands.txt').length : 0;
 

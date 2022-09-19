@@ -13,7 +13,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         const absoluteID = currentDate.getTime();
         const interaction = null
         const button = null
-        let args = null
+        const args = null
         const obj = message
         let parse = null
         const commandType = 'link'
@@ -21,7 +21,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             return;
         }
 
-        let overrides = {
+        const overrides = {
             user: null,
             page: null,
             mode: null,
@@ -30,7 +30,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             ex: null,
         }
 
-        const currentGuildId = message.guildId
         let settings: extypes.guildSettings;
         try {
             const curGuildSettings = await guildSettings.findOne({ where: { guildid: message.guildId } });

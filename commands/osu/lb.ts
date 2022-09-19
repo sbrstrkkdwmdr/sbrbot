@@ -19,9 +19,6 @@ module.exports = {
         let mode = 'osu';
         const guild = obj.guild;
 
-        let isFirstPage = false;
-        let isLastPage = false;
-
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
@@ -71,13 +68,13 @@ module.exports = {
             }
                 break;
         }
-        if (overrides != null) {
+        // if (overrides != null) {
 
-        }
+        // }
 
         //==============================================================================================================================================================================================
 
-        const pgbuttons: any = new Discord.ActionRowBuilder()
+        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-lb-${commanduser.id}`)
@@ -128,7 +125,6 @@ module.exports = {
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         if (page < 2 || typeof page != 'number') {
-            isFirstPage = true;
             page = 1;
         }
         page--
@@ -294,7 +290,7 @@ module.exports = {
 
         }
 
-        let iterator = 0;
+        // let iterator = 0;
 
         const another = rarr.slice().sort((b, a) => b.rank - a.rank) //for some reason this doesn't sort even tho it does in testing
         rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `
@@ -311,11 +307,15 @@ module.exports = {
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (message command => lb server) - ${timeelapsed}ms\n`)
 
         if(page <= 1){
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[0].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[1].setDisabled(true)
         }
         if (page + 1 >= Math.ceil(rarr.length / 10)) {
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[3].setDisabled(true)
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[4].setDisabled(true)
         }
 

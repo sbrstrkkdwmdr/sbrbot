@@ -572,9 +572,9 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                 ])
 
             if (page >= rsdata.length - 1) {
-                //@ts-expect-error
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[2].setDisabled(true)
-                //@ts-expect-error
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[3].setDisabled(true)
             }
 
@@ -630,15 +630,15 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
             rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 5)}`)
             rsEmbed.setFooter({ text: `gamemode: ${rsdata[0].mode}` })
             if (scoresarg.isFirstPage) {
-                //@ts-expect-error
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[0].setDisabled(true)
-                //@ts-expect-error
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[1].setDisabled(true)
             }
             if (scoresarg.isLastPage) {
-                //@ts-expect-error
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[3].setDisabled(true)
-                //@ts-expect-error
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[4].setDisabled(true)
             }
             //             let txt = '';

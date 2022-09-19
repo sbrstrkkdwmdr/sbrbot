@@ -51,9 +51,7 @@ module.exports = {
             }
                 break;
         }
-        if (overrides != null) {
 
-        }
 
         //==============================================================================================================================================================================================
 
@@ -106,7 +104,6 @@ module.exports = {
         }
         if (!(cmdchecks.isAdmin(commanduser.id, obj.guildId, client) || cmdchecks.isOwner(commanduser.id))) {
             searchUser = commanduser;
-        } else {
         }
 
 

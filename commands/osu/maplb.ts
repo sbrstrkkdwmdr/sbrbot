@@ -286,9 +286,9 @@ ${hitlist}
             }
             lbEmbed.setDescription(`${scoretxt}`)
             if (page >= (lbdata.length / 5) - 1) {
-                //@ts-ignore
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[3].setDisabled(true)
-                //@ts-ignore
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[4].setDisabled(true)
             }
             osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
@@ -360,9 +360,9 @@ ${hitlist}
             osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
 
             if (page >= (lbdata.length / 5) - 1) {
-                //@ts-ignore
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[3].setDisabled(true)
-                //@ts-ignore
+                //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[4].setDisabled(true)
             }
         }

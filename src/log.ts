@@ -28,14 +28,13 @@ Options: \n`;
     return firstlog;
 }
 
-function errLog(errType: string, err:string, ID?:string){
-    let errorstring = `
+function errLog(errType: string, err: string, ID?: string) {
+    const errorstring = `
 ${ID ? 'ID: ' + ID : ''}
 Error: ${errType}
 Text: ${err}
 `
-
-
+    return errorstring;
 }
 
 export { commandLog, optsLog, errLog };

@@ -18,9 +18,9 @@ type commandInfo = {
     options: { 
         name: string, 
         type: string,
-        required: any,
+        required: string | boolean,
         description: string ,
-        options: any[],
+        options: string[] | boolean[],
         defaultValue: string
     }[],
 }

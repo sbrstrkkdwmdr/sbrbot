@@ -41,7 +41,7 @@ function isAdmin(userid: string | number, guildid: string | number, client: Disc
  * @param type user/channel/role
  * @returns ID of first mention
  */
-function getMentionId(mentions: any, type: 'user' | 'channel' | 'role') {
+function getMentionId(mentions, type: 'user' | 'channel' | 'role') {
     let x = null;
     switch (type) {
         case 'user': {

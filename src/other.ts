@@ -1,6 +1,6 @@
 import fs = require('fs')
 export function readAllFiles(directory: string) {
-    let filesArr = []
+    const filesArr = []
     const init = fs.readdirSync(directory)
     //add init to filesArr
     //add all files in subdirectories to filesArr
@@ -56,7 +56,7 @@ export function separateNum(number:string|number, separator?:string){
 }
 
 export function flagImgUrl(string: string, ver?: 'osu') {
-    let flagUrl: string = `https://osuflags.omkserver.nl/${string}`;
+    const flagUrl: string = `https://osuflags.omkserver.nl/${string}`;
 return flagUrl;
 }
     // forgor https://osuflags.omkserver.nl/ was a thing

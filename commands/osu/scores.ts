@@ -21,7 +21,7 @@ module.exports = {
         let mapid;
         let page = 1;
 
-        let scoredetailed = false;
+        const scoredetailed = false;
         let sort: any = 'recent';
         let reverse = false;
         let mode = 'osu';
@@ -245,7 +245,7 @@ module.exports = {
             );
 
         if (user == null) {
-            let cuser = await osufunc.searchUser(searchid, userdata, true);
+            const cuser = await osufunc.searchUser(searchid, userdata, true);
             user = cuser.username;
             if (mode == null) {
                 mode = cuser.gamemode;
@@ -324,8 +324,7 @@ module.exports = {
             return;
         }
 
-        let scoredata: osuApiTypes.Score[] = scoredataPresort.scores
-        let sortdata = ''
+        const scoredata: osuApiTypes.Score[] = scoredataPresort.scores
         try {
             scoredata.length < 1
         } catch (error) {
@@ -392,15 +391,15 @@ module.exports = {
         osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
 
         if (scoresarg.isFirstPage) {
-            //@ts-ignore
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[0].setDisabled(true)
-            //@ts-ignore
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[1].setDisabled(true)
         }
         if (scoresarg.isLastPage) {
-            //@ts-ignore
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[3].setDisabled(true)
-            //@ts-ignore
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[4].setDisabled(true)
         }
 

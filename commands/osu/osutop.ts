@@ -438,15 +438,15 @@ module.exports = {
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
 
         if (scoresarg.isFirstPage) {
-            //@ts-expect-error
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[0].setDisabled(true)
-            //@ts-expect-error
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[1].setDisabled(true)
         }
         if (scoresarg.isLastPage) {
-            //@ts-expect-error
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[3].setDisabled(true)
-            //@ts-expect-error
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[4].setDisabled(true)
         }
 

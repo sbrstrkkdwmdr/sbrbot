@@ -84,9 +84,6 @@ module.exports = {
                 user = obj.content.includes(' ') ? obj.content.replace('https://', '').replace('http://', '').replace('www.', '').split('/')[2].split(' ')[0] : obj.content.replace('https://', '').replace('http://', '').replace('www.', '').split('/')[2]
             }
         }
-        if (overrides != null) {
-
-        }
 
         //==============================================================================================================================================================================================
 
@@ -173,7 +170,7 @@ module.exports = {
         }
 
         if (user == null) {
-            let cuser = await osufunc.searchUser(searchid, userdata, true);
+            const cuser = await osufunc.searchUser(searchid, userdata, true);
             user = cuser.username;
             if (mode == null) {
                 mode = cuser.gamemode;
@@ -223,7 +220,6 @@ module.exports = {
             osudata.statistics.global_rank == null ?
                 '---' :
                 func.separateNum(osudata.statistics.global_rank);
-        ;
         const countryrank =
             osudata.statistics.country_rank == null ?
                 '---' :

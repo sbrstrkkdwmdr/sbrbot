@@ -114,8 +114,8 @@ export async function scoreList(
         page = Math.ceil(newData.length / 5) - 1
     }
 
-    let scoresAsArrStr = [];
-    let scoresAsFields = [];
+    const scoresAsArrStr = [];
+    const scoresAsFields = [];
 
     fs.writeFileSync('debug.json', JSON.stringify(scores, null, 2));
 
@@ -142,7 +142,7 @@ export async function scoreList(
             }
         }
 
-        let mapid = mapidOverride ? mapidOverride : curscore.beatmap.id;
+        const mapid = mapidOverride?? curscore.beatmap.id;
 
         if (detailed === true) {
             const ranking = curscore.rank.toUpperCase()
@@ -248,7 +248,7 @@ export async function scoreList(
             }
             let weighted;
             if (showWeights == true) {
-                weighted = `${(curscore?.weight.pp).toFixed(2)}pp Weighted at **${(curscore?.weight.percentage).toFixed(2)}%**`
+                weighted = `${(curscore?.weight?.pp).toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage).toFixed(2)}%**`
             } else {
                 weighted = ''
             }
@@ -415,4 +415,4 @@ export function score(score: osuapitypes.Score, map: osuapitypes.Beatmap, detail
 
 export function user() { }
 
-type scoreSort = 'pp' | 'score' | 'acc' | 'recent' | 'combo' | 'miss' | 'rank'
+export type scoreSort = 'pp' | 'score' | 'acc' | 'recent' | 'combo' | 'miss' | 'rank'

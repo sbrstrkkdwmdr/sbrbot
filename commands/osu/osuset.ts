@@ -64,9 +64,7 @@ module.exports = {
             }
                 break;
         }
-        if (overrides != null) {
 
-        }
 
         //==============================================================================================================================================================================================
 
@@ -140,7 +138,12 @@ module.exports = {
 
         let txt = 'null'
 
-        let updateRows: any = {
+        let updateRows: {
+            userid: string | number,
+            osuname?: string,
+            mode?: string,
+            skin?: string,
+        } = {
             userid: commanduser.id
         }
         switch (type) {
@@ -158,7 +161,7 @@ module.exports = {
                 }
             }
                 break;
-            case 'mode': {
+            case 'skin': {
                 updateRows = {
                     userid: commanduser.id,
                     skin: value

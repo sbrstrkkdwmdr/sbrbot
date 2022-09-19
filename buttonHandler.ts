@@ -43,7 +43,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
                 .setTitle('Page')
                 .setCustomId(`SearchMenu-${command}-${interaction.user.id}`)
                 .addComponents(
-                    // @ts-ignore
+                    //@ts-expect-error - TextInputBuilder not assignable to AnyInputBuilder
                     new Discord.ActionRowBuilder()
                         .addComponents(new Discord.TextInputBuilder()
                             .setCustomId('SearchInput')

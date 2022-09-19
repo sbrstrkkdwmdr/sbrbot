@@ -21,7 +21,7 @@ module.exports = {
         let n100 = null;
         let n50 = null;
         let nMiss = null;
-        let scoreId = null;
+        // let scoreId = null;
 
 
         switch (commandType) {
@@ -95,9 +95,7 @@ module.exports = {
             }
                 break;
         }
-        if (overrides != null) {
 
-        }
 
         //==============================================================================================================================================================================================
 

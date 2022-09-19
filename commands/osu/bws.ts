@@ -45,9 +45,7 @@ module.exports = {
             }
                 break;
         }
-        if (overrides != null) {
 
-        }
         //==============================================================================================================================================================================================
 
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
@@ -93,7 +91,7 @@ module.exports = {
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         if (user == null) {
-            let cuser = await osufunc.searchUser(searchid, userdata, true);
+            const cuser = await osufunc.searchUser(searchid, userdata, true);
             user = cuser.username;
             if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
                 if (commandType != 'button') {

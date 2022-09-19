@@ -35,9 +35,7 @@ module.exports = {
             }
                 break;
         }
-        if (overrides != null) {
 
-        }
 
         //==============================================================================================================================================================================================
 
@@ -88,7 +86,13 @@ module.exports = {
             .setDescription(`${servers}`)
 
 
-        let rw:any = {
+        let rw:{
+            content?: string,
+            embeds?: Discord.EmbedBuilder[],
+            files?: string[]
+            allowedMentions: { repliedUser:boolean},
+            failIfNotExists: boolean
+        } = {
             embeds: [embed],
             allowedMentions: { repliedUser: false },
             failIfNotExists: true

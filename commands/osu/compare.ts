@@ -46,9 +46,9 @@ module.exports = {
             }
                 break;
         }
-        if (overrides != null) {
+        // if (overrides != null) {
 
-        }
+        // }
 
         //==============================================================================================================================================================================================
 
@@ -126,7 +126,7 @@ module.exports = {
             }
                 break;
             case 'score': {
-
+                'heheheha'
             }
                 break;
         }
@@ -223,7 +223,7 @@ module.exports = {
                 Embeds.push(uEmbed);
                 sendthething = true;
 
-            } else {
+            } else if (compareType == 'score') {
 
                 let secondScoresArray: osuApiTypes.Score[] = [];
                 if (first == null) {
@@ -241,7 +241,7 @@ module.exports = {
 
                     //get current user id, then find their scores on the same map as the previous score
 
-                    let cuser = await osufunc.searchUser(commanduser.id, userdata, true);
+                    const cuser = await osufunc.searchUser(commanduser.id, userdata, true);
                     // user = cuser.username;
                     // mode = cuser.gamemode;
                     if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
@@ -263,9 +263,9 @@ module.exports = {
                         }).catch()
                         return;
                     }
-                    let secondScoresArrayInt: any = await osufunc.apiget('user_get_scores_map', `${prevscore.beatmap.id}`, `${osudata.id}`)
+                    const secondScoresArrayInt: any = await osufunc.apiget('user_get_scores_map', `${prevscore.beatmap.id}`, `${osudata.id}`)
                     secondScoresArray = secondScoresArrayInt.scores
-                    let match = await osufunc.matchScores(firstScore, secondScoresArray).sort(
+                    const match = await osufunc.matchScores(firstScore, secondScoresArray).sort(
                         (a, b) => b.score - a.score
                     )
                     secondScore = match.length > 0 ? match[0] : secondScoresArray.length > 0 ? secondScoresArray.slice().sort((a, b) => b.score - a.score)[0] : prevscore;
@@ -320,6 +320,8 @@ module.exports = {
                     ;
                 Embeds.push(await sEmbed);
                 sendthething = true;
+            } else if (compareType == 'top'){
+                
             }
         } catch (error) {
             if (compareType == 'user') {

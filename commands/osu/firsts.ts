@@ -21,7 +21,7 @@ module.exports = {
         let page = 0;
 
         let scoredetailed = false;
-        let sort: any = 'recent';
+        let sort: embedStuff.scoreSort = 'recent';
         let reverse = false;
         let mode = 'osu';
         let filteredMapper = null;
@@ -237,7 +237,7 @@ module.exports = {
                 .setEmoji('🔁'),
         )
         if (user == null) {
-            let cuser = await osufunc.searchUser(searchid, userdata, true);
+            const cuser = await osufunc.searchUser(searchid, userdata, true);
             user = cuser.username;
             if (mode == null) {
                 mode = cuser.gamemode;
@@ -323,15 +323,15 @@ module.exports = {
         }
 
         if (scoresarg.isFirstPage) {
-            //@ts-ignore
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[0].setDisabled(true)
-            //@ts-ignore
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[1].setDisabled(true)
         }
         if (scoresarg.isLastPage) {
-            //@ts-ignore
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[3].setDisabled(true)
-            //@ts-ignore
+            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[4].setDisabled(true)
         }
 
