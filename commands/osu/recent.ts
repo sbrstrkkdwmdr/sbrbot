@@ -253,17 +253,31 @@ module.exports = {
                 .catch()
         }
 
-        const rsdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
+        let rsdata: osuApiTypes.Score[] & osuApiTypes.Error = [];// = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
+        async function getScoreCount(cinitnum) {
+            const fd: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('recent_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
+            //[{},{}]
+            //push {}
+            if (fd?.error) {
+                obj.reply({
+                    content: `${rsdata?.error ? rsdata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+                return;
+            }
+            for (let i = 0; i < fd.length; i++) {
+                if (!fd[i] || typeof fd[i] == 'undefined') { break; }
+                await rsdata.push(fd[i])
+            }
+            if (fd.length == 100) {
+                await getScoreCount(cinitnum + 100)
+            }
+
+        }
+        await getScoreCount(0);
         // fs.writeFileSync(`debug/command-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
         osufunc.debug(rsdata, 'command', 'recent', obj.guildId, 'rsData');
-        if (rsdata?.error) {
-            obj.reply({
-                content: `${rsdata?.error ? rsdata?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
-            return;
-        }
 
         const rsEmbed = new Discord.EmbedBuilder()
             .setAuthor({

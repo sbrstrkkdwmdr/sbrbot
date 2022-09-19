@@ -86,8 +86,8 @@ async function mapcalc(
                 await osuapiext.tools.download.difficulty(mapid, 'files/maps/', mapid); //uses fs btw
             }
 
-            if(mods == null){
-               mods = 'NM' 
+            if (mods == null) {
+                mods = 'NM'
             }
 
             mapscore = {
@@ -184,9 +184,9 @@ async function scorecalc(
                     await osuapiext.tools.download.difficulty(mapid, 'files/maps/', mapid); //uses fs btw
                 }
 
-                if(mods == null){
-                    mods = 'NM' 
-                 }
+                if (mods == null) {
+                    mods = 'NM'
+                }
 
                 let newacc = osumodcalc.calcgrade(hit300, hit100, hit50, 0).accuracy;
                 let mode;
@@ -593,7 +593,7 @@ async function mapcalclocal(
  * @param callNum number of times this function has been called (used for recursion/error handling)
  * @returns data
  */
-async function apiget(type: apiGetStrings, mainparam: string, params?: string, version?: number, callNum?: number) {
+async function apiget(type: apiGetStrings, mainparam: string, params?: string, version?: number, callNum?: number, ignoreNonAlphaChar?: boolean) {
     if (!callNum) callNum = 0;
     if (callNum > 5) throw new Error('Too many calls to api');
 
@@ -620,7 +620,7 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
         }
     }
     mainparam = cmdchecks.toHexadecimal(mainparam)
-    if (params) params = cmdchecks.toHexadecimal(params);
+    if (params && ignoreNonAlphaChar != true) params = cmdchecks.toHexadecimal(params);
     if (version == 2) {
         switch (type) {
             case 'map_search':
@@ -646,14 +646,23 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
             case 'scores_get_first': case 'firsts':
                 url += `users/${mainparam}/scores/firsts?mode=${params ?? 'osu'}&limit=100`
                 break;
+            case 'firsts_alt':
+                url += `users/${mainparam}/scores/firsts?limit=100&${params}`
+                break;
             case 'scores_get_map': case 'maplb':
                 url += `beatmaps/${mainparam}/scores`
                 break;
             case 'scores_get_pinned': case 'pinned':
                 url += `users/${mainparam}/scores/pinned?mode=${params ? params : 'osu'}&limit=100`
                 break;
+            case 'pinned_alt':
+                url += `users/${mainparam}/scores/firsts?limit=100&${params}`
+                break;
             case 'scores_get_recent': case 'recent':
                 url += `users/${mainparam}/scores/recent?include_fails=1&mode=${params ? params : 'osu'}&limit=100&offset=0`
+                break;
+            case 'recent_alt':
+                url += `users/${mainparam}/scores/recent?include_fails=1&limit=100&${params}`
                 break;
             case 'user_get': case 'user':
                 url += `users/${mainparam}/${params ? params : 'osu'}`
@@ -819,10 +828,10 @@ type apiGetStrings =
     'mapset_search' |
 
     'score_get' | 'score' |
-    'scores_get_best' | 'osutop' | 'best' |
-    'scores_get_first' | 'firsts' |
-    'scores_get_pinned' | 'pinned' |
-    'scores_get_recent' | 'recent' |
+    'scores_get_best' | 'osutop' | 'best' | 'osutop_alt' |
+    'scores_get_first' | 'firsts' | 'firsts_alt' |
+    'scores_get_pinned' | 'pinned' | 'pinned_alt' |
+    'scores_get_recent' | 'recent' | 'recent_alt' |
     'scores_get_map' | 'maplb' |
 
     'user_get' | 'user' |
@@ -894,10 +903,10 @@ export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string
 export function debug(data: any, type: string, name: string, serverId: string | number, params: string) {
     const pars = params.replaceAll(',', '=');
     // fs.writeFileSync(`debug/${type}-${name}=${pars}_${serverId}.json`, JSON.stringify(data, null, 2));
-    if(!fs.existsSync(`debug/${type}`)){
+    if (!fs.existsSync(`debug/${type}`)) {
         fs.mkdirSync(`debug/${type}`)
     }
-    if(!fs.existsSync(`debug/${type}/${name}/`)){
+    if (!fs.existsSync(`debug/${type}/${name}/`)) {
         fs.mkdirSync(`debug/${type}/${name}`)
     }
     fs.writeFileSync(`debug/${type}/${name}/${pars}_${serverId}.json`, JSON.stringify(data, null, 2))

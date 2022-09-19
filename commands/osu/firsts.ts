@@ -57,7 +57,7 @@ module.exports = {
 
                 break;
             case 'button': {
-                if(!obj.message.embeds[0]){
+                if (!obj.message.embeds[0]) {
                     return;
                 }
 
@@ -280,17 +280,32 @@ module.exports = {
             }).catch()
         }
 
-        const firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('firsts', `${osudata.id}`, `${mode}`)
-        // fs.writeFileSync(`debug/command-firsts=firstscoresdata=${obj.guildId}.json`, JSON.stringify(firstscoresdata, null, 2))
-        osufunc.debug(osudata, 'command', 'firsts', obj.guildId, 'firstsScoresData');
-        if (firstscoresdata?.error) {
-            obj.reply({
-                content: `${firstscoresdata?.error ? firstscoresdata?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
-            return;
+        let firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []
+        async function getScoreCount(cinitnum) {
+            const fd: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('firsts_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
+            //[{},{}]
+            //push {}
+            if (fd?.error) {
+                obj.reply({
+                    content: `${firstscoresdata?.error ? firstscoresdata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+                return;
+            }
+            for (let i = 0; i < fd.length; i++) {
+                if (!fd[i] || typeof fd[i] == 'undefined') { break; }
+
+                await firstscoresdata.push(fd[i])
+            }
+            if (fd.length == 100) {
+                await getScoreCount(cinitnum + 100)
+            }
+
         }
+        await getScoreCount(0);
+        // fs.writeFileSync(`debug/command-firsts=firstscoresdata=${obj.guildId}.json`, JSON.stringify(firstscoresdata, null, 2))
+        osufunc.debug(firstscoresdata, 'command', 'firsts', obj.guildId, 'firstsScoresData');
 
         const firstsEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.dec)

@@ -284,18 +284,32 @@ module.exports = {
             }).catch()
         }
 
-        const pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
+        let pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []; //= await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
+        async function getScoreCount(cinitnum) {
+            const fd: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('pinned_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
+            //[{},{}]
+            //push {}
+            if (fd?.error) {
+                obj.reply({
+                    content: `${pinnedscoresdata?.error ? pinnedscoresdata?.error : 'Error: null'}`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: false,
+                }).catch()
+                return;
+            }
+            for (let i = 0; i < fd.length; i++) {
+                if (!fd[i] || typeof fd[i] == 'undefined') { break; }
+                await pinnedscoresdata.push(fd[i])
+            }
+            if (fd.length == 100) {
+                await getScoreCount(cinitnum + 100)
+            }
+
+        }
+        await getScoreCount(0);
+
         // fs.writeFileSync(`debug/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
         osufunc.debug(pinnedscoresdata, 'command', 'pinned', obj.guildId, 'pinnedScoresData');
-
-        if (pinnedscoresdata?.error) {
-            obj.reply({
-                content: `${pinnedscoresdata?.error ? pinnedscoresdata?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
-            return;
-        }
 
         if (page >= Math.ceil(pinnedscoresdata.length / 5)) {
             page = Math.ceil(pinnedscoresdata.length / 5) - 1
