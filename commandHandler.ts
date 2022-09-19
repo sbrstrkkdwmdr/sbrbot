@@ -152,7 +152,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         execCommand(interaction.commandName, 'interaction', interaction, null, button, absoluteID, currentDate, interaction.member.user.id, args);
     });
 
-    function execCommand(command: string, commandType: string, obj: any, overrides: any, button, absoluteID: number, currentDate, userid: any, args: string[]) {
+    function execCommand(command: string, commandType: string, obj: Discord.Message | Discord.Interaction, overrides: null, button:null, absoluteID: number, currentDate: Date, userid: string|number, args: string[]) {
         switch (command) {
             case 'convert':
                 commandStruct.commands.get('convert').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
@@ -255,12 +255,12 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'leaveguild': case 'leave':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
                     commandStruct.admincmds.get('leaveguild').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                };
+                }
                 break;
             case 'servers':
                 if (checks.isOwner(userid)) {
                     commandStruct.admincmds.get('servers').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                };
+                }
                 break;
             case 'debug':
                 commandStruct.admincmds.get('debug').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
@@ -269,7 +269,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'crash':
                 if (checks.isOwner(userid)) {
                     commandStruct.admincmds.get('crash').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                };
+                }
                 break;
             case 'find':
                 commandStruct.admincmds.get('find').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)

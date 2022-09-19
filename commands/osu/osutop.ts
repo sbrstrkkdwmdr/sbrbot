@@ -234,7 +234,7 @@ module.exports = {
             )
 
         if (user == null) {
-            let cuser = await osufunc.searchUser(searchid, userdata, true);
+            const cuser = await osufunc.searchUser(searchid, userdata, true);
             user = cuser.username;
             if (mode == null) {
                 mode = cuser.gamemode;
@@ -438,15 +438,15 @@ module.exports = {
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
 
         if (scoresarg.isFirstPage) {
-            //@ts-ignore
+            //@ts-expect-error
             pgbuttons.components[0].setDisabled(true)
-            //@ts-ignore
+            //@ts-expect-error
             pgbuttons.components[1].setDisabled(true)
         }
         if (scoresarg.isLastPage) {
-            //@ts-ignore
+            //@ts-expect-error
             pgbuttons.components[3].setDisabled(true)
-            //@ts-ignore
+            //@ts-expect-error
             pgbuttons.components[4].setDisabled(true)
         }
 

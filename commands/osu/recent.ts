@@ -171,7 +171,7 @@ module.exports = {
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         if (user == null) {
-            let cuser = await osufunc.searchUser(searchid, userdata, true);
+            const cuser = await osufunc.searchUser(searchid, userdata, true);
             user = cuser.username;
             if (mode == null) {
                 mode = cuser.gamemode;
@@ -572,9 +572,9 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                 ])
 
             if (page >= rsdata.length - 1) {
-                //@ts-ignore
+                //@ts-expect-error
                 pgbuttons.components[2].setDisabled(true)
-                //@ts-ignore
+                //@ts-expect-error
                 pgbuttons.components[3].setDisabled(true)
             }
 
@@ -630,15 +630,15 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
             rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 5)}`)
             rsEmbed.setFooter({ text: `gamemode: ${rsdata[0].mode}` })
             if (scoresarg.isFirstPage) {
-                //@ts-ignore
+                //@ts-expect-error
                 pgbuttons.components[0].setDisabled(true)
-                //@ts-ignore
+                //@ts-expect-error
                 pgbuttons.components[1].setDisabled(true)
             }
             if (scoresarg.isLastPage) {
-                //@ts-ignore
+                //@ts-expect-error
                 pgbuttons.components[3].setDisabled(true)
-                //@ts-ignore
+                //@ts-expect-error
                 pgbuttons.components[4].setDisabled(true)
             }
             //             let txt = '';
@@ -660,9 +660,9 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
             //             rsEmbed.setFooter({ text: `gamemode: ${rsdata[0].mode}` })
 
             //             if (page >= Math.ceil(rsdata.length / 20)) {
-            //                 //@ts-ignore
+            //                 //@ts-expect-error
             //                 pgbuttons.components[2].setDisabled(true)
-            //                 //@ts-ignore
+            //                 //@ts-expect-error
             //                 pgbuttons.components[3].setDisabled(true)
             //             }
         }

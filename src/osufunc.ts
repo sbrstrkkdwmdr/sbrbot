@@ -7,6 +7,7 @@ import fetch from 'node-fetch';
 import osuApiTypes = require('./types/osuApiTypes');
 import config = require('../config/config.json');
 import cmdchecks = require('./checks');
+import extypes = require('./types/extratypes');
 // import Sequelize = require('sequelize');
 
 /**
@@ -39,7 +40,24 @@ export {
 };
 export { mapcalc, scorecalc, straincalc, graph, mapcalclocal, straincalclocal, apiget, updateToken, updateUserStats };
 
-
+type Score = {
+    mode?: rosu.GameMode;
+    mods?: number;
+    acc?: number;
+    n300?: number;
+    n100?: number;
+    n50?: number;
+    nMisses?: number;
+    nKatu?: number;
+    combo?: number;
+    score?: number;
+    passedObjects?: number;
+    clockRate?: number;
+    ar?: number;
+    cs?: number;
+    hp?: number;
+    od?: number;
+}
 
 
 /**
@@ -171,24 +189,29 @@ async function scorecalc(
                  }
 
                 let newacc = osumodcalc.calcgrade(hit300, hit100, hit50, 0).accuracy;
+                let mode;
                 switch (gamemode) {
                     case 'osu':
+                        mode = 0
                         break;
                     case 'taiko':
+                        mode = 1
                         newacc = osumodcalc.calcgradeTaiko(hit300, hit100, 0).accuracy;
                         break;
                     case 'fruits':
+                        mode = 2
                         newacc = osumodcalc.calcgradeCatch(hit300, hit100, hit50, 0, hitkatu).accuracy;
                         break;
                     case 'mania':
+                        mode = 3
                         newacc = osumodcalc.calcgradeMania(hitgeki, hit300, hitkatu, hit100, hit50, 0).accuracy;
                         break;
                 }
                 if (isNaN(newacc)) {
                     newacc = acc;
                 }
-                let basescore: any = {
-                    mode: gamemode,
+                let basescore: Score = {
+                    mode: mode,
                     mods: osumodcalc.ModStringToInt(mods),
                     combo: maxcombo,
                     acc: acc || 100,
@@ -196,7 +219,7 @@ async function scorecalc(
                 }
                 if (failed == true) {
                     basescore = {
-                        mode: gamemode,
+                        mode: mode,
                         mods: osumodcalc.ModStringToInt(mods),
                         combo: maxcombo,
                         acc: acc || 100,
@@ -729,10 +752,10 @@ function logCall(data: string, title?: string) {
 async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase: any) {
     // try {
     const allUsers = await sqlDatabase.findAll()
-    let findname = allUsers.find((u: any) => u.osuname.toLowerCase() == user.username.toLowerCase());
+    let findname = allUsers.find((u: extypes.dbUser) => u.osuname.toLowerCase() == user.username.toLowerCase());
 
     if (findname == null) {
-        findname = allUsers.find((u: any) => `${u.osuname}`.toLowerCase() == `${user.id}`.toLowerCase());
+        findname = allUsers.find((u: extypes.dbUser) => `${u.osuname}`.toLowerCase() == `${user.id}`.toLowerCase());
     }
     if (findname != null) {
         switch (mode) {

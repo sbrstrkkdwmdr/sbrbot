@@ -7,9 +7,9 @@ const config = require('../config/config.json');
  * @param {number} userid 
  * @returns true if the user is an owner
  */
-function isOwner(userid: number) {
+function isOwner(userid: string | number) {
     for (let i = 0; i < config.ownerusers.length; i++) {
-        if (config.ownerusers[i] == userid) {
+        if (`${config.ownerusers[i]}` == `${userid}`) {
             return true
         }
     }
@@ -22,7 +22,7 @@ function isOwner(userid: number) {
  * @param client client object
  * @returns true if user is admin in the current guild
  */
-function isAdmin(userid: number, guildid: number, client: Discord.Client) {
+function isAdmin(userid: string | number, guildid: string | number, client: Discord.Client) {
     if (client.guilds.cache.has(`${guildid}`)) {
         const curguild = client.guilds.cache.get(`${guildid}`)
         const curmem = curguild.members.cache.has(`${userid}`) ? curguild.members.cache.get(`${userid}`) : null
