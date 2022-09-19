@@ -414,6 +414,24 @@ const osucmds:commandInfo[] = [
         ]
     },
     {
+        name: 'globals',
+        description: 'Shows the number of #1 scores a player has',
+        usage: 'sbr-globals [username]',
+        slashusage: '/globals [username]',
+        examples: [],
+        aliases: [],
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the scores of',
+                options: ['N/A'],
+                defaultValue: 'your osu! username'
+            }
+        ]
+    },
+    {
         name: 'lb',
         description: 'Shows the leaderboard of the current server',
         usage: 'sbr-lb',

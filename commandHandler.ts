@@ -152,7 +152,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         execCommand(interaction.commandName, 'interaction', interaction, null, button, absoluteID, currentDate, interaction.member.user.id, args);
     });
 
-    function execCommand(command: string, commandType: string, obj: Discord.Message | Discord.Interaction, overrides: null, button:null, absoluteID: number, currentDate: Date, userid: string|number, args: string[]) {
+    function execCommand(command: string, commandType: string, obj: Discord.Message | Discord.Interaction, overrides: null, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[]) {
         switch (command) {
             case 'convert':
                 commandStruct.commands.get('convert').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
@@ -213,6 +213,9 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 break;
             case 'firsts':
                 commandStruct.osucmds.get('firsts').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                break;
+            case 'globals':
+                commandStruct.osucmds.get('globals').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
             case 'map': case 'm':
                 commandStruct.osucmds.get('map').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
