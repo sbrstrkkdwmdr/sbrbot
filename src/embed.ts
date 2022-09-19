@@ -248,7 +248,7 @@ export async function scoreList(
             }
             let weighted;
             if (showWeights == true) {
-                weighted = `${(curscore?.weight?.pp).toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage).toFixed(2)}%**`
+                weighted = `${(curscore?.weight?.pp)?.toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`
             } else {
                 weighted = ''
             }

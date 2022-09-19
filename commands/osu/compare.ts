@@ -46,9 +46,6 @@ module.exports = {
             }
                 break;
         }
-        // if (overrides != null) {
-
-        // }
 
         //==============================================================================================================================================================================================
 
@@ -320,8 +317,8 @@ module.exports = {
                     ;
                 Embeds.push(await sEmbed);
                 sendthething = true;
-            } else if (compareType == 'top'){
-                
+            } else if (compareType == 'top') {
+
             }
         } catch (error) {
             if (compareType == 'user') {

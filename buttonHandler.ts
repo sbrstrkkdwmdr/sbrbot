@@ -17,7 +17,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
         const button = interaction.customId.split('-')[0]
         const specid = interaction.customId.split('-')[2]
         const commandType = 'button';
-        let overrides = {
+        const overrides = {
             user: null,
             page: null,
             mode: null,
