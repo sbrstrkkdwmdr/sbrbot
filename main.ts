@@ -143,6 +143,20 @@ const guildSettings = sequelize.define('guildSettings', {
     },
 });
 
+const trackDb = sequelize.define('trackUsers', {
+    userid: {
+        type: Sequelize.INTEGER,
+        unique: true
+    },
+    osuid: {
+        type: Sequelize.INTEGER,
+        unique: true
+    },
+    channels: {
+        type: Sequelize.STRING,
+    }
+})
+
 client.once('ready', () => {
     const currentDate = new Date();
 
@@ -171,7 +185,7 @@ Current Client ID: ${client.user.id}
     buttonHandler(userdata, client, commandStruct, config, oncooldown);
     commandInit(userdata, client, config, oncooldown);
     exEvents(userdata, client, config, oncooldown, guildSettings);
-    osutrack(userdata, client, config, oncooldown);
+    osutrack(userdata, client, config, oncooldown, trackDb);
 
 
     if (!fs.existsSync(`./debug`)) {
@@ -211,39 +225,39 @@ Current Client ID: ${client.user.id}
     })();
 
     // setTimeout(() => {
-        fs.appendFileSync('logs/general.log', `\n\n\n${initlog}\n\n\n`, 'utf-8');
+    fs.appendFileSync('logs/general.log', `\n\n\n${initlog}\n\n\n`, 'utf-8');
 
-        fs.writeFileSync('debug/starttime.txt', currentDate.toString());
-        fetch('https://osu.ppy.sh/oauth/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-            ,
-            body: JSON.stringify({
-                grant_type: 'client_credentials',
-                client_id: config.osuClientID,
-                client_secret: config.osuClientSecret,
-                scope: 'public'
-            })
+    fs.writeFileSync('debug/starttime.txt', currentDate.toString());
+    fetch('https://osu.ppy.sh/oauth/token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        ,
+        body: JSON.stringify({
+            grant_type: 'client_credentials',
+            client_id: config.osuClientID,
+            client_secret: config.osuClientSecret,
+            scope: 'public'
+        })
 
-        }).then(res => res.json())
-            .then(res => {
-                fs.writeFileSync('config/osuauth.json', JSON.stringify(res))
-                fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
+    }).then(res => res.json())
+        .then(res => {
+            fs.writeFileSync('config/osuauth.json', JSON.stringify(res))
+            fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
 
-            }
-            )
-            .catch(error => {
-                fs.appendFileSync(`logs/updates.log`,
-                    `
+        }
+        )
+        .catch(error => {
+            fs.appendFileSync(`logs/updates.log`,
+                `
         ----------------------------------------------------
         ERROR
         node-fetch error: ${error}
         ----------------------------------------------------
         `, 'utf-8')
-                return;
-            });
+            return;
+        });
     // }, 1000);
 });
 client.login(config.token)

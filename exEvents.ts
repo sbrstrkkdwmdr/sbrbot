@@ -5,8 +5,9 @@ import fetch from 'node-fetch';
 import osuapitypes = require('./src/types/osuApiTypes');
 import extypes = require('./src/types/extraTypes');
 import Discord = require('discord.js');
+import track = require('./src/track');
 
-module.exports = (userdata, client, config, oncooldown, guildSettings) => {
+module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) => {
 
 
     //map clearing
