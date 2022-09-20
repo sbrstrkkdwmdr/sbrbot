@@ -381,17 +381,20 @@ ID: ${absoluteID}
             return;
         }
 
-        let guildsetting = await guildSettings.findOne({
-            where: { guildId: obj.guildId }
-        })
+        const guildsetting = await guildSettings.findOne({ where: { guildid: obj.guildId } });
 
-        guildsetting.dataValues.trackChannel = channelId;
+        // guildsetting.dataValues.trackChannel = channelId;
+        await guildsetting.update({
+            trackChannel: channelId
+        }, {
+            where: { guildid: obj.guildId }
+        })
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
-                    content: 'removing user from tracking list',
+                    content: 'Tracking channel is now set to <#' + channelId + '>',
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },
@@ -403,7 +406,7 @@ ID: ${absoluteID}
             //==============================================================================================================================================================================================
             case 'interaction': {
                 obj.reply({
-                    content: 'removing user from tracking list',
+                    content: 'Tracking channel is now set',
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },

@@ -257,6 +257,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 commandStruct.osucmds.get('track').remove(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
                 break;
             case 'trackchannel':
+                commandStruct.osucmds.get('track').setChannel(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
                 break;
 
             //admincmds below
