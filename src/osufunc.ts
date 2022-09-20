@@ -8,7 +8,7 @@ import osuApiTypes = require('./types/osuApiTypes');
 import config = require('../config/config.json');
 import cmdchecks = require('./checks');
 import extypes = require('./types/extratypes');
-// import Sequelize = require('sequelize');
+import Sequelize = require('sequelize');
 
 /**
  * 
@@ -184,14 +184,14 @@ async function scorecalc(
                     await osuapiext.tools.download.difficulty(mapid, 'files/maps/', mapid); //uses fs btw
                 }
 
-                if (mods == null) {
+                if (mods == null || mods.length < 1) {
                     mods = 'NM'
                 }
 
                 let newacc = osumodcalc.calcgrade(hit300, hit100, hit50, 0).accuracy;
                 let mode;
                 switch (gamemode) {
-                    case 'osu':
+                    case 'osu':default:
                         mode = 0
                         break;
                     case 'taiko':
@@ -943,3 +943,4 @@ export function matchScores(initScore: osuApiTypes.Score, scoreList: osuApiTypes
 
     return modScores;
 }
+
