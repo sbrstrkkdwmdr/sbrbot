@@ -191,7 +191,7 @@ async function scorecalc(
                 let newacc = osumodcalc.calcgrade(hit300, hit100, hit50, 0).accuracy;
                 let mode;
                 switch (gamemode) {
-                    case 'osu':default:
+                    case 'osu': default:
                         mode = 0
                         break;
                     case 'taiko':
@@ -944,3 +944,32 @@ export function matchScores(initScore: osuApiTypes.Score, scoreList: osuApiTypes
     return modScores;
 }
 
+export function getMapImages(mapSetId: string | number) {
+
+    return {
+        //smaller res of full/raw
+        thumbnail: `https://b.ppy.sh/thumb/${mapSetId}l.jpg`,
+        thumbnailLarge: `https://b.ppy.sh/thumb/${mapSetId}l.jpg`,
+        
+        //full res of map bg
+        full: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/fullsize.jpg`,
+        raw: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/raw.jpg`,
+
+        //same width but shorter height
+        cover: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/cover.jpg`,
+        cover2x: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/cover@2x.jpg`,
+       
+        //smaller ver of cover
+        card: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/card.jpg`,
+        card2x: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/card@2x.jpg`,
+       
+        //square
+        list: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/list.jpg`,
+        list2x: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/list@2x.jpg`,
+       
+        //shorter height ver of cover
+        slimcover: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/slimcover.jpg`,
+        slimcover2x: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/slimcover@2x.jpg`,
+
+    }
+}
