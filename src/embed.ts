@@ -58,70 +58,39 @@ export async function scoreList(
     }
 
     let newData = filtereddata.slice()
-    if (reverse == false || reverse == null) {
-        switch (sort) {
-            case 'score':
-                newData = filtereddata.slice().sort((a, b) => b.score - a.score)
-                filterinfo += `\nsorted by score`
-                break;
-            case 'acc':
-                newData = filtereddata.slice().sort((a, b) => b.accuracy - a.accuracy)
-                filterinfo += `\nsorted by highest accuracy`
-                break;
-            case 'pp': default:
-                newData = filtereddata.slice().sort((a, b) => b.pp - a.pp)
-                filterinfo += `\nsorted by highest pp`
-                sort = 'pp'
-                break;
-            case 'recent':
-                newData = filtereddata.slice().sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
-                filterinfo += `\nsorted by most recent`
-                break;
-            case 'combo':
-                newData = filtereddata.slice().sort((a, b) => b.max_combo - a.max_combo)
-                filterinfo += `\nsorted by highest combo`
-                break;
-            case 'miss':
-                newData = filtereddata.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
-                filterinfo += `\nsorted by least misses`
-                break;
-            case 'rank':
-                newData = filtereddata.slice().sort((a, b) => a.rank.localeCompare(b.rank))
-                filterinfo += `\nsorted by rank`
-                break;
-        }
-    } else {
-        switch (sort) {
-            case 'score':
-                newData = filtereddata.slice().sort((a, b) => a.score - b.score)
-                filterinfo += `\nsorted by lowest score`
-                break;
-            case 'acc':
-                newData = filtereddata.slice().sort((a, b) => a.accuracy - b.accuracy)
-                filterinfo += `\nsorted by lowest accuracy`
-                break;
-            case 'pp': default:
-                newData = filtereddata.slice().sort((a, b) => a.pp - b.pp)
-                filterinfo += `\nsorted by lowest pp`
-                sort = 'pp'
-                break;
-            case 'recent':
-                newData = filtereddata.slice().sort((a, b) => parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
-                filterinfo += `\nsorted by oldest`
-                break;
-            case 'combo':
-                newData = filtereddata.slice().sort((a, b) => a.max_combo - b.max_combo)
-                filterinfo += `\nsorted by lowest combo`
-                break;
-            case 'miss':
-                newData = filtereddata.slice().sort((a, b) => b.statistics.count_miss - a.statistics.count_miss)
-                filterinfo += `\nsorted by most misses`
-                break;
-            case 'rank':
-                newData = filtereddata.slice().sort((a, b) => b.rank.localeCompare(a.rank))
-                filterinfo += `\nsorted by lowest rank`
-                break;
-        }
+    switch (sort) {
+        case 'score':
+            newData = filtereddata.slice().sort((a, b) => b.score - a.score)
+            filterinfo += `\nsorted by score`
+            break;
+        case 'acc':
+            newData = filtereddata.slice().sort((a, b) => b.accuracy - a.accuracy)
+            filterinfo += `\nsorted by highest accuracy`
+            break;
+        case 'pp': default:
+            newData = filtereddata.slice().sort((a, b) => b.pp - a.pp)
+            filterinfo += `\nsorted by highest pp`
+            sort = 'pp'
+            break;
+        case 'recent':
+            newData = filtereddata.slice().sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
+            filterinfo += `\nsorted by most recent`
+            break;
+        case 'combo':
+            newData = filtereddata.slice().sort((a, b) => b.max_combo - a.max_combo)
+            filterinfo += `\nsorted by highest combo`
+            break;
+        case 'miss':
+            newData = filtereddata.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
+            filterinfo += `\nsorted by least misses`
+            break;
+        case 'rank':
+            newData = filtereddata.slice().sort((a, b) => a.rank.localeCompare(b.rank))
+            filterinfo += `\nsorted by rank`
+            break;
+    }
+    if (reverse == true) {
+        newData.reverse()
     }
 
     if (page >= Math.ceil(newData.length / 5)) {
