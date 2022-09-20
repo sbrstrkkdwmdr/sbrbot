@@ -404,7 +404,7 @@ export type ForumTopic = {
     user_id: number,
 } & Error
 
-export type GameMode = ('osu' | 'taiko' | 'fruits' | 'mania') & Error
+export type GameMode = ('osu' | 'taiko' | 'fruits' | 'mania')
 
 export type GithubUser = {
     display_name: string,
@@ -524,7 +524,7 @@ export type Score = {
     match?: any,
     max_combo: number,
     mode_int: number,
-    mode: string,
+    mode: GameMode,
     mods: Mod[],
     passed: boolean,
     perfect: boolean,

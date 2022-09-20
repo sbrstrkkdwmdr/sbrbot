@@ -34,7 +34,7 @@ export async function scoreList(
     let filteredMods = asObj.filteredMods
     const reverse = asObj.reverse
     const mapidOverride = asObj.mapidOverride
-    
+
 
     let filtereddata = scores.slice()
     let filterinfo = '';
@@ -160,53 +160,19 @@ export async function scoreList(
 
         if (detailed === true) {
             const ranking = curscore.rank.toUpperCase()
-            let grade: string;
-            switch (ranking) {
-                case 'F':
-                    grade = emojis.grades.F
-                    break;
-                case 'D':
-                    grade = emojis.grades.D
-                    break;
-                case 'C':
-                    grade = emojis.grades.C
-                    break;
-                case 'B':
-                    grade = emojis.grades.B
-                    break;
-                case 'A':
-                    grade = emojis.grades.A
-                    break;
-                case 'S':
-                    grade = emojis.grades.S
-                    break;
-                case 'SH':
-                    grade = emojis.grades.SH
-                    break;
-                case 'X':
-                    grade = emojis.grades.X
-                    break;
-                case 'XH':
-                    grade = emojis.grades.XH
-                    break;
-            }
-            let hitlist: string;
+            let grade: string = gradeToEmoji(ranking);
             const hitstats = curscore.statistics
-            switch (curscore.mode) {
-                case 'osu':
-                default:
-                    hitlist = `${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_50)}/${func.separateNum(hitstats.count_miss)}`
-                    break;
-                case 'taiko':
-                    hitlist = `${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_miss)}`
-                    break;
-                case 'fruits':
-                    hitlist = `${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_50)}/${func.separateNum(hitstats.count_miss)}`
-                    break;
-                case 'mania':
-                    hitlist = `${func.separateNum(hitstats.count_geki)}/${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_katu)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_50)}/${func.separateNum(hitstats.count_miss)}`
-                    break;
-            }
+            let hitlist: string = hitList(
+                {
+                    gamemode: curscore.mode,
+                    count_geki: hitstats.count_geki,
+                    count_300: hitstats.count_300,
+                    count_katu: hitstats.count_katu,
+                    count_100: hitstats.count_100,
+                    count_50: hitstats.count_50,
+                    count_miss: hitstats.count_miss,
+                }
+            )
 
             const tempMods = curscore.mods
             let ifmods: string;
@@ -290,53 +256,21 @@ ${weighted}
             )
         } else {
             const ranking = curscore.rank.toUpperCase()
-            let grade: string;
-            switch (ranking) {
-                case 'F':
-                    grade = emojis.grades.F
-                    break;
-                case 'D':
-                    grade = emojis.grades.D
-                    break;
-                case 'C':
-                    grade = emojis.grades.C
-                    break;
-                case 'B':
-                    grade = emojis.grades.B
-                    break;
-                case 'A':
-                    grade = emojis.grades.A
-                    break;
-                case 'S':
-                    grade = emojis.grades.S
-                    break;
-                case 'SH':
-                    grade = emojis.grades.SH
-                    break;
-                case 'X':
-                    grade = emojis.grades.X
-                    break;
-                case 'XH':
-                    grade = emojis.grades.XH
-                    break;
-            }
-            let hitlist: string;
+            let grade: string = gradeToEmoji(ranking);
+
             const hitstats = curscore.statistics
-            switch (curscore.mode) {
-                case 'osu':
-                default:
-                    hitlist = `${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_50)}/${func.separateNum(hitstats.count_miss)}`
-                    break;
-                case 'taiko':
-                    hitlist = `${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_miss)}`
-                    break;
-                case 'fruits':
-                    hitlist = `${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_50)}/${func.separateNum(hitstats.count_miss)}`
-                    break;
-                case 'mania':
-                    hitlist = `${func.separateNum(hitstats.count_geki)}/${func.separateNum(hitstats.count_300)}/${func.separateNum(hitstats.count_katu)}/${func.separateNum(hitstats.count_100)}/${func.separateNum(hitstats.count_50)}/${func.separateNum(hitstats.count_miss)}`
-                    break;
-            }
+
+            let hitlist: string = hitList(
+                {
+                    gamemode: curscore.mode,
+                    count_geki: hitstats.count_geki,
+                    count_300: hitstats.count_300,
+                    count_katu: hitstats.count_katu,
+                    count_100: hitstats.count_100,
+                    count_50: hitstats.count_50,
+                    count_miss: hitstats.count_miss,
+                }
+            )
 
             const tempMods = curscore.mods
             let ifmods: string;
@@ -430,3 +364,67 @@ export function score(score: osuapitypes.Score, map: osuapitypes.Beatmap, detail
 export function user() { }
 
 export type scoreSort = 'pp' | 'score' | 'acc' | 'recent' | 'combo' | 'miss' | 'rank'
+
+export function gradeToEmoji(str: string) {
+    let grade;
+    switch (str) {
+        case 'F':
+            grade = emojis.grades.F
+            break;
+        case 'D':
+            grade = emojis.grades.D
+            break;
+        case 'C':
+            grade = emojis.grades.C
+            break;
+        case 'B':
+            grade = emojis.grades.B
+            break;
+        case 'A':
+            grade = emojis.grades.A
+            break;
+        case 'S':
+            grade = emojis.grades.S
+            break;
+        case 'SH':
+            grade = emojis.grades.SH
+            break;
+        case 'X':
+            grade = emojis.grades.X
+            break;
+        case 'XH':
+            grade = emojis.grades.XH
+            break;
+    }
+    return grade;
+}
+
+export function hitList(
+    obj: {
+        gamemode: osuapitypes.GameMode,
+        count_geki?: number
+        count_300: number,
+        count_katu?: number
+        count_100: number,
+        count_50?: number,
+        count_miss: number,
+    }
+) {
+    let hitList: string;
+    switch (obj.gamemode) {
+        case 'osu':
+        default:
+            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`
+            break;
+        case 'taiko':
+            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_miss)}`
+            break;
+        case 'fruits':
+            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`
+            break;
+        case 'mania':
+            hitList = `${func.separateNum(obj.count_geki)}/${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_katu)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`
+            break;
+    }
+    return hitList;
+}
