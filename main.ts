@@ -141,6 +141,10 @@ const guildSettings = sequelize.define('guildSettings', {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
     },
+    trackChannel: {
+        type: Sequelize.INTEGER,
+        defaultValue: null,
+    }
 });
 
 const trackDb = sequelize.define('trackUsers', {
@@ -152,7 +156,7 @@ const trackDb = sequelize.define('trackUsers', {
         type: Sequelize.INTEGER,
         unique: true
     },
-    channels: {
+    guilds: {
         type: Sequelize.STRING,
     }
 })
@@ -162,6 +166,7 @@ client.once('ready', () => {
 
     userdata.sync();
     guildSettings.sync();
+    trackDb.sync();
     const timetostart = currentDate.getTime() - initdate.getTime()
     const initlog = `
 ===================================================================
@@ -179,13 +184,13 @@ Current Client ID: ${client.user.id}
 
     const oncooldown = new Set();
 
-    commandHandler(userdata, client, commandStruct, config, oncooldown, guildSettings);
+    commandHandler(userdata, client, commandStruct, config, oncooldown, guildSettings, trackDb);
     linkHandler(userdata, client, commandStruct, config, oncooldown, guildSettings);
     moderator(userdata, client, config, oncooldown, guildSettings);
     buttonHandler(userdata, client, commandStruct, config, oncooldown);
     commandInit(userdata, client, config, oncooldown);
     exEvents(userdata, client, config, oncooldown, guildSettings);
-    osutrack(userdata, client, config, oncooldown, trackDb);
+    osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);
 
 
     if (!fs.existsSync(`./debug`)) {
@@ -211,6 +216,10 @@ Current Client ID: ${client.user.id}
     if (!fs.existsSync(`./logs/moderator`)) {
         console.log(`Creating logs/moderator folder`);
         fs.mkdirSync(`./logs/moderator`);
+    }
+    if (!fs.existsSync(`./trackingFiles`)) {
+        console.log(`Creating trackingFiles folder`);
+        fs.mkdirSync(`./trackingFiles`);
     }
     (async () => {
         await client.guilds.cache.forEach(guild => {

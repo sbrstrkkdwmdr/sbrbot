@@ -5,32 +5,52 @@ import fs = require('fs');
 import Discord = require('discord.js');
 import func = require('./other');
 import embedstuff = require('./embed');
-module.exports = (userdata, client, config, oncooldown, trackDb:Sequelize.ModelStatic<any>) => {
+module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.ModelStatic<any>, guildSettings: Sequelize.ModelStatic<any>) => {
 
     async function trackUser(fr: { user: string, mode: string, inital?: boolean }) {
         const curdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('osutop', fr.user, fr.mode)
         const thisUser: osuApiTypes.User = await osufunc.apiget('user', fr.user, fr.mode)
         // osufunc.debug(curdata, 'auto', 'trackUser', curdata[0].id ?? 'ERROR', )
-        if (!curdata?.[0]?.id) return;
-        if (curdata?.[0]?.id && fr.inital == true) {
+        if (!curdata?.[0]?.user_id) return;
+        if (curdata?.[0]?.user_id && fr.inital == true) {
             fs.writeFileSync(`trackingFiles/${curdata[0].user_id}.json`, JSON.stringify(curdata, null, 2))
+            return;
         }
-        if (curdata?.[0]?.id) {
-            // let file = fs.readFileSync(`trackingFiles/${curdata[0].id}.json`, 'utf-8')
-            let previous: osuApiTypes.Score[] & osuApiTypes.Error = JSON.parse(fs.readFileSync(`trackingFiles/${curdata[0].id}.json`, 'utf-8'))
+        if (curdata?.[0]?.user_id) {
+            if (fs.existsSync(`trackingFiles/${curdata[0].user_id}.json`)) {
+                let previous: osuApiTypes.Score[] & osuApiTypes.Error = JSON.parse(fs.readFileSync(`trackingFiles/${curdata[0].user_id}.json`, 'utf-8'))
 
-            curdata.sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
+                // curdata.sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
 
-            for (let i = 0; i < curdata.length; i++) {
-                if (!previous.includes(curdata[i])) {
-                    console.log('new score')
-                    sendMsg(await getEmbed({
-                        scoredata: curdata[i],
-                        user: thisUser,
-                        scorepos: i
-                    }), fr.user)
+                for (let i = 0; i < curdata.length; i++) {
+
+                    //if current score is not in previous scores
+
+                    if (!previous.find(x => x.id == curdata[i].id)) {
+                        // console.log(curdata[i].id)
+                        console.log('new score #' + i)
+                        sendMsg(await getEmbed({
+                            scoredata: curdata[i],
+                            user: thisUser,
+                            scorepos: i
+                        }), fr.user)
+                    }
+                    // for (let j = 0; i < curdata.length; j++) {
+                    //     if (!previous[j]) break;
+
+
+                    //     if (curdata[i].id == previous[j].id) {
+                    //         console.log('new score #' + i)
+                    //         sendMsg(await getEmbed({
+                    //             scoredata: curdata[i],
+                    //             user: thisUser,
+                    //             scorepos: i
+                    //         }), fr.user)
+                    //     }
+                    // }
                 }
             }
+            fs.writeFileSync(`trackingFiles/${curdata[0].user_id}.json`, JSON.stringify(curdata, null, 2))
         }
     }
 
@@ -72,7 +92,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb:Sequelize.ModelS
             scorepos: number,
         }
     ) {
-        const ppcalc = osufunc.scorecalc(
+        const ppcalc = await osufunc.scorecalc(
             data.scoredata.mods.join(''),
             data.scoredata.mode,
             data.scoredata.beatmap.id,
@@ -105,8 +125,8 @@ module.exports = (userdata, client, config, oncooldown, trackDb:Sequelize.ModelS
             })
             .setImage(`${data.scoredata.beatmapset.covers['cover@2x']}`)
             .setDescription(
-                `${data.scoredata.mods ? '+' + data.scoredata.mods.join('') + ' | ' : ''} **Score set** <:t${new Date(data.scoredata.created_at).getTime() / 1000}:R>\n` +
-                `${(data.scoredata.accuracy * 100).toFixed(2)}% | ${embedstuff.gradeToEmoji(data.scoredata.rank)} | ${ppcalc[0].stars.toFixed(2)}⭐\n` +
+                `${data.scoredata.mods ? '+' + data.scoredata.mods.join('') + ' | ' : ''} **Score set** <t:${new Date(data.scoredata.created_at).getTime() / 1000}:R>\n` +
+                `${(data.scoredata.accuracy * 100).toFixed(2)}% | ${embedstuff.gradeToEmoji(data.scoredata.rank)} | ${(ppcalc?.[0]?.stars ?? data.scoredata.beatmap.difficulty_rating).toFixed(2)}⭐\n` +
                 `${embedstuff.hitList({
                     gamemode: data.scoredata.mode,
                     count_geki: data.scoredata.statistics.count_geki,
@@ -125,8 +145,8 @@ module.exports = (userdata, client, config, oncooldown, trackDb:Sequelize.ModelS
         const allUsers = await db.findAll()
         allUsers.forEach(user => {
             trackUser({
-                user: user.osuid,
-                mode: user.mode,
+                user: user.dataValues.osuid,
+                mode: user.dataValues.mode,
                 inital: false
             })
         })
@@ -138,26 +158,58 @@ module.exports = (userdata, client, config, oncooldown, trackDb:Sequelize.ModelS
                 osuid: curuser
             }
         })
-        const channels = userobj.channels.split(',')
+        const guilds = userobj.guilds.split(',')
 
-        channels.forEach(channel => {
-            if (channel) {
-                const curchannel = client.channels.get(channel)
-                if (curchannel) {
-                    curchannel.send({
-                        embeds: [embed]
+        let channels = []
+
+        guilds.forEach(guild => {
+            const guild2 = client.guilds.cache.forEach(async guild3 => {
+                if (guilds.includes(guild3.id)) {
+                    const curset = await guildSettings.findOne({
+                        where: {
+                            guildid: guild3.id
+                        }
                     })
+                    if (curset?.dataValues?.trackChannel) {
+                        await channels.push(`${curset.trackChannel}`)
+                        // console.log('tracking enabled in guild')
+                    }
                 }
-            }
+            })
         })
 
+        
+        // console.log(guilds)
+        // console.log('----------')
+        // console.log(channels)
+
+        setTimeout(() => {
+            // console.log(channels)
+
+            channels.forEach(channel => {
+                client.guilds.cache.forEach((guild: Discord.Guild) => {
+                    if (guild.channels.cache.has(`${channel}`)) {
+                        // console.log('channel found')
+                        const curchannel:Discord.GuildTextBasedChannel = guild.channels.cache.get(channel) as Discord.GuildTextBasedChannel
+                        // const curchannel = client.channels.get(channel)
+                        if (curchannel) {
+                            // console.log('sending')
+                            curchannel.send({
+                                embeds: [embed]
+                            }).catch()
+                        }
+                    }
+                })
+            })
+        }, 2000)
 
     }
 
     // export { trackUser, trackUsers, addTrackUser };
 
-
+    // trackUsers(trackDb)
+ 
     setInterval(() => {
         trackUsers(trackDb)
-    }, 60 * 1000);
+    }, 60 * 1000 * 5); //requests ever 5 min
 }

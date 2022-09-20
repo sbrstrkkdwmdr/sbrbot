@@ -5,7 +5,7 @@ import defaults = require('./src/consts/defaults');
 import Discord = require('discord.js');
 import cd = require('./src/consts/cooldown');
 
-module.exports = (userdata, client, commandStruct, config, oncooldown, guildSettings) => {
+module.exports = (userdata, client, commandStruct, config, oncooldown, guildSettings, trackDb) => {
     let timeouttime;
 
     client.on('messageCreate', async (message) => {
@@ -249,6 +249,14 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 break;
             case 'simplay': case 'simulate':
                 commandStruct.osucmds.get('simulate').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                break;
+            case 'trackadd':case 'track':
+                commandStruct.osucmds.get('track').add(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
+                break;
+            case 'trackremove':case 'trackrm':
+                commandStruct.osucmds.get('track').remove(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
+                break;
+            case 'trackchannel':
                 break;
 
             //admincmds below
