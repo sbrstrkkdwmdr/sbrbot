@@ -23,6 +23,9 @@ module.exports = {
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
+                scorelink = null;
+                scoremode = args[1] ?? 'osu';
+                scoreid = args[0];
             }
                 break;
 
@@ -138,6 +141,19 @@ module.exports = {
         } catch (error) {
             obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
                 .catch();
+
+            // switch (commandType) {
+            //     case 'button': {
+            //         obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
+            //             .catch();
+            //     }
+            //         break;
+            //     case 'message': {
+            //         obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed.', allowedMentions: { repliedUser: false } })
+            //             .catch();
+            //     }
+            //         break;
+            // }
             return;
         }
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${scoredata.beatmap.id}`)

@@ -244,6 +244,10 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'rs': case 'recent': case 'r':
                 commandStruct.osucmds.get('recent').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
+
+            case 'scoreparse': case 'score':case 'sp':
+                commandStruct.osucmds.get('scoreparse').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                break;
             case 'scores': case 'c':
                 commandStruct.osucmds.get('scores').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
@@ -253,13 +257,13 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'skin':
                 commandStruct.osucmds.get('skin').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
-            case 'trackadd': case 'track':case 'ta':
+            case 'trackadd': case 'track': case 'ta':
                 commandStruct.osucmds.get('track').add(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
                 break;
-            case 'trackremove': case 'trackrm':case 'tr':case 'untrack':
+            case 'trackremove': case 'trackrm': case 'tr': case 'untrack':
                 commandStruct.osucmds.get('track').remove(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
                 break;
-            case 'trackchannel':case 'tc':
+            case 'trackchannel': case 'tc':
                 commandStruct.osucmds.get('track').setChannel(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
                 break;
 
