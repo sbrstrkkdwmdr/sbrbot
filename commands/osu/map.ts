@@ -118,12 +118,12 @@ module.exports = {
 
             case 'link': {
                 commanduser = obj.author;
-
+                
                 const messagenohttp = obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
                 mapmods =
                     obj.content.includes('+') ?
                         messagenohttp.split('+')[1] : 'NM';
-                mapid;
+                // mapid;
                 if (
                     (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmapsets/') && messagenohttp.includes('#'))) ||
                     (!messagenohttp.includes('/s/') && (messagenohttp.includes('/b/'))) ||
@@ -143,9 +143,9 @@ module.exports = {
                             idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1]
                         }
                         if (isNaN(idfirst)) {
-                            mapid = idfirst.split(' ')[0]
+                            mapid = parseInt(idfirst.split(' ')[0])
                         } else {
-                            mapid = idfirst
+                            mapid = parseInt(idfirst)
                         }
                     } catch (error) {
                         obj.reply({
@@ -197,7 +197,6 @@ module.exports = {
                 break;
         }
         if (overrides != null) {
-            mapid = overrides.id
             overwriteModal = overrides.overwriteModal
         }
 
