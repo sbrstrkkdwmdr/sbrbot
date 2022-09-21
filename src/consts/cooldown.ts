@@ -1,12 +1,17 @@
 export const cooldownCommands = [
+    'bests',
+    'bws',
     'compare',
     'firsts',
+    'globals',
     'map', 'm',
     'maplb', 'mapleaderboard', 'leaderboard',
-    'osu', 'o', 'profile',
+    'nochokes', 'nc',
+    'osu', 'o', 'profile', 'user',
     'osutop', 'top',
     'pinned',
     'recent', 'rs', 'r',
+    'scoreparse', 'score', 'sp',
     'scores', 'c',
     'simulate', 'simplay',
 
