@@ -311,6 +311,9 @@ ID: ${absoluteID}
             case 'message': {
                 commanduser = obj.author;
                 channelId = args[0];
+                if(obj.content.includes('<#')){
+                    channelId = obj.content.split('<#')[1].split('>')[0]
+                }
             }
                 break;
             //==============================================================================================================================================================================================
@@ -370,7 +373,10 @@ ID: ${absoluteID}
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        if (!channelId || isNaN(+channelId)) {
+        
+
+
+        if (!channelId || isNaN(+channelId) || !client.channels.cache.get(channelId)) {
             obj.reply({
                 content: 'Please provide a valid channel ID',
                 embeds: [],
