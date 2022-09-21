@@ -153,22 +153,36 @@ export async function scoreList(
             }
 
             let pptxt: string;
-            const ppcalcing = await osufunc.scorecalc(
-                curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
-                curscore.mode,
-                mapid,
-                hitstats.count_geki,
-                hitstats.count_300,
-                hitstats.count_katu,
-                hitstats.count_100,
-                hitstats.count_50,
-                hitstats.count_miss,
-                curscore.accuracy,
-                curscore.max_combo,
-                curscore.score,
-                0,
-                null, false
-            )
+            const ppcalcing =
+                // await osufunc.scorecalc(
+                //     curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
+                //     curscore.mode,
+                //     mapid,
+                //     hitstats.count_geki,
+                //     hitstats.count_300,
+                //     hitstats.count_katu,
+                //     hitstats.count_100,
+                //     hitstats.count_50,
+                //     hitstats.count_miss,
+                //     curscore.accuracy,
+                //     curscore.max_combo,
+                //     curscore.score,
+                //     0,
+                //     null, false
+                // )
+                await osufunc.scorecalc({
+                    mods: curscore.mods.join('').length > 1 ?
+                        curscore.mods.join('') : 'NM',
+                    gamemode: curscore.mode,
+                    mapid: curscore.beatmap.id,
+                    miss: hitstats.count_miss,
+                    acc: curscore.accuracy,
+                    maxcombo: curscore.max_combo,
+                    score: curscore.score,
+                    calctype: 0,
+                    passedObj: 0,
+                    failed: false
+                })
             if (curscore.accuracy != 1) {
                 if (curscore.pp == null || isNaN(curscore.pp)) {
                     pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
@@ -254,22 +268,19 @@ ${weighted}
 
 
             if (curscore.pp == null || isNaN(curscore.pp)) {
-                const ppcalcing = await osufunc.scorecalc(
-                    curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
-                    curscore.mode,
-                    mapid,
-                    hitstats.count_geki,
-                    hitstats.count_300,
-                    hitstats.count_katu,
-                    hitstats.count_100,
-                    hitstats.count_50,
-                    hitstats.count_miss,
-                    curscore.accuracy,
-                    curscore.max_combo,
-                    curscore.score,
-                    0,
-                    null, false
-                )
+                const ppcalcing = await osufunc.scorecalc({
+                    mods: curscore.mods.join('').length > 1 ?
+                        curscore.mods.join('') : 'NM',
+                    gamemode: curscore.mode,
+                    mapid: curscore.beatmap.id,
+                    miss: hitstats.count_miss,
+                    acc: curscore.accuracy,
+                    maxcombo: curscore.max_combo,
+                    score: curscore.score,
+                    calctype: 0,
+                    passedObj: 0,
+                    failed: false
+                })
                 pptxt =
                     `${await ppcalcing[0].pp.toFixed(2)}pp`
             } else {

@@ -213,7 +213,20 @@ module.exports = {
         }
         let ppcalcing;
         try {
-            ppcalcing = await osufunc.scorecalc(scoredata.mods.join('').length > 1 ? scoredata.mods.join('') : 'NM', scoredata.mode, scoredata.beatmap.id, gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss, scoredata.accuracy * 100, scoredata.max_combo, scoredata.score, 0, null, false)
+            ppcalcing = await osufunc.scorecalc({
+                mods: scoredata.mods.join('').length > 1 ?
+                    scoredata.mods.join('') : 'NM',
+                gamemode: scoredata.mode,
+                mapid: scoredata.beatmap.id,
+                miss: gamehits.count_miss,
+                acc: scoredata.accuracy,
+                maxcombo: scoredata.max_combo,
+                score: scoredata.score,
+                calctype: 0,
+                passedObj: 0,
+                failed: false
+            })
+
             ppissue = ''
             // fs.writeFileSync(`debug/command-scoreparse=ppcalc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2));
             osufunc.debug(ppcalcing, 'command', 'scoreparse', obj.guildId, 'ppCalcing');

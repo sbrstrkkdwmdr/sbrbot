@@ -64,7 +64,7 @@ async function editTrackUser(
             }
             // console.log(prevchannels)
 
-            
+
 
             await fr.database.update({
                 userid: fr.discuser,
@@ -102,21 +102,19 @@ async function getEmbed(
         scorepos: number,
     }
 ) {
-    const ppcalc = osufunc.scorecalc(
-        data.scoredata.mods.join(''),
-        data.scoredata.mode,
-        data.scoredata.beatmap.id,
-        data.scoredata.statistics.count_geki,
-        data.scoredata.statistics.count_300,
-        data.scoredata.statistics.count_katu,
-        data.scoredata.statistics.count_100,
-        data.scoredata.statistics.count_50,
-        data.scoredata.statistics.count_miss,
-        data.scoredata.accuracy,
-        data.scoredata.max_combo,
-        data.scoredata.score,
-        0, null, false
-    )
+    const ppcalc = await osufunc.scorecalc({
+        mods: data.scoredata.mods.join('').length > 1 ?
+            data.scoredata.mods.join('') : 'NM',
+        gamemode: data.scoredata.mode,
+        mapid: data.scoredata.beatmap.id,
+        miss: data.scoredata.statistics.count_miss,
+        acc: data.scoredata.accuracy,
+        maxcombo: data.scoredata.max_combo,
+        score: data.scoredata.score,
+        calctype: 0,
+        passedObj: 0,
+        failed: false
+    })
 
     let pp: string;
     if (data.scoredata.accuracy != 1) {

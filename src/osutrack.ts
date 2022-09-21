@@ -92,21 +92,35 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
             scorepos: number,
         }
     ) {
-        const ppcalc = await osufunc.scorecalc(
-            data.scoredata.mods.join(''),
-            data.scoredata.mode,
-            data.scoredata.beatmap.id,
-            data.scoredata.statistics.count_geki,
-            data.scoredata.statistics.count_300,
-            data.scoredata.statistics.count_katu,
-            data.scoredata.statistics.count_100,
-            data.scoredata.statistics.count_50,
-            data.scoredata.statistics.count_miss,
-            data.scoredata.accuracy,
-            data.scoredata.max_combo,
-            data.scoredata.score,
-            0, null, false
-        )
+        const ppcalc =
+            // await osufunc.scorecalc(
+            //     data.scoredata.mods.join(''),
+            //     data.scoredata.mode,
+            //     data.scoredata.beatmap.id,
+            //     data.scoredata.statistics.count_geki,
+            //     data.scoredata.statistics.count_300,
+            //     data.scoredata.statistics.count_katu,
+            //     data.scoredata.statistics.count_100,
+            //     data.scoredata.statistics.count_50,
+            //     data.scoredata.statistics.count_miss,
+            //     data.scoredata.accuracy,
+            //     data.scoredata.max_combo,
+            //     data.scoredata.score,
+            //     0, null, false
+            // )
+            await osufunc.scorecalc({
+                mods: data.scoredata.mods.join('').length > 1 ?
+                    data.scoredata.mods.join('') : 'NM',
+                gamemode: data.scoredata.mode,
+                mapid: data.scoredata.beatmap.id,
+                miss: data.scoredata.statistics.count_miss,
+                acc: data.scoredata.accuracy,
+                maxcombo: data.scoredata.max_combo,
+                score: data.scoredata.score,
+                calctype: 0,
+                passedObj: 0,
+                failed: false
+            })
 
         let pp: string;
         if (data.scoredata.accuracy != 1) {
@@ -144,6 +158,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
     async function trackUsers(db) {
         const allUsers = await db.findAll()
         allUsers.forEach(user => {
+            osufunc.logCall(user.dataValues.osuid, 'Tracking user: ')
             trackUser({
                 user: user.dataValues.osuid,
                 mode: user.dataValues.mode,
@@ -178,7 +193,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
             })
         })
 
-        
+
         // console.log(guilds)
         // console.log('----------')
         // console.log(channels)
@@ -190,7 +205,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
                 client.guilds.cache.forEach((guild: Discord.Guild) => {
                     if (guild.channels.cache.has(`${channel}`)) {
                         // console.log('channel found')
-                        const curchannel:Discord.GuildTextBasedChannel = guild.channels.cache.get(channel) as Discord.GuildTextBasedChannel
+                        const curchannel: Discord.GuildTextBasedChannel = guild.channels.cache.get(channel) as Discord.GuildTextBasedChannel
                         // const curchannel = client.channels.get(channel)
                         if (curchannel) {
                             // console.log('sending')
@@ -208,7 +223,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
     // export { trackUser, trackUsers, addTrackUser };
 
     // trackUsers(trackDb)
- 
+
     setInterval(() => {
         trackUsers(trackDb)
     }, 60 * 1000 * 5); //requests ever 5 min

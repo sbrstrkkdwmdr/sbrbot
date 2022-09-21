@@ -172,22 +172,35 @@ module.exports = {
         const failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true
 
         try {
-            xpp = await osufunc.scorecalc(
-                osumodcalc.ModIntToString(replay.mods),
-                osumodcalc.ModeIntToName(replay.gameMode),
-                mapdata.id,
-                replay.gekis,
-                replay.number_300s,
-                replay.katus,
-                replay.number_100s,
-                replay.number_50s,
-                replay.misses,
-                accuracy,
-                replay.max_combo,
-                replay.score,
-                0,
-                totalhits, failed
-            )
+            xpp = 
+            // await osufunc.scorecalc(
+            //     osumodcalc.ModIntToString(replay.mods),
+            //     osumodcalc.ModeIntToName(replay.gameMode),
+            //     mapdata.id,
+            //     replay.gekis,
+            //     replay.number_300s,
+            //     replay.katus,
+            //     replay.number_100s,
+            //     replay.number_50s,
+            //     replay.misses,
+            //     accuracy,
+            //     replay.max_combo,
+            //     replay.score,
+            //     0,
+            //     totalhits, failed
+            // )
+            await osufunc.scorecalc({
+                mods: osumodcalc.ModIntToString(replay.mods),
+                gamemode: osumodcalc.ModeIntToName(replay.gameMode),
+                mapid: mapdata.id,
+                miss: replay.misses,
+                acc: accuracy,
+                maxcombo: replay.max_combo,
+                score: replay.score,
+                calctype: 0,
+                passedObj: 0,
+                failed: false
+            })
             ppissue = ''
         } catch (error) {
             xpp = [{

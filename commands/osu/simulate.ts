@@ -159,7 +159,20 @@ module.exports = {
         }
         // if(!n300){}
 
-        const score = await osufunc.scorecalc(mods, 'osu', mapid, null, n300, null, n100, n50, nMiss, acc, combo, null, 0, null, false);
+        const score = await osufunc.scorecalc({
+            mods,
+            gamemode: 'osu',
+            mapid,
+            hit300: n300,
+            hit100: n100,
+            hit50: n50,
+            miss: nMiss,
+            acc,
+            maxcombo: combo,
+            score: null,
+            calctype: 0,
+            failed: false
+        });
         osufunc.debug(score, 'command', 'simulate', obj.guildId, 'ppCalc');
 
         const fcaccgr =
@@ -175,7 +188,12 @@ module.exports = {
                 100 :
             fcaccgr.accuracy
 
-        const mapPerf = await osufunc.mapcalc(mods, 'osu', mapid, 0);
+        const mapPerf = await osufunc.mapcalc({
+            mods,
+            gamemode: 'osu',
+            mapid,
+            calctype: 0
+        });
 
         const title = mapdata.beatmapset?.title ?
             mapdata.beatmapset?.title != mapdata.beatmapset?.title_unicode ?

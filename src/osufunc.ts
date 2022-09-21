@@ -69,12 +69,15 @@ type Score = {
  * @returns 
  */
 async function mapcalc(
-    mods: string, gamemode: string, mapid: number,
+    obj: {
+    mods: string, 
+    gamemode: string,
+     mapid: number,
     calctype: number | null
-) {
+}) {
     let ppl
     let mapscore
-    const calctyper = osumodcalc.ModeNameToInt(gamemode)
+    const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
 
     switch (calctyper) {
         case 0: default:
@@ -82,52 +85,47 @@ async function mapcalc(
                 fs.mkdirSync('files/maps/');
             }
 
-            if (!fs.existsSync('files/maps/' + mapid + '.osu')) {
-                await osuapiext.tools.download.difficulty(mapid, 'files/maps/', mapid); //uses fs btw
+            if (!fs.existsSync('files/maps/' + obj.mapid + '.osu')) {
+                await osuapiext.tools.download.difficulty(obj.mapid, 'files/maps/', obj.mapid); //uses fs btw
                 // await dlMap(mapid);
             }
 
-
-
-
-            if (mods == null) {
-                mods = 'NM'
-            }
+            let mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
 
             mapscore = {
-                path: `files/maps/${mapid}.osu`,
+                path: `files/maps/${obj.mapid}.osu`,
                 params: [
                     {
-                        mode: gamemode,
+                        mode: obj.gamemode,
                         mods: osumodcalc.ModStringToInt(mods),
                         acc: 100,
 
                     },
                     {
-                        mode: gamemode,
+                        mode: obj.gamemode,
                         mods: osumodcalc.ModStringToInt(mods),
                         acc: 99,
 
                     },
                     {
-                        mode: gamemode,
+                        mode: obj.gamemode,
                         mods: osumodcalc.ModStringToInt(mods),
                         acc: 98,
 
                     },
                     {
-                        mode: gamemode,
+                        mode: obj.gamemode,
                         mods: osumodcalc.ModStringToInt(mods),
                         acc: 97,
 
                     },
                     {
-                        mode: gamemode,
+                        mode: obj.gamemode,
                         mods: osumodcalc.ModStringToInt(mods),
                         acc: 96
                     },
                     {
-                        mode: gamemode,
+                        mode: obj.gamemode,
                         mods: osumodcalc.ModStringToInt(mods),
                         acc: 95,
                     }
@@ -155,7 +153,7 @@ async function mapcalc(
  * @param hit100 
  * @param hit50 
  * @param miss 
- * @param acc 
+ * @param acc accuracy (IN DECIMAL) 88.64% acc = 0.8864
  * @param maxcombo 
  * @param score 
  * @param calctype 0 = rosu, 1 = booba, 2 = osu api extended
@@ -164,108 +162,142 @@ async function mapcalc(
  * @returns 
  */
 async function scorecalc(
-    mods: string, gamemode: string, mapid: number,
-    hitgeki: number | null, hit300: number | null, hitkatu: number | null, hit100: number | null, hit50: number | null, miss: number | null,
-    acc: number | null, maxcombo: number | null, score: number | null,
-    calctype: number | null, passedObj: number | null, failed: boolean | null
+    obj: {
+        mods: string, gamemode: string, mapid: number,
+        hitgeki?: number | null, hit300?: number | null, hitkatu?: number | null, hit100?: number | null, hit50?: number | null, miss: number | null,
+        acc: number | null, maxcombo?: number | null, score?: number | null,
+        calctype?: number | null, passedObj?: number | null, failed?: boolean | null
+    }
 ) {
     let ppl;
     let scorenofc;
     let scorefc;
+    let failed = obj.failed ?? false;
 
-    if (failed == null) {
-        failed = false
-    }
 
-    const calctyper = osumodcalc.ModeNameToInt(gamemode)
-    switch (calctype) {
+    const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
+    switch (obj.calctype) {
         case 0: default:
             {            //check if 'files/maps/' exists
                 if (!fs.existsSync('files/maps/')) {
                     console.log('creating files/maps/');
                     fs.mkdirSync('files/maps/');
                 }
-                if (!fs.existsSync('files/maps/' + mapid + '.osu')) {
-                    logCall(`${mapid}`, 'Map file not found')
-                    await osuapiext.tools.download.difficulty(mapid, 'files/maps/', mapid); //uses fs btw
+                if (!fs.existsSync('files/maps/' + obj.mapid + '.osu')) {
+                    logCall(`${obj.mapid}`, 'Map file not found')
+                    await osuapiext.tools.download.difficulty(obj.mapid, 'files/maps/', obj.mapid); //uses fs btw
                     // await dlMap(mapid);
                 }
+                let mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
 
-                if (mods == null || mods.length < 1) {
-                    mods = 'NM'
-                }
 
-                let newacc = osumodcalc.calcgrade(hit300, hit100, hit50, 0).accuracy;
                 let mode;
-                switch (gamemode) {
-                    case 'osu': default:
-                        mode = 0
-                        break;
-                    case 'taiko':
-                        mode = 1
-                        newacc = osumodcalc.calcgradeTaiko(hit300, hit100, 0).accuracy;
-                        break;
-                    case 'fruits':
-                        mode = 2
-                        newacc = osumodcalc.calcgradeCatch(hit300, hit100, hit50, 0, hitkatu).accuracy;
-                        break;
-                    case 'mania':
-                        mode = 3
-                        newacc = osumodcalc.calcgradeMania(hitgeki, hit300, hitkatu, hit100, hit50, 0).accuracy;
-                        break;
+
+                let newacc = osumodcalc.calcgrade(obj.hit300, obj.hit100, obj.hit50, 0).accuracy;
+                if (obj.hit300 && obj.hit100) {
+                    switch (obj.gamemode) {
+                        case 'osu': default:
+                            mode = 0
+                            if (obj.hit50) {
+                                osumodcalc.calcgrade(obj.hit300, obj.hit100, obj.hit50, 0).accuracy;
+                            } else {
+                                newacc = obj.acc
+                            }
+                            break;
+                        case 'taiko':
+                            mode = 1
+                            newacc = osumodcalc.calcgradeTaiko(obj.hit300, obj.hit100, 0).accuracy;
+                            break;
+                        case 'fruits':
+                            mode = 2
+                            if (obj.hit50) {
+                                newacc = osumodcalc.calcgradeCatch(obj.hit300, obj.hit100, obj.hit50, 0, obj.hitkatu).accuracy;
+                            } else {
+                                newacc = obj.acc
+                            }
+                            break;
+                        case 'mania':
+                            mode = 3
+                            if (obj.hitgeki && obj.hitkatu && obj.hit50) {
+                                newacc = osumodcalc.calcgradeMania(obj.hitgeki, obj.hit300, obj.hitkatu, obj.hit100, obj.hit50, 0).accuracy;
+                            } else {
+                                newacc = obj.acc
+                            }
+                            break;
+                    }
+                } else {
+                    newacc = obj.acc
+                    switch (obj.gamemode) {
+                        case 'osu': default:
+                            mode = 0
+                            break;
+                        case 'taiko':
+                            mode = 1
+                            break;
+                        case 'fruits':
+                            mode = 2
+                            break;
+                        case 'mania':
+                            mode = 3
+                            break;
+                    }
                 }
                 if (isNaN(newacc)) {
-                    newacc = acc;
+                    newacc = obj.acc;
                 }
                 let basescore: Score = {
                     mode: mode,
                     mods: osumodcalc.ModStringToInt(mods),
-                    combo: maxcombo,
-                    acc: acc || 100,
-                    score: score != null && !isNaN(score) ? score : 0,
+                    combo: obj.maxcombo,
+                    acc: obj?.acc ? obj.acc * 100 : 100,
+                    score: obj.score != null && !isNaN(obj.score) ? obj.score : 0,
                 }
                 if (failed == true) {
                     basescore = {
                         mode: mode,
                         mods: osumodcalc.ModStringToInt(mods),
-                        combo: maxcombo,
-                        acc: acc || 100,
-                        score: score != null && !isNaN(score) ? score : 0,
-                        passedObjects: passedObj
+                        combo: obj.maxcombo,
+                        acc: obj?.acc ? obj.acc * 100 : 100,
+                        score: obj.score != null && !isNaN(obj.score) ? obj.score : 0,
+                        passedObjects: obj.passedObj
                     }
                 }
-                if (hit300 != null && !isNaN(hit300)) {
-                    basescore.n300 = hit300
+                if (obj.hit300 != null && !isNaN(obj.hit300)) {
+                    basescore.n300 = obj.hit300
                 }
-                if (hit100 != null && !isNaN(hit100)) {
-                    basescore.n100 = hit100
+                if (obj.hit100 != null && !isNaN(obj.hit100)) {
+                    basescore.n100 = obj.hit100
                 }
-                if (hit50 != null && !isNaN(hit50)) {
-                    basescore.n50 = hit50
+                if (obj.hit50 != null && !isNaN(obj.hit50)) {
+                    basescore.n50 = obj.hit50
                 }
-                if (miss != null && !isNaN(miss)) {
-                    basescore.nMisses = miss
+                if (obj.miss != null && !isNaN(obj.miss)) {
+                    basescore.nMisses = obj.miss
                 }
-                if (hitkatu != null && !isNaN(hitkatu)) {
-                    basescore.nKatu = hitkatu
+                if (obj.hitkatu != null && !isNaN(obj.hitkatu)) {
+                    basescore.nKatu = obj.hitkatu
                 }
                 scorenofc = {
-                    path: `./files/maps/${mapid}.osu`,
+                    path: `./files/maps/${obj.mapid}.osu`,
                     params: [
                         basescore,
                         {
-                            mode: gamemode,
+                            mode: obj.gamemode,
                             mods: osumodcalc.ModStringToInt(mods),
-                            acc: newacc,
+                            acc: newacc * 100,
                         },
                         {
-                            mode: gamemode,
+                            mode: obj.gamemode,
                             mods: osumodcalc.ModStringToInt(mods),
                             acc: 100,
                         }
                     ]
                 }
+                // console.log(basescore)
+                console.log(scorenofc)
+                console.log(newacc)
                 ppl = await rosu.calculate(scorenofc);
+                // console.log(ppl)
 
             }
             break;
@@ -758,7 +790,7 @@ async function updateToken() {
     logCall('https://osu.ppy.sh/oauth/token', 'Update token')
 }
 
-function logCall(data: string, title?: string) {
+export function logCall(data: string, title?: string) {
     if (config.LogApiCalls == true) {
         console.log((title ? title : 'Api call') + ': ' + data)
     }

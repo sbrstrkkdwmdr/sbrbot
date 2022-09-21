@@ -506,7 +506,12 @@ params: ${mapid} | ${maptitleq}
         let ppissue: string;
         let totaldiff = mapdata.difficulty_rating;
         try {
-            ppComputed = await osufunc.mapcalc(mapmods, mapdata.mode, mapdata.id, 0)
+            ppComputed = await osufunc.mapcalc({
+                mods: mapmods,
+                gamemode: mapdata.mode,
+                mapid: mapdata.id,
+                calctype: 0
+            })
             ppissue = '';
             try {
                 totaldiff = ppComputed[0].stars?.toFixed(2)
@@ -795,15 +800,15 @@ ${error}
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-                setTimeout(() => { 
-                obj.editReply({
-                    content: '',
-                    embeds: embeds,
-                    components: useComponents,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+                setTimeout(() => {
+                    obj.editReply({
+                        content: '',
+                        embeds: embeds,
+                        components: useComponents,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
                 }, 1000)
             }
 

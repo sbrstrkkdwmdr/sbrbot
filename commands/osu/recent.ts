@@ -253,29 +253,8 @@ module.exports = {
                 .catch()
         }
 
-        let rsdata: osuApiTypes.Score[] & osuApiTypes.Error = [];// = await osufunc.apiget('recent', `${osudata.id}`, `${mode}`)
-        async function getScoreCount(cinitnum) {
-            const fd: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('recent_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
-            //[{},{}]
-            //push {}
-            if (fd?.error) {
-                obj.reply({
-                    content: `${rsdata?.error ? rsdata?.error : 'Error: null'}`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: false,
-                }).catch()
-                return;
-            }
-            for (let i = 0; i < fd.length; i++) {
-                if (!fd[i] || typeof fd[i] == 'undefined') { break; }
-                await rsdata.push(fd[i])
-            }
-            if (fd.length == 100) {
-                await getScoreCount(cinitnum + 100)
-            }
+        let rsdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('recent_alt', `${osudata.id}`, `mode=${mode}&offset=0`, 2, 0, true)
 
-        }
-        await getScoreCount(0);
         // fs.writeFileSync(`debug/command-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
         osufunc.debug(rsdata, 'command', 'recent', obj.guildId, 'rsData');
 
@@ -473,41 +452,33 @@ module.exports = {
             // const ppiffc = NaN;
             let ppcalcing
             try {
-                ppcalcing = await osufunc.scorecalc(
-                    curscore.mods.join('').length > 1 ?
+                ppcalcing = await osufunc.scorecalc({
+                    mods: curscore.mods.join('').length > 1 ?
                         curscore.mods.join('') : 'NM',
-                    curscore.mode,
-                    curscore.beatmap.id,
-                    gamehits.count_geki,
-                    gamehits.count_300,
-                    gamehits.count_katu,
-                    gamehits.count_100,
-                    gamehits.count_50,
-                    gamehits.count_miss,
-                    curscore.accuracy,
-                    curscore.max_combo,
-                    curscore.score,
-                    0,
-                    0, false
-                )
+                    gamemode: curscore.mode,
+                    mapid: curscore.beatmap.id,
+                    miss: gamehits.count_miss,
+                    acc: curscore.accuracy,
+                    maxcombo: curscore.max_combo,
+                    score: curscore.score,
+                    calctype: 0,
+                    passedObj: 0,
+                    failed: false
+                })
                 if (curscore.rank == 'F') {
-                    ppcalcing = await osufunc.scorecalc(
-                        curscore.mods.join('').length > 1 ?
+                    ppcalcing = await osufunc.scorecalc({
+                        mods: curscore.mods.join('').length > 1 ?
                             curscore.mods.join('') : 'NM',
-                        curscore.mode,
-                        curscore.beatmap.id,
-                        gamehits.count_geki,
-                        gamehits.count_300,
-                        gamehits.count_katu,
-                        gamehits.count_100,
-                        gamehits.count_50,
-                        gamehits.count_miss,
-                        curscore.accuracy,
-                        curscore.max_combo,
-                        curscore.score,
-                        0,
-                        totalhits,
-                        true
+                        gamemode: curscore.mode,
+                        mapid: curscore.beatmap.id,
+                        miss: gamehits.count_miss,
+                        acc: curscore.accuracy,
+                        maxcombo: curscore.max_combo,
+                        score: curscore.score,
+                        calctype: 0,
+                        passedObj: totalhits,
+                        failed: true
+                    }
                     )
                 }
                 totaldiff = ppcalcing[0].stars.toFixed(2)
