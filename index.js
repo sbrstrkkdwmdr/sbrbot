@@ -18,8 +18,8 @@ function generateCommands() {
         </p>
 
         <pre>
-        Command: ${cmd.usage}
-  Slash Command: ${cmd.slashusage}
+        Command: sbr-${cmd.usage}
+  Slash Command: /${cmd.slashusage}
        ${cmd.examples.length > 0 ?
                 `\nExamples: \n` + cmd.examples.join(
                     `                \n`) :
