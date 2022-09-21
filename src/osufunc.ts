@@ -84,7 +84,11 @@ async function mapcalc(
 
             if (!fs.existsSync('files/maps/' + mapid + '.osu')) {
                 await osuapiext.tools.download.difficulty(mapid, 'files/maps/', mapid); //uses fs btw
+                // await dlMap(mapid);
             }
+
+
+
 
             if (mods == null) {
                 mods = 'NM'
@@ -178,10 +182,13 @@ async function scorecalc(
         case 0: default:
             {            //check if 'files/maps/' exists
                 if (!fs.existsSync('files/maps/')) {
+                    console.log('creating files/maps/');
                     fs.mkdirSync('files/maps/');
                 }
                 if (!fs.existsSync('files/maps/' + mapid + '.osu')) {
+                    logCall(`${mapid}`, 'Map file not found')
                     await osuapiext.tools.download.difficulty(mapid, 'files/maps/', mapid); //uses fs btw
+                    // await dlMap(mapid);
                 }
 
                 if (mods == null || mods.length < 1) {
@@ -243,7 +250,7 @@ async function scorecalc(
                     basescore.nKatu = hitkatu
                 }
                 scorenofc = {
-                    path: `files/maps/${mapid}.osu`,
+                    path: `./files/maps/${mapid}.osu`,
                     params: [
                         basescore,
                         {
@@ -950,7 +957,7 @@ export function getMapImages(mapSetId: string | number) {
         //smaller res of full/raw
         thumbnail: `https://b.ppy.sh/thumb/${mapSetId}l.jpg`,
         thumbnailLarge: `https://b.ppy.sh/thumb/${mapSetId}l.jpg`,
-        
+
         //full res of map bg
         full: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/fullsize.jpg`,
         raw: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/raw.jpg`,
@@ -958,18 +965,37 @@ export function getMapImages(mapSetId: string | number) {
         //same width but shorter height
         cover: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/cover.jpg`,
         cover2x: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/cover@2x.jpg`,
-       
+
         //smaller ver of cover
         card: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/card.jpg`,
         card2x: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/card@2x.jpg`,
-       
+
         //square
         list: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/list.jpg`,
         list2x: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/list@2x.jpg`,
-       
+
         //shorter height ver of cover
         slimcover: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/slimcover.jpg`,
         slimcover2x: `https://assets.ppy.sh/beatmaps/${mapSetId}/covers/slimcover@2x.jpg`,
 
     }
+}
+
+export async function dlMap(mapid: number | string) {
+    const url = `https://osu.ppy.sh/osu/${mapid}`
+    const path = `./files/maps/${mapid}.osu`
+    //check if path
+    if (!fs.existsSync(path)) {
+        fs.mkdirSync(`./files/maps/`, { recursive: true })
+    }
+    const writer = fs.createWriteStream(path)
+    const res = await fetch(url)
+    logCall(url, 'Beatmap file download')
+    res.body.pipe(writer)
+    await new Promise((resolve, reject) => {
+        setTimeout(() => {
+        }, 1000)
+        resolve('w');
+    })
+    return;
 }
