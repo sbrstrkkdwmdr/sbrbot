@@ -28,7 +28,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
 
                     if (!previous.find(x => x.id == curdata[i].id)) {
                         // console.log(curdata[i].id)
-                        console.log('new score #' + i)
+                        // console.log('new score #' + i)
                         sendMsg(await getEmbed({
                             scoredata: curdata[i],
                             user: thisUser,
@@ -175,14 +175,18 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
         })
         const guilds = userobj.guilds.split(',')
 
+        // console.log(guilds)
+
         let channels = []
 
         guilds.forEach(guild => {
-            const guild2 = client.guilds.cache.forEach(async guild3 => {
-                if (guilds.includes(guild3.id)) {
+            client.guilds.cache.forEach(async guild2 => {
+                // console.log(guild2.id)
+                if (guilds.includes(guild2.id)) {
+                    // console.log(true)
                     const curset = await guildSettings.findOne({
                         where: {
-                            guildid: guild3.id
+                            guildid: guild2.id
                         }
                     })
                     if (curset?.dataValues?.trackChannel) {
@@ -198,23 +202,26 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
         // console.log('----------')
         // console.log(channels)
 
-        setTimeout(() => {
-            // console.log(channels)
+        //filter out duplicates
+        channels = await channels.filter((item, index) => channels.indexOf(item) === index)
 
-            channels.forEach(channel => {
-                client.guilds.cache.forEach((guild: Discord.Guild) => {
-                    if (guild.channels.cache.has(`${channel}`)) {
-                        // console.log('channel found')
-                        const curchannel: Discord.GuildTextBasedChannel = guild.channels.cache.get(channel) as Discord.GuildTextBasedChannel
-                        // const curchannel = client.channels.get(channel)
-                        if (curchannel) {
-                            // console.log('sending')
-                            curchannel.send({
-                                embeds: [embed]
-                            }).catch()
-                        }
-                    }
-                })
+
+        setTimeout(() => {
+            let i = 0;
+            channels.filter((item, index) => channels.indexOf(item) === index).forEach(channel => {
+                // console.log(channel)
+                // console.log(i)
+                // console.log('channel found')
+                const curchannel: Discord.GuildTextBasedChannel = client.channels.cache.get(channel) as Discord.GuildTextBasedChannel
+                // const curchannel = client.channels.get(channel)
+                if (curchannel) {
+                    // console.log('sending')
+                    curchannel.send({
+                        embeds: [embed]
+                    }).catch()
+                }
+                i++;
+
             })
         }, 2000)
 
