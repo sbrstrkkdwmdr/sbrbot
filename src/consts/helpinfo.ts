@@ -64,8 +64,8 @@ const cmds:commandInfo[] = [
     {
         name: 'convert',
         description: 'Converts a number from one unit to another',
-        usage: 'sbr-convert [from] [to] [number]',
-        slashusage: '/convert [from] [to] [number]',
+        usage: 'convert [from] [to] [number]',
+        slashusage: 'convert [from] [to] [number]',
         examples: [
             'sbr-convert km mi 10',
             'sbr-convert k c 273.15',
@@ -108,8 +108,8 @@ const cmds:commandInfo[] = [
     {
         name: 'help',
         description: 'Shows a list of commands or information about a specific command',
-        usage: 'sbr-help [command]',
-        slashusage: '/help [command]',
+        usage: 'help [command]',
+        slashusage: 'help [command]',
         examples: [
             'sbr-help',
             'sbr-help convert',
@@ -129,7 +129,7 @@ const cmds:commandInfo[] = [
     {
         name: 'info',
         description: 'Shows information about the bot',
-        usage: 'sbr-info',
+        usage: 'info',
         slashusage: 'null',
         examples: [],
         aliases: [],
@@ -138,8 +138,8 @@ const cmds:commandInfo[] = [
     {
         name: 'math',
         description: 'Solves a math problem',
-        usage: 'sbr-math [problem]',
-        slashusage: '/math [type] [num1] [num2]',
+        usage: 'math [problem]',
+        slashusage: 'math [type] [num1] [num2]',
         examples: [
             'sbr-math 2+2',
             '/math type:pythag num1:3 num2:4',
@@ -195,8 +195,8 @@ const cmds:commandInfo[] = [
     {
         name: 'ping',
         description: 'Pings the bot and returns the latency',
-        usage: 'sbr-ping',
-        slashusage: '/ping',
+        usage: 'ping',
+        slashusage: 'ping',
         examples: [],
         aliases: [],
         options: []
@@ -204,8 +204,8 @@ const cmds:commandInfo[] = [
     {
         name: 'remind',
         description: 'Sets a reminder',
-        usage: 'sbr-reminder [time] [reminder]',
-        slashusage: '/reminder [time] [reminder] [sendinchannel]',
+        usage: 'reminder [time] [reminder]',
+        slashusage: 'reminder [time] [reminder] [sendinchannel]',
         examples: [
             'sbr-remind 1h30m30s reminder',
             'sbr-remind 2:05 fc'
@@ -245,7 +245,7 @@ const cmds:commandInfo[] = [
     {
         name: 'stats',
         description: 'Shows the bot\'s statistics',
-        usage: 'sbr-stats',
+        usage: 'stats',
         slashusage: 'null',
         examples: [],
         aliases: [],
@@ -254,8 +254,8 @@ const cmds:commandInfo[] = [
     {
         name: 'time',
         description: 'Shows the current time in a specific timezone as well as UTC and the bot\'s timezone',
-        usage: 'sbr-time [timezone]',
-        slashusage: '/time [timezone]',
+        usage: 'time [timezone]',
+        slashusage: 'time [timezone]',
         examples: [
             'sbr-time',
             'sbr-time Australia/Melbourne'
@@ -278,8 +278,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'bws',
         description: 'Shows the badge weighted rank of a user',
-        usage: 'sbr-bws [user]',
-        slashusage: '/bws [user]',
+        usage: 'bws [user]',
+        slashusage: 'bws [user]',
         examples: [
             'sbr-bws',
             'sbr-bws peppy',
@@ -300,8 +300,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'compare',
         description: 'Compares two users\' osu! stats/top plays/scores',
-        usage: 'sbr-compare [first] [second]',
-        slashusage: '/compare [type] [first] [second]',
+        usage: 'compare [first] [second]',
+        slashusage: 'compare [type] [first] [second]',
         examples: [
             'sbr-compare',
             'sbr-compare peppy SaberStrike',
@@ -340,8 +340,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'firsts',
         description: 'Shows the #1 global scores of a user',
-        usage: 'sbr-firsts [user]',
-        slashusage: '/firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
+        usage: 'firsts [user]',
+        slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
         examples: [
             'sbr-firsts mrekk',
         ],
@@ -416,8 +416,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'globals',
         description: 'Shows the number of #1 scores a player has',
-        usage: 'sbr-globals [username]',
-        slashusage: '/globals [username]',
+        usage: 'globals [username]',
+        slashusage: 'globals [username]',
         examples: [],
         aliases: [],
         options: [
@@ -434,8 +434,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'lb',
         description: 'Shows the leaderboard of the current server',
-        usage: 'sbr-lb',
-        slashusage: '/lb',
+        usage: 'lb',
+        slashusage: 'lb',
         examples: [],
         aliases: [],
         options: []
@@ -443,8 +443,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'map',
         description: 'Shows information about a beatmap',
-        usage: 'sbr-map "query" [id] +[mods]',
-        slashusage: '/map [query] [id] [mods] [detailed]',
+        usage: 'map "query" [id] +[mods]',
+        slashusage: 'map [query] [id] [mods] [detailed]',
         examples: [
             'sbr-map "kimi no shiranai monogatari"',
             'sbr-map 3013912 +HDHR'
@@ -488,8 +488,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'maplb',
         description: 'Shows the leaderboard of a map',
-        usage: 'sbr-maplb [id]',
-        slashusage: '/maplb [id] [page] [mods]',
+        usage: 'maplb [id]',
+        slashusage: 'maplb [id] [page] [mods]',
         examples: [
             'sbr-maplb 32345',
             '/maplb mods:HDHR'
@@ -525,8 +525,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'nochokes',
         description: 'Shows the user\'s top plays without chokes',
-        usage: 'sbr-nochokes [user]',
-        slashusage: '/nochokes [user]',
+        usage: 'nochokes [user]',
+        slashusage: 'nochokes [user]',
         examples: [
             'sbr-nochokes SaberStrike'
         ],
@@ -545,8 +545,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'osu',
         description: 'Shows information about a user\'s osu! profile',
-        usage: 'sbr-osu [user]',
-        slashusage: '/osu [user] [detailed] [mode]',
+        usage: 'osu [user]',
+        slashusage: 'osu [user] [detailed] [mode]',
         aliases: ['o', 'profile', 'user'],
         examples: [
             'sbr-osu mrekk',
@@ -582,8 +582,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'osuset',
         description: 'Sets your osu! username/mode/skin',
-        usage: 'sbr-osuset [username]',
-        slashusage: '/osuset [username] [mode] [skin]',
+        usage: 'osuset [username]',
+        slashusage: 'osuset [username] [mode] [skin]',
         examples: [
             'sbr-osuset SaberStrike',
             '/osuset username:SaberStrike mode:fruits skin:sbr v11'
@@ -619,8 +619,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'osutop',
         description: 'Shows the top scores of a user',
-        usage: 'sbr-osutop [user]',
-        slashusage: '/osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
+        usage: 'osutop [user]',
+        slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
         examples: [
             'sbr-osutop',
             '/osutop sort:recent'
@@ -696,8 +696,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'pinned',
         description: 'Shows the pinned scores of a user',
-        usage: 'sbr-pinned [user]',
-        slashusage: '/pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
+        usage: 'pinned [user]',
+        slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
         examples: [
             'sbr-pinned mrekk',
         ],
@@ -772,8 +772,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'ppifrank',
         description: 'Shows the total pp if you are at a certain rank and vice versa',
-        usage: 'sbr-ppifrank [value] [type]',
-        slashusage: '/ppifrank [value] [type]',
+        usage: 'ppifrank [value] [type]',
+        slashusage: 'ppifrank [value] [type]',
         examples: [
             'sbr-ppifrank 20000',
             '/ppifrank 2000 rank'
@@ -801,8 +801,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'recent',
         description: 'Shows the recent score(s) of a user',
-        usage: 'sbr-recent [user]',
-        slashusage: '/recent [user] [page] [mode] [list]',
+        usage: 'recent [user]',
+        slashusage: 'recent [user] [page] [mode] [list]',
         examples: [
             'sbr-recent',
             'sbr-rs',
@@ -845,10 +845,40 @@ const osucmds:commandInfo[] = [
         ]
     },
     {
+        name: 'scoreparse',
+        description: 'Returns information about a score',
+        usage: 'scoreparse [id] [mode]',
+        slashusage: 'null',
+        examples: [
+            'sbr-scoreparse 1234567890',
+            'sbr-score 1234567890 mania',
+            'https://osu.ppy.sh/scores/osu/1234567890'
+        ],
+        aliases: ['score', 'sp'],
+        options: [
+            {
+                name: 'id',
+                type: 'integer',
+                required: true,
+                description: 'The id of the score',
+                options: ['N/A'],
+                defaultValue: 'null'
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode of the score',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu'
+            }
+        ]
+    },
+    {
         name: 'scores',
         description: 'Shows the scores of a user on a beatmap',
-        usage: 'sbr-scores [user] [id]',
-        slashusage: '/scores [user] [id] [sort] [reverse] [page] [detailed]',
+        usage: 'scores [user] [id]',
+        slashusage: 'scores [user] [id] [sort] [reverse] [page] [detailed]',
         examples: [
             'sbr-scores saberstrike',
             'sbr-c'
@@ -908,8 +938,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'simulate',
         description: 'Simulates a score on a beatmap',
-        usage: 'sbr-simulate [id] +[mods] misses=[misses] acc=[accuracy] combo=[combo] n300=[n300] n100=[n100] n50=[n50] miss=[misses]',
-        slashusage: '/simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses]',
+        usage: 'simulate [id] +[mods] misses=[misses] acc=[accuracy] combo=[combo] n300=[n300] n100=[n100] n50=[n50] miss=[misses]',
+        slashusage: 'simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses]',
         examples: [
             'sbr-simulate +HDHR misses=0 acc=97.86'
         ],
@@ -984,8 +1014,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'trackadd',
         description: 'Adds a user to the tracklist',
-        usage: 'sbr-trackadd [id]',
-        slashusage: '/trackadd [id]',
+        usage: 'trackadd [id]',
+        slashusage: 'trackadd [id]',
         examples: [
             'sbr-trackadd 15222484'
         ],
@@ -1004,8 +1034,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'trackchannel',
         description: 'Sets the channel to send tracklist updates to',
-        usage: 'sbr-trackchannel [channel]',
-        slashusage: '/trackchannel [channel]',
+        usage: 'trackchannel [channel]',
+        slashusage: 'trackchannel [channel]',
         examples: [
             'sbr-trackchannel #tracklist'
         ],
@@ -1024,8 +1054,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'trackremove',
         description: 'Removes a user from the tracklist',
-        usage: 'sbr-trackremove [id]',
-        slashusage: '/trackremove [id]',
+        usage: 'trackremove [id]',
+        slashusage: 'trackremove [id]',
         examples: [
             'sbr-trackremove 15222484'
         ],
@@ -1044,8 +1074,8 @@ const osucmds:commandInfo[] = [
     {
         name: 'whatif',
         description: 'Shows user stats if you gain a certain amount of raw pp',
-        usage: 'sbr-whatif [user] [pp]',
-        slashusage: '/whatif [user] [pp]',
+        usage: 'whatif [user] [pp]',
+        slashusage: 'whatif [user] [pp]',
         examples: [
             'sbr-whatif 1000',
             'sbr-whatif SaberStrike 300'
@@ -1076,8 +1106,8 @@ const othercmds:commandInfo[] = [
     {
         name: '8ball',
         description: 'Returns a yes/no/maybe answer to a question',
-        usage: 'sbr-8ball ',
-        slashusage: '/8ball ',
+        usage: '8ball ',
+        slashusage: '8ball ',
         examples: [
             'sbr-8ball is this a good bot?'
         ],
@@ -1087,8 +1117,8 @@ const othercmds:commandInfo[] = [
     {
         name: 'gif',
         description: 'Sends a gif',
-        usage: 'sbr-gif [type]',
-        slashusage: '/gif [type]',
+        usage: 'gif [type]',
+        slashusage: 'gif [type]',
         examples: [
             '/gif type:cry about it'
         ],
@@ -1107,8 +1137,8 @@ const othercmds:commandInfo[] = [
     {
         name: 'image',
         description: 'Sends an image',
-        usage: 'sbr-image [query]',
-        slashusage: '/image [query]',
+        usage: 'image [query]',
+        slashusage: 'image [query]',
         examples: [
             'sbr-image cat',
         ],
@@ -1127,8 +1157,8 @@ const othercmds:commandInfo[] = [
     {
         name: 'poll',
         description: 'Creates a poll',
-        usage: 'sbr-poll [question]',
-        slashusage: '/poll [question] [options]',
+        usage: 'poll [question]',
+        slashusage: 'poll [question] [options]',
         examples: [
             'sbr-poll djkfhgfbdkgbkfhdjgdkgd',
             '/poll title:What is your favorite color? options:red+green+blue'
@@ -1156,8 +1186,8 @@ const othercmds:commandInfo[] = [
     {
         name: 'roll',
         description: 'Rolls a random number',
-        usage: 'sbr-roll [max] [min]',
-        slashusage: '/roll [max] [min]',
+        usage: 'roll [max] [min]',
+        slashusage: 'roll [max] [min]',
         examples: [
             'sbr-roll',
             'sbr-roll 100 50'
@@ -1185,8 +1215,8 @@ const othercmds:commandInfo[] = [
     {
         name: 'say',
         description: 'Sends a message',
-        usage: 'sbr-say [message]',
-        slashusage: '/say [message] [channel]',
+        usage: 'say [message]',
+        slashusage: 'say [message] [channel]',
         examples: [
             'sbr-say hello',
         ],
@@ -1213,8 +1243,8 @@ const othercmds:commandInfo[] = [
     {
         name: 'ytsearch',
         description: 'Searches youtube for a video',
-        usage: 'sbr-ytsearch [query]',
-        slashusage: '/ytsearch [query]',
+        usage: 'ytsearch [query]',
+        slashusage: 'ytsearch [query]',
         examples: [
             'sbr-ytsearch never gonna give you up'
         ],
@@ -1236,8 +1266,8 @@ const admincmds:commandInfo[] = [
     {
         name: 'checkperms',
         description: 'Checks the permissions of the user',
-        usage: 'sbr-checkperms [user]',
-        slashusage: '/checkperms [user]',
+        usage: 'checkperms [user]',
+        slashusage: 'checkperms [user]',
         examples: [
             'sbr-checkperms @SSoB'
         ],
@@ -1256,8 +1286,8 @@ const admincmds:commandInfo[] = [
     {
         name: 'debug',
         description: 'Returns the debug files for a command',
-        usage: 'sbr-debug [command]',
-        slashusage: '/debug [command]',
+        usage: 'debug [command]',
+        slashusage: 'debug [command]',
         examples: [],
         aliases: [],
         options: [
@@ -1274,8 +1304,8 @@ const admincmds:commandInfo[] = [
     {
         name: 'find',
         description: 'Finds a user/guild/channel/role/emoji in the database',
-        usage: 'sbr-find [type] [id]',
-        slashusage: '/find [type] [id]',
+        usage: 'find [type] [id]',
+        slashusage: 'find [type] [id]',
         examples: [
             'sbr-find user 1234567890',
             'sbr-find @SSoB'
@@ -1303,8 +1333,8 @@ const admincmds:commandInfo[] = [
     {
         name: 'leaveguild',
         description: 'Makes the bot leave a guild',
-        usage: 'sbr-leaveguild [guild]',
-        slashusage: '/leaveguild [guild]',
+        usage: 'leaveguild [guild]',
+        slashusage: 'leaveguild [guild]',
         examples: [
             'sbr-leaveguild 1234567890',
         ],
@@ -1323,8 +1353,8 @@ const admincmds:commandInfo[] = [
     {
         name: 'prefix',
         description: 'Set\'s the prefix of the current server',
-        usage: 'sbr-prefix [prefix]',
-        slashusage: '/prefix [prefix]',
+        usage: 'prefix [prefix]',
+        slashusage: 'prefix [prefix]',
         examples: ['sbr-prefix !'],
         aliases: [],
         options: [
@@ -1341,8 +1371,8 @@ const admincmds:commandInfo[] = [
     {
         name: 'servers',
         description: 'Shows the servers the bot is in',
-        usage: 'sbr-servers',
-        slashusage: '/servers',
+        usage: 'servers',
+        slashusage: 'servers',
         examples: [],
         aliases: [],
         options: []

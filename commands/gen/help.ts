@@ -136,7 +136,7 @@ module.exports = {
                 desc += `\nCommand: \`${config.prefix}${command.usage}\``
             }
             if (command.slashusage) {
-                desc += `\nSlash Command: \`${command.slashusage}\``
+                desc += `\nSlash Command: \`/${command.slashusage}\``
             }
 
             const opts = command.options
