@@ -205,6 +205,9 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 break;
 
             //osu commands below
+            // case 'bests':
+            //     commandStruct.osucmds.get('bests').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+            //     break;
             case 'bws':
                 commandStruct.osucmds.get('bws').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
@@ -226,6 +229,9 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'map': case 'm':
                 commandStruct.osucmds.get('map').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
+            case 'nochokes': case 'nc':
+                commandStruct.osucmds.get('nochokes').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                break;
             case 'osu': case 'profile': case 'o': case 'user':
                 commandStruct.osucmds.get('osu').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
@@ -235,9 +241,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'osutop': case 'top':
                 commandStruct.osucmds.get('osutop').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
-            case 'nochokes': case 'nc':
-                commandStruct.osucmds.get('nochokes').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                break;
             case 'pinned':
                 commandStruct.osucmds.get('pinned').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
@@ -245,7 +248,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 commandStruct.osucmds.get('recent').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
 
-            case 'scoreparse': case 'score':case 'sp':
+            case 'scoreparse': case 'score': case 'sp':
                 commandStruct.osucmds.get('scoreparse').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
             case 'scores': case 'c':
@@ -269,37 +272,65 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
 
             //admincmds below
             case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
-                commandStruct.admincmds.get('checkperms').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                break;
-            case 'leaveguild': case 'leave':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    commandStruct.admincmds.get('leaveguild').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    commandStruct.admincmds.get('checkperms').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                } else {
+                    commandStruct.commands.get('noperms').execute(
+                        commandType, obj
+                    )
                 }
-                break;
-            case 'servers':
-                if (checks.isOwner(userid)) {
-                    commandStruct.admincmds.get('servers').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                }
-                break;
-            case 'debug':
-                commandStruct.admincmds.get('debug').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-
                 break;
             case 'crash':
                 if (checks.isOwner(userid)) {
                     commandStruct.admincmds.get('crash').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                } else {
+                    commandStruct.commands.get('noperms').execute(
+                        commandType, obj
+                    )
+                }
+                break;
+            case 'debug':
+                if (checks.isOwner(userid)) {
+                    commandStruct.admincmds.get('debug').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                } else {
+                    commandStruct.commands.get('noperms').execute(
+                        commandType, obj
+                    )
                 }
                 break;
             case 'find':
                 commandStruct.admincmds.get('find').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
+            case 'leaveguild': case 'leave':
+                if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
+                    commandStruct.admincmds.get('leaveguild').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                } else {
+                    commandStruct.commands.get('noperms').execute(
+                        commandType, obj
+                    )
+                }
+                break;
             case 'prefix':
-                commandStruct.admincmds.get('prefix').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, guildSettings)
+                if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
+                    commandStruct.admincmds.get('prefix').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, guildSettings)
+                } else {
+                    commandStruct.commands.get('noperms').execute(
+                        commandType, obj
+                    )
+                }
                 break;
-
-            case 'test':
-                commandStruct.commands.get('test').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+            case 'servers':
+                if (checks.isOwner(userid)) {
+                    commandStruct.admincmds.get('servers').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                } else {
+                    commandStruct.commands.get('noperms').execute(
+                        commandType, obj
+                    )
+                }
                 break;
+            // case 'test':
+            //     commandStruct.commands.get('test').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+            //     break;
 
             // music
 
