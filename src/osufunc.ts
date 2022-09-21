@@ -294,8 +294,8 @@ async function scorecalc(
                     ]
                 }
                 // console.log(basescore)
-                console.log(scorenofc)
-                console.log(newacc)
+                // console.log(scorenofc)
+                // console.log(newacc)
                 ppl = await rosu.calculate(scorenofc);
                 // console.log(ppl)
 
