@@ -9,6 +9,7 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
+import def = require('../../src/consts/defaults');
 
 module.exports = {
     name: 'scoreparse',
@@ -294,7 +295,7 @@ module.exports = {
             .setAuthor({
                 name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
                 url: `https://osu.ppy.sh/u/${osudata.id}`,
-                iconURL: `https://a.ppy.sh/${osudata.id}`
+                iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
             })
             .setTitle(`${artist} - ${title}`)
             .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.id}`)

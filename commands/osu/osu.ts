@@ -9,6 +9,7 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
+import def = require('../../src/consts/defaults');
 
 module.exports = {
     name: 'osu',
@@ -249,7 +250,7 @@ module.exports = {
             .setColor(colours.embedColour.user.dec)
             .setTitle(`${osudata.username}'s ${mode} profile`)
             .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode}`)
-            .setThumbnail(osudata?.avatar_url ? osudata.avatar_url : `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
+            .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
 
         let useEmbeds = [];
         if (detailed == true) {
@@ -257,7 +258,7 @@ module.exports = {
                 .setColor(colours.embedColour.user.dec)
                 .setTitle(`${osudata.username}'s ${mode} profile`)
                 .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode}`)
-                .setThumbnail(osudata?.avatar_url ? osudata.avatar_url : `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
+                .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
                 .setDescription(`Loading...`);
 
             if (commandType == 'interaction') {

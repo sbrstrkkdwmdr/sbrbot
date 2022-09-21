@@ -227,7 +227,7 @@ module.exports = {
                 .setColor(colours.embedColour.scorelist.dec)
                 .setTitle(`Score leaderboard of ${fulltitle}`)
                 .setURL(`https://osu.ppy.sh/b/${mapid}`)
-                .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`)
+                .setThumbnail(osufunc.getMapImages(mapdata.beatmapset_id).list2x)
                 ;
 
             let scoretxt: string;

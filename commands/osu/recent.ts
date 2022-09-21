@@ -10,6 +10,8 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
 import embedStuff = require('../../src/embed');
+import def = require('../../src/consts/defaults');
+
 module.exports = {
     name: 'recent',
     async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
@@ -529,7 +531,7 @@ module.exports = {
                 .setAuthor({
                     name: `${trycountstr}`,
                     url: `https://osu.ppy.sh/u/${osudata.id}`,
-                    iconURL: `https://a.ppy.sh/${osudata.id}`
+                    iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
                 })
                 .setThumbnail(`${curbms.covers.list}`)
                 .addFields([

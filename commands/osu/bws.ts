@@ -10,6 +10,7 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
+import def = require('../../src/consts/defaults');
 
 module.exports = {
     name: 'bws',
@@ -135,7 +136,7 @@ module.exports = {
                 iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
             })
             .setTitle(`Badge weighting for ${osudata.username}`)
-            .setThumbnail(`${osudata?.avatar_url}`)
+            .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
             .setDescription(
                 'Current number of badges: ' + badgecount
             )

@@ -341,9 +341,20 @@ export function score(score: osuapitypes.Score, map: osuapitypes.Beatmap, detail
     return fields;
 }
 
+export type scoreSort = 'pp' | 'score' | 'acc' | 'recent' | 'combo' | 'miss' | 'rank'
+
 export function user() { }
 
-export type scoreSort = 'pp' | 'score' | 'acc' | 'recent' | 'combo' | 'miss' | 'rank'
+export function userList(data: {
+    userdata: osuapitypes.User[],
+    sort: userSort,
+    page: number,
+    reverseSort: boolean,
+}) {
+
+}
+
+export type userSort = 'pp' | 'rank' | 'acc' | 'playcount' | 'level' | 'joindate' | 'countryrank' | 'countrypp' | 'score' | 'score_ranked'
 
 export function gradeToEmoji(str: string) {
     let grade;

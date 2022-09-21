@@ -10,6 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 import embedStuff = require('../../src/embed');
 import func = require('../../src/other');
+import def = require('../../src/consts/defaults');
 
 module.exports = {
     name: 'globals',

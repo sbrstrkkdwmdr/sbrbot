@@ -10,7 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 import embedStuff = require('../../src/embed');
 import func = require('../../src/other');
-
+import def = require('../../src/consts/defaults');
 module.exports = {
     name: 'scores',
     async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
@@ -356,7 +356,7 @@ module.exports = {
         const scoresEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`${artist} - ${title} [${mapdata.version}]`)
-            .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
+            .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
             // .setImage(`${mapdata.beatmapset.covers['list@2x']}`)
             .setImage(`${mapdata.beatmapset.covers['cover@2x']}`)
             .setAuthor({

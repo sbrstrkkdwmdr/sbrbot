@@ -9,6 +9,7 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
+import def = require('../../src/consts/defaults');
 
 module.exports = {
     name: 'map',
@@ -669,9 +670,9 @@ ${error}
             .setAuthor({
                 name: `${mapdata.beatmapset.creator}`,
                 url: `https://osu.ppy.sh/u/${mapperdata.id}`,
-                iconURL: `https://a.ppy.sh/${mapperdata.id}`,
+                iconURL: `${mapperdata?.avatar_url ?? def.images.any.url}`,
             })
-            .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg` || `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
+            .setThumbnail(osufunc.getMapImages(mapdata.beatmapset_id).list2x)
             .addFields([
                 {
                     name: 'MAP VALUES',

@@ -10,6 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 import embedStuff = require('../../src/embed');
 import func = require('../../src/other');
+import def = require('../../src/consts/defaults');
 
 module.exports = {
     name: 'nochokes',
@@ -332,7 +333,7 @@ module.exports = {
         const topEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`Top no choke scores of ${nochokedata[0].user.username}`)
-            .setThumbnail(`https://a.ppy.sh/${nochokedata[0].user.id}`)
+            .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
             .setURL(`https://osu.ppy.sh/users/${nochokedata[0].user.id}/${nochokedata[0].mode}`)
             .setAuthor({
                 name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,

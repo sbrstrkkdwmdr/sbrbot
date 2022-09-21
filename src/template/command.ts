@@ -9,6 +9,7 @@ import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
+import def = require('../../src/consts/defaults');
 
 module.exports = {
     name: 'COMMANDNAME',

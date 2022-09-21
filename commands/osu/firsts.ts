@@ -10,6 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 import embedStuff = require('../../src/embed');
 import func = require('../../src/other');
+import def = require('../../src/consts/defaults');
 
 module.exports = {
     name: 'firsts',
@@ -311,7 +312,7 @@ module.exports = {
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`#1 scores for ${osudata.username}`)
             .setURL(`https://osu.ppy.sh/users/${osudata.id}`)
-            .setThumbnail(`https://a.ppy.sh/${osudata.id}`)
+            .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
             .setAuthor({
                 name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
                 url: `https://osu.ppy.sh/u/${osudata.id}`,
