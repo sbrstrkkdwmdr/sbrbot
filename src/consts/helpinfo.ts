@@ -982,6 +982,66 @@ const osucmds:commandInfo[] = [
         ]
     },
     {
+        name: 'trackadd',
+        description: 'Adds a user to the tracklist',
+        usage: 'sbr-trackadd [id]',
+        slashusage: '/trackadd [id]',
+        examples: [
+            'sbr-trackadd 15222484'
+        ],
+        aliases: ['ta', 'track'],
+        options: [
+            {
+                name: 'id',
+                type: 'integer',
+                required: true,
+                description: 'The user id to add to the tracklist',
+                options: ['N/A'],
+                defaultValue: 'N/A'
+            }
+        ]
+    },
+    {
+        name: 'trackchannel',
+        description: 'Sets the channel to send tracklist updates to',
+        usage: 'sbr-trackchannel [channel]',
+        slashusage: '/trackchannel [channel]',
+        examples: [
+            'sbr-trackchannel #tracklist'
+        ],
+        aliases: ['tc'],
+        options: [
+            {
+                name: 'channel',
+                type: 'channel mention',
+                required: true,
+                description: 'The channel to send tracklist updates to',
+                options: ['N/A'],
+                defaultValue: 'N/A'
+            }
+        ]
+    },
+    {
+        name: 'trackremove',
+        description: 'Removes a user from the tracklist',
+        usage: 'sbr-trackremove [id]',
+        slashusage: '/trackremove [id]',
+        examples: [
+            'sbr-trackremove 15222484'
+        ],
+        aliases: ['tr', 'trackrm', 'untrack'],
+        options: [
+            {
+                name: 'id',
+                type: 'integer',
+                required: true,
+                description: 'The user id to remove from the tracklist',
+                options: ['N/A'],
+                defaultValue: 'N/A'
+            }
+        ]
+    },
+    {
         name: 'whatif',
         description: 'Shows user stats if you gain a certain amount of raw pp',
         usage: 'sbr-whatif [user] [pp]',

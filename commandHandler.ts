@@ -253,13 +253,13 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'skin':
                 commandStruct.osucmds.get('skin').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
-            case 'trackadd': case 'track':
+            case 'trackadd': case 'track':case 'ta':
                 commandStruct.osucmds.get('track').add(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
                 break;
-            case 'trackremove': case 'trackrm':
+            case 'trackremove': case 'trackrm':case 'tr':case 'untrack':
                 commandStruct.osucmds.get('track').remove(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
                 break;
-            case 'trackchannel':
+            case 'trackchannel':case 'tc':
                 commandStruct.osucmds.get('track').setChannel(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
                 break;
 
