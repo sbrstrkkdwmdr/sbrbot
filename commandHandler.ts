@@ -217,11 +217,14 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'globals':
                 commandStruct.osucmds.get('globals').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
+            case 'leaderboard': case 'maplb': case 'mapleaderboard':
+                commandStruct.osucmds.get('maplb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                break;
+            case 'lb':
+                commandStruct.osucmds.get('lb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                break;
             case 'map': case 'm':
                 commandStruct.osucmds.get('map').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                break;
-            case 'rs': case 'recent': case 'r':
-                commandStruct.osucmds.get('recent').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
             case 'osu': case 'profile': case 'o': case 'user':
                 commandStruct.osucmds.get('osu').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
@@ -232,28 +235,28 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'osutop': case 'top':
                 commandStruct.osucmds.get('osutop').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
-            case 'scores': case 'c':
-                commandStruct.osucmds.get('scores').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                break;
-            case 'leaderboard': case 'maplb': case 'mapleaderboard':
-                commandStruct.osucmds.get('maplb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                break;
-            case 'lb':
-                commandStruct.osucmds.get('lb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+            case 'nochokes': case 'nc':
+                commandStruct.osucmds.get('nochokes').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
             case 'pinned':
                 commandStruct.osucmds.get('pinned').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
-            case 'skin':
-                commandStruct.osucmds.get('skin').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+            case 'rs': case 'recent': case 'r':
+                commandStruct.osucmds.get('recent').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                break;
+            case 'scores': case 'c':
+                commandStruct.osucmds.get('scores').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
             case 'simplay': case 'simulate':
                 commandStruct.osucmds.get('simulate').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
-            case 'trackadd':case 'track':
+            case 'skin':
+                commandStruct.osucmds.get('skin').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                break;
+            case 'trackadd': case 'track':
                 commandStruct.osucmds.get('track').add(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
                 break;
-            case 'trackremove':case 'trackrm':
+            case 'trackremove': case 'trackrm':
                 commandStruct.osucmds.get('track').remove(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
                 break;
             case 'trackchannel':

@@ -36,8 +36,8 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
             .setTitle('Error - Button does not work')
             .setDescription('Feature not yet implemented/supported')
 
-        const PageOnlyCommands = ['firsts', 'maplb', 'osutop', 'pinned', 'recent', 'scores']
-        const ScoreSortCommands = ['firsts', 'maplb', 'osutop', 'pinned', 'scores']
+        const PageOnlyCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'recent', 'scores']
+        const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores']
         if (button == 'Search' && PageOnlyCommands.includes(command)) {
             const menu = new Discord.ModalBuilder()
                 .setTitle('Page')
@@ -243,6 +243,12 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
+            case 'nochokes':
+                commandStruct.osucmds.get('nochokes').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
+
 
             case 'help':
                 commandStruct.commands.get('help').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
