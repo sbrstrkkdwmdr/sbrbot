@@ -129,7 +129,7 @@ module.exports = {
 
         const useEmbeds = []
 
-        function commandEmb(command, embed){
+        function commandEmb(command: info.commandInfo, embed) {
             let desc = ''
             desc += command.description + "\n"
             if (command.usage) {
@@ -142,17 +142,33 @@ module.exports = {
             const opts = command.options
             let opttxt = '';
             for (let i = 0; i < opts.length; i++) {
-                opttxt += `\n\`${opts[i].name}\`: ${opts[i].description}`
+                const reqtxt = opts[i].required ? 'required' : 'optional'
+                opttxt += `\n\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description}\n`
 
             }
-            desc += "\n\n" + opttxt
 
-            if (command.aliases) {
-                desc += `\n\nAliases: ${command.aliases}`
-            }
+            let commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none'
+            let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n') : 'none'
 
             embed.setTitle("Command info for: " + command.name)
-            embed.setDescription(desc)                
+            embed.setDescription(desc)
+            embed.addFields([
+                {
+                    name: 'Options',
+                    value: opttxt,
+                    inline: false
+                },
+                {
+                    name: 'Aliases',
+                    value: commandaliases,
+                    inline: false
+                },
+                {
+                    name: 'Examples',
+                    value: commandexamples,
+                    inline: false
+                }
+            ])
         }
 
         if (command != null) {
@@ -163,15 +179,15 @@ module.exports = {
                 commandCategory = 'gen';
                 const res = info.cmds.find(obj => obj.name == fetchcmd)
                 commandEmb(res, commandInfo)
-            } else if(info.othercmds.find(obj => obj.name == fetchcmd)){
+            } else if (info.othercmds.find(obj => obj.name == fetchcmd)) {
                 commandCategory = 'misc';
                 const res = info.othercmds.find(obj => obj.name == fetchcmd)
                 commandEmb(res, commandInfo)
-            } else if(info.osucmds.find(obj => obj.name == fetchcmd)){
+            } else if (info.osucmds.find(obj => obj.name == fetchcmd)) {
                 commandCategory = 'osu';
                 const res = info.osucmds.find(obj => obj.name == fetchcmd)
                 commandEmb(res, commandInfo)
-            } else if(info.admincmds.find(obj => obj.name == fetchcmd)){
+            } else if (info.admincmds.find(obj => obj.name == fetchcmd)) {
                 commandCategory = 'admin';
                 const res = info.admincmds.find(obj => obj.name == fetchcmd)
                 commandEmb(res, commandInfo)

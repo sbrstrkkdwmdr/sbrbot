@@ -8,7 +8,7 @@
 //     aliases?: string
 // }
 
-type commandInfo = {
+export type commandInfo = {
     name: string,
     description: string,
     usage?: string,
