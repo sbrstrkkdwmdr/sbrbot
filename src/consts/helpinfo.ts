@@ -15,11 +15,11 @@ type commandInfo = {
     slashusage?: string,
     examples: string[],
     aliases?: string[]
-    options: { 
-        name: string, 
+    options: {
+        name: string,
         type: string,
         required: string | boolean,
-        description: string ,
+        description: string,
         options: string[] | boolean[],
         defaultValue: string
     }[],
@@ -60,7 +60,7 @@ const mods = [
     'MR'
 ]
 
-const cmds:commandInfo[] = [
+const cmds: commandInfo[] = [
     {
         name: 'convert',
         description: 'Converts a number from one unit to another',
@@ -274,7 +274,7 @@ const cmds:commandInfo[] = [
     }
 ]
 
-const osucmds:commandInfo[] = [
+const osucmds: commandInfo[] = [
     {
         name: 'bws',
         description: 'Shows the badge weighted rank of a user',
@@ -799,6 +799,59 @@ const osucmds:commandInfo[] = [
         ]
     },
     {
+        name: 'ranking',
+        description: 'Displays the global leaderboards',
+        usage: 'ranking [country]',
+        slashusage: 'ranking [country] [mode] [page] [type] [spotlight]',
+        examples: [
+            'sbr-ranking',
+            '/ranking country:us mode:taiko',
+            '/ranking type:charts spotlight:227'
+        ],
+        aliases: [],
+        options: [{
+            name: 'country',
+            type: 'string',
+            required: false,
+            description: 'The country code of the country to use',
+            options: ['N/A'],
+            defaultValue: 'global'
+        },
+        {
+            name: 'mode',
+            type: 'string',
+            required: false,
+            description: 'The mode to show the scores in',
+            options: ['osu', 'taiko', 'fruits', 'mania'],
+            defaultValue: 'osu'
+        },
+        {
+            name: 'page',
+            type: 'integer',
+            required: false,
+            description: 'The page of scores to show',
+            options: ['N/A'],
+            defaultValue: '1'
+        },
+        {
+            name: 'type',
+            type: 'string',
+            required: false,
+            description: 'The type of leaderboard to show',
+            options: ['performance', 'charts', 'score', 'country'],
+            defaultValue: 'performance'
+        },
+        {
+            name: 'spotlight',
+            type: 'integer',
+            required: false,
+            description: 'The spotlight to show the scores of. Only works with type charts',
+            options: ['N/A'],
+            defaultValue: 'latest'
+        }
+    ]
+    },
+    {
         name: 'recent',
         description: 'Shows the recent score(s) of a user',
         usage: 'recent [user]',
@@ -1102,7 +1155,7 @@ const osucmds:commandInfo[] = [
     }
 ]
 
-const othercmds:commandInfo[] = [
+const othercmds: commandInfo[] = [
     {
         name: '8ball',
         description: 'Returns a yes/no/maybe answer to a question',
@@ -1262,7 +1315,7 @@ const othercmds:commandInfo[] = [
     }
 ]
 
-const admincmds:commandInfo[] = [
+const admincmds: commandInfo[] = [
     {
         name: 'checkperms',
         description: 'Checks the permissions of the user',
