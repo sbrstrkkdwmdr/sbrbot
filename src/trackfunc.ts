@@ -5,6 +5,7 @@ import fs = require('fs');
 import Discord = require('discord.js');
 import func = require('./other');
 import embedstuff = require('./embed');
+import log = require('./log');
 
 async function trackUser(fr: { user: string, mode: string, inital?: boolean }) {
     const curdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('osutop', fr.user, fr.mode)
@@ -56,6 +57,7 @@ async function editTrackUser(
             // console.log(guildsetting)
             // fr.database
         } catch (error) {
+            log.logFile('error', log.errLog('database update', error))
             const previous = await fr.database.findOne({ where: { userid: fr.discuser } })
             const prevchannels: string[] = previous?.dataValues?.guilds?.split(',') ?? []
 

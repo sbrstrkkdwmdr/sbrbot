@@ -5,6 +5,8 @@ import fs = require('fs');
 import Discord = require('discord.js');
 import func = require('./other');
 import embedstuff = require('./embed');
+import log = require('./log');
+
 module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.ModelStatic<any>, guildSettings: Sequelize.ModelStatic<any>) => {
 
     async function trackUser(fr: { user: string, mode: string, inital?: boolean }) {
@@ -77,6 +79,8 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
                 // console.log(guildsetting)
                 // fr.database
             } catch (error) {
+                log.logFile('error', log.errLog('database update', error))
+
                 const previous = await fr.database.findOne({ where: { userid: fr.discuser } })
                 const prevchannels: string[] = previous?.dataValues?.guilds?.split(',') ?? []
     
@@ -249,7 +253,9 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
                     // console.log('sending')
                     curchannel.send({
                         embeds: [embed]
-                    }).catch()
+                    }).catch(error => {
+                        log.logFile('error', log.errLog('sending track embed', error))
+                    })
                 }
                 i++;
 

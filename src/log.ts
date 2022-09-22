@@ -1,3 +1,5 @@
+import fs = require('fs');
+
 function commandLog(commandname: string, baseCommandType: string, absoluteID: number, commanduser) {
     const currentDate = new Date();
     return `
@@ -37,5 +39,16 @@ Text: ${err}
     return errorstring;
 }
 
-export { commandLog, optsLog, errLog };
+function logFile(type: string, text: string) {
+    switch (type) {
+        case 'err': case 'error':
+            fs.appendFileSync('log.txt', text)
+            break;
+        default:
+            fs.appendFileSync('log.txt', text)
+            break;
+    }
+}
+
+export { commandLog, optsLog, errLog, logFile };
 
