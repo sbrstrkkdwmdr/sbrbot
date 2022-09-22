@@ -143,6 +143,10 @@ module.exports = {
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`);
         osufunc.debug(osudata, 'command', 'whatif', obj.guildId, 'osuData');
 
+        if (mode == null) {
+            mode = osudata.playmode;
+        }
+
         const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
         osufunc.debug(osutopdata, 'command', 'whatif', obj.guildId, 'osuTopData');
 
@@ -182,7 +186,7 @@ module.exports = {
                 iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
             })
             .setDescription(
-`A ${pp} score would be their **${calc.toOrdinal(ppindex + 1)}** top play and would be weighted at **${(weight * 100).toFixed(2)}%**.
+                `A ${pp} score would be their **${calc.toOrdinal(ppindex + 1)}** top play and would be weighted at **${(weight * 100).toFixed(2)}%**.
 Their pp would change by **${Math.abs((total + bonus) - osudata.statistics.pp).toFixed(2)}pp** and their new total pp would be **${(total + bonus).toFixed(2)}pp**.
 Their new rank would be **null** (+null).
 `
