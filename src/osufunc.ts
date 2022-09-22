@@ -698,7 +698,7 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
                 url += `users/${mainparam}/scores/pinned?mode=${params ? params : 'osu'}&limit=100`
                 break;
             case 'pinned_alt':
-                url += `users/${mainparam}/scores/firsts?limit=100&${params}`
+                url += `users/${mainparam}/scores/pinned?limit=100&${params}`
                 break;
             case 'scores_get_recent': case 'recent':
                 url += `users/${mainparam}/scores/recent?include_fails=1&mode=${params ? params : 'osu'}&limit=100&offset=0`
