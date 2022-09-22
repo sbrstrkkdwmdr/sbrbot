@@ -791,6 +791,59 @@ const osucommands = [
         ]
     },
     {
+        name: 'ranking',
+        description: 'Displays the global leaderboards',
+        usage: 'ranking [country]',
+        slashusage: 'ranking [country] [mode] [page] [type] [spotlight]',
+        examples: [
+            'sbr-ranking',
+            '/ranking country:us mode:taiko',
+            '/ranking type:charts spotlight:227'
+        ],
+        aliases: [],
+        options: [{
+            name: 'country',
+            type: 'string',
+            required: false,
+            description: 'The country code of the country to use',
+            options: ['N/A'],
+            defaultValue: 'global'
+        },
+        {
+            name: 'mode',
+            type: 'string',
+            required: false,
+            description: 'The mode to show the scores in',
+            options: ['osu', 'taiko', 'fruits', 'mania'],
+            defaultValue: 'osu'
+        },
+        {
+            name: 'page',
+            type: 'integer',
+            required: false,
+            description: 'The page of scores to show',
+            options: ['N/A'],
+            defaultValue: '1'
+        },
+        {
+            name: 'type',
+            type: 'string',
+            required: false,
+            description: 'The type of leaderboard to show',
+            options: ['performance', 'charts', 'score', 'country'],
+            defaultValue: 'performance'
+        },
+        {
+            name: 'spotlight',
+            type: 'integer',
+            required: false,
+            description: 'The spotlight to show the scores of. Only works with type charts',
+            options: ['N/A'],
+            defaultValue: 'latest'
+        }
+        ]
+    },
+    {
         name: 'recent',
         description: 'Shows the recent score(s) of a user',
         usage: 'recent [user]',
