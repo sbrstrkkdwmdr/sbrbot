@@ -396,7 +396,7 @@ module.exports = (userdata, client, config, oncooldown) => {
         options: [
             {
                 name: 'country',
-                description: 'The country to display the leaderboards of (defaults to global)',
+                description: 'The country code of the country to use (defaults to global)',
                 type: Discord.ApplicationCommandOptionType.String,
                 required: false,
                 maxLength: 2,
