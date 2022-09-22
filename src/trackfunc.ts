@@ -43,15 +43,15 @@ async function editTrackUser(
         guildSettings: Sequelize.ModelStatic<any>,
     }
 ) {
-    const guildsetting = await fr.guildSettings.findOne({
-        where: { guildId: fr.guildId }
-    })
+    // const guildsetting = await fr.guildSettings.findOne({
+    //     where: { guildId: fr.guildId }
+    // })
     if (!fr.action || fr.action == 'add') {
         try {
             await fr.database.create({
                 userid: fr.discuser,
                 osuid: fr.user,
-                guilds: guildsetting
+                guilds: fr.guildId
             })
             // console.log(guildsetting)
             // fr.database
