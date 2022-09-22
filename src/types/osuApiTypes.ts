@@ -507,7 +507,7 @@ export type RankingType = ('charts' | 'country' | 'performance' | 'score') & Err
 export type Rankings = {
     beatmapsets?: Beatmapset[],
     cursor: Cursor,
-    ranking: UserStatistics,
+    ranking: UserStatistics[],
     spotlight?: SpotLight | null,
     total: number,
 } & Error
@@ -693,13 +693,13 @@ export type UserStatistics = {
     play_count: number,
     play_time: number,
     pp: number,
-    country_rank: number | null,
+    country_rank?: number | null,
     global_rank: number | null,
     ranked_score: number,
     replays_watched_by_others: number,
     total_hits: number,
     total_score: number,
-    user: UserCompact,
+    user?: UserCompact,
 } & Error
 
 export type WikiPage = {
@@ -978,7 +978,11 @@ type UserStatisticsRulesets = any/* {
 
 } */
 
-type Country = any
+type Country = { code: CountryCode, name: CountryName }
+
+type CountryCode = string;
+
+type CountryName = string;
 
 type ProfilePage = 'me' | 'recent_activity' | 'beatmaps' | 'historical' | 'kudosu' | 'top_ranks' | 'medals';
 

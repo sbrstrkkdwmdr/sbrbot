@@ -220,6 +220,9 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'globals':
                 commandStruct.osucmds.get('globals').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
+            case 'ranking':
+                commandStruct.osucmds.get('ranking').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                break;
             case 'leaderboard': case 'maplb': case 'mapleaderboard':
                 commandStruct.osucmds.get('maplb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;

@@ -658,10 +658,13 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
                 break;
         }
     }
-    mainparam = cmdchecks.toHexadecimal(mainparam)
+    if(ignoreNonAlphaChar != true) mainparam = cmdchecks.toHexadecimal(mainparam)
     if (params && ignoreNonAlphaChar != true) params = cmdchecks.toHexadecimal(params);
     if (version == 2) {
         switch (type) {
+            case 'custom':
+                url += `${mainparam}`
+                break;
             case 'map_search':
                 break;
             case 'map_get': case 'map':
@@ -860,6 +863,8 @@ export async function getUser(username: string) {
 }
 
 type apiGetStrings =
+    'custom' |
+
     'map_search' |
     'map_get' | 'map' |
     'map_get_md5' |

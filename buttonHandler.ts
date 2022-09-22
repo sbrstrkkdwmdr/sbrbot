@@ -36,7 +36,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
             .setTitle('Error - Button does not work')
             .setDescription('Feature not yet implemented/supported')
 
-        const PageOnlyCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'recent', 'scores']
+        const PageOnlyCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'scores']
         const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores']
         if (button == 'Search' && PageOnlyCommands.includes(command)) {
             const menu = new Discord.ModalBuilder()
@@ -193,18 +193,8 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
                                 setTimeout(() => interaction.deleteReply(), 100)
                             )
                             break; */
-            case 'maplb':
-                commandStruct.osucmds.get('maplb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
-                interaction.deferUpdate()
-                    .catch(error => { });
-                break;
-            case 'osutop':
-                commandStruct.osucmds.get('osutop').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
-                interaction.deferUpdate()
-                    .catch(error => { });
-                break;
-            case 'recent':
-                commandStruct.osucmds.get('recent').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+            case 'firsts':
+                commandStruct.osucmds.get('firsts').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
@@ -213,33 +203,13 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
-            case 'firsts':
-                commandStruct.osucmds.get('firsts').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
-                interaction.deferUpdate()
-                    .catch(error => { });
-                break;
-            case 'pinned':
-                commandStruct.osucmds.get('pinned').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
-                interaction.deferUpdate()
-                    .catch(error => { });
-                break;
-            case 'scores':
-                commandStruct.osucmds.get('scores').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
-                interaction.deferUpdate()
-                    .catch(error => { });
-                break;
             case 'map':
                 commandStruct.osucmds.get('map').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
-            case 'osumaplink':
-                client.links.get('osumaplink').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
-                interaction.deferUpdate()
-                    .catch(error => { });
-                break;
-            case 'osu':
-                commandStruct.osucmds.get('osu').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+            case 'maplb':
+                commandStruct.osucmds.get('maplb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
@@ -248,7 +218,41 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
-
+            case 'osu':
+                commandStruct.osucmds.get('osu').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
+            case 'osumaplink':
+                client.links.get('osumaplink').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
+            case 'osutop':
+                commandStruct.osucmds.get('osutop').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
+            case 'pinned':
+                commandStruct.osucmds.get('pinned').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
+            case 'ranking':
+                commandStruct.osucmds.get('ranking').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
+            case 'recent':
+                commandStruct.osucmds.get('recent').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
+            case 'scores':
+                commandStruct.osucmds.get('scores').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
 
             case 'help':
                 commandStruct.commands.get('help').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);

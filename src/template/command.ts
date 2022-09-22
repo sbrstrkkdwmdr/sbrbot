@@ -9,6 +9,7 @@ import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
+import func = require('../../src/other');
 import def = require('../../src/consts/defaults');
 
 module.exports = {
@@ -39,7 +40,7 @@ module.exports = {
         }
         //==============================================================================================================================================================================================
 
-        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
@@ -60,6 +61,13 @@ module.exports = {
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡')
                 /* .setLabel('End') */,
+            );
+        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-COMMANDNAME-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('🔁'),
             );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -87,6 +95,7 @@ module.exports = {
                     content: '',
                     embeds: [],
                     files: [],
+                    components: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -99,6 +108,7 @@ module.exports = {
                     content: '',
                     embeds: [],
                     files: [],
+                    components: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -108,10 +118,11 @@ module.exports = {
 
                 break;
             case 'button': {
-                obj.edit({
+                obj.message.edit({
                     content: '',
                     embeds: [],
                     files: [],
+                    components: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })

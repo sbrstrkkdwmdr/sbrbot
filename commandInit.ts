@@ -268,33 +268,33 @@ module.exports = (userdata, client, config, oncooldown) => {
             }
         ]
     },
-        {//alternate command for osu
-            name: 'user',
-            description: 'Displays the user\'s osu! profile',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'user',
-                    description: 'The user to display the profile of',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                },
-                {
-                    name: 'detailed',
-                    description: 'Displays extra information',
-                    type: Discord.ApplicationCommandOptionType.Boolean,
-                    required: false,
-                    default: false
-                },
-                {
-                    name: 'mode',
-                    description: 'The mode to display the profile in',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                    choices: cmdconfig.modeopts
-                }
-            ]
-        },
+    {//alternate command for osu
+        name: 'user',
+        description: 'Displays the user\'s osu! profile',
+        dmPermission: false,
+        options: [
+            {
+                name: 'user',
+                description: 'The user to display the profile of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            },
+            {
+                name: 'detailed',
+                description: 'Displays extra information',
+                type: Discord.ApplicationCommandOptionType.Boolean,
+                required: false,
+                default: false
+            },
+            {
+                name: 'mode',
+                description: 'The mode to display the profile in',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: cmdconfig.modeopts
+            }
+        ]
+    },
     {
         name: 'osuset',
         description: 'Sets the user\'s osu! profile',
@@ -386,6 +386,52 @@ module.exports = (userdata, client, config, oncooldown) => {
                 type: Discord.ApplicationCommandOptionType.Boolean,
                 required: false,
                 default: false
+            }
+        ]
+    },
+    {
+        name: 'ranking',
+        description: 'Displays the global leaderboards',
+        dmPermission: false,
+        options: [
+            {
+                name: 'country',
+                description: 'The country to display the leaderboards of (defaults to global)',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                maxLength: 2,
+            },
+            {
+                name: 'mode',
+                description: 'The mode to display the leaderboards in',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: cmdconfig.modeopts
+            },
+            {
+                name: 'page',
+                description: 'The page to display',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: false,
+                minValue: 1
+            },
+            {
+                name: 'type',
+                description: 'The type of leaderboards to display',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: [
+                    { name: 'performance', value: 'performance' },
+                    { name: 'charts (spotlights)', value: 'charts' },
+                    { name: 'score', value: 'score' },
+                    { name: 'country', value: 'country' },
+                ]
+            },
+            {
+                name: 'spotlight',
+                description: 'The spotlight to display the leaderboards of',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: false,
             }
         ]
     },
