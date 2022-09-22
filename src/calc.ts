@@ -445,6 +445,23 @@ function toCapital(str:string){
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+function toOrdinal(num:number){
+    let txt;
+    if(num.toString().endsWith('1')){
+        txt = num + 'st';
+    }
+    else if(num.toString().endsWith('2')){
+        txt = num + 'nd';
+    }
+    else if(num.toString().endsWith('3')){
+        txt = num + 'rd';
+    }
+    else{
+        txt = num + 'th';
+    }
+    return txt;
+}
+
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
 export {
     findHCF, findLCM,
@@ -454,6 +471,6 @@ export {
     dayhuman, tomonthname,
     fixoffset, timeToMs,
     secondsToTime, secondsToTimeReadable,
-    toCapital
+    toCapital, toOrdinal
 };
 

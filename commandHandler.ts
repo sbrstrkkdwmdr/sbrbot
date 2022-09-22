@@ -272,6 +272,9 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'trackchannel': case 'tc':
                 commandStruct.osucmds.get('track').setChannel(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
                 break;
+            case 'whatif':
+                commandStruct.osucmds.get('whatif').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                break;
 
             //admincmds below
             case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':

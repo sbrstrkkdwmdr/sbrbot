@@ -1036,3 +1036,16 @@ export async function dlMap(mapid: number | string) {
     })
     return;
 }
+
+/**
+ * 
+ * @param index starts from 0
+ * @returns 
+ */
+export function findWeight(index:number){
+    return (0.95**(index))
+}
+
+export function rawToWeighted(pp:number, index:number){
+    return pp*(findWeight(index))
+}
