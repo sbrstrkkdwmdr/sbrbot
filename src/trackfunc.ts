@@ -57,7 +57,7 @@ async function editTrackUser(
             // fr.database
         } catch (error) {
             const previous = await fr.database.findOne({ where: { userid: fr.discuser } })
-            const prevchannels: string[] = previous.dataValues?.guilds?.split(',') || []
+            const prevchannels: string[] = previous?.dataValues?.guilds?.split(',') ?? []
 
             if (!prevchannels.includes(`${fr.guildId}`)) {
                 prevchannels.push(`${fr.guildId}`)
