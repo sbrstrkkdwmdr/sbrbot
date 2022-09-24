@@ -94,6 +94,32 @@ module.exports = {
             return;
         }
 
+        let guildsetting = await guildSettings.findOne({
+            where: { guildId: obj.guildId }
+        })
+
+        // if (!guildsetting.dataValues.trackChannel) {
+        //     obj.reply({
+        //         content: 'The current guild does not have a tracking channel',
+        //         embeds: [],
+        //         files: [],
+        //         allowedMentions: { repliedUser: false },
+        //         failIfNotExists: true
+        //     }).catch()
+        //     return;
+        // }
+
+        if(`${guildSettings.dataValues?.trackChannel ?? 'null'}` != `${obj.channelId}`) {
+            obj.reply({
+                content: 'You can only use this command in the tracking channel',
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            }).catch()
+            return;
+        }
+
         trackfunc.editTrackUser({
             database: trackDb,
             discuser: commanduser.id,
