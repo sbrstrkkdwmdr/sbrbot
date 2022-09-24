@@ -171,11 +171,21 @@ module.exports = {
                     const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
                     if (bmsdata?.error) {
                         if (commandType != 'button' && commandType != 'link') {
-                            obj.reply({
-                                content: 'Error - could not fetch beatmapset data.',
-                                allowedMentions: { repliedUser: false },
-                                failIfNotExists: true
-                            })
+                            if (commandType == 'interaction') {
+                                setTimeout(() => {
+                                    obj.editReply({
+                                        content: 'Error - could not fetch beatmapset data',
+                                        allowedMentions: { repliedUser: false },
+                                        failIfNotExists: true
+                                    }).catch()
+                                }, 1000)
+                            } else {
+                                obj.reply({
+                                    content: 'Error - could not fetch beatmapset data.',
+                                    allowedMentions: { repliedUser: false },
+                                    failIfNotExists: true
+                                }).catch()
+                            }
                         }
                         return;
                     }
@@ -273,11 +283,21 @@ module.exports = {
 
             if (mapdata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
-                    obj.reply({
-                        content: 'Error - could not fetch beatmap data.',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
+                    if (commandType == 'interaction') {
+                        setTimeout(() => {
+                            obj.editReply({
+                                content: 'Error - could not fetch beatmap data',
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            }).catch()
+                        }, 1000)
+                    } else {
+                        obj.reply({
+                            content: 'Error - could not fetch beatmap data.',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }
                 }
                 return;
             }
@@ -323,11 +343,21 @@ module.exports = {
 
             if (mapidtest?.error) {
                 if (commandType != 'button' && commandType != 'link') {
-                    obj.reply({
-                        content: 'Error - could not fetch beatmap search data.',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
+                    if (commandType == 'interaction') {
+                        setTimeout(() => {
+                            obj.editReply({
+                                content: 'Error - could not fetch beatmap search data',
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            }).catch()
+                        }, 1000)
+                    } else {
+                        obj.reply({
+                            content: 'Error - could not fetch beatmap search data.',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }
                 }
                 return;
             }
@@ -376,11 +406,21 @@ ${error}
             osufunc.debug(mapdata, 'command', 'map', obj.guildId, 'mapData');
             if (mapdata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
-                    obj.reply({
-                        content: 'Error - could not fetch beatmap data',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
+                    if (commandType == 'interaction') {
+                        setTimeout(() => {
+                            obj.editReply({
+                                content: 'Error - could not fetch beatmap data',
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            }).catch()
+                        }, 1000)
+                    } else {
+                        obj.reply({
+                            content: 'Error - could not fetch beatmap data',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }
                 }
                 return;
             }

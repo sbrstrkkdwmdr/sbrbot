@@ -186,13 +186,23 @@ module.exports = {
             return;
         })
 
-        if(rankingdata?.error){
+        if (rankingdata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not get rankings',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.editReply({
+                            content: 'Error - could not fetch rankings',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }, 1000)
+                } else {
+                    obj.reply({
+                        content: 'Error - could not fetch rankings',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
             }
             return;
         }

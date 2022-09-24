@@ -254,11 +254,21 @@ module.exports = {
         osufunc.debug(osudata, 'command', 'pinned', obj.guildId, 'osuData');
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not find user',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.editReply({
+                            content: 'Error - could not fetch user data',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }, 1000)
+                } else {
+                    obj.reply({
+                        content: 'Error - could not fetch user data',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
             }
             return;
         }
@@ -287,11 +297,21 @@ module.exports = {
             const fd: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('pinned_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
             if (fd?.error) {
                 if (commandType != 'button' && commandType != 'link') {
-                    obj.reply({
-                        content: 'Error - could not find user\'s pinned scores',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
+                    if (commandType == 'interaction') {
+                        setTimeout(() => {
+                            obj.editReply({
+                                content: 'Error - could not fetch user\'s pinned scores',
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            }).catch()
+                        }, 1000)
+                    } else {
+                        obj.reply({
+                            content: 'Error - could not fetch user\'s pinned scores',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }
                 }
                 return;
             }

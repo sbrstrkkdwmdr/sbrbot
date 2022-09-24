@@ -166,11 +166,21 @@ module.exports = {
 
         if (mapdata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not fetch beatmap data',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.editReply({
+                            content: 'Error - could not fetch beatmap data',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }, 1000)
+                } else {
+                    obj.reply({
+                        content: 'Error - could not fetch beatmap data',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
             }
             return;
         }
@@ -200,11 +210,21 @@ module.exports = {
 
             if (lbdataf?.error) {
                 if (commandType != 'button' && commandType != 'link') {
-                    obj.reply({
-                        content: 'Error - could not fetch leaderboard data',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
+                    if (commandType == 'interaction') {
+                        setTimeout(() => {
+                            obj.editReply({
+                                content: 'Error - could not fetch leaderboard data',
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            }).catch()
+                        }, 1000)
+                    } else {
+                        obj.reply({
+                            content: 'Error - could not fetch leaderboard data',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }
                 }
                 return;
             }
@@ -291,11 +311,21 @@ module.exports = {
 
             if (lbdata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
-                    obj.reply({
-                        content: 'Error - could not fetch leaderboard data',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
+                    if (commandType == 'interaction') {
+                        setTimeout(() => {
+                            obj.editReply({
+                                content: 'Error - could not fetch leaderboard data',
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            }).catch()
+                        }, 1000)
+                    } else {
+                        obj.reply({
+                            content: 'Error - could not fetch leaderboard data',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }
                 }
                 return;
             }

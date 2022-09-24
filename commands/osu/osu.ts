@@ -176,11 +176,21 @@ module.exports = {
 
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not find user',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.editReply({
+                            content: 'Error - could not fetch user data',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }, 1000)
+                } else {
+                    obj.reply({
+                        content: 'Error - could not fetch user data',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
             }
             return;
         }
@@ -265,11 +275,21 @@ module.exports = {
 
             if (osutopdata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
-                    obj.reply({
-                        content: 'Error - could not find user\'s top scores',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
+                    if (commandType == 'interaction') {
+                        setTimeout(() => {
+                            obj.editReply({
+                                content: 'Error - could not fetch user\'s top scores',
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            }).catch()
+                        }, 1000)
+                    } else {
+                        obj.reply({
+                            content: 'Error - could not fetch user\'s top scores',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }
                 }
                 return;
             }
@@ -279,11 +299,21 @@ module.exports = {
 
             if (mostplayeddata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
-                    obj.reply({
-                        content: 'Error - could not find user\'s most played beatmaps',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
+                    if (commandType == 'interaction') {
+                        setTimeout(() => {
+                            obj.editReply({
+                                content: 'Error - could not fetch user\'s most played beatmaps',
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            }).catch()
+                        }, 1000)
+                    } else {
+                        obj.reply({
+                            content: 'Error - could not fetch user\'s most played beatmaps',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }
                 }
                 return;
             }

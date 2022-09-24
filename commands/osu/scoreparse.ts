@@ -96,7 +96,8 @@ module.exports = {
                     content: 'Error - could not fetch score data',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                })
+                }).catch()
+
             }
             return;
         }
@@ -128,11 +129,21 @@ module.exports = {
 
         if (mapdata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not fetch beatmap data',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.editReply({
+                            content: 'Error - could not fetch beatmap data',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }, 1000)
+                } else {
+                    obj.reply({
+                        content: 'Error - could not fetch beatmap data',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
             }
         }
 
@@ -253,11 +264,21 @@ module.exports = {
         osufunc.debug(osudata, 'command', 'scoreparse', obj.guildId, 'osuData')
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not find user',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.editReply({
+                            content: 'Error - could not fetch user data',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }, 1000)
+                } else {
+                    obj.reply({
+                        content: 'Error - could not fetch user data',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
             }
             return;
         }

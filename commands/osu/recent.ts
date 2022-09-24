@@ -225,11 +225,21 @@ module.exports = {
 
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not find user',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.editReply({
+                            content: 'Error - could not fetch user data',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }, 1000)
+                } else {
+                    obj.reply({
+                        content: 'Error - could not fetch user',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
             }
             return;
         }
@@ -261,11 +271,22 @@ module.exports = {
 
         if (rsdata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not find user\'s recent scores',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.editReply({
+                            content: 'Error - could not fetch user\'s recent scores',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }, 1000)
+                } else {
+                    obj.reply({
+                        content: 'Error - could not fetch user\'s recent scores',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
+
             }
             return;
         }
@@ -304,11 +325,21 @@ module.exports = {
             osufunc.debug(mapdata, 'command', 'recent', obj.guildId, 'mapData');
             if (mapdata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
-                    obj.reply({
-                        content: 'Error - could not find beatmap',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
+                    if (commandType == 'interaction') {
+                        setTimeout(() => {
+                            obj.editReply({
+                                content: 'Error - could not find beatmap',
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            }).catch()
+                        }, 1000)
+                    } else {
+                        obj.reply({
+                            content: 'Error - could not find beatmap',
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }
                 }
                 return;
             }
