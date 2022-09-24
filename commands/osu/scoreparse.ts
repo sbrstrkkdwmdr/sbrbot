@@ -271,7 +271,7 @@ module.exports = {
             .setTitle(`${artist} - ${title}`)
             .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.id}`)
             .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`)
-            .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''}
+            .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
 ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + scoredata.mods.join('') : ''}
 ${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 \`${hitlist}\`

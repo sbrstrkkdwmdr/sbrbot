@@ -204,7 +204,7 @@ export async function scoreList(
                 name: `#${i + 1 + (page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
                 value: `
 **${showtitle}**
-**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
+**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>${curscore.replay ? `\n[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 ${func.separateNum(curscore.score)} | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 \`${hitlist}\`
 ${pptxt} 
@@ -214,7 +214,7 @@ ${weighted}
             })
             scoresAsArrStr.push(
                 `\n**#${i + 1 + (page * 5)} | [${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id})**
-**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
+**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>${curscore.replay ? `\n[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 ${func.separateNum(curscore.score)} | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 \`${hitlist}\`
 ${pptxt}
@@ -283,7 +283,7 @@ ${weighted}
             scoresAsFields.push({
                 name: `#${i + 1 + (page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
                 value: `
-**${showtitle}** **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
+**${showtitle}** **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>${curscore.replay ? `\n[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
 ${pptxt}
@@ -292,7 +292,7 @@ ${pptxt}
             })
             scoresAsArrStr.push(
                 `\n#${showtitle}
-**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>
+**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>${curscore.replay ? `\n[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 ${func.separateNum(curscore.score)} | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 \`${hitlist}\`
 ${pptxt}
