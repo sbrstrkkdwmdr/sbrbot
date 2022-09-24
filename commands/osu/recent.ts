@@ -564,13 +564,11 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                     new Discord.ButtonBuilder()
                         .setCustomId(`BigLeftArrow-recent-${commanduser.id}`)
                         .setStyle(Discord.ButtonStyle.Primary)
-                        .setEmoji('⬅')
-                        .setDisabled(false),
+                        .setEmoji('⬅'),
                     new Discord.ButtonBuilder()
                         .setCustomId(`LeftArrow-recent-${commanduser.id}`)
                         .setStyle(Discord.ButtonStyle.Primary)
-                        .setEmoji('◀')
-                        .setDisabled(false),
+                        .setEmoji('◀'),
                     new Discord.ButtonBuilder()
                         .setCustomId(`Search-recent-${commanduser.id}`)
                         .setStyle(Discord.ButtonStyle.Primary)
@@ -578,13 +576,11 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                     new Discord.ButtonBuilder()
                         .setCustomId(`RightArrow-recent-${commanduser.id}`)
                         .setStyle(Discord.ButtonStyle.Primary)
-                        .setEmoji('▶')
-                        .setDisabled(false),
+                        .setEmoji('▶'),
                     new Discord.ButtonBuilder()
                         .setCustomId(`BigRightArrow-recent-${commanduser.id}`)
                         .setStyle(Discord.ButtonStyle.Primary)
-                        .setEmoji('➡')
-                        .setDisabled(false),
+                        .setEmoji('➡'),
                 )
             rsEmbed
                 .setColor(colours.embedColour.scorelist.dec)

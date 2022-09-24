@@ -131,43 +131,6 @@ module.exports = {
         }
         page--
 
-        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-firsts-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅')
-                    .setDisabled(false)
-                ,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-firsts-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀')
-                    .setDisabled(false)
-                ,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`Search-firsts-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔍'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-firsts-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶')
-                    .setDisabled(false)
-                ,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-firsts-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡')
-                    .setDisabled(false)
-                ,
-            );
-        const buttons = new Discord.ActionRowBuilder().addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-firsts-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('🔁'),
-        )
         if (user == null) {
             const cuser = await osufunc.searchUser(searchid, userdata, true);
             user = cuser.username;
@@ -227,10 +190,10 @@ module.exports = {
             const fd = await osufunc.apiget('firsts_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
             scorecount += fd.length
             if (fd.length == 100) {
-                await getScoreCount(cinitnum+100)
+                await getScoreCount(cinitnum + 100)
             }
 
-        } 
+        }
         await getScoreCount(0);
 
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);

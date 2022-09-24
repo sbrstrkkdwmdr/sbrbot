@@ -114,7 +114,7 @@ module.exports = {
 
             case 'link': {
                 commanduser = obj.author;
-                
+
                 const messagenohttp = obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
                 mapmods =
                     obj.content.includes('+') ?

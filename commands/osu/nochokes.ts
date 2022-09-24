@@ -242,13 +242,11 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-nochokes-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅')
-                    .setDisabled(false),
+                    .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-nochokes-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀')
-                    .setDisabled(false),
+                    .setEmoji('◀'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-nochokes-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
@@ -256,13 +254,11 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-nochokes-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶')
-                    .setDisabled(false),
+                    .setEmoji('▶'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-nochokes-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡')
-                    .setDisabled(false),
+                    .setEmoji('➡'),
             );
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)

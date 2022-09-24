@@ -212,13 +212,11 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-pinned-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅')
-                    .setDisabled(false),
+                    .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-pinned-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀')
-                    .setDisabled(false),
+                    .setEmoji('◀'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-pinned-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
@@ -226,13 +224,11 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-pinned-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶')
-                    .setDisabled(false),
+                    .setEmoji('▶'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-pinned-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡')
-                    .setDisabled(false),
+                    .setEmoji('➡'),
             );
         if (user == null) {
             const cuser = await osufunc.searchUser(searchid, userdata, true);

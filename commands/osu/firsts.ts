@@ -205,13 +205,11 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-firsts-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅')
-                    .setDisabled(false),
+                    .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-firsts-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀')
-                    .setDisabled(false),
+                    .setEmoji('◀'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-firsts-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
@@ -219,13 +217,11 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-firsts-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶')
-                    .setDisabled(false),
+                    .setEmoji('▶'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-firsts-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡')
-                    .setDisabled(false),
+                    .setEmoji('➡'),
             );
         const buttons = new Discord.ActionRowBuilder().addComponents(
             new Discord.ButtonBuilder()

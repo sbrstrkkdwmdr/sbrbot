@@ -276,13 +276,11 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅')
-                    .setDisabled(false),
+                    .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀')
-                    .setDisabled(false),
+                    .setEmoji('◀'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
@@ -290,13 +288,11 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶')
-                    .setDisabled(false),
+                    .setEmoji('▶'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡')
-                    .setDisabled(false),
+                    .setEmoji('➡'),
             );
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)

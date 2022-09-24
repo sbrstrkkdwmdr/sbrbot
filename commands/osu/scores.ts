@@ -221,13 +221,11 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-scores-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅')
-                    .setDisabled(false),
+                    .setEmoji('⬅').setDisabled(false),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-scores-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀')
-                    .setDisabled(false),
+                    .setEmoji('◀'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-scores-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
@@ -235,13 +233,11 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-scores-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶')
-                    .setDisabled(false),
+                    .setEmoji('▶'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-scores-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡')
-                    .setDisabled(false),
+                    .setEmoji('➡'),
             );
 
         if (user == null) {

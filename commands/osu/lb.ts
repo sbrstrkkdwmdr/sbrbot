@@ -61,7 +61,7 @@ module.exports = {
 
                 break;
             case 'button': {
-                if(!obj.message.embeds[0]){
+                if (!obj.message.embeds[0]) {
                     return;
                 }
                 commanduser = obj.member.user;
@@ -304,7 +304,7 @@ module.exports = {
         const timeelapsed = endofcommand - currentDate.getTime();
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (message command => lb server) - ${timeelapsed}ms\n`)
 
-        if(page <= 1){
+        if (page <= 1) {
             //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[0].setDisabled(true)
             //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
@@ -317,51 +317,51 @@ module.exports = {
             pgbuttons.components[4].setDisabled(true)
         }
 
-            //SEND/EDIT MSG==============================================================================================================================================================================================
-            switch(commandType) {
+        //SEND/EDIT MSG==============================================================================================================================================================================================
+        switch (commandType) {
             case 'message': {
-    obj.reply({
-        content: '',
-        embeds: [serverlb],
-        components: [pgbuttons],
-        allowedMentions: { repliedUser: false },
-        failIfNotExists: true
-    })
-        .catch();
-}
-break;
+                obj.reply({
+                    content: '',
+                    embeds: [serverlb],
+                    components: [pgbuttons],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+                break;
 
             //==============================================================================================================================================================================================
 
             case 'interaction': {
-    obj.reply({
-        content: '',
-        embeds: [serverlb],
-        components: [pgbuttons],
-        allowedMentions: { repliedUser: false },
-        failIfNotExists: true
-    })
-        .catch();
-}
+                obj.reply({
+                    content: '',
+                    embeds: [serverlb],
+                    components: [pgbuttons],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
 
-//==============================================================================================================================================================================================
+                //==============================================================================================================================================================================================
 
-break;
+                break;
             case 'button': {
-    obj.edit({
-        content: '',
-        embeds: [serverlb],
-        components: [pgbuttons],
-        allowedMentions: { repliedUser: false },
-        failIfNotExists: true
-    })
-        .catch();
-}
-break;
+                obj.edit({
+                    content: '',
+                    embeds: [serverlb],
+                    components: [pgbuttons],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+                break;
         }
 
-fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-    `
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
