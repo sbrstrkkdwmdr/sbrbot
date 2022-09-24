@@ -31,6 +31,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
                     if (!previous.find(x => x.id == curdata[i].id)) {
                         // console.log(curdata[i].id)
                         // console.log('new score #' + i)
+                        osufunc.logCall(curdata[i]?.user?.username ?? 'null name', 'Found new score for')
                         sendMsg(await getEmbed({
                             scoredata: curdata[i],
                             user: thisUser,
