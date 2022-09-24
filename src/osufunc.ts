@@ -70,11 +70,11 @@ type Score = {
  */
 async function mapcalc(
     obj: {
-    mods: string, 
-    gamemode: string,
-     mapid: number,
-    calctype: number | null
-}) {
+        mods: string,
+        gamemode: string,
+        mapid: number,
+        calctype: number | null
+    }) {
     let ppl
     let mapscore
     const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
@@ -178,7 +178,7 @@ async function scorecalc(
     const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
     switch (obj.calctype) {
         case 0: default:
-            {        
+            {
                 if (!fs.existsSync('files/maps/')) {
                     console.log('creating files/maps/');
                     fs.mkdirSync('files/maps/');
@@ -246,7 +246,7 @@ async function scorecalc(
                     newacc = obj.acc;
                 }
                 let basescore: Score = {
-                    mode: mode,
+                    mode,
                     mods: osumodcalc.ModStringToInt(mods),
                     combo: obj.maxcombo,
                     acc: obj?.acc ? obj.acc * 100 : 100,
@@ -254,7 +254,7 @@ async function scorecalc(
                 }
                 if (failed == true) {
                     basescore = {
-                        mode: mode,
+                        mode,
                         mods: osumodcalc.ModStringToInt(mods),
                         combo: obj.maxcombo,
                         acc: obj?.acc ? obj.acc * 100 : 100,
@@ -282,12 +282,12 @@ async function scorecalc(
                     params: [
                         basescore,
                         {
-                            mode: obj.gamemode,
+                            mode,
                             mods: osumodcalc.ModStringToInt(mods),
                             acc: newacc * 100,
                         },
                         {
-                            mode: obj.gamemode,
+                            mode,
                             mods: osumodcalc.ModStringToInt(mods),
                             acc: 100,
                         }
@@ -652,7 +652,7 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
                 break;
         }
     }
-    if(ignoreNonAlphaChar != true) mainparam = cmdchecks.toHexadecimal(mainparam)
+    if (ignoreNonAlphaChar != true) mainparam = cmdchecks.toHexadecimal(mainparam)
     if (params && ignoreNonAlphaChar != true) params = cmdchecks.toHexadecimal(params);
     if (version == 2) {
         switch (type) {
@@ -796,8 +796,13 @@ export function logCall(data: string, title?: string) {
 
 async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase: any) {
     const allUsers = await sqlDatabase.findAll()
-    let findname = allUsers.find((u: extypes.dbUser) => u.osuname.toLowerCase() == user.username.toLowerCase());
 
+    let findname;
+    try {
+        findname = allUsers.find((u: extypes.dbUser) => u.osuname.toLowerCase() == user.username.toLowerCase());
+    } catch (error) {
+
+    }
     if (findname == null) {
         findname = allUsers.find((u: extypes.dbUser) => `${u.osuname}`.toLowerCase() == `${user.id}`.toLowerCase());
     }
@@ -1027,10 +1032,10 @@ export async function dlMap(mapid: number | string) {
  * @param index starts from 0
  * @returns 
  */
-export function findWeight(index:number){
-    return (0.95**(index))
+export function findWeight(index: number) {
+    return (0.95 ** (index))
 }
 
-export function rawToWeighted(pp:number, index:number){
-    return pp*(findWeight(index))
+export function rawToWeighted(pp: number, index: number) {
+    return pp * (findWeight(index))
 }
