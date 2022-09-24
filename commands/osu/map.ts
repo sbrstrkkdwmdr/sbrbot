@@ -550,18 +550,19 @@ ${error}
         const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
         const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
 
-        const mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
+        let mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
         osufunc.debug(mapperdata, 'command', 'map', obj.guildId, 'mapperData');
 
         if (mapperdata?.error) {
-            if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not find mapper',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }
-            return;
+            mapperdata = JSON.parse(fs.readFileSync('./files/defaults/mapper.json', 'utf8'));
+            // if (commandType != 'button' && commandType != 'link') {
+            //     obj.reply({
+            //         content: 'Error - could not find mapper',
+            //         allowedMentions: { repliedUser: false },
+            //         failIfNotExists: true
+            //     })
+            // }
+            // return;
         }
 
         const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
