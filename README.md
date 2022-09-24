@@ -2,12 +2,11 @@
 just an osu-centred discord bot
 
 ### Invite link
-Will be added once i get a server
+soon :tm:
 
 ### features
 osu! map/map leaderboard/profile/scores commands</br>
 Map link, osr, profile link, score link parsing</br>
-Mod logging (user, role, channel, guild, etc. updates)</br>
 Google image/youtube search </br>
 Rest of the commands can be found using `sbr-help` or `/help [command]`</br>
 
