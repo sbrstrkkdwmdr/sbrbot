@@ -13,6 +13,9 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
         const curdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('osutop', fr.user, fr.mode)
         const thisUser: osuApiTypes.User = await osufunc.apiget('user', fr.user, fr.mode)
         if (!curdata?.[0]?.user_id) return;
+
+        osufunc.updateUserStats(thisUser, fr.mode, userdata)
+
         if (curdata?.[0]?.user_id && fr.inital == true) {
             fs.writeFileSync(`trackingFiles/${curdata[0].user_id}.json`, JSON.stringify(curdata, null, 2))
             return;
