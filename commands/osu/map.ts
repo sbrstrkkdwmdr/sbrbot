@@ -148,6 +148,11 @@ module.exports = {
                             .catch(error => { });
                         return;
                     }
+                } else if (messagenohttp.includes('q=')) {
+                    maptitleq =
+                        messagenohttp.includes('&') ?
+                            messagenohttp.split('q=')[1].split('&')[0] :
+                            messagenohttp.split('q=')[1];
                 } else {
                     let setid = 910392;
                     if (!messagenohttp.includes('/beatmapsets/')) {
@@ -319,7 +324,7 @@ module.exports = {
             if (mapidtest?.error) {
                 if (commandType != 'button' && commandType != 'link') {
                     obj.reply({
-                        content: 'Error - could not fetch beatmap data.',
+                        content: 'Error - could not fetch beatmap search data.',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
