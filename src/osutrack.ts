@@ -137,6 +137,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
                 url: `https://osu.ppy.sh/u/${data.scoredata.user.id}`,
                 iconURL: `${`https://osuflags.omkserver.nl/${data.scoredata.user.country_code}.png`}`
             })
+            .setThumbnail(`${data.user.avatar_url}`)
             .setImage(`${data.scoredata.beatmapset.covers['cover@2x']}`)
             .setDescription(
                 `${data.scoredata.mods ? '+' + data.scoredata.mods.join('') + ' | ' : ''} **Score set** <t:${new Date(data.scoredata.created_at).getTime() / 1000}:R>\n` +

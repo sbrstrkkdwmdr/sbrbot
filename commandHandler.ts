@@ -214,9 +214,9 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
             case 'firsts':
                 commandStruct.osucmds.get('firsts').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
-            case 'globals':
-                commandStruct.osucmds.get('globals').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                break;
+            // case 'globals':
+            //     commandStruct.osucmds.get('globals').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+            //     break;
             case 'ranking':
                 commandStruct.osucmds.get('ranking').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
