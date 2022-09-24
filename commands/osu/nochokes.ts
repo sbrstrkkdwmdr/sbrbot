@@ -266,21 +266,11 @@ module.exports = {
 
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                if (commandType == 'interaction') {
-                    setTimeout(() => {
-                        obj.editReply({
-                            content: 'Error - could not fetch user data',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }, 1000)
-                } else {
-                    obj.reply({
-                        content: 'Error - could not fetch user data',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }
+                obj.reply({
+                    content: 'Error - could not fetch user data',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).catch()
             }
             return;
         }
@@ -295,21 +285,11 @@ module.exports = {
         osufunc.debug(nochokedata, 'command', 'nochokes', obj.guildId, 'osuTopData');
         if (nochokedata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                if (commandType == 'interaction') {
-                    setTimeout(() => {
-                        obj.editReply({
-                            content: 'Error - could not fetch user\'s top scores',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }, 1000)
-                } else {
-                    obj.reply({
-                        content: 'Error - could not fetch user\'s top scores',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }
+                obj.reply({
+                    content: 'Error - could not fetch user\'s top scores',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).catch()
             }
             return;
         }
@@ -324,7 +304,7 @@ module.exports = {
             cmd ID: ${absoluteID}
             Error - no scores found
             ----------------------------------------------------`)
-            return obj.reply({ content: 'failed to get osu! top plays', allowedMentions: { repliedUser: false } })
+            return obj.reply({ content: 'Error - could not fetch user\'s top scores', allowedMentions: { repliedUser: false } })
                 .catch();
 
         }

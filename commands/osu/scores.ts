@@ -266,21 +266,11 @@ module.exports = {
         osufunc.debug(osudata, 'command', 'scores', obj.guildId, 'osuData');
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                if (commandType == 'interaction') {
-                    setTimeout(() => {
-                        obj.editReply({
-                            content: 'Error - could not fetch user data',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }, 1000)
-                } else {
                     obj.reply({
                         content: 'Error - could not fetch user data',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
-                }
             }
             return;
         }
