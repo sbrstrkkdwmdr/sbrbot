@@ -236,7 +236,7 @@ ID: ${absoluteID}
             where: { guildId: obj.guildId }
         })
 
-        if(!guildsetting.dataValues.trackChannel){
+        if (!guildsetting.dataValues.trackChannel) {
             obj.reply({
                 content: 'The current guild does not have a tracking channel',
                 embeds: [],
@@ -311,7 +311,7 @@ ID: ${absoluteID}
             case 'message': {
                 commanduser = obj.author;
                 channelId = args[0];
-                if(obj.content.includes('<#')){
+                if (obj.content.includes('<#')) {
                     channelId = obj.content.split('<#')[1].split('>')[0]
                 }
             }
@@ -373,8 +373,29 @@ ID: ${absoluteID}
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        
+        const guildsetting = await guildSettings.findOne({ where: { guildid: obj.guildId } });
 
+        if (!channelId) {
+            //the current channel is...
+            if (!guildsetting.dataValues.trackChannel) {
+                obj.reply({
+                    content: 'The current guild does not have a tracking channel',
+                    embeds: [],
+                    files: [],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).catch()
+                return;
+            }
+            obj.reply({
+                content: `The current tracking channel is <#${guildsetting.dataValues.trackChannel}>`,
+                embeds: [],
+                files: [],
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            }).catch()
+            return;
+        }
 
         if (!channelId || isNaN(+channelId) || !client.channels.cache.get(channelId)) {
             obj.reply({
@@ -386,8 +407,6 @@ ID: ${absoluteID}
             }).catch()
             return;
         }
-
-        const guildsetting = await guildSettings.findOne({ where: { guildid: obj.guildId } });
 
         // guildsetting.dataValues.trackChannel = channelId;
         await guildsetting.update({
@@ -412,7 +431,7 @@ ID: ${absoluteID}
             //==============================================================================================================================================================================================
             case 'interaction': {
                 obj.reply({
-                    content: 'Tracking channel is now set',
+                    content: 'Tracking channel is now set  to <#' + channelId + '>',
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },
@@ -442,5 +461,158 @@ success
 ID: ${absoluteID}
 ----------------------------------------------------
 \n\n`, 'utf-8')
+    },
+    async userList(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings) {
+
+        let commanduser;
+
+
+        switch (commandType) {
+            case 'message': {
+                commanduser = obj.author;
+            }
+                break;
+            //==============================================================================================================================================================================================
+            case 'interaction': {
+                commanduser = obj.member.user;
+            }
+                //==============================================================================================================================================================================================
+
+                break;
+            case 'button': {
+                commanduser = obj.member.user;
+            }
+                break;
+        }
+        if (overrides != null) {
+
+        }
+        //==============================================================================================================================================================================================
+
+        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('⬅')
+                /* .setLabel('Start') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('◀'),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('▶')
+                /* .setLabel('Next') */,
+                new Discord.ButtonBuilder()
+                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('➡')
+                /* .setLabel('End') */,
+            );
+        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`Refresh-COMMANDNAME-${commanduser.id}`)
+                    .setStyle(Discord.ButtonStyle.Primary)
+                    .setEmoji('🔁'),
+            );
+
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            log.commandLog(
+                'COMMANDNAME',
+                commandType,
+                absoluteID,
+                commanduser
+            ), 'utf-8')
+        //OPTIONS==============================================================================================================================================================================================
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            log.optsLog(
+                absoluteID,
+                []
+            ), 'utf-8')
+
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+        const users = await trackDb.findAll();
+        const useridsarraylen = await trackDb.count();
+        // const user: extypes.dbUser = userids[i].dataValues;
+
+        let userList: {
+            osuid: string,
+            userid: string
+        }[] = [];
+
+
+        for (let i = 0; i < useridsarraylen; i++) {
+            const user = users[i].dataValues;
+            const guilds = user.guilds.split(',');
+
+            //check if obj.guildId is in guilds
+            if (guilds.includes(obj.guildId)) {
+                userList.push({
+                    osuid: `${user.osuid}`,
+                    userid: `${user.userid}`
+                })
+            }
+        }
+        const userListEmbed = new Discord.EmbedBuilder()
+            .setTitle(`All tracked users in ${obj.guild.name}`)
+            .setColor(colours.embedColour.userlist.dec)
+            .setDescription(`There are ${userList.length} users being tracked in this server\n\n` +
+                `${userList.map((user, i) => `${i + 1}. <@${user.userid}> => https://osu.ppy.sh/u/${user.osuid}`).join('\n')}`
+            )
+
+        //SEND/EDIT MSG==============================================================================================================================================================================================
+        switch (commandType) {
+            case 'message': {
+                obj.reply({
+                    content: '',
+                    embeds: [userListEmbed],
+                    files: [],
+                    components: [],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+                break;
+            //==============================================================================================================================================================================================
+            case 'interaction': {
+                obj.reply({
+                    content: '',
+                    embeds: [userListEmbed],
+                    files: [],
+                    components: [],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+                //==============================================================================================================================================================================================
+
+                break;
+            case 'button': {
+                obj.message.edit({
+                    content: '',
+                    embeds: [userListEmbed],
+                    files: [],
+                    components: [],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+                break;
+        }
+        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+            `
+----------------------------------------------------
+success
+ID: ${absoluteID}
+----------------------------------------------------
+\n\n`, 'utf-8')
+
     }
 }
