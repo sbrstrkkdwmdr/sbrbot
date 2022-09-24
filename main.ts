@@ -142,7 +142,7 @@ const guildSettings = sequelize.define('guildSettings', {
         defaultValue: true,
     },
     trackChannel: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         defaultValue: null,
     }
 });

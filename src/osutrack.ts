@@ -227,12 +227,14 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
                     })
                     if (curset?.dataValues?.trackChannel) {
                         await channels.push(`${curset.trackChannel}`)
+                        osufunc.logCall(`${curset.trackChannel}`, 'Found channel in guild settings')
                         // console.log('tracking enabled in guild')
+                    } else {
+                        osufunc.logCall('No channel set', 'Found channel in guild settings')
                     }
                 }
             })
         })
-
 
         // console.log(guilds)
         // console.log('----------')
@@ -251,12 +253,16 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
                 const curchannel: Discord.GuildTextBasedChannel = client.channels.cache.get(channel) as Discord.GuildTextBasedChannel
                 // const curchannel = client.channels.get(channel)
                 if (curchannel) {
+                    osufunc.logCall(curchannel.id, 'Sending to channel')
                     // console.log('sending')
                     curchannel.send({
                         embeds: [embed]
                     }).catch(error => {
+                        osufunc.logCall(error, 'error sending to channel')
                         log.logFile('error', log.errLog('sending track embed', error))
                     })
+                } else {
+                    osufunc.logCall('Channel not found', 'error sending to channel')
                 }
                 i++;
 
