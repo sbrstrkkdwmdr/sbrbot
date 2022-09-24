@@ -224,11 +224,13 @@ module.exports = {
         osufunc.debug(osudata, 'command', 'recent', obj.guildId, 'osuData');
 
         if (osudata?.error) {
-            obj.reply({
-                content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not find user',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
             return;
         }
 
@@ -256,6 +258,17 @@ module.exports = {
 
         let rsdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('recent_alt', `${osudata.id}`, `mode=${mode}&offset=0`, 2, 0, true)
         osufunc.debug(rsdata, 'command', 'recent', obj.guildId, 'rsData');
+
+        if (rsdata?.error) {
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not find user\'s recent scores',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+            return;
+        }
 
         const rsEmbed = new Discord.EmbedBuilder()
             .setAuthor({
@@ -290,11 +303,13 @@ module.exports = {
             const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${curbm.id}`)
             osufunc.debug(mapdata, 'command', 'recent', obj.guildId, 'mapData');
             if (mapdata?.error) {
-                obj.reply({
-                    content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: false,
-                }).catch()
+                if (commandType != 'button' && commandType != 'link') {
+                    obj.reply({
+                        content: 'Error - could not find beatmap',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
                 return;
             }
 

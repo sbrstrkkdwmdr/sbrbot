@@ -165,13 +165,14 @@ module.exports = {
                     }
                     const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
                     if (bmsdata?.error) {
-                        if (commandType != 'button') {
+                        if (commandType != 'button' && commandType != 'link') {
                             obj.reply({
-                                content: `${bmsdata?.error ? bmsdata?.error : 'Error: null'} `,
+                                content: 'Error - could not fetch beatmapset data.',
                                 allowedMentions: { repliedUser: false },
                                 failIfNotExists: true
                             })
                         }
+                        return;
                     }
                     try {
                         mapid = bmsdata.beatmaps[0].id;
@@ -266,11 +267,13 @@ module.exports = {
             osufunc.debug(mapdata, 'command', 'map', obj.guildId, 'mapData');
 
             if (mapdata?.error) {
-                obj.reply({
-                    content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: false,
-                }).catch()
+                if (commandType != 'button' && commandType != 'link') {
+                    obj.reply({
+                        content: 'Error - could not fetch beatmap data.',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
                 return;
             }
             const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${mapdata.beatmapset_id}`)
@@ -314,11 +317,13 @@ module.exports = {
             osufunc.debug(mapidtest, 'command', 'map', obj.guildId, 'mapIdTestData');
 
             if (mapidtest?.error) {
-                obj.reply({
-                    content: `${mapidtest?.error ? mapidtest?.error : 'Error: null'}`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: false,
-                }).catch()
+                if (commandType != 'button' && commandType != 'link') {
+                    obj.reply({
+                        content: 'Error - could not fetch beatmap data.',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
                 return;
             }
 
@@ -367,10 +372,10 @@ ${error}
             if (mapdata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
                     obj.reply({
-                        content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
+                        content: 'Error - could not fetch beatmap data',
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: false,
-                    }).catch()
+                        failIfNotExists: true
+                    })
                 }
                 return;
             }
@@ -544,12 +549,12 @@ ${error}
         osufunc.debug(mapperdata, 'command', 'map', obj.guildId, 'mapperData');
 
         if (mapperdata?.error) {
-            if (commandType != 'button') {
+            if (commandType != 'button' && commandType != 'link') {
                 obj.reply({
-                    content: `${mapperdata?.error ? mapperdata?.error : 'Error: null'}`,
+                    content: 'Error - could not find mapper',
                     allowedMentions: { repliedUser: false },
-                    failIfNotExists: false,
-                }).catch()
+                    failIfNotExists: true
+                })
             }
             return;
         }

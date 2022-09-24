@@ -152,8 +152,8 @@ module.exports = {
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
         osufunc.debug(osudata, 'command', 'globals', obj.guildId, 'osuData');
         if (osudata?.error) {
-            obj.reply({
-                content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
+            if (commandType != 'button') obj.reply({
+                content: `User not found`,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: false,
             }).catch()

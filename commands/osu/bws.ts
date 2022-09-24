@@ -87,6 +87,16 @@ module.exports = {
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `osu`)
         osufunc.debug(osudata, 'command', 'bws', obj.guildId, 'osuData');
+        if (osudata?.error) {
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not find user',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+            return;
+        }
 
         let badgecount = 0;
         for (const badge of osudata.badges) {

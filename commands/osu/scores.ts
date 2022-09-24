@@ -265,11 +265,13 @@ module.exports = {
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
         osufunc.debug(osudata, 'command', 'scores', obj.guildId, 'osuData');
         if (osudata?.error) {
-            obj.reply({
-                content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not find user',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
             return;
         }
 
@@ -310,11 +312,13 @@ module.exports = {
         const scoredataPresort: osuApiTypes.ScoreArrA = await osufunc.apiget('user_get_scores_map', `${mapid}`, `${osudata.id}`)
         osufunc.debug(scoredataPresort, 'command', 'scores', obj.guildId, 'scoreDataPresort');
         if (scoredataPresort?.error) {
-            obj.reply({
-                content: `${scoredataPresort?.error ? scoredataPresort?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not fetch beatmap scores data',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
             return;
         }
 
@@ -333,11 +337,13 @@ module.exports = {
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
         osufunc.debug(mapdata, 'command', 'scores', obj.guildId, 'mapData');
         if (mapdata?.error) {
-            obj.reply({
-                content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not fetch beatmap data',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
             return;
         }
 

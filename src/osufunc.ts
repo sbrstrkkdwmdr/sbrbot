@@ -729,7 +729,7 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
             datafirst = await apiget(type, mainparam, params, version, callNum + 1)
             //throw new Error('token expired. Updating token...')
         }
-        if (typeof datafirst?.error != 'undefined' && datafirst?.error == null && typeof datafirst?.error != 'object') {
+        if (typeof datafirst?.error != 'undefined' && datafirst?.error.toString() == 'null' && typeof datafirst?.error != 'object') {
             throw new Error('null')
         }
         data = datafirst;

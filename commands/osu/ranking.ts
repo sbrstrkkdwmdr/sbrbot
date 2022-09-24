@@ -184,8 +184,19 @@ module.exports = {
                 }).catch()
             }
             return;
+        })
+
+        if(rankingdata?.error){
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not get rankings',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+            return;
         }
-        )
+
         try {
             osufunc.debug(rankingdata, 'command', 'ranking', obj.guildId, 'rankingData')
         } catch (e) {

@@ -299,11 +299,13 @@ module.exports = {
         osufunc.debug(osudata, 'command', 'osutop', obj.guildId, 'osuData');
 
         if (osudata?.error) {
-            obj.reply({
-                content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not find user',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
             return;
         }
 
@@ -316,11 +318,13 @@ module.exports = {
         const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
         osufunc.debug(osutopdata, 'command', 'osutop', obj.guildId, 'osuTopData');
         if (osutopdata?.error) {
-            obj.reply({
-                content: `${osutopdata?.error ? osutopdata?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not find user\'s top scores',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
             return;
         }
 

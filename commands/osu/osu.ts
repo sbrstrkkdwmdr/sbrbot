@@ -162,18 +162,26 @@ module.exports = {
         let osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `${mode}`)
         osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
 
-        if (((commandType == 'interaction' && !obj?.options?.getString('mode')) || commandType == 'message') && osudata.playmode != 'osu') {
+        if (
+            (
+                (commandType == 'interaction' && !obj?.options?.getString('mode'))
+                || commandType == 'message'
+            ) &&
+            osudata.playmode != 'osu' &&
+            typeof osudata.playmode != 'undefined') {
             mode = osudata.playmode
             osudata = await osufunc.apiget('user', `${user}`, `${mode}`);
             osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
         }
 
         if (osudata?.error) {
-            if (commandType != 'button') obj.reply({
-                content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not find user',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
             return;
         }
         try {
@@ -256,11 +264,13 @@ module.exports = {
             osufunc.debug(osutopdata, 'command', 'osu', obj.guildId, 'osuTopData');
 
             if (osutopdata?.error) {
-                if (commandType != 'button') obj.reply({
-                    content: `${osutopdata?.error ? osutopdata?.error : 'Error: null'}`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: false,
-                }).catch()
+                if (commandType != 'button' && commandType != 'link') {
+                    obj.reply({
+                        content: 'Error - could not find user\'s top scores',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
                 return;
             }
 
@@ -268,11 +278,13 @@ module.exports = {
             osufunc.debug(mostplayeddata, 'command', 'osu', obj.guildId, 'mostPlayedData');
 
             if (mostplayeddata?.error) {
-                if (commandType != 'button') obj.reply({
-                    content: `${mostplayeddata?.error ? mostplayeddata?.error : 'Error: null'}`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: false,
-                }).catch()
+                if (commandType != 'button' && commandType != 'link') {
+                    obj.reply({
+                        content: 'Error - could not find user\'s most played beatmaps',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
                 return;
             }
             const secperplay = osudata?.statistics.play_time / parseFloat(playcount.replaceAll(',', ''))

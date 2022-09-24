@@ -251,11 +251,13 @@ module.exports = {
         // fs.writeFileSync(`debug/command-firsts=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         osufunc.debug(osudata, 'command', 'firsts', obj.guildId, 'osuData');
         if (osudata?.error) {
-            obj.reply({
-                content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not find user',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
             return;
         }
 
@@ -277,11 +279,13 @@ module.exports = {
         async function getScoreCount(cinitnum) {
             const fd: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('firsts_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
             if (fd?.error) {
-                obj.reply({
-                    content: `${firstscoresdata?.error ? firstscoresdata?.error : 'Error: null'}`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: false,
-                }).catch()
+                if (commandType != 'button' && commandType != 'link') {
+                    obj.reply({
+                        content: 'Error - could not find user\'s #1 scores',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
                 return;
             }
             for (let i = 0; i < fd.length; i++) {

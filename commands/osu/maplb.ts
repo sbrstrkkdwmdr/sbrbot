@@ -165,11 +165,13 @@ module.exports = {
         osufunc.debug(mapdata, 'command', 'maplb', obj.guildId, 'mapData');
 
         if (mapdata?.error) {
-            obj.reply({
-                content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not fetch beatmap data',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
             return;
         }
 
@@ -197,11 +199,13 @@ module.exports = {
             osufunc.debug(lbdataf, 'command', 'maplb', obj.guildId, 'lbDataF');
 
             if (lbdataf?.error) {
-                obj.reply({
-                    content: `${lbdataf?.error ? lbdataf?.error : 'Error: null'}`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: false,
-                }).catch()
+                if (commandType != 'button' && commandType != 'link') {
+                    obj.reply({
+                        content: 'Error - could not fetch leaderboard data',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
                 return;
             }
 
@@ -286,11 +290,13 @@ module.exports = {
             osufunc.debug(lbdata, 'command', 'maplb', obj.guildId, 'lbData');
 
             if (lbdata?.error) {
-                obj.reply({
-                    content: `${lbdata?.error ? lbdata?.error : 'Error: null'}`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: false,
-                }).catch()
+                if (commandType != 'button' && commandType != 'link') {
+                    obj.reply({
+                        content: 'Error - could not fetch leaderboard data',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
                 return;
             }
 

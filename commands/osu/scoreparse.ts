@@ -91,12 +91,12 @@ module.exports = {
 
         const scoredata: osuApiTypes.Score = await osufunc.apiget('score', `${scoreid}`, `${scoremode}`)
         if (scoredata?.error) {
-            if (commandType != 'button') {
+            if (commandType != 'button' && commandType != 'link') {
                 obj.reply({
-                    content: `${scoredata?.error ? scoredata?.error : 'Error: null'}`,
+                    content: 'Error - could not fetch score data',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                })
             }
             return;
         }
@@ -127,9 +127,9 @@ module.exports = {
         fs.appendFileSync('debug/command-scoreparse=map.json', JSON.stringify(mapdata, null, 2));
 
         if (mapdata?.error) {
-            if (commandType != 'button') {
+            if (commandType != 'button' && commandType != 'link') {
                 obj.reply({
-                    content: `${mapdata?.error ? mapdata?.error : 'Error: null'}`,
+                    content: 'Error - could not fetch beatmap data',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
@@ -251,7 +251,16 @@ module.exports = {
 
         const osudata = await osufunc.apiget('user', `${scoredata.user.username}`);
         osufunc.debug(osudata, 'command', 'scoreparse', obj.guildId, 'osuData')
-
+        if (osudata?.error) {
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: 'Error - could not find user',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+            return;
+        }
         const scoreembed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.score.dec)
             .setAuthor({
