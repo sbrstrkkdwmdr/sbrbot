@@ -261,7 +261,6 @@ module.exports = {
                     .setCustomId(`DetailDisable-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('ℹ')
-                /* .setLabel('End') */
             )
         } else {
             buttons.addComponents(
@@ -269,7 +268,6 @@ module.exports = {
                     .setCustomId(`DetailEnable-osutop-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('ℹ')
-                /* .setLabel('End') */
             )
         }
 
@@ -302,7 +300,6 @@ module.exports = {
             );
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
-        // fs.writeFileSync(`debug/command-otop=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
         osufunc.debug(osudata, 'command', 'osutop', obj.guildId, 'osuData');
 
         if (osudata?.error) {
@@ -321,7 +318,6 @@ module.exports = {
         }
 
         const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-        // fs.writeFileSync(`debug/command-otop=osutopdata=${obj.guildId}`, JSON.stringify(osutopdata, null, 2))
         osufunc.debug(osutopdata, 'command', 'osutop', obj.guildId, 'osuTopData');
         if (osutopdata?.error) {
             obj.reply({
@@ -355,7 +351,6 @@ module.exports = {
             }).catch()
         }
 
-        // fs.writeFileSync(`debug/command-otop=osutopdata=${obj.guildId}`, JSON.stringify(osutopdata, null, 2))
 
         let showtrue = false;
         if (sort != 'pp') {

@@ -1,12 +1,4 @@
-import cmdchecks = require('../../src/checks');
 import fs = require('fs');
-import calc = require('../../src/calc');
-import emojis = require('../../src/consts/emojis');
-import colours = require('../../src/consts/colours');
-import osufunc = require('../../src/osufunc');
-import osumodcalc = require('osumodcalculator');
-import osuApiTypes = require('../../src/types/osuApiTypes');
-import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
 
@@ -38,32 +30,7 @@ module.exports = {
             }
                 break;
         }
-
-
         //==============================================================================================================================================================================================
-
-        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-debug-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅')
-                /* .setLabel('Start') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-debug-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-debug-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶')
-                /* .setLabel('Next') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-debug-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡')
-                /* .setLabel('End') */,
-            );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
@@ -90,7 +57,6 @@ module.exports = {
 
         const files = [];
         const readfiles = func.readAllFiles('debug/');
-        // console.log(readfiles)
         let input = 'w';
         switch (command) {
             case 'compare':
@@ -120,7 +86,7 @@ module.exports = {
             case 'scoreparse':
                 input = 'scoreparse';
                 break;
-            case 'scores':case 'c':
+            case 'scores': case 'c':
                 input = 'scores';
                 break;
         }

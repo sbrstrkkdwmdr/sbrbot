@@ -206,14 +206,12 @@ module.exports = {
                     .setCustomId(`BigLeftArrow-firsts-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅')
-                    .setDisabled(false)
-                ,
+                    .setDisabled(false),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-firsts-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀')
-                    .setDisabled(false)
-                ,
+                    .setDisabled(false),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-firsts-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
@@ -222,14 +220,12 @@ module.exports = {
                     .setCustomId(`RightArrow-firsts-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶')
-                    .setDisabled(false)
-                ,
+                    .setDisabled(false),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-firsts-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡')
-                    .setDisabled(false)
-                ,
+                    .setDisabled(false),
             );
         const buttons = new Discord.ActionRowBuilder().addComponents(
             new Discord.ButtonBuilder()
@@ -284,8 +280,6 @@ module.exports = {
         let firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []
         async function getScoreCount(cinitnum) {
             const fd: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('firsts_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
-            //[{},{}]
-            //push {}
             if (fd?.error) {
                 obj.reply({
                     content: `${firstscoresdata?.error ? firstscoresdata?.error : 'Error: null'}`,
@@ -305,7 +299,6 @@ module.exports = {
 
         }
         await getScoreCount(0);
-        // fs.writeFileSync(`debug/command-firsts=firstscoresdata=${obj.guildId}.json`, JSON.stringify(firstscoresdata, null, 2))
         osufunc.debug(firstscoresdata, 'command', 'firsts', obj.guildId, 'firstsScoresData');
 
         const firstsEmbed = new Discord.EmbedBuilder()

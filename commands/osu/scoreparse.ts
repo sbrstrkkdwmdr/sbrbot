@@ -59,26 +59,6 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-scoreparse-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-scoreparse-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-scoreparse-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-scoreparse-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
-            );
-
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
                 'scoreparse',
@@ -135,26 +115,12 @@ module.exports = {
 
         }
 
-        // fs.writeFileSync(`debug/command-scoreparse=scoredata=${obj.guildId}.json`, JSON.stringify(scoredata, null, 2));
         osufunc.debug(scoredata, 'command', 'scoreparse', obj.guildId, 'scoreData');
         try {
             scoredata.rank.toUpperCase();
         } catch (error) {
             obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
                 .catch();
-
-            // switch (commandType) {
-            //     case 'button': {
-            //         obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
-            //             .catch();
-            //     }
-            //         break;
-            //     case 'message': {
-            //         obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed.', allowedMentions: { repliedUser: false } })
-            //             .catch();
-            //     }
-            //         break;
-            // }
             return;
         }
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${scoredata.beatmap.id}`)
@@ -205,10 +171,8 @@ module.exports = {
         const gamehits = scoredata.statistics
 
         const mode = scoredata.mode
-        // let ppfc: any;
         let hitlist: string;
         let fcacc: number;
-        // let ppiffc: any;
         let ppissue: string;
 
         if (mode == 'osu') {
@@ -244,8 +208,7 @@ module.exports = {
                 failed: false
             })
 
-            ppissue = ''
-            // fs.writeFileSync(`debug/command-scoreparse=ppcalc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2));
+            ppissue = '';
             osufunc.debug(ppcalcing, 'command', 'scoreparse', obj.guildId, 'ppCalcing');
         } catch (error) {
             ppcalcing = [{
@@ -291,7 +254,6 @@ module.exports = {
 
         const scoreembed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.score.dec)
-            // .setAuthor({ name: `${scoredata.user.username}`, iconURL: `https://a.ppy.sh/${scoredata.user.id}`, url: `https://osu.ppy.sh/users/${scoredata.user.id}` })
             .setAuthor({
                 name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
                 url: `https://osu.ppy.sh/u/${osudata.id}`,

@@ -187,7 +187,6 @@ module.exports = {
         }
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
-        // fs.writeFileSync(`debug/command-firsts=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         osufunc.debug(osudata, 'command', 'globals', obj.guildId, 'osuData');
         if (osudata?.error) {
             obj.reply({
@@ -213,7 +212,6 @@ module.exports = {
         }
         const firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('firsts_alt', `${osudata.id}`, `mode=${mode}&offset=0`)
 
-        // fs.writeFileSync(`debug/command-firsts=firstscoresdata=${obj.guildId}.json`, JSON.stringify(firstscoresdata, null, 2))
         osufunc.debug(firstscoresdata, 'command', 'globals', obj.guildId, 'firstsScoresData');
         if (firstscoresdata?.error) {
             obj.reply({

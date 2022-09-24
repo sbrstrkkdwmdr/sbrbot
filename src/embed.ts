@@ -104,7 +104,7 @@ export async function scoreList(
 
     let trueIndex: string | number = '';
 
-    let truePosArr = newData.slice()//.sort((a, b) => b.pp - a.pp)
+    let truePosArr = newData.slice()
 
     if (showTruePosition && sort != truePosType) {
         truePosArr = await scores.slice().sort((a, b) => b.pp - a.pp)
@@ -154,22 +154,6 @@ export async function scoreList(
 
             let pptxt: string;
             const ppcalcing =
-                // await osufunc.scorecalc(
-                //     curscore.mods.join('').length > 1 ? curscore.mods.join('').toUpperCase() : 'NM',
-                //     curscore.mode,
-                //     mapid,
-                //     hitstats.count_geki,
-                //     hitstats.count_300,
-                //     hitstats.count_katu,
-                //     hitstats.count_100,
-                //     hitstats.count_50,
-                //     hitstats.count_miss,
-                //     curscore.accuracy,
-                //     curscore.max_combo,
-                //     curscore.score,
-                //     0,
-                //     null, false
-                // )
                 await osufunc.scorecalc({
                     mods: curscore.mods.join('').length > 1 ?
                         curscore.mods.join('') : 'NM',

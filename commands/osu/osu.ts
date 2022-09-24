@@ -25,11 +25,6 @@ module.exports = {
             case 'message': {
                 commanduser = obj.author;
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
-                // let msgcontent = args.join(' ')
-                // if (args.join(' ').includes('detailed')) {
-                //     detailed = true;
-                //     msgcontent = msgcontent.replace('detailed', '')
-                // }
                 user = args.join(' ');
                 if (!args[0] || args[0].includes(searchid)) {
                     user = null
@@ -59,8 +54,6 @@ module.exports = {
                     detailed = true
                 }
 
-                //user =  message.embeds[0].title.split('\'s')[0]
-                //link = https://osu.ppy.sh/users/USERNAME/GAMEMODE
                 user = obj.message.embeds[0].url.split('users/')[1].split('/')[0]
                 mode = obj.message.embeds[0].url.split('users/')[1].split('/')[1]
 
@@ -88,36 +81,12 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-osu-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-osu-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-osu-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-osu-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
-            );
-
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`Refresh-osu-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔁'),
-                // new Discord.ButtonBuilder()
-                //     .setCustomId(`Detailed-osu-${commanduser.id}`)
-                //     .setStyle(Discord.ButtonStyle.Primary)
-                //     .setEmoji('📝'),
             )
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
@@ -191,7 +160,6 @@ module.exports = {
             mode = 'osu'
         }
         let osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `${mode}`)
-        // fs.writeFileSync(`debug/command-osu=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
 
         if (((commandType == 'interaction' && !obj?.options?.getString('mode')) || commandType == 'message') && osudata.playmode != 'osu') {
@@ -239,7 +207,6 @@ module.exports = {
             '---' :
             func.separateNum(osustats.play_count);
 
-        //${osustats.level.current}.${osustats.level.progress.toFixed(2)}
         const lvl = osustats.level.current != null ?
             osustats.level.progress != null && osustats.level.progress > 0 ?
                 `${osustats.level.current}.${Math.floor(osustats.level.progress)}` :
@@ -286,7 +253,6 @@ module.exports = {
                 .setImage(`${chartplay}`);
 
             const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-            // fs.writeFileSync(`debug/command-osu=osutopdata=${obj.guildId}.json`, JSON.stringify(osutopdata, null, 2))
             osufunc.debug(osutopdata, 'command', 'osu', obj.guildId, 'osuTopData');
 
             if (osutopdata?.error) {
@@ -299,7 +265,6 @@ module.exports = {
             }
 
             const mostplayeddata: osuApiTypes.BeatmapPlaycount[] & osuApiTypes.Error = await osufunc.apiget('most_played', `${osudata.id}`)
-            // fs.writeFileSync(`debug/command-osu=mostplayeddata=${obj.guildId}.json`, JSON.stringify(mostplayeddata, null, 2))
             osufunc.debug(mostplayeddata, 'command', 'osu', obj.guildId, 'mostPlayedData');
 
             if (mostplayeddata?.error) {

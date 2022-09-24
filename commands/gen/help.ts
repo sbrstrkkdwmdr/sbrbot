@@ -1,11 +1,6 @@
-import cmdchecks = require('../../src/checks');
 import fs = require('fs');
-import calc = require('../../src/calc');
 import emojis = require('../../src/consts/emojis');
 import colours = require('../../src/consts/colours');
-import osufunc = require('../../src/osufunc');
-import osumodcalc = require('osumodcalculator');
-import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import info = require('../../src/consts/helpinfo');
@@ -18,11 +13,6 @@ module.exports = {
 
         let commandCategory: string = 'default';
         let command: string;
-
-        // let maincmd = '`' + info.cmds.join('`,') + '`'
-        // let osucmd = '`' + info.osucmds.join('`,') + '`'
-        // let admincmd = '`' + info.admincmds.join('`,') + '`'
-        // let misccmd = '`' + info.othercmds.join('`,') + '`'
 
         const fullCommandList = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.info.dec)
@@ -80,31 +70,8 @@ module.exports = {
             }
                 break;
         }
-        // if (overrides != null) {
-
-        // }
 
         //==============================================================================================================================================================================================
-
-        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-help-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-help-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-help-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-help-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
-            );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(

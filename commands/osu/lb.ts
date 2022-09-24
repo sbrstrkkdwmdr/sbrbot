@@ -142,8 +142,6 @@ module.exports = {
             const user: extypes.dbUser = userids[i].dataValues;
             guild.members.cache.forEach(async member => {
                 if (member.id == user.userid) {
-                    // console.log(userids[i])
-                    // const user = userids[i].dataValues;
                     if (user != null && !rtxt.includes(`${member.user.id}`)) {
                         let acc: any;
                         let pp: any;

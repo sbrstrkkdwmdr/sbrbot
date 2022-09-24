@@ -62,7 +62,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) 
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: songsarr[Math.floor(Math.random() * songsarr.length)] + " | sbr-help",//"Yomi Yori kikoyu, Koukoku no hi to Honoo no Shoujo | sbr-help",
+            name: songsarr[Math.floor(Math.random() * songsarr.length)] + " | sbr-help",
             type: 2,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },

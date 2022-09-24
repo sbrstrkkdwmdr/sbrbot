@@ -288,8 +288,6 @@ module.exports = {
         let pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []; //= await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
         async function getScoreCount(cinitnum) {
             const fd: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('pinned_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
-            //[{},{}]
-            //push {}
             if (fd?.error) {
                 obj.reply({
                     content: `${pinnedscoresdata?.error ? pinnedscoresdata?.error : 'Error: null'}`,
@@ -309,7 +307,6 @@ module.exports = {
         }
         await getScoreCount(0);
 
-        // fs.writeFileSync(`debug/command-pinned=pinnedscoresdata=${obj.guildId}.json`, JSON.stringify(pinnedscoresdata, null, 2))
         osufunc.debug(pinnedscoresdata, 'command', 'pinned', obj.guildId, 'pinnedScoresData');
 
         if (page >= Math.ceil(pinnedscoresdata.length / 5)) {

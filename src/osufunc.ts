@@ -144,21 +144,21 @@ async function mapcalc(
 
 /**
  * 
- * @param mods 
- * @param gamemode 
- * @param mapid 
- * @param hitgeki 
- * @param hit300 
- * @param hitkatu 
- * @param hit100 
- * @param hit50 
- * @param miss 
- * @param acc accuracy (IN DECIMAL) 88.64% acc = 0.8864
- * @param maxcombo 
- * @param score 
- * @param calctype 0 = rosu, 1 = booba, 2 = osu api extended
- * @param passedObj number of objects hit
- * @param failed whether the score is failed or not
+ * @param obj.mods 
+ * @param obj.gamemode 
+ * @param obj.mapid 
+ * @param obj.hitgeki 
+ * @param obj.hit300 
+ * @param obj.hitkatu 
+ * @param obj.hit100 
+ * @param obj.hit50 
+ * @param obj.miss 
+ * @param obj.acc accuracy (IN DECIMAL) 88.64% acc = 0.8864
+ * @param obj.maxcombo 
+ * @param obj.score 
+ * @param obj.calctype 0 = rosu, 1 = booba, 2 = osu api extended
+ * @param obj.passedObj number of objects hit
+ * @param obj.failed whether the score is failed or not
  * @returns 
  */
 async function scorecalc(
@@ -178,7 +178,7 @@ async function scorecalc(
     const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
     switch (obj.calctype) {
         case 0: default:
-            {            //check if 'files/maps/' exists
+            {        
                 if (!fs.existsSync('files/maps/')) {
                     console.log('creating files/maps/');
                     fs.mkdirSync('files/maps/');
@@ -293,11 +293,8 @@ async function scorecalc(
                         }
                     ]
                 }
-                // console.log(basescore)
-                // console.log(scorenofc)
-                // console.log(newacc)
+
                 ppl = await rosu.calculate(scorenofc);
-                // console.log(ppl)
 
             }
             break;
@@ -330,9 +327,7 @@ async function straincalc(mapid: number, mods: string, calctype: number, mode: s
                     const straintimes = [];
                     const totalval = [];
 
-                    //let div = aimval.length / 200;
                     for (let i = 0; i < aimval.length; i++) {
-                        //let offset = Math.ceil(i * div);
                         const offset = i
                         const curval = aimval[offset] + aimnoslideval[offset] + speedval[offset] + flashlightval[offset];
                         totalval.push(curval)
@@ -382,9 +377,8 @@ async function straincalclocal(path: string | null, mods: string, calctype: numb
                     const straintimes = [];
                     const totalval = [];
 
-                    //let div = aimval.length / 200;
+
                     for (let i = 0; i < aimval.length; i++) {
-                        //let offset = Math.ceil(i * div);
                         const offset = i
                         const curval = aimval[offset] + aimnoslideval[offset] + speedval[offset] + flashlightval[offset];
                         totalval.push(curval)
@@ -801,7 +795,6 @@ export function logCall(data: string, title?: string) {
 }
 
 async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase: any) {
-    // try {
     const allUsers = await sqlDatabase.findAll()
     let findname = allUsers.find((u: extypes.dbUser) => u.osuname.toLowerCase() == user.username.toLowerCase());
 
@@ -852,9 +845,6 @@ async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase
                 break;
         }
     }
-    // } catch (error) {
-    //     console.log(`Error updating user stats for ${user?.username}: ` + error)
-    // }
     return;
 }
 
@@ -946,7 +936,6 @@ export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string
 
 export function debug(data: any, type: string, name: string, serverId: string | number, params: string) {
     const pars = params.replaceAll(',', '=');
-    // fs.writeFileSync(`debug/${type}-${name}=${pars}_${serverId}.json`, JSON.stringify(data, null, 2));
     if (!fs.existsSync(`debug/${type}`)) {
         fs.mkdirSync(`debug/${type}`)
     }
@@ -974,9 +963,6 @@ export function matchScores(initScore: osuApiTypes.Score, scoreList: osuApiTypes
 
     if (initScore.mods.includes('HD') || initScore.mods.includes('SO') || initScore.mods.includes('NF') || initScore.mods.includes('TD') || initScore.mods.includes('SD') || initScore.mods.includes('PF')) {
         filteredMods = initScore.mods.join('').replace('HD', '').replace('SO', '').replace('NF', '').replace('TD', '').replace('SD', '').replace('PF', '').split(/.{1,2}/g)
-        // if(initScore.mods.includes('DT')){
-
-        // }
     }
 
     modScores = modScores.slice().filter(score => score.mods.join('').replace('NC', 'DT').split(/.{1,2}/g).sort().join('') == filteredMods.sort().join(''))
@@ -1021,7 +1007,6 @@ export function getMapImages(mapSetId: string | number) {
 export async function dlMap(mapid: number | string) {
     const url = `https://osu.ppy.sh/osu/${mapid}`
     const path = `./files/maps/${mapid}.osu`
-    //check if path
     if (!fs.existsSync(path)) {
         fs.mkdirSync(`./files/maps/`, { recursive: true })
     }

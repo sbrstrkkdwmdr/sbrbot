@@ -164,9 +164,7 @@ module.exports = {
             newTotal.push(frpp[i] * osufunc.findWeight(i));
         }
 
-        //add all values in array
         const total = newTotal.reduce((a, b) => a + b, 0);
-        // const bonus = //Math.abs(total - osudata.statistics.pp);
         //     416.6667 * (1 - 0.9994 ** osudata.statistics.play_count);
 
         const newBonus = [];
@@ -174,7 +172,6 @@ module.exports = {
             newBonus.push(osutopdata[i].pp * osufunc.findWeight(i));
         }
         const bonus = osudata.statistics.pp - newBonus.reduce((a, b) => a + b, 0);
-        // osudata.statistics.play_count
 
         const embed = new Discord.EmbedBuilder()
             .setTitle(`What if ${osudata.username} gained ${pp}pp?`)

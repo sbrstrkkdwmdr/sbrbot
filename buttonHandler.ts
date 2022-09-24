@@ -11,7 +11,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
         const absoluteID = currentDate.getTime();
 
         const args = null;
-        // const message = interaction.message;
         const obj = interaction;
         const command = interaction.customId.split('-')[1]
         const button = interaction.customId.split('-')[0]
@@ -55,10 +54,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
 
             interaction.showModal(menu)
                 .catch(error => { });
-
-            //client.buttons.get('search').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, absoluteID, button, obj, command);
-            //                 interaction.deferUpdate()
-            // .catch(error => { });
             return;
         }
         if (button.includes('Select')) {
@@ -82,76 +77,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
         if (button == 'Sort' && ScoreSortCommands.includes(command)) {
             interaction.deferUpdate();
             return;
-            // const menu = new Discord.ModalBuilder()
-            //     .setTitle('Sort')
-            //     .setCustomId(`SortMenu-${command}-${interaction.user.id}`)
-            //     .setComponents(
-            //         new Discord.ActionRowBuilder()
-            //             .setComponents(
-            //                 new Discord.SelectMenuBuilder()
-            //                     .setCustomId(`SortType`)
-            //                     .setOptions(
-            //                         new Discord.SelectMenuOptionBuilder()
-            //                             .setDefault(true)
-            //                             .setLabel('Performance')
-            //                             .setDescription('Sort by performance')
-            //                             .setValue('pp'),
-            //                         new Discord.SelectMenuOptionBuilder()
-            //                             .setDefault(false)
-            //                             .setLabel('Score')
-            //                             .setDescription('Sort by score')
-            //                             .setValue('score'),
-            //                         new Discord.SelectMenuOptionBuilder()
-            //                             .setDefault(false)
-            //                             .setLabel('Recent')
-            //                             .setDescription('Sort by date')
-            //                             .setValue('recent'),
-            //                         new Discord.SelectMenuOptionBuilder()
-            //                             .setDefault(false)
-            //                             .setLabel('Accuracy')
-            //                             .setDescription('Sort by accuracy')
-            //                             .setValue('acc'),
-            //                         new Discord.SelectMenuOptionBuilder()
-            //                             .setDefault(false)
-            //                             .setLabel('Combo')
-            //                             .setDescription('Sort by combo')
-            //                             .setValue('combo'),
-            //                         new Discord.SelectMenuOptionBuilder()
-            //                             .setDefault(false)
-            //                             .setLabel('Miss')
-            //                             .setDescription('Sort by miss count')
-            //                             .setValue('miss'),
-            //                         new Discord.SelectMenuOptionBuilder()
-            //                             .setDefault(false)
-            //                             .setLabel('Rank')
-            //                             .setDescription('Sort by rank (SS/S/A/B/C/D)')
-            //                             .setValue('rank')
-            //                     ),
-            //                 new Discord.SelectMenuBuilder()
-            //                     .setCustomId(`isReverse`)
-            //                     .setOptions(
-            //                         new Discord.SelectMenuOptionBuilder()
-            //                             .setDefault(true)
-            //                             .setLabel('False')
-            //                             .setDescription('Don\'t reverse sorting order')
-            //                             .setValue('false'),
-            //                         new Discord.SelectMenuOptionBuilder()
-            //                             .setDefault(false)
-            //                             .setLabel('True')
-            //                             .setDescription('Reverse the sorting order')
-            //                             .setValue('true')
-            //                     )
-            //             )
-            //     )
-            // interaction.showModal(menu)
-            //     .catch(error => {
-            //         console.log(menu)
-            //         console.log(menu.components)
-            //         console.log(menu.components.data)
-            //         console.log(menu.components.components)
-            //         console.log(error)
-            //     });
-            // return;
         }
         if (button == 'SearchMenu' && PageOnlyCommands.includes(command)) {
             const tst = parseInt(interaction.fields.fields.at(0).value);
@@ -168,31 +93,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
 
 
         switch (command) {
-            /*             case 'test':
-                            if (button == 'BigLeftArrow') {
-                                //message.edit({content: 'Left'})
-                                client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                            }
-                            if (button == 'LeftArrow') {
-                                message.edit({ content: 'LeftS' })
-                                client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                            }
-                            if (button == 'BigRightArrow') {
-                                //message.edit({content: 'Right'})
-                                client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                            }
-                            if (button == 'RightArrow') {
-                                //message.edit({content: 'RightS'})
-                                client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                            }
-                            if (button == 'Middle') {
-                                //message.edit({content: 'Middle'})
-                                client.tstcmds.get('testcmd').execute(message, args, userdata, client, Discord, currentDate, currentDateISO, config, interaction, button);
-                            }
-                            interaction.reply({ content: '👍' }).then(
-                                setTimeout(() => interaction.deleteReply(), 100)
-                            )
-                            break; */
             case 'firsts':
                 commandStruct.osucmds.get('firsts').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
                 interaction.deferUpdate()

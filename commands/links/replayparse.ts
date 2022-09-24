@@ -1,7 +1,4 @@
-import cmdchecks = require('../../src/checks');
 import fs = require('fs');
-import calc = require('../../src/calc');
-import emojis = require('../../src/consts/emojis');
 import colours = require('../../src/consts/colours');
 import osufunc = require('../../src/osufunc');
 import osumodcalc = require('osumodcalculator');
@@ -43,26 +40,6 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-replayparse-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-replayparse-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-replayparse-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-replayparse-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
-            );
-
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
                 'replayparse',
@@ -86,18 +63,14 @@ module.exports = {
         } catch (err) {
             return;
         }
-        // fs.writeFileSync(`debug/command-replay=replay=${obj.guildId}.json`, JSON.stringify(replay, null, 2))
         osufunc.debug(replay, 'fileparse', 'replay', obj.guildId, 'replayData');
 
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map_get_md5', replay.beatmapMD5)
-        // fs.writeFileSync(`debug/command-replay=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
-        // fs.writeFileSync(`./debug/prevmap${obj.guildId}.json`, JSON.stringify(({ id: mapdata.id }), null, 2));
         osufunc.debug(mapdata, 'fileparse', 'replay', obj.guildId, 'mapData');
         if (mapdata?.id) {
             typeof mapdata.id == 'number' ? osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`) : ''
         }
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${replay.playerName}`)
-        // fs.writeFileSync(`debug/command-replay=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         osufunc.debug(osudata, 'fileparse', 'replay', obj.guildId, 'osuData');
         let userid: string | number;
         try {
@@ -136,7 +109,6 @@ module.exports = {
         let xpp: object;
         let hitlist: string;
         let fcacc: number;
-        // let ppiffc: any;
         let ppissue: string;
         let totalhits = 0
 
@@ -172,34 +144,17 @@ module.exports = {
         const failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true
 
         try {
-            xpp = 
-            // await osufunc.scorecalc(
-            //     osumodcalc.ModIntToString(replay.mods),
-            //     osumodcalc.ModeIntToName(replay.gameMode),
-            //     mapdata.id,
-            //     replay.gekis,
-            //     replay.number_300s,
-            //     replay.katus,
-            //     replay.number_100s,
-            //     replay.number_50s,
-            //     replay.misses,
-            //     accuracy,
-            //     replay.max_combo,
-            //     replay.score,
-            //     0,
-            //     totalhits, failed
-            // )
-            await osufunc.scorecalc({
+            xpp = await osufunc.scorecalc({
                 mods: osumodcalc.ModIntToString(replay.mods),
                 gamemode: osumodcalc.ModeIntToName(replay.gameMode),
                 mapid: mapdata.id,
                 miss: replay.misses,
-                acc: accuracy,
+                acc: accuracy / 100,
                 maxcombo: replay.max_combo,
                 score: replay.score,
                 calctype: 0,
-                passedObj: 0,
-                failed: false
+                passedObj: totalhits,
+                failed: failed
             })
             ppissue = ''
         } catch (error) {
@@ -209,8 +164,7 @@ module.exports = {
             {
                 pp: 0
             }]
-            // ppiffc = NaN
-            ppissue = 'Error - pp calculator could not fetch beatmap'
+            ppissue = 'Error - could not fetch beatmap'
             fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
 
         }

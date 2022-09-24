@@ -55,21 +55,6 @@ function pythag(a: number, b: number) {
  * @param {number} b number of significant figiures
  * @result converts the number to a significant figure
  */
-/* function sigfigold(a: number, b: number) {
-    if (isNaN(a)) return NaN;
-    let s: number = parseFloat((a / Math.abs(10 ** (a.toString().length - 1))).toFixed(a.toString().length - 1));
-    if (b) {
-        s = parseFloat((a / (10 ** (a.toString().length - 1))).toFixed(b))
-    }
-    const c = s + ' x 10^' + (a.toString().length - 1)
-    return c;
-} */
-/**
- * 
- * @param {number} a first number
- * @param {number} b number of significant figiures
- * @result converts the number to a significant figure
- */
 function sigfig(a: number, b: number) {
     if (isNaN(a)) return {
         number: a,
@@ -78,7 +63,7 @@ function sigfig(a: number, b: number) {
     const aAsArr = a.toString().replaceAll('.', '').split('')
     if (b < 2 || b == null) { b = aAsArr.length }
     const sigfig = aAsArr.slice(1, b).join('')
-    let mult: number = Math.floor(a / parseFloat(aAsArr[0] + '.' + sigfig))//.toString().length - 1
+    let mult: number = Math.floor(a / parseFloat(aAsArr[0] + '.' + sigfig))
     if (mult < 1 && mult != 0) { mult = mult.toString().length - 1 }
     const answer = aAsArr[0] + '.' + sigfig + '*10^' + mult
     return {
@@ -109,7 +94,6 @@ function factorial(part1: number) {
         return part1 * factorial(part1 - 1);
     }
 }
-//                                                       ms    s   min hour    day
 /**
  * 
  * @param {date} date 
@@ -127,7 +111,7 @@ function to12htime(date) {
         amorpm = 'AM'
     }
     hours = hours % 12;
-    if (hours == 0) hours = 12 // the hour '0' should be '12'
+    if (hours == 0) hours = 12 
     if (minutes < 10) {
         minutes = '0' + minutes
     }
@@ -153,7 +137,7 @@ function relto12htime(date) { //relative version of above
         amorpm = 'AM'
     }
     hours = hours % 12;
-    if (hours == 0) hours = 12 // the hour '0' should be '12'
+    if (hours == 0) hours = 12 
     if (minutes < 10) {
         minutes = '0' + minutes
     }
@@ -323,7 +307,6 @@ function timeToMs(str: string) {
         const hours = parseInt(hoursstr);
         const minutes = parseInt(minutesstr);
         const seconds = parseInt(secondsstr);
-        //convert to milliseconds
         const ms = (days * 24 * 60 * 60 * 1000) + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
 
         return ms;
@@ -368,9 +351,6 @@ function timeToMs(str: string) {
  * @returns the time in hh:mm:ss format
  */
 function secondsToTime(seconds: number, allowDays?: boolean) {
-    //1 * 60 * 60
-    //assuming 6000 seconds
-
     const days = Math.floor(seconds / 60 / 60 / 24).toString();
     const hours =
         allowDays == true ?
@@ -395,9 +375,6 @@ function secondsToTime(seconds: number, allowDays?: boolean) {
 }
 
 function secondsToTimeReadable(seconds: number, allowDays?: boolean, showSeconds?: boolean) {
-    //1 * 60 * 60
-    //assuming 6000 seconds
-
     const days = Math.floor(seconds / 60 / 60 / 24).toString();
     const hours =
         allowDays == true ?

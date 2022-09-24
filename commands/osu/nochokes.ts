@@ -266,7 +266,6 @@ module.exports = {
             );
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
-        // fs.writeFileSync(`debug/command-otop=osudata=${obj.guildId}`, JSON.stringify(osudata, null, 2))
         osufunc.debug(osudata, 'command', 'nochokes', obj.guildId, 'osuData');
 
         if (osudata?.error) {
@@ -285,7 +284,6 @@ module.exports = {
         }
 
         const nochokedata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-        // fs.writeFileSync(`debug/command-otop=nochokedata=${obj.guildId}`, JSON.stringify(nochokedata, null, 2))
         osufunc.debug(nochokedata, 'command', 'nochokes', obj.guildId, 'osuTopData');
         if (nochokedata?.error) {
             obj.reply({
@@ -318,8 +316,6 @@ module.exports = {
                 failIfNotExists: false,
             }).catch()
         }
-
-        // fs.writeFileSync(`debug/command-otop=nochokedata=${obj.guildId}`, JSON.stringify(nochokedata, null, 2))
 
         let showtrue = false;
         if (sort != 'pp') {

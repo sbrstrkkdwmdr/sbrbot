@@ -21,8 +21,6 @@ module.exports = {
         let n100 = null;
         let n50 = null;
         let nMiss = null;
-        // let scoreId = null;
-
 
         switch (commandType) {
             case 'message': {
@@ -99,26 +97,6 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-simulate-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-simulate-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-simulate-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-simulate-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
-            );
-
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
                 'simulate',
@@ -140,7 +118,6 @@ module.exports = {
         if (!mapid || isNaN(mapid)) {
             mapid = osufunc.getPreviousId('map', obj.guildId);
         }
-        // if(){}
 
         if (commandType == 'interaction') {
             obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
@@ -157,7 +134,6 @@ module.exports = {
         if (!combo) {
             combo = mapdata.max_combo
         }
-        // if(!n300){}
 
         const score = await osufunc.scorecalc({
             mods,

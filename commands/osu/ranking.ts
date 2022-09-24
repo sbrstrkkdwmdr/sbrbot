@@ -61,7 +61,6 @@ module.exports = {
                         page = pageParsed
                         break;
                 }
-                //base string - 'global? mode type ranking'
                 let base: string = obj.message.embeds[0].title;
                 if (base.includes('Global')) {
                     base = base.split('Global ')[1];
@@ -74,7 +73,6 @@ module.exports = {
                 //@ts-expect-error - type string not assignable to type RankingType
                 type = base.split(' ')[1].toLowerCase();
                 if (type == 'charts') {
-                    //             ifchart = `[${rankingdata.spotlight.name}](https://osu.ppy.sh/rankings/${mode}/charts?spotlight=${rankingdata.spotlight.id})`
                     spotlight = obj.message.embeds[0].description.split('\n')[1].split('?spotlight=')[1].split(')')[0];
                 }
             }
@@ -90,8 +88,7 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-ranking-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅')
-                /* .setLabel('Start') */,
+                    .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-ranking-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
@@ -103,13 +100,11 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-ranking-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶')
-                /* .setLabel('Next') */,
+                    .setEmoji('▶'),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-ranking-${commanduser.id}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡')
-                /* .setLabel('End') */,
+                    .setEmoji('➡'),
             );
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(

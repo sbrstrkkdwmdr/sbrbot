@@ -88,7 +88,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
 
     client.on('interactionCreate', async (interaction) => {
         if (!(interaction.type === Discord.InteractionType.ApplicationCommand)) return;
-        //make a variable that is the current date
         const currentDate = new Date()
         const currentDateISO = new Date().toISOString()
         const absoluteID = currentDate.getTime();
@@ -205,9 +204,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 break;
 
             //osu commands below
-            // case 'bests':
-            //     commandStruct.osucmds.get('bests').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-            //     break;
+
             case 'bws':
                 commandStruct.osucmds.get('bws').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
                 break;
@@ -343,18 +340,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                     )
                 }
                 break;
-            // case 'test':
-            //     commandStruct.commands.get('test').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-            //     break;
-
-            // music
-
-            // WIP
-            // case 'whatif': case 'play': case 'pause': case 'np': case 'wip': case 'skip': case 'queue': case 'resume':
-            //     obj.reply({ content: 'This command is currently under development. Will be added later.', allowedMentions: { repliedUser: false } })
-            //         .catch()
-            //     break;
-
         }
 
         fs.appendFileSync('logs/totalcommands.txt', 'x');

@@ -1,11 +1,6 @@
 import cmdchecks = require('../../src/checks');
 import fs = require('fs');
-import calc = require('../../src/calc');
-import emojis = require('../../src/consts/emojis');
 import colours = require('../../src/consts/colours');
-import osufunc = require('../../src/osufunc');
-import osumodcalc = require('osumodcalculator');
-import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 
@@ -14,8 +9,6 @@ module.exports = {
     execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
         let searchUser;
-        let type = 'user';
-
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
@@ -23,7 +16,6 @@ module.exports = {
                     if (obj.mentions.users.size > 0) {
                         searchUser = obj.mentions.users.first();
                     } else {
-                        type = 'int'
                         searchUser = client.users.cache.get(args.join(' '))
                     }
                 } else {
@@ -54,29 +46,6 @@ module.exports = {
 
 
         //==============================================================================================================================================================================================
-
-        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-checkperms-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅')
-                /* .setLabel('Start') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-checkperms-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-checkperms-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶')
-                /* .setLabel('Next') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-checkperms-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡')
-                /* .setLabel('End') */,
-            );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(

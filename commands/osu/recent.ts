@@ -221,7 +221,6 @@ module.exports = {
                     .setDisabled(isLastPage),
             );
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
-        // fs.writeFileSync(`debug/command-rs=user=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
         osufunc.debug(osudata, 'command', 'recent', obj.guildId, 'osuData');
 
         if (osudata?.error) {
@@ -256,8 +255,6 @@ module.exports = {
         }
 
         let rsdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('recent_alt', `${osudata.id}`, `mode=${mode}&offset=0`, 2, 0, true)
-
-        // fs.writeFileSync(`debug/command-rs=rsdata=${obj.guildId}.json`, JSON.stringify(rsdata, null, 2))
         osufunc.debug(rsdata, 'command', 'recent', obj.guildId, 'rsData');
 
         const rsEmbed = new Discord.EmbedBuilder()
@@ -271,10 +268,6 @@ module.exports = {
 
             if (button == 'BigRightArrow') {
                 page = rsdata.length - 1
-            }
-            if (page >= rsdata.length - 1) {
-                // pgbuttons.components[3].setDisabled(true)
-                // pgbuttons.components[4].setDisabled(true)
             }
 
             const curscore = rsdata[0 + page]
@@ -293,12 +286,8 @@ module.exports = {
             }
             const curbm = curscore.beatmap
             const curbms = curscore.beatmapset
-            // const hittime = curbm.hit_length
-            // let totalstr;
-
 
             const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${curbm.id}`)
-            // fs.writeFileSync(`debug/command-rs=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
             osufunc.debug(mapdata, 'command', 'recent', obj.guildId, 'mapData');
             if (mapdata?.error) {
                 obj.reply({
@@ -451,7 +440,6 @@ module.exports = {
             }
             let rspp: string | number = 0;
             let ppissue: string = '';
-            // const ppiffc = NaN;
             let ppcalcing
             try {
                 ppcalcing = await osufunc.scorecalc({
@@ -490,7 +478,6 @@ module.exports = {
                     curscore.pp ?
                         curscore.pp.toFixed(2) :
                         ppcalcing[0].pp.toFixed(2)
-                // fs.writeFileSync(`debug/command-rs=pp_calc=${obj.guildId}.json`, JSON.stringify(ppcalcing, null, 2))
                 osufunc.debug(ppcalcing, 'command', 'recent', obj.guildId, 'ppCalcing');
             } catch (error) {
                 rspp =
@@ -651,30 +638,6 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                 //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[4].setDisabled(true)
             }
-            //             let txt = '';
-            //             for (let i = 0; i < rsdata.length - (page * 20) && i < 20; i++) {
-            //                 const curscore = rsdata[i + page * 20]
-            //                 txt +=
-            //                     `**${1 + i + page * 20} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>**
-            // [${curscore.beatmapset.title}](https://osu.ppy.sh/b/${curscore.beatmap.id}) | [score link](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})
-            // ${curscore.mods.length > 0 ? '+' + curscore.mods.join('') + ' | ' : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${curscore.rank}
-            // `
-            //             }
-            //             if (txt == '') {
-            //                 txt = 'No recent plays found'
-            //             }
-            //             if (txt.length > 4000) {
-            //                 txt = txt.substring(0, 4000)
-            //             }
-            //             rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 20)}\n` + txt)
-            //             rsEmbed.setFooter({ text: `gamemode: ${rsdata[0].mode}` })
-
-            //             if (page >= Math.ceil(rsdata.length / 20)) {
-            //                 //@ts-expect-error
-            //                 pgbuttons.components[2].setDisabled(true)
-            //                 //@ts-expect-error
-            //                 pgbuttons.components[3].setDisabled(true)
-            //             }
         }
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
         try {

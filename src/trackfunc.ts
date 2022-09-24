@@ -10,20 +10,17 @@ import log = require('./log');
 async function trackUser(fr: { user: string, mode: string, inital?: boolean }) {
     const curdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('osutop', fr.user, fr.mode)
     const thisUser: osuApiTypes.User = await osufunc.apiget('user', fr.user, fr.mode)
-    // osufunc.debug(curdata, 'auto', 'trackUser', curdata[0].id ?? 'ERROR', )
     if (!curdata?.[0]?.id) return;
     if (curdata?.[0]?.id && fr.inital == true) {
         fs.writeFileSync(`trackingFiles/${curdata[0].user_id}.json`, JSON.stringify(curdata, null, 2))
     }
     if (curdata?.[0]?.id) {
-        // let file = fs.readFileSync(`trackingFiles/${curdata[0].id}.json`, 'utf-8')
         let previous: osuApiTypes.Score[] & osuApiTypes.Error = JSON.parse(fs.readFileSync(`trackingFiles/${curdata[0].id}.json`, 'utf-8'))
 
         curdata.sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
 
         for (let i = 0; i < curdata.length; i++) {
             if (!previous.includes(curdata[i])) {
-                // console.log('new score')
                 sendMsg(await getEmbed({
                     scoredata: curdata[i],
                     user: thisUser,
@@ -44,9 +41,7 @@ async function editTrackUser(
         guildSettings: Sequelize.ModelStatic<any>,
     }
 ) {
-    // const guildsetting = await fr.guildSettings.findOne({
-    //     where: { guildId: fr.guildId }
-    // })
+
     if (!fr.action || fr.action == 'add') {
         try {
             await fr.database.create({
@@ -54,8 +49,7 @@ async function editTrackUser(
                 osuid: fr.user,
                 guilds: fr.guildId
             })
-            // console.log(guildsetting)
-            // fr.database
+
         } catch (error) {
             log.logFile('error', log.errLog('database update', error))
             const previous = await fr.database.findOne({ where: { userid: fr.discuser } })
@@ -64,7 +58,6 @@ async function editTrackUser(
             if (!prevchannels.includes(`${fr.guildId}`)) {
                 prevchannels.push(`${fr.guildId}`)
             }
-            // console.log(prevchannels)
 
 
 
@@ -93,7 +86,6 @@ async function editTrackUser(
         })
 
     }
-    // const allUsers = await sqlDatabase.findAll()
     return true;
 }
 

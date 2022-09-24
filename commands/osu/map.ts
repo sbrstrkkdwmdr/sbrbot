@@ -61,22 +61,18 @@ module.exports = {
                 }
                 commanduser = obj.member.user;
                 const urlnohttp = obj.message.embeds[0].url.split('https://')[1];
-                //osu.ppy.sh/beatmapsets/setid#gamemode/id
                 const setid = urlnohttp.split('/')[2].split('#')[0];
                 const curid = urlnohttp.split('/')[3];
                 mapid = curid;
                 const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
-                // fs.writeFileSync(`debug/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
                 osufunc.debug(bmsdata, 'command', 'map', obj.guildId, 'bmsData');
 
                 if (bmsdata?.error) {
                     return;
                 }
                 const bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
-                // fs.writeFileSync(`debug/command-map=bmstosr=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2));
                 osufunc.debug(bmstosr, 'command', 'map', obj.guildId, 'bmsToSr');
 
-                //get which part of the array the current map is in
                 const curmapindex = bmstosr.findIndex(x => x.id == curid);
                 if (button == `RightArrow`) {
                     if (curmapindex == bmstosr.length - 1) {
@@ -123,7 +119,6 @@ module.exports = {
                 mapmods =
                     obj.content.includes('+') ?
                         messagenohttp.split('+')[1] : 'NM';
-                // mapid;
                 if (
                     (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmapsets/') && messagenohttp.includes('#'))) ||
                     (!messagenohttp.includes('/s/') && (messagenohttp.includes('/b/'))) ||
@@ -135,11 +130,9 @@ module.exports = {
 
                             idfirst = messagenohttp.split('#')[1].split('/')[1]
                         } else if (messagenohttp.includes('?')) {
-                            // osu.ppy.sh/beatmaps/4204?mode=osu
                             idfirst = messagenohttp.split('beatmaps/')[1].split('?')[0]
                         }
                         else {
-                            //make a variable that takes everything after the last '/'
                             idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1]
                         }
                         if (isNaN(idfirst)) {
@@ -202,25 +195,6 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        // const pgbuttons = new Discord.ActionRowBuilder()
-        //     .addComponents(
-        //         new Discord.ButtonBuilder()
-        //             .setCustomId(`BigLeftArrow-map-${commanduser.id}`)
-        //             .setStyle(Discord.ButtonStyle.Primary)
-        //             .setEmoji('⬅'),
-        //         new Discord.ButtonBuilder()
-        //             .setCustomId(`LeftArrow-map-${commanduser.id}`)
-        //             .setStyle(Discord.ButtonStyle.Primary)
-        //             .setEmoji('◀'),
-        //         new Discord.ButtonBuilder()
-        //             .setCustomId(`RightArrow-map-${commanduser.id}`)
-        //             .setStyle(Discord.ButtonStyle.Primary)
-        //             .setEmoji('▶'),
-        //         new Discord.ButtonBuilder()
-        //             .setCustomId(`BigRightArrow-map-${commanduser.id}`)
-        //             .setStyle(Discord.ButtonStyle.Primary)
-        //             .setEmoji('➡'),
-        //     );
         const buttons = new Discord.ActionRowBuilder().addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`Refresh-map-${commanduser.id}`)
@@ -283,16 +257,12 @@ module.exports = {
         }
         let mapdata: osuApiTypes.Beatmap;
 
-        const diffButtons = [];
-
         const inputModal = new Discord.SelectMenuBuilder()
             .setCustomId(`Select-map-${commanduser.id}`)
             .setPlaceholder('Select a map')
 
-        //get beatmap data
         if (maptitleq == null) {
             mapdata = await osufunc.apiget('map_get', `${mapid}`)
-            // fs.writeFileSync(`debug/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
             osufunc.debug(mapdata, 'command', 'map', obj.guildId, 'mapData');
 
             if (mapdata?.error) {
@@ -304,14 +274,9 @@ module.exports = {
                 return;
             }
             const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${mapdata.beatmapset_id}`)
-            // fs.writeFileSync(`debug/command-map=bmsdata=${obj.guildId}.json`, JSON.stringify(bmsdata, null, 2))
             osufunc.debug(bmsdata, 'command', 'map', obj.guildId, 'bmsData');
 
             if (bmsdata.beatmaps.length < 2 || typeof bmsdata.beatmaps == 'undefined') {
-                // no options
-
-                const curmode = mapdata.mode_int
-
                 inputModal.addOptions(
                     new Discord.SelectMenuOptionBuilder()
                         .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
@@ -346,7 +311,6 @@ module.exports = {
 
         if (maptitleq != null) {
             const mapidtest = await osufunc.apiget('mapset_search', `${maptitleq}`)
-            // fs.writeFileSync(`debug/command-map=mapidtest=${obj.guildId}.json`, JSON.stringify(mapidtest, null, 2))
             osufunc.debug(mapidtest, 'command', 'map', obj.guildId, 'mapIdTestData');
 
             if (mapidtest?.error) {
@@ -384,7 +348,6 @@ ${error}
             }
             const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset }[] = [];
 
-            //push all beatmaps
             for (let i = 0; i < mapidtest.beatmapsets.length; i++) {
                 if (!mapidtest.beatmapsets[i]) break;
 
@@ -400,7 +363,6 @@ ${error}
 
 
             mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
-            // fs.writeFileSync(`debug/command-map=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
             osufunc.debug(mapdata, 'command', 'map', obj.guildId, 'mapData');
             if (mapdata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
@@ -435,7 +397,6 @@ params: ${mapid} | ${maptitleq}
 
             for (let i = 0; i < allmaps.length && i < 25; i++) {
                 const curmap = allmaps[i]
-                // const curmapset = curmap.mapset
                 if (!curmap.map) break;
                 inputModal.addOptions(
                     new Discord.SelectMenuOptionBuilder()
@@ -518,7 +479,6 @@ params: ${mapid} | ${maptitleq}
             } catch (error) {
                 totaldiff = mapdata.difficulty_rating;
             }
-            // fs.writeFileSync(`./debug/command-map=pp_calc=${obj.guildId}.json`, JSON.stringify(ppComputed, null, 2))
             osufunc.debug(ppComputed, 'command', 'map', obj.guildId, 'ppCalc');
 
         } catch (error) {
@@ -581,7 +541,6 @@ ${error}
         const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
 
         const mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
-        // fs.writeFileSync(`./debug/command-map=mapper=${obj.guildId}.json`, JSON.stringify(mapperdata, null, 2))
         osufunc.debug(mapperdata, 'command', 'map', obj.guildId, 'mapperData');
 
         if (mapperdata?.error) {
@@ -597,11 +556,9 @@ ${error}
 
         const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
         try {
-            // fs.writeFileSync(`./debug/command-map=strains=${obj.guildId}.json`, JSON.stringify(strains, null, 2))
             osufunc.debug(strains, 'command', 'map', obj.guildId, 'strains');
 
         } catch (error) {
-            // fs.writeFileSync(`./debug/command-map=strains=${obj.guildId}.json`, JSON.stringify({ error: error }, null, 2))
             osufunc.debug({ error: error }, 'command', 'map', obj.guildId, 'strains');
         }
         let mapgraph;
@@ -768,7 +725,6 @@ ${error}
         osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
 
 
-        // buttons.addComponents(inputModal)
         useComponents.push(buttons);
 
         let frmod = inputModal;

@@ -1,19 +1,10 @@
-import cmdchecks = require('../../src/checks');
 import fs = require('fs');
-import calc = require('../../src/calc');
-import emojis = require('../../src/consts/emojis');
-import colours = require('../../src/consts/colours');
-import osufunc = require('../../src/osufunc');
-import osumodcalc = require('osumodcalculator');
-import osuApiTypes = require('../../src/types/osuApiTypes');
-import Discord = require('discord.js');
 import log = require('../../src/log');
 
 module.exports = {
     name: 'prefix',
     async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, guildSettings) {
         let commanduser;
-        let baseCommandType;
         let newPrefix;
 
         switch (commandType) {
@@ -42,29 +33,6 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-prefix-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅')
-                /* .setLabel('Start') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-prefix-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-prefix-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶')
-                /* .setLabel('Next') */,
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-prefix-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡')
-                /* .setLabel('End') */,
-            );
-
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
                 'prefix',
@@ -88,7 +56,6 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        const curGuild = client.guilds.cache.get(obj.guildId);
         const curGuildSettings = await guildSettings.findOne({ where: { guildid: obj.guildId } });
         let replymsg;
         if (curGuildSettings == null) {

@@ -20,9 +20,6 @@ module.exports = {
         let mapmods;
         let page;
 
-        let isFirstPage = false;
-        let isLastPage = false;
-
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
@@ -54,9 +51,6 @@ module.exports = {
                 }
                 commanduser = obj.member.user;
                 mapid = obj.message.embeds[0].url.split('/b/')[1]
-                // if (obj.message.embeds[0].footer) {
-                //     mapmods = obj.message.embeds[0].footer.text
-                // }
                 if (obj.message.embeds[0].title.includes('+')) {
                     mapmods = obj.message.embeds[0].title.split('+')[1]
                 }
@@ -77,14 +71,6 @@ module.exports = {
                     case 'Refresh':
                         page = parseInt((obj.message.embeds[0].description).split('/')[0].split(': ')[1])
                         break;
-                }
-                if (page < 2) {
-                    isFirstPage = true;
-                } else {
-                    isFirstPage = false;
-                }
-                if (page == parseInt((obj.message.embeds[0].description).split('/')[1].split('\n')[0])) {
-                    isLastPage = true;
                 }
             }
                 break;
@@ -159,7 +145,6 @@ module.exports = {
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         if (page < 2 || typeof page != 'number') {
-            isFirstPage = true;
             page = 1;
         }
         page--
@@ -177,7 +162,6 @@ module.exports = {
         }
 
         const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
-        // fs.writeFileSync(`debug/command-leaderboard=mapdata=${obj.guildId}.json`, JSON.stringify(mapdata, null, 2))
         osufunc.debug(mapdata, 'command', 'maplb', obj.guildId, 'mapData');
 
         if (mapdata?.error) {
@@ -210,7 +194,6 @@ module.exports = {
 
         if (mods == null) {
             const lbdataf: osuApiTypes.BeatmapScores = await osufunc.apiget('scores_get_map', `${mapid}`)
-            // fs.writeFileSync(`debug/command-leaderboard=lbdataf=${obj.guildId}.json`, JSON.stringify(lbdataf, null, 2))
             osufunc.debug(lbdataf, 'command', 'maplb', obj.guildId, 'lbDataF');
 
             if (lbdataf?.error) {
@@ -242,7 +225,6 @@ module.exports = {
                 page = Math.ceil(lbdata.length / 5) - 1
             }
 
-            // fs.writeFileSync(`debug/command-leaderboard=lbdata=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
             osufunc.debug(lbdata, 'command', 'maplb', obj.guildId, 'lbData');
 
             const scoresarg = await embedStuff.scoreList({
@@ -259,7 +241,7 @@ module.exports = {
                 reverse: false,
                 mapidOverride: mapdata.id
             })
-            
+
             if (scoresarg.fields.length == 0) {
                 lbEmbed.addFields([{
                     name: 'Error',
@@ -283,7 +265,7 @@ module.exports = {
                 }
             }
 
-            lbEmbed.setDescription(`Page: ${page+1}/${Math.ceil(scoresarg.maxPages)}`)
+            lbEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(scoresarg.maxPages)}`)
 
             if (scoresarg.isFirstPage) {
                 //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
@@ -301,7 +283,6 @@ module.exports = {
             osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
         } else {
             const lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1);
-            // fs.writeFileSync(`debug/command-leaderboard=lbdata_apiv1=${obj.guildId}.json`, JSON.stringify(lbdata, null, 2))
             osufunc.debug(lbdata, 'command', 'maplb', obj.guildId, 'lbData');
 
             if (lbdata?.error) {
@@ -317,9 +298,7 @@ module.exports = {
                 .setColor(colours.embedColour.scorelist.dec)
                 .setTitle(`Modded score leaderboard of ${fulltitle} + ${mods}`)
                 .setURL(`https://osu.ppy.sh/b/${mapid}`)
-                .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`)
-                // .setFooter({ text: `mods: ${mods}` })
-                ;
+                .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`);
 
             let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`
 

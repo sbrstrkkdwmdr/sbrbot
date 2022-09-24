@@ -1,11 +1,6 @@
-import cmdchecks = require('../../src/checks');
 import fs = require('fs');
 import calc = require('../../src/calc');
-import emojis = require('../../src/consts/emojis');
 import colours = require('../../src/consts/colours');
-import osufunc = require('../../src/osufunc');
-import osumodcalc = require('osumodcalculator');
-import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 
@@ -27,6 +22,7 @@ module.exports = {
 
             case 'interaction': {
                 commanduser = obj.member.user;
+                fetchtimezone = obj.options.getString('timezone')
             }
 
                 //==============================================================================================================================================================================================
@@ -40,26 +36,6 @@ module.exports = {
 
 
         //==============================================================================================================================================================================================
-
-        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-time-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-time-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-time-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-time-${commanduser.id}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
-            );
 
         fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
             log.commandLog(
@@ -89,7 +65,6 @@ module.exports = {
         const thedaysthingyiuseonmydiscordstatus = (msepochsince / 1000 / 60 / 60 / 24).toFixed(2)
 
         const rn = new Date()
-        const seconds = rn.getUTCSeconds()
         const datenow12hhours = calc.to12htime(rn)
         const day = calc.dayhuman(rn.getUTCDay())
         const date = rn.getUTCDate()
@@ -133,7 +108,6 @@ module.exports = {
         const offsetnum = rn.getTimezoneOffset()
         const offset = calc.fixoffset(offsetnum)
 
-        const relseconds = rn.getSeconds()
         const reldatenow12hhours = calc.relto12htime(rn)
         const relday = calc.dayhuman(rn.getDay())
         const reldate = rn.getDate()
@@ -176,7 +150,6 @@ module.exports = {
         if (fetchtimezone != null && fetchtimezone != '') {
             if (fetchtimezone.includes('/')) {
                 const timezone = args.splice(0, 1000).join(" ");
-                //timezone = 'Europe/Andorra'
                 const timeopts = {
                     timeZone: `${timezone}`,
                     hour12: false
@@ -190,23 +163,15 @@ module.exports = {
                     const optionaldateISO = new Date(optionaldatefirst).toISOString()
                     const optionaldateDate = new Date(optionaldateISO).toLocaleDateString();
                     const optionaldate = new Date(optionaldateISO)//.toString();
-                    //let optionaldate12hISO = new Date().toISOString(timeopts2);//.toString(timeopts2);
                     const optionaldate12hfirst = new Date(new Date().toLocaleString('en-US', timeopts2));
-                    const optionaldateoffset = calc.fixoffset(new Date(optionaldateISO).getTimezoneOffset())
 
-                    //let reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`
                     const optionaldate2 = `${calc.dayhuman(optionaldate.getDay())}, ${calc.tomonthname(optionaldate.getMonth())} ${optionaldate.getDate()} ${optionaldate.getFullYear()}`
                     const optionaldatetime = calc.relto12htime(new Date(optionaldate12hfirst))
                     const optionaldate12h = `${optionaldate2} ${optionaldatetime}`
 
                     const optionaldatehours = (optionaldate.getHours())
                     const optionaldateutchours = (new Date().getUTCHours())
-                    /* console.log(optionaldatehours)
-                    console.log(optionaldateutchours) */
                     const optionaldateoffsetNEW = calc.fixoffset((optionaldateutchours - optionaldatehours) * 60) //had to remake another version of offset 
-
-                    //
-
 
                     Embed
                         .addFields([{
