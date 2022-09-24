@@ -36,3 +36,16 @@ create a `./config/` folder and put `config.json` inside it
 ```
 
 to run the bot just use `ts-node main.ts`
+
+### credits n stuff
+
+Discord API wrapper: [Discord.js](discord.js.org/)</br>
+Performance/SR calculations: [rosu](https://github.com/MaxOhn/rosu-pp-js)</br>
+Fetch: [node-fetch](https://www.npmjs.com/package/node-fetch)</br>
+Database: [Sequelize](https://www.npmjs.com/package/sequelize)</br>
+Beatmap downloader: [osu-api-extended](https://github.com/cyperdark/osu-api-extended)</br>
+Mod calculations: [osumodcalculator](https://www.npmjs.com/package/osumodcalculator)</br>
+Image to text parser: [tesseract.js](https://github.com/naptha/tesseract.js)</br>
+Youtube search: [yt-search](https://www.npmjs.com/package/yt-search)</br>
+Graph/chart generator: [chartjs-to-image](https://www.npmjs.com/package/chartjs-to-image)</br>
+osr file parser: [osureplayparser](https://www.npmjs.com/package/osureplayparser)</br>

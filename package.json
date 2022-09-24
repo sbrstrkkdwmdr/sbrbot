@@ -17,28 +17,19 @@
   },
   "homepage": "https://github.com/sbrstrkkdwmdr/sbrbot#readme",
   "dependencies": {
-    "@discordjs/opus": "^0.8.0",
-    "@discordjs/voice": "^0.11.0",
     "@types/node": "^18.7.14",
     "chartjs-to-image": "^1.0.5",
     "discord.js": "^14.3.0",
-    "ffmpeg-static": "^5.1.0",
-    "googleapis": "^107.0.0",
     "node-fetch": "^2.6.7",
     "osu-api-extended": "^2.5.10",
     "osumodcalculator": "^1.1.9",
     "osureplayparser": "^1.0.1",
     "rosu-pp": "^0.8.0",
     "sequelize": "^6.21.4",
-    "sodium-native": "^3.4.1",
-    "sqlite3": "^5.0.11",
     "tesseract.js": "^3.0.2",
     "ts-node": "^10.9.1",
     "tslib": "^2.4.0",
     "typescript": "^4.8.2",
-    "ymp3d": "^1.0.5",
-    "youtube-mp3-downloader": "^0.7.11",
-    "yt-search": "^2.10.3",
-    "ytdl-core": "^4.11.2"
+    "yt-search": "^2.10.3"
   }
 }

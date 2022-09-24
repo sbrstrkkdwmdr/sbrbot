@@ -23,14 +23,18 @@ function isOwner(userid: string | number) {
  * @returns true if user is admin in the current guild
  */
 function isAdmin(userid: string | number, guildid: string | number, client: Discord.Client) {
-    if (client.guilds.cache.has(`${guildid}`)) {
-        const curguild = client.guilds.cache.get(`${guildid}`)
-        const curmem = curguild.members.cache.has(`${userid}`) ? curguild.members.cache.get(`${userid}`) : null
-        if (curmem != null) {
-            if (curmem.permissions.toArray().join(' ').includes('Administrator')) {
-                return true;
+    try {
+        if (client.guilds.cache.has(`${guildid}`)) {
+            const curguild = client.guilds.cache.get(`${guildid}`)
+            const curmem = curguild.members.cache.has(`${userid}`) ? curguild.members.cache.get(`${userid}`) : null
+            if (curmem != null) {
+                if (curmem.permissions.toArray().includes('Administrator')) {
+                    return true;
+                }
             }
         }
+    } catch (error) {
+        return false
     }
     return false;
 }
