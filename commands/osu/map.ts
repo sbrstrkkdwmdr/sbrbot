@@ -747,6 +747,9 @@ ${error}
             useComponents.push(selectrow);
         }
 
+        osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
+
+
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {

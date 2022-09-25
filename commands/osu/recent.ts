@@ -672,6 +672,7 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
             }
         }
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
+        
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, userdata)
         } catch (error) {

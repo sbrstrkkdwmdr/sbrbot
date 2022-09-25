@@ -414,7 +414,7 @@ module.exports = {
 
             case 'interaction': {
                 setTimeout(() => {
-                    obj.reply({
+                    obj.editReply({
                         content: '',
                         embeds: [lbEmbed],
                         components: [pgbuttons, buttons],
