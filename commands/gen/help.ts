@@ -315,7 +315,7 @@ module.exports = {
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
-                    .catch();
+                    .catch(() => {});
             }
                 break;
 

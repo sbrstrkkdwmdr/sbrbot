@@ -225,7 +225,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
 
     }
 
-    trackUsers(trackDb)
+    //trackUsers(trackDb)
 
     setInterval(() => {
         trackUsers(trackDb)

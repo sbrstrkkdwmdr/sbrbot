@@ -48,8 +48,7 @@ const commandStruct = {
     links: new Discord.Collection(),
     osucmds: new Discord.Collection(),
     admincmds: new Discord.Collection(),
-    tstcmds: new Discord.Collection(),
-    buttons: new Discord.Collection(),
+    checks: new Discord.Collection(),
 }
 
 const commandFiles = fs.readdirSync('./commands/gen').filter(file => file.endsWith('.ts'));
@@ -57,6 +56,7 @@ const miscCommandFiles = fs.readdirSync('./commands/misc').filter(file => file.e
 const linkCommandFiles = fs.readdirSync('./commands/links').filter(file => file.endsWith('.ts'));
 const osuCommandFiles = fs.readdirSync('./commands/osu').filter(file => file.endsWith('.ts'));
 const adminCommandFiles = fs.readdirSync('./commands/admin').filter(file => file.endsWith('.ts'));
+const checkFiles = fs.readdirSync('./commands/checks').filter(file => file.endsWith('.ts'));
 
 for (const file of commandFiles) {
     const command = require(`./commands/gen/${file}`);
@@ -77,6 +77,10 @@ for (const file of osuCommandFiles) {
 for (const file of adminCommandFiles) {
     const command = require(`./commands/admin/${file}`);
     commandStruct.admincmds.set(command.name, command);
+}
+for (const file of checkFiles) {
+    const command = require(`./commands/checks/${file}`);
+    commandStruct.checks.set(command.name, command);
 }
 
 const sequelize = new Sequelize.Sequelize('database', 'username', 'password', {

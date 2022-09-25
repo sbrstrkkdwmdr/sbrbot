@@ -41,6 +41,35 @@ function isAdmin(userid: string | number, guildid: string | number, client: Disc
 
 /**
  * 
+ * @param object message/interaction called
+ * @param client bot client
+ */
+function botHasPerms(object: Discord.Interaction | Discord.Message, client: Discord.Client, requiredPerms: Discord.PermissionsString[]) {
+    const guild = client.guilds.cache.get(object.guildId)
+    const botmember = guild.members.cache.get(client.user.id)
+    const botperms = botmember.permissions.toArray()
+    //if all of the elements in requiredPerms are in botperms return true
+    const len = requiredPerms.length
+    let newLen = 0
+    for (let i in requiredPerms) {
+        if (botperms.includes(requiredPerms[i])) {
+            newLen++
+        }
+    }
+    const channel = client.channels.cache.get(object.channelId) as Discord.TextChannel | Discord.ThreadChannel
+    const botchannelperms = channel.permissionsFor(client.user.id).toArray()
+    let channelPermLen = 0
+    for (let i in requiredPerms) {
+        if (botchannelperms.includes(requiredPerms[i])) {
+            channelPermLen++
+        }
+    }
+
+    return newLen == len && channelPermLen == len ? true : false;
+}
+
+/**
+ * 
  * @param mentions mentions cache
  * @param type user/channel/role
  * @returns ID of first mention
@@ -350,6 +379,8 @@ export {
     imgfiletype,
     isAdmin,
     isOwner,
+    botHasPerms,
+    getMentionId,
     lengthshorten,
     shorten,
     vidfiletypes,

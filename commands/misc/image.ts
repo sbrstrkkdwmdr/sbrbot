@@ -115,9 +115,7 @@ module.exports = {
         switch (commandType) {
             case 'message': {
                 obj.reply({
-                    content: '',
                     embeds: useEmbeds,
-                    files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })

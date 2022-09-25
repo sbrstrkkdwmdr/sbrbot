@@ -33,10 +33,13 @@ module.exports = {
                 commanduser = obj.author;
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
                 user = args.join(' ');
-                if (!args[0] || args[0].includes(searchid)) {
+                if (!args[0] || args[0].includes(searchid) || !isNaN(+args[0])) {
                     user = null
                 }
                 mapid = null;
+                if (!isNaN(+args[0])) {
+                    mapid = +args[0];
+                }
             }
                 break;
 
@@ -266,11 +269,11 @@ module.exports = {
         osufunc.debug(osudata, 'command', 'scores', obj.guildId, 'osuData');
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                    obj.reply({
-                        content: 'Error - could not fetch user data',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
+                obj.reply({
+                    content: 'Error - could not fetch user data',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).catch()
             }
             return;
         }
