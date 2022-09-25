@@ -299,9 +299,9 @@ ${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/,
 ${scoredata.max_combo}x/**${mapdata.max_combo}x**
 ${pptxt}\n${ppissue}
 `)
-        if (scoredata.best_id != null) {
-            fs.writeFileSync(`debug/prevscore${obj.guildId}.json`, JSON.stringify(scoredata, null, 2))
-        }
+
+        osufunc.writePreviousId('score', obj.guildId, JSON.stringify(scoredata, null, 2))
+        osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
