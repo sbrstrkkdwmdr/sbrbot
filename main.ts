@@ -10,7 +10,6 @@ import extypes = require('./src/types/extratypes');
 
 const commandHandler = require('./commandHandler');
 const linkHandler = require('./linkHandler.ts');
-const moderator = require('./moderator');
 const buttonHandler = require('./buttonHandler');
 const commandInit = require('./commandInit');
 const exEvents = require('./exEvents');
@@ -183,7 +182,6 @@ Current Client ID: ${client.user.id}
 
     commandHandler(userdata, client, commandStruct, config, oncooldown, guildSettings, trackDb);
     linkHandler(userdata, client, commandStruct, config, oncooldown, guildSettings);
-    moderator(userdata, client, config, oncooldown, guildSettings);
     buttonHandler(userdata, client, commandStruct, config, oncooldown);
     commandInit(userdata, client, config, oncooldown);
     exEvents(userdata, client, config, oncooldown, guildSettings);

@@ -1,6 +1,5 @@
 import rosu = require('rosu-pp');
 import osumodcalc = require('osumodcalculator');
-import osuapiext = require('osu-api-extended');
 import fs = require('fs');
 import charttoimg = require('chartjs-to-image');
 import fetch from 'node-fetch';
@@ -86,8 +85,7 @@ async function mapcalc(
             }
 
             if (!fs.existsSync('files/maps/' + obj.mapid + '.osu')) {
-                await osuapiext.tools.download.difficulty(obj.mapid, 'files/maps/', obj.mapid); //uses fs btw
-                // await dlMap(mapid);
+                await dlMap(obj.mapid);
             }
 
             let mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
@@ -185,8 +183,7 @@ async function scorecalc(
                 }
                 if (!fs.existsSync('files/maps/' + obj.mapid + '.osu')) {
                     logCall(`${obj.mapid}`, 'Map file not found')
-                    await osuapiext.tools.download.difficulty(obj.mapid, 'files/maps/', obj.mapid); //uses fs btw
-                    // await dlMap(mapid);
+                    await dlMap(obj.mapid);
                 }
                 let mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
 
@@ -1021,8 +1018,8 @@ export async function dlMap(mapid: number | string) {
     res.body.pipe(writer)
     await new Promise((resolve, reject) => {
         setTimeout(() => {
+            resolve('w');
         }, 1000)
-        resolve('w');
     })
     return;
 }

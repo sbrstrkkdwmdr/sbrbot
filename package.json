@@ -21,7 +21,6 @@
     "chartjs-to-image": "^1.0.5",
     "discord.js": "^14.3.0",
     "node-fetch": "^2.6.7",
-    "osu-api-extended": "^2.5.10",
     "osumodcalculator": "^1.1.9",
     "osureplayparser": "^1.0.1",
     "rosu-pp": "^0.8.0",

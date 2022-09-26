@@ -43,21 +43,21 @@ module.exports = {
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅')
                 /* .setLabel('Start') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶')
                 /* .setLabel('Next') */,
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡')
                 /* .setLabel('End') */,
@@ -65,7 +65,7 @@ module.exports = {
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-COMMANDNAME-${commanduser.id}`)
+                    .setCustomId(`Refresh-COMMANDNAME-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔁'),
             );
