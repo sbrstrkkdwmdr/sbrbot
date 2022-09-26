@@ -295,8 +295,19 @@ module.exports = {
                     .setEmoji('➡'),
             );
 
-        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
-        osufunc.debug(osudata, 'command', 'osutop', obj.guildId, 'osuData');
+        let osudata: osuApiTypes.User;
+
+        if (func.findFile(absoluteID, 'osudata') &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, 'osudata')) &&
+            button != 'Refresh'
+        ) {
+            osudata = func.findFile(absoluteID, 'osudata')
+        } else {
+            osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        }
+
+        osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
 
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
@@ -309,14 +320,27 @@ module.exports = {
             return;
         }
 
+        func.storeFile(osudata, absoluteID, 'osudata')
+
         try {
             osufunc.updateUserStats(osudata, mode, userdata)
         } catch (error) {
             console.log(error)
         }
+        let osutopdata: osuApiTypes.Score[] & osuApiTypes.Error
+        if (func.findFile(absoluteID, 'osutopdata') &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, 'osutopdata')) &&
+            button != 'Refresh'
+        ) {
+            osutopdata = func.findFile(absoluteID, 'osutopdata')
+        } else {
+            osutopdata = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
+        }
 
-        const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
         osufunc.debug(osutopdata, 'command', 'osutop', obj.guildId, 'osuTopData');
+        func.storeFile(osutopdata, absoluteID, 'osutopdata')
+
         if (osutopdata?.error) {
             if (commandType != 'button' && commandType != 'link') {
                 obj.reply({
@@ -338,8 +362,11 @@ module.exports = {
             cmd ID: ${absoluteID}
             Error - no scores found
             ----------------------------------------------------`)
-            return obj.reply({ content: 'Error - could not fetch user\'s top scores', allowedMentions: { repliedUser: false } })
-                .catch();
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({ content: 'Error - could not fetch user\'s top scores', allowedMentions: { repliedUser: false } })
+                    .catch();
+            }
+            return;
 
         }
 

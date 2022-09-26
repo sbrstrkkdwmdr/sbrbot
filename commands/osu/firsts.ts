@@ -101,7 +101,7 @@ module.exports = {
 
 
                     const reverse1 = obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
-                    if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))|| (reverse1.includes('worst'))) {
+                    if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
                         reverse = true
                     } else {
                         reverse = false
@@ -247,9 +247,20 @@ module.exports = {
             }
         }
 
-        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
-        // fs.writeFileSync(`debug/command-firsts=osudata=${obj.guildId}.json`, JSON.stringify(osudata, null, 2))
-        osufunc.debug(osudata, 'command', 'firsts', obj.guildId, 'osuData');
+        let osudata: osuApiTypes.User;
+
+        if (func.findFile(absoluteID, 'osudata') &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, 'osudata')) &&
+            button != 'Refresh'
+        ) {
+            osudata = func.findFile(absoluteID, 'osudata')
+        } else {
+            osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        }
+
+        osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
+
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
                 obj.reply({
@@ -260,6 +271,8 @@ module.exports = {
             }
             return;
         }
+
+        func.storeFile(osudata, absoluteID, 'osudata')
 
         if (!osudata.id) {
             return obj.channel.send('Error - no user found')
@@ -308,8 +321,17 @@ module.exports = {
             }
 
         }
-        await getScoreCount(0);
+        if (func.findFile(absoluteID, 'firstscoresdata') &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, 'firstscoresdata')) &&
+            button != 'Refresh'
+        ) {
+            firstscoresdata = func.findFile(absoluteID, 'firstscoresdata')
+        } else {
+            await getScoreCount(0);
+        }
         osufunc.debug(firstscoresdata, 'command', 'firsts', obj.guildId, 'firstsScoresData');
+        func.storeFile(firstscoresdata, absoluteID, 'firstscoresdata')
 
         const firstsEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.dec)

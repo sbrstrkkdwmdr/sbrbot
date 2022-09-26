@@ -261,8 +261,19 @@ module.exports = {
                     .setEmoji('➡'),
             );
 
-        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
-        osufunc.debug(osudata, 'command', 'nochokes', obj.guildId, 'osuData');
+        let osudata: osuApiTypes.User;
+
+        if (func.findFile(absoluteID, 'osudata') &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, 'osudata')) &&
+            button != 'Refresh'
+        ) {
+            osudata = func.findFile(absoluteID, 'osudata')
+        } else {
+            osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        }
+
+        osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
 
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
@@ -275,24 +286,27 @@ module.exports = {
             return;
         }
 
+        func.storeFile(osudata, absoluteID, 'osudata')
+
         try {
             osufunc.updateUserStats(osudata, mode, userdata)
         } catch (error) {
             console.log(error)
         }
 
-        const nochokedata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-        osufunc.debug(nochokedata, 'command', 'nochokes', obj.guildId, 'osuTopData');
-        if (nochokedata?.error) {
-            if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not fetch user\'s top scores',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-            return;
+        let nochokedata: osuApiTypes.Score[] & osuApiTypes.Error
+        if (func.findFile(absoluteID, 'nochokedata') &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, 'nochokedata')) &&
+            button != 'Refresh'
+        ) {
+            nochokedata = func.findFile(absoluteID, 'nochokedata')
+        } else {
+            nochokedata = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
         }
+
+        osufunc.debug(nochokedata, 'command', 'osutop', obj.guildId, 'noChokeData');
+        func.storeFile(nochokedata, absoluteID, 'nochokedata')
 
         try {
             nochokedata[0].user.username

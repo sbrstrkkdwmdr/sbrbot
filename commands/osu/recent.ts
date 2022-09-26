@@ -220,7 +220,17 @@ module.exports = {
                     .setEmoji('➡')
                     .setDisabled(isLastPage),
             );
-        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
+        let osudata: osuApiTypes.User;
+
+        if (func.findFile(absoluteID, 'osudata') &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, 'osudata')) &&
+            button != 'Refresh'
+        ) {
+            osudata = func.findFile(absoluteID, 'osudata')
+        } else {
+            osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        }
         osufunc.debug(osudata, 'command', 'recent', obj.guildId, 'osuData');
 
         if (osudata?.error) {
@@ -233,6 +243,8 @@ module.exports = {
             }
             return;
         }
+
+        func.storeFile(osudata, absoluteID, 'osudata')
 
         if (!osudata.id) {
             return obj.channel.send(
@@ -256,9 +268,18 @@ module.exports = {
                 .catch()
         }
 
-        let rsdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('recent_alt', `${osudata.id}`, `mode=${mode}&offset=0`, 2, 0, true)
+        let rsdata: osuApiTypes.Score[] & osuApiTypes.Error;
+        if (func.findFile(absoluteID, 'rsdata') &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, 'osudata')) &&
+            button != 'Refresh'
+        ) {
+            rsdata = func.findFile(absoluteID, 'rsdata')
+        } else {
+            rsdata = await osufunc.apiget('recent_alt', `${osudata.id}`, `mode=${mode}&offset=0`, 2, 0, true)
+        }
         osufunc.debug(rsdata, 'command', 'recent', obj.guildId, 'rsData');
-
+        func.storeFile(rsdata, absoluteID, 'rsdata')
         if (rsdata?.error) {
             if (commandType != 'button' && commandType != 'link') {
                 if (commandType == 'interaction') {
@@ -311,8 +332,18 @@ module.exports = {
             const curbm = curscore.beatmap
             const curbms = curscore.beatmapset
 
-            const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${curbm.id}`)
+            let mapdata: osuApiTypes.Beatmap;
+            if (func.findFile(absoluteID, `mapdata${curbm.id}`) &&
+                commandType == 'button' &&
+                !('error' in func.findFile(absoluteID, `mapdata${curbm.id}`)) &&
+                button != 'Refresh'
+            ) {
+                mapdata = func.findFile(absoluteID, `mapdata${curbm.id}`)
+            } else {
+                mapdata = await osufunc.apiget('map', `${curbm.id}`)
+            }
             osufunc.debug(mapdata, 'command', 'recent', obj.guildId, 'mapData');
+            func.storeFile(mapdata, absoluteID, `mapdata${curbm.id}`)
             if (mapdata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
                     if (commandType == 'interaction') {

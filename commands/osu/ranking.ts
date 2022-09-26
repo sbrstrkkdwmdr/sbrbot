@@ -165,26 +165,36 @@ module.exports = {
             url += '?spotlight=' + spotlight;
         }
 
-        const rankingdata: osuApiTypes.Rankings = await osufunc.apiget('custom', url, null, 2, 0, true).catch(async () => {
-            if (country != 'ALL') {
-                await obj.reply({
-                    content: 'Invalid country code',
-                    embeds: [],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            } else {
-                await obj.reply({
-                    content: 'Error',
-                    embeds: [],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-            return;
-        })
+        let rankingdata: osuApiTypes.Rankings;
+        if (func.findFile(absoluteID, 'rankingdata') &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, 'rankingdata')) &&
+            button != 'Refresh'
+        ) {
+            rankingdata = func.findFile(absoluteID, 'rankingdata')
+        } else {
+            rankingdata = await osufunc.apiget('custom', url, null, 2, 0, true).catch(async () => {
+                if (country != 'ALL') {
+                    await obj.reply({
+                        content: 'Invalid country code',
+                        embeds: [],
+                        files: [],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                } else {
+                    await obj.reply({
+                        content: 'Error',
+                        embeds: [],
+                        files: [],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
+                return;
+            })
+        }
+        func.storeFile(rankingdata, absoluteID, 'rankingdata')
 
         if (rankingdata?.error) {
             if (commandType != 'button' && commandType != 'link') {

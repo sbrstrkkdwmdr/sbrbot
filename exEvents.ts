@@ -11,15 +11,6 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) 
 
 
     //map clearing
-    try {
-        fs.readdirSync('files/maps').forEach(file => {
-            fs.unlinkSync('files/maps/' + file)
-        }
-        )
-        fs.appendFileSync('logs/updates.log', '\nmaps folder cleared at ' + new Date().toLocaleString() + '\n')
-    } catch (error) {
-        fs.appendFileSync('logs/updates.log', '\n' + new Date().toLocaleString() + '\n' + error + '\n')
-    }
 
     setInterval(() => {
         try {
@@ -164,7 +155,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) 
                 enableMusic: true,
                 enableAdmin: true,
             })
-        } catch (error) { 
+        } catch (error) {
 
         }
     })
@@ -180,10 +171,28 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) 
                     enableMusic: true,
                     enableAdmin: true,
                 })
-            } catch (error) { 
+            } catch (error) {
 
             }
         })
     }, 10 * 60 * 1000);
+
+    //when a new file is detected in './commandData/', delete it after 15 minutes
+    setInterval(() => {
+        const files = fs.readdirSync('./commandData')
+        for (const file of files) {
+            fs.stat('./commandData/' + file, (err, stat) => {
+                if (err) {
+                    return;
+                } else {
+                    if ((new Date().getTime() - stat.birthtimeMs) > (1000 * 60 * 15)) {
+                        fs.unlinkSync('./commandData/' + file)
+                        fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                    }
+                }
+            })
+
+        }
+    }, 1000 * 60)
 
 }

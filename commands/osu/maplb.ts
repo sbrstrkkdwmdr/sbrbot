@@ -161,7 +161,17 @@ module.exports = {
             }).catch()
         }
 
-        const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
+        let mapdata: osuApiTypes.Beatmap;
+        if (func.findFile(absoluteID, 'mapdata') &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, 'mapdata')) &&
+            button != 'Refresh'
+        ) {
+            mapdata = func.findFile(absoluteID, 'mapdata')
+        } else {
+            mapdata = await osufunc.apiget('map', `${mapid}`)
+        }
+        func.storeFile(mapdata, absoluteID, 'mapdata')
         osufunc.debug(mapdata, 'command', 'maplb', obj.guildId, 'mapData');
 
         if (mapdata?.error) {
@@ -205,7 +215,17 @@ module.exports = {
         const lbEmbed = new Discord.EmbedBuilder()
 
         if (mods == null) {
-            const lbdataf: osuApiTypes.BeatmapScores = await osufunc.apiget('scores_get_map', `${mapid}`)
+            let lbdataf: osuApiTypes.BeatmapScores;
+            if (func.findFile(absoluteID, 'lbdata') &&
+                commandType == 'button' &&
+                !('error' in func.findFile(absoluteID, 'lbdata')) &&
+                button != 'Refresh'
+            ) {
+                lbdataf = func.findFile(absoluteID, 'lbdata')
+            } else {
+                lbdataf = await osufunc.apiget('scores_get_map', `${mapid}`)
+            }
+            func.storeFile(lbdataf, absoluteID, 'lbdata')
             osufunc.debug(lbdataf, 'command', 'maplb', obj.guildId, 'lbDataF');
 
             if (lbdataf?.error) {
@@ -306,7 +326,17 @@ module.exports = {
 
             osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`);
         } else {
-            const lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1);
+            let lbdata;
+            if (func.findFile(absoluteID, 'lbdata') &&
+                commandType == 'button' &&
+                !('error' in func.findFile(absoluteID, 'lbdata')) &&
+                button != 'Refresh'
+            ) {
+                lbdata = func.findFile(absoluteID, 'lbdata')
+            } else {
+                lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1)
+            }
+            func.storeFile(lbdata, absoluteID, 'lbdata')
             osufunc.debug(lbdata, 'command', 'maplb', obj.guildId, 'lbData');
 
             if (lbdata?.error) {

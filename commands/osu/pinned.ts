@@ -250,7 +250,17 @@ module.exports = {
         if (mode == null) {
             mode = 'osu'
         }
-        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`)
+        let osudata: osuApiTypes.User;
+
+        if (func.findFile(absoluteID, 'osudata') &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, 'osudata')) &&
+            button != 'Refresh'
+        ) {
+            osudata = func.findFile(absoluteID, 'osudata')
+        } else {
+            osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        }
         osufunc.debug(osudata, 'command', 'pinned', obj.guildId, 'osuData');
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
@@ -314,9 +324,17 @@ module.exports = {
             }
 
         }
-        await getScoreCount(0);
-
+        if (func.findFile(absoluteID, 'pinnedscoresdata') &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, 'pinnedscoresdata')) &&
+            button != 'Refresh'
+        ) {
+            pinnedscoresdata = func.findFile(absoluteID, 'pinnedscoresdata')
+        } else {
+            await getScoreCount(0);
+        }
         osufunc.debug(pinnedscoresdata, 'command', 'pinned', obj.guildId, 'pinnedScoresData');
+        func.storeFile(pinnedscoresdata, absoluteID, 'pinnedscoresdata');
 
         if (page >= Math.ceil(pinnedscoresdata.length / 5)) {
             page = Math.ceil(pinnedscoresdata.length / 5) - 1

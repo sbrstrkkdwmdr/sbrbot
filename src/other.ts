@@ -1,4 +1,9 @@
 import fs = require('fs')
+// import truepath = require('../path').path
+import { path } from '../path'
+const truepath = `${path}`
+// truepath.path
+
 export function readAllFiles(directory: string) {
     const filesArr = []
     const init = fs.readdirSync(directory)
@@ -31,21 +36,32 @@ export function readAllFiles(directory: string) {
  * @param separator default is ,
  * @returns string
  */
-export function separateNum(number:string|number, separator?:string){
+export function separateNum(number: string | number, separator?: string) {
     let cursep = ','
-    if(separator){
+    if (separator) {
         cursep = separator
     }
     let ans = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, cursep)
-    if(number.toString().includes('.')){
-    const init = number.toString().split('.')[0];
-    const after = number.toString().split('.')[1];
-    ans = init.replace(/\B(?=(\d{3})+(?!\d))/g, cursep) + `.${after}`
+    if (number.toString().includes('.')) {
+        const init = number.toString().split('.')[0];
+        const after = number.toString().split('.')[1];
+        ans = init.replace(/\B(?=(\d{3})+(?!\d))/g, cursep) + `.${after}`
     }
     return ans;
 }
 
 export function flagImgUrl(string: string, ver?: 'osu') {
     const flagUrl: string = `https://osuflags.omkserver.nl/${string}`;
-return flagUrl;
+    return flagUrl;
+}
+
+export function storeFile(data: {}, commandId: string | number, name: string) {
+    fs.writeFileSync(`${truepath}\\commandData\\${commandId}-${name}.json`, JSON.stringify(data, null, 2))
+}
+export function findFile(commandId: string | number, name: string) {
+    if (fs.existsSync(`.\\commandData\\${commandId}-${name}.json`)) {
+        return JSON.parse(fs.readFileSync(`${truepath}\\commandData\\${commandId}-${name}.json`, 'utf-8'));
+    } else {
+        return false;
+    }
 }

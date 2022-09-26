@@ -64,7 +64,17 @@ module.exports = {
                 const setid = urlnohttp.split('/')[2].split('#')[0];
                 const curid = urlnohttp.split('/')[3];
                 mapid = curid;
-                const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
+                let bmsdata: osuApiTypes.Beatmapset;
+                if (func.findFile(absoluteID, `bmsdata${setid}`) &&
+                    commandType == 'button' &&
+                    !('error' in func.findFile(absoluteID, `bmsdata${setid}`)) &&
+                    button != 'Refresh') {
+                    bmsdata = func.findFile(absoluteID, `bmsdata${setid}`)
+                } else {
+                    bmsdata = await osufunc.apiget('mapset_get', `${setid}`)
+                }
+                func.storeFile(bmsdata, absoluteID, `bmsdata${setid}`)
+
                 osufunc.debug(bmsdata, 'command', 'map', obj.guildId, 'bmsData');
 
                 if (bmsdata?.error) {
@@ -190,6 +200,7 @@ module.exports = {
         }
         if (overrides != null) {
             overwriteModal = overrides.overwriteModal
+            mapid = overrides.id
         }
 
         //==============================================================================================================================================================================================
@@ -261,14 +272,22 @@ module.exports = {
             .setPlaceholder('Select a map')
 
         if (maptitleq == null) {
-            mapdata = await osufunc.apiget('map_get', `${mapid}`)
+            if (func.findFile(absoluteID, `mapdata${mapid}`) &&
+                commandType == 'button' &&
+                !('error' in func.findFile(absoluteID, `mapdata${mapid}`)) &&
+                button != 'Refresh') {
+                mapdata = func.findFile(absoluteID, `mapdata${mapid}`)
+            } else {
+                mapdata = await osufunc.apiget('map_get', `${mapid}`)
+            }
+            func.storeFile(mapdata, absoluteID, `mapdata${mapid}`)
             osufunc.debug(mapdata, 'command', 'map', obj.guildId, 'mapData');
 
             if (mapdata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
 
                     obj.reply({
-                        content: 'Error - could not fetch beatmap data.',
+                        content: 'Error - could not fetch mapper data.',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
@@ -276,10 +295,20 @@ module.exports = {
                 }
                 return;
             }
-            const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${mapdata.beatmapset_id}`)
+            let bmsdata: osuApiTypes.Beatmapset;
+            if (func.findFile(absoluteID, `bmsdata${mapdata.beatmapset_id}`) &&
+                commandType == 'button' &&
+                !('error' in func.findFile(absoluteID, `bmsdata${mapdata.beatmapset_id}`)) &&
+                button != 'Refresh') {
+                bmsdata = func.findFile(absoluteID, `bmsdata${mapdata.beatmapset_id}`)
+            } else {
+                bmsdata = await osufunc.apiget('mapset_get', `${mapdata.beatmapset_id}`)
+            }
+            func.storeFile(bmsdata, absoluteID, `bmsdata${mapdata.beatmapset_id}`)
+
             osufunc.debug(bmsdata, 'command', 'map', obj.guildId, 'bmsData');
 
-            if (bmsdata.beatmaps.length < 2 || typeof bmsdata.beatmaps == 'undefined') {
+            if (typeof bmsdata.beatmaps == 'undefined' || bmsdata.beatmaps.length < 2) {
                 inputModal.addOptions(
                     new Discord.SelectMenuOptionBuilder()
                         .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
@@ -367,8 +396,16 @@ ${error}
                 }
             }
 
+            if (func.findFile(absoluteID, `mapdata${mapidtest2[0].id}`) &&
+                commandType == 'button' &&
+                !('error' in func.findFile(absoluteID, `mapdata${mapidtest2[0].id}`)) &&
+                button != 'Refresh') {
+                mapdata = func.findFile(absoluteID, `mapdata${mapidtest2[0].id}`)
+            } else {
+                mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
+            }
+            func.storeFile(mapdata, absoluteID, `mapdata${mapidtest2[0].id}`)
 
-            mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
             osufunc.debug(mapdata, 'command', 'map', obj.guildId, 'mapData');
             if (mapdata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
@@ -547,7 +584,17 @@ ${error}
         const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
         const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
 
-        let mapperdata: osuApiTypes.User = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
+        let mapperdata: osuApiTypes.User;
+        if (func.findFile(absoluteID, `mapperdata${mapdata.beatmapset_id}`) &&
+            commandType == 'button' &&
+            !('error' in func.findFile(absoluteID, `mapperdata${mapdata.beatmapset_id}`)) &&
+            button != 'Refresh') {
+            mapperdata = func.findFile(absoluteID, `mapperdata${mapdata.beatmapset_id}`)
+        } else {
+            mapperdata = await osufunc.apiget('user', `${mapdata.beatmapset.creator}`)
+        }
+        func.storeFile(mapperdata, absoluteID, `mapperdata${mapdata.beatmapset_id}`)
+
         osufunc.debug(mapperdata, 'command', 'map', obj.guildId, 'mapperData');
 
         if (mapperdata?.error) {

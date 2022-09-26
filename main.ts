@@ -191,32 +191,36 @@ Current Client ID: ${client.user.id}
 
 
     if (!fs.existsSync(`./debug`)) {
-        console.log(`Creating debug folder`);
+        console.log(`Creating ./debug folder`);
         fs.mkdirSync(`./debug`);
     }
     if (!fs.existsSync(`./previous`)) {
-        console.log(`Creating previous IDs folder`);
+        console.log(`Creating previous IDs folder (./previous)`);
         fs.mkdirSync(`./previous`);
     }
     if (!fs.existsSync(`./logs`)) {
-        console.log(`Creating logs folder`);
+        console.log(`Creating ./logs folder`);
         fs.mkdirSync(`./logs`);
     }
     if (!fs.existsSync(`./logs/gen`)) {
-        console.log(`Creating logs/gen folder`);
+        console.log(`Creating ./logs/gen folder`);
         fs.mkdirSync(`./logs/gen`);
     }
     if (!fs.existsSync(`./logs/cmd`)) {
-        console.log(`Creating logs/cmd folder`);
+        console.log(`Creating ./logs/cmd folder`);
         fs.mkdirSync(`./logs/cmd`);
     }
     if (!fs.existsSync(`./logs/moderator`)) {
-        console.log(`Creating logs/moderator folder`);
+        console.log(`Creating ./logs/moderator folder`);
         fs.mkdirSync(`./logs/moderator`);
     }
     if (!fs.existsSync(`./trackingFiles`)) {
-        console.log(`Creating trackingFiles folder`);
+        console.log(`Creating ./trackingFiles folder`);
         fs.mkdirSync(`./trackingFiles`);
+    }
+    if(!fs.existsSync(`./commandData`)){
+        console.log('Creating ./commandData folder');
+        fs.mkdirSync('./commandData');
     }
     (async () => {
         await client.guilds.cache.forEach(guild => {
