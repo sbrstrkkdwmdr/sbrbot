@@ -58,40 +58,65 @@ export async function scoreList(
     }
 
     let newData = filtereddata.slice()
+    let sortinfo;
     switch (sort) {
         case 'score':
             newData = filtereddata.slice().sort((a, b) => b.score - a.score)
-            filterinfo += `\nsorted by score`
+            sortinfo = `\nsorted by highest score`
             break;
         case 'acc':
             newData = filtereddata.slice().sort((a, b) => b.accuracy - a.accuracy)
-            filterinfo += `\nsorted by highest accuracy`
+            sortinfo = `\nsorted by highest accuracy`
             break;
         case 'pp': default:
             newData = filtereddata.slice().sort((a, b) => b.pp - a.pp)
-            filterinfo += `\nsorted by highest pp`
+            sortinfo = `\nsorted by highest pp`
             sort = 'pp'
             break;
         case 'recent':
             newData = filtereddata.slice().sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
-            filterinfo += `\nsorted by most recent`
+            sortinfo = `\nsorted by most recent`
             break;
         case 'combo':
             newData = filtereddata.slice().sort((a, b) => b.max_combo - a.max_combo)
-            filterinfo += `\nsorted by highest combo`
+            sortinfo = `\nsorted by highest combo`
             break;
         case 'miss':
             newData = filtereddata.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
-            filterinfo += `\nsorted by least misses`
+            sortinfo = `\nsorted by least misses`
             break;
         case 'rank':
             newData = filtereddata.slice().sort((a, b) => a.rank.localeCompare(b.rank))
-            filterinfo += `\nsorted by rank`
+            sortinfo = `\nsorted by best rank`
             break;
     }
     if (reverse == true) {
         newData.reverse()
+        switch (sort) {
+            case 'score':
+                sortinfo = `\nsorted by lowest score`
+                break;
+            case 'acc':
+                sortinfo = `\nsorted by lowest accuracy`
+                break;
+            case 'pp': default:
+                sortinfo = `\nsorted by lowest pp`
+                break;
+            case 'recent':
+                sortinfo = `\nsorted by oldest`
+                break;
+            case 'combo':
+                sortinfo = `\nsorted by lowest combo`
+                break;
+            case 'miss':
+                sortinfo = `\nsorted by most misses`
+                break;
+            case 'rank':
+                sortinfo = `\nsorted by worst rank`
+                break;
+        }
     }
+    filterinfo += sortinfo
 
     if (page >= Math.ceil(newData.length / 5)) {
         page = Math.ceil(newData.length / 5) - 1
