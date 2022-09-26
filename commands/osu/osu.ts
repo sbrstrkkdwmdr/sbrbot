@@ -195,10 +195,12 @@ module.exports = {
             }
             return;
         }
-        try {
-            osufunc.updateUserStats(osudata, osudata.playmode, userdata)
-        } catch (error) {
-            console.log(error)
+        if (commandType != button || button == 'Refresh') {
+            try {
+                osufunc.updateUserStats(osudata, osudata.playmode, userdata)
+            } catch (error) {
+                console.log(error)
+            }
         }
 
         func.storeFile(osudata, absoluteID, 'osudata')

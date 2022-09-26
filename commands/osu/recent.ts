@@ -253,11 +253,6 @@ module.exports = {
                 .catch();
 
         }
-        try {
-            osufunc.updateUserStats(osudata, mode, userdata)
-        } catch (error) {
-            console.log(error)
-        }
 
         if (commandType == 'interaction') {
             obj.reply({
@@ -702,10 +697,12 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
         }
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
 
-        try {
-            osufunc.updateUserStats(osudata, osudata.playmode, userdata)
-        } catch (error) {
-            console.log(error)
+        if (commandType != button || button == 'Refresh') {
+            try {
+                osufunc.updateUserStats(osudata, osudata.playmode, userdata)
+            } catch (error) {
+                console.log(error)
+            }
         }
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {

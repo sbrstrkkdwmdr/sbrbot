@@ -322,11 +322,6 @@ module.exports = {
 
         func.storeFile(osudata, absoluteID, 'osudata')
 
-        try {
-            osufunc.updateUserStats(osudata, mode, userdata)
-        } catch (error) {
-            console.log(error)
-        }
         let osutopdata: osuApiTypes.Score[] & osuApiTypes.Error
         if (func.findFile(absoluteID, 'osutopdata') &&
             commandType == 'button' &&
@@ -495,11 +490,12 @@ module.exports = {
             //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[4].setDisabled(true)
         }
-
-        try {
-            osufunc.updateUserStats(osudata, osudata.playmode, userdata)
-        } catch (error) {
-            console.log(error)
+        if (commandType != button || button == 'Refresh') {
+            try {
+                osufunc.updateUserStats(osudata, osudata.playmode, userdata)
+            } catch (error) {
+                console.log(error)
+            }
         }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
