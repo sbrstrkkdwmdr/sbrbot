@@ -12,14 +12,28 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) 
     //map clearing
 
     setInterval(() => {
-        try {
-            fs.readdirSync('files/maps').forEach(file => {
-                fs.unlinkSync('files/maps/' + file)
-            }
-            )
-            fs.appendFileSync('logs/updates.log', '\nmaps folder cleared at ' + new Date().toLocaleString() + '\n')
-        } catch (error) {
-            fs.appendFileSync('logs/updates.log', '\n' + new Date().toLocaleString() + '\n' + error + '\n')
+        // try {
+        //     fs.readdirSync('files/maps').forEach(file => {
+        //         fs.unlinkSync('files/maps/' + file)
+        //     }
+        //     )
+        //     fs.appendFileSync('logs/updates.log', '\nmaps folder cleared at ' + new Date().toLocaleString() + '\n')
+        // } catch (error) {
+        //     fs.appendFileSync('logs/updates.log', '\n' + new Date().toLocaleString() + '\n' + error + '\n')
+        // }
+        const files = fs.readdirSync('./files/maps')
+        for (const file of files) {
+            fs.stat('./files/maps/' + file, (err, stat) => {
+                if (err) {
+                    return;
+                } else {
+                    if ((new Date().getTime() - stat.birthtimeMs) > (1000 * 60 * 15)) {
+                        fs.unlinkSync('./files/maps/' + file)
+                        fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                    }
+                }
+            })
+
         }
     }
         , 60 * 60 * 1000);
