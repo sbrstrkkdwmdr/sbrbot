@@ -84,7 +84,7 @@ module.exports = {
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-osu-${commanduser.id}`)
+                    .setCustomId(`Refresh-osu-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔁'),
             )
@@ -126,14 +126,14 @@ module.exports = {
         if (detailed == true) {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`DetailDisable-osu-${commanduser.id}`)
+                    .setCustomId(`DetailDisable-osu-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('📝')
             )
         } else {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`DetailEnable-osu-${commanduser.id}`)
+                    .setCustomId(`DetailEnable-osu-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('📝')
             )

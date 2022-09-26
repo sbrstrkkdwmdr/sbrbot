@@ -77,23 +77,23 @@ module.exports = {
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-lb-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-lb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-lb-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-lb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Search-lb-${commanduser.id}`)
+                    .setCustomId(`Search-lb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔍'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-lb-${commanduser.id}`)
+                    .setCustomId(`RightArrow-lb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-lb-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-lb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );

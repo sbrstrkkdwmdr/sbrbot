@@ -86,30 +86,30 @@ module.exports = {
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-ranking-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-ranking-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-ranking-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-ranking-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Search-ranking-${commanduser.id}`)
+                    .setCustomId(`Search-ranking-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔍'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-ranking-${commanduser.id}`)
+                    .setCustomId(`RightArrow-ranking-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-ranking-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-ranking-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-ranking-${commanduser.id}`)
+                    .setCustomId(`Refresh-ranking-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔁'),
             );

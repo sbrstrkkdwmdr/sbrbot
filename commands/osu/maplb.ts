@@ -86,30 +86,30 @@ module.exports = {
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-leaderboard-${commanduser.id}`)
+                    .setCustomId(`Refresh-leaderboard-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔁'),
             )
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-maplb-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-maplb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-maplb-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-maplb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Search-maplb-${commanduser.id}`)
+                    .setCustomId(`Search-maplb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔍'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-maplb-${commanduser.id}`)
+                    .setCustomId(`RightArrow-maplb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-maplb-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-maplb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );

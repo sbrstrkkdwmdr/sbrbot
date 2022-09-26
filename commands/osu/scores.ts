@@ -100,7 +100,7 @@ module.exports = {
 
 
                     const reverse1 = obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
-                    if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
+                    if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
                         reverse = true
                     } else {
                         reverse = false
@@ -166,7 +166,7 @@ module.exports = {
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-scores-${commanduser.id}`)
+                    .setCustomId(`Refresh-scores-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔁'),
             )
@@ -222,23 +222,23 @@ module.exports = {
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-scores-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-scores-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅').setDisabled(false),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-scores-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-scores-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Search-scores-${commanduser.id}`)
+                    .setCustomId(`Search-scores-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔍'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-scores-${commanduser.id}`)
+                    .setCustomId(`RightArrow-scores-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-scores-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-scores-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );

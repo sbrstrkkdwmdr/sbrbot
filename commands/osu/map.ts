@@ -196,7 +196,7 @@ module.exports = {
 
         const buttons = new Discord.ActionRowBuilder().addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-map-${commanduser.id}`)
+                .setCustomId(`Refresh-map-${commanduser.id}-${absoluteID}`)
                 .setStyle(Discord.ButtonStyle.Primary)
                 .setEmoji('🔁'),
         )
@@ -242,14 +242,14 @@ module.exports = {
         if (detailed == true) {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`DetailDisable-map-${commanduser.id}`)
+                    .setCustomId(`DetailDisable-map-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('ℹ')
             )
         } else {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`DetailEnable-map-${commanduser.id}`)
+                    .setCustomId(`DetailEnable-map-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('ℹ')
             )
@@ -257,7 +257,7 @@ module.exports = {
         let mapdata: osuApiTypes.Beatmap;
 
         const inputModal = new Discord.SelectMenuBuilder()
-            .setCustomId(`Select-map-${commanduser.id}`)
+            .setCustomId(`Select-map-${commanduser.id}-${absoluteID}`)
             .setPlaceholder('Select a map')
 
         if (maptitleq == null) {

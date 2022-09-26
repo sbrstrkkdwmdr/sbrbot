@@ -8,13 +8,17 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
         if (interaction.applicationId != client.application.id) return;
 
         const currentDate = new Date();
-        const absoluteID = currentDate.getTime();
+        // const absoluteID = currentDate.getTime();
 
         const args = null;
         const obj = interaction;
         const command = interaction.customId.split('-')[1]
         const button = interaction.customId.split('-')[0]
         const specid = interaction.customId.split('-')[2]
+        const absoluteID = interaction.customId.split('-')[3]
+
+        //buttonType-baseCommand-userId-commandId
+
         const commandType = 'button';
         const overrides = {
             user: null,

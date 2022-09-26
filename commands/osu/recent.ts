@@ -130,7 +130,7 @@ module.exports = {
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-recent-${commanduser.id}`)
+                    .setCustomId(`Refresh-recent-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔁'),
             )
@@ -200,22 +200,22 @@ module.exports = {
         let pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-recent-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-recent-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅')
                     .setDisabled(isFirstPage),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-recent-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-recent-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀')
                     .setDisabled(isFirstPage),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-recent-${commanduser.id}`)
+                    .setCustomId(`RightArrow-recent-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶')
                     .setDisabled(isLastPage),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-recent-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-recent-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡')
                     .setDisabled(isLastPage),
@@ -596,23 +596,23 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
             pgbuttons = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.ButtonBuilder()
-                        .setCustomId(`BigLeftArrow-recent-${commanduser.id}`)
+                        .setCustomId(`BigLeftArrow-recent-${commanduser.id}-${absoluteID}`)
                         .setStyle(Discord.ButtonStyle.Primary)
                         .setEmoji('⬅'),
                     new Discord.ButtonBuilder()
-                        .setCustomId(`LeftArrow-recent-${commanduser.id}`)
+                        .setCustomId(`LeftArrow-recent-${commanduser.id}-${absoluteID}`)
                         .setStyle(Discord.ButtonStyle.Primary)
                         .setEmoji('◀'),
                     new Discord.ButtonBuilder()
-                        .setCustomId(`Search-recent-${commanduser.id}`)
+                        .setCustomId(`Search-recent-${commanduser.id}-${absoluteID}`)
                         .setStyle(Discord.ButtonStyle.Primary)
                         .setEmoji('🔍'),
                     new Discord.ButtonBuilder()
-                        .setCustomId(`RightArrow-recent-${commanduser.id}`)
+                        .setCustomId(`RightArrow-recent-${commanduser.id}-${absoluteID}`)
                         .setStyle(Discord.ButtonStyle.Primary)
                         .setEmoji('▶'),
                     new Discord.ButtonBuilder()
-                        .setCustomId(`BigRightArrow-recent-${commanduser.id}`)
+                        .setCustomId(`BigRightArrow-recent-${commanduser.id}-${absoluteID}`)
                         .setStyle(Discord.ButtonStyle.Primary)
                         .setEmoji('➡'),
                 )

@@ -107,7 +107,7 @@ module.exports = {
 
 
                     const reverse1 = obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
-                    if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
+                    if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
                         reverse = true
                     } else {
                         reverse = false
@@ -225,11 +225,11 @@ module.exports = {
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-osutop-${commanduser.id}`)
+                    .setCustomId(`Refresh-osutop-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔁'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Sort-osutop-${commanduser.id}`)
+                    .setCustomId(`Sort-osutop-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔀'),
             )
@@ -258,14 +258,14 @@ module.exports = {
         if (detailed == true) {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`DetailDisable-osutop-${commanduser.id}`)
+                    .setCustomId(`DetailDisable-osutop-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('ℹ')
             )
         } else {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`DetailEnable-osutop-${commanduser.id}`)
+                    .setCustomId(`DetailEnable-osutop-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('ℹ')
             )
@@ -274,23 +274,23 @@ module.exports = {
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-osutop-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-osutop-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-osutop-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-osutop-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Search-osutop-${commanduser.id}`)
+                    .setCustomId(`Search-osutop-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔍'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-osutop-${commanduser.id}`)
+                    .setCustomId(`RightArrow-osutop-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-osutop-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-osutop-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );

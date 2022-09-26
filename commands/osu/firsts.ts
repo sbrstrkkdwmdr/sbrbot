@@ -101,7 +101,7 @@ module.exports = {
 
 
                     const reverse1 = obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
-                    if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
+                    if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))|| (reverse1.includes('worst'))) {
                         reverse = true
                     } else {
                         reverse = false
@@ -203,29 +203,29 @@ module.exports = {
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-firsts-${commanduser.id}`)
+                    .setCustomId(`BigLeftArrow-firsts-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('⬅'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-firsts-${commanduser.id}`)
+                    .setCustomId(`LeftArrow-firsts-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('◀'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Search-firsts-${commanduser.id}`)
+                    .setCustomId(`Search-firsts-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔍'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-firsts-${commanduser.id}`)
+                    .setCustomId(`RightArrow-firsts-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-firsts-${commanduser.id}`)
+                    .setCustomId(`BigRightArrow-firsts-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('➡'),
             );
         const buttons = new Discord.ActionRowBuilder().addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-firsts-${commanduser.id}`)
+                .setCustomId(`Refresh-firsts-${commanduser.id}-${absoluteID}`)
                 .setStyle(Discord.ButtonStyle.Primary)
                 .setEmoji('🔁'),
         )
