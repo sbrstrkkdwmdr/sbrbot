@@ -230,20 +230,17 @@ export async function scoreList(
                 value: `
 **${showtitle}**
 **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>${curscore.replay ? `\n[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${func.separateNum(curscore.score)} | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
-\`${hitlist}\`
-${pptxt} 
-${weighted}
+${func.separateNum(curscore.score)} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
+${pptxt} | ${weighted}
 `,
                 inline: false
             })
             scoresAsArrStr.push(
-                `\n**#${i + 1 + (page * 5)} | [${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id})**
+                `\n**#${i + 1 + (page * 5)} | **${showtitle}**
 **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>${curscore.replay ? `\n[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${func.separateNum(curscore.score)} | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
-\`${hitlist}\`
-${pptxt}
-${weighted}
+${func.separateNum(curscore.score)} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
+${pptxt} | ${weighted}
+
 `
             )
         } else {
@@ -308,19 +305,17 @@ ${weighted}
             scoresAsFields.push({
                 name: `#${i + 1 + (page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
                 value: `
-**${showtitle}** **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>${curscore.replay ? `\n[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+**${showtitle}** **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${pptxt}
 \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
-${pptxt}
 `,
                 inline: false
             })
             scoresAsArrStr.push(
-                `\n#${showtitle}
-**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>${curscore.replay ? `\n[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${func.separateNum(curscore.score)} | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
-\`${hitlist}\`
-${pptxt}
+                `#${i + 1 + (page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
+**${showtitle}** **Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${pptxt}
+\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
 `
             )
         }
