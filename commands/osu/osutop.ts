@@ -260,14 +260,14 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailDisable-osutop-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('ℹ')
+                    .setEmoji('📝')
             )
         } else {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailEnable-osutop-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('ℹ')
+                    .setEmoji('📝')
             )
         }
 

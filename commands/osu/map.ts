@@ -255,14 +255,14 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailDisable-map-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('ℹ')
+                    .setEmoji('📝')
             )
         } else {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailEnable-map-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('ℹ')
+                    .setEmoji('📝')
             )
         }
         let mapdata: osuApiTypes.Beatmap;
