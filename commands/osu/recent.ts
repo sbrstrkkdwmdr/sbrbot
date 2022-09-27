@@ -222,7 +222,6 @@ module.exports = {
                     .setDisabled(isLastPage),
             );
         let osudata: osuApiTypes.User;
-
         if (func.findFile(user, 'osudata') &&
             !('error' in func.findFile(user, 'osudata')) &&
             button != 'Refresh'
@@ -266,7 +265,7 @@ module.exports = {
         let rsdata: osuApiTypes.Score[] & osuApiTypes.Error;
         if (func.findFile(absoluteID, 'rsdata') &&
             commandType == 'button' &&
-            !('error' in func.findFile(absoluteID, 'osudata')) &&
+            !('error' in func.findFile(absoluteID, 'rsdata')) &&
             button != 'Refresh'
         ) {
             rsdata = func.findFile(absoluteID, 'rsdata')
@@ -450,12 +449,12 @@ module.exports = {
             }
             const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
             const guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
-            const curbmpasstime = Math.floor(guesspasspercentage / 100 * curbm.total_length);
+            const curbmpasstime = Math.floor(guesspasspercentage / 100 * curbm.hit_length);
 
             let rsgrade;
             switch (curscore.rank.toUpperCase()) {
                 case 'F':
-                    rspassinfo = `\n${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.total_length)})`
+                    rspassinfo = `\n${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.hit_length)})`
                     rsgrade = emojis.grades.F
                     break;
                 case 'D':
