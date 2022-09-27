@@ -70,9 +70,9 @@ const cacheById = [
  */
 export function storeFile(data: {}, id: string | number, name: string) {
     if (cacheById.some(x => name.includes(x))) {
-        fs.writeFileSync(`${truepath}\\cache\\commandData\\${name}${id}.json`, JSON.stringify(data, null, 2))
+        fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2))
     } else {
-        fs.writeFileSync(`${truepath}\\cache\\commandData\\${id}-${name}.json`, JSON.stringify(data, null, 2))
+        fs.writeFileSync(`${truepath}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, JSON.stringify(data, null, 2))
     }
 }
 
@@ -84,14 +84,14 @@ export function storeFile(data: {}, id: string | number, name: string) {
  */
 export function findFile(id: string | number, name: string) {
     if (cacheById.some(x => name.includes(x))) {
-        if (fs.existsSync(`${truepath}\\cache\\commandData\\${name}${id}.json`)) {
-            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name}${id}.json`, 'utf-8'));
+        if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`)) {
+            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, 'utf-8'));
         } else {
             return false;
         }
     } else {
-        if (fs.existsSync(`${truepath}\\cache\\commandData\\${id}-${name}.json`)) {
-            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${id}-${name}.json`, 'utf-8'));
+        if (fs.existsSync(`${truepath}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`)) {
+            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, 'utf-8'));
         } else {
             return false;
         }
