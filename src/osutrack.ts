@@ -6,15 +6,16 @@ import Discord = require('discord.js');
 import func = require('./other');
 import embedstuff = require('./embed');
 import log = require('./log');
+import def = require('./consts/defaults');
 
 module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.ModelStatic<any>, guildSettings: Sequelize.ModelStatic<any>) => {
 
     async function trackUser(fr: { user: string, mode: string, inital?: boolean }) {
         const curdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('osutop', fr.user, fr.mode)
-        const thisUser: osuApiTypes.User = await osufunc.apiget('user', fr.user, fr.mode)
+        // const thisUser: osuApiTypes.User = await osufunc.apiget('user', fr.user, fr.mode)
         if (!curdata?.[0]?.user_id) return;
 
-        osufunc.updateUserStats(thisUser, fr.mode, userdata)
+        // osufunc.updateUserStats(thisUser, fr.mode, userdata)
 
         if (curdata?.[0]?.user_id && fr.inital == true) {
             fs.writeFileSync(`trackingFiles/${curdata[0].user_id}.json`, JSON.stringify(curdata, null, 2))
@@ -38,7 +39,6 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
                         osufunc.logCall(curdata[i]?.user?.username ?? 'null name', 'Found new score for')
                         sendMsg(await getEmbed({
                             scoredata: curdata[i],
-                            user: thisUser,
                             scorepos: i
                         }), fr.user)
                     }
@@ -106,7 +106,6 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
     async function getEmbed(
         data: {
             scoredata: osuApiTypes.Score,
-            user: osuApiTypes.User,
             scorepos: number,
         }
     ) {
@@ -136,11 +135,11 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
             .setTitle(`${data.scoredata.beatmapset.title} [${data.scoredata.beatmap.version}]`)
             .setURL(`https://osu.ppy.sh/beatmapsets/${data.scoredata.beatmapset.id}#osu/${data.scoredata.beatmap.id}`)
             .setAuthor({
-                name: `New #${data.scorepos + 1} play for ${data.user.username} | #${func.separateNum(data.user?.statistics?.global_rank)} | #${func.separateNum(data.user?.statistics?.country_rank)} ${data.user.country_code} | ${func.separateNum(data.user?.statistics?.pp)}pp`,
-                url: `https://osu.ppy.sh/u/${data.scoredata.user.id}`,
-                iconURL: `${`https://osuflags.omkserver.nl/${data.scoredata.user.country_code}.png`}`
+                name: `New #${data.scorepos + 1} play for ${data.scoredata?.user?.username}`,
+                url: `https://osu.ppy.sh/u/${data.scoredata?.user?.id}`,
+                iconURL: `${`https://osuflags.omkserver.nl/${data.scoredata?.user?.country_code}.png`}`
             })
-            .setThumbnail(`${data.user.avatar_url}`)
+            .setThumbnail(`${data.scoredata?.user?.avatar_url ?? def.images.user.url}`)
             .setImage(`${data.scoredata.beatmapset.covers['cover@2x']}`)
             .setDescription(
                 `${data.scoredata.mods ? '+' + data.scoredata.mods.join('') + ' | ' : ''} **Score set** <t:${new Date(data.scoredata.created_at).getTime() / 1000}:R>\n` +
