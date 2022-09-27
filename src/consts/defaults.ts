@@ -6,19 +6,10 @@ const defaultClientConfig: extypes.config = {
     osuClientID: '',
     osuClientSecret: '',
     osuApiKey: '',
-    testGuildID: '',
     ownerusers: [],
-    fileblockedusers: [],
     google: {
         apiKey: '',
-        cx: '',
-    },
-    youtube: {
-        apiKey: '',
-    },
-    twitch: {
-        clientID: '',
-        clientSecret: '',
+        engineId: '',
     },
     useScreenshotParse: false,
     LogApiCalls: false,
