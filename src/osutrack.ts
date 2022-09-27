@@ -142,7 +142,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
             .setThumbnail(`${data.scoredata?.user?.avatar_url ?? def.images.user.url}`)
             .setImage(`${data.scoredata.beatmapset.covers['cover@2x']}`)
             .setDescription(
-                `${data.scoredata.mods ? '+' + data.scoredata.mods.join('') + ' | ' : ''} **Score set** <t:${new Date(data.scoredata.created_at).getTime() / 1000}:R>\n` +
+                `${data.scoredata.mods.length > 0 ? '+' + data.scoredata.mods.join('') + ' | ' : ''} **Score set** <t:${new Date(data.scoredata.created_at).getTime() / 1000}:R>\n` +
                 `${(data.scoredata.accuracy * 100).toFixed(2)}% | ${embedstuff.gradeToEmoji(data.scoredata.rank)} | ${(ppcalc?.[0]?.stars ?? data.scoredata.beatmap.difficulty_rating).toFixed(2)}⭐\n` +
                 `${embedstuff.hitList({
                     gamemode: data.scoredata.mode,
