@@ -720,19 +720,17 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
     }).then(res => res.json())
 
     try {
-
         if (datafirst?.authentication) {
             await updateToken()
             datafirst = await apiget(type, mainparam, params, version, callNum + 1)
-            //throw new Error('token expired. Updating token...')
         }
-        if ('error' in datafirst) {
-            throw new Error('null')
+        if ('error' in datafirst && !type.includes('search')) {
+            throw new Error('nullwww')
         }
         data = datafirst;
     } catch (error) {
         data = {
-            error,
+            error: error,
             url: url,
             params: {
                 type: type,
