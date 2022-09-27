@@ -146,7 +146,7 @@ module.exports = {
                         else {
                             idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1]
                         }
-                        if (isNaN(idfirst)) {
+                        if (isNaN(+idfirst)) {
                             mapid = parseInt(idfirst.split(' ')[0])
                         } else {
                             mapid = parseInt(idfirst)
@@ -200,8 +200,8 @@ module.exports = {
                 break;
         }
         if (overrides != null) {
-            overwriteModal = overrides.overwriteModal
-            mapid = overrides.id
+            overwriteModal = overrides.overwriteModal ?? overwriteModal
+            mapid = overrides.id ?? mapid
         }
 
         //==============================================================================================================================================================================================
