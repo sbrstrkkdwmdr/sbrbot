@@ -134,20 +134,19 @@ module.exports = {
                     .setStyle(Discord.ButtonStyle.Primary)
                     .setEmoji('🔁'),
             )
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'recent',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('recent', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                [{
+        log.logFile('command',
+            log.optsLog(absoluteID, [
+                {
                     name: 'User',
                     value: user
                 },
@@ -167,9 +166,11 @@ module.exports = {
                     name: 'List',
                     value: list
                 },
-                ]
-            ), 'utf-8')
-
+            ]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         if (user == null) {
@@ -749,12 +750,14 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

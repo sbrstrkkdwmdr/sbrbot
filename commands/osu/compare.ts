@@ -50,35 +50,32 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'compare',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('compare', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
-
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                [
-                    {
-                        name: 'Compare Type',
-                        value: compareType
-                    },
-                    {
-                        name: 'First',
-                        value: first
-                    },
-                    {
-                        name: 'Second',
-                        value: second
-                    }
-                ]
-            ), 'utf-8')
-
+        log.logFile('command',
+            log.optsLog(absoluteID, [{
+                name: 'Compare Type',
+                value: compareType
+            },
+            {
+                name: 'First',
+                value: first
+            },
+            {
+                name: 'Second',
+                value: second
+            }]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         let sendthething = false;
@@ -381,13 +378,15 @@ Second: \`${second}\`
 
 
 
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+                log.logFile('command',
                     `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+                    { guildId: `${obj.guildId}` }
+                )
             }
         }
     }

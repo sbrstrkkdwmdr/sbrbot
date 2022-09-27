@@ -54,13 +54,13 @@ module.exports = {
                 /* .setLabel('End') */,
             );
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'servers',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('servers', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
@@ -78,11 +78,11 @@ module.exports = {
             .setDescription(`${servers}`)
 
 
-        let rw:{
+        let rw: {
             content?: string,
             embeds?: Discord.EmbedBuilder[],
             files?: string[]
-            allowedMentions: { repliedUser:boolean},
+            allowedMentions: { repliedUser: boolean },
             failIfNotExists: boolean
         } = {
             embeds: [embed],
@@ -100,7 +100,7 @@ module.exports = {
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
-            case 'message':case 'interaction': {
+            case 'message': case 'interaction': {
                 obj.reply(rw)
                     .catch();
             }

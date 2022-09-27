@@ -430,19 +430,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                     )
                 }
                 break;
-            case 'debug':
-                if (checks.botHasPerms(obj, client, ['AttachFiles'])) {
-                    if (checks.isOwner(userid)) {
-                        commandStruct.admincmds.get('debug').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
-                    } else {
-                        commandStruct.checks.get('noperms').execute(
-                            commandType, obj, 'user'
-                        )
-                    }
-                } else {
-                    commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
-                }
-                break;
             case 'find':
                 if (checks.botHasPerms(obj, client, ['Administrator'])) {
                     commandStruct.admincmds.get('find').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)

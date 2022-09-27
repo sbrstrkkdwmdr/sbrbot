@@ -18,7 +18,7 @@ module.exports = {
         let country = 'ALL';
         let mode = 'osu';
         let type: osuApiTypes.RankingType = 'performance';
-        let page = 0;   
+        let page = 0;
         let spotlight;
 
         switch (commandType) {
@@ -114,41 +114,41 @@ module.exports = {
                     .setEmoji('🔁'),
             );
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'ranking',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('ranking', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
         //OPTIONS==============================================================================================================================================================================================
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                [
-                    {
-                        name: 'country',
-                        value: country
-                    },
-                    {
-                        name: 'mode',
-                        value: mode
-                    },
-                    {
-                        name: 'type',
-                        value: type
-                    },
-                    {
-                        name: 'page',
-                        value: `${page}`
-                    },
-                    {
-                        name: 'spotlight',
-                        value: `${spotlight}`
-                    }
-                ]
-            ), 'utf-8')
-
+        log.logFile('command',
+            log.optsLog(absoluteID, [
+                {
+                    name: 'country',
+                    value: country
+                },
+                {
+                    name: 'mode',
+                    value: mode
+                },
+                {
+                    name: 'type',
+                    value: type
+                },
+                {
+                    name: 'page',
+                    value: `${page}`
+                },
+                {
+                    name: 'spotlight',
+                    value: `${spotlight}`
+                }
+            ]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
         if (page < 2 || typeof page != 'number' || isNaN(page)) {
             page = 1;
@@ -332,12 +332,14 @@ module.exports = {
             }
                 break;
         }
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

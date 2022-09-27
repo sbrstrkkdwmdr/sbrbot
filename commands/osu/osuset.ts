@@ -68,20 +68,19 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'osuset',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('osuset', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                [{
+        log.logFile('command',
+            log.optsLog(absoluteID, [
+                {
                     name: 'Name',
                     value: name
                 },
@@ -101,9 +100,11 @@ module.exports = {
                     name: 'Value',
                     value: value
                 },
-                ]
-            ), 'utf-8')
-
+            ]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         if (typeof name == 'undefined' || name == null) {
@@ -231,12 +232,14 @@ module.exports = {
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

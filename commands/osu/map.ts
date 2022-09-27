@@ -211,38 +211,39 @@ module.exports = {
                 .setEmoji('🔁'),
         )
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'map',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('map', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                [{
+        log.logFile('command',
+            log.optsLog(absoluteID, [
+                {
                     name: 'Map ID',
                     value: mapid
                 },
                 {
-                    name: 'Map mods',
+                    name: 'Map Mods',
                     value: mapmods
                 },
                 {
-                    name: 'Map title query',
+                    name: 'Map Title Query',
                     value: maptitleq
                 },
                 {
                     name: 'Detailed',
                     value: detailed
                 }
-                ]
-            ), 'utf-8')
-
+            ]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
 
@@ -366,17 +367,8 @@ module.exports = {
             try {
                 mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating)
             } catch (error) {
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - map not found
-params: ${maptitleq}
-${error}
-----------------------------------------------------`)
                 obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                     .catch();
-
                 return;
             }
             const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset }[] = [];
@@ -424,13 +416,6 @@ ${error}
                 if (!isNaN(mapid)) {
                     ifid = `Found map id = ${mapid}\n${maptitleq}`
                 }
-                fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                    `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - map not found
-params: ${mapid} | ${maptitleq}
-----------------------------------------------------`)
                 obj.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true })
                     .catch();
 
@@ -524,13 +509,6 @@ params: ${mapid} | ${maptitleq}
             osufunc.debug(ppComputed, 'command', 'map', obj.guildId, 'ppCalc');
 
         } catch (error) {
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error - pp calculation failed
-${error}
-----------------------------------------------------`)
             ppissue = 'Error - pp could not be calculated';
             const tstmods = mapmods.toUpperCase();
 
@@ -852,12 +830,14 @@ ${error}
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

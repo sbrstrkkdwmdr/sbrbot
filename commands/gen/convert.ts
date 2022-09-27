@@ -52,34 +52,35 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'convert',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('convert', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                [
-                    {
-                        name: 'from',
-                        value: cat1
-                    },
-                    {
-                        name: 'to',
-                        value: cat2
-                    },
-                    {
-                        name: 'number',
-                        value: `${num}`
-                    }
-                ]
-            ), 'utf-8')
+        log.logFile('command',
+            log.optsLog(absoluteID, [
+                {
+                    name: 'From',
+                    value: cat1
+                },
+                {
+                    name: 'To',
+                    value: cat2
+                },
+                {
+                    name: 'Number',
+                    value: `${num}`
+                }
+            ]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -800,12 +801,14 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

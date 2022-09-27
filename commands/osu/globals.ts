@@ -20,13 +20,7 @@ module.exports = {
         let user;
         let searchid;
         let page = 0;
-
-        let scoredetailed = false;
-        let sort: embedStuff.scoreSort = 'recent';
-        let reverse = false;
         let mode = 'osu';
-        let filteredMapper = null;
-        let filteredMods = null;
 
         switch (commandType) {
             case 'message': {
@@ -71,59 +65,35 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'firsts',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('firsts', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                [
-                    {
-                        name: 'User',
-                        value: user
-                    },
-                    {
-                        name: 'Search ID',
-                        value: searchid
-                    },
-                    {
-                        name: 'Page',
-                        value: page
-                    },
-                    {
-                        name: 'Sort',
-                        value: sort
-                    },
-                    {
-                        name: 'Reverse',
-                        value: reverse
-                    },
-                    {
-                        name: 'Mode',
-                        value: mode
-                    },
-                    {
-                        name: 'Filtered Mapper',
-                        value: filteredMapper
-                    },
-                    {
-                        name: 'Filtered Mods',
-                        value: filteredMods
-                    },
-                    {
-                        name: 'Detailed',
-                        value: scoredetailed
-                    }
-                ]
-            ), 'utf-8')
-
+        log.logFile('command',
+            log.optsLog(absoluteID, [
+                {
+                    name: 'User',
+                    value: user
+                },
+                {
+                    name: 'Search ID',
+                    value: searchid
+                },
+                {
+                    name: 'Mode',
+                    value: mode
+                },
+            ]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         if (page < 2 || typeof page != 'number' || isNaN(page)) {
@@ -248,12 +218,14 @@ module.exports = {
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

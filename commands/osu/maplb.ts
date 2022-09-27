@@ -114,20 +114,19 @@ module.exports = {
                     .setEmoji('➡'),
             );
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'maplb',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('maplb', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                [{
+        log.logFile('command',
+            log.optsLog(absoluteID, [
+                {
                     name: 'Map ID',
                     value: mapid
                 },
@@ -139,9 +138,11 @@ module.exports = {
                     name: 'Page',
                     value: page
                 }
-                ]
-            ), 'utf-8')
-
+            ]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         if (page < 2 || typeof page != 'number') {
@@ -472,12 +473,14 @@ module.exports = {
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

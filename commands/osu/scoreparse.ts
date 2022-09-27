@@ -59,20 +59,19 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'scoreparse',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('scoreparse', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                [{
+            log.logFile('command',
+            log.optsLog(absoluteID, [
+                {
                     name: 'Score Link',
                     value: `${scorelink}`
                 },
@@ -84,9 +83,11 @@ module.exports = {
                     name: 'Score ID',
                     value: `${scoreid}`
                 }
-                ]
-            ), 'utf-8')
-
+            ]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         let scoredata: osuApiTypes.Score;
@@ -246,7 +247,6 @@ module.exports = {
                 pp: 0.000
             }]
             ppissue = 'Error - pp calculator could not fetch beatmap'
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, 'ERROR CALCULATING PERFORMANCE: ' + error)
 
         }
 
@@ -388,12 +388,14 @@ ${pptxt}\n${ppissue}
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

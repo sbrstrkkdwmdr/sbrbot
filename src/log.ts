@@ -11,7 +11,7 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `;
 }
-function optsLog(absoluteID: number, options: { name: string, value: string }[]) {
+function optsLog(absoluteID: number, options: { name: string, value: string | number }[]) {
     const currentDate = new Date();
     let firstlog = `
 ----------------------------------------------------
@@ -39,14 +39,15 @@ Text: ${err}
     return errorstring;
 }
 
-function logFile(type: string, text: string) {
+function logFile(type: string, text: string, opts?: {
+    guildId: string | number
+}) {
     switch (type) {
-        case 'err': case 'error':
-            fs.appendFileSync('log.txt', text)
+        case 'err': case 'error': default:
+            fs.appendFileSync('logs/log.txt', text)
             break;
-        default:
-            fs.appendFileSync('log.txt', text)
-            break;
+        case 'command':
+            fs.appendFileSync(`logs/cmd/commands${opts.guildId}.log`, text, 'utf-8')
     }
 }
 

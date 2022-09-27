@@ -98,30 +98,31 @@ module.exports = {
                     .setEmoji('➡'),
             );
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'lb',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('lb', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                [{
+        log.logFile('command',
+            log.optsLog(absoluteID, [
+                {
                     name: 'Page',
-                    value: `${page}`
+                    value: page
                 },
                 {
                     name: 'Mode',
-                    value: `${mode}`
+                    value: mode
                 }
-                ]
-            ), 'utf-8')
-
+            ]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         if (page < 2 || typeof page != 'number') {
@@ -302,7 +303,6 @@ module.exports = {
         serverlb.setFooter({ text: mode + ` | Page 1/${Math.ceil(rarr.length / 10)}` });
         const endofcommand = new Date().getTime();
         const timeelapsed = endofcommand - currentDate.getTime();
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`, `\nCommand Latency (message command => lb server) - ${timeelapsed}ms\n`)
 
         if (page <= 1) {
             //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
@@ -360,12 +360,14 @@ module.exports = {
                 break;
         }
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            `
+        log.logFile('command',
+`
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+{ guildId: `${obj.guildId}` }
+)
     }
 }

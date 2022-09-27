@@ -43,28 +43,31 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'roll',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('roll', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                [{
+        log.logFile('command',
+            log.optsLog(absoluteID, [
+                {
                     name: 'Maximum number',
-                    value: `${maxNum}`
+                    value: maxNum
                 },
                 {
                     name: 'Minimum number',
-                    value: `${minNum}`
-                }]
-            ), 'utf-8')
+                    value: minNum
+                }
+            ]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
         if (isNaN(maxNum)) {
@@ -120,12 +123,14 @@ module.exports = {
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

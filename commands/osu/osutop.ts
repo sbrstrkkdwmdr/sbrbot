@@ -162,17 +162,17 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'osutop',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('osutop', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             log.optsLog(
                 absoluteID,
                 [{
@@ -186,10 +186,6 @@ module.exports = {
                 {
                     name: 'Mode',
                     value: mode
-                },
-                {
-                    name: 'Detailed',
-                    value: detailed
                 },
                 {
                     name: 'Sort',
@@ -211,9 +207,8 @@ module.exports = {
                     name: 'Mods',
                     value: mods
                 }
-
                 ]
-            ), 'utf-8')
+            ))
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -349,13 +344,6 @@ module.exports = {
         try {
             osutopdata[0].user.username
         } catch (error) {
-            console.log(error)
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-            ----------------------------------------------------
-            cmd ID: ${absoluteID}
-            Error - no scores found
-            ----------------------------------------------------`)
             if (commandType != 'button' && commandType != 'link') {
                 obj.reply({ content: 'Error - could not fetch user\'s top scores', allowedMentions: { repliedUser: false } })
                     .catch();
@@ -544,12 +532,14 @@ module.exports = {
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

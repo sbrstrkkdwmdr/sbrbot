@@ -68,37 +68,39 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'remind',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('COMMANDNAME', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                [{
-                    name: 'time',
+        log.logFile('command',
+            log.optsLog(absoluteID, [
+                {
+                    name: 'Time',
                     value: time
                 },
                 {
-                    name: 'reminder',
+                    name: 'Reminder',
                     value: remindertxt
                 },
                 {
-                    name: 'sendinchannel',
+                    name: 'SendInChannel',
                     value: sendtochannel
                 },
                 {
-                    name: 'user',
+                    name: 'User',
                     value: user.id
                 }
-                ]
-            ), 'utf-8')
+            ]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -165,12 +167,14 @@ module.exports = {
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

@@ -44,19 +44,20 @@ module.exports = {
         }
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'track_add',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('track add', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
         //OPTIONS==============================================================================================================================================================================================
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                []
-            ), 'utf-8')
+        log.logFile('command',
+            log.optsLog(absoluteID, []),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -86,7 +87,7 @@ module.exports = {
         //     return;
         // }
 
-        if(`${guildSettings.dataValues?.trackChannel ?? 'null'}` != `${obj.channelId}`) {
+        if (`${guildSettings.dataValues?.trackChannel ?? 'null'}` != `${obj.channelId}`) {
             obj.reply({
                 content: 'You can only use this command in the tracking channel',
                 embeds: [],
@@ -145,13 +146,15 @@ module.exports = {
             }
                 break;
         }
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     },
 
     //==============================================================================================================================================================================================
@@ -185,19 +188,20 @@ ID: ${absoluteID}
         }
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'track_remove',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('track remove', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
         //OPTIONS==============================================================================================================================================================================================
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                []
-            ), 'utf-8')
+        log.logFile('command',
+            log.optsLog(absoluteID, []),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -275,13 +279,15 @@ ID: ${absoluteID}
             }
                 break;
         }
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     },
     async setChannel(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings) {
         let commanduser;
@@ -314,19 +320,20 @@ ID: ${absoluteID}
         }
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'track_remove',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('set channel', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
         //OPTIONS==============================================================================================================================================================================================
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                []
-            ), 'utf-8')
+        log.logFile('command',
+            log.optsLog(absoluteID, []),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -411,13 +418,15 @@ ID: ${absoluteID}
             }
                 break;
         }
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     },
     async userList(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings) {
 
@@ -476,19 +485,20 @@ ID: ${absoluteID}
                     .setEmoji('🔁'),
             );
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'COMMANDNAME',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('track list', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
         //OPTIONS==============================================================================================================================================================================================
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                []
-            ), 'utf-8')
+        log.logFile('command',
+            log.optsLog(absoluteID, []),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -563,13 +573,15 @@ ID: ${absoluteID}
             }
                 break;
         }
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
 
     }
 }

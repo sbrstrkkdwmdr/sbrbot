@@ -97,21 +97,55 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'simulate',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('simulate', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                []
-            ), 'utf-8')
+        log.logFile('command',
+            log.optsLog(absoluteID, [
+                {
+                    name: 'Map ID',
+                    value: mapid
+                },
+                {
+                    name: 'Mods',
+                    value: mods
+                },
+                {
+                    name: 'Accuracy',
+                    value: acc
+                },
+                {
+                    name: 'Combo',
+                    value: combo
+                },
+                {
+                    name: 'n300',
+                    value: n300
+                },
+                {
+                    name: 'n100',
+                    value: n100
+                },
+                {
+                    name: 'n50',
+                    value: n50
+                },
+                {
+                    name: 'Misses',
+                    value: nMiss
+                }
+            ]),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -277,12 +311,14 @@ ${emojis.mapobjs.total_length}${calc.secondsToTime(mapdata.total_length)}
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

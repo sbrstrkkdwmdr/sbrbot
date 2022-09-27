@@ -33,28 +33,29 @@ module.exports = {
         //==============================================================================================================================================================================================
 
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setLabel('Info')
-                .setURL('https://sbrstrkkdwmdr.github.io/sbrbot/')
-                .setStyle(Discord.ButtonStyle.Link)
-        );
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setLabel('Info')
+                    .setURL('https://sbrstrkkdwmdr.github.io/sbrbot/')
+                    .setStyle(Discord.ButtonStyle.Link)
+            );
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'info',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('info', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                []
-            ), 'utf-8')
+        log.logFile('command',
+            log.optsLog(absoluteID, []),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -115,12 +116,14 @@ Coded in: TypeScript
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

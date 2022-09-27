@@ -148,17 +148,17 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'nochokes',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('nochokes', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             log.optsLog(
                 absoluteID,
                 [{
@@ -193,9 +193,8 @@ module.exports = {
                     name: 'Mods',
                     value: mods
                 }
-
                 ]
-            ), 'utf-8')
+            ))
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -305,12 +304,6 @@ module.exports = {
             nochokedata[0].user.username
         } catch (error) {
             console.log(error)
-            fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-                `
-            ----------------------------------------------------
-            cmd ID: ${absoluteID}
-            Error - no scores found
-            ----------------------------------------------------`)
             return obj.reply({ content: 'Error - could not fetch user\'s top scores', allowedMentions: { repliedUser: false } })
                 .catch();
 
@@ -449,12 +442,14 @@ module.exports = {
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }
