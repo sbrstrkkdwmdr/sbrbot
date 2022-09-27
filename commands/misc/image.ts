@@ -68,7 +68,7 @@ module.exports = {
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         const res = await fetch(
-            `https://customsearch.googleapis.com/customsearch/v1?q=${query}&cx=${config.google.cx}&key=${config.google.apiKey}&searchType=image`
+            `https://customsearch.googleapis.com/customsearch/v1?q=${query}&cx=${config.google.engineId}&key=${config.google.apiKey}&searchType=image`
         )
 
 

@@ -13,5 +13,9 @@
         "src/**/*",
         "*",
         "test/*"
+    ],
+    "exclude": [
+        "setup.ts",
+        "node_modules"
     ]
 }

@@ -1,8 +1,8 @@
 https://sbrstrkkdwmdr.github.io/sbrbot/
 
-### install/setup
+## install/setup
 
-install rust [here](https://www.rust-lang.org/tools/install)
+first, install rust [here](https://www.rust-lang.org/tools/install) 
 
 install all dependencies with `npm i`
 
@@ -12,32 +12,36 @@ create a `./config/` folder and put `config.json` inside it
 
 ```json
 {
-  "token": "discord bot token",
-  "prefix": "discord bot command prefix",
-  "osuClientID": "osu api v2 client id https://osu.ppy.sh/home/account/edit#oauth",
-  "osuClientSecret": "osu api v2 client secret https://osu.ppy.sh/home/account/edit#oauth",
-  "osuApiKey": "osu api v1 key https://osu.ppy.sh/p/api",
-  "ownerusers": ["user id 1", "user id 2"],
-  "fileblockedusers": ["just leave this blank"],
+  "token": "create app here => https://discord.com/developers/applications",
+  "prefix": "sbr-",
+  "osuClientID": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
+  "osuClientSecret": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
+  "osuApiKey": "get api key here => https://osu.ppy.sh/p/api",
+  "ownerusers": ["user id"],
   "google": {
-    "apiKey": "wip",
-    "cx": "wip"
+    "apiKey": "tutorial below",
+    "cx": "e"
   },
-  "youtube": {
-    "apiKey": "wip"
-  },
-  "twitch": {
-    "clientID": "wip",
-    "clientSecret": "wip"
-  },
-  "useScreenshotParse": false, //uses a lot of memory/cpu
+  "useScreenshotParse": false,
   "LogApiCalls": false
 }
 ```
 
 to run the bot just use `ts-node main.ts`
 
-### credits n stuff
+
+## image search setup
+go to https://cse.google.com/cse/all or https://programmablesearchengine.google.com/controlpanel/all </br>
+press "Add"</br>
+in "what to search" enter "www.google.com/imghp"</br>
+in search settings, set enable "image search" and "search entire web"</br>
+press customise </br>
+copy the search engine id and paste it in the google.engineId field</br>
+scroll down and press "Get Started" on "Custom Search JSON API" (limited)</br>
+press "Get a Key" and create a new project </br>
+copy the key and paste it into the google.apiKey field </br>
+
+## credits n stuff
 
 Discord API wrapper: [Discord.js](discord.js.org/)</br>
 Performance/SR calculations: [rosu](https://github.com/MaxOhn/rosu-pp-js)</br>

@@ -1,22 +1,13 @@
 type config = {
     token: string,
     prefix: string,
-    osuClientID: string | number,
+    osuClientID: string,
     osuClientSecret: string,
     osuApiKey: string,
-    testGuildID: string,
     ownerusers: string[],
-    fileblockedusers: string[],
     google: {
         apiKey: string,
-        cx: string
-    },
-    youtube: {
-        apiKey: string
-    },
-    twitch: {
-        clientID: string,
-        clientSecret: string
+        engineId: string
     },
     useScreenshotParse: boolean,
     LogApiCalls: boolean,
