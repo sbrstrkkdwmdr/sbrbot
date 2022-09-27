@@ -128,7 +128,9 @@ module.exports = {
                 mapmods =
                     obj.content.includes('+') ?
                         messagenohttp.split('+')[1] : 'NM';
-                if (
+                if (args[0] && args[0].startsWith('query')) {
+                    maptitleq = args[1]
+                } else if (
                     (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmapsets/') && messagenohttp.includes('#'))) ||
                     (!messagenohttp.includes('/s/') && (messagenohttp.includes('/b/'))) ||
                     (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmaps/')))

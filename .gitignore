@@ -19,3 +19,4 @@ debug.json
 trackingFiles/
 log.txt
 cache/
+*.traineddata

@@ -13,7 +13,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         const absoluteID = currentDate.getTime();
         const interaction = null
         const button = null
-        const args = null
+        const args = []
         const obj = message
         let parse = null
         const commandType = 'link'
@@ -90,31 +90,17 @@ progress: ${m.progress ? m.progress : 'none'}
                                 const txttitle = text.split('\n')[0]
                                 const txtcreator = text.split('Beatmap by ')[1].split('\n')[0]
 
-                                parse = `${txttitle}//${txtcreator}`
+                                parse = `${txttitle} ${txtcreator}`
 
                             }
                             if (text.includes('Mapped by')) {
                                 const txttitle = text.split('\n')[0]
                                 const txtcreator = text.split('Mapped by ')[1].split('\n')[0]
 
-                                parse = `${txttitle}//${txtcreator}`
+                                parse = `${txttitle} ${txtcreator}`
                             }
                         })();
                     }
-                } if (message.content.includes('.png') || message.content.includes('.jpg')) {
-                    imgParseCooldown = true
-                    await (async () => {
-                        await worker.load();
-                        await worker.loadLanguage('eng');
-                        await worker.initialize('eng');
-                        const { data: { text } } = await worker.recognize(message.content);
-                        if (text.includes('Beatmap by')) {
-                            const txttitle = text.split('\n')[0]
-                            const txtcreator = text.split('Beatmap by ')[1].split('\n')[0]
-
-                            parse = `${txttitle}//${txtcreator}`
-                        }
-                    })();
                 }
             }
             if (imgParseCooldown == true) {
@@ -122,6 +108,10 @@ progress: ${m.progress ? m.progress : 'none'}
                     imgParseCooldown = false
                 }, 5000);
             }
+        }
+
+        if(parse){
+            args.push('query', parse)
         }
 
         const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
