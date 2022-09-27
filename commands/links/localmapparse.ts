@@ -36,21 +36,22 @@ module.exports = {
 
         //==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.commandLog(
-                'localmapparse',
-                commandType,
-                absoluteID,
-                commanduser
-            ), 'utf-8')
+        log.logFile(
+            'command',
+            log.commandLog('localmapparse', commandType, absoluteID, commanduser
+            ),
+            {
+                guildId: `${obj.guildId}`
+            })
 
         //OPTIONS==============================================================================================================================================================================================
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
-            log.optsLog(
-                absoluteID,
-                []
-            ), 'utf-8')
+        log.logFile('command',
+            log.optsLog(absoluteID, []),
+            {
+                guildId: `${obj.guildId}`
+            }
+        )
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -72,13 +73,6 @@ module.exports = {
             map.split('[HitObjects]')[1].split('\n')
         } catch (error) {
             errtxt += '\nError - invalid section: [HitObjects]'
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
         }
         let metadata;
         try {
@@ -86,13 +80,6 @@ Error: ${error}
         } catch (error) {
             errtxt += '\nError - invalid section: [Metadata]'
             metadata = errmap.split('[Metadata]')[1].split('[')[0]
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
         }
         let ppcalcing;
         try {
@@ -100,14 +87,6 @@ Error: ${error}
         } catch (error) {
             ppcalcing = await osufunc.mapcalclocal(mods, 'osu', './files/errmap.osu', 0)
             errtxt += '\nError - pp calculations failed'
-
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
         }
 
         let general;
@@ -120,14 +99,6 @@ Error: ${error}
 
             general = errmap.split('[General]')[1].split('[')[0]
             diff = errmap.split('[Difficulty]')[1].split('[')[0]
-
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
         }
         let title;
         let artist;
@@ -162,15 +133,6 @@ Error: ${error}
                 `${errmap.split('Artist:')[1].split('\n')[0]} (${errmap.split('ArtistUnicode:')[1].split('\n')[0]})`
             creator = errmap.split('Creator:')[1].split('\n')[0]
             version = errmap.split('Version:')[1].split('\n')[0]
-
-
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
         }
         const ftstr = `${artist} - ${title} [${version}] //${creator} ${mods ? `+${mods}` : ''}`
         let hitobjs;
@@ -180,14 +142,6 @@ Error: ${error}
             errtxt += '\nError - invalid section: [HitObjects]'
 
             hitobjs = errmap.split('[HitObjects]')[1].split('\n')
-
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
         }
         let countcircle = 0
         let countslider = 0
@@ -217,14 +171,6 @@ Error: ${error}
                     countcircle++
                 }
             }
-
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
         }
 
         let firsttimep;
@@ -237,14 +183,6 @@ Error: ${error}
 
             firsttimep = errmap.split('[HitObjects]')[1].split('\n')[1].split(',')[2]
             fintimep = errmap.split('[HitObjects]')[1].split('\n')[errmap.split('[HitObjects]').length - 2].split(',')[2] //inaccurate cos of sliders n stuff                                                                            
-
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
         }
         const mslen = parseInt(fintimep) - parseInt(firsttimep)
 
@@ -267,14 +205,6 @@ Error: ${error}
             errtxt += '\nError - invalid section: [TimingPoints]'
 
             timing = errmap.split('[TimingPoints]')[1].split('[')[0]
-
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
         }
         function pointToBPM(point: string) {
             const arr = point.split(',')
@@ -326,13 +256,6 @@ Error: ${error}
 
             strains = await osufunc.straincalclocal('./files/errmap.osu', mods, 0, osumodcalc.ModeIntToName(parseInt(gm)))
 
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
         }
 
         osufunc.debug(strains, 'fileparse', 'osu', obj.guildId, 'strains');
@@ -344,13 +267,6 @@ Error: ${error}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
         }
         let osuEmbed;
         try {
@@ -390,13 +306,6 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })
-            fs.appendFileSync(`logs/cmd/link${obj.guildId}.log`,
-                `
-----------------------------------------------------
-cmd ID: ${absoluteID}
-Error: ${error}
-----------------------------------------------------
-`, 'utf-8')
         }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -455,12 +364,14 @@ Error: ${error}
 
 
 
-        fs.appendFileSync(`logs/cmd/commands${obj.guildId}.log`,
+        log.logFile('command',
             `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`,
+            { guildId: `${obj.guildId}` }
+        )
     }
 }
