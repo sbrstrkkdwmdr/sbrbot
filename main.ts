@@ -187,6 +187,10 @@ Current Client ID: ${client.user.id}
     exEvents(userdata, client, config, oncooldown, guildSettings);
     osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);
 
+    if (!fs.existsSync(`./debug`)) {
+        console.log(`Creating ./debug folder`);
+        fs.mkdirSync(`./debug`);
+    }
     if (!fs.existsSync(`./logs`)) {
         console.log(`Creating ./logs folder`);
         fs.mkdirSync(`./logs`);
