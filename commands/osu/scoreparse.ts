@@ -89,7 +89,18 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        const scoredata: osuApiTypes.Score = await osufunc.apiget('score', `${scoreid}`, `${scoremode}`)
+        let scoredata: osuApiTypes.Score;
+
+        if (func.findFile(scoreid, 'scoredata') &&
+            !('error' in func.findFile(scoreid, 'scoredata')) &&
+            button != 'Refresh'
+        ) {
+            scoredata = func.findFile(scoreid, 'scoredata')
+        } else {
+            scoredata = await osufunc.apiget('score', `${scoreid}`, `${scoremode}`)
+        }
+        func.storeFile(scoredata, scoreid, 'scoredata')
+
         if (scoredata?.error) {
             if (commandType != 'button' && commandType != 'link') {
                 obj.reply({
@@ -124,8 +135,15 @@ module.exports = {
                 .catch();
             return;
         }
-        const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${scoredata.beatmap.id}`)
-        fs.appendFileSync('debug/command-scoreparse=map.json', JSON.stringify(mapdata, null, 2));
+        let mapdata: osuApiTypes.Beatmap;
+        if (func.findFile(scoredata.beatmap.id, 'mapdata') &&
+            !('error' in func.findFile(scoredata.beatmap.id, 'mapdata')) &&
+            button != 'Refresh') {
+            mapdata = func.findFile(scoredata.beatmap.id, 'mapdata')
+        } else {
+            mapdata = await osufunc.apiget('map_get', `${scoredata.beatmap.id}`)
+        }
+        func.storeFile(mapdata, scoredata.beatmap.id, 'mapdata')
 
         if (mapdata?.error) {
             if (commandType != 'button' && commandType != 'link') {
@@ -260,7 +278,17 @@ module.exports = {
             }
         }
 
-        const osudata = await osufunc.apiget('user', `${scoredata.user.username}`);
+        let osudata: osuApiTypes.User;
+        if (func.findFile(scoredata.user.username, 'osudata') &&
+            !('error' in func.findFile(scoredata.user.username, 'osudata')) &&
+            button != 'Refresh'
+        ) {
+            osudata = func.findFile(scoredata.user.username, 'osudata')
+        } else {
+            osudata = await osufunc.apiget('user', `${await scoredata.user.username}`, `${mode}`)
+        }
+        func.storeFile(osudata, osudata.id, 'osudata')
+        func.storeFile(osudata, scoredata.user.username, 'osudata')
         osufunc.debug(osudata, 'command', 'scoreparse', obj.guildId, 'osuData')
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {

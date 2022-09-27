@@ -162,16 +162,15 @@ module.exports = {
         }
 
         let mapdata: osuApiTypes.Beatmap;
-        if (func.findFile(absoluteID, 'mapdata') &&
-            commandType == 'button' &&
-            !('error' in func.findFile(absoluteID, 'mapdata')) &&
+        if (func.findFile(mapid, 'mapdata') &&
+            !('error' in func.findFile(mapid, 'mapdata')) &&
             button != 'Refresh'
         ) {
-            mapdata = func.findFile(absoluteID, 'mapdata')
+            mapdata = func.findFile(mapid, 'mapdata')
         } else {
             mapdata = await osufunc.apiget('map', `${mapid}`)
         }
-        func.storeFile(mapdata, absoluteID, 'mapdata')
+        func.storeFile(mapdata, mapid, 'mapdata')
         osufunc.debug(mapdata, 'command', 'maplb', obj.guildId, 'mapData');
 
         if (mapdata?.error) {

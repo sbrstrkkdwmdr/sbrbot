@@ -187,15 +187,6 @@ Current Client ID: ${client.user.id}
     exEvents(userdata, client, config, oncooldown, guildSettings);
     osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);
 
-
-    if (!fs.existsSync(`./debug`)) {
-        console.log(`Creating ./debug folder`);
-        fs.mkdirSync(`./debug`);
-    }
-    if (!fs.existsSync(`./previous`)) {
-        console.log(`Creating previous IDs folder (./previous)`);
-        fs.mkdirSync(`./previous`);
-    }
     if (!fs.existsSync(`./logs`)) {
         console.log(`Creating ./logs folder`);
         fs.mkdirSync(`./logs`);
@@ -216,9 +207,21 @@ Current Client ID: ${client.user.id}
         console.log(`Creating ./trackingFiles folder`);
         fs.mkdirSync(`./trackingFiles`);
     }
-    if(!fs.existsSync(`./commandData`)){
-        console.log('Creating ./commandData folder');
-        fs.mkdirSync('./commandData');
+    if (!fs.existsSync(`./cache`)) {
+        console.log('Creating ./cache folder');
+        fs.mkdirSync('./cache');
+    }
+    if (!fs.existsSync(`./cache/commandData`)) {
+        console.log('Creating ./cache/commandData folder');
+        fs.mkdirSync('./cache/commandData');
+    }
+    if (!fs.existsSync(`./cache/debug`)) {
+        console.log(`Creating ./cache/debug folder`);
+        fs.mkdirSync(`./cache/debug`);
+    }
+    if (!fs.existsSync(`./cache/previous`)) {
+        console.log(`Creating previous IDs folder (./previous)`);
+        fs.mkdirSync(`./cache/previous`);
     }
     (async () => {
         await client.guilds.cache.forEach(guild => {

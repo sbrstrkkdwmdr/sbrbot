@@ -18,7 +18,7 @@ module.exports = {
         let country = 'ALL';
         let mode = 'osu';
         let type: osuApiTypes.RankingType = 'performance';
-        let page = 0;
+        let page = 0;   
         let spotlight;
 
         switch (commandType) {

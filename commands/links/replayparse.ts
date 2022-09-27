@@ -5,7 +5,8 @@ import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
-import replayparse = require('osureplayparser')
+import replayparse = require('osureplayparser');
+import func = require('../../src/other');
 
 module.exports = {
     name: 'replayparse',
@@ -65,7 +66,17 @@ module.exports = {
         }
         osufunc.debug(replay, 'fileparse', 'replay', obj.guildId, 'replayData');
 
-        const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map_get_md5', replay.beatmapMD5)
+        let mapdata: osuApiTypes.Beatmap;
+        if (func.findFile(replay.beatmapMD5, `mapdata`) &&
+            commandType == 'button' &&
+            !('error' in func.findFile(replay.beatmapMD5, `mapdata`)) &&
+            button != 'Refresh') {
+            mapdata = func.findFile(replay.beatmapMD5, `mapdata`)
+        } else {
+            mapdata = await osufunc.apiget('map_get_md5', replay.beatmapMD5)
+        }
+        func.storeFile(mapdata, replay.beatmapMD5, 'mapdata')
+
         osufunc.debug(mapdata, 'fileparse', 'replay', obj.guildId, 'mapData');
         if (mapdata?.id) {
             typeof mapdata.id == 'number' ? osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`) : ''

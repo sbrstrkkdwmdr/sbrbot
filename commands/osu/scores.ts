@@ -267,15 +267,16 @@ module.exports = {
 
         let osudata: osuApiTypes.User;
 
-        if (func.findFile(absoluteID, 'osudata') &&
-            commandType == 'button' &&
-            !('error' in func.findFile(absoluteID, 'osudata')) &&
+        if (func.findFile(user, 'osudata') &&
+            !('error' in func.findFile(user, 'osudata')) &&
             button != 'Refresh'
         ) {
-            osudata = func.findFile(absoluteID, 'osudata')
+            osudata = func.findFile(user, 'osudata')
         } else {
             osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
         }
+        func.storeFile(osudata, osudata.id, 'osudata')
+        func.storeFile(osudata, user, 'osudata')
 
         osufunc.debug(osudata, 'command', 'scores', obj.guildId, 'osuData');
 
@@ -289,8 +290,6 @@ module.exports = {
             }
             return;
         }
-
-        func.storeFile(osudata, absoluteID, 'osudata')
 
         if (commandType == 'interaction') {
             obj.reply({
@@ -374,17 +373,16 @@ module.exports = {
         osufunc.debug(scoredata, 'command', 'scores', obj.guildId, 'scoreData');
 
         let mapdata: osuApiTypes.Beatmap;
-        if (func.findFile(absoluteID, 'mapdata') &&
-            commandType == 'button' &&
-            !('error' in func.findFile(absoluteID, 'mapdata')) &&
+        if (func.findFile(mapid, 'mapdata') &&
+            !('error' in func.findFile(mapid, 'mapdata')) &&
             button != 'Refresh'
         ) {
-            mapdata = func.findFile(absoluteID, 'mapdata')
+            mapdata = func.findFile(mapid, 'mapdata')
         } else {
             mapdata = await osufunc.apiget('map', `${mapid}`)
         }
         osufunc.debug(mapdata, 'command', 'scores', obj.guildId, 'mapData');
-        func.storeFile(mapdata, absoluteID, 'mapdata')
+        func.storeFile(mapdata, mapid, 'mapdata')
         if (mapdata?.error) {
             if (commandType != 'button' && commandType != 'link') {
                 if (commandType == 'interaction') {

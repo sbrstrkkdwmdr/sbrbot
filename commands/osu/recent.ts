@@ -222,15 +222,16 @@ module.exports = {
             );
         let osudata: osuApiTypes.User;
 
-        if (func.findFile(absoluteID, 'osudata') &&
-            commandType == 'button' &&
-            !('error' in func.findFile(absoluteID, 'osudata')) &&
+        if (func.findFile(user, 'osudata') &&
+            !('error' in func.findFile(user, 'osudata')) &&
             button != 'Refresh'
         ) {
-            osudata = func.findFile(absoluteID, 'osudata')
+            osudata = func.findFile(user, 'osudata')
         } else {
             osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
         }
+        func.storeFile(osudata, osudata.id, 'osudata')
+        func.storeFile(osudata, user, 'osudata')
         osufunc.debug(osudata, 'command', 'recent', obj.guildId, 'osuData');
 
         if (osudata?.error) {
@@ -243,8 +244,6 @@ module.exports = {
             }
             return;
         }
-
-        func.storeFile(osudata, absoluteID, 'osudata')
 
         if (!osudata.id) {
             return obj.channel.send(
@@ -328,17 +327,16 @@ module.exports = {
             const curbms = curscore.beatmapset
 
             let mapdata: osuApiTypes.Beatmap;
-            if (func.findFile(absoluteID, `mapdata${curbm.id}`) &&
-                commandType == 'button' &&
-                !('error' in func.findFile(absoluteID, `mapdata${curbm.id}`)) &&
+            if (func.findFile(curbm.id, 'mapdata') &&
+                !('error' in func.findFile(curbm.id, 'mapdata')) &&
                 button != 'Refresh'
             ) {
-                mapdata = func.findFile(absoluteID, `mapdata${curbm.id}`)
+                mapdata = func.findFile(curbm.id, 'mapdata')
             } else {
                 mapdata = await osufunc.apiget('map', `${curbm.id}`)
             }
             osufunc.debug(mapdata, 'command', 'recent', obj.guildId, 'mapData');
-            func.storeFile(mapdata, absoluteID, `mapdata${curbm.id}`)
+            func.storeFile(mapdata, curbm.id, 'mapdata')
             if (mapdata?.error) {
                 if (commandType != 'button' && commandType != 'link') {
                     if (commandType == 'interaction') {

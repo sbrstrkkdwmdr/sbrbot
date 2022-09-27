@@ -55,13 +55,45 @@ export function flagImgUrl(string: string, ver?: 'osu') {
     return flagUrl;
 }
 
-export function storeFile(data: {}, commandId: string | number, name: string) {
-    fs.writeFileSync(`${truepath}\\commandData\\${commandId}-${name}.json`, JSON.stringify(data, null, 2))
-}
-export function findFile(commandId: string | number, name: string) {
-    if (fs.existsSync(`.\\commandData\\${commandId}-${name}.json`)) {
-        return JSON.parse(fs.readFileSync(`${truepath}\\commandData\\${commandId}-${name}.json`, 'utf-8'));
+const cacheById = [
+    'bmsdata',
+    'mapdata',
+    'osudata',
+    'scoredata',
+]
+
+/**
+ * 
+ * @param data
+ * @param id command id. if storing a map use the map id/md5 or user id if storing a user
+ * @param name 
+ */
+export function storeFile(data: {}, id: string | number, name: string) {
+    if (cacheById.some(x => name.includes(x))) {
+        fs.writeFileSync(`${truepath}\\cache\\commandData\\${name}${id}.json`, JSON.stringify(data, null, 2))
     } else {
-        return false;
+        fs.writeFileSync(`${truepath}\\cache\\commandData\\${id}-${name}.json`, JSON.stringify(data, null, 2))
+    }
+}
+
+/**
+ * 
+ * @param id command id. If fetching a map use the map id/md5 or user id if fetching a user
+ * @param name 
+ * @returns 
+ */
+export function findFile(id: string | number, name: string) {
+    if (cacheById.some(x => name.includes(x))) {
+        if (fs.existsSync(`${truepath}\\cache\\commandData\\${name}${id}.json`)) {
+            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name}${id}.json`, 'utf-8'));
+        } else {
+            return false;
+        }
+    } else {
+        if (fs.existsSync(`${truepath}\\cache\\commandData\\${id}-${name}.json`)) {
+            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${id}-${name}.json`, 'utf-8'));
+        } else {
+            return false;
+        }
     }
 }

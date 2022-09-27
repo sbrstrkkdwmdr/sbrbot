@@ -190,17 +190,33 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) 
         })
     }, 10 * 60 * 1000);
 
-    //when a new file is detected in './commandData/', delete it after 15 minutes
+    const cacheById = [
+        'bmsdata',
+        'mapdata',
+        'osudata',
+        'scoredata',
+    ]
+    
+    //command-specific files are deleted after 15 minutes
+    //maps and users are stored for longer 
+
     setInterval(() => {
-        const files = fs.readdirSync('./commandData')
+        const files = fs.readdirSync('./cache/commandData')
         for (const file of files) {
-            fs.stat('./commandData/' + file, (err, stat) => {
+            fs.stat('./cache/commandData/' + file, (err, stat) => {
                 if (err) {
                     return;
                 } else {
-                    if ((new Date().getTime() - stat.birthtimeMs) > (1000 * 60 * 15)) {
-                        fs.unlinkSync('./commandData/' + file)
-                        fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                    if (cacheById.some(x => file.startsWith(x))) {
+                        if ((new Date().getTime() - stat.birthtimeMs) > (1000 * 60 * 60)) {
+                            fs.unlinkSync('./cache/commandData/' + file)
+                            fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                        }
+                    } else {
+                        if ((new Date().getTime() - stat.birthtimeMs) > (1000 * 60 * 15)) {
+                            fs.unlinkSync('./cache/commandData/' + file)
+                            fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                        }
                     }
                 }
             })

@@ -908,7 +908,7 @@ export async function searchUser(searchid: string, userdata: any, findMode: bool
 
 export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) {
     try {
-        const init = fs.readFileSync(`previous/${type}${serverId}.json`)
+        const init = fs.readFileSync(`cache/previous/${type}${serverId}.json`)
         return `${init}`
     } catch (error) {
         let data;
@@ -923,28 +923,28 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
                 data = JSON.stringify(require('template/score.json'), null, 2)
                 break;
         }
-        fs.writeFileSync(`previous/${type}${serverId}.json`, data);
+        fs.writeFileSync(`cache/previous/${type}${serverId}.json`, data);
         return data;
     }
 }
 export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string, data: string) {
     if (type == 'score') {
-        fs.writeFileSync(`previous/${type}${serverId}.json`, JSON.stringify(data, null, 2));
+        fs.writeFileSync(`cache/previous/${type}${serverId}.json`, JSON.stringify(data, null, 2));
     } else {
-        fs.writeFileSync(`previous/${type}${serverId}.json`, data);
+        fs.writeFileSync(`cache/previous/${type}${serverId}.json`, data);
     }
     return;
 }
 
 export function debug(data: any, type: string, name: string, serverId: string | number, params: string) {
     const pars = params.replaceAll(',', '=');
-    if (!fs.existsSync(`debug/${type}`)) {
-        fs.mkdirSync(`debug/${type}`)
+    if (!fs.existsSync(`cache/debug/${type}`)) {
+        fs.mkdirSync(`cache/debug/${type}`)
     }
-    if (!fs.existsSync(`debug/${type}/${name}/`)) {
-        fs.mkdirSync(`debug/${type}/${name}`)
+    if (!fs.existsSync(`cache/debug/${type}/${name}/`)) {
+        fs.mkdirSync(`cache/debug/${type}/${name}`)
     }
-    fs.writeFileSync(`debug/${type}/${name}/${pars}_${serverId}.json`, JSON.stringify(data, null, 2))
+    fs.writeFileSync(`cache/debug/${type}/${name}/${pars}_${serverId}.json`, JSON.stringify(data, null, 2))
     return;
 }
 

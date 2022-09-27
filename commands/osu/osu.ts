@@ -161,15 +161,16 @@ module.exports = {
         }
         let osudata: osuApiTypes.User;
 
-        if (func.findFile(absoluteID, 'osudata') &&
-            commandType == 'button' &&
-            !('error' in func.findFile(absoluteID, 'osudata')) &&
+        if (func.findFile(user, 'osudata') &&
+            !('error' in func.findFile(user, 'osudata')) &&
             button != 'Refresh'
         ) {
-            osudata = func.findFile(absoluteID, 'osudata')
+            osudata = func.findFile(user, 'osudata')
         } else {
             osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
         }
+        func.storeFile(osudata, osudata.id, 'osudata')
+        func.storeFile(osudata, user, 'osudata')
 
         osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
 
@@ -202,8 +203,6 @@ module.exports = {
                 console.log(error)
             }
         }
-
-        func.storeFile(osudata, absoluteID, 'osudata')
 
         const osustats = osudata.statistics;
         const grades = osustats.grade_counts;
