@@ -7,6 +7,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 import replayparse = require('osureplayparser');
 import func = require('../../src/other');
+import calc = require('../../src/calc');
 
 module.exports = {
     name: 'replayparse',
@@ -68,7 +69,7 @@ module.exports = {
 
         let mapdata: osuApiTypes.Beatmap;
         if (func.findFile(replay.beatmapMD5, `mapdata`) &&
-            commandType == 'button' &&
+
             !('error' in func.findFile(replay.beatmapMD5, `mapdata`)) &&
             button != 'Refresh') {
             mapdata = func.findFile(replay.beatmapMD5, `mapdata`)
@@ -81,7 +82,17 @@ module.exports = {
         if (mapdata?.id) {
             typeof mapdata.id == 'number' ? osufunc.writePreviousId('map', obj.guildId, `${mapdata.id}`) : ''
         }
-        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${replay.playerName}`)
+        let osudata: osuApiTypes.User;
+        if (func.findFile(replay.playerName, 'osudata') &&
+            !('error' in func.findFile(replay.playerName, 'osudata')) &&
+            button != 'Refresh'
+        ) {
+            osudata = func.findFile(replay.playerName, 'osudata')
+        } else {
+            osudata = await osufunc.apiget('user', `${await replay.playerName}`)
+        }
+        func.storeFile(osudata, osudata.id, 'osudata')
+        func.storeFile(osudata, replay.playerName, 'osudata')
         osufunc.debug(osudata, 'fileparse', 'replay', obj.guildId, 'osuData');
         let userid: string | number;
         try {
@@ -196,6 +207,12 @@ module.exports = {
 
         dataLabel.push('end')
 
+        const passper = Math.abs(totalhits / (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners)) * 100
+
+        const isfail = failed ?
+            `${passper.toFixed(2)}% passed (${calc.secondsToTime(passper / 100 * mapdata.hit_length)}/${calc.secondsToTime(mapdata.hit_length)})`
+            : ''
+
         const chart = await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay')
         const Embed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.score.dec)
@@ -209,6 +226,7 @@ ${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_
 \`${hitlist}\`
 ${xpp[0].pp.toFixed(2)}pp | ${xpp[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC 
 ${ppissue}
+${isfail}
 `
             )
             .setImage(`${chart}`);
