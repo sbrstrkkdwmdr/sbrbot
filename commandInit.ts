@@ -232,10 +232,10 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                         name: 'top plays',
                         value: 'top'
                     },
-                    {
-                        name: 'map scores',
-                        value: 'mapscore'
-                    },
+                    // {
+                    //     name: 'map scores',
+                    //     value: 'mapscore'
+                    // },
                 ]
             },
             {
