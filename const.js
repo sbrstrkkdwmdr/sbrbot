@@ -307,7 +307,7 @@ const osucommands = [
                 required: false,
                 description: 'The type of comparison',
                 options: [
-                    'score', 'user', 'top plays'
+                    'profile', 'top plays'
                 ],
                 defaultValue: 'user'
             },
@@ -317,7 +317,7 @@ const osucommands = [
                 required: false,
                 description: 'The first user to compare',
                 options: ['N/A'],
-                defaultValue: 'your osu! username/most recent play'
+                defaultValue: 'your osu! username'
             },
             {
                 name: 'second',
@@ -325,7 +325,7 @@ const osucommands = [
                 required: false,
                 description: 'The second user to compare',
                 options: ['N/A'],
-                defaultValue: 'your osu! username/the most recent play in the guild'
+                defaultValue: 'most recent user fetched in the guild'
             }
         ]
     },
