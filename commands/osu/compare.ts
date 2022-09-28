@@ -285,7 +285,7 @@ module.exports = {
                         arrscore.push(
                             `**[${firstscore.beatmapset.title} [${firstscore.beatmap.version}]](https://osu.ppy.sh/b/${firstscore.beatmap.id})**
 \`${firstuser.username.padEnd(30, ' ').substring(0, 30)} | ${seconduser.username.padEnd(30, ' ').substring(0, 30)}\`
-${firstscorestr.substring(0, 30)} | ${secondscorestr.substring(0, 30)}`
+${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                         )
                     }
 
