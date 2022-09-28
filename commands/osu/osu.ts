@@ -183,7 +183,7 @@ module.exports = {
                 || commandType == 'message'
             ) &&
             osudata.playmode != 'osu' &&
-            typeof osudata.playmode != 'undefined') {
+            typeof mode != 'undefined') {
             mode = osudata.playmode
             osudata = await osufunc.apiget('user', `${user}`, `${mode}`);
             osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
