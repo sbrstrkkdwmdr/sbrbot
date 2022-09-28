@@ -3,6 +3,7 @@ import fs = require('fs');
 import calc = require('../../src/calc');
 import emojis = require('../../src/consts/emojis');
 import colours = require('../../src/consts/colours');
+import colourfunc = require('../../src/colourcalc');
 import osufunc = require('../../src/osufunc');
 import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
@@ -15,30 +16,48 @@ module.exports = {
     name: 'compare',
     async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
         let commanduser;
-
-        let compareType;
-        let first;
-        let second;
+        let type: 'profile' | 'top' | 'mapscore' = 'top';
+        let first = null;
+        let second = null;
+        let firstsearchid = null;
+        let secondsearchid = null;
+        let mode = 'osu';
 
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
-                compareType = 'score';
-                if (args[0]) {
-                    compareType = args[0]
+                if (obj.mentions.users.size > 1) {
+                    firstsearchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
+                    secondsearchid = obj.mentions.users.size > 1 ? obj.mentions.users.at(1).id : null;
+                } else if (obj.mentions.users.size == 1) {
+                    firstsearchid = obj.author.id;
+                    secondsearchid = obj.mentions.users.at(0).id
+                } else {
+                    firstsearchid = obj.author.id
                 }
+                first = null;
+                second = args[0] ?? null;
+                if (args[1]) {
+                    first = args[0];
+                    second = args[1];
+                }
+                first != null && first.includes(firstsearchid) ? first = null : null;
+                second != null && second.includes(secondsearchid) ? second = null : null;
             }
                 break;
-
             //==============================================================================================================================================================================================
-
             case 'interaction': {
                 commanduser = obj.member.user;
-                compareType = obj.options.getString('type');
+                type = obj.options.getString('type') ?? 'profile';
                 first = obj.options.getString('first');
                 second = obj.options.getString('second');
+                firstsearchid = commanduser.id
+                mode = obj.options.getString('mode') ?? 'osu'
+                if (second == null && first != null) {
+                    second = first;
+                    first = null;
+                }
             }
-
                 //==============================================================================================================================================================================================
 
                 break;
@@ -47,7 +66,9 @@ module.exports = {
             }
                 break;
         }
+        if (overrides != null) {
 
+        }
         //==============================================================================================================================================================================================
 
         log.logFile(
@@ -57,337 +78,311 @@ module.exports = {
             {
                 guildId: `${obj.guildId}`
             })
-
         //OPTIONS==============================================================================================================================================================================================
         log.logFile('command',
-            log.optsLog(absoluteID, [{
-                name: 'Compare Type',
-                value: compareType
-            },
-            {
-                name: 'First',
-                value: first
-            },
-            {
-                name: 'Second',
-                value: second
-            }]),
+            log.optsLog(absoluteID, [
+                {
+                    name: 'Type',
+                    value: type
+                },
+                {
+                    name: 'First',
+                    value: first
+                },
+                {
+                    name: 'Second',
+                    value: second
+                },
+                {
+                    name: 'Mode',
+                    value: mode
+                },
+                {
+                    name: 'FirstSearchId',
+                    value: firstsearchid
+                },
+                {
+                    name: 'SecondSearchId',
+                    value: secondsearchid
+                }
+            ]),
             {
                 guildId: `${obj.guildId}`
             }
         )
+
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        let sendthething = false;
-
-        const prevscore: osuApiTypes.Score = osufunc.getPreviousId('score', `${obj.guildId}`);
-        const prevuser: osuApiTypes.User = osufunc.getPreviousId('user', `${obj.guildId}`);
-
-        let firstScore: osuApiTypes.Score = prevscore;
-        let secondScore: osuApiTypes.Score = prevscore;
-
-        switch (compareType) {
-            case 'user': {
-                if (!first && second) {
-                    first = prevuser
-                }
-                if (!second && first) {
-                    second = prevuser
-                }
-                if (!first && !second) {
-                    first = null
-                    second = prevuser
-                }
-            }
-                break;
-            case 'score': {
-                'heheheha'
-            }
-                break;
+        let fieldFirst: Discord.EmbedField = {
+            name: 'First',
+            value: 'Loading...',
+            inline: true
         }
-
-        if (commandType == 'interaction') {
-            obj.reply({
-                content: 'Loading...',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch()
+        let fieldSecond: Discord.EmbedField = {
+            name: 'Second',
+            value: 'Loading...',
+            inline: true
         }
-
-        const Embeds = [];
+        let fieldComparison: Discord.EmbedField = {
+            name: 'Comparison',
+            value: 'Loading...',
+            inline: false
+        }
+        let embedTitle: string = 'w';
+        let usefields: Discord.EmbedField[] = []
         try {
-            if (compareType == 'user') {
-                if (first == null) {
-                    const findname = await userdata.findOne({ where: { userid: commanduser.id } })
-                    if (findname != null) {
-                        first = findname.get('osuname');
-                    } else {
-                        first = 'peppy'
-                    }
-                }
-                const firstuser: osuApiTypes.User = await osufunc.apiget('user', first)
-                    .catch(error => {
-                        throw new Error(`Api Error: user \`${first}\``)
-                    });
-                if (firstuser?.error) {
-                    obj.reply({
-                        content: `${firstuser?.error ? firstuser?.error : 'Error: null'}`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: false,
-                    }).catch()
-                    return;
-                }
-
-                const seconduser: osuApiTypes.User = await osufunc.apiget('user', second)
-                    .catch(error => {
-                        throw new Error(`Api Error: user \`${second}\``)
-                    });
-                if (seconduser?.error) {
-                    obj.reply({
-                        content: `${seconduser?.error ? seconduser?.error : 'Error: null'}`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: false,
-                    }).catch()
-                    return;
-                }
-
-                // fs.writeFileSync(`debug/prevuser${obj.guildId}.json`, JSON.stringify({ id: firstuser.username }), 'utf8');
-                // fs.writeFileSync(`debug/command-compare=firstuserdata=${obj.guildId}.json`, JSON.stringify(firstuser, null, 2), 'utf8');
-                // fs.writeFileSync(`debug/command-compare=seconduserdata=${obj.guildId}.json`, JSON.stringify(seconduser, null, 2), 'utf8');
-                osufunc.debug(firstuser, 'command', 'compare', obj.guildId, 'firstUserData');
-                osufunc.debug(seconduser, 'command', 'compare', obj.guildId, 'secondUserData');
-
-                const uEmbed = new Discord.EmbedBuilder()
-                    .setColor(colours.embedColour.userlist.dec)
-                    .setTitle(`Comparing ${firstuser.username} and ${seconduser.username}`)
-                    .addFields([
-                        {
-                            name: `**${firstuser.username}**`,
-                            value:
-                                `**Rank:** ${`${firstuser?.statistics.global_rank}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**pp:** ${`${firstuser?.statistics.pp}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**Accuracy:** ${(firstuser?.statistics.hit_accuracy != null ? firstuser.statistics.hit_accuracy : 0).toFixed(2)}%
-**Playcount:** ${`${firstuser?.statistics.play_count}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**Level:** ${`${firstuser.statistics.level.current}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-`,
-                            inline: true
-                        },
-                        {
-                            name: `**${seconduser.username}**`,
-                            value:
-                                `**Rank:** ${`${seconduser?.statistics.global_rank}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**pp:** ${`${seconduser?.statistics.pp}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**Accuracy:** ${(seconduser?.statistics.hit_accuracy != null ? seconduser.statistics.hit_accuracy : 0).toFixed(2)}%
-**Playcount:** ${`${seconduser?.statistics.play_count}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**Level:** ${`${seconduser.statistics.level.current}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-`,
-                            inline: true
-                        },
-                        {
-                            name: `**Difference**`,
-                            value:
-                                `**Rank:** ${(firstuser.statistics.global_rank - seconduser.statistics.global_rank).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**pp:** ${(firstuser?.statistics.pp - seconduser?.statistics.pp).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**Accuracy:** ${((firstuser.statistics.hit_accuracy != null ? firstuser.statistics.hit_accuracy : 0) - (seconduser.statistics.hit_accuracy != null ? seconduser.statistics.hit_accuracy : 0)).toFixed(2)}%
-**Playcount:** ${`${firstuser.statistics.play_count - seconduser.statistics.play_count}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**Level:** ${(firstuser.statistics.level.current - seconduser.statistics.level.current).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-`,
-                        }
-                    ])
-                    ;
-                Embeds.push(uEmbed);
-                sendthething = true;
-
-            } else if (compareType == 'score') {
-
-                let secondScoresArray: osuApiTypes.Score[] = [];
-                if (first == null) {
-                    //do nothing
-                } else {
-                    firstScore = await osufunc.apiget('score', first)
-                }
-                if (second == null) {
-                    //get current 
-                } else {
-                    secondScore = await osufunc.apiget('score', second)
-                }
-                if (first == null && second == null) {
-                    firstScore = prevscore
-
-                    //get current user id, then find their scores on the same map as the previous score
-
-                    const cuser = await osufunc.searchUser(commanduser.id, userdata, true);
-                    // user = cuser.username;
-                    // mode = cuser.gamemode;
+            if (second == null) {
+                if (secondsearchid) {
+                    const cuser = await osufunc.searchUser(secondsearchid, userdata, true);
+                    second = cuser.username;
                     if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
                         if (commandType != 'button') {
-                            obj.reply({
-                                content: 'User not found',
-                                allowedMentions: { repliedUser: false },
-                                failIfNotExists: true
-                            }).catch()
+                            throw new Error('Second user not found')
                         }
                         return;
                     }
-                    const osudata = await osufunc.apiget('user', cuser.username);
-                    if (osudata?.error) {
-                        if (commandType != 'button') obj.reply({
-                            content: `${osudata?.error ? osudata?.error : 'Error: null'}`,
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: false,
-                        }).catch()
-                        return;
+                } else {
+                    if (osufunc.getPreviousId('user', `${obj.guildId}`) == null) {
+                        throw new Error('Second user not found')
                     }
-                    const secondScoresArrayInt: any = await osufunc.apiget('user_get_scores_map', `${prevscore.beatmap.id}`, `${osudata.id}`)
-                    secondScoresArray = secondScoresArrayInt.scores
-                    const match = await osufunc.matchScores(firstScore, secondScoresArray).sort(
-                        (a, b) => b.score - a.score
-                    )
-                    secondScore = match.length > 0 ? match[0] : secondScoresArray.length > 0 ? secondScoresArray.slice().sort((a, b) => b.score - a.score)[0] : prevscore;
+                    second = osufunc.getPreviousId('user', `${obj.guildId}`)
                 }
-
-                osufunc.debug(firstScore, 'command', 'compare', obj.guildId, 'firstScoreData');
-                osufunc.debug(secondScore, 'command', 'compare', obj.guildId, 'secondScoreData');
-
-                const sEmbed = new Discord.EmbedBuilder()
-                    .setColor(colours.embedColour.scorelist.dec)
-                    .setTitle(`Comparing two scores on ${firstScore.beatmapset.title} [${firstScore.beatmap.version}]`)
-                    .setURL(`https://osu.ppy.sh/beatmapsets/${firstScore.beatmapset.id}#osu/${firstScore.beatmap.id}`)
-                    .addFields([
-                        {
-                            name: `**${firstScore.user.username}**`,
-                            value:
-                                `**Score:** ${`${firstScore.score}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**pp:** ${`${firstScore.pp}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**Accuracy:** ${(firstScore.accuracy * 100).toFixed(2)}%
-**Combo:** ${firstScore.max_combo}x/${firstScore.beatmap.max_combo}x
-**Hits:** ${firstScore.statistics.count_300}/${firstScore.statistics.count_100}/${firstScore.statistics.count_50}/${firstScore.statistics.count_miss}
-**Mods:** ${firstScore.mods.join('')}
-**URL:** https://osu.ppy.sh/scores/osu/${firstScore.best_id ?? firstScore.id}
-`,
-                            inline: true,
-                        },
-                        {
-                            name: `**${secondScore.user.username}**`,
-                            value:
-                                `**Score:** ${`${secondScore.score}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**pp:** ${`${secondScore.pp}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-**Accuracy:** ${(secondScore.accuracy * 100).toFixed(2)}%
-**Combo:** ${secondScore.max_combo}x/${secondScore.beatmap.max_combo}x
-**Hits:** ${secondScore.statistics.count_300}/${secondScore.statistics.count_100}/${secondScore.statistics.count_50}/${secondScore.statistics.count_miss}
-**Mods:** ${secondScore.mods.join('')}
-**URL:** https://osu.ppy.sh/scores/osu/${secondScore.best_id ? secondScore.best_id : secondScore.id}
-`,
-                            inline: true,
-
-                        },
-                        {
-                            name: `**Difference**`,
-                            value:
-                                `**Score:** ${firstScore.score - secondScore.score}
-**pp:** ${firstScore.pp - secondScore.pp}
-**Accuracy:** ${(firstScore.accuracy * 100 - secondScore.accuracy * 100).toFixed(2)}%
-**Combo:** ${firstScore.max_combo - secondScore.max_combo}x
-**Hits:** ${firstScore.statistics.count_300 - secondScore.statistics.count_300}/${firstScore.statistics.count_100 - secondScore.statistics.count_100}/${firstScore.statistics.count_50 - secondScore.statistics.count_50}/${firstScore.statistics.count_miss - secondScore.statistics.count_miss}
-`
+            }
+            if (first == null) {
+                if (firstsearchid) {
+                    const cuser = await osufunc.searchUser(firstsearchid, userdata, true);
+                    first = cuser.username;
+                    if (mode == null) {
+                        mode = cuser.gamemode;
+                    }
+                    if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
+                        if (commandType != 'button') {
+                            throw new Error('First user not found')
                         }
-                    ])
-                    ;
-                Embeds.push(await sEmbed);
-                sendthething = true;
-            } else if (compareType == 'top') {
+                        return;
+                    }
+                } else {
+                    throw new Error('first user not found')
+                }
+            }
+
+            let firstuser: osuApiTypes.User;
+            if (func.findFile(first, 'osudata') &&
+                !('error' in func.findFile(first, 'osudata')) &&
+                button != 'Refresh'
+            ) {
+                firstuser = func.findFile(first, 'osudata')
+            } else {
+                firstuser = await osufunc.apiget('user', `${await first}`)
+            }
+
+            if (firstuser?.error) {
+                if (commandType != 'button' && commandType != 'link') {
+                    throw new Error('could not fetch first user data')
+
+                }
+                return;
+            }
+
+            let seconduser: osuApiTypes.User;
+            if (func.findFile(second, 'osudata') &&
+                !('error' in func.findFile(second, 'osudata')) &&
+                button != 'Refresh'
+            ) {
+                seconduser = func.findFile(second, 'osudata')
+            } else {
+                seconduser = await osufunc.apiget('user', `${await second}`)
+            }
+
+            if (seconduser?.error) {
+                if (commandType != 'button' && commandType != 'link') {
+                    throw new Error('could not fetch second user data')
+                }
+                return;
+            }
+
+            func.storeFile(firstuser, firstuser.id, 'osudata')
+            func.storeFile(firstuser, first, 'osudata')
+            func.storeFile(seconduser, seconduser.id, 'osudata')
+            func.storeFile(seconduser, second, 'osudata')
+
+
+            switch (type) {
+                case 'profile': {
+                    embedTitle = 'Comparing profiles'
+                    fieldFirst = {
+                        name: `**${firstuser.username}**`,
+                        value:
+                            `**Rank:** ${func.separateNum(firstuser?.statistics.global_rank)}
+**pp:** ${func.separateNum(firstuser?.statistics.pp)}
+**Accuracy:** ${(firstuser?.statistics.hit_accuracy != null ? firstuser.statistics.hit_accuracy : 0).toFixed(2)}%
+**Playcount:** ${func.separateNum(firstuser?.statistics.play_count)}
+**Level:** ${func.separateNum(firstuser.statistics.level.current)}
+`,
+                        inline: true
+                    };
+                    fieldSecond = {
+                        name: `**${seconduser.username}**`,
+                        value:
+                            `**Rank:** ${func.separateNum(seconduser?.statistics.global_rank)}
+**pp:** ${func.separateNum(seconduser?.statistics.pp)}
+**Accuracy:** ${(seconduser?.statistics.hit_accuracy != null ? seconduser.statistics.hit_accuracy : 0).toFixed(2)}%
+**Playcount:** ${func.separateNum(seconduser?.statistics.play_count)}
+**Level:** ${func.separateNum(seconduser.statistics.level.current)}
+`,
+                        inline: true
+                    };
+                    fieldComparison = {
+                        name: `**Difference**`,
+                        value:
+                            `**Rank:** ${func.separateNum(Math.abs(firstuser.statistics.global_rank - seconduser.statistics.global_rank))}
+**pp:** ${func.separateNum(Math.abs(firstuser?.statistics.pp - seconduser?.statistics.pp).toFixed(2))}
+**Accuracy:** ${Math.abs((firstuser.statistics.hit_accuracy != null ? firstuser.statistics.hit_accuracy : 0) - (seconduser.statistics.hit_accuracy != null ? seconduser.statistics.hit_accuracy : 0)).toFixed(2)}%
+**Playcount:** ${func.separateNum(Math.abs(firstuser.statistics.play_count - seconduser.statistics.play_count))}
+**Level:** ${func.separateNum(Math.abs(firstuser.statistics.level.current - seconduser.statistics.level.current))}
+`,
+                        inline: false
+                    }
+                    usefields.push(fieldFirst, fieldSecond, fieldComparison)
+                }
+                    break;
+
+
+
+                case 'top': {
+                    const firsttopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${firstuser.id}`, `${mode}`)
+                    if (firsttopdata?.error) {
+                        if (commandType != 'button' && commandType != 'link') {
+                            throw new Error('could not fetch first user\'s top scores')
+                        }
+                        return;
+                    }
+                    const secondtopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${seconduser.id}`, `${mode}`)
+                    if (secondtopdata?.error) {
+                        if (commandType != 'button' && commandType != 'link') {
+                            throw new Error('could not fetch second user\'s top scores')
+                        }
+                        return;
+                    }
+                    let filterfirst = [];
+                    //filter so that scores that have a shared beatmap id with the second user are kept
+                    for (let i = 0; i < firsttopdata.length; i++) {
+                        if (secondtopdata.find(score => score.beatmap.id == firsttopdata[i].beatmap.id)) {
+                            filterfirst.push(firsttopdata[i])
+                        }
+                    }
+                    filterfirst.sort((a, b) => b.pp - a.pp)
+                    embedTitle = 'Comparing top scores'
+                    let arrscore = [];
+                    for (let i = 0; i < filterfirst.length; i++) {
+                        const firstscore: osuApiTypes.Score = filterfirst[i]
+                        const secondscore: osuApiTypes.Score = secondtopdata.find(score => score.beatmap.id == firstscore.beatmap.id)
+                        if (secondscore == null) break;
+                        const firstscorestr =
+                        `\`${firstscore.pp.toFixed(2)}pp | ${(firstscore.accuracy * 100).toFixed(2)}% ${firstscore.mods.length > 0 ? '| +' + firstscore.mods.join('') : ''}`//.padEnd(30, ' ').substring(0, 30)
+                        const secondscorestr =
+                        `${secondscore.pp.toFixed(2)}pp | ${(secondscore.accuracy * 100).toFixed(2)}% ${secondscore.mods.length > 0 ? '| +' + secondscore.mods.join('') : ''}\`\n`//.padEnd(30, ' ').substring(0, 30)
+                        arrscore.push(
+                            `**[${firstscore.beatmapset.title} [${firstscore.beatmap.version}]](https://osu.ppy.sh/b/${firstscore.beatmap.id})**
+\`${firstuser.username.padEnd(30, ' ').substring(0, 30)} | ${seconduser.username.padEnd(30, ' ').substring(0, 30)}\`
+${firstscorestr.substring(0, 30)} | ${secondscorestr.substring(0, 30)}`
+                        )
+                    }
+
+                    const scores = arrscore.length > 0 ? arrscore.slice(0, 5).join('\n') : 'No shared scores'
+                    fieldFirst.value = scores
+                    usefields.push(fieldFirst)
+                }
+                    break;
+
+
+
+                case 'mapscore': {
+                    embedTitle = 'Comparing map scores'
+                    fieldFirst = {
+                        name: `**${firstuser.username}**`,
+                        value: '',
+                        inline: true
+                    }
+                    fieldSecond = {
+                        name: `**${seconduser.username}**`,
+                        value: 's',
+                        inline: true
+                    }
+                    fieldComparison = {
+                        name: `**Difference**`,
+                        value: 'w',
+                        inline: false
+                    }
+                    usefields.push(fieldFirst, fieldSecond, fieldComparison)
+                }
+                    break;
 
             }
+            osufunc.writePreviousId('user', obj.guildId, `${seconduser.id}`)
         } catch (error) {
-            if (compareType == 'user') {
-                const uEmbed = new Discord.EmbedBuilder()
-                    .setColor(colours.embedColour.admin.dec)
-                    .setTitle(`Error comparing users`)
-                    .setDescription(`\`\`\`${error}\`\`\`
-                    params:
-Type: \`${compareType}\`
-First: \`${first}\`
-Second: \`${second}\`
-                    `)
-                    ;
-                Embeds.push(uEmbed);
-            }
-            if (compareType == 'score') {
-                const sEmbed = new Discord.EmbedBuilder()
-                    .setColor(colours.embedColour.admin.dec)
-                    .setTitle(`Error comparing scores`)
-                    .setDescription(`
-params:
-Type: \`${compareType}\`
-First: \`${first}\`
-Second: \`${second}\`
-                    `)
-                    ;
-                Embeds.push(sEmbed);
-            }
+            embedTitle = 'Error'
+            usefields.push({
+                name: 'Error',
+                value: `${error}`,
+                inline: false
+            })
         }
 
+        const embed = new Discord.EmbedBuilder()
+            .setTitle(embedTitle)
+            .addFields(usefields)
+
         //SEND/EDIT MSG==============================================================================================================================================================================================
-        function send() {
-            if (sendthething == false) {
-                send()
-            } else {
-                switch (commandType) {
-                    case 'message': {
-                        obj.reply({
-                            content: '',
-                            embeds: Embeds,
-                            files: [],
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch();
-                    }
-                        break;
+        switch (commandType) {
+            case 'message': {
+                obj.reply({
+                    content: '',
+                    embeds: [embed],
+                    files: [],
+                    components: [],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+                break;
+            //==============================================================================================================================================================================================
+            case 'interaction': {
+                obj.reply({
+                    content: '',
+                    embeds: [embed],
+                    files: [],
+                    components: [],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+                //==============================================================================================================================================================================================
 
-                    //==============================================================================================================================================================================================
-
-                    case 'interaction': {
-                        setTimeout(() => {
-                            obj.reply({
-                                content: '',
-                                embeds: Embeds,
-                                files: [],
-                                allowedMentions: { repliedUser: false },
-                                failIfNotExists: true
-                            })
-                                .catch();
-                        }, 1000)
-                    }
-
-                        //==============================================================================================================================================================================================
-
-                        break;
-                    case 'button': {
-                        obj.edit({
-                            content: '',
-                            embeds: [],
-                            files: [],
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch();
-                    }
-                        break;
-                }
-
-
-
-                log.logFile('command',
-                    `
+                break;
+            case 'button': {
+                obj.message.edit({
+                    content: '',
+                    embeds: [],
+                    files: [],
+                    components: [],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+                    .catch();
+            }
+                break;
+        }
+        log.logFile('command',
+            `
 ----------------------------------------------------
 success
 ID: ${absoluteID}
 ----------------------------------------------------
 \n\n`,
-                    { guildId: `${obj.guildId}` }
-                )
-            }
-        }
+            { guildId: `${obj.guildId}` }
+        )
     }
 }

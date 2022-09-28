@@ -1,6 +1,6 @@
 import cmdconfig = require('./src/consts/commandopts');
 import Discord = require('discord.js');
-module.exports = (userdata, client, config, oncooldown) => {
+module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => {
     /*
             const guildID = config.testGuildID;
         const guild = client.guilds.cache.get(guildID);
@@ -39,7 +39,7 @@ module.exports = (userdata, client, config, oncooldown) => {
                 description: 'The type of gif to send',
                 type: Discord.ApplicationCommandOptionType.String,
                 required: true,
-                choices: cmdconfig.gifopts
+                choices: cmdconfig.gifopts,
             }
         ]
     },
@@ -213,6 +213,52 @@ module.exports = (userdata, client, config, oncooldown) => {
     },
 
     //below are osu related commands
+    {
+        name: 'compare',
+        description: 'Compares two users/scores',
+        dmPermission: false,
+        options: [
+            {
+                name: 'type',
+                description: 'The type of comparison',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.String,
+                choices: [
+                    {
+                        name: 'profile',
+                        value: 'profile'
+                    },
+                    {
+                        name: 'top plays',
+                        value: 'top'
+                    },
+                    {
+                        name: 'map scores',
+                        value: 'mapscore'
+                    },
+                ]
+            },
+            {
+                name: 'first',
+                description: 'The first user to compare',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.String,
+            },
+            {
+                name: 'second',
+                description: 'The second user to compare',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.String,
+            },
+            {
+                name: 'mode',
+                description: 'The gamemode to use',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.String,
+                choices: cmdconfig.modeopts
+            }
+        ]
+    },
     {
         name: 'osu',
         description: 'Displays the user\'s osu! profile',
@@ -532,31 +578,6 @@ module.exports = (userdata, client, config, oncooldown) => {
         name: 'lb',
         description: 'Displays the server leaderboard',
         dmPermission: false,
-    },
-    {
-        name: 'compare',
-        description: 'Compares two users/scores',
-        dmPermission: false,
-        options: [
-            {
-                name: 'type',
-                description: 'The type of comparison',
-                required: false,
-                type: Discord.ApplicationCommandOptionType.String,
-            },
-            {
-                name: 'first',
-                description: 'The first user/score to compare',
-                required: false,
-                type: Discord.ApplicationCommandOptionType.String,
-            },
-            {
-                name: 'second',
-                description: 'The second user/score to compare',
-                required: false,
-                type: Discord.ApplicationCommandOptionType.String,
-            }
-        ]
     },
     {
         name: 'simulate',
