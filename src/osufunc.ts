@@ -1028,6 +1028,7 @@ export async function dlMap(mapid: number | string) {
  * @returns 
  */
 export function findWeight(index: number) {
+    if (index > 99 || index < 0) return 0;
     return (0.95 ** (index))
 }
 

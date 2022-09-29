@@ -119,7 +119,19 @@ module.exports = {
             pp = 100;
         }
 
-        const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`);
+        let osudata: osuApiTypes.User;
+
+        if (func.findFile(user, 'osudata') &&
+            !('error' in func.findFile(user, 'osudata')) &&
+            button != 'Refresh'
+        ) {
+            osudata = func.findFile(user, 'osudata')
+        } else {
+            osudata = await osufunc.apiget('user', `${await user}`)
+        }
+        func.storeFile(osudata, osudata.id, 'osudata')
+        func.storeFile(osudata, user, 'osudata')
+        
         osufunc.debug(osudata, 'command', 'whatif', obj.guildId, 'osuData');
 
         if (mode == null) {
@@ -132,15 +144,14 @@ module.exports = {
         let pparr = osutopdata.slice().map(x => x.pp);
         pparr.push(pp);
         pparr.sort((a, b) => b - a);
-        const frpp = pparr.slice(0, 99)
-        const ppindex = frpp.indexOf(pp);
+        const ppindex = pparr.indexOf(pp);
 
         const weight = osufunc.findWeight(ppindex);
 
         const newTotal: number[] = [];
 
-        for (let i = 0; i < frpp.length; i++) {
-            newTotal.push(frpp[i] * osufunc.findWeight(i));
+        for (let i = 0; i < pparr.length; i++) {
+            newTotal.push(pparr[i] * osufunc.findWeight(i));
         }
 
         const total = newTotal.reduce((a, b) => a + b, 0);
@@ -148,8 +159,9 @@ module.exports = {
 
         const newBonus = [];
         for (let i = 0; i < osutopdata.length; i++) {
-            newBonus.push(osutopdata[i].pp * osufunc.findWeight(i));
+            newBonus.push(osutopdata[i].weight.pp/*  ?? (osutopdata[i].pp * osufunc.findWeight(i)) */);
         }
+
         const bonus = osudata.statistics.pp - newBonus.reduce((a, b) => a + b, 0);
 
         const embed = new Discord.EmbedBuilder()
