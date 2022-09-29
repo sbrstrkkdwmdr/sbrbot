@@ -5,8 +5,9 @@ import osuapitypes = require('./src/types/osuApiTypes');
 import extypes = require('./src/types/extraTypes');
 import Discord = require('discord.js');
 import track = require('./src/trackfunc');
+import Sequelize = require('sequelize');
 
-module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) => {
+module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, trackDb) => {
 
 
     setInterval(() => {
@@ -137,37 +138,36 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) 
 
     //create settings for new guilds
     client.on('guildCreate', async (guild) => {
-        try {
-            await guildSettings.create({
-                guildId: guild.id,
-                guildnanme: guild.name,
-                prefix: config.prefix,
-                osuParseLinks: true,
-                osuParseScreenshots: true,
-                enableMusic: true,
-                enableAdmin: true,
-            })
-        } catch (error) {
-
-        }
+        createGuildSettings(guild);
     })
     setInterval(() => {
         client.guilds.cache.forEach(async (guild) => {
-            try {
-                await guildSettings.create({
-                    guildId: guild.id,
-                    guildnanme: guild.name,
-                    prefix: config.prefix,
-                    osuParseLinks: true,
-                    osuParseScreenshots: true,
-                    enableMusic: true,
-                    enableAdmin: true,
-                })
-            } catch (error) {
-
-            }
+            createGuildSettings(guild);
         })
+        clearUnused();
     }, 10 * 60 * 1000);
+
+    clearUnused();
+
+    async function createGuildSettings(guild: Discord.Guild) {
+        try {
+            await guildSettings.create({
+                guildid: guild.id ?? null,
+                guildname: guild.name ?? null,
+                prefix: config.prefix,
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function clearUnused() {
+        (async () => {
+            await guildSettings.destroy({
+                where: { guildid: null, guildname: null }
+            })
+        })();
+    }
 
     const cacheById = [
         'bmsdata',
