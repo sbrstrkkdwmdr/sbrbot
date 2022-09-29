@@ -15,7 +15,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         if (message.author.bot && !message.author.id == client.user.id) return;
 
         const currentGuildId = message.guildId
-        let settings: extypes.guildSettings;
+        let settings;//: extypes.guildSettings;
         try {
             const curGuildSettings = await guildSettings.findOne({ where: { guildid: message.guildId } });
             settings = curGuildSettings.dataValues;
@@ -25,9 +25,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                     guildid: message.guildId,
                     guildname: message?.guild?.name ?? 'Unknown',
                     prefix: 'sbr-',
-                    osuParseLinks: true,
-                    osuParseScreenshots: true,
-                    osuParseReplays: true,
                 })
             } catch (error) {
 
@@ -36,9 +33,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 guildid: message.guildId,
                 guildname: message?.guild?.name ?? 'Unknown',
                 prefix: 'sbr-',
-                osuParseLinks: true,
-                osuParseScreenshots: true,
-                osuParseReplays: true,
             };
         }
 
@@ -123,7 +117,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
 
 
         const currentGuildId = interaction.guildId
-        let settings: extypes.guildSettings;
+        let settings;//: extypes.guildSettings;
         try {
             const curGuildSettings = await guildSettings.findOne({ where: { guildid: currentGuildId } });
             settings = curGuildSettings.dataValues;
@@ -133,9 +127,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                     guildid: interaction.guildId,
                     guildname: interaction?.guild?.name ?? 'Unknown',
                     prefix: 'sbr-',
-                    osuParseLinks: true,
-                    osuParseScreenshots: true,
-                    osuParseReplays: true,
                 })
             } catch (error) {
                 console.log(error)
@@ -144,9 +135,6 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 guildid: interaction.guildId,
                 guildname: interaction?.guild?.name ?? 'Unknown',
                 prefix: 'sbr-',
-                osuParseLinks: true,
-                osuParseScreenshots: true,
-                osuParseReplays: true,
             };
         }
         execCommand(interaction.commandName, 'interaction', interaction, null, button, absoluteID, currentDate, interaction.member.user.id, args);
