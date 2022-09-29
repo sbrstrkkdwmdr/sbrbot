@@ -31,28 +31,25 @@ async function trackUser(fr: { user: string, mode: string, inital?: boolean }) {
     }
 }
 
-async function editTrackUser(
-    fr: {
-        database: Sequelize.ModelStatic<any>,
-        discuser: string | number,
-        user: string | number,
-        action?: 'add' | 'remove',
-        guildId: string | number,
-        guildSettings: Sequelize.ModelStatic<any>,
-    }
+async function editTrackUser(fr: {
+    database: Sequelize.ModelStatic<any>,
+    userid: string | number,
+    action?: 'add' | 'remove',
+    guildId: string | number,
+    guildSettings: Sequelize.ModelStatic<any>,
+}
 ) {
 
     if (!fr.action || fr.action == 'add') {
         try {
             await fr.database.create({
-                userid: fr.discuser,
-                osuid: fr.user,
+                osuid: fr.userid,
                 guilds: fr.guildId
             })
 
         } catch (error) {
-            log.logFile('error', log.errLog('database update', error))
-            const previous = await fr.database.findOne({ where: { userid: fr.discuser } })
+            log.logFile('error', log.errLog('database track user creation err', error))
+            const previous = await fr.database.findOne({ where: { osuid: fr.userid } })
             const prevchannels: string[] = previous?.dataValues?.guilds?.split(',') ?? []
 
             if (!prevchannels.includes(`${fr.guildId}`)) {
@@ -62,26 +59,24 @@ async function editTrackUser(
 
 
             await fr.database.update({
-                userid: fr.discuser,
-                osuid: fr.user,
+                osuid: fr.userid,
                 guilds: prevchannels.join(',')
             }, {
                 where: {
-                    userid: fr.discuser
+                    osuid: fr.userid,
                 }
             })
         }
     } else {
-        const curuser = await fr.database.findOne({ where: { userid: fr.discuser } })
+        const curuser = await fr.database.findOne({ where: { osuid: fr.userid } })
         const curguilds: string[] = curuser.dataValues.guilds.split(',')
         const newguilds = curguilds.filter(channel => channel != fr.guildId)
         await fr.database.update({
-            userid: fr.discuser,
-            osuid: fr.user,
+            osuid: fr.userid,
             guilds: newguilds.join(',')
         }, {
             where: {
-                userid: fr.discuser
+                osuid: fr.userid
             }
         })
 

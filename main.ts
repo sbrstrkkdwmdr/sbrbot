@@ -144,12 +144,8 @@ const guildSettings = sequelize.define('guildSettings', {
 });
 
 const trackDb = sequelize.define('trackUsers', {
-    userid: {
-        type: Sequelize.INTEGER,
-        unique: true
-    },
     osuid: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         unique: true
     },
     guilds: {

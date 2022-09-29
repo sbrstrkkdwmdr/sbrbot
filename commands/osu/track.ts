@@ -10,6 +10,7 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import trackfunc = require('../../src/trackfunc');
+import func = require('../../src/other');
 
 module.exports = {
     name: 'track',
@@ -61,35 +62,13 @@ module.exports = {
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        if (!user || isNaN(+user)) {
-            obj.reply({
-                content: 'Please provide a valid user ID',
-                embeds: [],
-                files: [],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch()
-            return;
-        }
-
         let guildsetting = await guildSettings.findOne({
             where: { guildId: obj.guildId }
         })
 
-        // if (!guildsetting.dataValues.trackChannel) {
-        //     obj.reply({
-        //         content: 'The current guild does not have a tracking channel',
-        //         embeds: [],
-        //         files: [],
-        //         allowedMentions: { repliedUser: false },
-        //         failIfNotExists: true
-        //     }).catch()
-        //     return;
-        // }
-
-        if (`${guildSettings.dataValues?.trackChannel ?? 'null'}` != `${obj.channelId}`) {
+        if (!guildsetting.dataValues.trackChannel) {
             obj.reply({
-                content: 'You can only use this command in the tracking channel',
+                content: 'The current guild does not have a tracking channel',
                 embeds: [],
                 files: [],
                 allowedMentions: { repliedUser: false },
@@ -98,10 +77,21 @@ module.exports = {
             return;
         }
 
+        let osudata: osuApiTypes.User;
+
+        if (func.findFile(user, 'osudata') &&
+            !('error' in func.findFile(user, 'osudata'))
+        ) {
+            osudata = func.findFile(user, 'osudata')
+        } else {
+            osudata = await osufunc.apiget('user', `${await user}`)
+        }
+        func.storeFile(osudata, osudata.id, 'osudata')
+        func.storeFile(osudata, user, 'osudata')
+
         trackfunc.editTrackUser({
             database: trackDb,
-            discuser: commanduser.id,
-            user: user,
+            userid: osudata.id,
             action: 'add',
             guildId: obj.guildId,
             guildSettings: guildSettings,
@@ -205,17 +195,6 @@ ID: ${absoluteID}
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-        if (!user || isNaN(+user)) {
-            obj.reply({
-                content: 'Please provide a valid user ID',
-                embeds: [],
-                files: [],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch()
-            return;
-        }
-
         let guildsetting = await guildSettings.findOne({
             where: { guildId: obj.guildId }
         })
@@ -231,10 +210,21 @@ ID: ${absoluteID}
             return;
         }
 
+        let osudata: osuApiTypes.User;
+
+        if (func.findFile(user, 'osudata') &&
+            !('error' in func.findFile(user, 'osudata'))
+        ) {
+            osudata = func.findFile(user, 'osudata')
+        } else {
+            osudata = await osufunc.apiget('user', `${await user}`)
+        }
+        func.storeFile(osudata, osudata.id, 'osudata')
+        func.storeFile(osudata, user, 'osudata')
+
         trackfunc.editTrackUser({
             database: trackDb,
-            discuser: commanduser.id,
-            user: user,
+            userid: osudata.id,
             action: 'remove',
             guildId: obj.guildId,
             guildSettings: guildSettings,
