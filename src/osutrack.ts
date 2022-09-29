@@ -228,5 +228,5 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
 
     setInterval(() => {
         trackUsers(trackDb)
-    }, 60 * 1000 * 5); //requests ever 5 min
+    }, 60 * 1000 * 15); //requests every 15 min
 }
