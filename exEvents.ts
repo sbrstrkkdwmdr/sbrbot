@@ -9,34 +9,13 @@ import track = require('./src/trackfunc');
 module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) => {
 
 
-    //map clearing
+    setInterval(() => {
+        clearMapFiles();
+    }, 60 * 60 * 1000);
 
     setInterval(() => {
-        // try {
-        //     fs.readdirSync('files/maps').forEach(file => {
-        //         fs.unlinkSync('files/maps/' + file)
-        //     }
-        //     )
-        //     fs.appendFileSync('logs/updates.log', '\nmaps folder cleared at ' + new Date().toLocaleString() + '\n')
-        // } catch (error) {
-        //     fs.appendFileSync('logs/updates.log', '\n' + new Date().toLocaleString() + '\n' + error + '\n')
-        // }
-        const files = fs.readdirSync('./files/maps')
-        for (const file of files) {
-            fs.stat('./files/maps/' + file, (err, stat) => {
-                if (err) {
-                    return;
-                } else {
-                    if ((new Date().getTime() - stat.birthtimeMs) > (1000 * 60 * 15)) {
-                        fs.unlinkSync('./files/maps/' + file)
-                        fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
-                    }
-                }
-            })
-
-        }
-    }
-        , 60 * 60 * 1000);
+        clearCommandCache();
+    }, 1000 * 60);
 
     //status updates
     const songsarr = [
@@ -196,11 +175,33 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) 
         'osudata',
         'scoredata',
     ]
-    
-    //command-specific files are deleted after 15 minutes
-    //maps and users are stored for longer 
 
-    setInterval(() => {
+    /**
+     * removes map files that are older than 1 hour
+     */
+    function clearMapFiles() {
+        const files = fs.readdirSync('./files/maps')
+        for (const file of files) {
+            fs.stat('./files/maps/' + file, (err, stat) => {
+                if (err) {
+                    return;
+                } else {
+                    if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
+                        fs.unlinkSync('./files/maps/' + file)
+                        fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                    }
+                }
+            })
+
+        }
+    }
+
+
+    /**
+     * command-specific files are deleted after 15 minutes of being unused.
+     * maps and users are stored for an hour
+     */
+    function clearCommandCache() {
         const files = fs.readdirSync('./cache/commandData')
         for (const file of files) {
             fs.stat('./cache/commandData/' + file, (err, stat) => {
@@ -208,12 +209,12 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) 
                     return;
                 } else {
                     if (cacheById.some(x => file.startsWith(x))) {
-                        if ((new Date().getTime() - stat.birthtimeMs) > (1000 * 60 * 60)) {
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
                             fs.unlinkSync('./cache/commandData/' + file)
                             fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     } else {
-                        if ((new Date().getTime() - stat.birthtimeMs) > (1000 * 60 * 15)) {
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 15)) {
                             fs.unlinkSync('./cache/commandData/' + file)
                             fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
@@ -222,6 +223,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) 
             })
 
         }
-    }, 1000 * 60)
+    }
+
 
 }
