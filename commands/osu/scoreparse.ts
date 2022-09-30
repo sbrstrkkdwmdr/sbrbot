@@ -10,6 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
 import def = require('../../src/consts/defaults');
+import buttonsthing = require('../../src/consts/buttons')
 
 module.exports = {
     name: 'scoreparse',

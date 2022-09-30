@@ -11,6 +11,7 @@ import log = require('../../src/log');
 import embedStuff = require('../../src/embed');
 import func = require('../../src/other');
 import def = require('../../src/consts/defaults');
+import buttonsthing = require('../../src/consts/buttons')
 
 module.exports = {
     name: 'nochokes',
@@ -207,12 +208,8 @@ module.exports = {
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`Refresh-nochokes-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔁'),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`Sort-nochokes-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔀'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.refresh),
             )
 
         if (user == null) {
@@ -240,24 +237,24 @@ module.exports = {
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-nochokes-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.first),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-nochokes-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.previous),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-nochokes-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔍'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.search),
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-nochokes-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.next),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-nochokes-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.last),
             );
 
         if (commandType == 'interaction') {

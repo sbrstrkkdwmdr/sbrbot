@@ -10,6 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
 import def = require('../../src/consts/defaults');
+import buttonsthing = require('../../src/consts/buttons')
 
 module.exports = {
     name: 'osu',
@@ -85,8 +86,8 @@ module.exports = {
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`Refresh-osu-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔁'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.refresh),
             )
 
         log.logFile(
@@ -130,15 +131,15 @@ module.exports = {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailDisable-osu-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('📝')
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailed)
             )
         } else {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`DetailEnable-osu-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('📝')
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailed)
             )
         }
 

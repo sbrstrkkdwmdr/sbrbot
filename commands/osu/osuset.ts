@@ -8,6 +8,7 @@ import osumodcalc = require('osumodcalculator');
 import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
+import buttonsthing = require('../../src/consts/buttons')
 
 module.exports = {
     name: 'osuset',

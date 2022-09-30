@@ -10,6 +10,7 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
 import embedStuff = require('../../src/embed');
+import buttonsthing = require('../../src/consts/buttons')
 
 module.exports = {
     name: 'maplb',
@@ -87,31 +88,31 @@ module.exports = {
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`Refresh-leaderboard-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔁'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.refresh),
             )
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-maplb-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.first),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-maplb-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.previous),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-maplb-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔍'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.search),
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-maplb-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.next),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-maplb-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.last),
             );
 
         log.logFile(

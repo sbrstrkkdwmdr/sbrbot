@@ -10,6 +10,7 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
+import buttonsthing = require('../../src/consts/buttons')
 
 module.exports = {
     name: 'ranking',
@@ -87,31 +88,31 @@ module.exports = {
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-ranking-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.first),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-ranking-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.previous),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-ranking-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔍'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.search),
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-ranking-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.next),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-ranking-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.last),
             );
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`Refresh-ranking-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔁'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.refresh),
             );
 
         log.logFile(

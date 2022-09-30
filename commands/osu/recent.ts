@@ -11,6 +11,7 @@ import log = require('../../src/log');
 import func = require('../../src/other');
 import embedStuff = require('../../src/embed');
 import def = require('../../src/consts/defaults');
+import buttonsthing = require('../../src/consts/buttons')
 
 module.exports = {
     name: 'recent',
@@ -148,8 +149,8 @@ module.exports = {
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`Refresh-recent-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔁'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.refresh),
             )
         log.logFile(
             'command',
@@ -219,23 +220,23 @@ module.exports = {
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-recent-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅')
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.first)
                     .setDisabled(isFirstPage),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-recent-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀')
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.previous)
                     .setDisabled(isFirstPage),
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-recent-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶')
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.next)
                     .setDisabled(isLastPage),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-recent-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡')
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.last)
                     .setDisabled(isLastPage),
             );
         let osudata: osuApiTypes.User;
@@ -645,24 +646,24 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                 .addComponents(
                     new Discord.ButtonBuilder()
                         .setCustomId(`BigLeftArrow-recent-${commanduser.id}-${absoluteID}`)
-                        .setStyle(Discord.ButtonStyle.Primary)
-                        .setEmoji('⬅'),
+                        .setStyle(buttonsthing.type.current)
+                        .setEmoji(buttonsthing.label.page.first),
                     new Discord.ButtonBuilder()
                         .setCustomId(`LeftArrow-recent-${commanduser.id}-${absoluteID}`)
-                        .setStyle(Discord.ButtonStyle.Primary)
-                        .setEmoji('◀'),
+                        .setStyle(buttonsthing.type.current)
+                        .setEmoji(buttonsthing.label.page.previous),
                     new Discord.ButtonBuilder()
                         .setCustomId(`Search-recent-${commanduser.id}-${absoluteID}`)
-                        .setStyle(Discord.ButtonStyle.Primary)
-                        .setEmoji('🔍'),
+                        .setStyle(buttonsthing.type.current)
+                        .setEmoji(buttonsthing.label.page.search),
                     new Discord.ButtonBuilder()
                         .setCustomId(`RightArrow-recent-${commanduser.id}-${absoluteID}`)
-                        .setStyle(Discord.ButtonStyle.Primary)
-                        .setEmoji('▶'),
+                        .setStyle(buttonsthing.type.current)
+                        .setEmoji(buttonsthing.label.page.next),
                     new Discord.ButtonBuilder()
                         .setCustomId(`BigRightArrow-recent-${commanduser.id}-${absoluteID}`)
-                        .setStyle(Discord.ButtonStyle.Primary)
-                        .setEmoji('➡'),
+                        .setStyle(buttonsthing.type.current)
+                        .setEmoji(buttonsthing.label.page.last),
                 )
             rsEmbed
                 .setColor(colours.embedColour.scorelist.dec)

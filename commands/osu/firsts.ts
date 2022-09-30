@@ -11,6 +11,7 @@ import log = require('../../src/log');
 import embedStuff = require('../../src/embed');
 import func = require('../../src/other');
 import def = require('../../src/consts/defaults');
+import buttonsthing = require('../../src/consts/buttons')
 
 module.exports = {
     name: 'firsts',
@@ -204,30 +205,30 @@ module.exports = {
             .addComponents(
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-firsts-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.first),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-firsts-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.previous),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-firsts-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔍'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.search),
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-firsts-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.next),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-firsts-${commanduser.id}-${absoluteID}`)
-                    .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.page.last),
             );
         const buttons = new Discord.ActionRowBuilder().addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`Refresh-firsts-${commanduser.id}-${absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('🔁'),
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.refresh),
         )
         if (user == null) {
             const cuser = await osufunc.searchUser(searchid, userdata, true);

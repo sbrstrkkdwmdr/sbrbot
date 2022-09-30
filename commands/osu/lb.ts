@@ -9,6 +9,7 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import extypes = require('../../src/types/extratypes');
+import buttonsthing = require('../../src/consts/buttons');
 
 module.exports = {
     name: 'lb',
@@ -79,23 +80,23 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigLeftArrow-lb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('⬅'),
+                    .setEmoji(buttonsthing.label.page.first),
                 new Discord.ButtonBuilder()
                     .setCustomId(`LeftArrow-lb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('◀'),
+                    .setEmoji(buttonsthing.label.page.previous),
                 new Discord.ButtonBuilder()
                     .setCustomId(`Search-lb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('🔍'),
+                    .setEmoji(buttonsthing.label.page.search),
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-lb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('▶'),
+                    .setEmoji(buttonsthing.label.page.next),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-lb-${commanduser.id}-${absoluteID}`)
                     .setStyle(Discord.ButtonStyle.Primary)
-                    .setEmoji('➡'),
+                    .setEmoji(buttonsthing.label.page.last),
             );
 
         log.logFile(
