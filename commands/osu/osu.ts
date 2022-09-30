@@ -162,6 +162,15 @@ module.exports = {
         if (mode == null) {
             mode = 'osu'
         }
+
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+        }
+
         let osudata: osuApiTypes.User;
 
         if (func.findFile(user, 'osudata') &&
@@ -189,16 +198,27 @@ module.exports = {
             osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
         }
 
-        if (osudata?.error) {
+        if (osudata?.error || !osudata.id) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not fetch user data',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.editReply({
+                            content: `Error - could not find user \`${user}\``,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }, 1000);
+                } else {
+                    obj.reply({
+                        content: `Error - could not find user \`${user}\``,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
             }
             return;
         }
+
         if (commandType != button || button == 'Refresh') {
             try {
                 osufunc.updateUserStats(osudata, osudata.playmode, userdata)
@@ -254,12 +274,14 @@ module.exports = {
                 .setDescription(`Loading...`);
 
             if (commandType == 'interaction') {
-                if (commandType != 'button') obj.reply({
-                    embeds: [loading],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+                setTimeout(() => {
+                    if (commandType != 'button') obj.editReply({
+                        embeds: [loading],
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }, 1000);
 
             }
             const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')

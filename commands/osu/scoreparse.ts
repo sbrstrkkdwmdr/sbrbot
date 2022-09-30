@@ -291,22 +291,20 @@ module.exports = {
         func.storeFile(osudata, scoredata.user.username, 'osudata')
         osufunc.debug(osudata, 'command', 'scoreparse', obj.guildId, 'osuData')
         if (osudata?.error) {
-            if (commandType != 'button' && commandType != 'link') {
-                if (commandType == 'interaction') {
-                    setTimeout(() => {
-                        obj.editReply({
-                            content: 'Error - could not fetch user data',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }, 1000)
-                } else {
+            if (commandType == 'interaction') {
+                setTimeout(() => {
                     obj.reply({
-                        content: 'Error - could not fetch user data',
+                        content: `Error - could not find user \`${scoredata?.user?.username}\``,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
-                }
+                    })
+                }, 1000);
+            } else {
+                obj.reply({
+                    content: `Error - could not find user \`${scoredata?.user?.username}\``,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
             }
             return;
         }

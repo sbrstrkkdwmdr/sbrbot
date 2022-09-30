@@ -179,14 +179,14 @@ module.exports = {
                 if (commandType == 'interaction') {
                     setTimeout(() => {
                         obj.editReply({
-                            content: 'Error - could not fetch beatmap data',
+                            content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
                     }, 1000)
                 } else {
                     obj.reply({
-                        content: 'Error - could not fetch beatmap data',
+                        content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
@@ -233,14 +233,14 @@ module.exports = {
                     if (commandType == 'interaction') {
                         setTimeout(() => {
                             obj.editReply({
-                                content: 'Error - could not fetch leaderboard data',
+                                content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                                 allowedMentions: { repliedUser: false },
                                 failIfNotExists: true
                             }).catch()
                         }, 1000)
                     } else {
                         obj.reply({
-                            content: 'Error - could not fetch leaderboard data',
+                            content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
@@ -344,14 +344,14 @@ module.exports = {
                     if (commandType == 'interaction') {
                         setTimeout(() => {
                             obj.editReply({
-                                content: 'Error - could not fetch leaderboard data',
+                                content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                                 allowedMentions: { repliedUser: false },
                                 failIfNotExists: true
                             }).catch()
                         }, 1000)
                     } else {
                         obj.reply({
-                            content: 'Error - could not fetch leaderboard data',
+                            content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()

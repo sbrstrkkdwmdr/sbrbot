@@ -289,7 +289,7 @@ module.exports = {
                 if (commandType != 'button' && commandType != 'link') {
 
                     obj.reply({
-                        content: 'Error - could not fetch mapper data.',
+                        content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
@@ -348,7 +348,6 @@ module.exports = {
 
             if (mapidtest?.error) {
                 if (commandType != 'button' && commandType != 'link') {
-
                     obj.reply({
                         content: 'Error - could not fetch beatmap search data.',
                         allowedMentions: { repliedUser: false },
@@ -403,24 +402,11 @@ module.exports = {
                 if (commandType != 'button' && commandType != 'link') {
 
                     obj.reply({
-                        content: 'Error - could not fetch beatmap data',
+                        content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
                 }
-                return;
-            }
-
-            try {
-                mapdata.beatmapset.creator
-            } catch (error) {
-                let ifid = ''
-                if (!isNaN(mapid)) {
-                    ifid = `Found map id = ${mapid}\n${maptitleq}`
-                }
-                obj.reply({ content: 'Error - map not found\n' + ifid, allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                    .catch();
-
                 return;
             }
 

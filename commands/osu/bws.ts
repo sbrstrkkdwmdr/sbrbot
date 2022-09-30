@@ -87,13 +87,23 @@ module.exports = {
 
         const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `osu`)
         osufunc.debug(osudata, 'command', 'bws', obj.guildId, 'osuData');
-        if (osudata?.error) {
+        if (osudata?.error || !osudata.id) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not find user',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.editReply({
+                            content: `Error - could not find user \`${user}\``,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }, 1000);
+                } else {
+                    obj.reply({
+                        content: `Error - could not find user \`${user}\``,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
             }
             return;
         }

@@ -251,6 +251,15 @@ module.exports = {
         if (mode == null) {
             mode = 'osu'
         }
+
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+        }
+
         let osudata: osuApiTypes.User;
 
         if (func.findFile(user, 'osudata') &&
@@ -265,34 +274,23 @@ module.exports = {
         func.storeFile(osudata, user, 'osudata')
 
         osufunc.debug(osudata, 'command', 'pinned', obj.guildId, 'osuData');
-        if (osudata?.error) {
-            if (commandType != 'button' && commandType != 'link') {
+        if (osudata?.error || !osudata.id) {
+            if (commandType == 'interaction') {
+                setTimeout(() => {
+                    obj.reply({
+                        content: `Error - could not find user \`${user}\``,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }, 1000);
+            } else {
                 obj.reply({
-                    content: 'Error - could not fetch user data',
+                    content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                })
             }
             return;
-        }
-
-        if (!osudata.id) {
-            obj.reply({
-                content: 'Error - user could not be found',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
-                .catch();
-
-            return;
-        }
-
-        if (commandType == 'interaction') {
-            obj.reply({
-                content: 'Loading...',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
         }
 
         let pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []; //= await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)

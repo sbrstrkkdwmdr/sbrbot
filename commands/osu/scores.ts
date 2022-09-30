@@ -264,6 +264,13 @@ module.exports = {
             mapid = osufunc.getPreviousId('map', obj.guildId);
         }
 
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+        }
 
         let osudata: osuApiTypes.User;
 
@@ -280,46 +287,26 @@ module.exports = {
 
         osufunc.debug(osudata, 'command', 'scores', obj.guildId, 'osuData');
 
-        if (osudata?.error) {
-            if (commandType != 'button' && commandType != 'link') {
+        if (osudata?.error || !osudata.id) {
+            if (commandType == 'interaction') {
+                setTimeout(() => {
+                    obj.reply({
+                        content: `Error - could not find user \`${user}\``,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }, 1000);
+            } else {
                 obj.reply({
-                    content: 'Error - could not fetch user data',
+                    content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                })
             }
             return;
+
         }
 
-        if (commandType == 'interaction') {
-            obj.reply({
-                content: 'Loading...',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
-        }
-
-        if (!osudata.id) {
-            if (button == null) {
-                return obj.reply({
-                    content: 'Error - no user found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch()
-                    ;
-
-            } else {
-                return obj.message.edit({
-                    content: 'Error - no user found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch()
-                    ;
-
-            }
-        }
         if (page == null || page < 1) {
             page = 0
         } else {
@@ -343,14 +330,14 @@ module.exports = {
                 if (commandType == 'interaction') {
                     setTimeout(() => {
                         obj.editReply({
-                            content: 'Error - could not fetch beatmap scores',
+                            content: 'Error - could not fetch scores',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
                     }, 1000)
                 } else {
                     obj.reply({
-                        content: 'Error - could not fetch beatmap scores',
+                        content: 'Error - could not fetch scores',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
@@ -364,7 +351,7 @@ module.exports = {
             scoredata.length < 1
         } catch (error) {
             return obj.reply({
-                content: 'Error - no scores found',
+                content: `Error - no scores found for \`${user}\` on map \`${mapid}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
             })

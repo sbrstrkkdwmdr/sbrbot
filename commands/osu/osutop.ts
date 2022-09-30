@@ -293,6 +293,14 @@ module.exports = {
                     .setEmoji('➡'),
             );
 
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+        }
+
         let osudata: osuApiTypes.User;
 
         if (func.findFile(user, 'osudata') &&
@@ -308,13 +316,23 @@ module.exports = {
 
         osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
 
-        if (osudata?.error) {
+        if (osudata?.error || !osudata.id) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not fetch user data',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.reply({
+                            content: `Error - could not find user \`${user}\``,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }, 1000);
+                } else {
+                    obj.reply({
+                        content: `Error - could not find user \`${user}\``,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
             }
             return;
         }
@@ -335,11 +353,21 @@ module.exports = {
 
         if (osutopdata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not fetch user\'s top scores',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.reply({
+                            content: `Error - could not find \`${user}\`'s top scores`,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }, 1000);
+                } else {
+                    obj.reply({
+                        content: `Error - could not find \`${user}\`'s top scores`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
             }
             return;
         }
@@ -348,19 +376,25 @@ module.exports = {
             osutopdata[0].user.username
         } catch (error) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({ content: 'Error - could not fetch user\'s top scores', allowedMentions: { repliedUser: false } })
-                    .catch();
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.reply({
+                            content: `Error - could not fetch \`${user}\`'s top scores`,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                            .catch();
+                    }, 1000);
+                } else {
+                    obj.reply({
+                        content: `Error - could not fetch \`${user}\`'s top scores`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }
             }
             return;
-
-        }
-
-        if (commandType == 'interaction') {
-            obj.reply({
-                content: 'Loading...',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
         }
 
 

@@ -260,6 +260,14 @@ module.exports = {
                     .setEmoji('➡'),
             );
 
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+        }
+
         let osudata: osuApiTypes.User;
 
         if (func.findFile(user, 'osudata') &&
@@ -277,11 +285,21 @@ module.exports = {
 
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not fetch user data',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.reply({
+                            content: `Error - could not find user \`${user}\``,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }, 1000);
+                } else {
+                    obj.reply({
+                        content: `Error - could not find user \`${user}\``,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
             }
             return;
         }
@@ -300,21 +318,50 @@ module.exports = {
         osufunc.debug(nochokedata, 'command', 'osutop', obj.guildId, 'noChokeData');
         func.storeFile(nochokedata, absoluteID, 'nochokedata')
 
+        if (nochokedata?.error) {
+            if (commandType != 'button' && commandType != 'link') {
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.reply({
+                            content: `Error - could not find \`${user}\`'s top scores`,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }, 1000);
+                } else {
+                    obj.reply({
+                        content: `Error - could not find \`${user}\`'s top scores`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
+            }
+            return;
+        }
+
         try {
             nochokedata[0].user.username
         } catch (error) {
-            console.log(error)
-            return obj.reply({ content: 'Error - could not fetch user\'s top scores', allowedMentions: { repliedUser: false } })
-                .catch();
-
-        }
-
-        if (commandType == 'interaction') {
-            obj.reply({
-                content: 'Loading...',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
+            if (commandType != 'button' && commandType != 'link') {
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.reply({
+                            content: `Error - could not fetch \`${user}\`'s top scores`,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                            .catch();
+                    }, 1000);
+                } else {
+                    obj.reply({
+                        content: `Error - could not fetch \`${user}\`'s top scores`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }
+            }
+            return;
         }
 
         let showtrue = false;

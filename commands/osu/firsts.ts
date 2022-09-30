@@ -247,6 +247,14 @@ module.exports = {
             }
         }
 
+        if (commandType == 'interaction') {
+            obj.reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: false,
+            }).catch()
+        }
+
         let osudata: osuApiTypes.User;
 
         if (func.findFile(user, 'osudata') &&
@@ -262,29 +270,26 @@ module.exports = {
 
         osufunc.debug(osudata, 'command', 'osu', obj.guildId, 'osuData');
 
-        if (osudata?.error) {
+        if (osudata?.error || !osudata.id) {
             if (commandType != 'button' && commandType != 'link') {
-                obj.reply({
-                    content: 'Error - could not fetch user data',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
+
+                if (commandType == 'interaction') {
+                    setTimeout(() => {
+                        obj.reply({
+                            content: `Error - could not find user \`${user}\``,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                    }, 1000);
+                } else {
+                    obj.reply({
+                        content: `Error - could not find user \`${user}\``,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                }
             }
             return;
-        }
-
-        if (!osudata.id) {
-            return obj.channel.send('Error - no user found')
-                .catch();
-
-        }
-
-        if (commandType == 'interaction') {
-            obj.reply({
-                content: 'Loading...',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: false,
-            }).catch()
         }
 
         let firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []
