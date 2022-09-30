@@ -11,6 +11,7 @@ const mapobjs = {
 
 const gamemodes = {
     standard: '<:modeosu:944181096868884481>', //standard, STD, osu!
+    osu: '<:modeosu:944181096868884481>',
     taiko: '<:modetaiko:944181097053442068>', //taiko, drums
     fruits: '<:modefruits:944181096206176326>', //catch, catch the beat, ctb
     mania: '<:modemania:944181095874834453>' //piano
@@ -41,3 +42,4 @@ const onlinestatus = {
 
 //module.exports = { mapobjs, gamemodes, rankedstatus, grades, onlinestatus }
 export { mapobjs, gamemodes, rankedstatus, grades, onlinestatus }
+

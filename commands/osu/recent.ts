@@ -65,7 +65,24 @@ module.exports = {
                         obj.message.embeds[0].title.split('most recent play for ')[1].split(' | ')[0] :
                         obj.message.embeds[0].title.split('plays for ')[1]
 
-                mode = obj.message.embeds[0].fields[0].value.split(' | ')[1].split('\n')[0]
+                const modething = obj.message.embeds[0].description.split(' | ')[1].split('\n')[0]
+                switch (true) {
+                    case modething.includes('osu'): {
+                        mode = 'osu';
+                    }
+                        break;
+                    case modething.includes('taiko'): {
+                        mode = 'taiko';
+                    }
+                        break;
+                    case modething.includes('fruits'): {
+                        mode = 'fruits';
+                    }
+                        break;
+                    case modething.includes('mania'): {
+                        mode = 'mania';
+                    }
+                }
                 if (obj.message.embeds[0].footer) {
                     mode = obj.message.embeds[0].footer.text.split('gamemode: ')[1]
                 }
@@ -237,7 +254,7 @@ module.exports = {
         if (osudata?.error) {
             if (commandType != 'button' && commandType != 'link') {
                 obj.reply({
-                    content: 'Error - could not fetch user',
+                    content: `Error - could not fetch user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 }).catch()
@@ -246,11 +263,14 @@ module.exports = {
         }
 
         if (!osudata.id) {
-            return obj.channel.send(
-                'Error - no user found'
-            )
-                .catch();
-
+            if (commandType != 'button' && commandType != 'link') {
+                obj.reply({
+                    content: `Error - could not fetch user \`${user}\``,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).catch()
+            }
+            return;
         }
 
         if (commandType == 'interaction') {
@@ -279,14 +299,14 @@ module.exports = {
                 if (commandType == 'interaction') {
                     setTimeout(() => {
                         obj.editReply({
-                            content: 'Error - could not fetch user\'s recent scores',
+                            content: `Error - could not fetch \`${user}\`\'s recent scores`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
                     }, 1000)
                 } else {
                     obj.reply({
-                        content: 'Error - could not fetch user\'s recent scores',
+                        content: `Error - could not fetch \`${user}\`\'s recent scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
@@ -312,14 +332,23 @@ module.exports = {
             const curscore = rsdata[0 + page]
             if (!curscore || curscore == undefined || curscore == null) {
                 if (button == null) {
-                    obj.reply(
-                        {
-                            content: ' Error - no score found',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                        .catch();
-
+                    if (commandType == 'interaction') {
+                        setTimeout(() => {
+                            obj.editReply({
+                                content: `Error - \`${user}\` has no recent ${mode ?? 'osu'} scores`,
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            }).catch()
+                        }, 1000)
+                    } else {
+                        obj.reply(
+                            {
+                                content: `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores`,
+                                allowedMentions: { repliedUser: false },
+                                failIfNotExists: true
+                            })
+                            .catch();
+                    }
                 }
                 return;
             }
@@ -544,7 +573,7 @@ module.exports = {
                     curscore.pp ?
                         curscore.pp.toFixed(2) :
                         NaN
-                ppissue = 'Error - pp calculator could not fetch beatmap'
+                ppissue = 'Error - pp calculator could not calculate beatmap'
             }
             let fcflag = 'FC'
             if (curscore.accuracy != 100) {
@@ -581,17 +610,12 @@ module.exports = {
                     iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
                 })
                 .setThumbnail(`${curbms.covers.list}`)
-                .addFields([
-                    {
-                        name: 'MAP DETAILS',
-                        value:
-                            `
+                .setDescription(`
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
-${totaldiff}⭐ | ${curscore.mode}
+${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
 ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
-                        `,
-                        inline: false
-                    },
+`)
+                .addFields([
                     {
                         name: 'SCORE DETAILS',
                         value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}` +
