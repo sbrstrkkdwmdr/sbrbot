@@ -73,22 +73,12 @@ module.exports = {
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
         const trueping = `${calc.toCapital(commandType)} latency: ${obj.createdAt.getTime() - new Date().getTime()}ms`
-        const starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString())
-        const uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
-        const uptimehours = Math.floor(uptime / 3600) >= 10 ? Math.floor(uptime / 3600) : '0' + Math.floor(uptime / 3600);
-        const uptimeminutes = Math.floor((uptime % 3600) / 60) >= 10 ? Math.floor((uptime % 3600) / 60) : '0' + Math.floor((uptime % 3600) / 60);
-        const uptimeseconds = Math.floor(uptime % 60) >= 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
-
-        const frtxt =
-            `Client latency: ${client.ws.ping}ms
-${trueping}
-Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}
-`;
 
         const pingEmbed = new Discord.EmbedBuilder()
             .setTitle('Pong!')
             .setColor(colours.embedColour.info.dec)
-            .setDescription(frtxt)
+            .setDescription(`Client latency: ${client.ws.ping}ms
+            ${trueping}`);
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
