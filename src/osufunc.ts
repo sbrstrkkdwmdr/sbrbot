@@ -1035,3 +1035,115 @@ export function findWeight(index: number) {
 export function rawToWeighted(pp: number, index: number) {
     return pp * (findWeight(index))
 }
+
+export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: number, userdata: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode) {
+    const users = await userdata.findAll()
+    const pprankarr: { pp: number, rank: number }[] = [];
+
+    for (let i = 0; i < users.length; i++) {
+        const curuser = users[i].dataValues;
+        switch (mode) {
+            case 'osu': default:
+                if (typeof curuser.osupp == 'undefined' || !curuser.osupp) break;
+                if (typeof curuser.osurank == 'undefined' || !curuser.osurank) break;
+                pprankarr.push({
+                    pp: curuser.osupp,
+                    rank: curuser.osurank
+                })
+                break;
+            case 'taiko':
+                if (typeof curuser.taikopp == 'undefined' || !curuser.taikopp) break;
+                if (typeof curuser.taikorank == 'undefined' || !curuser.taikorank) break;
+                pprankarr.push({
+                    pp: curuser.taikopp,
+                    rank: curuser.taikorank
+                })
+                break;
+            case 'fruits':
+                if (typeof curuser.fruitspp == 'undefined' || !curuser.fruitspp) break;
+                if (typeof curuser.fruitsrank == 'undefined' || !curuser.fruitsrank) break;
+                pprankarr.push({
+                    pp: curuser.fruitspp,
+                    rank: curuser.fruitsrank
+                })
+                break;
+            case 'mania':
+                if (typeof curuser.maniapp == 'undefined' || !curuser.maniapp) break;
+                if (typeof curuser.maniarank == 'undefined' || !curuser.maniarank) break;
+                pprankarr.push({
+                    pp: curuser.maniapp,
+                    rank: curuser.maniarank
+                })
+                break;
+        }
+    }
+
+    //sort by pp
+    pprankarr.sort((a, b) => b.pp - a.pp)
+
+    let returnval;
+
+    switch (type) {
+        case 'pp->rank': {
+            pprankarr.push({ pp: value, rank: 0 })
+            pprankarr.sort((a, b) => b.pp - a.pp);
+
+            /** val = 4503
+             *  3000, 68987
+             *  6000, 22
+             * 1000, 500000
+             * 
+             * 4503, null
+             */
+
+            /**
+             * 6000, 22
+             * 4503, null
+             * 3000, 68987  
+             * 1000, 500000
+             * 
+             */
+
+            //get position
+            const pos = pprankarr.findIndex(e => e.pp == value)
+            const prev = pprankarr[pos - 1]
+            const next = pprankarr[pos + 1]
+            //estimate rank
+            if (typeof prev == 'undefined') {
+                returnval = next.rank
+            }
+            else if (typeof next == 'undefined') {
+                returnval = prev.rank
+            } else {
+                // returnval = prev.rank + ((next.rank - prev.rank) / (next.pp - prev.pp)) * (value - prev.pp)
+                returnval = (prev.rank + next.rank) / 2
+            }
+            if(typeof prev == 'undefined' && typeof next == 'undefined'){
+                returnval = 0;
+            }
+        }
+            break;
+        case 'rank->pp': {
+            pprankarr.push({ pp: 0, rank: value })
+            pprankarr.sort((a, b) => b.rank - a.rank);
+            const pos = pprankarr.findIndex(e => e.rank == value)
+            const prev = pprankarr[pos - 1]
+            const next = pprankarr[pos + 1]
+            //estimate pp
+            if (typeof prev == 'undefined') {
+                returnval = next.pp
+            }
+            else if (typeof next == 'undefined') {
+                returnval = prev.pp
+            } else {
+                // returnval = prev.pp + ((next.pp - prev.pp) / (next.rank - prev.rank)) * (value - prev.rank)
+                returnval = (prev.pp + next.pp) / 2
+            }
+            if(typeof prev == 'undefined' && typeof next == 'undefined'){
+                returnval = 0;
+            }
+
+        }
+            break;
+    }
+}
