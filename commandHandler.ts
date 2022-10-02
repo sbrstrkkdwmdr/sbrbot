@@ -280,6 +280,26 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
+            case 'rank':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    let overrides = {
+                        type: 'rank'
+                    }
+                    commandStruct.osucmds.get('rankpp').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                } else {
+                    commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
+                }
+                break;
+            case 'pp':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    let overrides = {
+                        type: 'pp'
+                    }
+                    commandStruct.osucmds.get('rankpp').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                } else {
+                    commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
+                }
+                break;
             case 'leaderboard': case 'maplb': case 'mapleaderboard':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     commandStruct.osucmds.get('maplb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)

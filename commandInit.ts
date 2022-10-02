@@ -435,6 +435,48 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
         ]
     },
     {
+        name: 'pp',
+        description: 'Estimates the rank of a user from the pp given',
+        dmPermission: false,
+        options: [
+            {
+                name: 'pp',
+                description: 'The pp to estimate the rank of',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: true,
+                minValue: 1
+            },
+            {
+                name: 'mode',
+                description: 'The mode to estimate the rank in',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: cmdconfig.modeopts
+            },
+        ]
+    },
+    {
+        name: 'rank',
+        description: 'Estimates the pp of a user from the rank given',
+        dmPermission: false,
+        options: [
+            {
+                name: 'rank',
+                description: 'The rank to estimate the pp of',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: true,
+                minValue: 1
+            },
+            {
+                name: 'mode',
+                description: 'The mode to estimate the pp in',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: cmdconfig.modeopts
+            }
+        ]
+    },
+    {
         name: 'ranking',
         description: 'Displays the global leaderboards',
         dmPermission: false,

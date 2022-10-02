@@ -1106,6 +1106,7 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
 
             //get position
             const pos = pprankarr.findIndex(e => e.pp == value)
+            
             const prev = pprankarr[pos - 1]
             const next = pprankarr[pos + 1]
             //estimate rank
@@ -1118,8 +1119,8 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
                 // returnval = prev.rank + ((next.rank - prev.rank) / (next.pp - prev.pp)) * (value - prev.pp)
                 returnval = (prev.rank + next.rank) / 2
             }
-            if(typeof prev == 'undefined' && typeof next == 'undefined'){
-                returnval = 0;
+            if (typeof prev == 'undefined' && typeof next == 'undefined') {
+                returnval = 'unknown';
             }
         }
             break;
@@ -1139,11 +1140,12 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
                 // returnval = prev.pp + ((next.pp - prev.pp) / (next.rank - prev.rank)) * (value - prev.rank)
                 returnval = (prev.pp + next.pp) / 2
             }
-            if(typeof prev == 'undefined' && typeof next == 'undefined'){
+            if (typeof prev == 'undefined' && typeof next == 'undefined') {
                 returnval = 0;
             }
 
         }
             break;
     }
+    return returnval;
 }
