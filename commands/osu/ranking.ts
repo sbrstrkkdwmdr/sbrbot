@@ -11,10 +11,11 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
 import buttonsthing = require('../../src/consts/buttons')
+import extypes = require('../../src/types/extraTypes');
 
 module.exports = {
     name: 'ranking',
-    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
+    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate:Date, overrides, userdata) {
         let commanduser;
         let country = 'ALL';
         let mode = 'osu';
@@ -25,6 +26,14 @@ module.exports = {
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
+                if (args.includes('-page')) {
+                    page = parseInt(args[args.indexOf('-page') + 1]);
+                    args.splice(args.indexOf('-page'), 2);
+                }
+                if (args.includes('-p')) {
+                    page = parseInt(args[args.indexOf('-p') + 1]);
+                    args.splice(args.indexOf('-p'), 2);
+                }
                 args[0] ? country = args[0].toUpperCase() : country = 'ALL';
             }
                 break;

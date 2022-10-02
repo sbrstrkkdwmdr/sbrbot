@@ -11,11 +11,11 @@ import log = require('../../src/log');
 import embedStuff = require('../../src/embed');
 import func = require('../../src/other');
 import def = require('../../src/consts/defaults');
-import buttonsthing = require('../../src/consts/buttons')
-
+import buttonsthing = require('../../src/consts/buttons');
+import extypes = require('../../src/types/extraTypes');
 module.exports = {
     name: 'scores',
-    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
+    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate:Date, overrides, userdata) {
         let commanduser;
 
         let user;
@@ -34,8 +34,16 @@ module.exports = {
             case 'message': {
                 commanduser = obj.author;
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
+                if (args.includes('-page')) {
+                    page = parseInt(args[args.indexOf('-page') + 1]);
+                    args.splice(args.indexOf('-page'), 2);
+                }
+                if (args.includes('-p')) {
+                    page = parseInt(args[args.indexOf('-p') + 1]);
+                    args.splice(args.indexOf('-p'), 2);
+                }
                 user = args.join(' ');
-                if (!args[0] || args[0].includes(searchid) || !isNaN(+args[0])) {
+                if (!args[0] || args.includes(searchid) || !isNaN(+args[0])) {
                     user = null
                 }
                 mapid = null;

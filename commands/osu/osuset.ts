@@ -9,10 +9,11 @@ import osuApiTypes = require('../../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../../src/log');
 import buttonsthing = require('../../src/consts/buttons')
+import extypes = require('../../src/types/extraTypes');
 
 module.exports = {
     name: 'osuset',
-    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
+    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate:Date, overrides, userdata) {
         let commanduser;
 
         let name;

@@ -12,10 +12,11 @@ import embedStuff = require('../../src/embed');
 import func = require('../../src/other');
 import def = require('../../src/consts/defaults');
 import buttonsthing = require('../../src/consts/buttons')
+import extypes = require('../../src/types/extraTypes');
 
 module.exports = {
     name: 'osutop',
-    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
+    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate:Date, overrides, userdata) {
         let commanduser;
 
         let user;
@@ -32,8 +33,16 @@ module.exports = {
             case 'message': {
                 commanduser = obj.author;
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
+                if (args.includes('-page')) {
+                    page = parseInt(args[args.indexOf('-page') + 1]);
+                    args.splice(args.indexOf('-page'), 2);
+                }
+                if (args.includes('-p')) {
+                    page = parseInt(args[args.indexOf('-p') + 1]);
+                    args.splice(args.indexOf('-p'), 2);
+                }
                 user = args.join(' ');
-                if (!args[0] || args[0].includes(searchid)) {
+                if (!args[0] || args.includes(searchid)) {
                     user = null
                 }
                 mode = null;
@@ -511,7 +520,7 @@ module.exports = {
             //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
             pgbuttons.components[4].setDisabled(true)
         }
-        if (commandType != button || button == 'Refresh') {
+        if (commandType != 'button' || button == 'Refresh') {
             try {
                 osufunc.updateUserStats(osudata, osudata.playmode, userdata)
             } catch (error) {

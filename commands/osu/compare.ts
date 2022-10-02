@@ -11,10 +11,11 @@ import Discord = require('discord.js');
 import log = require('../../src/log');
 import func = require('../../src/other');
 import def = require('../../src/consts/defaults');
+import extypes = require('../../src/types/extraTypes');
 
 module.exports = {
     name: 'compare',
-    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
+    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate:Date, overrides, userdata) {
         let commanduser;
         let type: 'profile' | 'top' | 'mapscore' = 'top';
         let first = null;

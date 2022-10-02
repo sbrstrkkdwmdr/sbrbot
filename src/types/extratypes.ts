@@ -163,6 +163,7 @@ type dbUser = {
     maniarank: number,
 }
 
+type commandType = 'message' | 'interaction' | 'button' | 'link'
 
-export { config, guildSettings, imagesearches, googleSearchItem, ytSearch, dbUser }
+export { config, guildSettings, imagesearches, googleSearchItem, ytSearch, dbUser, commandType }
 

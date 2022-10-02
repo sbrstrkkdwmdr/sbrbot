@@ -13,7 +13,7 @@ import buttonsthing = require('../../src/consts/buttons');
 
 module.exports = {
     name: 'lb',
-    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
+    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate:Date, overrides, userdata) {
         let commanduser;
 
         let page = 0;

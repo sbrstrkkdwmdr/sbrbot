@@ -12,10 +12,11 @@ import embedStuff = require('../../src/embed');
 import func = require('../../src/other');
 import def = require('../../src/consts/defaults');
 import buttonsthing = require('../../src/consts/buttons')
+import extypes = require('../../src/types/extraTypes');
 
 module.exports = {
     name: 'firsts',
-    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
+    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate:Date, overrides, userdata) {
         let commanduser;
 
         let user;
@@ -404,7 +405,7 @@ module.exports = {
         }
 
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
-        if (commandType != button || button == 'Refresh') {
+        if (commandType != 'button' || button == 'Refresh') {
             try {
                 osufunc.updateUserStats(osudata, osudata.playmode, userdata)
             } catch (error) {

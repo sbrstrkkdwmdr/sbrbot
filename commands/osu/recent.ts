@@ -12,10 +12,11 @@ import func = require('../../src/other');
 import embedStuff = require('../../src/embed');
 import def = require('../../src/consts/defaults');
 import buttonsthing = require('../../src/consts/buttons')
+import extypes = require('../../src/types/extratypes');
 
 module.exports = {
     name: 'recent',
-    async execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata) {
+    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate:Date, overrides, userdata) {
         let commanduser;
 
         let user;
@@ -31,8 +32,28 @@ module.exports = {
             case 'message': {
                 commanduser = obj.author;
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
+                if (args.includes('-list')) {
+                    list = true;
+                    args.splice(args.indexOf('-list'), 1);
+                }
+                if (args.includes('-page')) {
+                    page = parseInt(args[args.indexOf('-page') + 1]);
+                    args.splice(args.indexOf('-page'), 2);
+                }
+                if (args.includes('-p')) {
+                    page = parseInt(args[args.indexOf('-p') + 1]);
+                    args.splice(args.indexOf('-p'), 2);
+                }
+                if (args.includes('-mode')) {
+                    mode = (args[args.indexOf('-mode') + 1]);
+                    args.splice(args.indexOf('-mode'), 2);
+                }
+                if (args.includes('-m')) {
+                    mode = (args[args.indexOf('-m') + 1]);
+                    args.splice(args.indexOf('-m'), 2);
+                }
                 user = args.join(' ');
-                if (!args[0] || args[0].includes(searchid)) {
+                if (!args[0] || args.includes(searchid)) {
                     user = null
                 }
                 page = 0;
@@ -208,7 +229,7 @@ module.exports = {
                 return;
             }
         }
-        if (mode == null) {
+        if (mode == null || mode != 'osu' && mode != 'taiko' && mode != 'fruits' && mode != 'mania') {
             mode = 'osu'
         }
         if (page < 2 || typeof page != 'number') {
@@ -720,7 +741,7 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
         }
         osufunc.writePreviousId('user', obj.guildId, `${osudata.id}`);
 
-        if (commandType != button || button == 'Refresh') {
+        if (commandType != 'button' || button == 'Refresh') {
             try {
                 osufunc.updateUserStats(osudata, osudata.playmode, userdata)
             } catch (error) {
