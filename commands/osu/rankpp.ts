@@ -20,7 +20,7 @@ module.exports = {
         let commanduser;
         let type: string = 'rank';
         let value;
-        let mode:osuApiTypes.GameMode = 'osu';
+        let mode: osuApiTypes.GameMode = 'osu';
         switch (commandType) {
             case 'message': {
                 commanduser = obj.author;
@@ -30,6 +30,7 @@ module.exports = {
             //==============================================================================================================================================================================================
             case 'interaction': {
                 commanduser = obj.member.user;
+                value = obj.options.getInteger('value') ?? 100;
             }
                 //==============================================================================================================================================================================================
 
@@ -72,7 +73,7 @@ module.exports = {
             case 'pp': {
                 returnval = await osufunc.getRankPerformance('pp->rank', value, userdata, mode);
                 if (typeof returnval == 'number') {
-                    returnval = '#' + func.separateNum(returnval)
+                    returnval = 'approx. #' + func.separateNum(returnval)
                 } else {
                     returnval = 'null'
                 }
@@ -86,7 +87,7 @@ module.exports = {
                 returnval = await osufunc.getRankPerformance('rank->pp', value, userdata, mode);
 
                 if (typeof returnval == 'number') {
-                    returnval = func.separateNum(returnval) + 'pp'
+                    returnval = 'approx. ' + func.separateNum(returnval) + 'pp'
                 } else {
                     returnval = 'null'
                 }

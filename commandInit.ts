@@ -260,6 +260,135 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
         ]
     },
     {
+        name: 'firsts',
+        description: 'Displays the user\'s #1 scores',
+        dmPermission: false,
+        options: cmdconfig.playArrayOpts
+    },
+    {
+        name: 'lb',
+        description: 'Displays the server leaderboard',
+        dmPermission: false,
+    },
+    {
+        name: 'leaderboard',
+        description: 'Displays the top five plays on a specific map',
+        dmPermission: false,
+        options: [
+            {
+                name: 'id',
+                description: 'The id of the map to display',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'page',
+                description: 'Which page to display',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+                default: 1,
+                minValue: 1,
+                maxValue: 20
+
+            },
+            {
+                name: 'mods',
+                description: 'What mods to sort',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.String
+            }
+        ]
+    },
+    {//alternate command for leaderboard
+        name: 'maplb',
+        description: 'Displays the top five plays on a specific map',
+        dmPermission: false,
+        options: [
+            {
+                name: 'id',
+                description: 'The id of the map to display',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'page',
+                description: 'Which page to display',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+                default: 1,
+                minValue: 1,
+                maxValue: 20
+
+            },
+            {
+                name: 'mods',
+                description: 'What mods to sort',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.String
+            }
+        ]
+    },
+    {
+        name: 'map',
+        description: 'Displays the map info of the map',
+        dmPermission: false,
+        options: [
+            {
+                name: 'id',
+                description: 'The id of the map to display',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: false,
+                minValue: 1
+            },
+            {
+                name: 'mods',
+                description: 'The mods to display the map info of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            },
+            {
+                name: 'detailed',
+                description: 'Show all details',
+                type: Discord.ApplicationCommandOptionType.Boolean,
+                required: false,
+                default: false
+            },
+            {
+                name: 'query',
+                description: 'The name of the map to display',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            }
+        ]
+    },
+    {//alternate command for map
+        name: 'm',
+        description: 'Displays the map info of the map',
+        dmPermission: false,
+        options: [
+            {
+                name: 'id',
+                description: 'The id of the map to display',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: false,
+                minValue: 1
+            },
+            {
+                name: 'mods',
+                description: 'The mods to display the map info of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            },
+            {
+                name: 'detailed',
+                description: 'Show all details',
+                type: Discord.ApplicationCommandOptionType.Boolean,
+                required: false,
+                default: false
+            }
+        ]
+    },
+    {
         name: 'osu',
         description: 'Displays the user\'s osu! profile',
         dmPermission: false,
@@ -375,64 +504,10 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
         options: cmdconfig.playArrayOpts
     },
     {
-        name: 'map',
-        description: 'Displays the map info of the map',
+        name: 'pinned',
+        description: 'Displays the user\'s pinned scores',
         dmPermission: false,
-        options: [
-            {
-                name: 'id',
-                description: 'The id of the map to display',
-                type: Discord.ApplicationCommandOptionType.Integer,
-                required: false,
-                minValue: 1
-            },
-            {
-                name: 'mods',
-                description: 'The mods to display the map info of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            },
-            {
-                name: 'detailed',
-                description: 'Show all details',
-                type: Discord.ApplicationCommandOptionType.Boolean,
-                required: false,
-                default: false
-            },
-            {
-                name: 'query',
-                description: 'The name of the map to display',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            }
-        ]
-    },
-    {//alternate command for map
-        name: 'm',
-        description: 'Displays the map info of the map',
-        dmPermission: false,
-        options: [
-            {
-                name: 'id',
-                description: 'The id of the map to display',
-                type: Discord.ApplicationCommandOptionType.Integer,
-                required: false,
-                minValue: 1
-            },
-            {
-                name: 'mods',
-                description: 'The mods to display the map info of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            },
-            {
-                name: 'detailed',
-                description: 'Show all details',
-                type: Discord.ApplicationCommandOptionType.Boolean,
-                required: false,
-                default: false
-            }
-        ]
+        options: cmdconfig.playArrayOpts
     },
     {
         name: 'pp',
@@ -440,7 +515,7 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
         dmPermission: false,
         options: [
             {
-                name: 'pp',
+                name: 'value',
                 description: 'The pp to estimate the rank of',
                 type: Discord.ApplicationCommandOptionType.Integer,
                 required: true,
@@ -461,7 +536,7 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
         dmPermission: false,
         options: [
             {
-                name: 'rank',
+                name: 'value',
                 description: 'The rank to estimate the pp of',
                 type: Discord.ApplicationCommandOptionType.Integer,
                 required: true,
@@ -545,81 +620,6 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
         description: 'Displays the user\'s scores for a set map',
         dmPermission: false,
         options: cmdconfig.useridsortopts
-    },
-    {
-        name: 'firsts',
-        description: 'Displays the user\'s #1 scores',
-        dmPermission: false,
-        options: cmdconfig.playArrayOpts
-    },
-    {
-        name: 'pinned',
-        description: 'Displays the user\'s pinned scores',
-        dmPermission: false,
-        options: cmdconfig.playArrayOpts
-    },
-    {
-        name: 'leaderboard',
-        description: 'Displays the top five plays on a specific map',
-        dmPermission: false,
-        options: [
-            {
-                name: 'id',
-                description: 'The id of the map to display',
-                required: false,
-                type: Discord.ApplicationCommandOptionType.Integer,
-            },
-            {
-                name: 'page',
-                description: 'Which page to display',
-                required: false,
-                type: Discord.ApplicationCommandOptionType.Integer,
-                default: 1,
-                minValue: 1,
-                maxValue: 20
-
-            },
-            {
-                name: 'mods',
-                description: 'What mods to sort',
-                required: false,
-                type: Discord.ApplicationCommandOptionType.String
-            }
-        ]
-    },
-    {//alternate command for leaderboard
-        name: 'maplb',
-        description: 'Displays the top five plays on a specific map',
-        dmPermission: false,
-        options: [
-            {
-                name: 'id',
-                description: 'The id of the map to display',
-                required: false,
-                type: Discord.ApplicationCommandOptionType.Integer,
-            },
-            {
-                name: 'page',
-                description: 'Which page to display',
-                required: false,
-                type: Discord.ApplicationCommandOptionType.Integer,
-                default: 1,
-                minValue: 1,
-                maxValue: 20
-
-            },
-            {
-                name: 'mods',
-                description: 'What mods to sort',
-                required: false,
-                type: Discord.ApplicationCommandOptionType.String
-            }
-        ]
-    },
-    {
-        name: 'lb',
-        description: 'Displays the server leaderboard',
-        dmPermission: false,
     },
     {
         name: 'simulate',
