@@ -762,31 +762,60 @@ const osucommands = [
         ]
     },
     {
-        name: 'ppifrank',
-        description: 'Shows the total pp if you are at a certain rank and vice versa',
-        usage: 'ppifrank [value] [type]',
-        slashusage: 'ppifrank [value] [type]',
+        name: 'pp',
+        description: 'Estimates the rank of a user from the pp given',
+        usage: 'pp [value] [mode]',
+        slashusage: 'pp [value] [mode]',
         examples: [
-            'sbr-ppifrank 20000',
-            '/ppifrank 2000 rank'
+            'sbr-pp 100000',
+            'sbr-pp 2999 fruits',
         ],
-        aliases: ['rankifpp'],
+        aliases: [],
         options: [
             {
                 name: 'value',
                 type: 'integer',
                 required: true,
-                description: 'The value to use',
+                description: 'The pp to estimate the rank of',
                 options: ['N/A'],
-                defaultValue: 'null'
+                defaultValue: 'N/A'
             },
             {
-                name: 'type',
+                name: 'mode',
+                type: 'string',
+                required: false,    
+                description: 'The mode to estimate the rank in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu'
+            }
+        ]
+    },
+    {
+        name: 'rank',
+        description: 'Estimates the performance points of a user from the rank given',
+        usage: 'rank [value] [mode]',
+        slashusage: 'rank [value] [mode]',
+        examples: [
+            'sbr-rank 1',
+            'sbr-rank 1 taiko',
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'value',
+                type: 'integer',
+                required: true,
+                description: 'The rank to estimate the pp of',
+                options: ['N/A'],
+                defaultValue: 'N/A'
+            },
+            {
+                name: 'mode',
                 type: 'string',
                 required: false,
-                description: 'The type of value',
-                options: ['rank', 'pp'],
-                defaultValue: 'pp'
+                description: 'The mode to show the scores in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu'
             }
         ]
     },
