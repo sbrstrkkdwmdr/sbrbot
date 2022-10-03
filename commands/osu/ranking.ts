@@ -15,7 +15,7 @@ import extypes = require('../../src/types/extraTypes');
 
 module.exports = {
     name: 'ranking',
-    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate:Date, overrides, userdata) {
+    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate: Date, overrides, userdata) {
         let commanduser;
         let country = 'ALL';
         let mode = 'osu';
@@ -274,16 +274,14 @@ module.exports = {
                     {
                         name: `${i + 1 + (page * 5)}`,
                         value:
-                            `[${curuser.user.username}](https://osu.ppy.sh/u/${curuser.user.id}/${mode})
-                        Rank: ${curuser.global_rank == null ?
+                            `:flag_${curuser.user.country_code.toLowerCase()}: [${curuser.user.username}](https://osu.ppy.sh/u/${curuser.user.id}/${mode})
+#${curuser.global_rank == null ?
                                 '---' :
                                 func.separateNum(curuser.global_rank)
                             }
-                            Score: ${curuser.total_score == null ? '---' : func.separateNum(curuser.total_score)} (${curuser.ranked_score == null ? '---' : func.separateNum(curuser.ranked_score)} ranked)
-                            ${curuser.pp == null ? '---' : func.separateNum(curuser.pp)}pp
-                            Accuracy: ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}%
-                            Play count: ${curuser.play_count == null ? '---' : func.separateNum(curuser.play_count)}
-                            `
+Score: ${curuser.total_score == null ? '---' : func.separateNum(curuser.total_score)} (${curuser.ranked_score == null ? '---' : func.separateNum(curuser.ranked_score)} ranked)
+${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${curuser.pp == null ? '---' : func.separateNum(curuser.pp)}pp | ${curuser.play_count == null ? '---' : func.separateNum(curuser.play_count)} plays
+`
                         ,
                         inline: false
                     }
