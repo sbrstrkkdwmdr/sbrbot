@@ -93,6 +93,9 @@ module.exports = {
                         detailed = false
                     }
                 }
+                if(!obj.message.embeds[0].title){
+                    graphonly = true
+                }
             }
                 break;
             case 'link': {
@@ -201,7 +204,7 @@ module.exports = {
         ) {
             osudata = func.findFile(user, 'osudata')
         } else {
-            osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+            osudata = await osufunc.apiget('user', `${await user}`, mode)
         }
         func.storeFile(osudata, osudata.id, 'osudata')
         func.storeFile(osudata, user, 'osudata')
@@ -295,7 +298,6 @@ module.exports = {
             const chartrank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank');
 
             const ChartsEmbedRank = new Discord.EmbedBuilder()
-                .setDescription('Click on the image to see the full chart')
                 .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
                 .setImage(`${chartrank}`);
 
