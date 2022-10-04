@@ -32,7 +32,7 @@ module.exports = {
                     detailed = true;
                     args.splice(args.indexOf('-details'), 1);
                 }
-                if(args.includes('-graph')){
+                if (args.includes('-graph')) {
                     graphonly = true;
                     args.splice(args.indexOf('-graph'), 1);
                 }
