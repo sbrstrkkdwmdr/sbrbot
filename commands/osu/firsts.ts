@@ -264,6 +264,8 @@ module.exports = {
             }
         }
 
+        mode = osufunc.modeValidator(mode);
+
         if (commandType == 'interaction') {
             obj.reply({
                 content: 'Loading...',

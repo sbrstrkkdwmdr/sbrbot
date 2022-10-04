@@ -255,9 +255,8 @@ module.exports = {
                 return;
             }
         }
-        if (mode == null) {
-            mode = 'osu'
-        }
+
+        mode = osufunc.modeValidator(mode);
 
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(

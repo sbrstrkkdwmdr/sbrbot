@@ -1106,7 +1106,7 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
 
             //get position
             const pos = pprankarr.findIndex(e => e.pp == value)
-            
+
             const prev = pprankarr[pos - 1]
             const next = pprankarr[pos + 1]
             //estimate rank
@@ -1148,4 +1148,41 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
             break;
     }
     return returnval;
+}
+
+export function modeValidator(mode: string | number) {
+    let returnf: osuApiTypes.GameMode = 'osu';
+
+    if (typeof mode == 'number') {
+        switch (mode) {
+            case 0: default:
+                returnf = 'osu';
+                break;
+            case 1:
+                returnf = 'taiko';
+                break;
+            case 2:
+                returnf = 'fruits';
+                break;
+            case 3:
+                returnf = 'mania';
+                break;
+        }
+    } else if (typeof mode == 'string') {
+        switch(mode){
+            case 'osu': default: case 'o': case 'std': case 'standard':
+                returnf = 'osu';
+                break;
+            case 'taiko': case 't': case 'drums':
+                returnf = 'taiko';
+                break;
+            case 'fruits': case 'f': case 'c': case 'ctb': case 'catch': case 'catch the beat': case 'catchthebeat':
+                returnf = 'fruits';
+                break;
+            case 'mania':case 'm': case 'piano': case 'key':case 'keys':
+                returnf = 'mania';
+                break;
+        }
+    }
+    return returnf;
 }

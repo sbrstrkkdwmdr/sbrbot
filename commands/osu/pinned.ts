@@ -265,9 +265,8 @@ module.exports = {
                 return;
             }
         }
-        if (mode == null) {
-            mode = 'osu'
-        }
+
+        mode = osufunc.modeValidator(mode);
 
         if (commandType == 'interaction') {
             obj.reply({

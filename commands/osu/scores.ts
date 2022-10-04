@@ -276,6 +276,9 @@ module.exports = {
                 return;
             }
         }
+
+        mode = osufunc.modeValidator(mode);
+
         if (!mapid || isNaN(mapid)) {
             mapid = osufunc.getPreviousId('map', obj.guildId);
         }

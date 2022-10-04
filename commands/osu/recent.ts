@@ -231,9 +231,9 @@ module.exports = {
                 return;
             }
         }
-        if (mode == null || mode != 'osu' && mode != 'taiko' && mode != 'fruits' && mode != 'mania') {
-            mode = 'osu'
-        }
+
+        mode = osufunc.modeValidator(mode);
+
         if (page < 2 || typeof page != 'number') {
             isFirstPage = true;
             page = 1;

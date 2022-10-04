@@ -99,6 +99,9 @@ module.exports = {
         if (overrides != null) {
             page = overrides.page ?? page;
         }
+
+        mode = osufunc.modeValidator(mode);
+
         //==============================================================================================================================================================================================
 
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
