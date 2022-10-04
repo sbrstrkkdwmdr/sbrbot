@@ -80,8 +80,8 @@ module.exports = {
                     return;
                 }
                 commanduser = obj.member.user;
-                user = obj.message.embeds[0].title.split('for ')[1]
-                mode = obj.message.embeds[0].description.split('\n')[1]
+                user = obj.message.embeds[0].url.split('users/')[1].split('/')[0]
+                mode = obj.message.embeds[0].url.split('users/')[1].split('/')[1]
                 page = 0;
                 if (obj.message.embeds[0].description) {
                     if (obj.message.embeds[0].description.includes('mapper')) {
@@ -143,7 +143,6 @@ module.exports = {
                             page = pageParsed
                             break;
                     }
-                    mode = obj.message.embeds[0].description.split('mode: ')[1].split('\n')[0]
                 }
             }
                 break;
@@ -360,7 +359,7 @@ module.exports = {
         const pinnedEmbed = new Discord.EmbedBuilder()
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`Pinned scores for ${osudata.username}`)
-            .setURL(`https://osu.ppy.sh/u/${osudata.id}`)
+            .setURL(`https://osu.ppy.sh/users/${osudata.id}/${pinnedscoresdata[0].mode}`)
             .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
             .setAuthor({
                 name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
@@ -382,7 +381,7 @@ module.exports = {
                 filteredMods: filteredMods,
                 reverse: false
             });
-        pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\nmode: ${mode}\n`)
+        pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n`)
         if (scoresarg.fields.length == 0) {
             pinnedEmbed.addFields([{
                 name: 'Error',

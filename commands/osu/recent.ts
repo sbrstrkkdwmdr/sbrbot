@@ -89,7 +89,7 @@ module.exports = {
                         obj.message.embeds[0].title.split('most recent play for ')[1].split(' | ')[0] :
                         obj.message.embeds[0].title.split('plays for ')[1]
 
-                const modething = obj.message.embeds[0].description.split(' | ')[1].split('\n')[0]
+                const modething = obj.message.embeds[0].footer ? obj.message.embeds[0].description.split('\n')[1] : obj.message.embeds[0].description.split(' | ')[1].split('\n')[0]
                 switch (true) {
                     case modething.includes('osu'): {
                         mode = 'osu';
@@ -106,9 +106,6 @@ module.exports = {
                     case modething.includes('mania'): {
                         mode = 'mania';
                     }
-                }
-                if (obj.message.embeds[0].footer) {
-                    mode = obj.message.embeds[0].footer.text.split('gamemode: ')[1]
                 }
 
                 page = 0
@@ -726,8 +723,8 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                     rsEmbed.addFields(scoresarg.fields[i])
                 }
             }
-            rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 5)}`)
-            rsEmbed.setFooter({ text: `gamemode: ${rsdata[0].mode}` })
+            rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 5)}\n${emojis.gamemodes[mode]}`)
+            rsEmbed.setFooter({ text: `-` })
             if (scoresarg.isFirstPage) {
                 //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
                 pgbuttons.components[0].setDisabled(true)

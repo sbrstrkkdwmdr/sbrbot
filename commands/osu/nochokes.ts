@@ -419,7 +419,7 @@ module.exports = {
                 filteredMods: mods,
                 reverse: reverse
             })
-        topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}`)
+        topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`)
         if (scoresarg.fields.length == 0) {
             topEmbed.addFields([{
                 name: 'Error',
