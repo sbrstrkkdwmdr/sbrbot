@@ -41,7 +41,7 @@ export function separateNum(number: string | number, separator?: string) {
     if (separator) {
         cursep = separator
     }
-    let ans = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, cursep)
+    let ans = `${number}`.replace(/\B(?=(\d{3})+(?!\d))/g, cursep)
     if (number.toString().includes('.')) {
         const init = number.toString().split('.')[0];
         const after = number.toString().split('.')[1];
