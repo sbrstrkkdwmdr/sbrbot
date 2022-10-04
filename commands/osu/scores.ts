@@ -43,13 +43,19 @@ module.exports = {
                     args.splice(args.indexOf('-p'), 2);
                 }
                 user = args.join(' ');
-                if (!args[0] || args.includes(searchid) || !isNaN(+args[0])) {
+                if (!args[0] || args.includes(searchid) || isNaN(+args[0])) {
                     user = null
                 }
                 mapid = null;
                 if (!isNaN(+args[0])) {
                     mapid = +args[0];
                 }
+                //find if any string in args is a number
+                const number = args.find(arg => !isNaN(+arg));
+                if (number) {
+                    mapid = +number;
+                }
+
             }
                 break;
 

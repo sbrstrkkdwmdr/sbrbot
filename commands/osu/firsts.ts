@@ -34,11 +34,26 @@ module.exports = {
             case 'message': {
                 commanduser = obj.author;
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
+                if (args.includes('-page')) {
+                    page = parseInt(args[args.indexOf('-page') + 1]);
+                    args.splice(args.indexOf('-page'), 2);
+                }
+                if (args.includes('-p')) {
+                    page = parseInt(args[args.indexOf('-p') + 1]);
+                    args.splice(args.indexOf('-p'), 2);
+                }
+                if (args.includes('-mode')) {
+                    mode = (args[args.indexOf('-mode') + 1]);
+                    args.splice(args.indexOf('-mode'), 2);
+                }
+                if (args.includes('-m')) {
+                    mode = (args[args.indexOf('-m') + 1]);
+                    args.splice(args.indexOf('-m'), 2);
+                }
                 user = args.join(' ');
                 if (!args[0] || args[0].includes(searchid)) {
                     user = null
                 }
-                page = 0
             }
                 break;
 

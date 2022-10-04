@@ -22,6 +22,7 @@ export type commandInfo = {
         description: string,
         options: string[] | boolean[],
         defaultValue: string
+        aliases?: string[]
     }[],
 }
 
@@ -67,8 +68,8 @@ const cmds: commandInfo[] = [
         usage: 'convert [from] [to] [number]',
         slashusage: 'convert [from] [to] [number]',
         examples: [
-            'sbr-convert km mi 10',
-            'sbr-convert k c 273.15',
+            'PREFIXMSGconvert km mi 10',
+            'PREFIXMSGconvert k c 273.15',
         ],
         aliases: [],
         options: [
@@ -111,8 +112,8 @@ const cmds: commandInfo[] = [
         usage: 'help [command]',
         slashusage: 'help [command]',
         examples: [
-            'sbr-help',
-            'sbr-help convert',
+            'PREFIXMSGhelp',
+            'PREFIXMSGhelp convert',
         ],
         aliases: [],
         options: [
@@ -141,7 +142,7 @@ const cmds: commandInfo[] = [
         usage: 'math [problem]',
         slashusage: 'math [type] [num1] [num2]',
         examples: [
-            'sbr-math 2+2',
+            'PREFIXMSGmath 2+2',
             '/math type:pythag num1:3 num2:4',
         ],
         aliases: [],
@@ -207,8 +208,8 @@ const cmds: commandInfo[] = [
         usage: 'reminder [time] [reminder]',
         slashusage: 'reminder [time] [reminder] [sendinchannel]',
         examples: [
-            'sbr-remind 1h30m30s reminder',
-            'sbr-remind 2:05 fc'
+            'PREFIXMSGremind 1h30m30s reminder',
+            'PREFIXMSGremind 2:05 fc'
         ],
         aliases: [],
         options: [
@@ -257,8 +258,8 @@ const cmds: commandInfo[] = [
         usage: 'time [timezone]',
         slashusage: 'time [timezone]',
         examples: [
-            'sbr-time',
-            'sbr-time Australia/Melbourne'
+            'PREFIXMSGtime',
+            'PREFIXMSGtime Australia/Melbourne'
         ],
         aliases: [],
         options: [
@@ -281,9 +282,9 @@ const osucmds: commandInfo[] = [
         usage: 'bws [user]',
         slashusage: 'bws [user]',
         examples: [
-            'sbr-bws',
-            'sbr-bws peppy',
-            'sbr-bws DigitalHypno'
+            'PREFIXMSGbws',
+            'PREFIXMSGbws peppy',
+            'PREFIXMSGbws DigitalHypno'
         ],
         aliases: [],
         options: [
@@ -303,8 +304,8 @@ const osucmds: commandInfo[] = [
         usage: 'compare [first] [second]',
         slashusage: 'compare [type] [first] [second]',
         examples: [
-            'sbr-compare',
-            'sbr-compare peppy SaberStrike',
+            'PREFIXMSGcompare',
+            'PREFIXMSGcompare peppy SaberStrike',
             '/compare type:score'
         ],
         aliases: [],
@@ -340,10 +341,13 @@ const osucmds: commandInfo[] = [
     {
         name: 'firsts',
         description: 'Shows the #1 global scores of a user',
-        usage: 'firsts [user]',
-        slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
+        usage: 'firsts [user] [-page] [-mode]',
+        slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods]',
         examples: [
-            'sbr-firsts mrekk',
+            'PREFIXMSGfirsts SaberStrike',
+            'PREFIXMSGfirsts -p 3',
+            'PREFIXMSGfirsts -m mania',
+            '/firsts mods:HDHR sort:recent'
         ],
         aliases: [],
         options: [
@@ -361,7 +365,8 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mode to show the scores in',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu'
+                defaultValue: 'osu',
+                aliases: ['m']
             },
             {
                 name: 'sort',
@@ -369,7 +374,7 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The sort order of the scores',
                 options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
-                defaultValue: 'recent'
+                defaultValue: 'pp'
             },
             {
                 name: 'reverse',
@@ -385,7 +390,8 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The page of scores to show',
                 options: ['N/A'],
-                defaultValue: '1'
+                defaultValue: '1',
+                aliases: ['p']
             },
             {
                 name: 'mapper',
@@ -446,8 +452,8 @@ const osucmds: commandInfo[] = [
         usage: 'map "query" [id] +[mods]',
         slashusage: 'map [query] [id] [mods] [detailed]',
         examples: [
-            'sbr-map "kimi no shiranai monogatari"',
-            'sbr-map 3013912 +HDHR'
+            'PREFIXMSGmap "kimi no shiranai monogatari"',
+            'PREFIXMSGmap 3013912 +HDHR'
         ],
         aliases: ['m'],
         options: [
@@ -491,7 +497,7 @@ const osucmds: commandInfo[] = [
         usage: 'maplb [id]',
         slashusage: 'maplb [id] [page] [mods]',
         examples: [
-            'sbr-maplb 32345',
+            'PREFIXMSGmaplb 32345',
             '/maplb mods:HDHR'
         ],
         aliases: ['leaderboard', 'mapleaderboard'],
@@ -525,10 +531,13 @@ const osucmds: commandInfo[] = [
     {
         name: 'nochokes',
         description: 'Shows the user\'s top plays without chokes',
-        usage: 'nochokes [user]',
-        slashusage: 'nochokes [user]',
+        usage: 'nochokes [user] [-page] [-mode]',
+        slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
         examples: [
-            'sbr-nochokes SaberStrike'
+            'PREFIXMSGnochokes SaberStrike',
+            'PREFIXMSGnc -p 3',
+            'PREFIXMSGnochokes -m mania',
+            '/nochokes mods:HDHR sort:recent'
         ],
         aliases: ['nc'],
         options: [
@@ -536,20 +545,78 @@ const osucmds: commandInfo[] = [
                 name: 'user',
                 type: 'string/integer/user mention',
                 required: false,
-                description: 'The user to show the plays of',
+                description: 'The user to show the scores of',
                 options: ['N/A'],
                 defaultValue: 'your osu! username'
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode to show the scores in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu',
+                aliases: ['m']
+            },
+            {
+                name: 'sort',
+                type: 'string',
+                required: false,
+                description: 'The sort order of the scores',
+                options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
+                defaultValue: 'pp'
+            },
+            {
+                name: 'reverse',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to reverse the sort order',
+                options: ['true', 'false'],
+                defaultValue: 'false'
+            },
+            {
+                name: 'page',
+                type: 'integer',
+                required: false,
+                description: 'The page of scores to show',
+                options: ['N/A'],
+                defaultValue: '1',
+                aliases: ['p']
+            },
+            {
+                name: 'mapper',
+                type: 'string',
+                required: false,
+                description: 'The mapper to filter the scores by',
+                options: ['N/A'],
+                defaultValue: 'null'
+            },
+            {
+                name: 'mods',
+                type: 'string',
+                required: false,
+                description: 'The mods to filter the scores by',
+                options: mods,
+                defaultValue: 'null'
+            },
+            {
+                name: 'detailed',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to show detailed information about the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false'
             }
         ]
     },
     {
         name: 'osu',
         description: 'Shows information about a user\'s osu! profile',
-        usage: 'osu [user]',
+        usage: 'osu [user] [-graph] [-detailed] [-mode]',
         slashusage: 'osu [user] [detailed] [mode]',
         aliases: ['o', 'profile', 'user'],
         examples: [
-            'sbr-osu mrekk',
+            'PREFIXMSGosu SaberStrike',
             '/osu detailed:true mode:taiko'
         ],
         options: [
@@ -576,6 +643,14 @@ const osucmds: commandInfo[] = [
                 description: 'The gamemode to show the stats of',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
                 defaultValue: 'your playmode'
+            },
+            {
+                name: 'graph',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to show only user statistics graphs',
+                options: ['true', 'false'],
+                defaultValue: 'false'
             }
         ]
     },
@@ -585,7 +660,7 @@ const osucmds: commandInfo[] = [
         usage: 'osuset [username]',
         slashusage: 'osuset [username] [mode] [skin]',
         examples: [
-            'sbr-osuset SaberStrike',
+            'PREFIXMSGosuset SaberStrike',
             '/osuset username:SaberStrike mode:fruits skin:sbr v11'
         ],
         aliases: [],
@@ -619,11 +694,14 @@ const osucmds: commandInfo[] = [
     {
         name: 'osutop',
         description: 'Shows the top scores of a user',
-        usage: 'osutop [user]',
+        usage: 'osutop [user] [-page] [-mode] [-mapper] [-mods] [-reverse] [-sort]',
         slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
         examples: [
-            'sbr-osutop',
-            '/osutop sort:recent'
+            'PREFIXMSGosutop SaberStrike',
+            'PREFIXMSGosutop -p 3',
+            'PREFIXMSGosutop -m mania',
+            'PREFIXMSGosutop -m fruits -mods hdhr',
+            '/osutop mods:HDHR sort:recent'
         ],
         aliases: ['top'],
         options: [
@@ -641,7 +719,8 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mode to show the scores in',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu'
+                defaultValue: 'osu',
+                aliases: ['m']
             },
             {
                 name: 'sort',
@@ -665,7 +744,8 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The page of scores to show',
                 options: ['N/A'],
-                defaultValue: '1'
+                defaultValue: '1',
+                aliases: ['p']
             },
             {
                 name: 'mapper',
@@ -696,77 +776,81 @@ const osucmds: commandInfo[] = [
     {
         name: 'pinned',
         description: 'Shows the pinned scores of a user',
-        usage: 'pinned [user]',
-        slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
+        usage: 'pinned [user] [-page] [-mode]',
+        slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods]',
         examples: [
-            'sbr-pinned mrekk',
+            'PREFIXMSGpinned SaberStrike',
+            'PREFIXMSGpinned -p 3',
+            'PREFIXMSGpinned -m mania',
+            '/pinned mods:HDHR sort:recent'
         ],
         aliases: [],
-        options: [
-            {
-                name: 'user',
-                type: 'string/integer/user mention',
-                required: false,
-                description: 'The user to show the scores of',
-                options: ['N/A'],
-                defaultValue: 'your osu! username'
-            },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The mode to show the scores in',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu'
-            },
-            {
-                name: 'sort',
-                type: 'string',
-                required: false,
-                description: 'The sort order of the scores',
-                options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
-                defaultValue: 'recent'
-            },
-            {
-                name: 'reverse',
-                type: 'boolean',
-                required: false,
-                description: 'Whether to reverse the sort order',
-                options: ['true', 'false'],
-                defaultValue: 'false'
-            },
-            {
-                name: 'page',
-                type: 'integer',
-                required: false,
-                description: 'The page of scores to show',
-                options: ['N/A'],
-                defaultValue: '1'
-            },
-            {
-                name: 'mapper',
-                type: 'string',
-                required: false,
-                description: 'The mapper to filter the scores by',
-                options: ['N/A'],
-                defaultValue: 'null'
-            },
-            {
-                name: 'mods',
-                type: 'string',
-                required: false,
-                description: 'The mods to filter the scores by',
-                options: mods,
-                defaultValue: 'null'
-            },
-            {
-                name: 'detailed',
-                type: 'boolean',
-                required: false,
-                description: 'Whether to show detailed information about the scores',
-                options: ['true', 'false'],
-                defaultValue: 'false'
-            }
+        options: [{
+            name: 'user',
+            type: 'string/integer/user mention',
+            required: false,
+            description: 'The user to show the scores of',
+            options: ['N/A'],
+            defaultValue: 'your osu! username'
+        },
+        {
+            name: 'mode',
+            type: 'string',
+            required: false,
+            description: 'The mode to show the scores in',
+            options: ['osu', 'taiko', 'fruits', 'mania'],
+            defaultValue: 'osu',
+            aliases: ['m']
+        },
+        {
+            name: 'sort',
+            type: 'string',
+            required: false,
+            description: 'The sort order of the scores',
+            options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
+            defaultValue: 'pp'
+        },
+        {
+            name: 'reverse',
+            type: 'boolean',
+            required: false,
+            description: 'Whether to reverse the sort order',
+            options: ['true', 'false'],
+            defaultValue: 'false'
+        },
+        {
+            name: 'page',
+            type: 'integer',
+            required: false,
+            description: 'The page of scores to show',
+            options: ['N/A'],
+            defaultValue: '1',
+            aliases: ['p']
+        },
+        {
+            name: 'mapper',
+            type: 'string',
+            required: false,
+            description: 'The mapper to filter the scores by',
+            options: ['N/A'],
+            defaultValue: 'null'
+        },
+        {
+            name: 'mods',
+            type: 'string',
+            required: false,
+            description: 'The mods to filter the scores by',
+            options: mods,
+            defaultValue: 'null'
+        },
+        {
+            name: 'detailed',
+            type: 'boolean',
+            required: false,
+            description: 'Whether to show detailed information about the scores',
+            options: ['true', 'false'],
+            defaultValue: 'false'
+        }
         ]
     },
     {
@@ -775,8 +859,8 @@ const osucmds: commandInfo[] = [
         usage: 'pp [value] [mode]',
         slashusage: 'pp [value] [mode]',
         examples: [
-            'sbr-pp 100000',
-            'sbr-pp 2999 fruits',
+            'PREFIXMSGpp 100000',
+            'PREFIXMSGpp 2999 fruits',
         ],
         aliases: [],
         options: [
@@ -791,7 +875,7 @@ const osucmds: commandInfo[] = [
             {
                 name: 'mode',
                 type: 'string',
-                required: false,    
+                required: false,
                 description: 'The mode to estimate the rank in',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
                 defaultValue: 'osu'
@@ -804,8 +888,8 @@ const osucmds: commandInfo[] = [
         usage: 'rank [value] [mode]',
         slashusage: 'rank [value] [mode]',
         examples: [
-            'sbr-rank 1',
-            'sbr-rank 1 taiko',
+            'PREFIXMSGrank 1',
+            'PREFIXMSGrank 1 taiko',
         ],
         aliases: [],
         options: [
@@ -830,10 +914,10 @@ const osucmds: commandInfo[] = [
     {
         name: 'ranking',
         description: 'Displays the global leaderboards',
-        usage: 'ranking [country]',
+        usage: 'ranking [country] [-page][-mode]',
         slashusage: 'ranking [country] [mode] [page] [type] [spotlight]',
         examples: [
-            'sbr-ranking',
+            'PREFIXMSGranking',
             '/ranking country:us mode:taiko',
             '/ranking type:charts spotlight:227'
         ],
@@ -852,7 +936,8 @@ const osucmds: commandInfo[] = [
             required: false,
             description: 'The mode to show the scores in',
             options: ['osu', 'taiko', 'fruits', 'mania'],
-            defaultValue: 'osu'
+            defaultValue: 'osu',
+            aliases: ['m']
         },
         {
             name: 'page',
@@ -860,7 +945,8 @@ const osucmds: commandInfo[] = [
             required: false,
             description: 'The page of scores to show',
             options: ['N/A'],
-            defaultValue: '1'
+            defaultValue: '1',
+            aliases: ['p']
         },
         {
             name: 'type',
@@ -883,12 +969,12 @@ const osucmds: commandInfo[] = [
     {
         name: 'recent',
         description: 'Shows the recent score(s) of a user',
-        usage: 'recent [user]',
+        usage: 'recent [user] [-page] [-list] [-mode]',
         slashusage: 'recent [user] [page] [mode] [list]',
         examples: [
-            'sbr-recent',
-            'sbr-rs',
-            '/recent list'
+            'PREFIXMSGrecent',
+            'PREFIXMSGrs -p 2 -list',
+            '/recent list:true'
         ],
         aliases: ['rs', 'r'],
         options: [
@@ -906,7 +992,8 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The page of scores to show',
                 options: ['N/A'],
-                defaultValue: '1'
+                defaultValue: '1',
+                aliases: ['p']
             },
             {
                 name: 'mode',
@@ -914,7 +1001,8 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mode to show the score(s) in',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu'
+                defaultValue: 'osu',
+                aliases: ['m']
             },
             {
                 name: 'list',
@@ -922,7 +1010,8 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Whether to show multiple scores. If false, only the most recent score will be shown',
                 options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: 'false',
+                aliases: ['l']
             }
         ]
     },
@@ -932,8 +1021,8 @@ const osucmds: commandInfo[] = [
         usage: 'scoreparse [id] [mode]',
         slashusage: 'null',
         examples: [
-            'sbr-scoreparse 1234567890',
-            'sbr-score 1234567890 mania',
+            'PREFIXMSGscoreparse 1234567890',
+            'PREFIXMSGscore 1234567890 mania',
             'https://osu.ppy.sh/scores/osu/1234567890'
         ],
         aliases: ['score', 'sp'],
@@ -959,11 +1048,12 @@ const osucmds: commandInfo[] = [
     {
         name: 'scores',
         description: 'Shows the scores of a user on a beatmap',
-        usage: 'scores [user] [id]',
+        usage: 'scores [user] [id] [-page]',
         slashusage: 'scores [user] [id] [sort] [reverse] [page] [detailed]',
         examples: [
-            'sbr-scores saberstrike',
-            'sbr-c'
+            'PREFIXMSGscores saberstrike',
+            'PREFIXMSGc',
+            'PREFIXMSGc 4204'
         ],
         aliases: ['c'],
         options: [
@@ -1023,7 +1113,7 @@ const osucmds: commandInfo[] = [
         usage: 'simulate [id] +[mods] misses=[misses] acc=[accuracy] combo=[combo] n300=[n300] n100=[n100] n50=[n50] miss=[misses]',
         slashusage: 'simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses]',
         examples: [
-            'sbr-simulate +HDHR misses=0 acc=97.86'
+            'PREFIXMSGsimulate +HDHR misses=0 acc=97.86'
         ],
         aliases: ['sim', 'simplay'],
         options: [
@@ -1099,7 +1189,7 @@ const osucmds: commandInfo[] = [
         usage: 'trackadd [id]',
         slashusage: 'trackadd [id]',
         examples: [
-            'sbr-trackadd 15222484'
+            'PREFIXMSGtrackadd 15222484'
         ],
         aliases: ['ta', 'track'],
         options: [
@@ -1119,7 +1209,7 @@ const osucmds: commandInfo[] = [
         usage: 'trackchannel [channel]',
         slashusage: 'trackchannel [channel]',
         examples: [
-            'sbr-trackchannel #tracklist'
+            'PREFIXMSGtrackchannel #tracklist'
         ],
         aliases: ['tc'],
         options: [
@@ -1139,7 +1229,7 @@ const osucmds: commandInfo[] = [
         usage: 'trackremove [id]',
         slashusage: 'trackremove [id]',
         examples: [
-            'sbr-trackremove 15222484'
+            'PREFIXMSGtrackremove 15222484'
         ],
         aliases: ['tr', 'trackrm', 'untrack'],
         options: [
@@ -1159,8 +1249,8 @@ const osucmds: commandInfo[] = [
         usage: 'whatif [user] [pp]',
         slashusage: 'whatif [user] [pp]',
         examples: [
-            'sbr-whatif 1000',
-            'sbr-whatif SaberStrike 300'
+            'PREFIXMSGwhatif 1000',
+            'PREFIXMSGwhatif SaberStrike 300'
         ],
         aliases: [],
         options: [
@@ -1191,7 +1281,7 @@ const othercmds: commandInfo[] = [
         usage: '8ball ',
         slashusage: '8ball ',
         examples: [
-            'sbr-8ball is this a good bot?'
+            'PREFIXMSG8ball is this a good bot?'
         ],
         aliases: [],
         options: [],
@@ -1222,7 +1312,7 @@ const othercmds: commandInfo[] = [
         usage: 'image [query]',
         slashusage: 'image [query]',
         examples: [
-            'sbr-image cat',
+            'PREFIXMSGimage cat',
         ],
         aliases: [],
         options: [
@@ -1242,7 +1332,7 @@ const othercmds: commandInfo[] = [
         usage: 'poll [question]',
         slashusage: 'poll [question] [options]',
         examples: [
-            'sbr-poll djkfhgfbdkgbkfhdjgdkgd',
+            'PREFIXMSGpoll djkfhgfbdkgbkfhdjgdkgd',
             '/poll title:What is your favorite color? options:red+green+blue'
         ],
         aliases: [],
@@ -1271,8 +1361,8 @@ const othercmds: commandInfo[] = [
         usage: 'roll [max] [min]',
         slashusage: 'roll [max] [min]',
         examples: [
-            'sbr-roll',
-            'sbr-roll 100 50'
+            'PREFIXMSGroll',
+            'PREFIXMSGroll 100 50'
         ],
         aliases: [],
         options: [
@@ -1300,7 +1390,7 @@ const othercmds: commandInfo[] = [
         usage: 'say [message]',
         slashusage: 'say [message] [channel]',
         examples: [
-            'sbr-say hello',
+            'PREFIXMSGsay hello',
         ],
         aliases: [],
         options: [
@@ -1328,7 +1418,7 @@ const othercmds: commandInfo[] = [
         usage: 'ytsearch [query]',
         slashusage: 'ytsearch [query]',
         examples: [
-            'sbr-ytsearch never gonna give you up'
+            'PREFIXMSGytsearch never gonna give you up'
         ],
         aliases: [],
         options: [
@@ -1351,7 +1441,7 @@ const admincmds: commandInfo[] = [
         usage: 'checkperms [user]',
         slashusage: 'checkperms [user]',
         examples: [
-            'sbr-checkperms @SSoB'
+            'PREFIXMSGcheckperms @SSoB'
         ],
         aliases: ['perms'],
         options: [
@@ -1389,8 +1479,8 @@ const admincmds: commandInfo[] = [
         usage: 'find [type] [id]',
         slashusage: 'find [type] [id]',
         examples: [
-            'sbr-find user 1234567890',
-            'sbr-find @SSoB'
+            'PREFIXMSGfind user 1234567890',
+            'PREFIXMSGfind @SSoB'
         ],
         aliases: [],
         options: [
@@ -1418,7 +1508,7 @@ const admincmds: commandInfo[] = [
         usage: 'leaveguild [guild]',
         slashusage: 'leaveguild [guild]',
         examples: [
-            'sbr-leaveguild 1234567890',
+            'PREFIXMSGleaveguild 1234567890',
         ],
         aliases: ['leave'],
         options: [
@@ -1437,7 +1527,7 @@ const admincmds: commandInfo[] = [
         description: 'Set\'s the prefix of the current server',
         usage: 'prefix [prefix]',
         slashusage: 'prefix [prefix]',
-        examples: ['sbr-prefix !'],
+        examples: ['PREFIXMSGprefix !'],
         aliases: [],
         options: [
             {

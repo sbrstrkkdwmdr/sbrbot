@@ -47,7 +47,7 @@ function logFile(type: string, text: string, opts?: {
             fs.appendFileSync('logs/log.txt', text)
             break;
         case 'command':
-            fs.appendFileSync(`logs/cmd/commands${opts.guildId ?? null}.log`, text, 'utf-8')
+            fs.appendFileSync(`logs/cmd/commands${opts?.guildId ?? null}.log`, text, 'utf-8')
     }
 }
 

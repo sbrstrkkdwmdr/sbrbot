@@ -16,7 +16,7 @@ import extypes = require('../../src/types/extraTypes');
 
 module.exports = {
     name: 'nochokes',
-    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate:Date, overrides, userdata) {
+    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate: Date, overrides, userdata) {
         let commanduser;
 
         let user;
@@ -40,16 +40,31 @@ module.exports = {
                     page = parseInt(args[args.indexOf('-p') + 1]);
                     args.splice(args.indexOf('-p'), 2);
                 }
+                mode = null;
+                sort = 'pp';
+                page = 1;
+                mapper = null;
+                mods = null;
+                if (args.includes('-page')) {
+                    page = parseInt(args[args.indexOf('-page') + 1]);
+                    args.splice(args.indexOf('-page'), 2);
+                }
+                if (args.includes('-p')) {
+                    page = parseInt(args[args.indexOf('-p') + 1]);
+                    args.splice(args.indexOf('-p'), 2);
+                }
+                if (args.includes('-mode')) {
+                    mode = (args[args.indexOf('-mode') + 1]);
+                    args.splice(args.indexOf('-mode'), 2);
+                }
+                if (args.includes('-m')) {
+                    mode = (args[args.indexOf('-m') + 1]);
+                    args.splice(args.indexOf('-m'), 2);
+                }
                 user = args.join(' ');
                 if (!args[0] || args.includes(searchid)) {
                     user = null
                 }
-                mode = null;
-                sort = 'pp';
-                page = 1;
-
-                mapper = null;
-                mods = null;
             }
                 break;
 
@@ -204,7 +219,9 @@ module.exports = {
                     value: mods
                 }
                 ]
-            ))
+            ), {
+            guildId: `${obj.guildId}`
+        })
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 

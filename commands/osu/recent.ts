@@ -16,13 +16,13 @@ import extypes = require('../../src/types/extratypes');
 
 module.exports = {
     name: 'recent',
-    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate:Date, overrides, userdata) {
+    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate: Date, overrides, userdata) {
         let commanduser;
 
         let user;
         let searchid;
-        let page;
-        let mode;
+        let page = 0;
+        let mode = null;
         let list;
 
         let isFirstPage = false;
@@ -35,6 +35,10 @@ module.exports = {
                 if (args.includes('-list')) {
                     list = true;
                     args.splice(args.indexOf('-list'), 1);
+                }
+                if (args.includes('-l')) {
+                    list = true;
+                    args.splice(args.indexOf('-l'), 1);
                 }
                 if (args.includes('-page')) {
                     page = parseInt(args[args.indexOf('-page') + 1]);
@@ -56,8 +60,6 @@ module.exports = {
                 if (!args[0] || args.includes(searchid)) {
                     user = null
                 }
-                page = 0;
-                mode = null;
                 isFirstPage = true;
 
             }

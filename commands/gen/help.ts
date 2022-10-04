@@ -115,7 +115,7 @@ module.exports = {
             }
 
             let commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none'
-            let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n') : 'none'
+            let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n').replaceAll('PREFIXMSG', config.prefix) : 'none'
 
             embed.setTitle("Command info for: " + command.name)
             embed.setDescription(desc)

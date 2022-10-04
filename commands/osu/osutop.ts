@@ -33,6 +33,13 @@ module.exports = {
             case 'message': {
                 commanduser = obj.author;
                 searchid = obj.mentions.users.size > 0 ? obj.mentions.users.first().id : obj.author.id;
+                mode = null;
+                sort = 'pp';
+                page = 1;
+
+                mapper = null;
+                mods = null;
+                detailed = false;
                 if (args.includes('-page')) {
                     page = parseInt(args[args.indexOf('-page') + 1]);
                     args.splice(args.indexOf('-page'), 2);
@@ -41,17 +48,34 @@ module.exports = {
                     page = parseInt(args[args.indexOf('-p') + 1]);
                     args.splice(args.indexOf('-p'), 2);
                 }
+                if (args.includes('-mode')) {
+                    mode = (args[args.indexOf('-mode') + 1]);
+                    args.splice(args.indexOf('-mode'), 2);
+                }
+                if (args.includes('-m')) {
+                    mode = (args[args.indexOf('-m') + 1]);
+                    args.splice(args.indexOf('-m'), 2);
+                }
+                if (args.includes('-mapper')) {
+                    mapper = (args[args.indexOf('-mapper') + 1]);
+                    args.splice(args.indexOf('-mapper'), 2);
+                }
+                if (args.includes('-mods')) {
+                    mods = (args[args.indexOf('-mods') + 1]);
+                    args.splice(args.indexOf('-mods'), 2);
+                }
+                if (args.includes('-reverse')) {
+                    reverse = true
+                    args.splice(args.indexOf('-reverse'), 1);
+                }
+                if (args.includes('-sort')) {
+                    sort = (args[args.indexOf('-sort') + 1]);
+                    args.splice(args.indexOf('-sort'), 2);
+                }
                 user = args.join(' ');
                 if (!args[0] || args.includes(searchid)) {
                     user = null
                 }
-                mode = null;
-                sort = 'pp';
-                page = 1;
-
-                mapper = null;
-                mods = null;
-                detailed = false;
             }
                 break;
 

@@ -42,11 +42,18 @@ module.exports = {
                     page = parseInt(args[args.indexOf('-p') + 1]);
                     args.splice(args.indexOf('-p'), 2);
                 }
+                if (args.includes('-mode')) {
+                    mode = (args[args.indexOf('-mode') + 1]);
+                    args.splice(args.indexOf('-mode'), 2);
+                }
+                if (args.includes('-m')) {
+                    mode = (args[args.indexOf('-m') + 1]);
+                    args.splice(args.indexOf('-m'), 2);
+                }
                 user = args.join(' ');
                 if (!args[0] || args.includes(searchid)) {
                     user = null
                 }
-                page = 1;
             }
                 break;
 

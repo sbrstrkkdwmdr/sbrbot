@@ -32,9 +32,21 @@ module.exports = {
                     detailed = true;
                     args.splice(args.indexOf('-details'), 1);
                 }
+                if(args.includes('-graph')){
+                    graphonly = true;
+                    args.splice(args.indexOf('-graph'), 1);
+                }
                 if (args.includes('-g')) {
                     graphonly = true;
                     args.splice(args.indexOf('-g'), 1);
+                }
+                if (args.includes('-mode')) {
+                    mode = (args[args.indexOf('-mode') + 1]);
+                    args.splice(args.indexOf('-mode'), 2);
+                }
+                if (args.includes('-m')) {
+                    mode = (args[args.indexOf('-m') + 1]);
+                    args.splice(args.indexOf('-m'), 2);
                 }
                 user = args.join(' ');
                 if (!args[0] || args.includes(searchid)) {
