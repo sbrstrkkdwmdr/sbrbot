@@ -1,3 +1,5 @@
+import Discord = require('discord.js');
+import Sequelize = require('sequelize');
 type config = {
     token: string,
     prefix: string,
@@ -165,5 +167,32 @@ type dbUser = {
 
 type commandType = 'message' | 'interaction' | 'button' | 'link'
 
-export { config, guildSettings, imagesearches, googleSearchItem, ytSearch, dbUser, commandType }
+// type commandObject = any//Discord.Message | Discord.CommandInteraction | Discord.ButtonInteraction
+type commandObject = Discord.Message<any> | Discord.CommandInteraction<any> | Discord.ButtonInteraction<any>
+
+type overrides = {
+    user: any,
+    page: string | number,
+    mode: string,
+    sort: string,
+    reverse: boolean | string,
+    ex: string | number,
+    id: string | number,
+    overwriteModal: Discord.SelectMenuComponent | Discord.SelectMenuBuilder,
+} | null
+
+type data = Sequelize.ModelStatic<any>
+
+export {
+    config,
+    guildSettings,
+    imagesearches,
+    googleSearchItem,
+    ytSearch,
+    dbUser,
+    commandType,
+    commandObject,
+    overrides,
+    data
+};
 

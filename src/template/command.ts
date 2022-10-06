@@ -16,28 +16,40 @@ import extypes = require('../../src/types/extraTypes');
 
 module.exports = {
     name: 'COMMANDNAME',
-    async execute(commandType: extypes.commandType, obj, args: string[], button: string, config: extypes.config, client: Discord.Client, absoluteID: number, currentDate:Date, overrides, userdata) {
+    async execute(input: {
+        commandType: extypes.commandType,
+        obj: extypes.commandObject,
+        args: string[],
+        button: string,
+        config: extypes.config,
+        client: Discord.Client,
+        absoluteID: number,
+        currentDate: Date,
+        overrides: extypes.overrides,
+        userdata: extypes.data,
+    }) {
         let commanduser;
 
 
-        switch (commandType) {
+        switch (input.commandType) {
             case 'message': {
-                commanduser = obj.author;
+                //@ts-expect-error author property only exists on message
+                commanduser = input.obj.author;
             }
                 break;
             //==============================================================================================================================================================================================
             case 'interaction': {
-                commanduser = obj.member.user;
+                commanduser = input.obj.member.user;
             }
                 //==============================================================================================================================================================================================
 
                 break;
             case 'button': {
-                commanduser = obj.member.user;
+                commanduser = input.obj.member.user;
             }
                 break;
         }
-        if (overrides != null) {
+        if (input.overrides != null) {
 
         }
         //==============================================================================================================================================================================================
@@ -45,42 +57,42 @@ module.exports = {
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}-${absoluteID}`)
+                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.first),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}-${absoluteID}`)
+                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.previous),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}-${absoluteID}`)
+                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji('▶'),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}-${absoluteID}`)
+                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.last),
             );
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-COMMANDNAME-${commanduser.id}-${absoluteID}`)
+                    .setCustomId(`Refresh-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.main.refresh),
             );
 
         log.logFile(
             'command',
-            log.commandLog('COMMANDNAME', commandType, absoluteID, commanduser
+            log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
             ),
             {
-                guildId: `${obj.guildId}`
+                guildId: `${input.obj.guildId}`
             })
         //OPTIONS==============================================================================================================================================================================================
         log.logFile('command',
-            log.optsLog(absoluteID, []),
+            log.optsLog(input.absoluteID, []),
             {
-                guildId: `${obj.guildId}`
+                guildId: `${input.obj.guildId}`
             }
         )
 
@@ -89,9 +101,10 @@ module.exports = {
 
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
-        switch (commandType) {
+        switch (input.commandType) {
             case 'message': {
-                obj.reply({
+                //@ts-expect-error smth smth each type not compatible
+                input.obj.reply({
                     content: '',
                     embeds: [],
                     files: [],
@@ -104,7 +117,8 @@ module.exports = {
                 break;
             //==============================================================================================================================================================================================
             case 'interaction': {
-                obj.reply({
+                //@ts-expect-error smth smth each type not compatible
+                input.obj.reply({
                     content: '',
                     embeds: [],
                     files: [],
@@ -118,7 +132,8 @@ module.exports = {
 
                 break;
             case 'button': {
-                obj.message.edit({
+                //@ts-expect-error smth smth each type not compatible
+                input.obj.message.edit({
                     content: '',
                     embeds: [],
                     files: [],
@@ -134,10 +149,10 @@ module.exports = {
             `
 ----------------------------------------------------
 success
-ID: ${absoluteID}
+ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
-            { guildId: `${obj.guildId}` }
+            { guildId: `${input.obj.guildId}` }
         )
     }
 }
