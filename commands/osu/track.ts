@@ -86,22 +86,31 @@ module.exports = {
         } else {
             osudata = await osufunc.apiget('user', `${await user}`)
         }
-        func.storeFile(osudata, osudata.id, 'osudata')
-        func.storeFile(osudata, user, 'osudata')
 
-        trackfunc.editTrackUser({
-            database: trackDb,
-            userid: osudata.id,
-            action: 'add',
-            guildId: obj.guildId,
-            guildSettings: guildSettings,
-        })
+        let replymsg;
 
+        if (osudata?.error || !osudata.id) {
+            replymsg = `Error - could not find user \`${user}\``
+        } else {
+
+            replymsg = `Added \`${osudata.username}\` to the tracking list`
+
+            func.storeFile(osudata, osudata.id, 'osudata')
+            func.storeFile(osudata, user, 'osudata')
+
+            trackfunc.editTrackUser({
+                database: trackDb,
+                userid: osudata.id,
+                action: 'add',
+                guildId: obj.guildId,
+                guildSettings: guildSettings,
+            })
+        }
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
-                    content: 'Added to the tracking list',
+                    content: replymsg,
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },
@@ -113,7 +122,7 @@ module.exports = {
             //==============================================================================================================================================================================================
             case 'interaction': {
                 obj.reply({
-                    content: '',
+                    content: replymsg,
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },
@@ -219,22 +228,32 @@ ID: ${absoluteID}
         } else {
             osudata = await osufunc.apiget('user', `${await user}`)
         }
-        func.storeFile(osudata, osudata.id, 'osudata')
-        func.storeFile(osudata, user, 'osudata')
 
-        trackfunc.editTrackUser({
-            database: trackDb,
-            userid: osudata.id,
-            action: 'remove',
-            guildId: obj.guildId,
-            guildSettings: guildSettings,
-        })
+        let replymsg;
+
+        if (osudata?.error || !osudata.id) {
+            replymsg = `Error - could not find user \`${user}\``
+        } else {
+
+            replymsg = `Removed \`${osudata.username}\` from the tracking list`
+
+            func.storeFile(osudata, osudata.id, 'osudata')
+            func.storeFile(osudata, user, 'osudata')
+
+            trackfunc.editTrackUser({
+                database: trackDb,
+                userid: osudata.id,
+                action: 'remove',
+                guildId: obj.guildId,
+                guildSettings: guildSettings,
+            })
+        }
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
         switch (commandType) {
             case 'message': {
                 obj.reply({
-                    content: 'removing user from tracking list',
+                    content: replymsg,
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },
@@ -246,7 +265,7 @@ ID: ${absoluteID}
             //==============================================================================================================================================================================================
             case 'interaction': {
                 obj.reply({
-                    content: 'removing user from tracking list',
+                    content: replymsg,
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },
