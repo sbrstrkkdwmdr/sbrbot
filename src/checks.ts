@@ -299,7 +299,7 @@ function nthIndexLast(str: string, pat: string, n: number) {
  * @returns a string with special characters converted to versions that won't break URLs
  */
 function toHexadecimal(str: string | number) {
-    const newstr = str.toString()
+    const newstr = `${str}`
         .replaceAll('%', '%25')
         .replaceAll('`', '%60')
         .replaceAll('~', '%7E')

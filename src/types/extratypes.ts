@@ -168,20 +168,36 @@ type dbUser = {
 type commandType = 'message' | 'interaction' | 'button' | 'link'
 
 // type commandObject = any//Discord.Message | Discord.CommandInteraction | Discord.ButtonInteraction
-type commandObject = Discord.Message<any> | Discord.CommandInteraction<any> | Discord.ButtonInteraction<any>
+type commandObject = Discord.Message<any> | Discord.ChatInputCommandInteraction<any> | Discord.ButtonInteraction<any>
 
 type overrides = {
-    user: any,
-    page: string | number,
-    mode: string,
-    sort: string,
-    reverse: boolean | string,
-    ex: string | number,
-    id: string | number,
-    overwriteModal: Discord.SelectMenuComponent | Discord.SelectMenuBuilder,
+    user?: any,
+    page?: number,
+    mode?: string,
+    sort?: string,
+    reverse?: boolean,
+    ex?: string | number,
+    id?: string | number,
+    overwriteModal?: Discord.SelectMenuComponent | Discord.SelectMenuBuilder,
+    type?: string,
 } | null
 
 type data = Sequelize.ModelStatic<any>
+
+type commandInput = {
+    commandType: commandType,
+    obj: commandObject,
+    args: string[],
+    button?: string,
+    config?: config,
+    client?: Discord.Client,
+    absoluteID?: number,
+    currentDate?: Date,
+    overrides?: overrides,
+    userdata?: data,
+    trackDb?: data,
+    guildSettings?: data,
+}
 
 export {
     config,
@@ -193,6 +209,7 @@ export {
     commandType,
     commandObject,
     overrides,
-    data
+    data,
+    commandInput
 };
 

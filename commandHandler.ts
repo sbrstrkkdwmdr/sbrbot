@@ -5,6 +5,12 @@ import defaults = require('./src/consts/defaults');
 import Discord = require('discord.js');
 import cd = require('./src/consts/cooldown');
 
+import commands = require('./commands/cmdGeneral');
+import osucmds = require('./commands/cmdosu');
+import admincmds = require('./commands/cmdAdmin');
+import misccmds = require('./commands/cmdMisc');
+import checkcmds = require('./commands/cmdChecks');
+
 module.exports = (userdata, client, commandStruct, config, oncooldown, guildSettings, trackDb) => {
     let timeouttime;
 
@@ -140,81 +146,103 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         execCommand(interaction.commandName, 'interaction', interaction, null, button, absoluteID, currentDate, interaction.member.user.id, args);
     });
 
-    function execCommand(command: string, commandType: string, obj: Discord.Message | Discord.Interaction, overrides: null, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[]) {
+    function execCommand(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: null, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[]) {
         if (!checks.botHasPerms(obj, client, ['ReadMessageHistory'])) return;
         if (!checks.botHasPerms(obj, client, ['SendMessages', 'ReadMessageHistory', 'ViewChannel']) && commandType == 'message') return;
         //if is thread check if bot has perms
         if (!checks.botHasPerms(obj, client, ['SendMessagesInThreads']) &&
             obj.channel.type == Discord.ChannelType.GuildPublicThread ||
             obj.channel.type == Discord.ChannelType.GuildPrivateThread) return;
-
+        const input: extypes.commandInput = { commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata }
         switch (command) {
             case 'convert':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.commands.get('convert').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    commands.convert({
+                        commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata
+                    })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'help':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.commands.get('help').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    // commandStruct.commands.get('help').execute({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata})
+                    commands.help({
+                        commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata
+                    })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'math':
-                commandStruct.commands.get('math').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                commands.math({
+                    commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata
+                })
+                // commandStruct.commands.get('math').execute({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata})
                 break;
             case 'ping':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.commands.get('ping').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    commands.ping({
+                        commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata
+                    })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'remind':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.commands.get('remind').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    // commandStruct.commands.get('remind').execute({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata})
+                    commands.remind({
+                        commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata
+                    })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'stats':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.commands.get('stats').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    // commandStruct.commands.get('stats').execute({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata})
+                    commands.stats({
+                        commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata
+                    })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'time':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.commands.get('time').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    // commandStruct.commands.get('time').execute({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata})
+                    commands.time({
+                        commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata
+                    })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'info':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.commands.get('info').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    // commandStruct.commands.get('info').execute({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata})
+                    commands.info({
+                        commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata
+                    })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
 
             case '8ball': case 'ask':
-                commandStruct.misccmds.get('8ball').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                misccmds._8ball({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 break;
             case 'gif':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.misccmds.get('gif').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    misccmds.gif({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'image': case 'imagesearch':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.misccmds.get('image').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    misccmds.image({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
@@ -224,24 +252,24 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                     (checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') ||
                     commandType == 'interaction') &&
                     checks.botHasPerms(obj, client, ['AddReactions'])) {
-                    commandStruct.misccmds.get('poll').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    misccmds.poll({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'roll':
-                commandStruct.misccmds.get('roll').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                misccmds.roll({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 break;
             case 'say':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.misccmds.get('say').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    misccmds.say({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'ytsearch': case 'yt':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.misccmds.get('ytsearch').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    misccmds.ytsearch({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
@@ -251,31 +279,31 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
 
             case 'bws':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('bws').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.bws({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'compare':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('compare').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.compare({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'firsts':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('firsts').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.firsts({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             // case 'globals':
-            //     commandStruct.osucmds.get('globals').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+            //     commandStruct.osucmds.get('globals').execute({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata})
             //     break;
             case 'ranking':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('ranking').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.ranking({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
@@ -285,7 +313,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                     let overrides = {
                         type: 'rank'
                     }
-                    commandStruct.osucmds.get('rankpp').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
@@ -295,111 +323,111 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                     let overrides = {
                         type: 'pp'
                     }
-                    commandStruct.osucmds.get('rankpp').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'leaderboard': case 'maplb': case 'mapleaderboard':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('maplb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.maplb({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'lb':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('lb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.lb({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'map': case 'm':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('map').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.map({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'nochokes': case 'nc':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('nochokes').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.nochokes({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'osu': case 'profile': case 'o': case 'user':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('osu').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'osuset':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('osuset').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.osuset({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'osutop': case 'top':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('osutop').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'pinned':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('pinned').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'rs': case 'recent': case 'r':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('recent').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'scoreparse': case 'score': case 'sp':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('scoreparse').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'scores': case 'c':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('scores').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.scores({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
-            case 'simplay': case 'simulate':
+            case 'simplay': case 'simulate': case 'sim':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('simulate').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.simulate({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'skin':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commandStruct.osucmds.get('skin').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    osucmds.skin({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'trackadd': case 'track': case 'ta':
-                commandStruct.osucmds.get('track').add(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
+                osucmds.trackadd({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings })
                 break;
             case 'trackremove': case 'trackrm': case 'tr': case 'untrack':
-                commandStruct.osucmds.get('track').remove(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
+                osucmds.trackremove({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings })
                 break;
             case 'trackchannel': case 'tc':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    commandStruct.osucmds.get('track').setChannel(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
+                    osucmds.trackchannel({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings })
                 } else {
                     commandStruct.checks.get('noperms').execute(
                         commandType, obj, 'user'
@@ -407,17 +435,21 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 }
                 break;
             case 'tracklist': case 'tl':
-                commandStruct.osucmds.get('track').userList(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings)
+                osucmds.tracklist({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings })
                 break;
             case 'whatif':
-                commandStruct.osucmds.get('whatif').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    osucmds.whatif({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
+                }
                 break;
 
             //admincmds below
             case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
                 if (checks.botHasPerms(obj, client, ['Administrator'])) {
                     if ((checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid))) {
-                        commandStruct.admincmds.get('checkperms').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                        admincmds.checkperms({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                     } else {
                         commandStruct.checks.get('noperms').execute(
                             commandType, obj, 'user'
@@ -431,7 +463,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 break;
             case 'crash':
                 if (checks.isOwner(userid)) {
-                    commandStruct.admincmds.get('crash').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    admincmds.crash({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(
                         commandType, obj, 'user'
@@ -440,14 +472,14 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 break;
             case 'find':
                 if (checks.botHasPerms(obj, client, ['Administrator'])) {
-                    commandStruct.admincmds.get('find').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    admincmds.find({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(commandType, obj, 'bot')
                 }
                 break;
             case 'leaveguild': case 'leave':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    commandStruct.admincmds.get('leaveguild').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    admincmds.leaveguild({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.commands.get('noperms').execute(
                         commandType, obj
@@ -455,17 +487,11 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
                 }
                 break;
             case 'prefix':
-                if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
-                    commandStruct.admincmds.get('prefix').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, guildSettings)
-                } else {
-                    commandStruct.checks.get('noperms').execute(
-                        commandType, obj, 'user'
-                    )
-                }
+                admincmds.prefix({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, guildSettings })
                 break;
             case 'servers':
                 if (checks.isOwner(userid)) {
-                    commandStruct.admincmds.get('servers').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata)
+                    admincmds.servers({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     commandStruct.checks.get('noperms').execute(
                         commandType, obj, 'user'

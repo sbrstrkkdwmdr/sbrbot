@@ -11,6 +11,7 @@ import def = require('./consts/defaults');
 module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.ModelStatic<any>, guildSettings: Sequelize.ModelStatic<any>) => {
 
     async function trackUser(fr: { user: string, mode: string, inital?: boolean }) {
+        if(!fr.user) return;
         const curdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('osutop', fr.user, fr.mode)
         // const thisUser: osuApiTypes.User = await osufunc.apiget('user', fr.user, fr.mode)
         if (!curdata?.[0]?.user_id) return;
