@@ -4,8 +4,9 @@
  * @param {number} y second number
  * @returns the highest common factor between two numbers
  */
- function findHCF(x: number, y: number) {
+function findHCF(x: number, y: number) {
     if (isNaN(x) || isNaN(y)) return NaN;
+    if (x == 0 || y == 0) return 0;
 
     while (Math.max(x, y) % Math.min(x, y) != 0) {
         if (x > y) {
@@ -25,6 +26,7 @@
  */
 function findLCM(n1: number, n2: number) {
     if (isNaN(n1) || isNaN(n2)) return NaN;
+    if (n1 == 0 || n2 == 0) return 0;
     const lar = Math.max(n1, n2);
     const small = Math.min(n1, n2);
 
@@ -111,7 +113,7 @@ function to12htime(date) {
         amorpm = 'AM'
     }
     hours = hours % 12;
-    if (hours == 0) hours = 12 
+    if (hours == 0) hours = 12
     if (minutes < 10) {
         minutes = '0' + minutes
     }
@@ -137,7 +139,7 @@ function relto12htime(date) { //relative version of above
         amorpm = 'AM'
     }
     hours = hours % 12;
-    if (hours == 0) hours = 12 
+    if (hours == 0) hours = 12
     if (minutes < 10) {
         minutes = '0' + minutes
     }
@@ -418,22 +420,22 @@ function secondsToTimeReadable(seconds: number, allowDays?: boolean, showSeconds
  * @param str the string to convert
  * @returns string with the first letter capitalised
  */
-function toCapital(str:string){
+function toCapital(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function toOrdinal(num:number){
+function toOrdinal(num: number) {
     let txt;
-    if(num.toString().endsWith('1')){
+    if (num.toString().endsWith('1')) {
         txt = num + 'st';
     }
-    else if(num.toString().endsWith('2')){
+    else if (num.toString().endsWith('2')) {
         txt = num + 'nd';
     }
-    else if(num.toString().endsWith('3')){
+    else if (num.toString().endsWith('3')) {
         txt = num + 'rd';
     }
-    else{
+    else {
         txt = num + 'th';
     }
     return txt;
