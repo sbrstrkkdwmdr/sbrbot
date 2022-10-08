@@ -2376,7 +2376,8 @@ export async function maplb(input: extypes.commandInput) {
             filteredMapper: null,
             filteredMods: null,
             reverse: false,
-            mapidOverride: mapdata.id
+            mapidOverride: mapdata.id,
+            showUserName: true
         })
 
         if (scoresarg.fields.length == 0) {

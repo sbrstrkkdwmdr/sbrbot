@@ -19,6 +19,7 @@ export async function scoreList(
         filteredMods: string,
         reverse: boolean,
         mapidOverride?: number,
+        showUserName?: boolean,
     }
 ) {
 
@@ -218,6 +219,9 @@ export async function scoreList(
             } else {
                 showtitle = `Score #${i + 1 + (page * 5)}${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods}`
             }
+            if(asObj.showUserName == true){
+                showtitle = `[${curscore.user.username}](https://osu.ppy.sh/u/${curscore.user.id})`
+            }
             let weighted;
             if (showWeights == true) {
                 weighted = `${(curscore?.weight?.pp)?.toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`
@@ -300,6 +304,9 @@ ${pptxt} | ${weighted}
                 showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}\n`
             } else {
                 showtitle = `[Score #${i + 1 + (page * 5)}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
+            }
+            if(asObj.showUserName == true){
+                showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
             }
 
             scoresAsFields.push({
