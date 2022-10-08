@@ -298,9 +298,9 @@ module.exports = (userdata, client,  config, oncooldown, guildSettings, trackDb)
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            // case 'globals':
-            //     commandStruct.osucmds.get('globals').execute({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata})
-            //     break;
+            case 'globals':
+                osucmds.globals({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata})
+                break;
             case 'ranking':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.ranking({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })

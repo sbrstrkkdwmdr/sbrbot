@@ -325,28 +325,8 @@ export async function globals(input: extypes.commandInput) {
             failIfNotExists: false,
         }).catch()
     }
-    const firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('firsts_alt', `${osudata.id}`, `mode=${mode}&offset=0`)
 
-    osufunc.debug(firstscoresdata, 'command', 'globals', input.obj.guildId, 'firstsScoresData');
-    if (firstscoresdata?.error) {//@ts-ignore
-        input.obj.reply({
-            content: `${firstscoresdata?.error ? firstscoresdata?.error : 'Error: null'}`,
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
-        }).catch()
-        return;
-    }
-
-    let scorecount = 0
-    async function getScoreCount(cinitnum) {
-        const fd = await osufunc.apiget('firsts_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
-        scorecount += fd.length
-        if (fd.length == 100) {
-            await getScoreCount(cinitnum + 100)
-        }
-
-    }
-    await getScoreCount(0);
+    const scorecount = osudata?.scores_first_count ?? 0;
 
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
     if (input.commandType != 'button' || input.button == 'Refresh') {
