@@ -11,7 +11,7 @@ import admincmds = require('./commands/cmdAdmin');
 import misccmds = require('./commands/cmdMisc');
 import checkcmds = require('./commands/cmdChecks');
 
-module.exports = (userdata, client, commandStruct, config, oncooldown, guildSettings) => {
+module.exports = (userdata, client, config, oncooldown, guildSettings) => {
     let imgParseCooldown = false;
 
     client.on('messageCreate', async (message) => {
@@ -23,7 +23,7 @@ module.exports = (userdata, client, commandStruct, config, oncooldown, guildSett
         const obj = message
         let parse = null
         const commandType = 'link'
-        if(!(message.content.startsWith('http') || message.content.includes('osu.') || message.attachments.size > 0)){
+        if (!(message.content.startsWith('http') || message.content.includes('osu.') || message.attachments.size > 0)) {
             return;
         }
 
@@ -116,7 +116,7 @@ progress: ${m.progress ? m.progress : 'none'}
             }
         }
 
-        if(parse){
+        if (parse) {
             args.push('query', parse)
         }
 
@@ -124,10 +124,10 @@ progress: ${m.progress ? m.progress : 'none'}
 
         if (messagenohttp.startsWith('osu.ppy.sh/b/') || messagenohttp.startsWith('osu.ppy.sh/beatmaps/') || messagenohttp.startsWith('osu.ppy.sh/beatmapsets') || messagenohttp.startsWith('osu.ppy.sh/s/') || parse != null) {
             overrides.ex = 'link'
-            osucmds.map({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+            osucmds.map({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
         }
         if (messagenohttp.startsWith('osu.ppy.sh/u/') || messagenohttp.startsWith('osu.ppy.sh/users/')) {
-            osucmds.osu({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+            osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
         }
 
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osr'))) {
@@ -140,11 +140,11 @@ progress: ${m.progress ? m.progress : 'none'}
                 response.pipe(osrdlfile);
             });
             setTimeout(() => {
-                osucmds.replayparse({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.replayparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
             }, 1500)
         }
         if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
-            osucmds.scoreparse({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+            osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
         }
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osu'))) {
             const attachosu = message.attachments.first().url
@@ -153,7 +153,7 @@ progress: ${m.progress ? m.progress : 'none'}
                 response.pipe(osudlfile);
             });
             setTimeout(() => {
-                osucmds.maplocal({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.maplocal({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
             }, 1500)
         }
 

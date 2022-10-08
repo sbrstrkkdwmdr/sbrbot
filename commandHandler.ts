@@ -11,7 +11,7 @@ import admincmds = require('./commands/cmdAdmin');
 import misccmds = require('./commands/cmdMisc');
 import checkcmds = require('./commands/cmdChecks');
 
-module.exports = (userdata, client, commandStruct, config, oncooldown, guildSettings, trackDb) => {
+module.exports = (userdata, client,  config, oncooldown, guildSettings, trackDb) => {
     let timeouttime;
 
     client.on('messageCreate', async (message) => {

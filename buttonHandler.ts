@@ -7,7 +7,7 @@ import admincmds = require('./commands/cmdAdmin');
 import misccmds = require('./commands/cmdMisc');
 import checkcmds = require('./commands/cmdChecks');
 
-module.exports = (userdata, client, commandStruct, config, oncooldown) => {
+module.exports = (userdata, client,  config, oncooldown) => {
 
     client.on('interactionCreate', interaction => {
         if (!(interaction.type == Discord.InteractionType.MessageComponent || interaction.type == Discord.InteractionType.ModalSubmit)) return;

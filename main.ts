@@ -41,46 +41,6 @@ const client = new Client({
         Partials.User
     ]
 })
-const commandStruct = {
-    commands: new Discord.Collection(),
-    misccmds: new Discord.Collection(),
-    links: new Discord.Collection(),
-    osucmds: new Discord.Collection(),
-    admincmds: new Discord.Collection(),
-    checks: new Discord.Collection(),
-}
-
-const commandFiles = fs.readdirSync('./commands/gen').filter(file => file.endsWith('.ts'));
-const miscCommandFiles = fs.readdirSync('./commands/misc').filter(file => file.endsWith('.ts'));
-const linkCommandFiles = fs.readdirSync('./commands/links').filter(file => file.endsWith('.ts'));
-const osuCommandFiles = fs.readdirSync('./commands/osu').filter(file => file.endsWith('.ts'));
-const adminCommandFiles = fs.readdirSync('./commands/admin').filter(file => file.endsWith('.ts'));
-const checkFiles = fs.readdirSync('./commands/checks').filter(file => file.endsWith('.ts'));
-
-for (const file of commandFiles) {
-    const command = require(`./commands/gen/${file}`);
-    commandStruct.commands.set(command.name, command);
-}
-for (const file of miscCommandFiles) {
-    const command = require(`./commands/misc/${file}`);
-    commandStruct.misccmds.set(command.name, command);
-}
-for (const file of linkCommandFiles) {
-    const command = require(`./commands/links/${file}`);
-    commandStruct.links.set(command.name, command);
-}
-for (const file of osuCommandFiles) {
-    const command = require(`./commands/osu/${file}`);
-    commandStruct.osucmds.set(command.name, command);
-}
-for (const file of adminCommandFiles) {
-    const command = require(`./commands/admin/${file}`);
-    commandStruct.admincmds.set(command.name, command);
-}
-for (const file of checkFiles) {
-    const command = require(`./commands/checks/${file}`);
-    commandStruct.checks.set(command.name, command);
-}
 
 const sequelize = new Sequelize.Sequelize('database', 'username', 'password', {
     host: 'localhost',
@@ -176,9 +136,9 @@ Current Client ID: ${client.user.id}
 
     const oncooldown = new Set();
 
-    commandHandler(userdata, client, commandStruct, config, oncooldown, guildSettings, trackDb);
-    linkHandler(userdata, client, commandStruct, config, oncooldown, guildSettings);
-    buttonHandler(userdata, client, commandStruct, config, oncooldown);
+    commandHandler(userdata, client, config, oncooldown, guildSettings, trackDb);
+    linkHandler(userdata, client, config, oncooldown, guildSettings);
+    buttonHandler(userdata, client, config, oncooldown);
     commandInit(userdata, client, config, oncooldown);
     exEvents(userdata, client, config, oncooldown, guildSettings);
     osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);
