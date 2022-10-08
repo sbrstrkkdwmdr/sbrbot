@@ -1,6 +1,12 @@
 import Discord = require("discord.js");
 import fs = require('fs');
 
+import commands = require('./commands/cmdGeneral');
+import osucmds = require('./commands/cmdosu');
+import admincmds = require('./commands/cmdAdmin');
+import misccmds = require('./commands/cmdMisc');
+import checkcmds = require('./commands/cmdChecks');
+
 module.exports = (userdata, client, commandStruct, config, oncooldown) => {
 
     client.on('interactionCreate', interaction => {
@@ -98,74 +104,69 @@ module.exports = (userdata, client, commandStruct, config, oncooldown) => {
 
         switch (command) {
             case 'firsts':
-                commandStruct.osucmds.get('firsts').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                osucmds.firsts({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'lb':
-                commandStruct.osucmds.get('lb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                osucmds.lb({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'map':
-                commandStruct.osucmds.get('map').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                osucmds.map({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'maplb':
-                commandStruct.osucmds.get('maplb').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                osucmds.maplb({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'nochokes':
-                commandStruct.osucmds.get('nochokes').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                osucmds.nochokes({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'osu':
-                commandStruct.osucmds.get('osu').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
-                interaction.deferUpdate()
-                    .catch(error => { });
-                break;
-            case 'osumaplink':
-                client.links.get('osumaplink').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                osucmds.osu({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'osutop':
-                commandStruct.osucmds.get('osutop').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                osucmds.osutop({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'pinned':
-                commandStruct.osucmds.get('pinned').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                osucmds.pinned({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'ranking':
-                commandStruct.osucmds.get('ranking').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                osucmds.ranking({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'recent':
-                commandStruct.osucmds.get('recent').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                osucmds.recent({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'scores':
-                commandStruct.osucmds.get('scores').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                osucmds.scores({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
 
             case 'help':
-                commandStruct.commands.get('help').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                commands.help({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
 
             case 'test':
-                client.commands.get('test').execute(commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata);
+                client.commands.get('test').execute({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
