@@ -11,7 +11,7 @@ import def = require('./consts/defaults');
 module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.ModelStatic<any>, guildSettings: Sequelize.ModelStatic<any>) => {
 
     async function trackUser(fr: { user: string, mode: string, inital?: boolean }) {
-        if(!fr.user) return;
+        if (!fr.user) return;
         const curdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('osutop', fr.user, fr.mode)
         // const thisUser: osuApiTypes.User = await osufunc.apiget('user', fr.user, fr.mode)
         if (!curdata?.[0]?.user_id) return;
@@ -163,11 +163,18 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
         const allUsers = await db.findAll()
         allUsers.forEach(user => {
             osufunc.logCall(user.dataValues.osuid, 'Tracking user: ')
-            trackUser({
-                user: user.dataValues.osuid,
-                mode: user.dataValues.mode,
-                inital: false
-            })
+            if (user.dataValues.osuid == null) {
+                osufunc.logCall('null id', 'Cancelling tracking')
+            }
+            else if (user.dataValues.guilds.length < 1) {
+                osufunc.logCall(`User is not assigned to any guild (${user.dataValues.osuid})`, 'Cancelling tracking')
+            } else {
+                trackUser({
+                    user: user.dataValues.osuid,
+                    mode: user.dataValues.mode,
+                    inital: false
+                })
+            }
         })
     }
 
@@ -225,7 +232,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
 
     }
 
-    //trackUsers(trackDb)
+    // trackUsers(trackDb)
 
     setInterval(() => {
         trackUsers(trackDb)
