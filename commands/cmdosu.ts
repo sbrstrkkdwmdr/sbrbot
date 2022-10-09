@@ -487,9 +487,15 @@ export async function lb(input: extypes.commandInput) {
     let rtxt = `\n`;
     const rarr = [];
 
+    if (input.commandType == 'interaction') {
+        //@ts-ignore
+        input.obj.reply('loading...')
+    }
+
 
     for (let i = 0; i < useridsarraylen; i++) {
         const user: extypes.dbUser = userids[i].dataValues;
+
         guild.members.cache.forEach(async member => {
             if (`${member.id}` == `${user.userid}`) {
                 if (user != null && !rtxt.includes(`${member.user.id}`)) {
@@ -1623,7 +1629,8 @@ ${onlinestatus}
         obj: input.obj,
         args: {
             embeds: useEmbeds,
-            components: [buttons]
+            components: [buttons],
+            edit: true
         }
     })
 
@@ -1671,13 +1678,74 @@ export async function firsts(input: extypes.commandInput) {
                 page = parseInt(input.args[input.args.indexOf('-p') + 1]);
                 input.args.splice(input.args.indexOf('-p'), 2);
             }
-            if (input.args.includes('-mode')) {
-                mode = (input.args[input.args.indexOf('-mode') + 1]);
-                input.args.splice(input.args.indexOf('-mode'), 2);
+
+            if (input.args.includes('-osu')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-osu'), 1);
             }
-            if (input.args.includes('-m')) {
-                mode = (input.args[input.args.indexOf('-m') + 1]);
-                input.args.splice(input.args.indexOf('-m'), 2);
+            if (input.args.includes('-o')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-recent')) {
+                sort = 'recent';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-performance')) {
+                sort = 'pp';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-pp')) {
+                sort = 'pp';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-score')) {
+                sort = 'score';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-acc')) {
+                sort = 'acc';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-combo')) {
+                sort = 'combo';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-miss')) {
+                sort = 'miss';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-rank')) {
+                sort = 'rank';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-r')) {
+                sort = 'recent';
+                input.args.splice(input.args.indexOf('-r'), 1);
             }
             user = input.args.join(' ');
             if (!input.args[0] || input.args[0].includes(searchid)) {
@@ -2527,6 +2595,7 @@ export async function maplb(input: extypes.commandInput) {
         args: {
             embeds: [lbEmbed],
             components: [pgbuttons, buttons],
+            edit: true
         }
     })
 
@@ -2582,13 +2651,74 @@ export async function nochokes(input: extypes.commandInput) {
                 page = parseInt(input.args[input.args.indexOf('-p') + 1]);
                 input.args.splice(input.args.indexOf('-p'), 2);
             }
-            if (input.args.includes('-mode')) {
-                mode = (input.args[input.args.indexOf('-mode') + 1]);
-                input.args.splice(input.args.indexOf('-mode'), 2);
+
+            if (input.args.includes('-osu')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-osu'), 1);
             }
-            if (input.args.includes('-m')) {
-                mode = (input.args[input.args.indexOf('-m') + 1]);
-                input.args.splice(input.args.indexOf('-m'), 2);
+            if (input.args.includes('-o')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-recent')) {
+                sort = 'recent';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-performance')) {
+                sort = 'pp';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-pp')) {
+                sort = 'pp';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-score')) {
+                sort = 'score';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-acc')) {
+                sort = 'acc';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-combo')) {
+                sort = 'combo';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-miss')) {
+                sort = 'miss';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-rank')) {
+                sort = 'rank';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-r')) {
+                sort = 'recent';
+                input.args.splice(input.args.indexOf('-r'), 1);
             }
             user = input.args.join(' ');
             if (!input.args[0] || input.args.includes(searchid)) {
@@ -3024,7 +3154,7 @@ export async function osutop(input: extypes.commandInput) {
     let user;
     let mode;
     let detailed;
-    let sort;
+    let sort: embedStuff.scoreSort;
     let reverse;
     let page;
     let mapper;
@@ -3052,14 +3182,6 @@ export async function osutop(input: extypes.commandInput) {
                 page = parseInt(input.args[input.args.indexOf('-p') + 1]);
                 input.args.splice(input.args.indexOf('-p'), 2);
             }
-            if (input.args.includes('-mode')) {
-                mode = (input.args[input.args.indexOf('-mode') + 1]);
-                input.args.splice(input.args.indexOf('-mode'), 2);
-            }
-            if (input.args.includes('-m')) {
-                mode = (input.args[input.args.indexOf('-m') + 1]);
-                input.args.splice(input.args.indexOf('-m'), 2);
-            }
             if (input.args.includes('-mapper')) {
                 mapper = (input.args[input.args.indexOf('-mapper') + 1]);
                 input.args.splice(input.args.indexOf('-mapper'), 2);
@@ -3072,9 +3194,74 @@ export async function osutop(input: extypes.commandInput) {
                 reverse = true
                 input.args.splice(input.args.indexOf('-reverse'), 1);
             }
-            if (input.args.includes('-sort')) {
-                sort = (input.args[input.args.indexOf('-sort') + 1]);
-                input.args.splice(input.args.indexOf('-sort'), 2);
+
+            if (input.args.includes('-osu')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-recent')) {
+                sort = 'recent';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-performance')) {
+                sort = 'pp';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-pp')) {
+                sort = 'pp';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-score')) {
+                sort = 'score';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-acc')) {
+                sort = 'acc';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-combo')) {
+                sort = 'combo';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-miss')) {
+                sort = 'miss';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-rank')) {
+                sort = 'rank';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-r')) {
+                sort = 'recent';
+                input.args.splice(input.args.indexOf('-r'), 1);
             }
             user = input.args.join(' ');
             if (!input.args[0] || input.args.includes(searchid)) {
@@ -3190,7 +3377,7 @@ export async function osutop(input: extypes.commandInput) {
         if (input.overrides.page != null) {
             page = input.overrides.page
         }
-        if (input.overrides.sort != null) {
+        if (input.overrides.sort != null) {//@ts-ignore
             sort = input.overrides.sort
         }
         if (input.overrides.reverse != null) {
@@ -3607,13 +3794,74 @@ export async function pinned(input: extypes.commandInput) {
                 page = parseInt(input.args[input.args.indexOf('-p') + 1]);
                 input.args.splice(input.args.indexOf('-p'), 2);
             }
-            if (input.args.includes('-mode')) {
-                mode = (input.args[input.args.indexOf('-mode') + 1]);
-                input.args.splice(input.args.indexOf('-mode'), 2);
+
+            if (input.args.includes('-osu')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-osu'), 1);
             }
-            if (input.args.includes('-m')) {
-                mode = (input.args[input.args.indexOf('-m') + 1]);
-                input.args.splice(input.args.indexOf('-m'), 2);
+            if (input.args.includes('-o')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-recent')) {
+                sort = 'recent';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-performance')) {
+                sort = 'pp';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-pp')) {
+                sort = 'pp';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-score')) {
+                sort = 'score';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-acc')) {
+                sort = 'acc';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-combo')) {
+                sort = 'combo';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-miss')) {
+                sort = 'miss';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-rank')) {
+                sort = 'rank';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-r')) {
+                sort = 'recent';
+                input.args.splice(input.args.indexOf('-r'), 1);
             }
             user = input.args.join(' ');
             if (!input.args[0] || input.args.includes(searchid)) {
@@ -4755,6 +5003,7 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
         args: {
             embeds: [rsEmbed],
             components: [pgbuttons, buttons],
+            edit: true
         }
     })
 
@@ -5836,7 +6085,8 @@ export async function scores(input: extypes.commandInput) {
         obj: input.obj,
         args: {
             embeds: [scoresEmbed],
-            components: [pgbuttons, buttons]
+            components: [pgbuttons, buttons],
+            edit: true
         }
     })
 
@@ -6888,7 +7138,8 @@ export async function map(input: extypes.commandInput) {
         obj: input.obj,
         args: {
             embeds: embeds,
-            components: useComponents
+            components: useComponents,
+            edit: true
         }
     })
 
@@ -7663,11 +7914,11 @@ export async function tracklist(input: extypes.commandInput) {
         const user = users[i].dataValues;
         let guilds
         try {
-            if(user.guilds.length < 3) throw new Error('no guilds');
+            if (user.guilds.length < 3) throw new Error('no guilds');
             guilds = user.guilds.includes(',')
                 ? user.guilds.split(',') :
                 [user.guilds];
-            
+
         } catch (error) {
             guilds = [];
         }
@@ -7712,7 +7963,7 @@ ID: ${input.absoluteID}
 export async function compare(input: extypes.commandInput) {
 
     let commanduser;
-    let type: 'profile' | 'top' | 'mapscore' = 'top';
+    let type: 'profile' | 'top' | 'mapscore' = 'profile';
     let first = null;
     let second = null;
     let firstsearchid = null;
@@ -7763,8 +8014,8 @@ export async function compare(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {
-
+    if (input.overrides != null) {//@ts-ignore
+        if (input.overrides.type != null) type = input.overrides.type;
     }
     //==============================================================================================================================================================================================
 
@@ -7987,6 +8238,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                 }
 
                 const scores = arrscore.length > 0 ? arrscore.slice(0, 5).join('\n') : 'No shared scores'
+                fieldFirst.name = '‎ '
                 fieldFirst.value = scores
                 usefields.push(fieldFirst)
             }

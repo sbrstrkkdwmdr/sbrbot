@@ -11,7 +11,7 @@ import admincmds = require('./commands/cmdAdmin');
 import misccmds = require('./commands/cmdMisc');
 import checkcmds = require('./commands/cmdChecks');
 
-module.exports = (userdata, client,  config, oncooldown, guildSettings, trackDb) => {
+module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) => {
     let timeouttime;
 
     client.on('messageCreate', async (message) => {
@@ -146,7 +146,7 @@ module.exports = (userdata, client,  config, oncooldown, guildSettings, trackDb)
         execCommand(interaction.commandName, 'interaction', interaction, null, button, absoluteID, currentDate, interaction.member.user.id, args);
     });
 
-    function execCommand(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: null, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[]) {
+    function execCommand(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: any, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[]) {
         if (!checks.botHasPerms(obj, client, ['ReadMessageHistory'])) return;
         if (!checks.botHasPerms(obj, client, ['SendMessages', 'ReadMessageHistory', 'ViewChannel']) && commandType == 'message') return;
         //if is thread check if bot has perms
@@ -291,6 +291,16 @@ module.exports = (userdata, client,  config, oncooldown, guildSettings, trackDb)
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
+            case 'common':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    overrides = {
+                        type: 'top'
+                    }
+                    osucmds.compare({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
             case 'firsts':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.firsts({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
@@ -299,7 +309,7 @@ module.exports = (userdata, client,  config, oncooldown, guildSettings, trackDb)
                 }
                 break;
             case 'globals':
-                osucmds.globals({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata})
+                osucmds.globals({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 break;
             case 'ranking':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {

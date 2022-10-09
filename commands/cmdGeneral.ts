@@ -1912,7 +1912,7 @@ export function time(input: extypes.commandInput) {
             name: `UTC/GMT${offset} (Host's Local Time)`,
             value: `\n**Date**: ${reltruedate}` +
                 `\n**Full Date**: ${reldatenow12h}` +
-                `\n**Full Date(24h)**: ${input.currentDate}` +
+                `\n**Full Date(24h)**: ${`${input.currentDate}`.split('GMT')[0]}` +
                 `\n**Time since command was last used**: ${minlastvisw} `
             ,
             inline: false
@@ -1949,7 +1949,7 @@ export function time(input: extypes.commandInput) {
                         name: `UTC/GMT ${optionaldateoffsetNEW} (Requested Time)`,
                         value: `\n**Date**: ${optionaldateDate}` +
                             `\n**Full Date**: ${optionaldate12h}` +
-                            `\n**Full Date(24h)**: ${optionaldate}` +
+                            `\n**Full Date(24h)**: ${`${optionaldate}`.split('GMT')[0]}` +
                             `\n**Full Date ISO8601**: ${optionaldateISO}`,
                         inline: false
                     }])

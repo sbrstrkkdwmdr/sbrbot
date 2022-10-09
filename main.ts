@@ -53,7 +53,7 @@ const sequelize = new Sequelize.Sequelize('database', 'username', 'password', {
 
 const userdata = sequelize.define('userdata', {
     userid: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         unique: true
     },
     osuname: Sequelize.TEXT,
@@ -81,7 +81,7 @@ const userdata = sequelize.define('userdata', {
 
 const guildSettings = sequelize.define('guildSettings', {
     guildid: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TEXT,
         unique: true
     },
     guildname: Sequelize.TEXT,
