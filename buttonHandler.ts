@@ -7,7 +7,7 @@ import admincmds = require('./commands/cmdAdmin');
 import misccmds = require('./commands/cmdMisc');
 import checkcmds = require('./commands/cmdChecks');
 
-module.exports = (userdata, client,  config, oncooldown) => {
+module.exports = (userdata, client, config, oncooldown) => {
 
     client.on('interactionCreate', interaction => {
         if (!(interaction.type == Discord.InteractionType.MessageComponent || interaction.type == Discord.InteractionType.ModalSubmit)) return;
@@ -104,69 +104,74 @@ module.exports = (userdata, client,  config, oncooldown) => {
 
         switch (command) {
             case 'firsts':
-                osucmds.firsts({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.firsts({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'lb':
-                osucmds.lb({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.lb({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'map':
-                osucmds.map({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.map({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'maplb':
-                osucmds.maplb({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.maplb({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'nochokes':
-                osucmds.nochokes({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.nochokes({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'osu':
-                osucmds.osu({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'osutop':
-                osucmds.osutop({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'pinned':
-                osucmds.pinned({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.pinned({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'ranking':
-                osucmds.ranking({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.ranking({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'recent':
-                osucmds.recent({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'scores':
-                osucmds.scores({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                osucmds.scores({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
+            case 'compare':
+                osucmds.scores({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
 
             case 'help':
-                commands.help({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                commands.help({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
 
             case 'test':
-                client.commands.get('test').execute({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata});
+                client.commands.get('test').execute({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;

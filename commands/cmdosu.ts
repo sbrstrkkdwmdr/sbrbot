@@ -7969,6 +7969,7 @@ export async function compare(input: extypes.commandInput) {
     let firstsearchid = null;
     let secondsearchid = null;
     let mode = 'osu';
+    let page = 0;
 
     switch (input.commandType) {
         case 'message': {
@@ -8011,6 +8012,8 @@ export async function compare(input: extypes.commandInput) {
             break;
         case 'button': {
             commanduser = input.obj.member.user;
+            type = 'top';//@ts-ignore
+            page = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[0])
         }
             break;
     }
@@ -8078,6 +8081,15 @@ export async function compare(input: extypes.commandInput) {
     }
     let embedTitle: string = 'w';
     let usefields: Discord.EmbedField[] = []
+
+    let useComponents: Discord.ActionRowBuilder[] = []
+    let embedescription = null;
+
+    if (page < 2) {
+        page = 1
+    }
+    page--
+
     try {
         if (second == null) {
             if (secondsearchid) {
@@ -8198,6 +8210,7 @@ export async function compare(input: extypes.commandInput) {
 
 
             case 'top': {
+                page
                 const firsttopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${firstuser.id}`, `${mode}`)
                 if (firsttopdata?.error) {
                     if (input.commandType != 'button' && input.commandType != 'link') {
@@ -8222,8 +8235,9 @@ export async function compare(input: extypes.commandInput) {
                 filterfirst.sort((a, b) => b.pp - a.pp)
                 embedTitle = 'Comparing top scores'
                 let arrscore = [];
-                for (let i = 0; i < filterfirst.length; i++) {
-                    const firstscore: osuApiTypes.Score = filterfirst[i]
+                for (let i = 0; i < filterfirst.length && i < 5; i++) {
+                    const firstscore: osuApiTypes.Score = filterfirst[i + (page * 5)];
+                    if(!firstscore) break;
                     const secondscore: osuApiTypes.Score = secondtopdata.find(score => score.beatmap.id == firstscore.beatmap.id)
                     if (secondscore == null) break;
                     const firstscorestr =
@@ -8237,10 +8251,41 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                     )
                 }
 
-                const scores = arrscore.length > 0 ? arrscore.slice(0, 5).join('\n') : 'No shared scores'
+                const scores = arrscore.length > 0 ? arrscore.slice().join('\n') : 'No shared scores'
+
+                embedescription = `**[${firstuser.username}](https://osu.ppy.sh/u/${firstuser.id})** and **[${seconduser.username}](https://osu.ppy.sh/u/${seconduser.id})** have ${filterfirst.length} shared scores
+                Page: ${page + 1}/${Math.ceil(filterfirst.length / 5)}`
+
                 fieldFirst.name = '‎ '
                 fieldFirst.value = scores
                 usefields.push(fieldFirst)
+
+
+                const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+                    .addComponents(
+                        new Discord.ButtonBuilder()
+                            .setCustomId(`BigLeftArrow-compare-${commanduser.id}-${input.absoluteID}`)
+                            .setStyle(buttonsthing.type.current)
+                            .setEmoji(buttonsthing.label.page.first),
+                        new Discord.ButtonBuilder()
+                            .setCustomId(`LeftArrow-compare-${commanduser.id}-${input.absoluteID}`)
+                            .setStyle(buttonsthing.type.current)
+                            .setEmoji(buttonsthing.label.page.previous),
+                        new Discord.ButtonBuilder()
+                            .setCustomId(`Search-compare-${commanduser.id}-${input.absoluteID}`)
+                            .setStyle(buttonsthing.type.current)
+                            .setEmoji(buttonsthing.label.page.search),
+                        new Discord.ButtonBuilder()
+                            .setCustomId(`RightArrow-compare-${commanduser.id}-${input.absoluteID}`)
+                            .setStyle(buttonsthing.type.current)
+                            .setEmoji(buttonsthing.label.page.next),
+                        new Discord.ButtonBuilder()
+                            .setCustomId(`BigRightArrow-compare-${commanduser.id}-${input.absoluteID}`)
+                            .setStyle(buttonsthing.type.current)
+                            .setEmoji(buttonsthing.label.page.last),
+                    );
+
+                useComponents.push(pgbuttons)
             }
                 break;
 
@@ -8281,6 +8326,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
     const embed = new Discord.EmbedBuilder()
         .setTitle(embedTitle)
         .addFields(usefields)
+    if (embedescription) embed.setDescription(embedescription)
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage({
