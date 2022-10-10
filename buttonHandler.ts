@@ -159,7 +159,7 @@ module.exports = (userdata, client, config, oncooldown) => {
                     .catch(error => { });
                 break;
             case 'compare':
-                osucmds.scores({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
+                osucmds.compare({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;

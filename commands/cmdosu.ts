@@ -4409,29 +4409,29 @@ export async function recent(input: extypes.commandInput) {
         if (input.overrides.page != null) {
             page = parseInt(`${input.overrides.page}`)
         }
-        if(input.overrides.type != null){
-            if(input.overrides.type == 'list'){
+        if (input.overrides.type != null) {
+            if (input.overrides.type == 'list') {
                 list = true
             }
-            if(input.overrides.type == 'listtaiko'){
+            if (input.overrides.type == 'listtaiko') {
                 list = true
                 mode = 'taiko'
             }
-            if(input.overrides.type == 'listfruits'){
+            if (input.overrides.type == 'listfruits') {
                 list = true
                 mode = 'fruits'
             }
-            if(input.overrides.type == 'listmania'){
+            if (input.overrides.type == 'listmania') {
                 list = true
                 mode = 'mania'
             }
-            if(input.overrides.type == 'taiko'){
+            if (input.overrides.type == 'taiko') {
                 mode = 'taiko'
             }
-            if(input.overrides.type == 'fruits'){
+            if (input.overrides.type == 'fruits') {
                 mode = 'fruits'
             }
-            if(input.overrides.type == 'mania'){
+            if (input.overrides.type == 'mania') {
                 mode = 'mania'
             }
 
@@ -8038,9 +8038,47 @@ export async function compare(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            //@ts-ignore
+            if (!input.obj.message.embeds[0]) {
+                return;
+            }
             commanduser = input.obj.member.user;
             type = 'top';//@ts-ignore
-            page = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[0])
+            const pawge = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[0])
+            //@ts-ignore
+            const pagefin = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[1])
+            switch (input.button) {
+                case 'BigLeftArrow': {
+                    page = 0;
+                }
+                    break;
+                case 'LeftArrow': {
+                    page = pawge - 1;
+                }
+                    break;
+                case 'RightArrow': {
+                    page = pawge + 1;
+                }
+                    break;
+                case 'BigRightArrow': {
+                    page = pagefin;
+                }
+                    break;
+                case 'Refresh': {
+                    page = pawge;
+                }
+                    break;
+            }
+
+            if (page > pagefin) page = pagefin;
+
+            //@ts-ignore
+            const firsti = input.obj.message.embeds[0].description.split('and')[0]//@ts-ignore
+            const secondi = input.obj.message.embeds[0].description.split('and')[1].split('have')[0]
+
+            //user => [name](url)
+            first = firsti.split('u/')[1].split(')')[0];
+            second = secondi.split('u/')[1].split(')')[0];
         }
             break;
     }
@@ -8082,6 +8120,10 @@ export async function compare(input: extypes.commandInput) {
             {
                 name: 'SecondSearchId',
                 value: secondsearchid
+            },
+            {
+                name: 'Page',
+                value: page
             }
         ]),
         {
@@ -8112,8 +8154,8 @@ export async function compare(input: extypes.commandInput) {
     let useComponents: Discord.ActionRowBuilder[] = []
     let embedescription = null;
 
-    if (page < 2) {
-        page = 1
+    if (page < 2 || typeof page != 'number' || isNaN(page)) {
+        page = 1;
     }
     page--
 
@@ -8170,6 +8212,7 @@ export async function compare(input: extypes.commandInput) {
             }
             return;
         }
+
 
         let seconduser: osuApiTypes.User;
         if (func.findFile(second, 'osudata') &&
@@ -8238,14 +8281,36 @@ export async function compare(input: extypes.commandInput) {
 
             case 'top': {
                 page
-                const firsttopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${firstuser.id}`, `${mode}`)
+                let firsttopdata: osuApiTypes.Score[] & osuApiTypes.Error;
+                if (func.findFile(input.absoluteID, 'firsttopdata') &&
+                    !('error' in func.findFile(input.absoluteID, 'firsttopdata')) &&
+                    input.button != 'Refresh'
+                ) {
+                    firsttopdata = func.findFile(input.absoluteID, 'firsttopdata')
+                } else {
+                    firsttopdata = await osufunc.apiget('best', `${firstuser.id}`, `${mode}`)
+                }
+
                 if (firsttopdata?.error) {
                     if (input.commandType != 'button' && input.commandType != 'link') {
                         throw new Error('could not fetch first user\'s top scores')
                     }
                     return;
                 }
-                const secondtopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${seconduser.id}`, `${mode}`)
+
+                let secondtopdata: osuApiTypes.Score[] & osuApiTypes.Error;
+                if (func.findFile(input.absoluteID, 'secondtopdata') &&
+                    !('error' in func.findFile(input.absoluteID, 'secondtopdata')) &&
+                    input.button != 'Refresh'
+                ) {
+                    secondtopdata = func.findFile(input.absoluteID, 'secondtopdata')
+                } else {
+                    secondtopdata = await osufunc.apiget('best', `${seconduser.id}`, `${mode}`)
+                }
+
+                func.storeFile(firsttopdata, input.absoluteID, 'firsttopdata')
+                func.storeFile(secondtopdata, input.absoluteID, 'secondtopdata')
+
                 if (secondtopdata?.error) {
                     if (input.commandType != 'button' && input.commandType != 'link') {
                         throw new Error('could not fetch second user\'s top scores')
@@ -8262,9 +8327,12 @@ export async function compare(input: extypes.commandInput) {
                 filterfirst.sort((a, b) => b.pp - a.pp)
                 embedTitle = 'Comparing top scores'
                 let arrscore = [];
+
+
+
                 for (let i = 0; i < filterfirst.length && i < 5; i++) {
                     const firstscore: osuApiTypes.Score = filterfirst[i + (page * 5)];
-                    if(!firstscore) break;
+                    if (!firstscore) break;
                     const secondscore: osuApiTypes.Score = secondtopdata.find(score => score.beatmap.id == firstscore.beatmap.id)
                     if (secondscore == null) break;
                     const firstscorestr =
@@ -8360,7 +8428,8 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [embed]
+            embeds: [embed],
+            components: useComponents
         }
     })
 
