@@ -207,15 +207,19 @@ type commandButtonTypes =
 type osustatscache = {
     osuid: string,
     country: string,
+    
     osupp: string,
     osurank: string,
     osuacc: string,
+
     taikopp: string,
     taikorank: string,
     taikoacc: string,
+
     fruitspp: string,
     fruitsrank: string,
     fruitsacc: string,
+
     maniapp: string,
     maniarank: string,
     maniaacc: string,

@@ -7,7 +7,7 @@ import admincmds = require('./commands/cmdAdmin');
 import misccmds = require('./commands/cmdMisc');
 import checkcmds = require('./commands/cmdChecks');
 
-module.exports = (userdata, client, config, oncooldown) => {
+module.exports = (userdata, client, config, oncooldown, statsCache) => {
 
     client.on('interactionCreate', interaction => {
         if (!(interaction.type == Discord.InteractionType.MessageComponent || interaction.type == Discord.InteractionType.ModalSubmit)) return;
@@ -144,7 +144,7 @@ module.exports = (userdata, client, config, oncooldown) => {
                     .catch(error => { });
                 break;
             case 'ranking':
-                osucmds.ranking({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
+                osucmds.ranking({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;

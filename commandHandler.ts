@@ -11,7 +11,7 @@ import admincmds = require('./commands/cmdAdmin');
 import misccmds = require('./commands/cmdMisc');
 import checkcmds = require('./commands/cmdChecks');
 
-module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) => {
+module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, statsCache) => {
     let timeouttime;
 
     client.on('messageCreate', async (message) => {
@@ -313,7 +313,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) 
                 break;
             case 'ranking':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.ranking({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                    osucmds.ranking({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }

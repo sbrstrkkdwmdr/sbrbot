@@ -118,10 +118,23 @@ const statsCache = sequelize.define('statsCache', {
         type: Sequelize.STRING,
         unique: true
     },
+    country: Sequelize.STRING,
+
     osupp: Sequelize.STRING,
     osurank: Sequelize.STRING,
-    osuname: Sequelize.STRING,
-    country: Sequelize.STRING
+    osuacc: Sequelize.STRING,
+
+    taikopp: Sequelize.STRING,
+    taikorank: Sequelize.STRING,
+    taikoacc: Sequelize.STRING,
+
+    fruitspp: Sequelize.STRING,
+    fruitsrank: Sequelize.STRING,
+    fruitsacc: Sequelize.STRING,
+
+    maniapp: Sequelize.STRING,
+    maniarank: Sequelize.STRING,
+    maniaacc: Sequelize.STRING,
 })
 
 client.once('ready', () => {
@@ -130,6 +143,7 @@ client.once('ready', () => {
     userdata.sync();
     guildSettings.sync();
     trackDb.sync();
+    statsCache.sync();
     const timetostart = currentDate.getTime() - initdate.getTime()
     const initlog = `
 ===================================================================
@@ -147,9 +161,9 @@ Current Client ID: ${client.user.id}
 
     const oncooldown = new Set();
 
-    commandHandler(userdata, client, config, oncooldown, guildSettings, trackDb);
+    commandHandler(userdata, client, config, oncooldown, guildSettings, trackDb, statsCache);
     linkHandler(userdata, client, config, oncooldown, guildSettings);
-    buttonHandler(userdata, client, config, oncooldown);
+    buttonHandler(userdata, client, config, oncooldown, statsCache);
     commandInit(userdata, client, config, oncooldown);
     exEvents(userdata, client, config, oncooldown, guildSettings);
     osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);

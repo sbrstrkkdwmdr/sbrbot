@@ -695,7 +695,7 @@ ID: ${input.absoluteID}
 
 }
 
-export async function ranking(input: extypes.commandInput) {
+export async function ranking(input: extypes.commandInput & { statsCache: any }) {
 
     let commanduser;
     let country = 'ALL';
@@ -935,11 +935,15 @@ export async function ranking(input: extypes.commandInput) {
         }).catch()
         return;
     }
-    //if country > show countryh icon, country total pp, score
 
     let ifchart = '';
     if (type == 'charts') {
         ifchart = `[${rankingdata.spotlight.name}](https://osu.ppy.sh/rankings/${mode}/charts?spotlight=${rankingdata.spotlight.id})`
+    }
+
+    if (country == 'ALL' && input.button == null) {
+        //@ts-ignore
+        osufunc.userStatsCache(rankingdata.ranking, input.statsCache, mode)
     }
 
     const embed = new Discord.EmbedBuilder()
