@@ -1186,3 +1186,7 @@ export function modeValidator(mode: string | number) {
     }
     return returnf;
 }
+
+export function userStatsCache(user: osuApiTypes.User[], database: extypes.osustatscache[]){
+    
+}

@@ -113,6 +113,17 @@ const trackDb = sequelize.define('trackUsers', {
     }
 })
 
+const statsCache = sequelize.define('statsCache', {
+    osuid: {
+        type: Sequelize.STRING,
+        unique: true
+    },
+    osupp: Sequelize.STRING,
+    osurank: Sequelize.STRING,
+    osuname: Sequelize.STRING,
+    country: Sequelize.STRING
+})
+
 client.once('ready', () => {
     const currentDate = new Date();
 

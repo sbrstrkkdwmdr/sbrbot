@@ -199,6 +199,23 @@ type commandInput = {
     guildSettings?: data,
 }
 
+type osustatscache = {
+    osuid: string,
+    country: string,
+    osupp: string,
+    osurank: string,
+    osuacc: string,
+    taikopp: string,
+    taikorank: string,
+    taikoacc: string,
+    fruitspp: string,
+    fruitsrank: string,
+    fruitsacc: string,
+    maniapp: string,
+    maniarank: string,
+    maniaacc: string,
+}
+
 export {
     config,
     guildSettings,
@@ -210,6 +227,7 @@ export {
     commandObject,
     overrides,
     data,
-    commandInput
+    commandInput,
+    osustatscache
 };
 
