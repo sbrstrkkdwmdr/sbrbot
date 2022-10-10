@@ -519,7 +519,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                 break;
             case 'whatif':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.whatif({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                    osucmds.whatif({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }

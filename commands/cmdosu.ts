@@ -8771,7 +8771,7 @@ ID: ${input.absoluteID}
 
 }
 
-export async function whatif(input: extypes.commandInput) {
+export async function whatif(input: extypes.commandInput & { statsCache: any }) {
 
     let commanduser;
     let user;
@@ -8923,6 +8923,8 @@ export async function whatif(input: extypes.commandInput) {
 
     const bonus = osudata.statistics.pp - newBonus.reduce((a, b) => a + b, 0);
 
+    const guessrank = await osufunc.getRankPerformance('pp->rank', (total + bonus), input.userdata, 'osu', input.statsCache)
+
     const embed = new Discord.EmbedBuilder()
         .setTitle(`What if ${osudata.username} gained ${pp}pp?`)
         .setColor(colours.embedColour.query.dec)
@@ -8935,7 +8937,7 @@ export async function whatif(input: extypes.commandInput) {
         .setDescription(
             `A ${pp} score would be their **${calc.toOrdinal(ppindex + 1)}** top play and would be weighted at **${(weight * 100).toFixed(2)}%**.
 Their pp would change by **${Math.abs((total + bonus) - osudata.statistics.pp).toFixed(2)}pp** and their new total pp would be **${(total + bonus).toFixed(2)}pp**.
-Their new rank would be **null** (+null).
+Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - guessrank}).
 `
         )
 
