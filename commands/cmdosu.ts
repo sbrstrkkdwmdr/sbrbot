@@ -1020,7 +1020,7 @@ ID: ${input.absoluteID}
 
 }
 
-export async function rankpp(input: extypes.commandInput) {
+export async function rankpp(input: extypes.commandInput & { statsCache: any }) {
 
     let commanduser;
     let type: string = 'rank';
@@ -1077,7 +1077,7 @@ export async function rankpp(input: extypes.commandInput) {
 
     switch (type) {
         case 'pp': {
-            returnval = await osufunc.getRankPerformance('pp->rank', value, input.userdata, mode);
+            returnval = await osufunc.getRankPerformance('pp->rank', value, input.userdata, mode, input.statsCache);
             if (typeof returnval == 'number') {
                 returnval = 'approx. #' + func.separateNum(returnval)
             } else {
@@ -1090,7 +1090,7 @@ export async function rankpp(input: extypes.commandInput) {
             break;
         case 'rank': {
 
-            returnval = await osufunc.getRankPerformance('rank->pp', value, input.userdata, mode);
+            returnval = await osufunc.getRankPerformance('rank->pp', value, input.userdata, mode, input.statsCache);
 
             if (typeof returnval == 'number') {
                 returnval = 'approx. ' + func.separateNum(returnval) + 'pp'

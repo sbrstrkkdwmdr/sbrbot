@@ -323,7 +323,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     let overrides = {
                         type: 'rank'
                     }
-                    osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                    osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
@@ -333,7 +333,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     let overrides = {
                         type: 'pp'
                     }
-                    osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                    osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }

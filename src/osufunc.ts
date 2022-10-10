@@ -1036,9 +1036,12 @@ export function rawToWeighted(pp: number, index: number) {
     return pp * (findWeight(index))
 }
 
-export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: number, userdata: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode) {
+export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: number, userdata: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode,
+    statsCache: Sequelize.ModelStatic<any>) {
     const users = await userdata.findAll()
-    const pprankarr: { pp: number, rank: number }[] = [];
+    const cacheUsers = await statsCache.findAll()
+    users.push(...cacheUsers)
+    const pprankarr: { pp: string, rank: string }[] = [];
 
     for (let i = 0; i < users.length; i++) {
         const curuser = users[i].dataValues;
@@ -1079,14 +1082,14 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
     }
 
     //sort by pp
-    pprankarr.sort((a, b) => b.pp - a.pp)
+    pprankarr.sort((a, b) => parseFloat(b.pp) - parseFloat(a.pp))
 
     let returnval;
 
     switch (type) {
         case 'pp->rank': {
-            pprankarr.push({ pp: value, rank: 0 })
-            pprankarr.sort((a, b) => b.pp - a.pp);
+            pprankarr.push({ pp: `${value}`, rank: `${0}` })
+            pprankarr.sort((a, b) => parseFloat(b.pp) - parseFloat(a.pp));
 
             /** val = 4503
              *  3000, 68987
@@ -1105,19 +1108,20 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
              */
 
             //get position
-            const pos = pprankarr.findIndex(e => e.pp == value)
+            const pos = pprankarr.findIndex(e => parseFloat(e.pp) == value)
 
             const prev = pprankarr[pos - 1]
+            
             const next = pprankarr[pos + 1]
             //estimate rank
             if (typeof prev == 'undefined') {
                 returnval = next.rank
             }
-            else if (typeof next == 'undefined') {
+            else if (typeof next == 'undefined' && typeof prev != 'undefined') {
                 returnval = prev.rank
             } else {
                 // returnval = prev.rank + ((next.rank - prev.rank) / (next.pp - prev.pp)) * (value - prev.pp)
-                returnval = (prev.rank + next.rank) / 2
+                returnval = (parseInt(prev.rank) + parseInt(next.rank)) / 2
             }
             if (typeof prev == 'undefined' && typeof next == 'undefined') {
                 returnval = 'unknown';
@@ -1125,9 +1129,9 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
         }
             break;
         case 'rank->pp': {
-            pprankarr.push({ pp: 0, rank: value })
-            pprankarr.sort((a, b) => b.rank - a.rank);
-            const pos = pprankarr.findIndex(e => e.rank == value)
+            pprankarr.push({ pp: '0', rank: `${value}` })
+            pprankarr.sort((a, b) => parseInt(b.rank) - parseInt(a.rank));
+            const pos = pprankarr.findIndex(e => parseInt(e.rank) == value)
             const prev = pprankarr[pos - 1]
             const next = pprankarr[pos + 1]
             //estimate pp
@@ -1138,7 +1142,7 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
                 returnval = prev.pp
             } else {
                 // returnval = prev.pp + ((next.pp - prev.pp) / (next.rank - prev.rank)) * (value - prev.rank)
-                returnval = (prev.pp + next.pp) / 2
+                returnval = (parseFloat(prev.pp) + parseFloat(next.pp)) / 2
             }
             if (typeof prev == 'undefined' && typeof next == 'undefined') {
                 returnval = 0;
