@@ -906,7 +906,8 @@ export function help(input: extypes.commandInput) {
         }
 
         let commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none'
-        let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
+        // let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
+        let commandexamples = command.examples && command.examples.length > 0 ? command.examples.map(x => x.text).join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
 
         embed.setTitle("Command info for: " + command.name)
         embed.setDescription(desc)
@@ -928,92 +929,122 @@ export function help(input: extypes.commandInput) {
             }
         ])
     }
-
-    if (command != null) {
-        const fetchcmd = command.toString()
-        const commandInfo = new Discord.EmbedBuilder()
-            .setColor(colours.embedColour.info.dec)
-        if (helpinfo.cmds.find(obj => obj.name == fetchcmd)) {
-            commandCategory = 'gen';
-            const res = helpinfo.cmds.find(obj => obj.name == fetchcmd)
-            commandEmb(res, commandInfo)
-        } else if (helpinfo.othercmds.find(obj => obj.name == fetchcmd)) {
-            commandCategory = 'misc';
-            const res = helpinfo.othercmds.find(obj => obj.name == fetchcmd)
-            commandEmb(res, commandInfo)
-        } else if (helpinfo.osucmds.find(obj => obj.name == fetchcmd)) {
-            commandCategory = 'osu';
-            const res = helpinfo.osucmds.find(obj => obj.name == fetchcmd)
-            commandEmb(res, commandInfo)
-        } else if (helpinfo.admincmds.find(obj => obj.name == fetchcmd)) {
-            commandCategory = 'admin';
-            const res = helpinfo.admincmds.find(obj => obj.name == fetchcmd)
-            commandEmb(res, commandInfo)
-        }
-
-
-        if (command.includes('CategoryMenu')) {
-            switch (true) {
-                case command.includes('gen'): {
-                    commandInfo.setTitle("General Commands");
-                    let desctxt = '';
-                    for (let i = 0; i < helpinfo.cmds.length; i++) {
-                        desctxt += `\n\`${helpinfo.cmds[i].name}\`: ${helpinfo.cmds[i].description}`;
-                    }
-                    if (desctxt == '') {
-                        desctxt = 'No commands in this category';
-                    }
-                    commandInfo.setDescription(desctxt);
-                    commandCategory = 'gen';
-                }
-                    break;
-                case command.includes('osu'): {
-                    commandInfo.setTitle("osu! Commands");
-                    let desctxt = '';
-                    for (let i = 0; i < helpinfo.osucmds.length; i++) {
-                        desctxt += `\n\`${helpinfo.osucmds[i].name}\`: ${helpinfo.osucmds[i].description}`;
-                    }
-                    if (desctxt == '') {
-                        desctxt = 'No commands in this category';
-                    }
-                    commandInfo.setDescription(desctxt);
-                    commandCategory = 'osu';
-                }
-                    break;
-                case command.includes('admin'): {
-                    commandInfo.setTitle("Admin Commands");
-                    let desctxt = '';
-                    for (let i = 0; i < helpinfo.admincmds.length; i++) {
-                        desctxt += `\n\`${helpinfo.admincmds[i].name}\`: ${helpinfo.admincmds[i].description}`;
-                    }
-                    if (desctxt == '') {
-                        desctxt = 'No commands in this category';
-                    }
-                    commandInfo.setDescription(desctxt);
-                    commandCategory = 'admin';
-                }
-                    break;
-                case command.includes('misc'): {
-                    commandInfo.setTitle("General Commands");
-                    let desctxt = ''
-                    for (let i = 0; i < helpinfo.othercmds.length; i++) {
-                        desctxt += `\n\`${helpinfo.othercmds[i].name}\`: ${helpinfo.othercmds[i].description}`;
-                    }
-                    if (desctxt == '') {
-                        desctxt = 'No commands in this category';
-                    }
-                    commandInfo.setDescription(desctxt);
-                    commandCategory = 'misc';
-                }
-                    break;
+    function getemb() {
+        if (command != null) {
+            const fetchcmd = command.toString()
+            const commandInfo = new Discord.EmbedBuilder()
+                .setColor(colours.embedColour.info.dec)
+            if (helpinfo.cmds.find(obj => obj.name == fetchcmd)) {
+                commandCategory = 'gen';
+                const res = helpinfo.cmds.find(obj => obj.name == fetchcmd)
+                commandEmb(res, commandInfo)
+            } else if (helpinfo.cmds.find(obj => obj.aliases.includes(fetchcmd))) {
+                commandCategory = 'gen';
+                const res = helpinfo.cmds.find(obj => obj.aliases.includes(fetchcmd))
+                commandEmb(res, commandInfo)
             }
-        }
-        useEmbeds.push(commandInfo)
-    } else {
-        useEmbeds.push(fullCommandList)
-        commandCategory = 'default';
-    }
 
+            else if (helpinfo.othercmds.find(obj => obj.name == fetchcmd)) {
+                commandCategory = 'misc';
+                const res = helpinfo.othercmds.find(obj => obj.name == fetchcmd)
+                commandEmb(res, commandInfo)
+            } else if (helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd))) {
+                commandCategory = 'gen';
+                const res = helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd))
+                commandEmb(res, commandInfo)
+            }
+
+            else if (helpinfo.osucmds.find(obj => obj.name == fetchcmd)) {
+                commandCategory = 'osu';
+                const res = helpinfo.osucmds.find(obj => obj.name == fetchcmd)
+                commandEmb(res, commandInfo)
+            } else if (helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd))) {
+                commandCategory = 'gen';
+                const res = helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd))
+                commandEmb(res, commandInfo)
+            }
+
+            else if (helpinfo.admincmds.find(obj => obj.name == fetchcmd)) {
+                commandCategory = 'admin';
+                const res = helpinfo.admincmds.find(obj => obj.name == fetchcmd)
+                commandEmb(res, commandInfo)
+            } else if (helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd))) {
+                commandCategory = 'gen';
+                const res = helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd))
+                commandEmb(res, commandInfo)
+            }
+
+            else {
+                command = null
+                getemb()
+                return;
+            }
+
+
+
+            if (command.includes('CategoryMenu')) {
+                switch (true) {
+                    case command.includes('gen'): {
+                        commandInfo.setTitle("General Commands");
+                        let desctxt = '';
+                        for (let i = 0; i < helpinfo.cmds.length; i++) {
+                            desctxt += `\n\`${helpinfo.cmds[i].name}\`: ${helpinfo.cmds[i].description}`;
+                        }
+                        if (desctxt == '') {
+                            desctxt = 'No commands in this category';
+                        }
+                        commandInfo.setDescription(desctxt);
+                        commandCategory = 'gen';
+                    }
+                        break;
+                    case command.includes('osu'): {
+                        commandInfo.setTitle("osu! Commands");
+                        let desctxt = '';
+                        for (let i = 0; i < helpinfo.osucmds.length; i++) {
+                            desctxt += `\n\`${helpinfo.osucmds[i].name}\`: ${helpinfo.osucmds[i].description}`;
+                        }
+                        if (desctxt == '') {
+                            desctxt = 'No commands in this category';
+                        }
+                        commandInfo.setDescription(desctxt);
+                        commandCategory = 'osu';
+                    }
+                        break;
+                    case command.includes('admin'): {
+                        commandInfo.setTitle("Admin Commands");
+                        let desctxt = '';
+                        for (let i = 0; i < helpinfo.admincmds.length; i++) {
+                            desctxt += `\n\`${helpinfo.admincmds[i].name}\`: ${helpinfo.admincmds[i].description}`;
+                        }
+                        if (desctxt == '') {
+                            desctxt = 'No commands in this category';
+                        }
+                        commandInfo.setDescription(desctxt);
+                        commandCategory = 'admin';
+                    }
+                        break;
+                    case command.includes('misc'): {
+                        commandInfo.setTitle("General Commands");
+                        let desctxt = ''
+                        for (let i = 0; i < helpinfo.othercmds.length; i++) {
+                            desctxt += `\n\`${helpinfo.othercmds[i].name}\`: ${helpinfo.othercmds[i].description}`;
+                        }
+                        if (desctxt == '') {
+                            desctxt = 'No commands in this category';
+                        }
+                        commandInfo.setDescription(desctxt);
+                        commandCategory = 'misc';
+                    }
+                        break;
+                }
+            }
+            useEmbeds.push(commandInfo)
+        } else {
+            useEmbeds.push(fullCommandList)
+            commandCategory = 'default';
+        }
+    }
+    getemb();
     const inputMenu = new Discord.SelectMenuBuilder()
         .setCustomId(`SelectMenu-help-${commanduser.id}`)
         .setPlaceholder('Select a command')
