@@ -401,6 +401,76 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb) 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
+            case 'recentlist': case 'rl':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    overrides = {
+                        type: 'list'
+                    }
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+            case 'recentlisttaiko': case 'rlt':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    overrides = {
+                        type: 'listtaiko'
+                    }
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+            case 'recentlistfruits': case 'rlf': case 'rlctb': case 'rlc':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    overrides = {
+                        type: 'listfruits'
+                    }
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+            case 'recentlistmania': case 'rlm':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    overrides = {
+                        type: 'listmania'
+                    }
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+                case 'recenttaiko':case 'rt':
+                    if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                        overrides = {
+                            type: 'taiko'
+                        }
+                        osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                    } else {
+                        checkcmds.noperms(commandType, obj, 'bot')
+                    }
+                    break;
+                    case 'recentfruits':case 'rf':case 'rctb':
+                        if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                            overrides = {
+                                type: 'fruits'
+                            }
+                            osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                        } else {
+                            checkcmds.noperms(commandType, obj, 'bot')
+                        }
+                        break;
+                        case 'recentmania':case 'rm':
+                            if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                                overrides = {
+                                    type: 'mania'
+                                }
+                                osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                            } else {
+                                checkcmds.noperms(commandType, obj, 'bot')
+                            }
+                            break;
             case 'scoreparse': case 'score': case 'sp':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })

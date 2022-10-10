@@ -4409,6 +4409,33 @@ export async function recent(input: extypes.commandInput) {
         if (input.overrides.page != null) {
             page = parseInt(`${input.overrides.page}`)
         }
+        if(input.overrides.type != null){
+            if(input.overrides.type == 'list'){
+                list = true
+            }
+            if(input.overrides.type == 'listtaiko'){
+                list = true
+                mode = 'taiko'
+            }
+            if(input.overrides.type == 'listfruits'){
+                list = true
+                mode = 'fruits'
+            }
+            if(input.overrides.type == 'listmania'){
+                list = true
+                mode = 'mania'
+            }
+            if(input.overrides.type == 'taiko'){
+                mode = 'taiko'
+            }
+            if(input.overrides.type == 'fruits'){
+                mode = 'fruits'
+            }
+            if(input.overrides.type == 'mania'){
+                mode = 'mania'
+            }
+
+        }
     }
 
     //==============================================================================================================================================================================================
