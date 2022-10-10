@@ -188,7 +188,7 @@ type commandInput = {
     commandType: commandType,
     obj: commandObject,
     args: string[],
-    button?: string,
+    button?: commandButtonTypes,
     config?: config,
     client?: Discord.Client,
     absoluteID?: number,
@@ -198,6 +198,11 @@ type commandInput = {
     trackDb?: data,
     guildSettings?: data,
 }
+
+type commandButtonTypes = 
+'BigLeftArrow' | 'LeftArrow' | 'Search' | 'RightArrow' | 'BigRightArrow' |
+'Refresh' | 'Select' | 
+'DetailEnable' | 'DetailDisable'
 
 type osustatscache = {
     osuid: string,
