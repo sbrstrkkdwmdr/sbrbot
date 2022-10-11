@@ -20,3 +20,4 @@ trackingFiles/
 log.txt
 cache/
 *.traineddata
+id.txt

@@ -168,6 +168,10 @@ Current Client ID: ${client.user.id}
     exEvents(userdata, client, config, oncooldown, guildSettings);
     osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);
 
+    if (!fs.existsSync(`./id.txt`)) {
+        console.log(`Creating ./id.txt`);
+        fs.writeFileSync(`./id.txt`, '0', 'utf-8');
+    }
     if (!fs.existsSync(`./debug`)) {
         console.log(`Creating ./debug folder`);
         fs.mkdirSync(`./debug`);

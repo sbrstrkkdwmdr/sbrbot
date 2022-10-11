@@ -1,8 +1,19 @@
 import fs = require('fs')
 // import truepath = require('../path').path
-import { path } from '../path'
+import { path } from '../path';
 const truepath = `${path}`
 // truepath.path
+
+export function generateId() {
+    const lid = fs.readFileSync(`id.txt`, 'utf8');
+    if (+lid == null) {
+        fs.writeFileSync(`id.txt`, `1`);
+        return 0;
+    }
+    fs.writeFileSync(`id.txt`, `${+lid + 1}`);
+    return +lid + 1;
+
+}
 
 export function readAllFiles(directory: string) {
     const filesArr = []
