@@ -1079,7 +1079,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
         case 'pp': {
             returnval = await osufunc.getRankPerformance('pp->rank', value, input.userdata, mode, input.statsCache);
             if (typeof returnval == 'number') {
-                returnval = 'approx. #' + func.separateNum(returnval)
+                returnval = 'approx. #' + func.separateNum(Math.ceil(returnval))
             } else {
                 returnval = 'null'
             }

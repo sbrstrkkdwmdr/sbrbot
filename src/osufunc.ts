@@ -1108,7 +1108,7 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
              */
 
             //get position
-            const pos = pprankarr.findIndex(e => parseFloat(e.pp) == value)
+            const pos = pprankarr.findIndex(e => parseFloat(e.pp) == value && e.rank == '0')
 
             const prev = pprankarr[pos - 1]
             
@@ -1130,10 +1130,11 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
             break;
         case 'rank->pp': {
             pprankarr.push({ pp: '0', rank: `${value}` })
-            pprankarr.sort((a, b) => parseInt(b.rank) - parseInt(a.rank));
-            const pos = pprankarr.findIndex(e => parseInt(e.rank) == value)
+            pprankarr.sort((a, b) => parseInt(a.rank) - parseInt(b.rank));
+            const pos = pprankarr.findIndex(e => parseInt(e.rank) == value && e.pp == '0')
             const prev = pprankarr[pos - 1]
             const next = pprankarr[pos + 1]
+            
             //estimate pp
             if (typeof prev == 'undefined' && typeof next != 'undefined') {
                 returnval = parseInt(next.pp)
