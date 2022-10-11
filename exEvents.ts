@@ -6,9 +6,9 @@ import extypes = require('./src/types/extraTypes');
 import Discord = require('discord.js');
 import track = require('./src/trackfunc');
 import Sequelize = require('sequelize');
+import osufunc = require('./src/osufunc');
 
-module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, trackDb) => {
-
+module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, trackDb, statsCache) => {
 
     setInterval(() => {
         clearMapFiles();

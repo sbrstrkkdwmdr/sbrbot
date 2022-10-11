@@ -165,7 +165,7 @@ Current Client ID: ${client.user.id}
     linkHandler(userdata, client, config, oncooldown, guildSettings);
     buttonHandler(userdata, client, config, oncooldown, statsCache);
     commandInit(userdata, client, config, oncooldown);
-    exEvents(userdata, client, config, oncooldown, guildSettings);
+    exEvents(userdata, client, config, oncooldown, guildSettings, statsCache);
     osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);
 
     if (!fs.existsSync(`./id.txt`)) {

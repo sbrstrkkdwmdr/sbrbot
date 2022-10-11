@@ -1084,7 +1084,7 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
     //sort by pp
     pprankarr.sort((a, b) => parseFloat(b.pp) - parseFloat(a.pp))
 
-    let returnval:number;
+    let returnval: number;
 
     switch (type) {
         case 'pp->rank': {
@@ -1111,7 +1111,7 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
             const pos = pprankarr.findIndex(e => parseFloat(e.pp) == value && e.rank == '0')
 
             const prev = pprankarr[pos - 1]
-            
+
             const next = pprankarr[pos + 1]
             //estimate rank
             if (typeof prev == 'undefined' && typeof next != 'undefined') {
@@ -1134,7 +1134,7 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
             const pos = pprankarr.findIndex(e => parseInt(e.rank) == value && e.pp == '0')
             const prev = pprankarr[pos - 1]
             const next = pprankarr[pos + 1]
-            
+
             //estimate pp
             if (typeof prev == 'undefined' && typeof next != 'undefined') {
                 returnval = parseInt(next.pp)
@@ -1193,101 +1193,137 @@ export function modeValidator(mode: string | number) {
 }
 
 export async function userStatsCache(user: osuApiTypes.UserStatistics[], database: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode) {
-    for (let i = 0; i < user.length; i++) {
-        const curuser = user[i];
-        let findname = await database.findOne({
-            where: {
-                osuid: curuser.user.id
+    await (async () => {
+        for (let i = 0; i < user.length; i++) {
+            const curuser = user[i];
+            let findname = await database.findOne({
+                where: {
+                    osuid: curuser.user.id
+                }
+            })
+            if (findname == Promise<{ pending }>) {
+                findname = null;
             }
+            switch (mode) {
+                case 'osu': default: {
+                    if (typeof findname == 'undefined' || !findname) {
+                        await database.create({
+                            osuid: curuser.user.id,
+                            country: curuser.user.country_code,
+                            osupp: curuser.pp,
+                            osurank: curuser.global_rank,
+                            osuacc: curuser.hit_accuracy
+                        })
+                    } else {
+                        await database.update({
+                            osupp: curuser.pp,
+                            osurank: curuser.global_rank,
+                            osuacc: curuser.hit_accuracy
+                        },
+                            {
+                                where: { osuid: curuser.user.id }
+                            })
+                    }
+                }
+                    break;
+                case 'taiko': {
+                    if (typeof findname == 'undefined' || !findname) {
+                        await database.create({
+                            osuid: curuser.user.id,
+                            country: curuser.user.country_code,
+                            taikopp: curuser.pp,
+                            taikorank: curuser.global_rank,
+                            taikoacc: curuser.hit_accuracy
+                        })
+                    } else {
+                        await database.update({
+                            taikopp: curuser.pp,
+                            taikorank: curuser.global_rank,
+                            taikoacc: curuser.hit_accuracy
+                        },
+                            {
+                                where: { osuid: curuser.user.id }
+                            })
+                    }
+                }
+                    break;
+                case 'fruits': {
+                    if (typeof findname == 'undefined' || !findname) {
+                        await database.create({
+                            osuid: curuser.user.id,
+                            country: curuser.user.country_code,
+                            fruitspp: curuser.pp,
+                            fruitsrank: curuser.global_rank,
+                            fruitsacc: curuser.hit_accuracy
+                        })
+                    } else {
+                        await database.update({
+                            fruitspp: curuser.pp,
+                            fruitsrank: curuser.global_rank,
+                            fruitsacc: curuser.hit_accuracy
+                        },
+                            {
+                                where: { osuid: curuser.user.id }
+                            })
+                    }
+                }
+                    break;
+                case 'mania': {
+                    if (typeof findname == 'undefined' || !findname) {
+                        await database.create({
+                            osuid: curuser.user.id,
+                            country: curuser.user.country_code,
+                            maniapp: curuser.pp,
+                            maniarank: curuser.global_rank,
+                            maniaacc: curuser.hit_accuracy
+                        })
+                    } else {
+                        await database.update({
+                            maniapp: curuser.pp,
+                            maniarank: curuser.global_rank,
+                            maniaacc: curuser.hit_accuracy
+                        },
+                            {
+                                where: { osuid: curuser.user.id }
+                            })
+                    }
+                }
+                    break;
+            }
+        }
+    })();
+
+    await userStatsCacheFix(database, mode);
+}
+
+export async function userStatsCacheFix(database: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode) {
+    const users = await database.findAll();
+    const actualusers = []
+    for (let i = 0; i < users.length; i++) {
+        const curuser = {
+            pp: users[i].dataValues[`${mode}pp`],
+            rank: users[i].dataValues[`${mode}rank`],
+            acc: users[i].dataValues[`${mode}acc`],
+            uid: users[i].dataValues.osuid
+        }
+        actualusers.push(curuser)
+    }
+
+    actualusers.sort((a, b) => b.pp - a.pp)
+
+    for(let i = 0; i < actualusers.length; i++) {
+        const curuser = actualusers[i];
+        let givenrank = i + 1;
+        //if user doesn't have a rank, make it null
+        if (typeof curuser.pp == 'undefined' || !curuser.pp) {
+            givenrank = null;
+        }
+        await database.update({
+            [`${mode}pp`]: curuser.pp,
+            [`${mode}rank`]: givenrank,
+            [`${mode}acc`]: curuser.acc,
+        }, {
+            where: { osuid: curuser.uid }
         })
-        if (findname == Promise<{ pending }>) {
-            findname = null;
-        }
-        switch (mode) {
-            case 'osu': default: {
-                if (typeof findname == 'undefined' || !findname) {
-                    await database.create({
-                        osuid: curuser.user.id,
-                        country: curuser.user.country_code,
-                        osupp: curuser.pp,
-                        osurank: curuser.global_rank,
-                        osuacc: curuser.hit_accuracy
-                    })
-                } else {
-                    await database.update({
-                        osupp: curuser.pp,
-                        osurank: curuser.global_rank,
-                        osuacc: curuser.hit_accuracy
-                    },
-                        {
-                            where: { osuid: curuser.user.id }
-                        })
-                }
-            }
-                break;
-            case 'taiko': {
-                if (typeof findname == 'undefined' || !findname) {
-                    await database.create({
-                        osuid: curuser.user.id,
-                        country: curuser.user.country_code,
-                        taikopp: curuser.pp,
-                        taikorank: curuser.global_rank,
-                        taikoacc: curuser.hit_accuracy
-                    })
-                } else {
-                    await database.update({
-                        taikopp: curuser.pp,
-                        taikorank: curuser.global_rank,
-                        taikoacc: curuser.hit_accuracy
-                    },
-                        {
-                            where: { osuid: curuser.user.id }
-                        })
-                }
-            }
-                break;
-            case 'fruits': {
-                if (typeof findname == 'undefined' || !findname) {
-                    await database.create({
-                        osuid: curuser.user.id,
-                        country: curuser.user.country_code,
-                        fruitspp: curuser.pp,
-                        fruitsrank: curuser.global_rank,
-                        fruitsacc: curuser.hit_accuracy
-                    })
-                } else {
-                    await database.update({
-                        fruitspp: curuser.pp,
-                        fruitsrank: curuser.global_rank,
-                        fruitsacc: curuser.hit_accuracy
-                    },
-                        {
-                            where: { osuid: curuser.user.id }
-                        })
-                }
-            }
-                break;
-            case 'mania': {
-                if (typeof findname == 'undefined' || !findname) {
-                    await database.create({
-                        osuid: curuser.user.id,
-                        country: curuser.user.country_code,
-                        maniapp: curuser.pp,
-                        maniarank: curuser.global_rank,
-                        maniaacc: curuser.hit_accuracy
-                    })
-                } else {
-                    await database.update({
-                        maniapp: curuser.pp,
-                        maniarank: curuser.global_rank,
-                        maniaacc: curuser.hit_accuracy
-                    },
-                        {
-                            where: { osuid: curuser.user.id }
-                        })
-                }
-            }
-                break;
-        }
     }
 }
