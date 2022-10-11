@@ -4,7 +4,7 @@ import tesseract = require('tesseract.js');
 import extypes = require('./src/types/extratypes');
 import defaults = require('./src/consts/defaults');
 import Discord = require('discord.js');
-import func = require('./src/other');
+import func = require('./src/tools');
 
 import commands = require('./commands/cmdGeneral');
 import osucmds = require('./commands/cmdosu');

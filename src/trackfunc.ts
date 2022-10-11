@@ -3,7 +3,7 @@ import osuApiTypes = require('./types/osuApiTypes');
 import Sequelize = require('sequelize');
 import fs = require('fs');
 import Discord = require('discord.js');
-import func = require('./other');
+import func = require('./tools');
 import embedstuff = require('./embed');
 import log = require('./log');
 

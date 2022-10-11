@@ -3,7 +3,7 @@ import osumodcalc = require('osumodcalculator');
 import emojis = require('./consts/emojis');
 import osufunc = require('./osufunc');
 import fs = require('fs');
-import func = require('./other');
+import func = require('./tools');
 
 export async function scoreList(
     asObj: {
