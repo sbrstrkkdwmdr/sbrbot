@@ -1292,8 +1292,10 @@ export async function userStatsCache(user: osuApiTypes.UserStatistics[], databas
             }
         }
     })();
-
-    await userStatsCacheFix(database, mode);
+    try {
+        await userStatsCacheFix(database, mode);
+    } catch(error){
+    }
 }
 
 export async function userStatsCacheFix(database: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode) {
@@ -1311,7 +1313,7 @@ export async function userStatsCacheFix(database: Sequelize.ModelStatic<any>, mo
 
     actualusers.sort((a, b) => b.pp - a.pp)
 
-    for(let i = 0; i < actualusers.length; i++) {
+    for (let i = 0; i < actualusers.length; i++) {
         const curuser = actualusers[i];
         let givenrank = i + 1;
         //if user doesn't have a rank, make it null
