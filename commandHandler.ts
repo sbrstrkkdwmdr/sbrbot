@@ -390,7 +390,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                 break;
             case 'pinned':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                    osucmds.pinned({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
