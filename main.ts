@@ -146,16 +146,16 @@ client.once('ready', () => {
     statsCache.sync();
     const timetostart = currentDate.getTime() - initdate.getTime()
     const initlog = `
-===================================================================
+====================================================
 BOT IS NOW ONLINE
--------------------------------------------------------------------
-Boot time: ${timetostart}ms
-Current Time: ${currentDate.toLocaleString()}
+----------------------------------------------------
+Boot time:                ${timetostart}ms
+Current Time:             ${currentDate.toLocaleString()}
+Current Time (ISO):       ${currentDate.toISOString()}
 Current Time (epoch, ms): ${currentDate.getTime()}
-Current Time (ISO): ${currentDate.toISOString()}
-Current Client: ${client.user.tag} 
-Current Client ID: ${client.user.id}
-====================================================================
+Current Client:           ${client.user.tag} 
+Current Client ID:        ${client.user.id}
+====================================================
 `
     console.log(initlog)
 
@@ -248,16 +248,71 @@ Current Client ID: ${client.user.id}
         }
         )
         .catch(error => {
+            const rn = new Date();
             fs.appendFileSync(`logs/updates.log`,
                 `
-        ----------------------------------------------------
-        ERROR
-        node-fetch error: ${error}
-        ----------------------------------------------------
-        `, 'utf-8')
+====================================================
+ERROR
+----------------------------------------------------
+Date:             ${rn}
+Date (ISO):       ${rn.toISOString()}
+Date (epoch, ms): ${rn.getTime()}
+----------------------------------------------------
+node-fetch error: ${error}
+====================================================
+`, 'utf-8')
             return;
         });
 });
+client.on('debug', (info) => {
+    const rn = new Date();
+    const text = `
+====================================================
+DEBUG
+----------------------------------------------------
+Date:             ${rn}
+Date (ISO):       ${rn.toISOString()}
+Date (epoch, ms): ${rn.getTime()}
+----------------------------------------------------
+${info}
+====================================================
+`
+
+
+    fs.appendFileSync(`./logs/debug.log`, text + '\n', 'utf-8');
+});
+client.on('warn', (info) => {
+    const rn = new Date();
+    const text = `
+====================================================
+WARN
+----------------------------------------------------
+Date:             ${rn}
+Date (ISO):       ${rn.toISOString()}
+Date (epoch, ms): ${rn.getTime()}
+----------------------------------------------------
+${info}
+====================================================
+`
+    fs.appendFileSync(`./logs/warn.log`, text + '\n', 'utf-8');
+});
+client.on('error', (error) => {
+    const rn = new Date();
+    const text = `
+====================================================
+ERROR
+----------------------------------------------------
+Date:             ${rn}
+Date (ISO):       ${rn.toISOString()}
+Date (epoch, ms): ${rn.getTime()}
+----------------------------------------------------
+${error}
+====================================================
+`
+    fs.appendFileSync(`./logs/err.log`, text + '\n', 'utf-8');
+});
+
+
 client.login(config.token)
 
 export { };

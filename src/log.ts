@@ -52,4 +52,3 @@ function logFile(type: string, text: string, opts?: {
 }
 
 export { commandLog, optsLog, errLog, logFile };
-
