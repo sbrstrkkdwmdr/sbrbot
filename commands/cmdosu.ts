@@ -8464,25 +8464,44 @@ export async function osuset(input: extypes.commandInput) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
-            name = input.args.join(' ');
-            switch (input.args[0]) {
-                case 'mode':
-                    type = 'mode';
-                    value = input.args.join(' ').slice(type.length);
-                    break;
-                case 'skin':
-                    type = 'skin';
-                    value = input.args.join(' ').slice(type.length);
-                    break;
-                default:
-                    type = 'name';
-                    if (input.args[0] == 'name') {
-                        value = input.args.join(' ').slice(type.length);
-                    } else {
-                        value = input.args.join(' ');
-                    }
-                    break;
+            if (input.args.includes('-osu')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-osu'), 1);
             }
+            if (input.args.includes('-o')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+
+            if(input.args.includes('-skin')){
+                skin = input.args.slice(input.args.indexOf('-skin')).join(' ')
+                input.args.splice(input.args.indexOf('-skin'))
+            }
+            name = input.args.join(' ');
         }
             break;
 
@@ -8621,6 +8640,15 @@ export async function osuset(input: extypes.commandInput) {
 
         if (affectedRows.length > 0 || affectedRows[0] > 0) {
             txt = 'Updated the database'
+            if(name){
+                txt += `\nSet your username to \`${name}\``
+            }
+            if(mode){
+                txt += `\nSet your mode to \`${mode}\``
+            }
+            if(skin){
+                txt += `\nSet your skin to \`${skin}\``
+            }
         } else {
             txt = 'There was an error trying to update your settings'
             log.errLog('Database error', `${affectedRows}`, `${input.absoluteID}`)
