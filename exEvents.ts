@@ -7,6 +7,7 @@ import Discord = require('discord.js');
 import track = require('./src/trackfunc');
 import Sequelize = require('sequelize');
 import osufunc = require('./src/osufunc');
+import osuApiTypes = require('./src/types/osuApiTypes');
 
 module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, trackDb, statsCache) => {
 
@@ -17,6 +18,10 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
     setInterval(() => {
         clearCommandCache();
     }, 1000 * 60);
+
+    setInterval(async () => {
+        //rankings
+    }, 1000 * 60 * 60 * 24); 
 
     //status updates
     const songsarr = [
@@ -225,5 +230,27 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
         }
     }
 
+    async function rankings(db){
+        osufunc.userStatsCache(
+            await osufunc.apiget('custom', `rankings/osu/performance`, null, 2, 0, true),
+            db,
+            'osu'
+        );
+        osufunc.userStatsCache(
+            await osufunc.apiget('custom', `rankings/taiko/performance`, null, 2, 0, true),
+            db,
+            'taiko'
+        );
+        osufunc.userStatsCache(
+            await osufunc.apiget('custom', `rankings/fruits/performance`, null, 2, 0, true),
+            db,
+            'fruits'
+        );
+        osufunc.userStatsCache(
+            await osufunc.apiget('custom', `rankings/mania/performance`, null, 2, 0, true),
+            db,
+            'mania'
+        );
+    }
 
 }
