@@ -1354,18 +1354,6 @@ export async function osu(input: extypes.commandInput) {
 
     osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
 
-    if ((
-        //@ts-expect-error options property does not exist on message
-        (input.commandType == 'interaction' && !input.obj?.options?.getString('mode'))
-        || input.commandType == 'message'
-    ) &&
-        osudata.playmode != 'osu' &&
-        typeof mode != 'undefined') {
-        mode = osudata.playmode
-        osudata = await osufunc.apiget('user', `${user}`, `${mode}`);
-        osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
-    }
-
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
@@ -1387,6 +1375,18 @@ export async function osu(input: extypes.commandInput) {
             }
         }
         return;
+    }
+
+    if ((
+        //@ts-expect-error options property does not exist on message
+        (input.commandType == 'interaction' && !input.obj?.options?.getString('mode'))
+        || input.commandType == 'message'
+    ) &&
+        osudata.playmode != 'osu' &&
+        typeof mode != 'undefined') {
+        mode = osudata.playmode
+        osudata = await osufunc.apiget('user', `${user}`, `${mode}`);
+        osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
     }
 
     if (input.commandType != 'button' || input.button == 'Refresh') {
@@ -8498,7 +8498,7 @@ export async function osuset(input: extypes.commandInput) {
             }
 
             if(input.args.includes('-skin')){
-                skin = input.args.slice(input.args.indexOf('-skin')).join(' ')
+                skin = input.args.slice(input.args.indexOf('-skin') + 1).join(' ')
                 input.args.splice(input.args.indexOf('-skin'))
             }
             name = input.args.join(' ');
@@ -8585,40 +8585,17 @@ export async function osuset(input: extypes.commandInput) {
     } = {
         userid: commanduser.id
     }
-    switch (type) {
-        case 'name': {
-            updateRows = {
-                userid: commanduser.id,
-                osuname: value
-            }
-        }
-            break;
-        case 'mode': {
-            updateRows = {
-                userid: commanduser.id,
-                mode: value
-            }
-        }
-            break;
-        case 'skin': {
-            updateRows = {
-                userid: commanduser.id,
-                skin: value
-            }
-        }
-        case 'interaction': {
-            updateRows = {
-                userid: commanduser.id,
-                osuname: name
-            }
-            if (mode != null) {
-                updateRows['mode'] = mode;
-            }
-            if (skin != null) {
-                updateRows['skin'] = skin;
-            }
-        }
-            break;
+    updateRows = {
+        userid: commanduser.id,
+    }
+    if(name != null){
+        updateRows['name'] = name;
+    }
+    if (mode != null) {
+        updateRows['mode'] = mode;
+    }
+    if (skin != null) {
+        updateRows['skin'] = skin;
     }
 
     const findname = await input.userdata.findOne({ where: { userid: commanduser.id } })
@@ -8626,7 +8603,7 @@ export async function osuset(input: extypes.commandInput) {
         try {
             await input.userdata.create({
                 userid: commanduser.id,
-                osuname: name,
+                osuname: name ?? 'undefined',
                 mode: mode ?? 'osu',
                 skin: skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117'
             })

@@ -490,7 +490,7 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                 name: 'user',
                 description: 'The user to set the profile of',
                 type: Discord.ApplicationCommandOptionType.String,
-                required: true,
+                required: false,
             },
             {
                 name: 'mode',
