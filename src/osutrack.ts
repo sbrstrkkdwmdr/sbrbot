@@ -136,7 +136,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
             .setTitle(`${data.scoredata.beatmapset.title} [${data.scoredata.beatmap.version}]`)
             .setURL(`https://osu.ppy.sh/beatmapsets/${data.scoredata.beatmapset.id}#osu/${data.scoredata.beatmap.id}`)
             .setAuthor({
-                name: `New #${data.scorepos + 1} play for ${data.scoredata?.user?.username}`,
+                name: `${data.scoredata?.user?.username} | New #${data.scorepos + 1} Personal Best`,
                 url: `https://osu.ppy.sh/u/${data.scoredata?.user?.id}`,
                 iconURL: `${`https://osuflags.omkserver.nl/${data.scoredata?.user?.country_code}.png`}`
             })
@@ -211,7 +211,6 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
 
 
         setTimeout(() => {
-            let i = 0;
             channels.filter((item, index) => channels.indexOf(item) === index).forEach(channel => {
                 const curchannel: Discord.GuildTextBasedChannel = client.channels.cache.get(channel) as Discord.GuildTextBasedChannel
                 if (curchannel) {
@@ -225,8 +224,6 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
                 } else {
                     osufunc.logCall('Channel not found', 'error sending to channel')
                 }
-                i++;
-
             })
         }, 2000)
 
