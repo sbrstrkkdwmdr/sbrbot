@@ -1003,7 +1003,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'pp',
         description: 'Estimates the rank of a user from the pp given',
-        usage: 'pp [value] [mode]',
+        usage: 'pp [value] [-(mode)]',
         slashusage: 'pp [value] [mode]',
         examples: [
             {
@@ -1011,7 +1011,7 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Estimates your rank with 100,000pp'
             },
             {
-                text: 'PREFIXMSGpp 2999 fruits',
+                text: 'PREFIXMSGpp 2999 -fruits',
                 descriptor: 'Estimates your ctb/fruits rank with 2,999pp'
             },
         ],
@@ -1038,7 +1038,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'rank',
         description: 'Estimates the performance points of a user from the rank given',
-        usage: 'rank [value] [mode]',
+        usage: 'rank [value] [-(mode)]',
         slashusage: 'rank [value] [mode]',
         examples: [
             {
@@ -1046,7 +1046,7 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Estimates your pp with rank 1'
             },
             {
-                text: 'PREFIXMSGrank 1 taiko',
+                text: 'PREFIXMSGrank 1 -taiko',
                 descriptor: 'Estimates your taiko pp with rank 1'
             },
         ],
@@ -1527,7 +1527,7 @@ const othercmds: commandInfo[] = [
                 descriptor: 'Returns a yes/no/maybe answer to the question'
             }
         ],
-        aliases: [],
+        aliases: ['ask'],
         options: [],
     },
     {
@@ -1564,7 +1564,7 @@ const othercmds: commandInfo[] = [
                 descriptor: 'Sends the first five results of a google image search for "cat"'
             },
         ],
-        aliases: [],
+        aliases: ['imagesearch'],
         options: [
             {
                 name: 'query',
@@ -1591,7 +1591,7 @@ const othercmds: commandInfo[] = [
                 descriptor: 'Creates a poll with the question "What is your favorite color?" and the options "red", "green", and "blue"'
             }
         ],
-        aliases: [],
+        aliases: ['vote'],
         options: [
             {
                 name: 'question',
@@ -1688,7 +1688,7 @@ const othercmds: commandInfo[] = [
                 descriptor: 'Searches youtube for "never gonna give you up"'
             }
         ],
-        aliases: [],
+        aliases: ['yt'],
         options: [
             {
                 name: 'query',
@@ -1723,24 +1723,6 @@ const admincmds: commandInfo[] = [
                 description: 'The user to check the permissions of',
                 options: ['N/A'],
                 defaultValue: 'your discord account'
-            }
-        ]
-    },
-    {
-        name: 'debug',
-        description: 'Returns the debug files for a command',
-        usage: 'debug [command]',
-        slashusage: 'debug [command]',
-        examples: [],
-        aliases: [],
-        options: [
-            {
-                name: 'command',
-                type: 'string',
-                required: false,
-                description: 'The command',
-                options: [''],
-                defaultValue: 'N/A'
             }
         ]
     },
