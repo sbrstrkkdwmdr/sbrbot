@@ -21,7 +21,7 @@ function generateCommands() {
         <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
                             <div class="codeblock">/${cmd.slashusage}</div>
 
-        ${cmd.aliases.length > 0 ? `<div>Aliases:</div> <div class="codeblock">${cmd.aliases.join('\n')}</div>` : ''}
+        ${cmd.aliases.length > 0 ? `<div>Aliases:</div> ${cmd.aliases.map(x => `<div class="codeblock">${x}</div>`).join('\n')}` : ''}
         
         ${cmd.examples.length > 0 ?
                 `\nExamples: \n` +
@@ -44,7 +44,7 @@ function generateCommands() {
         </pre>
 
         ${cmd.options.length > 0 ?
-                `<br><br>Options:
+                `<br><br><center>Options:</center>
         <table class="table">
         <tr>
             <th>Name</th>
@@ -97,7 +97,7 @@ function generateCommands() {
         <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
                             <div class="codeblock">/${cmd.slashusage}</div>
 
-                            ${cmd.aliases.length > 0 ? `<div>Aliases:</div> <div class="codeblock">${cmd.aliases.join('\n')}</div>` : ''}
+        ${cmd.aliases.length > 0 ? `<div>Aliases:</div> ${cmd.aliases.map(x => `<div class="codeblock">${x}</div>`).join('\n')}` : ''}
 
        ${cmd.examples.length > 0 ?
                 `\nExamples: \n` +
@@ -120,7 +120,7 @@ function generateCommands() {
         </pre>
 
         ${cmd.options.length > 0 ?
-                `<br><br>Options:
+                `<br><br><center>Options</center>
         <table class="table">
         <tr>
             <th>Name</th>
@@ -172,7 +172,7 @@ function generateCommands() {
         <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
                             <div class="codeblock">/${cmd.slashusage}</div>
 
-                            ${cmd.aliases.length > 0 ? `<div>Aliases:</div> <div class="codeblock">${cmd.aliases.join('\n')}</div>` : ''}
+        ${cmd.aliases.length > 0 ? `<div>Aliases:</div> ${cmd.aliases.map(x => `<div class="codeblock">${x}</div>`).join('\n')}` : ''}
 
         ${cmd.examples.length > 0 ?
                 `\nExamples: \n` +
@@ -195,7 +195,7 @@ function generateCommands() {
         </pre>
 
         ${cmd.options.length > 0 ?
-                `<br><br>Options:
+                `<br><br><center>Options:</center>
         <table class="table">
         <tr>
             <th>Name</th>
@@ -270,7 +270,7 @@ function generateCommands() {
         </pre>
 
         ${cmd.options.length > 0 ?
-                `<br><br>Options:
+                `<br><br><center>Options:</center>
         <table class="table">
         <tr>
             <th>Name</th>
