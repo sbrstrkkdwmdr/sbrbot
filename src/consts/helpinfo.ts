@@ -411,7 +411,7 @@ const osucmds: commandInfo[] = [
         slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods]',
         examples: [
             {
-                text: 'PREFIXMSGfirsts SaberStrike (shows SaberStrike\'s #1 scores)',
+                text: 'PREFIXMSGfirsts SaberStrike',
                 descriptor: 'Shows SaberStrike\'s #1 scores'
             },
             {
@@ -420,11 +420,11 @@ const osucmds: commandInfo[] = [
             }
             ,
             {
-                text: 'PREFIXMSGfirsts -mania (shows your #1 mania scores)',
+                text: 'PREFIXMSGfirsts -mania',
                 descriptor: 'Shows your #1 mania scores'
             },
             {
-                text: '/firsts mods:HDHR sort:recent (shows your #1 scores with HDHR sorted by recent)',
+                text: '/firsts mods:HDHR sort:recent',
                 descriptor: 'Shows your #1 scores with HDHR sorted by recent'
             }
         ],
@@ -536,7 +536,7 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Returns the first result for "kimi no shiranai monogatari"'
             },
             {
-                text: 'PREFIXMSGmap 3013912 +HDHR (returns the beatmap with the id 3013912 with HDHR)',
+                text: 'PREFIXMSGmap 3013912 +HDHR',
                 descriptor: 'Returns the beatmap with the id 3013912 with HDHR'
             },
         ],
