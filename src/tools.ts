@@ -80,10 +80,15 @@ const cacheById = [
  * @param name 
  */
 export function storeFile(data: {}, id: string | number, name: string) {
-    if (cacheById.some(x => name.includes(x))) {
-        fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2))
-    } else {
-        fs.writeFileSync(`${truepath}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, JSON.stringify(data, null, 2))
+    try {
+        if (cacheById.some(x => name.includes(x))) {
+            fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2))
+        } else {
+            fs.writeFileSync(`${truepath}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, JSON.stringify(data, null, 2))
+        }
+        return true;
+    } catch(error){
+        return error;
     }
 }
 

@@ -716,15 +716,39 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                 page = parseInt(input.args[input.args.indexOf('-p') + 1]);
                 input.args.splice(input.args.indexOf('-p'), 2);
             }
-            if (input.args.includes('-mode')) {
-                mode = (input.args[input.args.indexOf('-mode') + 1]);
-                input.args.splice(input.args.indexOf('-mode'), 2);
+            if (input.args.includes('-osu')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-osu'), 1);
             }
-            if (input.args.includes('-m')) {
-                mode = (input.args[input.args.indexOf('-m') + 1]);
-                input.args.splice(input.args.indexOf('-m'), 2);
+            if (input.args.includes('-o')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-o'), 1);
             }
-            input.args[0] ? country = input.args[0].toUpperCase() : country = 'ALL';
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            input.args[0] && input.args[0].length == 2 ? country = input.args[0].toUpperCase() : country = 'ALL';
         }
             break;
         //==============================================================================================================================================================================================
@@ -876,9 +900,9 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
     ) {
         rankingdata = func.findFile(input.absoluteID, 'rankingdata')
     } else {
-        rankingdata = await osufunc.apiget('custom', url, null, 2, 0, true).catch(async () => {
+        rankingdata = await osufunc.apiget('custom', url, null, 2, 0, true).catch(() => {
             if (country != 'ALL') {//@ts-ignore
-                await input.obj.reply({
+                input.obj.reply({
                     content: 'Invalid country code',
                     embeds: [],
                     files: [],
@@ -886,7 +910,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                     failIfNotExists: true
                 }).catch()
             } else {//@ts-ignore
-                await input.obj.reply({
+                input.obj.reply({
                     content: 'Error',
                     embeds: [],
                     files: [],
@@ -1031,12 +1055,45 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
             value = input.args[0] ?? 100;
+            if (input.args.includes('-osu')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
             commanduser = input.obj.member.user;//@ts-ignore
-            value = input.obj.options.getInteger('value') ?? 100;
+            value = input.obj.options.getInteger('value') ?? 100;//@ts-ignore
+            mode = input.obj.options.getString('mode') ?? 'osu';
         }
             //==============================================================================================================================================================================================
 
@@ -1079,13 +1136,12 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
         case 'pp': {
             returnval = await osufunc.getRankPerformance('pp->rank', value, input.userdata, mode, input.statsCache);
             if (typeof returnval == 'number') {
-                returnval = 'approx. #' + func.separateNum(Math.ceil(returnval))
+                returnval = 'approx. rank #' + func.separateNum(Math.ceil(returnval))
             } else {
                 returnval = 'null'
             }
             Embed
                 .setTitle(`Approximate rank for ${value}pp`)
-                .setDescription(`Rank: ${returnval}`)
         }
             break;
         case 'rank': {
@@ -1100,10 +1156,12 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
 
             Embed
                 .setTitle(`Approximate performance for rank #${value}`)
-                .setDescription(`${returnval}`)
         }
             break;
     }
+    Embed
+        .setDescription(`${returnval}\n${emojis.gamemodes[mode]}`)
+
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage({
@@ -1166,13 +1224,37 @@ export async function osu(input: extypes.commandInput) {
                 graphonly = true;
                 input.args.splice(input.args.indexOf('-g'), 1);
             }
-            if (input.args.includes('-mode')) {
-                mode = (input.args[input.args.indexOf('-mode') + 1]);
-                input.args.splice(input.args.indexOf('-mode'), 2);
+            if (input.args.includes('-osu')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-osu'), 1);
             }
-            if (input.args.includes('-m')) {
-                mode = (input.args[input.args.indexOf('-m') + 1]);
-                input.args.splice(input.args.indexOf('-m'), 2);
+            if (input.args.includes('-o')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-mania'), 1);
             }
             user = input.args.join(' ');
             if (!input.args[0] || input.args.includes(searchid)) {
@@ -7510,6 +7592,11 @@ ID: ${input.absoluteID}
     )
 }
 
+export async function userBeatmaps(input: extypes.commandInput) {
+
+}
+
+
 //tracking
 
 export async function trackadd(input: extypes.commandInput) {
@@ -8497,7 +8584,7 @@ export async function osuset(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
 
-            if(input.args.includes('-skin')){
+            if (input.args.includes('-skin')) {
                 skin = input.args.slice(input.args.indexOf('-skin') + 1).join(' ')
                 input.args.splice(input.args.indexOf('-skin'))
             }
@@ -8588,7 +8675,7 @@ export async function osuset(input: extypes.commandInput) {
     updateRows = {
         userid: commanduser.id,
     }
-    if(name != null){
+    if (name != null) {
         updateRows['name'] = name;
     }
     if (mode != null) {
@@ -8617,13 +8704,13 @@ export async function osuset(input: extypes.commandInput) {
 
         if (affectedRows.length > 0 || affectedRows[0] > 0) {
             txt = 'Updated the database'
-            if(name){
+            if (name) {
                 txt += `\nSet your username to \`${name}\``
             }
-            if(mode){
+            if (mode) {
                 txt += `\nSet your mode to \`${mode}\``
             }
-            if(skin){
+            if (skin) {
                 txt += `\nSet your skin to \`${skin}\``
             }
         } else {
