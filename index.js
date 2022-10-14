@@ -12,23 +12,37 @@ function generateCommands() {
             `
         
         <details>
-        <summary class="divCommandName" id="osu-${cmd.name}">${cmd.name}</summary>
+        <summary class="divCommandName" id="general-${cmd.name}">${cmd.name}</summary>
         <div class="divCommandDetails">
         <p>${cmd.description}
         </p>
 
         <pre>
-        Command: sbr-${cmd.usage}
-  Slash Command: /${cmd.slashusage}
-       ${cmd.examples.length > 0 ?
-                `\nExamples: \n` + cmd.examples.join(
-                    `                \n`) :
-                ''}
+        <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
+                            <div class="codeblock">/${cmd.slashusage}</div>
+        ${cmd.examples.length > 0 ?
+                `\nExamples: \n` +
+                `<table class="cmdexample">
+                                <tr>
+                                <th> </th>
+                                <th> </th>
+                                </tr>
+                                
+                                ` +
+                cmd.examples.map(x =>
+                    `<tr>
+                                    <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
+                                    <td class="tdEx"><div class="exdesc">${x.descriptor}</div></td>
+                                    </tr>
+                                    `
+
+                ).join(`\n`) + '</table>' :
+                ''} 
         </pre>
 
         ${cmd.options.length > 0 ?
                 `<br><br>Options:
-        <table>
+        <table class="table">
         <tr>
             <th>Name</th>
             <th>Type</th>
@@ -42,12 +56,12 @@ function generateCommands() {
                     cmd.options.map(option => {
                         return `
                 <tr>
-                    <td>${option.name}</td>
-                    <td>${option.type}</td>
-                    <td>${option.required}</td>
-                    <td>${option.description}</td>
-                    <td>${option.options ? option.options.join(', ') : ''}</td>
-                    <td>${option.defaultValue}</td>
+                    <td class="tdOpts">${option.name}</td>
+                    <td class="tdOpts">${option.type}</td>
+                    <td class="tdOpts">${option.required}</td>
+                    <td class="tdOpts">${option.description}</td>
+                    <td class="tdOpts">${option.options ? option.options.join(', ') : ''}</td>
+                    <td class="tdOpts">${option.defaultValue}</td>
                 </tr>
                 `
                     }).join('') : ''}
@@ -77,17 +91,31 @@ function generateCommands() {
         </p>
 
         <pre>
-        Command: ${cmd.usage}
-  Slash Command: ${cmd.slashusage}
+        <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
+                            <div class="codeblock">/${cmd.slashusage}</div>
        ${cmd.examples.length > 0 ?
-                `\nExamples: \n` + cmd.examples.join(
-                    `                \n`) :
+                `\nExamples: \n` +
+                `<table class="cmdexample">
+                <tr>
+                <th> </th>
+                <th> </th>
+                </tr>
+                
+                ` +
+                cmd.examples.map(x =>
+                    `<tr>
+                    <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
+                    <td class="tdEx"><div class="exdesc">${x.descriptor}</div></td>
+                    </tr>
+                    `
+
+                ).join(`\n`) + '</table>' :
                 ''}
         </pre>
 
         ${cmd.options.length > 0 ?
                 `<br><br>Options:
-        <table>
+        <table class="table">
         <tr>
             <th>Name</th>
             <th>Type</th>
@@ -101,12 +129,12 @@ function generateCommands() {
                     cmd.options.map(option => {
                         return `
                 <tr>
-                    <td>${option.name}</td>
-                    <td>${option.type}</td>
-                    <td>${option.required}</td>
-                    <td>${option.description}</td>
-                    <td>${option.options ? option.options.join(', ') : ''}</td>
-                    <td>${option.defaultValue}</td>
+                    <td class="tdOpts">${option.name}</td>
+                    <td class="tdOpts">${option.type}</td>
+                    <td class="tdOpts">${option.required}</td>
+                    <td class="tdOpts">${option.description}</td>
+                    <td class="tdOpts">${option.options ? option.options.join(', ') : ''}</td>
+                    <td class="tdOpts">${option.defaultValue}</td>
                 </tr>
                 `
                     }).join('') : ''}
@@ -129,23 +157,37 @@ function generateCommands() {
             `
         
         <details>
-        <summary class="divCommandName" id="osu-${cmd.name}">${cmd.name}</summary>
+        <summary class="divCommandName" id="misc-${cmd.name}">${cmd.name}</summary>
         <div class="divCommandDetails">
         <p>${cmd.description}
         </p>
 
         <pre>
-        Command: ${cmd.usage}
-  Slash Command: ${cmd.slashusage}
-       ${cmd.examples.length > 0 ?
-                `\nExamples: \n` + cmd.examples.join(
-                    `                \n`) :
+        <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
+                            <div class="codeblock">/${cmd.slashusage}</div>
+        ${cmd.examples.length > 0 ?
+                `\nExamples: \n` +
+                `<table class="cmdexample">
+                                <tr>
+                                <th> </th>
+                                <th> </th>
+                                </tr>
+                                
+                                ` +
+                cmd.examples.map(x =>
+                    `<tr>
+                                    <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
+                                    <td class="tdEx"><div class="exdesc">${x.descriptor}</div></td>
+                                    </tr>
+                                    `
+
+                ).join(`\n`) + '</table>' :
                 ''}
         </pre>
 
         ${cmd.options.length > 0 ?
                 `<br><br>Options:
-        <table>
+        <table class="table">
         <tr>
             <th>Name</th>
             <th>Type</th>
@@ -159,12 +201,12 @@ function generateCommands() {
                     cmd.options.map(option => {
                         return `
                 <tr>
-                    <td>${option.name}</td>
-                    <td>${option.type}</td>
-                    <td>${option.required}</td>
-                    <td>${option.description}</td>
-                    <td>${option.options ? option.options.join(', ') : ''}</td>
-                    <td>${option.defaultValue}</td>
+                    <td class="tdOpts">${option.name}</td>
+                    <td class="tdOpts">${option.type}</td>
+                    <td class="tdOpts">${option.required}</td>
+                    <td class="tdOpts">${option.description}</td>
+                    <td class="tdOpts">${option.options ? option.options.join(', ') : ''}</td>
+                    <td class="tdOpts">${option.defaultValue}</td>
                 </tr>
                 `
                     }).join('') : ''}
@@ -187,23 +229,37 @@ function generateCommands() {
             `
         
         <details>
-        <summary class="divCommandName" id="osu-${cmd.name}">${cmd.name}</summary>
+        <summary class="divCommandName" id="admin-${cmd.name}">${cmd.name}</summary>
         <div class="divCommandDetails">
         <p>${cmd.description}
         </p>
 
         <pre>
-        Command: ${cmd.usage}
-  Slash Command: ${cmd.slashusage}
-       ${cmd.examples.length > 0 ?
-                `\nExamples: \n` + cmd.examples.join(
-                    `                \n`) :
+        <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
+                            <div class="codeblock">/${cmd.slashusage}</div>
+        ${cmd.examples.length > 0 ?
+                `\nExamples: \n` +
+                `<table class="cmdexample">
+                                <tr>
+                                <th> </th>
+                                <th> </th>
+                                </tr>
+                                
+                                ` +
+                cmd.examples.map(x =>
+                    `<tr>
+                                    <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
+                                    <td class="tdEx"><div class="exdesc">${x.descriptor}</div></td>
+                                    </tr>
+                                    `
+
+                ).join(`\n`) + '</table>' :
                 ''}
         </pre>
 
         ${cmd.options.length > 0 ?
                 `<br><br>Options:
-        <table>
+        <table class="table">
         <tr>
             <th>Name</th>
             <th>Type</th>
@@ -217,12 +273,12 @@ function generateCommands() {
                     cmd.options.map(option => {
                         return `
                 <tr>
-                    <td>${option.name}</td>
-                    <td>${option.type}</td>
-                    <td>${option.required}</td>
-                    <td>${option.description}</td>
-                    <td>${option.options ? option.options.join(', ') : ''}</td>
-                    <td>${option.defaultValue}</td>
+                    <td class="tdOpts">${option.name}</td>
+                    <td class="tdOpts">${option.type}</td>
+                    <td class="tdOpts">${option.required}</td>
+                    <td class="tdOpts">${option.description}</td>
+                    <td class="tdOpts">${option.options ? option.options.join(', ') : ''}</td>
+                    <td class="tdOpts">${option.defaultValue}</td>
                 </tr>
                 `
                     }).join('') : ''}
@@ -238,3 +294,85 @@ function generateCommands() {
     }
 }
 generateCommands();
+
+//https://css-tricks.com/how-to-animate-the-details-element/
+class smoothOpen {
+    constructor(el) {
+        this.el = el;
+        this.summary = el.querySelector('summary');
+        this.content = el.querySelector('.divCommandDetails');
+
+        this.animation = null;
+        this.isClosing = false;
+        this.isExpanding = false;
+        this.summary.addEventListener('click', (e) => this.onClick(e));
+    }
+
+    onClick(e) {
+        e.preventDefault();
+        this.el.style.overflow = 'hidden';
+        if (this.isClosing || !this.el.open) {
+            this.open();
+        } else if (this.isExpanding || this.el.open) {
+            this.shrink();
+        }
+    }
+
+    shrink() {
+        this.isClosing = true;
+
+        const startHeight = `${this.el.offsetHeight}px`;
+        const endHeight = `${this.summary.offsetHeight}px`;
+
+        if (this.animation) {
+            this.animation.cancel();
+        }
+
+        this.animation = this.el.animate({
+            height: [startHeight, endHeight]
+        }, {
+            duration: 400,
+            easing: 'ease-out'
+        });
+
+        this.animation.onfinish = () => this.onAnimationFinish(false);
+        this.animation.oncancel = () => this.isClosing = false;
+    }
+
+    open() {
+        this.el.style.height = `${this.el.offsetHeight}px`;
+        this.el.open = true;
+        window.requestAnimationFrame(() => this.expand());
+    }
+
+    expand() {
+        this.isExpanding = true;
+        const startHeight = `${this.el.offsetHeight}px`;
+        const endHeight = `${this.summary.offsetHeight + this.content.offsetHeight}px`;
+
+        if (this.animation) {
+            this.animation.cancel();
+        }
+
+        this.animation = this.el.animate({
+            height: [startHeight, endHeight]
+        }, {
+            duration: 400,
+            easing: 'ease-out'
+        });
+        this.animation.onfinish = () => this.onAnimationFinish(true);
+        this.animation.oncancel = () => this.isExpanding = false;
+    }
+
+    onAnimationFinish(open) {
+        this.el.open = open;
+        this.animation = null;
+        this.isClosing = false;
+        this.isExpanding = false;
+        this.el.style.height = this.el.style.overflow = '';
+    }
+}
+
+document.querySelectorAll('details').forEach((el) => {
+    new smoothOpen(el);
+});

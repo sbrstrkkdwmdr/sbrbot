@@ -6,7 +6,7 @@ body {
     background-color: #a04747;
     /*background-image: url(../image/bg.jpg);*/
     background-image: url(./docbg.jpg);
-    background-repeat: repeat;
+    background-repeat: initial;
     background-attachment: fixed;
     background-size: fill;
     color: white;
@@ -99,6 +99,12 @@ li a:hover {
     margin-left: 35px;
 }
 
+.divCommandDetailsList {
+    margin-left: 35px;
+    font-family: 'Ubuntu';
+    font-weight: bolder;
+}
+
 .divCommandName {
     margin-left: 70px;
 }
@@ -118,12 +124,20 @@ th {
     word-wrap: break-word;
 }
 
-td {
+.tdOpts {
     border: 1px solid #ffffff;
     padding: 10px;
     max-width: 175px;
     min-width: 175px;
     word-wrap: break-word;
+}
+
+.tdEx {
+    border: none;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
 }
 
 summary {
@@ -142,6 +156,74 @@ pre {
     font-size: 16px;
 }
 
-table {
+/* details {
+    overscroll-behavior: smooth;
+} */
+
+.codeblock {
+    float: inline-start;
+    color: rgb(226, 223, 219);
+    background-color: rgb(66, 72, 75);
+    margin-right: 25px;
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+    font-family: 'Consolas';
+    font-weight: bolder;
+}
+
+.extxt {
+    color: rgb(226, 223, 219);
+    background-color: rgb(66, 72, 75);
+    border-radius: 5px;
+    font-family: 'Consolas';
+    font-weight: bolder;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.exdesc {
+    font-family: 'Ubuntu';
+}
+
+.table {
+    background-color: rgb(66, 72, 75);
+    padding: 10px;
+    border-radius: 5px;
     font-size: 16px;
+}
+
+.cmdexample {
+    border: rgba(0, 0, 0, 0.50);
+    padding: 10px;
+}
+
+.title {
+    margin-bottom: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+    background-color: rgba(0, 0, 0, 0.50);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.bodytype {
+    background-color: rgba(22, 22, 22, 1);
+    margin-left: 50px;
+    margin-right: 50px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: #000000;
+    z-index: 98;
+}
+
+.command {
+    background-color: rgba(49, 49, 49, 0.5);
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 99;
 }
