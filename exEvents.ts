@@ -146,9 +146,6 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
         createGuildSettings(guild);
     })
     setInterval(() => {
-        client.guilds.cache.forEach(async (guild) => {
-            createGuildSettings(guild);
-        })
         clearUnused();
     }, 10 * 60 * 1000);
 
