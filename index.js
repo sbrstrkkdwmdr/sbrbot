@@ -24,14 +24,8 @@ function generateCommands() {
         ${cmd.aliases.length > 0 ? `<div>Aliases:</div> ${cmd.aliases.map(x => `<div class="codeblock">${x}</div>`).join('\n')}` : ''}
         
         ${cmd.examples.length > 0 ?
-                `\nExamples: \n` +
-                `<table class="cmdexample">
-                                <tr>
-                                <th> </th>
-                                <th> </th>
-                                </tr>
-                                
-                                ` +
+                `\nExamples:` +
+                `<table class="cmdexample">` +
                 cmd.examples.map(x =>
                     `<tr>
                                     <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
@@ -100,14 +94,8 @@ function generateCommands() {
         ${cmd.aliases.length > 0 ? `<div>Aliases:</div> ${cmd.aliases.map(x => `<div class="codeblock">${x}</div>`).join('\n')}` : ''}
 
        ${cmd.examples.length > 0 ?
-                `\nExamples: \n` +
-                `<table class="cmdexample">
-                <tr>
-                <th> </th>
-                <th> </th>
-                </tr>
-                
-                ` +
+                `\nExamples:` +
+                `<table class="cmdexample">` +
                 cmd.examples.map(x =>
                     `<tr>
                     <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
@@ -175,14 +163,8 @@ function generateCommands() {
         ${cmd.aliases.length > 0 ? `<div>Aliases:</div> ${cmd.aliases.map(x => `<div class="codeblock">${x}</div>`).join('\n')}` : ''}
 
         ${cmd.examples.length > 0 ?
-                `\nExamples: \n` +
-                `<table class="cmdexample">
-                                <tr>
-                                <th> </th>
-                                <th> </th>
-                                </tr>
-                                
-                                ` +
+                `\nExamples: ` +
+                `<table class="cmdexample">` +
                 cmd.examples.map(x =>
                     `<tr>
                                     <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
@@ -250,14 +232,8 @@ function generateCommands() {
                             ${cmd.aliases.length > 0 ? `<div>Aliases:</div> <div class="codeblock">${cmd.aliases.join('\n')}</div>` : ''}
 
         ${cmd.examples.length > 0 ?
-                `\nExamples: \n` +
-                `<table class="cmdexample">
-                                <tr>
-                                <th> </th>
-                                <th> </th>
-                                </tr>
-                                
-                                ` +
+                `\nExamples:` +
+                `<table class="cmdexample">` +
                 cmd.examples.map(x =>
                     `<tr>
                                     <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
