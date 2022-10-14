@@ -1513,7 +1513,7 @@ const misccommands = [
                 descriptor: 'Returns a yes/no/maybe answer to the question'
             }
         ],
-        aliases: [],
+        aliases: ['ask'],
         options: [],
     },
     {
@@ -1550,7 +1550,7 @@ const misccommands = [
                 descriptor: 'Sends the first five results of a google image search for "cat"'
             },
         ],
-        aliases: [],
+        aliases: ['imagesearch'],
         options: [
             {
                 name: 'query',
@@ -1577,7 +1577,7 @@ const misccommands = [
                 descriptor: 'Creates a poll with the question "What is your favorite color?" and the options "red", "green", and "blue"'
             }
         ],
-        aliases: [],
+        aliases: ['vote'],
         options: [
             {
                 name: 'question',
@@ -1674,7 +1674,7 @@ const misccommands = [
                 descriptor: 'Searches youtube for "never gonna give you up"'
             }
         ],
-        aliases: [],
+        aliases: ['yt'],
         options: [
             {
                 name: 'query',
@@ -1709,24 +1709,6 @@ const admincommands = [
                 description: 'The user to check the permissions of',
                 options: ['N/A'],
                 defaultValue: 'your discord account'
-            }
-        ]
-    },
-    {
-        name: 'debug',
-        description: 'Returns the debug files for a command',
-        usage: 'debug [command]',
-        slashusage: 'debug [command]',
-        examples: [],
-        aliases: [],
-        options: [
-            {
-                name: 'command',
-                type: 'string',
-                required: false,
-                description: 'The command',
-                options: [''],
-                defaultValue: 'N/A'
             }
         ]
     },

@@ -20,6 +20,9 @@ function generateCommands() {
         <pre>
         <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
                             <div class="codeblock">/${cmd.slashusage}</div>
+
+        ${cmd.aliases.length > 0 ? `<div>Aliases:</div> <div class="codeblock">${cmd.aliases.join('\n')}</div>` : ''}
+        
         ${cmd.examples.length > 0 ?
                 `\nExamples: \n` +
                 `<table class="cmdexample">
@@ -93,6 +96,9 @@ function generateCommands() {
         <pre>
         <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
                             <div class="codeblock">/${cmd.slashusage}</div>
+
+                            ${cmd.aliases.length > 0 ? `<div>Aliases:</div> <div class="codeblock">${cmd.aliases.join('\n')}</div>` : ''}
+
        ${cmd.examples.length > 0 ?
                 `\nExamples: \n` +
                 `<table class="cmdexample">
@@ -165,6 +171,9 @@ function generateCommands() {
         <pre>
         <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
                             <div class="codeblock">/${cmd.slashusage}</div>
+
+                            ${cmd.aliases.length > 0 ? `<div>Aliases:</div> <div class="codeblock">${cmd.aliases.join('\n')}</div>` : ''}
+
         ${cmd.examples.length > 0 ?
                 `\nExamples: \n` +
                 `<table class="cmdexample">
@@ -237,6 +246,9 @@ function generateCommands() {
         <pre>
         <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
                             <div class="codeblock">/${cmd.slashusage}</div>
+
+                            ${cmd.aliases.length > 0 ? `<div>Aliases:</div> <div class="codeblock">${cmd.aliases.join('\n')}</div>` : ''}
+
         ${cmd.examples.length > 0 ?
                 `\nExamples: \n` +
                 `<table class="cmdexample">
