@@ -8672,7 +8672,7 @@ export async function osuset(input: extypes.commandInput) {
         userid: commanduser.id,
     }
     if (name != null) {
-        updateRows['name'] = name;
+        updateRows['osuname'] = name;
     }
     if (mode != null) {
         updateRows['mode'] = mode;
@@ -8696,7 +8696,10 @@ export async function osuset(input: extypes.commandInput) {
             log.errLog('Database error', error, `${input.absoluteID}`)
         }
     } else {
-        const affectedRows = await input.userdata.update(updateRows, { where: { userid: commanduser.id } })
+        const affectedRows = await input.userdata.update(
+            updateRows, 
+            { where: { userid: commanduser.id } }
+            );
 
         if (affectedRows.length > 0 || affectedRows[0] > 0) {
             txt = 'Updated the database'
