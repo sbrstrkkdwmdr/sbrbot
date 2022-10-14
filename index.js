@@ -44,7 +44,7 @@ function generateCommands() {
         </pre>
 
         ${cmd.options.length > 0 ?
-                `<br><br><center>Options:</center>
+                `<br><br>Options:
         <table class="table">
         <tr>
             <th>Name</th>
@@ -120,7 +120,7 @@ function generateCommands() {
         </pre>
 
         ${cmd.options.length > 0 ?
-                `<br><br><center>Options</center>
+                `<br><br>Options:
         <table class="table">
         <tr>
             <th>Name</th>
@@ -195,7 +195,7 @@ function generateCommands() {
         </pre>
 
         ${cmd.options.length > 0 ?
-                `<br><br><center>Options:</center>
+                `<br><br>Options:
         <table class="table">
         <tr>
             <th>Name</th>
@@ -270,7 +270,7 @@ function generateCommands() {
         </pre>
 
         ${cmd.options.length > 0 ?
-                `<br><br><center>Options:</center>
+                `<br><br>Options:
         <table class="table">
         <tr>
             <th>Name</th>
