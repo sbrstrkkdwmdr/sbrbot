@@ -837,7 +837,12 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Shows your top scores with HDHR sorted by recent'
             }
         ],
-        aliases: ['top'],
+        aliases: [
+            'top', 't', 'ot',
+            'taikotop', 'toptaiko', 'tt',
+            'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tc', 'tf', 'tctb',
+            'maniatop', 'topmania', 'tm'
+        ],
         options: [
             {
                 name: 'user',

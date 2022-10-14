@@ -3469,6 +3469,9 @@ export async function osutop(input: extypes.commandInput) {
         if (input.overrides.reverse != null) {
             reverse = input.overrides.reverse === true;
         }
+        if (input.overrides.mode != null) {
+            mode = input.overrides.mode
+        }
     }
 
     //==============================================================================================================================================================================================
@@ -4511,16 +4514,9 @@ export async function recent(input: extypes.commandInput) {
                 list = true
                 mode = 'mania'
             }
-            if (input.overrides.type == 'taiko') {
-                mode = 'taiko'
-            }
-            if (input.overrides.type == 'fruits') {
-                mode = 'fruits'
-            }
-            if (input.overrides.type == 'mania') {
-                mode = 'mania'
-            }
-
+        }
+        if (input.overrides.mode != null) {
+            mode = input.overrides.mode
         }
     }
 
