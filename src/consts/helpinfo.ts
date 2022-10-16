@@ -1529,8 +1529,8 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Shows sotarks\'s ranked beatmaps on page 4'
             },
             {
-                text: '/userbeatmaps user:Sotarks type:Loved reverse:true page:2 sort:Title',
-                descriptor: 'Shows sotarks\'s loved beatmaps on page 2, sorted by title in reverse'
+                text: '/userbeatmaps user:Mismagius type:Loved reverse:true page:2 sort:Title',
+                descriptor: 'Shows Mismagius\'s loved beatmaps on page 2, sorted by title in reverse'
             }
         ],
         aliases: ['ub', 'userb', 'ubm', 'um', 'usermaps'],
