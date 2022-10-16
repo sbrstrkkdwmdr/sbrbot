@@ -18,6 +18,9 @@ import msgfunc = require('./msgfunc');
 import fetch from 'node-fetch';
 import yts = require('yt-search');
 
+/**
+ * yes or no
+ */
 export function _8ball(input: extypes.commandInput) {
 
     let commanduser;
@@ -91,6 +94,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * send random gif
+ */
 export function gif(input: extypes.commandInput) {
 
     let commanduser;
@@ -404,6 +410,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * search for an image
+ */
 export async function image(input: extypes.commandInput) {
 
     let commanduser;
@@ -531,6 +540,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * generate a poll
+ */
 export function poll(input: extypes.commandInput) {
 
     let commanduser;
@@ -703,6 +715,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * random number
+ */
 export function roll(input: extypes.commandInput) {
 
     let commanduser;
@@ -800,6 +815,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * send a message
+ */
 export function say(input: extypes.commandInput) {
 
     let commanduser;
@@ -919,6 +937,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * search youtube
+ */
 export async function ytsearch(input: extypes.commandInput) {
 
     let commanduser;

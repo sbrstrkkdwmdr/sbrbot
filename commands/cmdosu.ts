@@ -24,6 +24,9 @@ export async function name(input: extypes.commandInput) {
 
 //user stats
 
+/**
+ * badge weight seed
+ */
 export async function bws(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -188,6 +191,9 @@ ID: ${input.absoluteID}
     )
 }
 
+/**
+ * number of #1 scores
+ */
 export async function globals(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -348,6 +354,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * server leaderboards
+ */
 export async function lb(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -686,6 +695,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * global leaderboards
+ */
 export async function ranking(input: extypes.commandInput & { statsCache: any }) {
 
     let commanduser: Discord.User;
@@ -1035,6 +1047,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * estimate rank from pp or vice versa
+ */
 export async function rankpp(input: extypes.commandInput & { statsCache: any }) {
 
     let commanduser: Discord.User;
@@ -1176,6 +1191,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * return osu! profile
+ */
 export async function osu(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -1723,6 +1741,9 @@ ID: ${input.absoluteID}
 
 //scores
 
+/**
+ * list of #1 scores
+ */
 export async function firsts(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -2242,6 +2263,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * leaderboard of a map
+ */
 export async function maplb(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -2682,6 +2706,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * top plays without misses
+ */
 export async function nochokes(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -3215,6 +3242,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * list of top plays
+ */
 export async function osutop(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -3833,6 +3863,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * list of pinned scores
+ */
 export async function pinned(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -4327,6 +4360,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * most recent score or list of recent scores
+ */
 export async function recent(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -5102,6 +5138,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * parse replay file and return data
+ */
 export async function replayparse(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -5347,6 +5386,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * parse score and return data
+ */
 export async function scoreparse(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -5688,6 +5730,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * list of user's scores on a map
+ */
 export async function scores(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -6182,6 +6227,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * simulate play on a map
+ */
 export async function simulate(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -6461,6 +6509,9 @@ ID: ${input.absoluteID}
 
 //map
 
+/**
+ * parse map and return map data
+ */
 export async function map(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -7235,6 +7286,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * parse .osu file and return data
+ */
 export async function maplocal(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -7559,6 +7613,9 @@ ID: ${input.absoluteID}
     )
 }
 
+/**
+ * list of user's maps
+ */
 export async function userBeatmaps(input: extypes.commandInput) {
 
 }
@@ -7566,6 +7623,9 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
 //tracking
 
+/**
+ * add user to tracking list
+ */
 export async function trackadd(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -7682,6 +7742,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * remove user from tracking list
+ */
 export async function trackremove(input: extypes.commandInput) {
     let commanduser: Discord.User;
     let user;
@@ -7795,6 +7858,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * channel to send tracking updates to
+ */
 export async function trackchannel(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -7909,6 +7975,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * list of users being tracked
+ */
 export async function tracklist(input: extypes.commandInput) {
 
 
@@ -8045,6 +8114,9 @@ ID: ${input.absoluteID}
 
 //other
 
+/**
+ * compare stats/plays
+ */
 export async function compare(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -8503,6 +8575,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * set username/mode/skin
+ */
 export async function osuset(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -8644,16 +8719,16 @@ export async function osuset(input: extypes.commandInput) {
 
     let txt = 'null'
 
-    if(mode){
+    if (mode) {
         const thing = osufunc.modeValidatorAlt(mode)
         mode = thing.mode;
-        if(thing.isincluded == false){
+        if (thing.isincluded == false) {
             //@ts-ignore
             input.obj.reply({
-                        content: 'Error - invalid mode given',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    });
+                content: 'Error - invalid mode given',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            });
             return;
         }
     }
@@ -8747,6 +8822,15 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * return saved osu! username/mode/skin
+ */
+export async function saved(input: extypes.commandInput) {
+}
+
+/**
+ * return skin
+ */
 export async function skin(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -8869,6 +8953,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * estimate stats if x pp score
+ */
 export async function whatif(input: extypes.commandInput & { statsCache: any }) {
 
     let commanduser: Discord.User;

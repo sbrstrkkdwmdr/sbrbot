@@ -20,6 +20,9 @@ export function name(input: extypes.commandInput) {
 
 }
 
+/**
+ * return permissions of user
+ */
 export function checkperms(input: extypes.commandInput) {
 
     let commanduser;
@@ -139,6 +142,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * force crash bot
+ */
 export function crash(input: extypes.commandInput) {
 
     let commanduser;
@@ -190,6 +196,9 @@ export function crash(input: extypes.commandInput) {
     process.exit(1)
 }
 
+/**
+ * find user/role/channel/guild/emoji from id 
+ */
 export function find(input: extypes.commandInput) {
 
     let commanduser;
@@ -475,6 +484,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * leave guild/server matching id given (or cur guild)
+ */
 export function leaveguild(input: extypes.commandInput) {
 
     let commanduser;
@@ -566,6 +578,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * set bot prefix for current guild
+ */
 export async function prefix(input: extypes.commandInput) {
 
     let commanduser;
@@ -657,6 +672,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * list of guilds bot is in
+ */
 export function servers(input: extypes.commandInput) {
 
     let commanduser;

@@ -16,6 +16,10 @@ import extypes = require('../src/types/extraTypes');
 import helpinfo = require('../src/consts/helpinfo');
 import msgfunc = require('./msgfunc');
 
+
+/**
+ * convert a value
+ */
 export function convert(input: extypes.commandInput) {
 
     let commanduser;
@@ -795,6 +799,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * list all commands or info about a specific command
+ */
 export function help(input: extypes.commandInput) {
 
     let commanduser;
@@ -1151,6 +1158,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * bot info
+ */
 export function info(input: extypes.commandInput) {
 
     let commanduser;
@@ -1245,6 +1255,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * perform basic math operation
+ */
 export function math(input: extypes.commandInput) {
 
     let commanduser;
@@ -1440,7 +1453,9 @@ ID: ${input.absoluteID}
 
 }
 
-
+/**
+ * ping bot
+ */
 export function ping(input: extypes.commandInput) {
     let commanduser;
 
@@ -1539,6 +1554,9 @@ ID: ${input.absoluteID}
     )
 }
 
+/**
+ * set reminder
+ */
 export function remind(input: extypes.commandInput) {
 
     let commanduser;
@@ -1707,6 +1725,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * bot stats
+ */
 export function stats(input: extypes.commandInput) {
 
     let commanduser;
@@ -1804,6 +1825,9 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * get timezone
+ */
 export function time(input: extypes.commandInput) {
 
     let commanduser;

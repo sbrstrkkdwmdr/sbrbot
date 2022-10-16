@@ -19,6 +19,9 @@ import msgfunc = require('./msgfunc');
 export function name(input: extypes.commandInput) {
 }
 
+/**
+ * if no permissions
+ */
 export function noperms(commandType, obj, type: 'bot' | 'user') {
     
 
