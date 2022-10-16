@@ -688,6 +688,67 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
             },
         ]
     },
+    {
+        name: 'userbeatmaps',
+        description: 'Displays the user\'s beatmaps',
+        dmPermission: false,
+        options: [
+            {
+                name: 'user',
+                description: 'The user to display the beatmaps of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            },
+            {
+                name: 'type',
+                description: 'The type of beatmaps to display',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: [
+                    { name: 'ranked', value: 'ranked' },
+                    { name: 'loved', value: 'loved' },
+                    { name: 'favourites', value: 'favourite' },
+                    { name: 'pending', value: 'pending' },
+                    { name: 'graveyard', value: 'graveyard' },
+                ]
+            },
+            {
+                name: 'reverse',
+                description: 'Whether to reverse the order of the beatmaps',
+                type: Discord.ApplicationCommandOptionType.Boolean,
+                required: false,
+            },
+            {
+                name: 'page',
+                description: 'The page to display',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: false,
+                minValue: 1
+            },
+            {
+                name: 'sort',
+                description: 'The sort order to use',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: [
+                    { name: 'Title', value: 'title' },
+                    { name: 'Artist', value: 'artist' },
+                    { name: 'Difficulty', value: 'difficulty' },
+                    { name: 'Ranked Status', value: 'status' },
+                    { name: 'Fail Count', value: 'fails' },
+                    { name: 'Play Count', value: 'plays' },
+                    { name: 'Date Submitted', value: 'dateadded' },
+                    { name: 'Favourites', value: 'favourites' },
+                    { name: 'BPM', value: 'bpm' },
+                    { name: 'CS', value: 'cs' },
+                    { name: 'AR', value: 'ar' },
+                    { name: 'OD', value: 'od' },
+                    { name: 'HP', value: 'hp' },
+                    { name: 'Song Length', value: 'length' },
+                ]
+            }
+        ]
+    },
     //below are admin related commands
     {
         name: 'checkperms',

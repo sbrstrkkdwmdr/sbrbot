@@ -709,6 +709,9 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
             case 'user_get_maps':
                 url += `users/${mainparam}/beatmapsets/${params ?? 'favourite'}?limit=100`
                 break;
+            case 'user_get_maps_alt':
+                url += `users/${mainparam}/beatmapsets/${params ?? 'favourite'}&limit=100`
+                break;
         }
     }
     let data;
@@ -874,7 +877,7 @@ type apiGetStrings =
     'user_get' | 'user' |
     'user_get_most_played' | 'most_played' |
     'user_get_scores_map' |
-    'user_get_maps'
+    'user_get_maps' | 'user_get_maps_alt'
 
 export async function searchUser(searchid: string, userdata: any, findMode: boolean) {
     const findname = await userdata.findOne({ where: { userid: searchid } })

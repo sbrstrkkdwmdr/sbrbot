@@ -50,7 +50,7 @@ export async function bws(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
             searchid = commanduser.id
             //@ts-expect-error options property does not exist on message
-            user = input.options.getString('user');
+            user = input.obj.options.getString('user');
         }
             //==============================================================================================================================================================================================
 
@@ -7620,7 +7620,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
     let filter: 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' = 'favourite';
     let sort:
         'title' | 'artist' |
-        'difficulty' | 'status' | 'rating' |
+        'difficulty' | 'status' |
         'fails' | 'plays' |
         'dateadded' | 'favourites' | 'bpm' |
         'cs' | 'ar' | 'od' | 'hp' | 'length' = 'dateadded';
@@ -7683,7 +7683,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 filter = 'pending';
                 input.args.splice(input.args.indexOf('-pending'), 1);
             }
-            if (input.args.includes('-reverse')){
+            if (input.args.includes('-reverse')) {
                 reverse = true;
                 input.args.splice(input.args.indexOf('-reverse'), 1);
             }
@@ -7699,13 +7699,13 @@ export async function userBeatmaps(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
             //@ts-expect-error options property does not exist on message
-            user = input.options.getString('user');
+            user = input.obj.options.getString('user') ?? null;
             //@ts-expect-error options property does not exist on message
-            filter = input.options.getString('filter');
+            filter = input.obj.options.getString('type') ?? 'favourite';
             //@ts-expect-error options property does not exist on message
-            sort = input.options.getString('sort');
+            sort = input.obj.options.getString('sort') ?? 'dateadded';
             //@ts-expect-error options property does not exist on message
-            reverse = input.options.getBoolean('reverse');
+            reverse = input.obj.options.getBoolean('reverse') ?? false;
 
         }
             //==============================================================================================================================================================================================
@@ -7715,8 +7715,8 @@ export async function userBeatmaps(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
             //@ts-expect-error messsage property does not exist on message
-            const curembed:Discord.Embed = input.obj.message.embeds[0];
-            if(!curembed) return;
+            const curembed: Discord.Embed = input.obj.message.embeds[0];
+            if (!curembed) return;
             user = curembed.author.url.split('u/')[1]
             sort = 'dateadded';
             //@ts-ignore
@@ -7747,7 +7747,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
             break;
     }
     if (input.overrides != null) {
-        if(input.overrides.page){
+        if (input.overrides.page) {
             page = input.overrides.page;
         }
     }
@@ -7853,6 +7853,39 @@ export async function userBeatmaps(input: extypes.commandInput) {
     }
 
     let maplistdata: osuApiTypes.Beatmapset[] & osuApiTypes.Error = []
+
+    async function getScoreCount(cinitnum) {
+        const fd: osuApiTypes.Beatmapset[] & osuApiTypes.Error = await osufunc.apiget('user_get_maps_alt', `${osudata.id}`, `${filter + `?offset=${cinitnum}`}`, 2, 0, true);
+        if (fd?.error) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                if (input.commandType == 'interaction') {
+                    setTimeout(() => {//@ts-ignore
+                        input.obj.editReply({
+                            content: `Error - could not find user\'s ${calc.toCapital(filter)} Maps`,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }, 1000)
+                } else {//@ts-ignore
+                    input.obj.reply({
+                        content: `Error - could not find user\'s ${calc.toCapital(filter)} Maps`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
+            }
+            return;
+        }
+        for (let i = 0; i < fd.length; i++) {
+            if (!fd[i] || typeof fd[i] == 'undefined') { break; }
+            maplistdata.push(fd[i])
+        }
+        if (fd.length == 100) {
+            await getScoreCount(cinitnum + 100)
+        }
+
+    }
+
     if (func.findFile(input.absoluteID, 'maplistdata') &&
         input.commandType == 'button' &&
         !('error' in func.findFile(input.absoluteID, 'maplistdata')) &&
@@ -7860,7 +7893,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
     ) {
         maplistdata = func.findFile(input.absoluteID, 'maplistdata')
     } else {
-        maplistdata = await osufunc.apiget('user_get_maps', `${osudata.id}`, `${filter}`);
+        await getScoreCount(0);
     }
 
     osufunc.debug(maplistdata, 'command', 'userbeatmaps', input.obj.guildId, 'mapListData');

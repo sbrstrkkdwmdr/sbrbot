@@ -579,7 +579,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
             case 'tracklist': case 'tl':
                 osucmds.tracklist({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings })
                 break;
-            case 'userbeatmaps':
+            case 'userbeatmaps':case 'ub': case 'userb': case 'ubm': case 'um':case 'usermaps':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.userBeatmaps({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 } else {
