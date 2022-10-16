@@ -1192,6 +1192,59 @@ export function modeValidator(mode: string | number) {
     return returnf;
 }
 
+export function modeValidatorAlt(mode: string | number) {
+    let returnf: osuApiTypes.GameMode = 'osu';
+
+    if (typeof mode == 'number') {
+        switch (mode) {
+            case 0: default:
+                returnf = 'osu';
+                break;
+            case 1:
+                returnf = 'taiko';
+                break;
+            case 2:
+                returnf = 'fruits';
+                break;
+            case 3:
+                returnf = 'mania';
+                break;
+        }
+    } else if (typeof mode == 'string') {
+        switch (mode) {
+            case 'osu': default: case 'o': case 'std': case 'standard':
+                returnf = 'osu';
+                break;
+            case 'taiko': case 't': case 'drums':
+                returnf = 'taiko';
+                break;
+            case 'fruits': case 'f': case 'c': case 'ctb': case 'catch': case 'catch the beat': case 'catchthebeat':
+                returnf = 'fruits';
+                break;
+            case 'mania': case 'm': case 'piano': case 'key': case 'keys':
+                returnf = 'mania';
+                break;
+        }
+    }
+
+    const included = [
+        0, 'osu', 'o', 'std', 'standard',
+        1, 'taiko', 't', 'drums',
+        2, 'fruits', 'f', 'c', 'ctb', 'catch', 'catch the beat', 'catchthebeat',
+        3, 'mania', 'm', 'piano', 'key', 'keys'
+    ]
+
+    let isincluded = true
+    if (!included.includes(mode)) {
+        isincluded = false
+    }
+
+    return {
+        mode: returnf,
+        isincluded
+    };
+}
+
 export async function userStatsCache(user: osuApiTypes.UserStatistics[], database: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode) {
     await (async () => {
         for (let i = 0; i < user.length; i++) {
@@ -1294,7 +1347,7 @@ export async function userStatsCache(user: osuApiTypes.UserStatistics[], databas
     })();
     try {
         await userStatsCacheFix(database, mode);
-    } catch(error){
+    } catch (error) {
     }
 }
 

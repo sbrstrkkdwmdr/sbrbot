@@ -4127,7 +4127,7 @@ export async function pinned(input: extypes.commandInput) {
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
-        
+
     //if user is null, use searchid
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
@@ -8578,6 +8578,19 @@ export async function osuset(input: extypes.commandInput) {
             break;
     }
 
+    if (input.overrides != null) {
+        if (input.overrides.type != null) {
+            switch (input.overrides.type) {
+                case 'mode':
+                    mode = name
+                    break;
+                case 'skin':
+                    skin = name
+                    break;
+            }
+            name = null
+        }
+    }
 
     //==============================================================================================================================================================================================
 
@@ -8620,16 +8633,30 @@ export async function osuset(input: extypes.commandInput) {
     )
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    if (typeof name == 'undefined' || name == null) {//@ts-ignore
-        input.obj.reply({
-            content: 'Error - username undefined',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        });
-        return;
-    }
+    // if (typeof name == 'undefined' || name == null) {//@ts-ignore
+    //     input.obj.reply({
+    //         content: 'Error - username undefined',
+    //         allowedMentions: { repliedUser: false },
+    //         failIfNotExists: true
+    //     });
+    //     return;
+    // }
 
     let txt = 'null'
+
+    if(mode){
+        const thing = osufunc.modeValidatorAlt(mode)
+        mode = thing.mode;
+        if(thing.isincluded == false){
+            //@ts-ignore
+            input.obj.reply({
+                        content: 'Error - invalid mode given',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    });
+            return;
+        }
+    }
 
     let updateRows: {
         userid: string | number,
@@ -8661,7 +8688,16 @@ export async function osuset(input: extypes.commandInput) {
                 mode: mode ?? 'osu',
                 skin: skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117'
             })
-            txt = 'Updated the database'
+            txt = 'Added to database'
+            if (name) {
+                txt += `\nSet your username to \`${name}\``
+            }
+            if (mode) {
+                txt += `\nSet your mode to \`${mode}\``
+            }
+            if (skin) {
+                txt += `\nSet your skin to \`${skin}\``
+            }
         } catch (error) {
             txt = 'There was an error trying to update your settings'
             log.errLog('Database error', error, `${input.absoluteID}`)
@@ -8673,7 +8709,7 @@ export async function osuset(input: extypes.commandInput) {
         );
 
         if (affectedRows.length > 0 || affectedRows[0] > 0) {
-            txt = 'Updated the database'
+            txt = 'Updated your settings:'
             if (name) {
                 txt += `\nSet your username to \`${name}\``
             }
@@ -8919,7 +8955,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
         }
     )
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-    
+
     //if user is null, use searchid
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
