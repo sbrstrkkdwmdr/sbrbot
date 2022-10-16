@@ -756,19 +756,31 @@ const osucommands = [
     {
         name: 'osuset',
         description: 'Sets your osu! username/mode/skin',
-        usage: 'osuset [username]',
+        usage: 'osuset [username] [-(mode)] [-skin]',
         slashusage: 'osuset [username] [mode] [skin]',
         examples: [
             {
                 text: 'PREFIXMSGosuset SaberStrike',
-                descriptor: 'Sets your osu! username to SaberStrike'
+                descriptor: 'Sets your username to SaberStrike'
             },
             {
                 text: '/osuset username:SaberStrike mode:fruits skin:sbr v11',
-                descriptor: 'Sets your osu! username to SaberStrike, mode to fruits, and skin to sbr v11'
-            }
+                descriptor: 'Sets your username to SaberStrike, mode to fruits, and skin to sbr v11'
+            },
+            {
+                text: 'PREFIXMSGosuset SaberStrike -taiko -skin sbr v11',
+                descriptor: 'Sets your username to SaberStrike, mode to taiko, and skin to sbr v11'
+            },
+            {
+                text: 'PREFIXMSGsetmode ctb',
+                descriptor: 'Sets your mode to fruits (catch the beat)'
+            },
+            {
+                text: 'PREFIXMSGsetskin sbr v11',
+                descriptor: 'Sets your skin to sbr v11'
+            },
         ],
-        aliases: [],
+        aliases: ['setuser', 'set', 'setmode', 'setskin'],
         options: [
             {
                 name: 'username',
