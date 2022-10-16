@@ -347,7 +347,7 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the badge weighting of',
                 options: ['N/A'],
-                defaultValue: 'your osu! username'
+                defaultValue: 'The user who ran the command'
             }
         ]
     },
@@ -392,7 +392,7 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The first user to compare',
                 options: ['N/A'],
-                defaultValue: 'your osu! username'
+                defaultValue: 'The user who ran the command'
             },
             {
                 name: 'second',
@@ -436,7 +436,7 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
-                defaultValue: 'your osu! username'
+                defaultValue: 'The user who ran the command'
             },
             {
                 name: 'mode',
@@ -512,7 +512,7 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
-                defaultValue: 'your osu! username'
+                defaultValue: 'The user who ran the command'
             }
         ]
     },
@@ -650,7 +650,7 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
-                defaultValue: 'your osu! username'
+                defaultValue: 'The user who ran the command'
             },
             {
                 name: 'mode',
@@ -739,7 +739,7 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the profile of',
                 options: ['N/A'],
-                defaultValue: 'your osu! username'
+                defaultValue: 'The user who ran the command'
             },
             {
                 name: 'detailed',
@@ -755,7 +755,7 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The gamemode to show the stats of',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'your playmode'
+                defaultValue: 'The user\'s default gamemode'
             },
             {
                 name: 'graph',
@@ -862,7 +862,7 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
-                defaultValue: 'your osu! username'
+                defaultValue: 'The user who ran the command'
             },
             {
                 name: 'mode',
@@ -955,7 +955,7 @@ const osucmds: commandInfo[] = [
             required: false,
             description: 'The user to show the scores of',
             options: ['N/A'],
-            defaultValue: 'your osu! username'
+            defaultValue: 'The user who ran the command'
         },
         {
             name: 'mode',
@@ -1194,7 +1194,7 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the score(s) of',
                 options: ['N/A'],
-                defaultValue: 'your osu! username'
+                defaultValue: 'The user who ran the command'
             },
             {
                 name: 'page',
@@ -1232,7 +1232,7 @@ const osucmds: commandInfo[] = [
         slashusage: 'saved [user]',
         examples: [
             {
-                text:'PREFIXMSGsaved @SaberStrike',
+                text: 'PREFIXMSGsaved @SaberStrike',
                 descriptor: 'Shows SaberStrike\'s saved settings'
             },
         ],
@@ -1314,7 +1314,7 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
-                defaultValue: 'your osu! username'
+                defaultValue: 'The user who ran the command'
             },
             {
                 name: 'id',
@@ -1519,6 +1519,64 @@ const osucmds: commandInfo[] = [
         ]
     },
     {
+        name: 'userbeatmaps',
+        description: 'Shows a user\'s beatmaps (favourites/ranked/pending/graveyard/loved)',
+        usage: 'userbeatmaps [user] [-(type)] [-reverse] [-page]',
+        slashusage: 'userbeatmaps [user] [type] [reverse] [page] [sort]',
+        examples: [
+            {
+                text: 'PREFIXMSGubm sotarks -p 4 -ranked',
+                descriptor: 'Shows sotarks\'s ranked beatmaps on page 4'
+            },
+            {
+                text: '/userbeatmaps user:Sotarks type:Loved reverse:true page:2 sort:Title',
+                descriptor: 'Shows sotarks\'s loved beatmaps on page 2, sorted by title in reverse'
+            }
+        ],
+        aliases: ['ub', 'userb', 'ubm', 'um', 'usermaps'],
+        options: [{
+            name: 'user',
+            type: 'string/integer/user mention',
+            required: false,
+            description: 'The user to show the beatmaps of',
+            options: ['N/A'],
+            defaultValue: 'The user who ran the command'
+        },
+        {
+            name: 'type',
+            type: 'string',
+            required: false,
+            description: 'The type of beatmaps to show',
+            options: ['Favourites', 'Ranked', 'Pending', 'Graveyard', 'Loved'],
+            defaultValue: 'Favourites'
+        },
+        {
+            name: 'reverse',
+            type: 'boolean',
+            required: false,
+            description: 'Whether to sort the beatmaps in reverse',
+            options: ['true', 'false'],
+            defaultValue: 'false'
+        },
+        {
+            name: 'page',
+            type: 'integer',
+            required: false,
+            description: 'The page of beatmaps to show',
+            options: ['N/A'],
+            defaultValue: '1'
+        },
+        {
+            name: 'sort',
+            type: 'string',
+            required: false,
+            description: 'The way to sort the beatmaps',
+            options: ['Title', 'Artist', 'Difficulty', 'Status', 'Fails', 'Plays', 'Date Added', 'Favourites', 'BPM', 'CS', 'AR', 'OD', 'HP', 'Length'],
+            defaultValue: 'Date Added'
+        }
+    ]
+    },
+    {
         name: 'whatif',
         description: 'Shows user stats if you gain a certain amount of raw pp',
         usage: 'whatif [user] [pp]',
@@ -1541,7 +1599,7 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the stats of',
                 options: ['N/A'],
-                defaultValue: 'your osu! username'
+                defaultValue: 'The user who ran the command'
             },
             {
                 name: 'pp',
@@ -1762,7 +1820,7 @@ const admincmds: commandInfo[] = [
                 required: false,
                 description: 'The user to check the permissions of',
                 options: ['N/A'],
-                defaultValue: 'your discord account'
+                defaultValue: 'The user who ran the command'
             }
         ]
     },
