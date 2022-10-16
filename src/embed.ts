@@ -127,7 +127,7 @@ export async function scoreList(
     }
 
     const scoresAsArrStr = [];
-    const scoresAsFields:Discord.EmbedField[] = [];
+    const scoresAsFields: Discord.EmbedField[] = [];
 
     fs.writeFileSync('debug.json', JSON.stringify(scores, null, 2));
 
@@ -443,11 +443,11 @@ export async function mapList(
         reverse: boolean,
     }
 ) {
-    let filterinfo: string;
+    let filterinfo: string = '';
     let newData = [];
-    let mapsArr:Discord.EmbedField[] = [];
+    let mapsArr: Discord.EmbedField[] = [];
     let page = data.page;
-    let sortinfo;
+    let sortinfo = '';
 
     switch (data.type) {
         case 'mapset': {
@@ -531,7 +531,7 @@ export async function mapList(
             if (page >= Math.ceil(maps.length / 5)) {
                 page = Math.ceil(maps.length / 5) - 1
             }
-            if(page < 0) {
+            if (page < 0) {
                 page = 0;
             }
 
@@ -555,13 +555,13 @@ export async function mapList(
                  */
                 const topmap = curmapset.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0]
                 mapsArr.push({
-                    name: `${i + 1}`,
+                    name: `${offset + 1}`,
                     value:
                         `
 [**${curmapset.artist} - ${curmapset.title}**](https://osu.ppy.sh/s/${curmapset.id})
 ${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
 ${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bpm}
-${topmap.max_combo}x | ${curmapset.play_count} plays |${func.separateNum(topmap.passcount)} passes | ${func.separateNum(curmapset.favourite_count)} favourites
+${curmapset.play_count} plays | ${func.separateNum(topmap.passcount)} passes | ${func.separateNum(curmapset.favourite_count)} favourites
 Submitted <t:${new Date(curmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(curmapset.last_updated).getTime() / 1000}:R>
 ${topmap.status == 'ranked' ?
                             `Ranked <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''

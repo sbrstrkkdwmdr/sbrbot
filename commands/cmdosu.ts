@@ -7647,6 +7647,47 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-p'), 2);
             }
 
+            if (input.args.includes('-ranked')) {
+                filter = 'ranked';
+                input.args.splice(input.args.indexOf('-ranked'), 1);
+            }
+            if (input.args.includes('-rank')) {
+                filter = 'ranked';
+                input.args.splice(input.args.indexOf('-rank'), 1);
+            }
+            if (input.args.includes('-favourites')) {
+                filter = 'favourite';
+                input.args.splice(input.args.indexOf('-favourites'), 1);
+            }
+            if (input.args.includes('-favourite')) {
+                filter = 'favourite';
+                input.args.splice(input.args.indexOf('-favourite'), 1);
+            }
+            if (input.args.includes('-fav')) {
+                filter = 'favourite';
+                input.args.splice(input.args.indexOf('-fav'), 1);
+            }
+            if (input.args.includes('-graveyard')) {
+                filter = 'graveyard';
+                input.args.splice(input.args.indexOf('-graveyard'), 1);
+            }
+            if (input.args.includes('-grave')) {
+                filter = 'graveyard';
+                input.args.splice(input.args.indexOf('-grave'), 1);
+            }
+            if (input.args.includes('-loved')) {
+                filter = 'loved';
+                input.args.splice(input.args.indexOf('-loved'), 1);
+            }
+            if (input.args.includes('-pending')) {
+                filter = 'pending';
+                input.args.splice(input.args.indexOf('-pending'), 1);
+            }
+            if (input.args.includes('-reverse')){
+                reverse = true;
+                input.args.splice(input.args.indexOf('-reverse'), 1);
+            }
+
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null
@@ -7679,7 +7720,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
             user = curembed.author.url.split('u/')[1]
             sort = 'dateadded';
             //@ts-ignore
-            filter = curembed.title.split('Maps')[0].split('\'s')[1].toLowerCase()
+            filter = curembed.title.split('Maps')[0].split('\'s')[1].toLowerCase().replaceAll(' ', '')
             const curpage = parseInt(
                 curembed.description.split('Page: ')[1].split('/')[0]
             )

@@ -29,9 +29,8 @@ module.exports = {
         currentDate: Date,
         overrides: extypes.overrides,
         userdata: extypes.data,
-    }) 
-    {
-        let commanduser:Discord.User;
+    }) {
+        let commanduser: Discord.User;
 
 
         switch (input.commandType) {
@@ -70,7 +69,7 @@ module.exports = {
                 new Discord.ButtonBuilder()
                     .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
-                    .setEmoji('▶'),
+                    .setEmoji(buttonsthing.label.page.next),
                 new Discord.ButtonBuilder()
                     .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
