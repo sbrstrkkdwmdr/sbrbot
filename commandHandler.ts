@@ -525,6 +525,14 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
+            case 'saved':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    osucmds.saved({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+
             case 'scoreparse': case 'score': case 'sp':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })

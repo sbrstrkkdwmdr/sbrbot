@@ -1226,6 +1226,29 @@ const osucmds: commandInfo[] = [
         ]
     },
     {
+        name: 'saved',
+        description: 'Shows a user\'s saved settings',
+        usage: 'saved [user]',
+        slashusage: 'saved [user]',
+        examples: [
+            {
+                text:'PREFIXMSGsaved @SaberStrike',
+                descriptor: 'Shows SaberStrike\'s saved settings'
+            },
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'user',
+                type: 'user mention',
+                required: false,
+                description: 'The user to show the saved settings of',
+                options: ['N/A'],
+                defaultValue: 'you'
+            }
+        ]
+    },
+    {
         name: 'scoreparse',
         description: 'Returns information about a score',
         usage: 'scoreparse [id] [mode]',

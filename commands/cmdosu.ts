@@ -8826,6 +8826,98 @@ ID: ${input.absoluteID}
  * return saved osu! username/mode/skin
  */
 export async function saved(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+    let searchid;
+
+    switch (input.commandType) {
+        case 'message': {
+            //@ts-expect-error author property only exists on message
+            commanduser = input.obj.author;
+            //@ts-expect-error mentions property does not exist on interaction
+            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            commanduser = input.obj.member.user;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+
+    }
+    //==============================================================================================================================================================================================
+
+    log.logFile(
+        'command',
+        log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
+        ),
+        {
+            guildId: `${input.obj.guildId}`
+        })
+    //OPTIONS==============================================================================================================================================================================================
+    log.logFile('command',
+        log.optsLog(input.absoluteID, []),
+        {
+            guildId: `${input.obj.guildId}`
+        }
+    )
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    const user = input.client.users.cache.get(searchid);
+
+    const Embed = new Discord.EmbedBuilder()
+        .setTitle(`${user.username}'s saved settings`)
+
+    const allUsers = await input.userdata.findAll()
+
+    const cuser = allUsers.find(user => user.userid == searchid)
+
+    if (cuser) {
+        Embed.addFields([{
+            name: 'Username',
+            value: cuser.osuname ?? 'undefined',
+            inline: true
+        },
+        {
+            name: 'Mode',
+            value: cuser.mode ?? 'osu (default)',
+        },
+        {
+            name: 'Skin',
+            value: cuser.skin ?? 'None',
+        }
+        ]
+
+        )
+    } else {
+        Embed.setDescription('No saved settings found')
+    }
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [Embed],
+        }
+    })
+    log.logFile('command',
+        `
+----------------------------------------------------
+success
+ID: ${input.absoluteID}
+----------------------------------------------------
+\n\n`,
+        { guildId: `${input.obj.guildId}` }
+    )
 }
 
 /**
