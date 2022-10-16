@@ -26,7 +26,7 @@ export async function name(input: extypes.commandInput) {
 
 export async function bws(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
     let user;
     let searchid;
 
@@ -79,22 +79,16 @@ export async function bws(input: extypes.commandInput) {
     )
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+    //if user is null, use searchid
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
         user = cuser.username;
-        if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-            if (input.commandType != 'button') {
-                //@ts-expect-error
-                //This expression is not callable.
-                //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-                input.obj.reply({
-                    content: 'User not found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-            return;
-        }
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
     }
 
     if (input.commandType == 'interaction') {
@@ -196,7 +190,7 @@ ID: ${input.absoluteID}
 
 export async function globals(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let user;
     let searchid;
@@ -283,22 +277,19 @@ export async function globals(input: extypes.commandInput) {
     }
     page--
 
+    //if user is null, use searchid
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
         user = cuser.username;
         if (mode == null) {
             mode = cuser.gamemode;
         }
-        if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-            if (input.commandType != 'button') {//@ts-ignore
-                input.obj.reply({
-                    content: 'User not found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-            return;
-        }
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
     }
 
     const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
@@ -359,7 +350,7 @@ ID: ${input.absoluteID}
 
 export async function lb(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let page = 0;
     let mode = 'osu';
@@ -697,7 +688,7 @@ ID: ${input.absoluteID}
 
 export async function ranking(input: extypes.commandInput & { statsCache: any }) {
 
-    let commanduser;
+    let commanduser: Discord.User;
     let country = 'ALL';
     let mode = 'osu';
     let type: osuApiTypes.RankingType = 'performance';
@@ -1046,7 +1037,8 @@ ID: ${input.absoluteID}
 
 export async function rankpp(input: extypes.commandInput & { statsCache: any }) {
 
-    let commanduser;
+    let commanduser: Discord.User;
+
     let type: string = 'rank';
     let value;
     let mode: osuApiTypes.GameMode = 'osu';
@@ -1186,7 +1178,7 @@ ID: ${input.absoluteID}
 
 export async function osu(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let user = null;
     let mode = null;
@@ -1257,7 +1249,7 @@ export async function osu(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             user = input.args.join(' ');
-            if (!input.args[0] || input.args.includes(searchid)) {
+            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null
             }
         }
@@ -1391,23 +1383,19 @@ export async function osu(input: extypes.commandInput) {
         )
     }
 
+    //if user is null, use searchid
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
         user = cuser.username;
         if (mode == null) {
             mode = cuser.gamemode;
         }
-        if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-            if (input.commandType != 'button') {
-                //@ts-expect-error reply smth smth signature invalid not compatible
-                input.obj.reply({
-                    content: 'User not found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-            return;
-        }
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
     }
 
     mode = mode ? osufunc.modeValidator(mode) : null;
@@ -1737,7 +1725,7 @@ ID: ${input.absoluteID}
 
 export async function firsts(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let user;
     let searchid;
@@ -2044,23 +2032,20 @@ export async function firsts(input: extypes.commandInput) {
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.main.refresh),
     )
+
+    //if user is null, use searchid
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
         user = cuser.username;
         if (mode == null) {
             mode = cuser.gamemode;
         }
-        if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-            if (input.commandType != 'button') {
-                //@ts-ignore
-                input.obj.reply({
-                    content: 'User not found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-            return;
-        }
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
     }
 
     mode = osufunc.modeValidator(mode);
@@ -2259,7 +2244,7 @@ ID: ${input.absoluteID}
 
 export async function maplb(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let mapid;
     let mapmods;
@@ -2699,7 +2684,7 @@ ID: ${input.absoluteID}
 
 export async function nochokes(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let user;
     let mode;
@@ -2807,7 +2792,7 @@ export async function nochokes(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
             user = input.args.join(' ');
-            if (!input.args[0] || input.args.includes(searchid)) {
+            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null
             }
         }
@@ -2983,22 +2968,19 @@ export async function nochokes(input: extypes.commandInput) {
                 .setEmoji(buttonsthing.label.main.refresh),
         )
 
+    //if user is null, use searchid
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
         user = cuser.username;
         if (mode == null) {
             mode = cuser.gamemode;
         }
-        if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-            if (input.commandType != 'button') {//@ts-ignore
-                input.obj.reply({
-                    content: 'User not found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-            return;
-        }
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
     }
 
     mode = osufunc.modeValidator(mode);
@@ -3235,7 +3217,7 @@ ID: ${input.absoluteID}
 
 export async function osutop(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let user;
     let mode;
@@ -3350,7 +3332,7 @@ export async function osutop(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
             user = input.args.join(' ');
-            if (!input.args[0] || input.args.includes(searchid)) {
+            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null
             }
         }
@@ -3542,22 +3524,19 @@ export async function osutop(input: extypes.commandInput) {
                 .setEmoji(buttonsthing.label.main.refresh),
         )
 
+    //if user is null, use searchid
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
         user = cuser.username;
         if (mode == null) {
             mode = cuser.gamemode;
         }
-        if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-            if (input.commandType != 'button') {//@ts-ignore
-                input.obj.reply({
-                    content: 'User not found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-            return;
-        }
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
     }
 
     mode = osufunc.modeValidator(mode);
@@ -3856,7 +3835,7 @@ ID: ${input.absoluteID}
 
 export async function pinned(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let user;
     let searchid;
@@ -3953,7 +3932,7 @@ export async function pinned(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
             user = input.args.join(' ');
-            if (!input.args[0] || input.args.includes(searchid)) {
+            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null
             }
         }
@@ -4148,22 +4127,20 @@ export async function pinned(input: extypes.commandInput) {
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
+        
+    //if user is null, use searchid
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
         user = cuser.username;
         if (mode == null) {
             mode = cuser.gamemode;
         }
-        if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-            if (input.commandType != 'button') {//@ts-ignore
-                input.obj.reply({
-                    content: 'User not found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-            return;
-        }
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
     }
 
     mode = osufunc.modeValidator(mode);
@@ -4352,7 +4329,7 @@ ID: ${input.absoluteID}
 
 export async function recent(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let user;
     let searchid;
@@ -4394,7 +4371,7 @@ export async function recent(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-m'), 2);
             }
             user = input.args.join(' ');
-            if (!input.args[0] || input.args.includes(searchid)) {
+            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null
             }
             isFirstPage = true;
@@ -4568,22 +4545,19 @@ export async function recent(input: extypes.commandInput) {
     )
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+    //if user is null, use searchid
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
         user = cuser.username;
         if (mode == null) {
             mode = cuser.gamemode;
         }
-        if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-            if (input.commandType != 'button') {//@ts-ignore
-                input.obj.reply({
-                    content: 'User not found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-            return;
-        }
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
     }
 
     mode = osufunc.modeValidator(mode);
@@ -5130,7 +5104,7 @@ ID: ${input.absoluteID}
 
 export async function replayparse(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
     let replay;
 
     switch (input.commandType) {
@@ -5375,7 +5349,7 @@ ID: ${input.absoluteID}
 
 export async function scoreparse(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let scorelink: string;
     let scoremode: string;
@@ -5716,7 +5690,7 @@ ID: ${input.absoluteID}
 
 export async function scores(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let user;
     let searchid;
@@ -5744,7 +5718,7 @@ export async function scores(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-p'), 2);
             }
             user = input.args.join(' ');
-            if (!input.args[0] || input.args.includes(searchid) || isNaN(+input.args[0])) {
+            if (!input.args[0] || input.args.join(' ').includes(searchid) || isNaN(+input.args[0])) {
                 user = null
             }
             mapid = null;
@@ -5959,22 +5933,19 @@ export async function scores(input: extypes.commandInput) {
                 .setEmoji(buttonsthing.label.page.last),
         );
 
+    //if user is null, use searchid
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
         user = cuser.username;
         if (mode == null) {
             mode = cuser.gamemode;
         }
-        if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-            if (input.commandType != 'button') {//@ts-ignore
-                input.obj.reply({
-                    content: 'User not found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-            return;
-        }
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
     }
 
     mode = osufunc.modeValidator(mode);
@@ -6213,7 +6184,7 @@ ID: ${input.absoluteID}
 
 export async function simulate(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
     let mapid = null;
     let mods = null;
     let acc = null;
@@ -6492,7 +6463,7 @@ ID: ${input.absoluteID}
 
 export async function map(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let mapid;
     let mapmods;
@@ -7266,7 +7237,7 @@ ID: ${input.absoluteID}
 
 export async function maplocal(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     switch (input.commandType) {
         case 'message': {
@@ -7597,7 +7568,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
 export async function trackadd(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let user;
 
@@ -7712,7 +7683,7 @@ ID: ${input.absoluteID}
 }
 
 export async function trackremove(input: extypes.commandInput) {
-    let commanduser;
+    let commanduser: Discord.User;
     let user;
 
     switch (input.commandType) {
@@ -7826,7 +7797,7 @@ ID: ${input.absoluteID}
 
 export async function trackchannel(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
     let channelId;
 
     switch (input.commandType) {
@@ -7941,7 +7912,7 @@ ID: ${input.absoluteID}
 export async function tracklist(input: extypes.commandInput) {
 
 
-    let commanduser;
+    let commanduser: Discord.User;
 
 
     switch (input.commandType) {
@@ -8076,7 +8047,7 @@ ID: ${input.absoluteID}
 
 export async function compare(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
     let type: 'profile' | 'top' | 'mapscore' = 'profile';
     let first = null;
     let second = null;
@@ -8534,7 +8505,7 @@ ID: ${input.absoluteID}
 
 export async function osuset(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
 
     let name;
     let mode;
@@ -8697,9 +8668,9 @@ export async function osuset(input: extypes.commandInput) {
         }
     } else {
         const affectedRows = await input.userdata.update(
-            updateRows, 
+            updateRows,
             { where: { userid: commanduser.id } }
-            );
+        );
 
         if (affectedRows.length > 0 || affectedRows[0] > 0) {
             txt = 'Updated the database'
@@ -8742,7 +8713,7 @@ ID: ${input.absoluteID}
 
 export async function skin(input: extypes.commandInput) {
 
-    let commanduser;
+    let commanduser: Discord.User;
     let string: string;
     let searchid: string;
 
@@ -8864,7 +8835,7 @@ ID: ${input.absoluteID}
 
 export async function whatif(input: extypes.commandInput & { statsCache: any }) {
 
-    let commanduser;
+    let commanduser: Discord.User;
     let user;
     let pp;
     let searchid;
@@ -8948,23 +8919,22 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
         }
     )
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+    
+    //if user is null, use searchid
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
         user = cuser.username;
         if (mode == null) {
             mode = cuser.gamemode;
         }
-        if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
-            if (input.commandType != 'button') {//@ts-ignore
-                input.obj.reply({
-                    content: 'User not found',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-            return;
-        }
     }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
+    }
+
     if (!pp) {
         pp = 100;
     }
