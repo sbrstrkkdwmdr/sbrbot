@@ -5949,11 +5949,6 @@ export async function scores(input: extypes.commandInput) {
     )
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    if (page < 2 || typeof page != 'number' || isNaN(page)) {
-        page = 1;
-    }
-    page--
-
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
@@ -5977,6 +5972,12 @@ export async function scores(input: extypes.commandInput) {
                 .setStyle(Discord.ButtonStyle.Primary)
                 .setEmoji(buttonsthing.label.page.last),
         );
+
+
+    if (page < 2 || typeof page != 'number' || isNaN(page)) {
+        page = 1;
+    }
+    page--
 
     //if user is null, use searchid
     if (user == null) {
@@ -6042,11 +6043,6 @@ export async function scores(input: extypes.commandInput) {
 
     }
 
-    if (page == null || page < 1) {
-        page = 0
-    } else {
-        page = page - 1
-    }
     let scoredataPresort: osuApiTypes.ScoreArrA;
     if (func.findFile(input.absoluteID, 'scores') &&
         input.commandType == 'button' &&
@@ -6181,7 +6177,7 @@ export async function scores(input: extypes.commandInput) {
         //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
         pgbuttons.components[4].setDisabled(true)
     } else {
-        for (let i = 0; i < scoredata.length && i < 5; i++) {
+        for (let i = 0; i < scoresarg.fields.length && i < 5; i++) {
             scoresEmbed.addFields([scoresarg.fields[i]])
         }
     }
