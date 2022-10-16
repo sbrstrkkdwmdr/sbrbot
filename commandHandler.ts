@@ -579,6 +579,13 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
             case 'tracklist': case 'tl':
                 osucmds.tracklist({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings })
                 break;
+            case 'userbeatmaps':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    osucmds.userBeatmaps({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
             case 'whatif':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.whatif({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })

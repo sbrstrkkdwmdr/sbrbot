@@ -4,6 +4,9 @@ import emojis = require('./consts/emojis');
 import osufunc = require('./osufunc');
 import fs = require('fs');
 import func = require('./tools');
+import calc = require('./calc');
+import Discord = require('discord.js');
+import cmdchecks = require('./checks');
 
 export async function scoreList(
     asObj: {
@@ -124,7 +127,7 @@ export async function scoreList(
     }
 
     const scoresAsArrStr = [];
-    const scoresAsFields = [];
+    const scoresAsFields:Discord.EmbedField[] = [];
 
     fs.writeFileSync('debug.json', JSON.stringify(scores, null, 2));
 
@@ -219,7 +222,7 @@ export async function scoreList(
             } else {
                 showtitle = `Score #${i + 1 + (page * 5)}${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods}`
             }
-            if(asObj.showUserName == true){
+            if (asObj.showUserName == true) {
                 showtitle = `[${curscore.user.username}](https://osu.ppy.sh/u/${curscore.user.id})`
             }
             let weighted;
@@ -305,7 +308,7 @@ ${pptxt} | ${weighted}
             } else {
                 showtitle = `[Score #${i + 1 + (page * 5)}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
             }
-            if(asObj.showUserName == true){
+            if (asObj.showUserName == true) {
                 showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
             }
 
@@ -430,3 +433,165 @@ export function hitList(
     }
     return hitList;
 }
+
+export async function mapList(
+    data: {
+        type: 'mapset' | 'map',
+        maps: osuapitypes.Beatmap[] | osuapitypes.Beatmapset[],
+        page: number,
+        sort: mapSort,
+        reverse: boolean,
+    }
+) {
+    let filterinfo: string;
+    let newData = [];
+    let mapsArr:Discord.EmbedField[] = [];
+    let page = data.page;
+    let sortinfo;
+
+    switch (data.type) {
+        case 'mapset': {
+            let maps = data.maps as osuapitypes.Beatmapset[];
+            switch (data.sort) {
+                case 'title':
+                    maps.sort((a, b) => a.title.localeCompare(b.title))
+                    sortinfo = 'Sorted by title';
+                    break;
+                case 'artist':
+                    maps.sort((a, b) => a.artist.localeCompare(b.artist))
+                    sortinfo = 'Sorted by artist';
+                    break;
+                case 'difficulty':
+                    maps.sort((a, b) =>
+                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].difficulty_rating -
+                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].difficulty_rating
+                    )
+                    sortinfo = 'Sorted by difficulty';
+                    break;
+                case 'plays':
+                    maps.sort((a, b) => b.play_count - a.play_count)
+                    sortinfo = 'Sorted by playcount';
+                    break;
+                case 'dateadded':
+                    maps.sort((a, b) => new Date(b.submitted_date).getTime() - new Date(a.submitted_date).getTime())
+                    sortinfo = 'Sorted by date added';
+                    break;
+                case 'favourites':
+                    maps.sort((a, b) => b.favourite_count - a.favourite_count)
+                    sortinfo = 'Sorted by favourites';
+                    break;
+                case 'bpm':
+                    maps.sort((a, b) => b.bpm - a.bpm)
+                    sortinfo = 'Sorted by bpm';
+                    break;
+                case 'cs':
+                    maps.sort((a, b) =>
+                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].cs -
+                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].cs
+                    )
+                    sortinfo = 'Sorted by circle size';
+                    break;
+                case 'ar':
+                    maps.sort((a, b) =>
+                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].ar -
+                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].ar
+                    )
+                    sortinfo = 'Sorted by approach rate';
+                    break;
+                case 'od':
+                    maps.sort((a, b) =>
+                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].accuracy -
+                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].accuracy
+                    )
+                    sortinfo = 'Sorted by overall difficulty';
+                    break;
+                case 'hp':
+                    maps.sort((a, b) =>
+                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].drain -
+                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].drain
+                    )
+                    sortinfo = 'Sorted by hp';
+                    break;
+                case 'length':
+                    maps.sort((a, b) =>
+                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].total_length -
+                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].total_length
+                    )
+                    sortinfo = 'Sorted by length';
+                    break;
+                default:
+                    break;
+            }
+
+            if (data.reverse == true) {
+                maps.reverse();
+                sortinfo += ' (reversed)';
+            }
+            filterinfo += sortinfo
+            if (page >= Math.ceil(maps.length / 5)) {
+                page = Math.ceil(maps.length / 5) - 1
+            }
+            if(page < 0) {
+                page = 0;
+            }
+
+            newData = maps;
+
+            for (let i = 0; i < 5 && i < maps.length; i++) {
+                const offset = page * 5 + i
+                const curmapset = maps[offset]
+                if (!curmapset) {
+                    break;
+                }
+                /**
+                 * artist - title (url)
+                 * status | mode
+                 * length | bpm
+                 * top diff combo
+                 * playcount | passes
+                 * submitted date | last updated
+                 * ranked date
+                 * favourite count
+                 */
+                const topmap = curmapset.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0]
+                mapsArr.push({
+                    name: `${i + 1}`,
+                    value:
+                        `
+[**${curmapset.artist} - ${curmapset.title}**](https://osu.ppy.sh/s/${curmapset.id})
+${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
+${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bpm}
+${topmap.max_combo}x | ${curmapset.play_count} plays |${func.separateNum(topmap.passcount)} passes | ${func.separateNum(curmapset.favourite_count)} favourites
+Submitted <t:${new Date(curmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(curmapset.last_updated).getTime() / 1000}:R>
+${topmap.status == 'ranked' ?
+                            `Ranked <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                        }${topmap.status == 'approved' || topmap.status == 'qualified' ?
+                            `Approved/Qualified <t: ${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                        }${topmap.status == 'loved' ?
+                            `Loved <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                        }`,
+                    inline: false
+                })
+            }
+        }
+            break;
+        case 'map': {
+
+        }
+            break;
+    }
+
+    return {
+        fields: mapsArr,
+        filter: filterinfo,
+        maxPages: Math.ceil(newData.length / 5),
+        isFirstPage: page == 0,
+        isLastPage: page >= Math.ceil(newData.length / 5) - 1
+    }
+}
+
+export type mapSort = 'title' | 'artist' |
+    'difficulty' | 'status' | 'rating' |
+    'fails' | 'plays' |
+    'dateadded' | 'favourites' | 'bpm' |
+    'cs' | 'ar' | 'od' | 'hp' | 'length'

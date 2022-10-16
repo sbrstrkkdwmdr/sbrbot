@@ -45,7 +45,7 @@ module.exports = (userdata, client, config, oncooldown, statsCache) => {
             .setTitle('Error - Button does not work')
             .setDescription('Feature not yet implemented/supported')
 
-        const PageOnlyCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'scores']
+        const PageOnlyCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'scores', 'userbeatmaps']
         const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores']
         if (button == 'Search' && PageOnlyCommands.includes(command)) {
             const menu = new Discord.ModalBuilder()
@@ -103,6 +103,11 @@ module.exports = (userdata, client, config, oncooldown, statsCache) => {
 
 
         switch (command) {
+            case 'compare':
+                osucmds.compare({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
             case 'firsts':
                 osucmds.firsts({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
@@ -158,8 +163,8 @@ module.exports = (userdata, client, config, oncooldown, statsCache) => {
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
-            case 'compare':
-                osucmds.compare({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
+            case 'userbeatmaps':
+                osucmds.userBeatmaps({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;

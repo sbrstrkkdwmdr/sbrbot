@@ -20,6 +20,7 @@ const gamemodes = {
 const rankedstatus = {
     ranked: '<:statusranked:944512775579926609>',
     approved: '<:statusapproved:944512764913811467>',
+    qualified: '<:statusapproved:944512764913811467>',
     loved: '<:statusloved:944512775810588733>',
     graveyard: '<:statusgraveyard:944512765282897940>'
 }

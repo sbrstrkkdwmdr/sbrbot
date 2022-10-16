@@ -7617,6 +7617,292 @@ ID: ${input.absoluteID}
  * list of user's maps
  */
 export async function userBeatmaps(input: extypes.commandInput) {
+    let filter: 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' = 'favourite';
+    let sort:
+        'title' | 'artist' |
+        'difficulty' | 'status' | 'rating' |
+        'fails' | 'plays' |
+        'dateadded' | 'favourites' | 'bpm' |
+        'cs' | 'ar' | 'od' | 'hp' | 'length' = 'dateadded';
+    let reverse = false;
+    let user;
+    let searchid;
+    let page = 1;
+
+    let commanduser: Discord.User;
+
+
+    switch (input.commandType) {
+        case 'message': {
+            //@ts-expect-error author property only exists on message
+            commanduser = input.obj.author;
+            //@ts-expect-error mentions property does not exist on interaction
+            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+            if (input.args.includes('-page')) {
+                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
+                input.args.splice(input.args.indexOf('-page'), 2);
+            }
+            if (input.args.includes('-p')) {
+                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
+                input.args.splice(input.args.indexOf('-p'), 2);
+            }
+
+            user = input.args.join(' ');
+            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+                user = null
+            }
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            commanduser = input.obj.member.user;
+            searchid = commanduser.id;
+            //@ts-expect-error options property does not exist on message
+            user = input.options.getString('user');
+            //@ts-expect-error options property does not exist on message
+            filter = input.options.getString('filter');
+            //@ts-expect-error options property does not exist on message
+            sort = input.options.getString('sort');
+            //@ts-expect-error options property does not exist on message
+            reverse = input.options.getBoolean('reverse');
+
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            commanduser = input.obj.member.user;
+            searchid = commanduser.id;
+            //@ts-expect-error messsage property does not exist on message
+            const curembed:Discord.Embed = input.obj.message.embeds[0];
+            if(!curembed) return;
+            user = curembed.author.url.split('u/')[1]
+            sort = 'dateadded';
+            //@ts-ignore
+            filter = curembed.title.split('Maps')[0].split('\'s')[1].toLowerCase()
+            const curpage = parseInt(
+                curembed.description.split('Page: ')[1].split('/')[0]
+            )
+            switch (input.button) {
+                case 'BigLeftArrow':
+                    page = 1
+                    break;
+                case 'LeftArrow':
+                    page = curpage - 1
+                    break;
+                case 'RightArrow':
+                    page = curpage + 1
+                    break;
+                case 'BigRightArrow'://@ts-ignore
+                    page = parseInt(
+                        curembed.description.split('Page: ')[1].split('/')[1].split('\n')[0]
+                    )
+                    break;
+                default:
+                    page = curpage
+                    break;
+            }
+        }
+            break;
+    }
+    if (input.overrides != null) {
+        if(input.overrides.page){
+            page = input.overrides.page;
+        }
+    }
+    //==============================================================================================================================================================================================
+
+    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`BigLeftArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.first),
+            new Discord.ButtonBuilder()
+                .setCustomId(`LeftArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.previous),
+            new Discord.ButtonBuilder()
+                .setCustomId(`Search-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.search),
+            new Discord.ButtonBuilder()
+                .setCustomId(`RightArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.next),
+            new Discord.ButtonBuilder()
+                .setCustomId(`BigRightArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.last),
+        );
+
+    log.logFile(
+        'command',
+        log.commandLog('userbeatmaps', input.commandType, input.absoluteID, commanduser
+        ),
+        {
+            guildId: `${input.obj.guildId}`
+        })
+    //OPTIONS==============================================================================================================================================================================================
+    log.logFile('command',
+        log.optsLog(input.absoluteID, []),
+        {
+            guildId: `${input.obj.guildId}`
+        }
+    )
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    if (page < 2 || typeof page != 'number' || isNaN(page)) {
+        page = 1;
+    }
+    page--
+
+    //if user is null, use searchid
+    if (user == null) {
+        const cuser = await osufunc.searchUser(searchid, input.userdata, true);
+        user = cuser.username;
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
+    }
+
+    if (input.commandType == 'interaction') {//@ts-ignore
+        input.obj.reply({
+            content: 'Loading...',
+            allowedMentions: { repliedUser: false },
+            failIfNotExists: false,
+        }).catch()
+    }
+
+    let osudata: osuApiTypes.User;
+    if (func.findFile(user, 'osudata') &&
+        !('error' in func.findFile(user, 'osudata')) &&
+        input.button != 'Refresh'
+    ) {
+        osudata = func.findFile(user, 'osudata');
+    } else {
+        osudata = await osufunc.apiget('user', `${await user}`);
+    }
+    func.storeFile(osudata, osudata.id, 'osudata');
+    func.storeFile(osudata, user, 'osudata');
+
+    osufunc.debug(osudata, 'command', 'userbeatmaps', input.obj.guildId, 'osuData');
+
+    if (osudata?.error || !osudata.id) {
+        if (input.commandType == 'interaction') {
+            setTimeout(() => {//@ts-ignore
+                input.obj.reply({
+                    content: `Error - could not find user \`${user}\``,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }, 1000);
+        } else {//@ts-ignore
+            input.obj.reply({
+                content: `Error - could not find user \`${user}\``,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            })
+        }
+        return;
+    }
+
+    let maplistdata: osuApiTypes.Beatmapset[] & osuApiTypes.Error = []
+    if (func.findFile(input.absoluteID, 'maplistdata') &&
+        input.commandType == 'button' &&
+        !('error' in func.findFile(input.absoluteID, 'maplistdata')) &&
+        input.button != 'Refresh'
+    ) {
+        maplistdata = func.findFile(input.absoluteID, 'maplistdata')
+    } else {
+        maplistdata = await osufunc.apiget('user_get_maps', `${osudata.id}`, `${filter}`);
+    }
+
+    osufunc.debug(maplistdata, 'command', 'userbeatmaps', input.obj.guildId, 'mapListData');
+    func.storeFile(maplistdata, input.absoluteID, 'maplistdata');
+
+    if (page >= Math.ceil(maplistdata.length / 5)) {
+        page = Math.ceil(maplistdata.length / 5) - 1
+    }
+
+    const mapList = new Discord.EmbedBuilder()
+        .setTitle(`${osudata.username}'s ${calc.toCapital(filter)} Maps`)
+        .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
+        .setAuthor({
+            name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
+            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
+        })
+        .setColor(colours.embedColour.userlist.dec);
+
+    const mapsarg = await embedStuff.mapList({
+        type: 'mapset',
+        maps: maplistdata,
+        page: page,
+        sort,
+        reverse,
+    })
+
+    if (mapsarg.fields.length == 0) {
+        mapList.addFields([{
+            name: 'Error',
+            value: 'No mapsets found',
+            inline: false
+        }])
+        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+        pgbuttons.components[0].setDisabled(true)
+        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+        pgbuttons.components[1].setDisabled(true)
+        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+        pgbuttons.components[2].setDisabled(true)
+        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+        pgbuttons.components[3].setDisabled(true)
+        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+        pgbuttons.components[4].setDisabled(true)
+    } else {
+        for (let i = 0; i < mapsarg.fields.length; i++) {
+            mapList.addFields([mapsarg.fields[i]])
+        }
+    }
+    if (mapsarg.isFirstPage) {
+        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+        pgbuttons.components[0].setDisabled(true)
+        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+        pgbuttons.components[1].setDisabled(true)
+    }
+    if (mapsarg.isLastPage) {
+        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+        pgbuttons.components[3].setDisabled(true)
+        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
+        pgbuttons.components[4].setDisabled(true)
+    }
+    mapList.setDescription(`${mapsarg.filter}\nPage: ${page + 1}/${Math.ceil(mapsarg.maxPages)}\n`)
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            edit: true,
+            embeds: [mapList],
+            components: [pgbuttons]
+        }
+    })
+
+    log.logFile('command',
+        `
+----------------------------------------------------
+success
+ID: ${input.absoluteID}
+----------------------------------------------------
+\n\n`,
+        { guildId: `${input.obj.guildId}` }
+    )
+
 
 }
 
