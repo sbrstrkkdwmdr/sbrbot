@@ -13,6 +13,8 @@ import func = require('../tools');
 import def = require('../../src/consts/defaults');
 import buttonsthing = require('../../src/consts/buttons');
 import extypes = require('../../src/types/extraTypes');
+import msgfunc = require('../../commands/msgfunc');
+
 
 module.exports = {
     name: 'COMMANDNAME',
@@ -27,8 +29,9 @@ module.exports = {
         currentDate: Date,
         overrides: extypes.overrides,
         userdata: extypes.data,
-    }) {
-        let commanduser;
+    }) 
+    {
+        let commanduser:Discord.User;
 
 
         switch (input.commandType) {
@@ -101,50 +104,13 @@ module.exports = {
 
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
-        switch (input.commandType) {
-            case 'message': {
-                //@ts-expect-error smth smth each type not compatible
-                input.obj.reply({
-                    content: '',
-                    embeds: [],
-                    files: [],
-                    components: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
+        msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
             }
-                break;
-            //==============================================================================================================================================================================================
-            case 'interaction': {
-                //@ts-expect-error smth smth each type not compatible
-                input.obj.reply({
-                    content: '',
-                    embeds: [],
-                    files: [],
-                    components: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
-            }
-                //==============================================================================================================================================================================================
+        })
 
-                break;
-            case 'button': {
-                //@ts-expect-error smth smth each type not compatible
-                input.obj.message.edit({
-                    content: '',
-                    embeds: [],
-                    files: [],
-                    components: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
-            }
-                break;
-        }
         log.logFile('command',
             `
 ----------------------------------------------------
