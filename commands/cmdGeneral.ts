@@ -1226,7 +1226,7 @@ Coded in: TypeScript
 [Github repo](https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts)
 [Creator](https://sbrstrkkdwmdr.github.io/sbr-web/)
 [Commands](https://sbrstrkkdwmdr.github.io/sbrbot/commands)
-PP version: 2022-08-02
+PP version: 2022-08-02 (rosu-pp)
 `)
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
