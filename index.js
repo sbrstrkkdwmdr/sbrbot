@@ -4,111 +4,48 @@ function generateCommands() {
     let misccmddiv = document.getElementById('misccmd');
     let admincmddiv = document.getElementById('admincmd');
 
-    for (let i = 0; i < generalcommands.length; i++) {
-        let cmd = generalcommands[i];
-        let cmddiv = document.createElement('div');
-        cmddiv.classList.add('command');
-        cmddiv.innerHTML =
-            `
-        
-        <details>
-        <summary class="divCommandName" id="general-${cmd.name}">${cmd.name}</summary>
-        <div class="divCommandDetails">
-        <p>${cmd.description}
-        </p>
+    toList(generalcommands, gencmddiv, 'generalcmd');
+    toList(osucommands, osucmddiv, 'osucmd');
+    toList(misccommands, misccmddiv, 'misccmd');
+    toList(admincommands, admincmddiv, 'admincmd');
 
-        <pre>
-        <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
-                            <div class="codeblock">/${cmd.slashusage}</div>
-
-        ${cmd.aliases.length > 0 ? `<div>Aliases:</div> ${cmd.aliases.map(x => `<div class="codeblock">${x}</div>`).join('\n')}` : ''}
-        
-        ${cmd.examples.length > 0 ?
-                `\nExamples:` +
-                `<table class="cmdexample">` +
-                cmd.examples.map(x =>
-                    `<tr>
-                                    <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
-                                    <td class="tdEx"><div class="exdesc">${x.descriptor}</div></td>
-                                    </tr>
-                                    `
-
-                ).join(`\n`) + '</table>' :
-                ''} 
-        </pre>
-
-        ${cmd.options.length > 0 ?
-                `<br><br>Options:
-        <table class="table">
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Required</th>
-            <th>Description</th>
-            <th>Options</th>
-            <th>Default Value</th>
-        </tr>
-
-        ${cmd.options ?
-                    cmd.options.map(option => {
-                        return `
-                <tr>
-                    <td class="tdOpts">${option.name}</td>
-                    <td class="tdOpts">${option.type}</td>
-                    <td class="tdOpts">${option.required}</td>
-                    <td class="tdOpts">${option.description}</td>
-                    <td class="tdOpts">${option.options ? option.options.join(', ') : ''}</td>
-                    <td class="tdOpts">${option.defaultValue}</td>
-                </tr>
+    function toList(commands, div, name) {
+        // console.log('Generating command list for ' + name ?? 'null name');
+        for (let i = 0; i < commands.length; i++) {
+            let cmd = commands[i];
+            let cmddiv = document.createElement('div');
+            cmddiv.classList.add('command');
+            cmddiv.innerHTML =
                 `
-                    }).join('') : ''}
-        </table>` : ''
-            }
-        </div>
-
-
-        </details>
-        </div>
-        `
-
-        gencmddiv.appendChild(cmddiv);
-    }
-
-    for (let i = 0; i < osucommands.length; i++) {
-        let cmd = osucommands[i];
-        let cmddiv = document.createElement('div');
-        cmddiv.classList.add('command');
-        cmddiv.innerHTML =
-            `
         
         <details>
         <summary class="divCommandName" id="osu-${cmd.name}">${cmd.name}</summary>
         <div class="divCommandDetails">
         <p>${cmd.description}
         </p>
-
+    
         <pre>
         <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
                             <div class="codeblock">/${cmd.slashusage}</div>
-
+    
         ${cmd.aliases.length > 0 ? `<div>Aliases:</div> ${cmd.aliases.map(x => `<div class="codeblock">${x}</div>`).join('\n')}` : ''}
-
+    
        ${cmd.examples.length > 0 ?
-                `\nExamples:` +
-                `<table class="cmdexample">` +
-                cmd.examples.map(x =>
-                    `<tr>
+                    `\nExamples:` +
+                    `<table class="cmdexample">` +
+                    cmd.examples.map(x =>
+                        `<tr>
                     <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
                     <td class="tdEx"><div class="exdesc">${x.descriptor}</div></td>
                     </tr>
                     `
 
-                ).join(`\n`) + '</table>' :
-                ''}
+                    ).join(`\n`) + '</table>' :
+                    ''}
         </pre>
-
+    
         ${cmd.options.length > 0 ?
-                `<br><br>Options:
+                    `<br><br>Options:
         <table class="table">
         <tr>
             <th>Name</th>
@@ -118,10 +55,10 @@ function generateCommands() {
             <th>Options</th>
             <th>Default Value</th>
         </tr>
-
+    
         ${cmd.options ?
-                    cmd.options.map(option => {
-                        return `
+                        cmd.options.map(option => {
+                            return `
                 <tr>
                     <td class="tdOpts">${option.name}</td>
                     <td class="tdOpts">${option.type}</td>
@@ -131,154 +68,17 @@ function generateCommands() {
                     <td class="tdOpts">${option.defaultValue}</td>
                 </tr>
                 `
-                    }).join('') : ''}
+                        }).join('') : ''}
         </table>` : ''
-            }
+                }
         </div>
-
-
+    
+    
         </details>
         </div>
         `
-        osucmddiv.appendChild(cmddiv);
-    }
-
-    for (let i = 0; i < misccommands.length; i++) {
-        let cmd = misccommands[i];
-        let cmddiv = document.createElement('div');
-        cmddiv.classList.add('command');
-        cmddiv.innerHTML =
-            `
-        
-        <details>
-        <summary class="divCommandName" id="misc-${cmd.name}">${cmd.name}</summary>
-        <div class="divCommandDetails">
-        <p>${cmd.description}
-        </p>
-
-        <pre>
-        <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
-                            <div class="codeblock">/${cmd.slashusage}</div>
-
-        ${cmd.aliases.length > 0 ? `<div>Aliases:</div> ${cmd.aliases.map(x => `<div class="codeblock">${x}</div>`).join('\n')}` : ''}
-
-        ${cmd.examples.length > 0 ?
-                `\nExamples: ` +
-                `<table class="cmdexample">` +
-                cmd.examples.map(x =>
-                    `<tr>
-                                    <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
-                                    <td class="tdEx"><div class="exdesc">${x.descriptor}</div></td>
-                                    </tr>
-                                    `
-
-                ).join(`\n`) + '</table>' :
-                ''}
-        </pre>
-
-        ${cmd.options.length > 0 ?
-                `<br><br>Options:
-        <table class="table">
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Required</th>
-            <th>Description</th>
-            <th>Options</th>
-            <th>Default Value</th>
-        </tr>
-
-        ${cmd.options ?
-                    cmd.options.map(option => {
-                        return `
-                <tr>
-                    <td class="tdOpts">${option.name}</td>
-                    <td class="tdOpts">${option.type}</td>
-                    <td class="tdOpts">${option.required}</td>
-                    <td class="tdOpts">${option.description}</td>
-                    <td class="tdOpts">${option.options ? option.options.join(', ') : ''}</td>
-                    <td class="tdOpts">${option.defaultValue}</td>
-                </tr>
-                `
-                    }).join('') : ''}
-        </table>` : ''
-            }
-        </div>
-
-
-        </details>
-        </div>
-        `
-        misccmddiv.appendChild(cmddiv);
-    }
-
-    for (let i = 0; i < admincommands.length; i++) {
-        let cmd = admincommands[i];
-        let cmddiv = document.createElement('div');
-        cmddiv.classList.add('command');
-        cmddiv.innerHTML =
-            `
-        
-        <details>
-        <summary class="divCommandName" id="admin-${cmd.name}">${cmd.name}</summary>
-        <div class="divCommandDetails">
-        <p>${cmd.description}
-        </p>
-
-        <pre>
-        <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
-                            <div class="codeblock">/${cmd.slashusage}</div>
-
-                            ${cmd.aliases.length > 0 ? `<div>Aliases:</div> <div class="codeblock">${cmd.aliases.join('\n')}</div>` : ''}
-
-        ${cmd.examples.length > 0 ?
-                `\nExamples:` +
-                `<table class="cmdexample">` +
-                cmd.examples.map(x =>
-                    `<tr>
-                                    <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
-                                    <td class="tdEx"><div class="exdesc">${x.descriptor}</div></td>
-                                    </tr>
-                                    `
-
-                ).join(`\n`) + '</table>' :
-                ''}
-        </pre>
-
-        ${cmd.options.length > 0 ?
-                `<br><br>Options:
-        <table class="table">
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Required</th>
-            <th>Description</th>
-            <th>Options</th>
-            <th>Default Value</th>
-        </tr>
-
-        ${cmd.options ?
-                    cmd.options.map(option => {
-                        return `
-                <tr>
-                    <td class="tdOpts">${option.name}</td>
-                    <td class="tdOpts">${option.type}</td>
-                    <td class="tdOpts">${option.required}</td>
-                    <td class="tdOpts">${option.description}</td>
-                    <td class="tdOpts">${option.options ? option.options.join(', ') : ''}</td>
-                    <td class="tdOpts">${option.defaultValue}</td>
-                </tr>
-                `
-                    }).join('') : ''}
-        </table>` : ''
-            }
-        </div>
-
-
-        </details>
-        </div>
-        `
-        admincmddiv.appendChild(cmddiv);
+            div.appendChild(cmddiv);
+        }
     }
 }
 generateCommands();
