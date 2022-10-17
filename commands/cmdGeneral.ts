@@ -956,7 +956,7 @@ export function help(input: extypes.commandInput) {
                 const res = helpinfo.othercmds.find(obj => obj.name == fetchcmd)
                 commandEmb(res, commandInfo)
             } else if (helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd))) {
-                commandCategory = 'gen';
+                commandCategory = 'misc';
                 const res = helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd))
                 commandEmb(res, commandInfo)
             }
@@ -966,7 +966,7 @@ export function help(input: extypes.commandInput) {
                 const res = helpinfo.osucmds.find(obj => obj.name == fetchcmd)
                 commandEmb(res, commandInfo)
             } else if (helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd))) {
-                commandCategory = 'gen';
+                commandCategory = 'osu';
                 const res = helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd))
                 commandEmb(res, commandInfo)
             }
@@ -976,7 +976,7 @@ export function help(input: extypes.commandInput) {
                 const res = helpinfo.admincmds.find(obj => obj.name == fetchcmd)
                 commandEmb(res, commandInfo)
             } else if (helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd))) {
-                commandCategory = 'gen';
+                commandCategory = 'admin';
                 const res = helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd))
                 commandEmb(res, commandInfo)
             }
