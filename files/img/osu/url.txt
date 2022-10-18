@@ -1,0 +1,5 @@
+https://osu.ppy.sh/images/layout/beatmapset-page/
+count_circles.svg
+count_sliders.svg
+bpm.svg
+total_length.svg

@@ -1,48 +1,55 @@
-# sbrbot
-just an osu-centred discord bot
+https://sbrstrkkdwmdr.github.io/sbrbot/
 
-### Invite link
-soon :tm:
+## install/setup
 
-### features
-osu! map/map leaderboard/profile/scores commands</br>
-Map link, osr, profile link, score link parsing</br>
-Google image/youtube search </br>
-Rest of the commands can be found using `sbr-help` or `/help [command]`</br>
+first, install rust [here](https://www.rust-lang.org/tools/install) 
 
-### to do list
-in order of most likely to happen first </br>
-top play tracking</br>
-output mod logs to channels</br>
-whatif x pp score/score simulation</br>
-twitch/yt notifications</br>
-[x] server leaderboard</br>
-support for other servers like gatari, ez-pp farm etc.</br>
+install all dependencies with `npm i`
 
-### Things
-Performance calculation [rosu](https://github.com/MaxOhn/rosu-pp)</br>
-Performance calculation (old): [booba](https://www.npmjs.com/package/booba)</br>
-Tools: [osu-api-extended](https://github.com/cyperdark/osu-api-extended)</br>
-Difficulty calculation: [osumodcalc](https://www.npmjs.com/package/osumodcalculator)</br>
+create a `./config/` folder and put `config.json` inside it
+
+`config.json` should look like this:
+
+```json
+{
+  "token": "create app here => https://discord.com/developers/applications",
+  "prefix": "sbr-",
+  "osuClientID": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
+  "osuClientSecret": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
+  "osuApiKey": "get api key here => https://osu.ppy.sh/p/api",
+  "ownerusers": ["user id"],
+  "google": {
+    "apiKey": "tutorial below",
+    "cx": "e"
+  },
+  "useScreenshotParse": false,
+  "LogApiCalls": false
+}
+```
+
+to run the bot just use `ts-node main.ts`
+
+
+## image search setup
+go to https://cse.google.com/cse/all or https://programmablesearchengine.google.com/controlpanel/all </br>
+press "Add"</br>
+in "what to search" enter "www.google.com/imghp"</br>
+in search settings, set enable "image search" and "search entire web"</br>
+press customise </br>
+copy the search engine id and paste it in the google.engineId field</br>
+scroll down and press "Get Started" on "Custom Search JSON API" (limited)</br>
+press "Get a Key" and create a new project </br>
+copy the key and paste it into the google.apiKey field </br>
+
+## credits n stuff
+
+Discord API wrapper: [Discord.js](discord.js.org/)</br>
+Performance/SR calculations: [rosu](https://github.com/MaxOhn/rosu-pp-js)</br>
+Fetch: [node-fetch](https://www.npmjs.com/package/node-fetch)</br>
 Database: [Sequelize](https://www.npmjs.com/package/sequelize)</br>
-Server: </br>
-
-
-## setup
-### pre requisites
-[Node js v16](https://nodejs.org/en/blog/release/v16.13.0/)</br>
-[osu! oauth app](https://osu.ppy.sh/home/account/edit#new-oauth-application) => New OAuth Application > set the app name as whatever and ignore the callback URL part</br>
-[Discord bot app](https://discord.com/developers/applications) => follow [this guide](https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot)</br>
-[Google search api app](https://cse.google.com/cse/all) => follow [this guide](https://cdn.discordapp.com/attachments/824898253005914112/892674375646584862/HowTo.mp4) to get the key/id
-[Rust](https://www.rust-lang.org/tools/install) 
-[VS Studio C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) (ignore this if using the first option in rust installer)
-
-### setup
-Open up any terminal in the bot's directory by clicking on the address bar, type `cmd` (powershell or any other terminal works too), then press enter</br>You should get a screen that looks like this <img src=https://cdn.discordapp.com/attachments/724514625005158403/993119861649715280/unknown.png>
-</br>
-
-First, install all the dependencies by running `npm i`</br>
-Then, setup the bot by running `node setup.js`</br>
-~~Once the bot has been setup, you can run it anytime by using `node main` or `node main.js`.~~</br> 
-Once the bot has been setup, you can run it anytime by using `ts-node main.ts` or `tsc && node main.js`</br>
-To stop the bot, use ctrl+c while the window is in focus (or you can just close it)
+Beatmap downloader: [osu-api-extended](https://github.com/cyperdark/osu-api-extended)</br>
+Mod calculations: [osumodcalculator](https://www.npmjs.com/package/osumodcalculator)</br>
+Image to text parser: [tesseract.js](https://github.com/naptha/tesseract.js)</br>
+Youtube search: [yt-search](https://www.npmjs.com/package/yt-search)</br>
+Graph/chart generator: [chartjs-to-image](https://www.npmjs.com/package/chartjs-to-image)</br>
+osr file parser: [osureplayparser](https://www.npmjs.com/package/osureplayparser)</br>

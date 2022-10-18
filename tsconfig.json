@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "module": "commonjs",
+        "moduleResolution": "node",
         "lib": [
             "ES2021"
         ],
@@ -8,24 +9,13 @@
     },
     "include": [
         "commands/**/*",
-        "configs/**/*",
-        "other/**/*",
-        "*.ts",
-        "calc/*",
-        "src/*"
+        "config/**/*",
+        "src/**/*",
+        "*",
+        "test/*"
     ],
     "exclude": [
-        "commands/tests/*",
-        "test/*",
+        "setup.ts",
+        "node_modules"
     ]
-    /*     "files": [
-        "main.ts",
-        "Moderator.ts",
-        "CommandHandler.ts",
-        "LinkHandler.ts",
-        "SlashCommandHandler.ts",
-        "ButtonHandler.ts",
-        "CommandInit.ts",
-        "ExEvents.ts",
-    ] */
 }

@@ -1,0 +1,136 @@
+{
+    "avatar_url": "https://osu.ppy.sh/images/layout/avatar-guest.png",
+    "country_code": "AU",
+    "default_group": "default",
+    "id": 2,
+    "is_active": false,
+    "is_bot": false,
+    "is_deleted": false,
+    "is_online": false,
+    "is_supporter": false,
+    "last_visit": null,
+    "pm_friends_only": false,
+    "profile_colour": null,
+    "username": "Unknown user",
+    "cover_url": "https://assets.ppy.sh/user-profile-covers/2/baba245ef60834b769694178f8f6d4f6166c5188c740de084656ad2b80f1eea7.jpeg",
+    "discord": null,
+    "has_supported": true,
+    "interests": null,
+    "join_date": "2007-08-28T03:09:12+00:00",
+    "kudosu": {
+        "total": 50,
+        "available": 50
+    },
+    "location": "unknown location",
+    "max_blocks": 100,
+    "max_friends": 500,
+    "occupation": null,
+    "playmode": "osu",
+    "playstyle": [
+        "keyboard",
+        "tablet"
+    ],
+    "post_count": 0,
+    "profile_order": [
+        "me",
+        "recent_activity",
+        "historical",
+        "top_ranks",
+        "beatmaps",
+        "kudosu",
+        "medals"
+    ],
+    "title": null,
+    "title_url": null,
+    "twitter": null,
+    "website": null,
+    "country": {
+        "code": "AU",
+        "name": "Australia"
+    },
+    "cover": {
+        "custom_url": "https://assets.ppy.sh/user-profile-covers/2/baba245ef60834b769694178f8f6d4f6166c5188c740de084656ad2b80f1eea7.jpeg",
+        "url": "https://assets.ppy.sh/user-profile-covers/2/baba245ef60834b769694178f8f6d4f6166c5188c740de084656ad2b80f1eea7.jpeg",
+        "id": null
+    },
+    "account_history": [],
+    "active_tournament_banner": null,
+    "badges": [],
+    "beatmap_playcounts_count": 1,
+    "comments_count": 1,
+    "favourite_beatmapset_count": 1,
+    "follower_count": 1,
+    "graveyard_beatmapset_count": 1,
+    "groups": [],
+    "guest_beatmapset_count": 0,
+    "loved_beatmapset_count": 0,
+    "mapping_follower_count": 0,
+    "monthly_playcounts": [
+        {
+            "start_date": "2007-01-01",
+            "count": 1
+        }
+    ],
+    "page": {
+        "html": "w",
+        "raw": "w"
+    },
+    "pending_beatmapset_count": 0,
+    "previous_usernames": [],
+    "ranked_beatmapset_count": 0,
+    "replays_watched_counts": [
+        {
+            "start_date": "2007-01-01",
+            "count": 1
+        }
+    ],
+    "scores_best_count": 0,
+    "scores_first_count": 0,
+    "scores_pinned_count": 0,
+    "scores_recent_count": 0,
+    "statistics": {
+        "level": {
+            "current": 1,
+            "progress": 1
+        },
+        "global_rank": 1,
+        "pp": 1,
+        "ranked_score": 1,
+        "hit_accuracy": 100.00,
+        "play_count": 1,
+        "play_time": 1,
+        "total_score": 1,
+        "total_hits": 1,
+        "maximum_combo": 1,
+        "replays_watched_by_others": 1,
+        "is_ranked": true,
+        "grade_counts": {
+            "ss": 1,
+            "ssh": 1,
+            "s": 1,
+            "sh": 1,
+            "a": 1
+        },
+        "country_rank": 1,
+        "rank": {
+            "country": 1
+        }
+    },
+    "support_level": 1,
+    "user_achievements": [
+        {
+            "achieved_at": "2022-07-15T07:50:31+00:00",
+            "achievement_id": 222
+        }
+    ],
+    "rankHistory": {
+        "mode": "osu",
+        "data": [1]
+    },
+    "rank_history": {
+        "mode": "osu",
+        "data": [1]
+    },
+    "ranked_and_approved_beatmapset_count": 1,
+    "unranked_beatmapset_count": 1
+}
