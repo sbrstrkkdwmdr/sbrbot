@@ -1523,23 +1523,52 @@ export function ping(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const trueping = `${calc.toCapital(input.commandType)} latency: ${input.obj.createdAt.getTime() - new Date().getTime()}ms`
+    const trueping = `${calc.toCapital(input.commandType)} latency: ${Math.abs(input.obj.createdAt.getTime() - new Date().getTime())}ms`
 
     const pingEmbed = new Discord.EmbedBuilder()
         .setTitle('Pong!')
         .setColor(colours.embedColour.info.dec)
-        .setDescription(`Client latency: ${input.client.ws.ping}ms
-        ${trueping}`);
+        .setDescription(`
+Client latency: ${input.client.ws.ping}ms
+${trueping}`);
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage(
-        {
-            commandType: input.commandType,
-            obj: input.obj,
-            args: {
-                embeds: [pingEmbed]
-            }
+
+
+    const preEdit = new Date()
+    //@ts-expect-error
+    //This expression is not callable.
+    //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
+    input.obj.reply({
+        embeds: [pingEmbed],
+        allowedMentions: { repliedUser: false },
+        failIfNotExists: true
+    }).then((msg: Discord.Message<any> | Discord.CommandInteraction) => {
+        const timeToEdit = new Date().getTime() - preEdit.getTime()
+        pingEmbed.setDescription(`
+Client latency: ${input.client.ws.ping}ms
+${trueping}
+${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
+`);
+        switch (input.commandType) {
+            case 'message':
+                //@ts-expect-error 'edit' property does not exist on CommandInteraction
+                msg.edit({
+                    embeds: [pingEmbed],
+                    allowedMentions: { repliedUser: false },
+                })
+                break;
+            case 'interaction':
+                //@ts-expect-error 'editReply' property does not exist on Message<any>
+                input.obj.editReply({
+                    embeds: [pingEmbed],
+                    allowedMentions: { repliedUser: false },
+                })
+                break;
+
         }
-    )
+    })
+        .catch();
+
 
 
 
