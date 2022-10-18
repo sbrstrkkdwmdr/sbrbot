@@ -1061,7 +1061,6 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
-            value = input.args[0] ?? 100;
             if (input.args.includes('-osu')) {
                 mode = 'osu'
                 input.args.splice(input.args.indexOf('-osu'), 1);
@@ -1094,6 +1093,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
+            value = input.args[0] ?? 100;
         }
             break;
         //==============================================================================================================================================================================================
