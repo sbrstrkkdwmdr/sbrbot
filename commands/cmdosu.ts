@@ -9239,16 +9239,16 @@ export async function saved(input: extypes.commandInput) {
     if (cuser) {
         Embed.addFields([{
             name: 'Username',
-            value: cuser.osuname ?? 'undefined',
+            value: `${cuser.osuname && cuser.mode.length > 1 ? cuser.osuname : 'undefined'}`,
             inline: true
         },
         {
             name: 'Mode',
-            value: cuser.mode ?? 'osu (default)',
+            value: `${cuser.mode && cuser.mode.length > 1 ? cuser.mode : 'osu (default)'}`,
         },
         {
             name: 'Skin',
-            value: cuser.skin ?? 'None',
+            value: `${cuser.skin && cuser.skin.length > 1 ? cuser.skin : 'None'}`,
         }
         ]
 
