@@ -1,6 +1,5 @@
 node_modules/
 debug/
-<<<<<<< HEAD
 logs/
 config/
 *.log
@@ -22,16 +21,3 @@ log.txt
 cache/
 *.traineddata
 id.txt
-=======
-*.bat
-logs/
-files/music/
-files/ffmpegbin
-files/maps
-*.js
-!setup.js
-*.traineddata
-files/tempdiff.osu
-*OLD.ts
-configs/guilds/
->>>>>>> main

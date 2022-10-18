@@ -1,70 +1,27 @@
-const checks = require('./calc/commandchecks');
 import fs = require('fs');
-import osuapiext = require('osu-api-extended');
 import osumodcalc = require('osumodcalculator');
 import fetch from 'node-fetch';
-import { OAuth } from './configs/osuApiTypes';
+import osuapitypes = require('./src/types/osuApiTypes');
+import extypes = require('./src/types/extraTypes');
 import Discord = require('discord.js');
+import track = require('./src/trackfunc');
+import Sequelize = require('sequelize');
+import osufunc = require('./src/osufunc');
+import osuApiTypes = require('./src/types/osuApiTypes');
 
-module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, config) => {
-
-    //update oauth access token
-   /*  setInterval(async () => {
-        const newtoken: OAuth = await fetch('https://osu.ppy.sh/oauth/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-            ,
-            body: JSON.stringify({
-                grant_type: 'client_credentials',
-                client_id: osuClientID,
-                client_secret: osuClientSecret,
-                scope: 'public'
-            })
-
-        }).then(res => res.json() as any)
-            .catch(error => {
-                fs.appendFileSync(`logs/updates.log`,
-                    `
-        ----------------------------------------------------
-        ERROR
-        node-fetch error: ${error}
-        ----------------------------------------------------
-        `, 'utf-8')
-            });
-        if (newtoken.access_token) {
-            fs.writeFileSync('configs/osuauth.json', JSON.stringify(newtoken))
-            fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
-        }
-
-    }, 1 * 60 * 1000); */
-
-    //clear maps folder
-    try {
-        fs.readdirSync('files/maps').forEach(file => {
-            fs.unlinkSync('files/maps/' + file)
-        }
-        )
-        fs.appendFileSync('logs/updates.log', '\nmaps folder cleared at ' + new Date().toLocaleString() + '\n')
-    } catch (error) {
-        fs.appendFileSync('logs/updates.log', '\n' + new Date().toLocaleString() + '\n' + error + '\n')
-    }
+module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, trackDb, statsCache) => {
 
     setInterval(() => {
-        try {
-            fs.readdirSync('files/maps').forEach(file => {
-                fs.unlinkSync('files/maps/' + file)
-            }
-            )
-            fs.appendFileSync('logs/updates.log', '\nmaps folder cleared at ' + new Date().toLocaleString() + '\n')
-        } catch (error) {
-            fs.appendFileSync('logs/updates.log', '\n' + new Date().toLocaleString() + '\n' + error + '\n')
-        }
-    }
-        , 60 * 60 * 1000);
+        clearMapFiles();
+    }, 60 * 60 * 1000);
 
+    setInterval(() => {
+        clearCommandCache();
+    }, 1000 * 60);
 
+    setInterval(async () => {
+        //rankings
+    }, 1000 * 60 * 60 * 24); 
 
     //status updates
     const songsarr = [
@@ -94,7 +51,7 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: songsarr[Math.floor(Math.random() * songsarr.length)] + " | sbr-help",//"Yomi Yori kikoyu, Koukoku no hi to Honoo no Shoujo | sbr-help",
+            name: songsarr[Math.floor(Math.random() * songsarr.length)] + " | sbr-help",
             type: 2,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
@@ -145,11 +102,35 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
 
 
     client.on('messageCreate', async (message) => {
+
+        const currentGuildId = message.guildId
+        let settings: extypes.guildSettings;
+        let prefix: string = config.prefix;
+
+        if (
+            typeof prefix === 'undefined' ||
+            prefix === null ||
+            prefix === ''
+        ) {
+            prefix = config.prefix;
+        }
+
+        //if message mentions bot and no other args given, return prefix
         if (message.mentions.users.size > 0) {
             if (message.mentions.users.first().id == client.user.id && message.content.replaceAll(' ', '').length == (`<@${client.user.id}>`).length) {
-                return message.reply({ content: `Prefix is \`${config.prefix}\``, allowedMentions: { repliedUser: false } })
+                let serverPrefix = 'null'
+                try {
+                    const curGuildSettings = await guildSettings.findOne({ where: { guildid: message.guildId } });
+                    settings = curGuildSettings.dataValues;
+                    serverPrefix = settings.prefix
+                } catch (error) {
+                    serverPrefix = config.prefix
+                }
+                return message.reply({ content: `Global prefix is \`${prefix}\`\nServer prefix is \`${serverPrefix}\``, allowedMentions: { repliedUser: false } })
             }
         }
+
+        //if message is a cooldown message, delete it after 3 seconds
         if (message.content.startsWith('You\'re on cooldown') && message.author.id == client.user.id) {
             setTimeout(() => {
                 message.delete()
@@ -160,15 +141,113 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
     })
 
 
-    /* 
-        let osupp;
+    //create settings for new guilds
+    client.on('guildCreate', async (guild) => {
+        createGuildSettings(guild);
+    })
+    setInterval(() => {
+        clearUnused();
+    }, 10 * 60 * 1000);
+
+    clearUnused();
+
+    async function createGuildSettings(guild: Discord.Guild) {
+        try {
+            await guildSettings.create({
+                guildid: guild.id ?? null,
+                guildname: guild.name ?? null,
+                prefix: config.prefix,
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function clearUnused() {
         (async () => {
-            //await osuapiext.auth.authorize(osuClientID, osuClientSecret, '');
-    
-            osupp = osuapiext.tools.pp.calculate(1186443, osumodcalc.ModStringToInt('HDDT'), 412, 0, 96.95)
-                .then(x => {
-                    console.log(x)
-                })
-        })(); */
+            await guildSettings.destroy({
+                where: { guildid: null, guildname: null }
+            })
+        })();
+    }
+
+    const cacheById = [
+        'bmsdata',
+        'mapdata',
+        'osudata',
+        'scoredata',
+    ]
+
+    /**
+     * removes map files that are older than 1 hour
+     */
+    function clearMapFiles() {
+        const files = fs.readdirSync('./files/maps')
+        for (const file of files) {
+            fs.stat('./files/maps/' + file, (err, stat) => {
+                if (err) {
+                    return;
+                } else {
+                    if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
+                        fs.unlinkSync('./files/maps/' + file)
+                        // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                    }
+                }
+            })
+
+        }
+    }
+
+
+    /**
+     * command-specific files are deleted after 15 minutes of being unused.
+     * maps and users are stored for an hour
+     */
+    function clearCommandCache() {
+        const files = fs.readdirSync('./cache/commandData')
+        for (const file of files) {
+            fs.stat('./cache/commandData/' + file, (err, stat) => {
+                if (err) {
+                    return;
+                } else {
+                    if (cacheById.some(x => file.startsWith(x))) {
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
+                            fs.unlinkSync('./cache/commandData/' + file)
+                            // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                        }
+                    } else {
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 15)) {
+                            fs.unlinkSync('./cache/commandData/' + file)
+                            // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                        }
+                    }
+                }
+            })
+
+        }
+    }
+
+    async function rankings(db){
+        osufunc.userStatsCache(
+            await osufunc.apiget('custom', `rankings/osu/performance`, null, 2, 0, true),
+            db,
+            'osu'
+        );
+        osufunc.userStatsCache(
+            await osufunc.apiget('custom', `rankings/taiko/performance`, null, 2, 0, true),
+            db,
+            'taiko'
+        );
+        osufunc.userStatsCache(
+            await osufunc.apiget('custom', `rankings/fruits/performance`, null, 2, 0, true),
+            db,
+            'fruits'
+        );
+        osufunc.userStatsCache(
+            await osufunc.apiget('custom', `rankings/mania/performance`, null, 2, 0, true),
+            db,
+            'mania'
+        );
+    }
 
 }

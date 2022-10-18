@@ -1,16 +1,15 @@
-import cmdconfig = require('./configs/commandopts');
+import cmdconfig = require('./src/consts/commandopts');
 import Discord = require('discord.js');
-module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, config) => {
-
-    const guildID = config.testGuildID;
-    //const guild = client.guilds.cache.get(guildID);
-    //let commands;
-    /*     let settoguild = 0
-        if (settoguild == 1 && guild) {
-            commands = guild.commands
-        } else { */
+module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => {
+    /*
+            const guildID = config.testGuildID;
+        const guild = client.guilds.cache.get(guildID);
+        let commands;
+             let settoguild = 0
+            if (settoguild == 1 && guild) {
+                commands = guild.commands
+            } else { */
     const commands = client.application?.commands
-    //}
 
     commands?.set([{
         name: 'ping',
@@ -40,7 +39,7 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
                 description: 'The type of gif to send',
                 type: Discord.ApplicationCommandOptionType.String,
                 required: true,
-                choices: cmdconfig.gifopts
+                choices: cmdconfig.gifopts,
             }
         ]
     },
@@ -215,238 +214,61 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
 
     //below are osu related commands
     {
-        name: 'osu',
-        description: 'Displays the user\'s osu! profile',
+        name: 'compare',
+        description: 'Compares two users/scores',
         dmPermission: false,
         options: [
             {
-                name: 'user',
-                description: 'The user to display the profile of',
-                type: Discord.ApplicationCommandOptionType.String,
+                name: 'type',
+                description: 'The type of comparison',
                 required: false,
+                type: Discord.ApplicationCommandOptionType.String,
+                choices: [
+                    {
+                        name: 'profile',
+                        value: 'profile'
+                    },
+                    {
+                        name: 'top plays',
+                        value: 'top'
+                    },
+                    // {
+                    //     name: 'map scores',
+                    //     value: 'mapscore'
+                    // },
+                ]
             },
             {
-                name: 'detailed',
-                description: 'Displays extra information',
-                type: Discord.ApplicationCommandOptionType.Boolean,
+                name: 'first',
+                description: 'The first user to compare',
                 required: false,
-                default: false
+                type: Discord.ApplicationCommandOptionType.String,
             },
             {
-                name: 'mode',
-                description: 'The mode to display the profile in',
+                name: 'second',
+                description: 'The second user to compare',
+                required: false,
                 type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-                choices: cmdconfig.modeopts
-            }
-        ]
-    },
-    {//alternate command for osu
-        name: 'o',
-        description: 'Displays the user\'s osu! profile',
-        dmPermission: false,
-        options: [
-            {
-                name: 'user',
-                description: 'The user to display the profile of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            },
-            {
-                name: 'detailed',
-                description: 'Displays extra information',
-                type: Discord.ApplicationCommandOptionType.Boolean,
-                required: false,
-                default: false
             },
             {
                 name: 'mode',
-                description: 'The mode to display the profile in',
-                type: Discord.ApplicationCommandOptionType.String,
+                description: 'The gamemode to use',
                 required: false,
+                type: Discord.ApplicationCommandOptionType.String,
                 choices: cmdconfig.modeopts
             }
         ]
     },
     {
-        name: 'osuset',
-        description: 'Sets the user\'s osu! profile',
+        name: 'firsts',
+        description: 'Displays the user\'s #1 scores',
         dmPermission: false,
-        options: [
-            {
-                name: 'user',
-                description: 'The user to set the profile of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: true,
-            },
-            {
-                name: 'mode',
-                description: 'The mode to set the profile to',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-                choices: cmdconfig.modeopts,
-                default: 'osu'
-            },
-            {
-                name: 'skin',
-                description: 'The player\'s skin',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-
-            }
-        ]
+        options: cmdconfig.playArrayOpts
     },
     {
-        name: 'osutop',
-        description: 'Displays the top plays of the user',
+        name: 'lb',
+        description: 'Displays the server leaderboard',
         dmPermission: false,
-        options: [
-            {
-                name: 'user',
-                description: 'The user to display the top plays of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            },
-            {
-                name: 'mode',
-                description: 'The mode to display the top plays of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-                choices: cmdconfig.modeopts
-            },
-            {
-                name: 'sort',
-                description: 'The sort to display the top plays of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-                choices: cmdconfig.playsortopts
-            },
-            {
-                name: 'reverse',
-                description: 'If true, the top plays will be displayed in reverse',
-                type: Discord.ApplicationCommandOptionType.Boolean,
-                required: false,
-            },
-            {
-                name: 'page',
-                description: 'The page to display the top plays of',
-                type: Discord.ApplicationCommandOptionType.Integer,
-                required: false,
-                default: 1,
-                minValue: 1,
-                maxValue: 20
-            },
-            {
-                name: 'mapper',
-                description: 'Filter the top plays to show maps from this mapper',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            },
-            {
-                name: 'mods',
-                description: 'Filter the top plays to show only plays with these mods',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            },
-            {
-                name: 'detailed',
-                description: 'Show all details',
-                type: Discord.ApplicationCommandOptionType.Boolean,
-                required: false,
-                default: false
-            },
-            {
-                name: 'compact',
-                description: 'Whether or not to show the compact version of the top plays',
-                type: Discord.ApplicationCommandOptionType.Boolean,
-                required: false,
-                default: false
-            }
-        ]
-    },
-    {
-        name: 'map',
-        description: 'Displays the map info of the map',
-        dmPermission: false,
-        options: [
-            {
-                name: 'id',
-                description: 'The id of the map to display',
-                type: Discord.ApplicationCommandOptionType.Integer,
-                required: false,
-                minValue: 1
-            },
-            {
-                name: 'mods',
-                description: 'The mods to display the map info of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            },
-            {
-                name: 'detailed',
-                description: 'Show all details',
-                type: Discord.ApplicationCommandOptionType.Boolean,
-                required: false,
-                default: false
-            },
-            {
-                name: 'name',
-                description: 'The name of the map to display',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            }
-        ]
-    },
-    {//alternate command for map
-        name: 'm',
-        description: 'Displays the map info of the map',
-        dmPermission: false,
-        options: [
-            {
-                name: 'id',
-                description: 'The id of the map to display',
-                type: Discord.ApplicationCommandOptionType.Integer,
-                required: false,
-                minValue: 1
-            },
-            {
-                name: 'mods',
-                description: 'The mods to display the map info of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            },
-            {
-                name: 'detailed',
-                description: 'Show all details',
-                type: Discord.ApplicationCommandOptionType.Boolean,
-                required: false,
-                default: false
-            }
-        ]
-    },
-    {
-        name: 'rs',
-        description: 'Displays the user\'s most recent score',
-        dmPermission: false,
-        options: cmdconfig.rsopts
-    },
-    {//alternate command for rs
-        name: 'recent',
-        description: 'Displays the user\'s most recent score',
-        dmPermission: false,
-        options: cmdconfig.rsopts
-    },
-    {
-        name: 'scores',
-        description: 'Displays the user\'s scores for a set map',
-        dmPermission: false,
-        options: cmdconfig.useridsortopts
-    },
-    {//alternate command for scores
-        name: 'c',
-        description: 'Displays the user\'s scores for a set map',
-        dmPermission: false,
-        options: cmdconfig.useridsortopts
     },
     {
         name: 'leaderboard',
@@ -507,91 +329,426 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
         ]
     },
     {
-        name: 'lb',
-        description: 'Displays the server leaderboard',
-        dmPermission: false,
-    },
-    {
-        name: 'compare',
-        description: 'Compares two users/scores',
+        name: 'map',
+        description: 'Displays the map info of the map',
         dmPermission: false,
         options: [
             {
-                name: 'type',
-                description: 'The type of comparison',
+                name: 'id',
+                description: 'The id of the map to display',
+                type: Discord.ApplicationCommandOptionType.Integer,
                 required: false,
-                type: Discord.ApplicationCommandOptionType.String,
+                minValue: 1
             },
-            {
-                name: 'first',
-                description: 'The first user/score to compare',
-                required: false,
-                type: Discord.ApplicationCommandOptionType.String,
-            },
-            {
-                name: 'second',
-                description: 'The second user/score to compare',
-                required: false,
-                type: Discord.ApplicationCommandOptionType.String,
-            }
-        ]
-    },
-    /* {
-        name: 'osumodcalc',
-        description: 'Calculates the values for a map based on the values given',
-        dmPermission: false,
-        options: [
             {
                 name: 'mods',
-                description: 'The mods to calculate the values for',
-                required: true,
-                type: Discord.ApplicationCommandOptionType.String
+                description: 'The mods to display the map info of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
             },
             {
-                name: 'cs',
-                description: 'The circle size to calculate the values for',
-                required: true,
-                type: Discord.ApplicationCommandOptionType.Number,
-                minValue: 0,
-                maxValue: 11
+                name: 'detailed',
+                description: 'Show all details',
+                type: Discord.ApplicationCommandOptionType.Boolean,
+                required: false,
+                default: false
             },
             {
-                name: 'ar',
-                description: 'The approach rate to calculate the values for',
-                required: true,
-                type: Discord.ApplicationCommandOptionType.Number,
-                minValue: 0,
-                maxValue: 11
-            },
+                name: 'query',
+                description: 'The name of the map to display',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            }
+        ]
+    },
+    {//alternate command for map
+        name: 'm',
+        description: 'Displays the map info of the map',
+        dmPermission: false,
+        options: [
             {
-                name: 'od',
-                description: 'The overall difficulty to calculate the values for',
-                required: true,
-                type: Discord.ApplicationCommandOptionType.Number,
-                minValue: 0,
-                maxValue: 11
-            },
-            {
-                name: 'hp',
-                description: 'The HP to calculate the values for',
-                required: true,
-                type: Discord.ApplicationCommandOptionType.Number,
-                minValue: 0,
-                maxValue: 11
-            },
-            {
-                name: 'bpm',
-                description: 'The BPM to calculate the values for',
-                required: true,
-                type: Discord.ApplicationCommandOptionType.Number,
+                name: 'id',
+                description: 'The id of the map to display',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: false,
                 minValue: 1
+            },
+            {
+                name: 'mods',
+                description: 'The mods to display the map info of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            },
+            {
+                name: 'detailed',
+                description: 'Show all details',
+                type: Discord.ApplicationCommandOptionType.Boolean,
+                required: false,
+                default: false
+            }
+        ]
+    },
+    {
+        name: 'nochokes',
+        description: 'Displays the user\'s top scores without misses',
+        dmPermission: false,
+        options: cmdconfig.playArrayOpts
+    },
+    {//alternate command for nochokes
+        name: 'nc',
+        description: 'Displays the user\'s top scores without misses',
+        dmPermission: false,
+        options: cmdconfig.playArrayOpts
+    },
+    {
+        name: 'osu',
+        description: 'Displays the user\'s osu! profile',
+        dmPermission: false,
+        options: [
+            {
+                name: 'user',
+                description: 'The user to display the profile of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            },
+            {
+                name: 'detailed',
+                description: 'Displays extra information',
+                type: Discord.ApplicationCommandOptionType.Boolean,
+                required: false,
+                default: false
+            },
+            {
+                name: 'mode',
+                description: 'The mode to display the profile in',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: cmdconfig.modeopts
+            }
+        ]
+    },
+    {//alternate command for osu
+        name: 'o',
+        description: 'Displays the user\'s osu! profile',
+        dmPermission: false,
+        options: [
+            {
+                name: 'user',
+                description: 'The user to display the profile of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            },
+            {
+                name: 'detailed',
+                description: 'Displays extra information',
+                type: Discord.ApplicationCommandOptionType.Boolean,
+                required: false,
+                default: false
+            },
+            {
+                name: 'mode',
+                description: 'The mode to display the profile in',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: cmdconfig.modeopts
+            }
+        ]
+    },
+    {//alternate command for osu
+        name: 'user',
+        description: 'Displays the user\'s osu! profile',
+        dmPermission: false,
+        options: [
+            {
+                name: 'user',
+                description: 'The user to display the profile of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            },
+            {
+                name: 'detailed',
+                description: 'Displays extra information',
+                type: Discord.ApplicationCommandOptionType.Boolean,
+                required: false,
+                default: false
+            },
+            {
+                name: 'mode',
+                description: 'The mode to display the profile in',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: cmdconfig.modeopts
+            }
+        ]
+    },
+    {
+        name: 'osuset',
+        description: 'Sets the user\'s osu! profile',
+        dmPermission: false,
+        options: [
+            {
+                name: 'user',
+                description: 'The user to set the profile of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            },
+            {
+                name: 'mode',
+                description: 'The mode to set the profile to',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: cmdconfig.modeopts,
+                default: 'osu'
+            },
+            {
+                name: 'skin',
+                description: 'The player\'s skin',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
 
             }
         ]
-
-
-    }, */
-
+    },
+    {
+        name: 'osutop',
+        description: 'Displays the top plays of the user',
+        dmPermission: false,
+        options: cmdconfig.playArrayOpts
+    },
+    {
+        name: 'pinned',
+        description: 'Displays the user\'s pinned scores',
+        dmPermission: false,
+        options: cmdconfig.playArrayOpts
+    },
+    {
+        name: 'pp',
+        description: 'Estimates the rank of a user from the pp given',
+        dmPermission: false,
+        options: [
+            {
+                name: 'value',
+                description: 'The pp to estimate the rank of',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: true,
+                minValue: 1
+            },
+            {
+                name: 'mode',
+                description: 'The mode to estimate the rank in',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: cmdconfig.modeopts
+            },
+        ]
+    },
+    {
+        name: 'rank',
+        description: 'Estimates the pp of a user from the rank given',
+        dmPermission: false,
+        options: [
+            {
+                name: 'value',
+                description: 'The rank to estimate the pp of',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: true,
+                minValue: 1
+            },
+            {
+                name: 'mode',
+                description: 'The mode to estimate the pp in',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: cmdconfig.modeopts
+            }
+        ]
+    },
+    {
+        name: 'ranking',
+        description: 'Displays the global leaderboards',
+        dmPermission: false,
+        options: [
+            {
+                name: 'country',
+                description: 'The country code of the country to use (defaults to global)',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                maxLength: 2,
+            },
+            {
+                name: 'mode',
+                description: 'The mode to display the leaderboards in',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: cmdconfig.modeopts
+            },
+            {
+                name: 'page',
+                description: 'The page to display',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: false,
+                minValue: 1
+            },
+            {
+                name: 'type',
+                description: 'The type of leaderboards to display',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: [
+                    { name: 'performance', value: 'performance' },
+                    { name: 'charts (spotlights)', value: 'charts' },
+                    { name: 'score', value: 'score' },
+                    { name: 'country', value: 'country' },
+                ]
+            },
+            {
+                name: 'spotlight',
+                description: 'The spotlight to display the leaderboards of',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: false,
+            }
+        ]
+    },
+    {
+        name: 'rs',
+        description: 'Displays the user\'s most recent score',
+        dmPermission: false,
+        options: cmdconfig.rsopts
+    },
+    {//alternate command for rs
+        name: 'recent',
+        description: 'Displays the user\'s most recent score',
+        dmPermission: false,
+        options: cmdconfig.rsopts
+    },
+    {
+        name: 'scores',
+        description: 'Displays the user\'s scores for a set map',
+        dmPermission: false,
+        options: cmdconfig.useridsortopts
+    },
+    {//alternate command for scores
+        name: 'c',
+        description: 'Displays the user\'s scores for a set map',
+        dmPermission: false,
+        options: cmdconfig.useridsortopts
+    },
+    {
+        name: 'simulate',
+        description: 'Simulates a play on a map',
+        dmPermission: false,
+        options: [
+            {
+                name: 'id',
+                description: 'The id of the map',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'mods',
+                description: 'The mods to use',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.String,
+            },
+            {
+                name: 'accuracy',
+                description: 'The accuracy to use',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Number,
+            },
+            {
+                name: 'combo',
+                description: 'The maximum combo',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'n300',
+                description: 'The number of hit 300s',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'n100',
+                description: 'The number of hit 100s',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'n50',
+                description: 'The number of hit 50s',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: 'miss',
+                description: 'The number of misses',
+                required: false,
+                type: Discord.ApplicationCommandOptionType.Integer,
+            },
+        ]
+    },
+    {
+        name: 'userbeatmaps',
+        description: 'Displays the user\'s beatmaps',
+        dmPermission: false,
+        options: [
+            {
+                name: 'user',
+                description: 'The user to display the beatmaps of',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+            },
+            {
+                name: 'type',
+                description: 'The type of beatmaps to display',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: [
+                    { name: 'ranked', value: 'ranked' },
+                    { name: 'loved', value: 'loved' },
+                    { name: 'favourites', value: 'favourite' },
+                    { name: 'pending', value: 'pending' },
+                    { name: 'graveyard', value: 'graveyard' },
+                ]
+            },
+            {
+                name: 'reverse',
+                description: 'Whether to reverse the order of the beatmaps',
+                type: Discord.ApplicationCommandOptionType.Boolean,
+                required: false,
+            },
+            {
+                name: 'page',
+                description: 'The page to display',
+                type: Discord.ApplicationCommandOptionType.Integer,
+                required: false,
+                minValue: 1
+            },
+            {
+                name: 'sort',
+                description: 'The sort order to use',
+                type: Discord.ApplicationCommandOptionType.String,
+                required: false,
+                choices: [
+                    { name: 'Title', value: 'title' },
+                    { name: 'Artist', value: 'artist' },
+                    { name: 'Difficulty', value: 'difficulty' },
+                    { name: 'Ranked Status', value: 'status' },
+                    { name: 'Fail Count', value: 'fails' },
+                    { name: 'Play Count', value: 'plays' },
+                    { name: 'Date Submitted', value: 'dateadded' },
+                    { name: 'Favourites', value: 'favourites' },
+                    { name: 'BPM', value: 'bpm' },
+                    { name: 'CS', value: 'cs' },
+                    { name: 'AR', value: 'ar' },
+                    { name: 'OD', value: 'od' },
+                    { name: 'HP', value: 'hp' },
+                    { name: 'Song Length', value: 'length' },
+                ]
+            }
+        ]
+    },
     //below are admin related commands
     {
         name: 'checkperms',
@@ -625,7 +782,6 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
                 minValue: 1
             }
         ],
-        //channelTypes: ['GuildText']
 
     },
     {
@@ -658,7 +814,6 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
                 required: false,
             }
         ],
-        //channelTypes: ['GuildText']
     },
     {
         name: 'find',
@@ -721,406 +876,5 @@ module.exports = (userdata, client, osuApiKey, osuClientID, osuClientSecret, con
             }
         ]
     },
-    // {
-    //     name: 'settings',
-    //     description: 'Opens the settings menu',
-    //     dmPermission: false,
-    //     options: [
-    //         {
-    //             name: 'setting',
-    //             description: 'The setting to change',
-    //             type: Discord.ApplicationCommandOptionType.String,
-    //             required: true,
-    //             choices: [
-    //                 { name: 'Prefix', value: 'prefix' },
-    //                 { name: 'admin', value: 'admin' },
-    //                 { name: 'osu', value: 'osu' },
-    //                 { name: 'general', value: 'general' },
-    //                 { name: 'misc', value: 'misc' },
-    //                 { name: 'music', value: 'music' },
-    //             ]
-    //         }
-    //     ]
-    // },
-    
-    // {
-    //     name: 'settings',
-    //     description: 'Displays/edits the settings of a server',
-    //     dmPermission: false,
-    //     options: [
-    //         {
-    //             name: 'setting',
-    //             description: 'The setting to edit',
-    //             type: Discord.ApplicationCommandOptionType.SubcommandGroup,
-    //             options: [
-    //                 {
-    //                     name: 'admin',
-    //                     description: 'The admin setting to edit',
-    //                     type: Discord.ApplicationCommandOptionType.SubcommandGroup,
-    //                     required: false,
-    //                     options: [
-    //                         {
-    //                             name: 'basic',
-    //                             description: 'The basic setting to edit',
-    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
-    //                             required: false,
-    //                             options: [
-    //                                 {
-    //                                     name: 'enabled',
-    //                                     description: 'Whether or not admin commands are enabled',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'limited',
-    //                                     description: 'Whether or not to limit admin commands to specific channels',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                             ]
-    //                         },
-    //                         {
-    //                             name: 'channels',
-    //                             description: 'The channels to limit admin commands to',
-    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
-    //                             required: false,
-    //                             options: [
-    //                                 {
-    //                                     name: 'add',
-    //                                     description: 'Adds a channel to the list of channels to limit admin commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Channel,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'remove',
-    //                                     description: 'Removes a channel from the list of channels to limit admin commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Channel,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'clear',
-    //                                     description: 'Clears the list of channels to limit admin commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 }
-    //                             ]
-    //                         },
-    //                         {
-    //                             name: 'log',
-    //                             description: 'The log setting to edit',
-    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
-    //                             required: false,
-    //                             options: [
-    //                                 {
-    //                                     name: 'messages',
-    //                                     description: 'Whether or not to log messages edits/deletions',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'guild',
-    //                                     description: 'Whether or not to log guild events',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'channel',
-    //                                     description: 'Whether or not to log channel events',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'role',
-    //                                     description: 'Whether or not to log role events',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'emoji',
-    //                                     description: 'Whether or not to log emoji events',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'user',
-    //                                     description: 'Whether or not to log user events',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'voice',
-    //                                     description: 'Whether or not to log voice events',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'presence',
-    //                                     description: 'Whether or not to log user presence events',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 }
-    //                             ]
-    //                         }
-    //                     ]
-    //                 },
-    //                 {
-    //                     name: 'osu',
-    //                     description: 'The osu! setting to edit',
-    //                     type: Discord.ApplicationCommandOptionType.SubcommandGroup,
-    //                     required: false,
-    //                     options: [
-    //                         {
-    //                             name: 'basic',
-    //                             description: 'The basic setting to edit',
-    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
-    //                             required: false,
-    //                             options: [
-    //                                 {
-    //                                     name: 'enabled',
-    //                                     description: 'Whether or not osu! commands are enabled',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'limited',
-    //                                     description: 'Whether or not to limit the osu! commands to specific channels',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                             ]
-    //                         },
-    //                         {
-    //                             name: 'channels',
-    //                             description: 'The channels to limit osu! commands to',
-    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
-    //                             required: false,
-    //                             options: [
-    //                                 {
-    //                                     name: 'add',
-    //                                     description: 'Adds a channel to the list of channels to limit osu! commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Channel,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'remove',
-    //                                     description: 'Removes a channel from the list of channels to limit osu! commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Channel,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'clear',
-    //                                     description: 'Clears the list of channels to limit osu! commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 }
-    //                             ]
-    //                         },
-    //                         {
-    //                             name: 'parsing',
-    //                             description: 'The parsing setting to edit',
-    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
-    //                             required: false,
-    //                             options: [
-    //                                 {
-    //                                     name: 'parselinks',
-    //                                     description: 'Whether or not to parse osu! links',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'parsereplays',
-    //                                     description: 'Whether or not to parse osu! replays',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'parsescreenshots',
-    //                                     description: 'Whether or not to parse osu! screenshots',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 }
-    //                             ]
-    //                         }
-    //                     ]
-
-    //                 },
-    //                 {
-    //                     name: 'general',
-    //                     description: 'The setting to edit',
-    //                     type: Discord.ApplicationCommandOptionType.SubcommandGroup,
-    //                     required: false,
-    //                     options: [
-    //                         {
-    //                             name: 'basic',
-    //                             description: 'The basic setting to edit',
-    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
-    //                             required: false,
-    //                             options: [
-    //                                 {
-    //                                     name: 'enabled',
-    //                                     description: 'Whether or not general commands are enabled',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'limited',
-    //                                     description: 'Whether or not to limit general commands to specific channels',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                             ]
-    //                         },
-    //                         {
-    //                             name: 'channels',
-    //                             description: 'The channels to limit general commands to',
-    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
-    //                             required: false,
-    //                             options: [
-    //                                 {
-    //                                     name: 'add',
-    //                                     description: 'Adds a channel to the list of channels to limit general commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Channel,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'remove',
-    //                                     description: 'Removes a channel from the list of channels to limit general commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Channel,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'clear',
-    //                                     description: 'Clears the list of channels to limit general commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 }
-    //                             ]
-    //                         }
-    //                     ]
-    //                 },
-    //                 {
-    //                     name: 'misc',
-    //                     description: 'The misc setting to edit',
-    //                     type: Discord.ApplicationCommandOptionType.SubcommandGroup,
-    //                     required: false,
-    //                     options: [
-    //                         {
-    //                             name: 'basic',
-    //                             description: 'The basic setting to edit',
-    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
-    //                             required: false,
-    //                             options: [
-    //                                 {
-    //                                     name: 'enabled',
-    //                                     description: 'Whether or not misc commands are enabled',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'limited',
-    //                                     description: 'Whether or not to limit misc commands to specific channels',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                             ]
-    //                         },
-    //                         {
-    //                             name: 'channels',
-    //                             description: 'The channels to limit misc commands to',
-    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
-    //                             required: false,
-    //                             options: [
-    //                                 {
-    //                                     name: 'add',
-    //                                     description: 'Adds a channel to the list of channels to limit misc commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Channel,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'remove',
-    //                                     description: 'Removes a channel from the list of channels to limit misc commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Channel,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'clear',
-    //                                     description: 'Clears the list of channels to limit misc commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 }
-    //                             ]
-    //                         }
-    //                     ]
-    //                 },
-    //                 {
-    //                     name: 'music',
-    //                     description: 'The music setting to edit',
-    //                     type: Discord.ApplicationCommandOptionType.SubcommandGroup,
-    //                     required: false,
-    //                     options: [
-    //                         {
-    //                             name: 'basic',
-    //                             description: 'The basic setting to edit',
-    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
-    //                             required: false,
-    //                             options: [
-    //                                 {
-    //                                     name: 'enabled',
-    //                                     description: 'Whether or not music commands are enabled',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'limited',
-    //                                     description: 'Whether or not to limit music commands to specific channels',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 },
-    //                             ]
-    //                         },
-    //                         {
-    //                             name: 'channels',
-    //                             description: 'The channels to limit music commands to',
-    //                             type: Discord.ApplicationCommandOptionType.Subcommand,
-    //                             required: false,
-    //                             options: [
-    //                                 {
-    //                                     name: 'add',
-    //                                     description: 'Adds a channel to the list of channels to limit music commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Channel,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'remove',
-    //                                     description: 'Removes a channel from the list of channels to limit music commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Channel,
-    //                                     required: false,
-    //                                 },
-    //                                 {
-    //                                     name: 'clear',
-    //                                     description: 'Clears the list of channels to limit music commands to',
-    //                                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                                     required: false,
-    //                                 }
-    //                             ]
-    //                         }
-    //                     ]
-    //                 },
-    //                 {
-    //                     name: 'reset',
-    //                     description: 'Resets the settings of a server',
-    //                     type: Discord.ApplicationCommandOptionType.Boolean,
-    //                     required: false,
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // },
-
-    {
-        name: 'Bookmark',
-        type: 3,
-        dmPermission: false,
-    }
     ])
 }
