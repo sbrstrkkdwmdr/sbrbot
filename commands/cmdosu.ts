@@ -1474,16 +1474,19 @@ export async function osu(input: extypes.commandInput) {
         return;
     }
 
+    //check for player's default mode if mode is null
     if ((
         //@ts-expect-error options property does not exist on message
         (input.commandType == 'interaction' && !input.obj?.options?.getString('mode'))
-        || input.commandType == 'message'
+        || input.commandType == 'message' || input.commandType == 'link'
     ) &&
         osudata.playmode != 'osu' &&
         typeof mode != 'undefined') {
         mode = osudata.playmode
         osudata = await osufunc.apiget('user', `${user}`, `${mode}`);
         osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
+    } else {
+        mode = mode ?? 'osu'
     }
 
     if (input.commandType != 'button' || input.button == 'Refresh') {
@@ -1528,7 +1531,7 @@ export async function osu(input: extypes.commandInput) {
     const osuEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.user.dec)
         .setTitle(`${osudata.username}'s ${mode ?? 'osu!'} profile`)
-        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
 
     let useEmbeds = [];
@@ -1553,7 +1556,7 @@ export async function osu(input: extypes.commandInput) {
             const loading = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.user.dec)
                 .setTitle(`${osudata.username}'s ${mode ?? 'osu!'} profile`)
-                .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode}`)
+                .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
                 .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
                 .setDescription(`Loading...`);
 
