@@ -1331,10 +1331,19 @@ export async function osu(input: extypes.commandInput) {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
 
+            //@ts-expect-error content property does not exist on interaction
+            const msgnohttp: string = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
+
             //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            //@ts-expect-error content property does not exist on interaction
-            user = input.obj.content.includes(' ') ? input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '').split('/')[2].split(' ')[0] : input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '').split('/')[2]
+            user = msgnohttp.includes(' ') ? msgnohttp.split('/')[2].split(' ')[0] : msgnohttp.split('/')[2]
+            mode = msgnohttp.includes(' ') ?
+                msgnohttp.split('/')[3] ?
+                    msgnohttp.split('/')[3] : null
+                :
+                msgnohttp.split('/')[3] ?
+                    msgnohttp.split('/')[3] : null
+            //u
         }
     }
 
@@ -1518,7 +1527,7 @@ export async function osu(input: extypes.commandInput) {
 
     const osuEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.user.dec)
-        .setTitle(`${osudata.username}'s ${mode} profile`)
+        .setTitle(`${osudata.username}'s ${mode ?? 'osu!'} profile`)
         .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
 
@@ -1543,7 +1552,7 @@ export async function osu(input: extypes.commandInput) {
         if (detailed == true) {
             const loading = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.user.dec)
-                .setTitle(`${osudata.username}'s ${mode} profile`)
+                .setTitle(`${osudata.username}'s ${mode ?? 'osu!'} profile`)
                 .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode}`)
                 .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
                 .setDescription(`Loading...`);
