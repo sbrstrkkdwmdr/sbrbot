@@ -2,7 +2,9 @@ https://sbrstrkkdwmdr.github.io/sbrbot/
 
 ## install/setup
 
-first, install rust [here](https://www.rust-lang.org/tools/install) 
+install nodejs (v16) [here](https://nodejs.org/en/download/)
+
+install rust [here](https://www.rust-lang.org/tools/install) 
 
 install all dependencies with `npm i`
 
@@ -13,14 +15,14 @@ create a `./config/` folder and put `config.json` inside it
 ```json
 {
   "token": "create app here => https://discord.com/developers/applications",
-  "prefix": "sbr-",
+  "prefix": "string",
   "osuClientID": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
   "osuClientSecret": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
   "osuApiKey": "get api key here => https://osu.ppy.sh/p/api",
   "ownerusers": ["user id"],
   "google": {
     "apiKey": "tutorial below",
-    "cx": "e"
+    "engineId": "id_here"
   },
   "useScreenshotParse": false,
   "LogApiCalls": false
@@ -47,9 +49,19 @@ Discord API wrapper: [Discord.js](discord.js.org/)</br>
 Performance/SR calculations: [rosu](https://github.com/MaxOhn/rosu-pp-js)</br>
 Fetch: [node-fetch](https://www.npmjs.com/package/node-fetch)</br>
 Database: [Sequelize](https://www.npmjs.com/package/sequelize)</br>
-Beatmap downloader: [osu-api-extended](https://github.com/cyperdark/osu-api-extended)</br>
 Mod calculations: [osumodcalculator](https://www.npmjs.com/package/osumodcalculator)</br>
 Image to text parser: [tesseract.js](https://github.com/naptha/tesseract.js)</br>
 Youtube search: [yt-search](https://www.npmjs.com/package/yt-search)</br>
 Graph/chart generator: [chartjs-to-image](https://www.npmjs.com/package/chartjs-to-image)</br>
 osr file parser: [osureplayparser](https://www.npmjs.com/package/osureplayparser)</br>
+
+## config properties
+</br>token: bot token. go to https://discord.com/developers/applications, create a new app, and create a new bot under the bot section. copy the token from there
+</br>prefix: a string at the start of each message to detect if a message is a command. ie `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't
+</br>osuClientID: the client id of an osu! api v2 app
+</br>osuClientSecret: the secret/token of an osu! api v2 app
+</br>ownerusers: an array of user ids stored as strings. users with these ids can use any command
+</br>google.apiKey: the api key of a google programmable search engine
+</br>google.engineId: the search engine id of a google programmable search engine
+</br>useScreenshotParse: enables/disables the detection of maps in screenshots. Can cause crashes due to high CPU and memory usage
+</br>LogApiCalls: enables/disables logging output to the console
