@@ -15,14 +15,14 @@ create a `./config/` folder and put `config.json` inside it
 ```json
 {
   "token": "create app here => https://discord.com/developers/applications",
-  "prefix": "sbr-",
+  "prefix": "string",
   "osuClientID": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
   "osuClientSecret": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
   "osuApiKey": "get api key here => https://osu.ppy.sh/p/api",
   "ownerusers": ["user id"],
   "google": {
     "apiKey": "tutorial below",
-    "cx": "e"
+    "engineId": "id_here"
   },
   "useScreenshotParse": false,
   "LogApiCalls": false
@@ -54,3 +54,18 @@ Image to text parser: [tesseract.js](https://github.com/naptha/tesseract.js)</br
 Youtube search: [yt-search](https://www.npmjs.com/package/yt-search)</br>
 Graph/chart generator: [chartjs-to-image](https://www.npmjs.com/package/chartjs-to-image)</br>
 osr file parser: [osureplayparser](https://www.npmjs.com/package/osureplayparser)</br>
+
+## config properties
+token: bot token. go to https://discord.com/developers/applications, create a new app, and create a new bot under the bot section. copy the token from there
+prefix: a string at the start of each message to detect if a message is a command. ie `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't
+osuClientID: the client id of an osu! api v2 app
+osuClientSecret: the secret/token of an osu! api v2 app
+ownerusers: an array of user ids stored as strings. users with these ids can use any command
+google.apiKey: the api key of a google programmable search engine
+google.engineId: the search engine id of a google programmable search engine
+useScreenshotParse: enables/disables the detection of maps in screenshots. Can cause crashes due to high CPU and memory usage
+LogApiCalls: enables/disables logging output to the console
+
+
+
+
