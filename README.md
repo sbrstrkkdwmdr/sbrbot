@@ -2,7 +2,9 @@ https://sbrstrkkdwmdr.github.io/sbrbot/
 
 ## install/setup
 
-first, install rust [here](https://www.rust-lang.org/tools/install) 
+install nodejs (v16) [here](https://nodejs.org/en/download/)
+
+install rust [here](https://www.rust-lang.org/tools/install) 
 
 install all dependencies with `npm i`
 
@@ -47,7 +49,6 @@ Discord API wrapper: [Discord.js](discord.js.org/)</br>
 Performance/SR calculations: [rosu](https://github.com/MaxOhn/rosu-pp-js)</br>
 Fetch: [node-fetch](https://www.npmjs.com/package/node-fetch)</br>
 Database: [Sequelize](https://www.npmjs.com/package/sequelize)</br>
-Beatmap downloader: [osu-api-extended](https://github.com/cyperdark/osu-api-extended)</br>
 Mod calculations: [osumodcalculator](https://www.npmjs.com/package/osumodcalculator)</br>
 Image to text parser: [tesseract.js](https://github.com/naptha/tesseract.js)</br>
 Youtube search: [yt-search](https://www.npmjs.com/package/yt-search)</br>
