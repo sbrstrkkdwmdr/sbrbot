@@ -56,15 +56,15 @@ Graph/chart generator: [chartjs-to-image](https://www.npmjs.com/package/chartjs-
 osr file parser: [osureplayparser](https://www.npmjs.com/package/osureplayparser)</br>
 
 ## config properties
-token: bot token. go to https://discord.com/developers/applications, create a new app, and create a new bot under the bot section. copy the token from there
-prefix: a string at the start of each message to detect if a message is a command. ie `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't
-osuClientID: the client id of an osu! api v2 app
-osuClientSecret: the secret/token of an osu! api v2 app
-ownerusers: an array of user ids stored as strings. users with these ids can use any command
-google.apiKey: the api key of a google programmable search engine
-google.engineId: the search engine id of a google programmable search engine
-useScreenshotParse: enables/disables the detection of maps in screenshots. Can cause crashes due to high CPU and memory usage
-LogApiCalls: enables/disables logging output to the console
+</br>token: bot token. go to https://discord.com/developers/applications, create a new app, and create a new bot under the bot section. copy the token from there
+</br>prefix: a string at the start of each message to detect if a message is a command. ie `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't
+</br>osuClientID: the client id of an osu! api v2 app
+</br>osuClientSecret: the secret/token of an osu! api v2 app
+</br>ownerusers: an array of user ids stored as strings. users with these ids can use any command
+</br>google.apiKey: the api key of a google programmable search engine
+</br>google.engineId: the search engine id of a google programmable search engine
+</br>useScreenshotParse: enables/disables the detection of maps in screenshots. Can cause crashes due to high CPU and memory usage
+</br>LogApiCalls: enables/disables logging output to the console
 
 
 
