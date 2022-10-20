@@ -5068,7 +5068,9 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
             )
         rsEmbed
             .setColor(colours.embedColour.scorelist.dec)
-            .setTitle(`Recent plays for ${osudata.username}`);
+            .setTitle(`Recent plays for ${osudata.username}`)
+            .setThumbnail(`${osudata.avatar_url ?? def.images.any.url}`)
+            ;
         const scoresarg = await embedStuff.scoreList(
             {
                 scores: rsdata,
