@@ -178,6 +178,10 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
         'scoredata',
     ]
 
+    const permanentCache = [
+        'mapdataRank', 'mapdataLoved', 'mapdataApproved'
+    ]
+
     /**
      * removes map files that are older than 1 hour
      */
@@ -210,7 +214,10 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
                 if (err) {
                     return;
                 } else {
-                    if (cacheById.some(x => file.startsWith(x))) {
+                    if(permanentCache.some(x => file.startsWith(x))){
+                        //do nothing
+                    }
+                    else if (cacheById.some(x => file.startsWith(x))) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
                             fs.unlinkSync('./cache/commandData/' + file)
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')

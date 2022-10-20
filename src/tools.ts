@@ -2,6 +2,8 @@ import fs = require('fs')
 // import truepath = require('../path').path
 import { path } from '../path';
 const truepath = `${path}`
+import osuApiTypes = require('../src/types/osuApiTypes');
+import calc = require('./calc');
 // truepath.path
 
 export function generateId() {
@@ -82,12 +84,35 @@ const cacheById = [
 export function storeFile(data: {}, id: string | number, name: string) {
     try {
         if (cacheById.some(x => name.includes(x))) {
-            fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2))
+            if (name.includes('mapdata')) {
+                const datamap: osuApiTypes.Beatmap = data as any
+                let status = '';
+                switch (datamap.status) {
+                    case 'ranked':
+                        status = 'Ranked'
+                        break;
+                    case 'loved':
+                        status = 'Loved'
+                        break;
+                    case 'approved':
+                        status = 'Approved'
+                        break;
+                    case 'pending':
+                        status = 'Pending'
+                        break;
+                    default: case 'graveyard':
+                        status = 'Graveyard'
+                        break;
+                }
+                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2))
+            } else {
+                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2))
+            }
         } else {
             fs.writeFileSync(`${truepath}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, JSON.stringify(data, null, 2))
         }
         return true;
-    } catch(error){
+    } catch (error) {
         return error;
     }
 }
@@ -102,7 +127,17 @@ export function findFile(id: string | number, name: string) {
     if (cacheById.some(x => name.includes(x))) {
         if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`)) {
             return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, 'utf-8'));
-        } else {
+        }
+        else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`)) {
+            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`, 'utf-8'));
+        } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`)) {
+            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`, 'utf-8'));
+        } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`)) {
+            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`, 'utf-8'));
+        } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`)) {
+            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`, 'utf-8'));
+        }
+        else {
             return false;
         }
     } else {
