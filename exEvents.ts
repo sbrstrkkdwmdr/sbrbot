@@ -21,7 +21,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
 
     setInterval(async () => {
         //rankings
-    }, 1000 * 60 * 60 * 24); 
+    }, 1000 * 60 * 60 * 24);
 
     //status updates
     const songsarr = [
@@ -192,9 +192,11 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
                 if (err) {
                     return;
                 } else {
-                    if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
-                        fs.unlinkSync('./files/maps/' + file)
-                        // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                    if (file.includes('temp')) {
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
+                            fs.unlinkSync('./files/maps/' + file)
+                            // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                        }
                     }
                 }
             })
@@ -214,7 +216,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
                 if (err) {
                     return;
                 } else {
-                    if(permanentCache.some(x => file.startsWith(x))){
+                    if (permanentCache.some(x => file.startsWith(x))) {
                         //do nothing
                     }
                     else if (cacheById.some(x => file.startsWith(x))) {
@@ -234,7 +236,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
         }
     }
 
-    async function rankings(db){
+    async function rankings(db) {
         osufunc.userStatsCache(
             await osufunc.apiget('custom', `rankings/osu/performance`, null, 2, 0, true),
             db,

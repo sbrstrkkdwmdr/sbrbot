@@ -73,7 +73,9 @@ async function mapcalc(
         gamemode: string,
         mapid: number,
         calctype: number | null
-    }) {
+    },
+    mapIsRank?:string
+    ) {
     let ppl
     let mapscore
     const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
@@ -83,15 +85,16 @@ async function mapcalc(
             if (!fs.existsSync('files/maps/')) {
                 fs.mkdirSync('files/maps/');
             }
+            const mapPath = await dlMap(obj.mapid, mapIsRank);
 
-            if (!fs.existsSync('files/maps/' + obj.mapid + '.osu')) {
-                await dlMap(obj.mapid);
+            if (!(typeof mapPath == 'string')) {
+                return mapPath;
             }
 
             let mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
 
             mapscore = {
-                path: `files/maps/${obj.mapid}.osu`,
+                path: mapPath,
                 params: [
                     {
                         mode: obj.gamemode,
@@ -165,7 +168,8 @@ async function scorecalc(
         hitgeki?: number | null, hit300?: number | null, hitkatu?: number | null, hit100?: number | null, hit50?: number | null, miss: number | null,
         acc: number | null, maxcombo?: number | null, score?: number | null,
         calctype?: number | null, passedObj?: number | null, failed?: boolean | null
-    }
+    },
+    mapIsRank?:string
 ) {
     let ppl;
     let scorenofc;
@@ -181,9 +185,12 @@ async function scorecalc(
                     console.log('creating files/maps/');
                     fs.mkdirSync('files/maps/');
                 }
-                if (!fs.existsSync('files/maps/' + obj.mapid + '.osu')) {
-                    logCall(`${obj.mapid}`, 'Map file not found')
-                    await dlMap(obj.mapid);
+                const mapPath = await dlMap(obj.mapid, mapIsRank);
+
+
+                console.log(typeof mapPath)
+                if (!(typeof mapPath == 'string')) {
+                    return mapPath;
                 }
                 let mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
 
@@ -275,7 +282,7 @@ async function scorecalc(
                     basescore.nKatu = obj.hitkatu
                 }
                 scorenofc = {
-                    path: `./files/maps/${obj.mapid}.osu`,
+                    path: mapPath,
                     params: [
                         basescore,
                         {
@@ -314,9 +321,14 @@ async function straincalc(mapid: number, mods: string, calctype: number, mode: s
     let strains;
     switch (calctype) {
         case 0: default:
+            const mapPath = await dlMap(mapid);
+
+            if (!(typeof mapPath == 'string')) {
+                return mapPath;
+            }
             switch (mode) {
                 case 'osu': {
-                    const strains1 = JSON.parse(JSON.stringify(await rosu.strains(`files/maps/${mapid}.osu`, osumodcalc.ModStringToInt(mods)), null, 2));
+                    const strains1 = JSON.parse(JSON.stringify(await rosu.strains(`${mapPath}`, osumodcalc.ModStringToInt(mods)), null, 2));
                     const aimval = strains1.aim;
                     const aimnoslideval = strains1.aimNoSliders;
                     const speedval = strains1.speed;
@@ -1011,22 +1023,42 @@ export function getMapImages(mapSetId: string | number) {
     }
 }
 
-export async function dlMap(mapid: number | string) {
-    const url = `https://osu.ppy.sh/osu/${mapid}`
-    const path = `./files/maps/${mapid}.osu`
-    if (!fs.existsSync(path)) {
-        fs.mkdirSync(`./files/maps/`, { recursive: true })
+export async function dlMap(mapid: number | string, isRanked?:string) {
+    const mapFiles = fs.readdirSync('./files/maps')
+    let mapDir = '';
+    if (mapFiles.some(x => x.includes(`${mapid}`)) == false) {
+        console.log(mapFiles.some(x => x.includes(`${mapid}`)))
+        let curType = 'temp'
+        if(['ranked', 'loved', 'approved'].some(x => x.includes(isRanked ?? 'temp'))){
+            curType = 'perm'
+        }
+
+        const url = `https://osu.ppy.sh/osu/${mapid}`
+        const path = `./files/maps/${curType}${mapid}.osu`
+        mapDir = path;
+        if (!fs.existsSync(path)) {
+            fs.mkdirSync(`./files/maps/`, { recursive: true })
+        }
+        const writer = fs.createWriteStream(path)
+        const res = await fetch(url)
+        logCall(url, 'Beatmap file download')
+        res.body.pipe(writer)
+        await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve('w');
+            }, 1000)
+        })
+        logCall(mapDir.replace('./', ''), 'saved file')
+    } else {
+        for (let i = 0; i < mapFiles.length; i++) {
+            const curmap = mapFiles[i]
+            if (curmap.includes(`${mapid}`)) {
+                mapDir = `./files/maps/${curmap}`
+            }
+        }
+        logCall(mapDir.replace('./', ''), 'found file')
     }
-    const writer = fs.createWriteStream(path)
-    const res = await fetch(url)
-    logCall(url, 'Beatmap file download')
-    res.body.pipe(writer)
-    await new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve('w');
-        }, 1000)
-    })
-    return;
+    return mapDir.replace('./', '');
 }
 
 /**

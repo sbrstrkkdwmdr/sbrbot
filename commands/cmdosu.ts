@@ -4943,7 +4943,9 @@ export async function recent(input: extypes.commandInput) {
                 calctype: 0,
                 passedObj: 0,
                 failed: false
-            })
+            },
+            
+            )
             if (curscore.rank == 'F') {
                 ppcalcing = await osufunc.scorecalc({
                     mods: curscore.mods.join('').length > 1 ?
@@ -4960,8 +4962,8 @@ export async function recent(input: extypes.commandInput) {
                 }
                 )
             }
-            totaldiff = ppcalcing[0].stars.toFixed(2)
 
+            totaldiff = ppcalcing[0].stars.toFixed(2)
 
             rspp =
                 curscore.pp ?
