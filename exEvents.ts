@@ -195,6 +195,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
                     if (file.includes('temp')) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
                             fs.unlinkSync('./files/maps/' + file)
+                            osufunc.logCall(file, 'deleted file')
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     }
@@ -222,11 +223,13 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
                     else if (cacheById.some(x => file.startsWith(x))) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
                             fs.unlinkSync('./cache/commandData/' + file)
+                            osufunc.logCall(file, 'deleted file')
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     } else {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 15)) {
                             fs.unlinkSync('./cache/commandData/' + file)
+                            osufunc.logCall(file, 'deleted file')
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     }
