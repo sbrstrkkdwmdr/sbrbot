@@ -1788,7 +1788,7 @@ export async function firsts(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-p'), 2);
             }
 
-            if(input.args.includes('-parse')) {
+            if (input.args.includes('-parse')) {
                 parseScore = true;
                 parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
                 input.args.splice(input.args.indexOf('-parse'), 2);
@@ -2185,10 +2185,17 @@ export async function firsts(input: extypes.commandInput) {
     osufunc.debug(firstscoresdata, 'command', 'firsts', input.obj.guildId, 'firstsScoresData');
     func.storeFile(firstscoresdata, input.absoluteID, 'firstscoresdata')
 
-    if(parseScore == true){
+    if (parseScore == true) {
+        let pid = parseInt(parseId) - 1
+        if (pid < 0) {
+            pid = 0
+        }
+        if (pid > firstscoresdata.length) {
+            pid = firstscoresdata.length - 1
+        }
         input.overrides = {
             mode: firstscoresdata?.[0]?.mode ?? 'osu',
-            id: firstscoresdata?.[parseInt(parseId)]?.best_id ?? firstscoresdata?.[0]?.best_id
+            id: firstscoresdata?.[pid]?.best_id
         }
         await scoreparse(input)
         return;
@@ -2774,7 +2781,7 @@ export async function nochokes(input: extypes.commandInput) {
             mapper = null;
             mods = null;
 
-            if(input.args.includes('-parse')) {
+            if (input.args.includes('-parse')) {
                 parseScore = true;
                 parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
                 input.args.splice(input.args.indexOf('-parse'), 2);
@@ -3188,10 +3195,17 @@ export async function nochokes(input: extypes.commandInput) {
         page = Math.ceil(nochokedata.length / 5) - 1
     }
 
-    if(parseScore == true){
+    if (parseScore == true) {
+        let pid = parseInt(parseId) - 1
+        if (pid < 0) {
+            pid = 0
+        }
+        if (pid > nochokedata.length) {
+            pid = nochokedata.length - 1
+        }
         input.overrides = {
             mode: nochokedata?.[0]?.mode ?? 'osu',
-            id: nochokedata?.[parseInt(parseId)]?.best_id ?? nochokedata?.[0]?.best_id
+            id: nochokedata?.[pid]?.best_id
         }
         await scoreparse(input)
         return;
@@ -3323,7 +3337,7 @@ export async function osutop(input: extypes.commandInput) {
             mapper = null;
             mods = null;
             detailed = false;
-            if(input.args.includes('-parse')) {
+            if (input.args.includes('-parse')) {
                 parseScore = true;
                 parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
                 input.args.splice(input.args.indexOf('-parse'), 2);
@@ -3782,10 +3796,17 @@ export async function osutop(input: extypes.commandInput) {
         page = Math.ceil(osutopdata.length / 5) - 1
     }
 
-    if(parseScore == true){
+    if (parseScore == true) {
+        let pid = parseInt(parseId) - 1
+        if (pid < 0) {
+            pid = 0
+        }
+        if (pid > osutopdata.length) {
+            pid = osutopdata.length - 1
+        }
         input.overrides = {
             mode: osutopdata?.[0]?.mode ?? 'osu',
-            id: osutopdata?.[parseInt(parseId)]?.best_id ?? osutopdata?.[0]?.best_id
+            id: osutopdata?.[pid]?.best_id
         }
         await scoreparse(input)
         return;
@@ -3956,7 +3977,7 @@ export async function pinned(input: extypes.commandInput) {
             commanduser = input.obj.author;
             //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if(input.args.includes('-parse')) {
+            if (input.args.includes('-parse')) {
                 parseScore = true;
                 parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
                 input.args.splice(input.args.indexOf('-parse'), 2);
@@ -4342,10 +4363,17 @@ export async function pinned(input: extypes.commandInput) {
         page = Math.ceil(pinnedscoresdata.length / 5) - 1
     }
 
-    if(parseScore == true){
+    if (parseScore == true) {
+        let pid = parseInt(parseId) - 1
+        if (pid < 0) {
+            pid = 0
+        }
+        if (pid > pinnedscoresdata.length) {
+            pid = pinnedscoresdata.length - 1
+        }
         input.overrides = {
             mode: pinnedscoresdata?.[0]?.mode ?? 'osu',
-            id: pinnedscoresdata?.[parseInt(parseId)]?.best_id ?? pinnedscoresdata?.[0]?.best_id
+            id: pinnedscoresdata?.[pid]?.best_id
         }
         await scoreparse(input)
         return;
@@ -5016,7 +5044,7 @@ export async function recent(input: extypes.commandInput) {
                 passedObj: 0,
                 failed: false
             },
-            
+
             )
             if (curscore.rank == 'F') {
                 ppcalcing = await osufunc.scorecalc({
@@ -5523,11 +5551,11 @@ export async function scoreparse(input: extypes.commandInput) {
         }
     }
 
-    if(input.overrides != null){
-        if(input.overrides?.id != null){
+    if (input.overrides != null) {
+        if (input.overrides?.id != null) {
             scoreid = input.overrides.id
         }
-        if(input.overrides?.mode != null){
+        if (input.overrides?.mode != null) {
             scoremode = input.overrides.mode
         }
     }
@@ -5854,7 +5882,7 @@ export async function scores(input: extypes.commandInput) {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;//@ts-ignore
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if(input.args.includes('-parse')) {
+            if (input.args.includes('-parse')) {
                 parseScore = true;
                 parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
                 input.args.splice(input.args.indexOf('-parse'), 2);
@@ -6196,10 +6224,19 @@ export async function scores(input: extypes.commandInput) {
     }
     osufunc.debug(scoredata, 'command', 'scores', input.obj.guildId, 'scoreData');
 
-    if(parseScore == true){
+    if (parseScore == true) {
+        let pid = parseInt(parseId) - 1
+        if (pid < 0) {
+            pid = 0
+        }
+        if (pid > scoredata.length) {
+            pid = scoredata.length - 1
+        }
         input.overrides = {
             mode: scoredata?.[0]?.mode ?? 'osu',
-            id: scoredata?.[parseInt(parseId)]?.best_id ?? scoredata?.[0]?.best_id
+            id: scoredata.slice().sort((a, b) =>
+                parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
+            )?.[pid]?.best_id
         }
         await scoreparse(input)
         return;
