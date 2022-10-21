@@ -6395,11 +6395,53 @@ export async function simulate(input: extypes.commandInput) {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;//@ts-ignore
             const ctn = input.obj.content;
-            if (isNaN(+input.args[0])) {
-                mapid = +input.args[0]
+            if (ctn.includes('-mods')) {
+                mods = input.args[input.args.indexOf('-mods') + 1]
+                input.args.splice(input.args.indexOf('-mods'), 2)
             }
-            if (ctn.includes('+')) {
-                mods = ctn.split('+')[1].split(' ')[0]
+            if (ctn.includes('-acc')) {
+                acc = parseFloat(input.args[input.args.indexOf('-acc') + 1])
+                input.args.splice(input.args.indexOf('-acc'), 2)
+                acc = parseFloat(ctn.split('acc=')[1].split(' ')[0])
+            }
+            if (ctn.includes('-accuracy')) {
+                acc = parseFloat(input.args[input.args.indexOf('-accuracy') + 1])
+                input.args.splice(input.args.indexOf('-accuracy'), 2)
+            }
+            if (ctn.includes('-combo')) {
+                combo = parseInt(input.args[input.args.indexOf('-combo') + 1])
+                input.args.splice(input.args.indexOf('-combo'), 2)
+            }
+            if (ctn.includes('-n300')) {
+                n300 = parseInt(input.args[input.args.indexOf('-n300') + 1])
+                input.args.splice(input.args.indexOf('-n300'), 2)
+            }
+            if (ctn.includes('-300s')) {
+                n300 = parseInt(input.args[input.args.indexOf('-300s') + 1])
+                input.args.splice(input.args.indexOf('-300s'), 2)
+            }
+            if (ctn.includes('-n100')) {
+                n100 = parseInt(input.args[input.args.indexOf('-n100') + 1])
+                input.args.splice(input.args.indexOf('-n100'), 2)
+            }
+            if (ctn.includes('-100s')) {
+                n100 =  parseInt(input.args[input.args.indexOf('-100s') + 1])
+                input.args.splice(input.args.indexOf('-100s'), 2)
+            }
+            if (ctn.includes('-n50')) {
+                n50 = parseInt(input.args[input.args.indexOf('-n50') + 1])
+                input.args.splice(input.args.indexOf('-n50'), 2)
+            }
+            if (ctn.includes('-50s')) {
+                n50 = parseInt(input.args[input.args.indexOf('-50s') + 1])
+                input.args.splice(input.args.indexOf('-50s'), 2)
+            }
+            if (ctn.includes('-miss')) {
+                nMiss = parseInt(input.args[input.args.indexOf('-miss') + 1])
+                input.args.splice(input.args.indexOf('-miss'), 2)
+            }
+            if (ctn.includes('-misses')) {
+                nMiss = parseInt(input.args[input.args.indexOf('-misses') + 1])
             }
             if (ctn.includes('mods=')) {
                 mods = ctn.split('mods=')[1].split(' ')[0]
@@ -6436,6 +6478,12 @@ export async function simulate(input: extypes.commandInput) {
             }
             if (ctn.includes('misses=')) {
                 nMiss = parseInt(ctn.split('misses=')[1].split(' ')[0])
+            }
+            if (isNaN(+input.args[0])) {
+                mapid = +input.args[0]
+            }
+            if (ctn.includes('+')) {
+                mods = ctn.split('+')[1].split(' ')[0]
             }
         }
             break;

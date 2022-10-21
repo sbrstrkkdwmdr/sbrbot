@@ -1610,7 +1610,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'simulate',
         description: 'Simulates a score on a beatmap',
-        usage: 'simulate [id] +[mods] misses=[misses] acc=[accuracy] combo=[combo] n300=[n300] n100=[n100] n50=[n50] miss=[misses]',
+        usage: 'simulate [id] +[mods]  -acc [accuracy] -combo [combo] -n300 [n300] -n100 [n100] -n50 [n50] -miss [misses]',
         slashusage: 'simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses]',
         examples: [
             {
