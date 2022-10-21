@@ -407,7 +407,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'firsts',
         description: 'Shows the #1 global scores of a user',
-        usage: 'firsts [user] [-page] [-(mode)]',
+        usage: 'firsts [user] [-page] [-(mode)] [-parse]',
         slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods]',
         examples: [
             {
@@ -426,6 +426,10 @@ const osucmds: commandInfo[] = [
             {
                 text: '/firsts mods:HDHR sort:recent',
                 descriptor: 'Shows your #1 scores with HDHR sorted by recent'
+            },
+            {
+                text: 'PREFIXMSGfirsts -parse 3',
+                descriptor: 'Returns your 3rd most recent first score'
             }
         ],
         aliases: [],
@@ -495,6 +499,14 @@ const osucmds: commandInfo[] = [
                 description: 'Whether to show detailed information about the scores',
                 options: ['true', 'false'],
                 defaultValue: 'false'
+            },
+            {
+                name: 'parse',
+                type: 'number',
+                required: false,
+                description: 'Parse the score with the specific index',
+                options: ['N/A'],
+                defaultValue: '0'
             }
         ]
     },
@@ -622,7 +634,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'nochokes',
         description: 'Shows the user\'s top plays without misses',
-        usage: 'nochokes [user] [-page] [-(mode)]',
+        usage: 'nochokes [user] [-page] [-(mode)] [-parse]',
         slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
         examples: [
             {
@@ -640,6 +652,10 @@ const osucmds: commandInfo[] = [
             {
                 text: '/nochokes mods:HDHR sort:recent',
                 descriptor: 'Returns your top plays with HDHR sorted by recent without misses'
+            },
+            {
+                text: 'PREFIXMSGnc -parse 2',
+                descriptor: 'Returns your 2nd no miss top play'
             }
         ],
         aliases: ['nc'],
@@ -709,6 +725,14 @@ const osucmds: commandInfo[] = [
                 description: 'Whether to show detailed information about the scores',
                 options: ['true', 'false'],
                 defaultValue: 'false'
+            },
+            {
+                name: 'parse',
+                type: 'number',
+                required: false,
+                description: 'Parse the score with the specific index',
+                options: ['N/A'],
+                defaultValue: '0'
             }
         ]
     },
@@ -825,7 +849,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'osutop',
         description: 'Shows the top scores of a user',
-        usage: 'osutop [user] [-page] [-(mode)] [-mapper] [-mods] [-reverse] [-(sort)]',
+        usage: 'osutop [user] [-page] [-(mode)] [-mapper] [-mods] [-reverse] [-(sort)] [-parse]',
         slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
         examples: [
             {
@@ -847,6 +871,10 @@ const osucmds: commandInfo[] = [
             {
                 text: '/osutop mods:HDHR sort:recent',
                 descriptor: 'Shows your top scores with HDHR sorted by recent'
+            },
+            {
+                text: 'PREFIXMSGtop -parse 3',
+                descriptor: 'Returns your 3rd personal best score'
             }
         ],
         aliases: [
@@ -921,6 +949,14 @@ const osucmds: commandInfo[] = [
                 description: 'Whether to show detailed information about the scores',
                 options: ['true', 'false'],
                 defaultValue: 'false'
+            },
+            {
+                name: 'parse',
+                type: 'number',
+                required: false,
+                description: 'Parse the score with the specific index',
+                options: ['N/A'],
+                defaultValue: '0'
             }
         ]
     },
@@ -1304,6 +1340,10 @@ const osucmds: commandInfo[] = [
             {
                 text: 'PREFIXMSGc 4204',
                 descriptor: 'Shows your scores on the beatmap with the id 4204'
+            },
+            {
+                text: 'PREFIXMSGscores -parse 5',
+                descriptor: 'Returns your fifth most recent score on the most recent beatmap'
             }
         ],
         aliases: ['c'],
@@ -1355,6 +1395,14 @@ const osucmds: commandInfo[] = [
                 description: 'Whether to show detailed information about the scores',
                 options: ['true', 'false'],
                 defaultValue: 'false'
+            },
+            {
+                name: 'parse',
+                type: 'number',
+                required: false,
+                description: 'Parse the score with the specific index',
+                options: ['N/A'],
+                defaultValue: '0'
             }
         ]
     },
