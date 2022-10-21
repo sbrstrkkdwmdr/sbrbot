@@ -10,6 +10,8 @@
 
 //PREFIXMSG gets replaced later
 
+import extypes = require('../types/extratypes')
+
 export type commandInfo = {
     name: string,
     description: string,
@@ -26,7 +28,9 @@ export type commandInfo = {
         required: string | boolean,
         description: string,
         options: string[] | boolean[],
-        defaultValue: string
+        defaultValue: string,
+        commandTypes: extypes.commandType[],
+        examples: string[],
         aliases?: string[]
     }[],
 }
@@ -90,7 +94,9 @@ const cmds: commandInfo[] = [
                 required: true,
                 description: 'The unit to convert from',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['k', 'from:kelvin'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'to',
@@ -105,7 +111,9 @@ const cmds: commandInfo[] = [
                     'grams', 'Newtons(WIP)', 'kilograms(WIP)', 'ounces', 'pounds', 'metric tonnes',
                     'help', 'SI units'
                 ],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['c', 'to:celsius'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'number',
@@ -113,7 +121,9 @@ const cmds: commandInfo[] = [
                 required: true,
                 description: 'The number to convert',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['273.15', 'number:273.15'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -144,7 +154,9 @@ const cmds: commandInfo[] = [
                 required: false,
                 description: 'The command to get information about',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['recent', 'command:osutop'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -182,7 +194,9 @@ const cmds: commandInfo[] = [
                 options: [
                     'non numerical characters are ignored (excluding pi)',
                 ],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['8/2(2+2)', '2^32'],
+                commandTypes: ['message']
             },
             {
                 name: 'type',
@@ -200,7 +214,9 @@ const cmds: commandInfo[] = [
                     'od+dt', 'od+ht', 'od(ms)',
                     'mod int to string'
                 ],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['type:pythag'],
+                commandTypes: ['interaction']
             },
             {
                 name: 'num1',
@@ -208,7 +224,9 @@ const cmds: commandInfo[] = [
                 required: 'true (if using slash command)',
                 description: 'The first number',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['num1:4'],
+                commandTypes: ['interaction']
             },
             {
                 name: 'num2',
@@ -216,7 +234,9 @@ const cmds: commandInfo[] = [
                 required: 'true (sometimes)',
                 description: 'The second number',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['num2:5'],
+                commandTypes: ['interaction']
             }
         ]
     },
@@ -256,11 +276,12 @@ const cmds: commandInfo[] = [
                 required: true,
                 description: 'The time until the reminder',
                 options: [
-                    'format: [number][unit]',
+                    'format: [number][unit] or hh:mm:ss',
                     'units: s, m, h, d, w, y',
-                    'example: 1h30m30s'
                 ],
-                defaultValue: '0s'
+                defaultValue: '0s',
+                examples: ['1h30m30s', '5:23:02'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'reminder',
@@ -268,7 +289,9 @@ const cmds: commandInfo[] = [
                 required: false,
                 description: 'The reminder',
                 options: ['N/A'],
-                defaultValue: 'null'
+                defaultValue: 'null',
+                examples: ['this is a reminder', 'reminder:this is a reminder'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'sendinchannel',
@@ -276,7 +299,9 @@ const cmds: commandInfo[] = [
                 required: false,
                 description: 'Whether to send the reminder in the channel or in a DM. Admin only',
                 options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: 'false',
+                examples: ['sendinchannel:true'],
+                commandTypes: ['interaction']
             }
         ]
     },
@@ -311,9 +336,11 @@ const cmds: commandInfo[] = [
                 name: 'timezone',
                 type: 'string',
                 required: false,
-                description: 'The timezone to show the time in',
-                options: ['N/A'],
-                defaultValue: 'UTC'
+                description: 'The timezone to show the time in (see here - https://stackoverflow.com/a/54500197)',
+                options: ['Formatted as [region][city]'],
+                defaultValue: 'UTC',
+                examples: ['Australia/Melbourne', 'Europe/Warsaw'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     }
@@ -347,7 +374,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the badge weighting of',
                 options: ['N/A'],
-                defaultValue: 'The user who ran the command'
+                defaultValue: 'The user who ran the command',
+                examples: ['DigitalHypno', 'fieryrage'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -384,7 +413,9 @@ const osucmds: commandInfo[] = [
                 options: [
                     'profile', 'top plays'
                 ],
-                defaultValue: 'user'
+                defaultValue: 'user stats (top plays if using "common")',
+                examples: ['type:top'],
+                commandTypes: ['interaction']
             },
             {
                 name: 'first',
@@ -392,7 +423,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The first user to compare',
                 options: ['N/A'],
-                defaultValue: 'The user who ran the command'
+                defaultValue: 'The user who ran the command',
+                examples: ['SaberStrike', 'first:SaberStrike'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'second',
@@ -400,7 +433,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The second user to compare',
                 options: ['N/A'],
-                defaultValue: 'most recent user fetched in the guild'
+                defaultValue: 'most recent user fetched in the guild',
+                examples: ['Soragaton', 'second:Soragaton'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -440,7 +475,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
-                defaultValue: 'The user who ran the command'
+                defaultValue: 'The user who ran the command',
+                examples: ['mrekk', 'user:mrekk'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'mode',
@@ -449,7 +486,8 @@ const osucmds: commandInfo[] = [
                 description: 'The mode to show the scores in',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
                 defaultValue: 'osu',
-                aliases: ['m']
+                examples: ['taiko', 'mode:mania'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'sort',
@@ -457,7 +495,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The sort order of the scores',
                 options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
-                defaultValue: 'pp'
+                defaultValue: 'pp',
+                examples: ['sort:score', '-recent'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'reverse',
@@ -465,7 +505,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Whether to reverse the sort order',
                 options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: 'false',
+                examples: ['reverse:true', '-reverse'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'page',
@@ -474,7 +516,9 @@ const osucmds: commandInfo[] = [
                 description: 'The page of scores to show',
                 options: ['N/A'],
                 defaultValue: '1',
-                aliases: ['p']
+                aliases: ['p'],
+                examples: ['page:6', '-p 4'],
+                commandTypes: ['message', 'interaction', 'button']
             },
             {
                 name: 'mapper',
@@ -482,7 +526,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mapper to filter the scores by',
                 options: ['N/A'],
-                defaultValue: 'null'
+                defaultValue: 'null',
+                examples: ['mapper:Sotarks'],
+                commandTypes: ['interaction']
             },
             {
                 name: 'mods',
@@ -490,7 +536,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mods to filter the scores by',
                 options: mods,
-                defaultValue: 'null'
+                defaultValue: 'null',
+                examples: ['mods:HDHR'],
+                commandTypes: ['interaction']
             },
             {
                 name: 'detailed',
@@ -498,7 +546,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Whether to show detailed information about the scores',
                 options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: 'false',
+                examples: ['detailed:true', '-detailed'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'parse',
@@ -506,7 +556,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Parse the score with the specific index',
                 options: ['N/A'],
-                defaultValue: '0'
+                defaultValue: '0',
+                examples: ['-parse 5'],
+                commandTypes: ['message']
             }
         ]
     },
@@ -522,10 +574,12 @@ const osucmds: commandInfo[] = [
                 name: 'user',
                 type: 'string/integer/user mention',
                 required: false,
-                description: 'The user to show the scores of',
+                description: 'The user to get',
                 options: ['N/A'],
-                defaultValue: 'The user who ran the command'
-            }
+                defaultValue: 'The user who ran the command',
+                examples: ['mrekk', 'user:mrekk'],
+                commandTypes: ['message', 'interaction']
+            },
         ]
     },
     {
@@ -535,7 +589,19 @@ const osucmds: commandInfo[] = [
         slashusage: 'lb',
         examples: [],
         aliases: [],
-        options: []
+        options: [
+            {
+                name: 'page',
+                type: 'integer',
+                required: false,
+                description: 'The page of users to show',
+                options: ['N/A'],
+                defaultValue: '1',
+                aliases: ['p'],
+                examples: [''],
+                commandTypes: ['button']
+            }
+        ]
     },
     {
         name: 'map',
@@ -551,6 +617,14 @@ const osucmds: commandInfo[] = [
                 text: 'PREFIXMSGmap 3013912 +HDHR',
                 descriptor: 'Returns the beatmap with the id 3013912 with HDHR'
             },
+            {
+                text: 'https://osu.ppy.sh/beatmapsets?q=blue%20dragon%20blue%20dragon',
+                descriptor: 'Returns the first result for "blue dragon blue dragon"'
+            },
+            {
+                text: 'https://osu.ppy.sh/beatmapsets/326920#osu/725718 +HDHR',
+                descriptor: 'Returns beatmap 725718 with HDHR'
+            }
         ],
         aliases: ['m'],
         options: [
@@ -560,7 +634,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The map to search for',
                 options: ['N/A'],
-                defaultValue: 'null'
+                defaultValue: 'null',
+                examples: ['"kimi no shiranai monogatari"', 'query:big black blue dragon'],
+                commandTypes: ['message', 'interaction', 'link']
             },
             {
                 name: 'id',
@@ -568,7 +644,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The map ID to search for',
                 options: ['N/A'],
-                defaultValue: 'the most recent map in the guild'
+                defaultValue: 'the most recent map in the guild',
+                examples: ['4204', 'id:4204'],
+                commandTypes: ['message', 'interaction', 'link']
             },
             {
                 name: 'mods',
@@ -576,7 +654,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mods to calculate the map with',
                 options: mods,
-                defaultValue: 'none'
+                defaultValue: 'none',
+                examples: ['+HDHR', 'mods:HDDTHR'],
+                commandTypes: ['message', 'interaction', 'link']
             },
             {
                 name: 'detailed',
@@ -584,7 +664,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Whether to show detailed information about the map',
                 options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: 'false',
+                examples: ['detailed:true'],
+                commandTypes: ['message', 'interaction', 'button']
             }
         ]
     },
@@ -611,7 +693,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The ID of the map to show the leaderboard of',
                 options: ['N/A'],
-                defaultValue: 'the most recent map in the guild'
+                defaultValue: 'the most recent map in the guild',
+                examples: ['4204', 'id:4204'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'page',
@@ -619,7 +703,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The page of the leaderboard to show',
                 options: ['N/A'],
-                defaultValue: '1'
+                defaultValue: '1',
+                examples: ['page:4'],
+                commandTypes: ['message', 'interaction', 'button']
             },
             {
                 name: 'mods',
@@ -627,7 +713,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mods to filter the leaderboard by',
                 options: mods,
-                defaultValue: 'none'
+                defaultValue: 'none',
+                examples: ['+HDHR', 'mods:EZFL'],
+                commandTypes: ['message', 'interaction']
             },
         ]
     },
@@ -666,7 +754,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
-                defaultValue: 'The user who ran the command'
+                defaultValue: 'The user who ran the command',
+                examples: ['mrekk', 'user:mrekk'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'mode',
@@ -675,7 +765,8 @@ const osucmds: commandInfo[] = [
                 description: 'The mode to show the scores in',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
                 defaultValue: 'osu',
-                aliases: ['m']
+                examples: ['taiko', 'mode:mania'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'sort',
@@ -683,7 +774,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The sort order of the scores',
                 options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
-                defaultValue: 'pp'
+                defaultValue: 'pp',
+                examples: ['sort:score', '-recent'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'reverse',
@@ -691,7 +784,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Whether to reverse the sort order',
                 options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: 'false',
+                examples: ['reverse:true', '-reverse'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'page',
@@ -700,7 +795,9 @@ const osucmds: commandInfo[] = [
                 description: 'The page of scores to show',
                 options: ['N/A'],
                 defaultValue: '1',
-                aliases: ['p']
+                aliases: ['p'],
+                examples: ['page:6', '-p 4'],
+                commandTypes: ['message', 'interaction', 'button']
             },
             {
                 name: 'mapper',
@@ -708,7 +805,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mapper to filter the scores by',
                 options: ['N/A'],
-                defaultValue: 'null'
+                defaultValue: 'null',
+                examples: ['mapper:Sotarks'],
+                commandTypes: ['interaction']
             },
             {
                 name: 'mods',
@@ -716,7 +815,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mods to filter the scores by',
                 options: mods,
-                defaultValue: 'null'
+                defaultValue: 'null',
+                examples: ['mods:HDHR'],
+                commandTypes: ['interaction']
             },
             {
                 name: 'detailed',
@@ -724,7 +825,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Whether to show detailed information about the scores',
                 options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: 'false',
+                examples: ['detailed:true', '-detailed'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'parse',
@@ -732,7 +835,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Parse the score with the specific index',
                 options: ['N/A'],
-                defaultValue: '0'
+                defaultValue: '0',
+                examples: ['-parse 5'],
+                commandTypes: ['message']
             }
         ]
     },
@@ -749,11 +854,15 @@ const osucmds: commandInfo[] = [
             },
             {
                 text: '/osu detailed:true mode:taiko',
-                descriptor: 'Shows your taiko profile with detailed information'
+                descriptor: 'Shows your taiko profile with extra details'
             },
             {
                 text: 'PREFIXMSGosu -graph',
                 descriptor: 'Shows a graph of your osu! rank and playcount'
+            },
+            {
+                text: 'osu.ppy.sh/u/15222484/osu -d',
+                descriptor: 'Shows SaberStrike\'s osu profile with extra details'
             }
         ],
         options: [
@@ -763,7 +872,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the profile of',
                 options: ['N/A'],
-                defaultValue: 'The user who ran the command'
+                defaultValue: 'The user who ran the command',
+                examples: ['SaberStrike', 'user:15222484'],
+                commandTypes: ['message', 'interaction', 'link']
             },
             {
                 name: 'detailed',
@@ -771,7 +882,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Whether to show detailed information about the user',
                 options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: 'false',
+                examples: ['-d', '-detailed', 'detailed:true'],
+                commandTypes: ['message', 'interaction', 'button', 'link']
             },
             {
                 name: 'mode',
@@ -779,7 +892,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The gamemode to show the stats of',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'The user\'s default gamemode'
+                defaultValue: 'The user\'s default gamemode',
+                examples: ['-taiko', 'mode:mania', '-ctb'],
+                commandTypes: ['message', 'interaction', 'link']
             },
             {
                 name: 'graph',
@@ -787,7 +902,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Whether to show only user statistics graphs',
                 options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: 'false',
+                examples: ['-g', '-graph'],
+                commandTypes: ['message']
             }
         ]
     },
@@ -826,7 +943,9 @@ const osucmds: commandInfo[] = [
                 required: true,
                 description: 'The osu! username to set',
                 options: ['N/A'],
-                defaultValue: 'null'
+                defaultValue: 'null',
+                examples: ['username:SaberStrike', 'SaberStrike'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'mode',
@@ -834,7 +953,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The osu! mode to set',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu'
+                defaultValue: 'osu',
+                examples: ['-taiko', '-ctb', 'mode:fruits'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'skin',
@@ -842,7 +963,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The skin to set',
                 options: ['N/A'],
-                defaultValue: 'osu! default 2014'
+                defaultValue: 'osu! default 2014',
+                examples: ['-skin sbr v11', 'skin:rafis hddt'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -890,7 +1013,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
-                defaultValue: 'The user who ran the command'
+                defaultValue: 'The user who ran the command',
+                examples: ['mrekk', 'user:mrekk'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'mode',
@@ -899,7 +1024,8 @@ const osucmds: commandInfo[] = [
                 description: 'The mode to show the scores in',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
                 defaultValue: 'osu',
-                aliases: ['m']
+                examples: ['taiko', 'mode:mania'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'sort',
@@ -907,7 +1033,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The sort order of the scores',
                 options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
-                defaultValue: 'pp'
+                defaultValue: 'pp',
+                examples: ['sort:score', '-recent'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'reverse',
@@ -915,7 +1043,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Whether to reverse the sort order',
                 options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: 'false',
+                examples: ['reverse:true', '-reverse'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'page',
@@ -924,7 +1054,9 @@ const osucmds: commandInfo[] = [
                 description: 'The page of scores to show',
                 options: ['N/A'],
                 defaultValue: '1',
-                aliases: ['p']
+                aliases: ['p'],
+                examples: ['page:6', '-p 4'],
+                commandTypes: ['message', 'interaction', 'button']
             },
             {
                 name: 'mapper',
@@ -932,7 +1064,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mapper to filter the scores by',
                 options: ['N/A'],
-                defaultValue: 'null'
+                defaultValue: 'null',
+                examples: ['mapper:Sotarks'],
+                commandTypes: ['interaction']
             },
             {
                 name: 'mods',
@@ -940,7 +1074,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mods to filter the scores by',
                 options: mods,
-                defaultValue: 'null'
+                defaultValue: 'null',
+                examples: ['mods:HDHR'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'detailed',
@@ -948,7 +1084,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Whether to show detailed information about the scores',
                 options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: 'false',
+                examples: ['detailed:true', '-detailed'],
+                commandTypes: ['message', 'interaction', 'button']
             },
             {
                 name: 'parse',
@@ -956,7 +1094,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Parse the score with the specific index',
                 options: ['N/A'],
-                defaultValue: '0'
+                defaultValue: '0',
+                examples: ['-parse 5'],
+                commandTypes: ['message']
             }
         ]
     },
@@ -985,72 +1125,98 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: [],
-        options: [{
-            name: 'user',
-            type: 'string/integer/user mention',
-            required: false,
-            description: 'The user to show the scores of',
-            options: ['N/A'],
-            defaultValue: 'The user who ran the command'
-        },
-        {
-            name: 'mode',
-            type: 'string',
-            required: false,
-            description: 'The mode to show the scores in',
-            options: ['osu', 'taiko', 'fruits', 'mania'],
-            defaultValue: 'osu',
-            aliases: ['m']
-        },
-        {
-            name: 'sort',
-            type: 'string',
-            required: false,
-            description: 'The sort order of the scores',
-            options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
-            defaultValue: 'pp'
-        },
-        {
-            name: 'reverse',
-            type: 'boolean',
-            required: false,
-            description: 'Whether to reverse the sort order',
-            options: ['true', 'false'],
-            defaultValue: 'false'
-        },
-        {
-            name: 'page',
-            type: 'integer',
-            required: false,
-            description: 'The page of scores to show',
-            options: ['N/A'],
-            defaultValue: '1',
-            aliases: ['p']
-        },
-        {
-            name: 'mapper',
-            type: 'string',
-            required: false,
-            description: 'The mapper to filter the scores by',
-            options: ['N/A'],
-            defaultValue: 'null'
-        },
-        {
-            name: 'mods',
-            type: 'string',
-            required: false,
-            description: 'The mods to filter the scores by',
-            options: mods,
-            defaultValue: 'null'
-        },
-        {
-            name: 'detailed',
-            type: 'boolean',
-            required: false,
-            description: 'Whether to show detailed information about the scores',
-            options: ['true', 'false'],
-            defaultValue: 'false'
-        }
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the scores of',
+                options: ['N/A'],
+                defaultValue: 'The user who ran the command',
+                examples: ['mrekk', 'user:mrekk'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode to show the scores in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu',
+                examples: ['taiko', 'mode:mania'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'sort',
+                type: 'string',
+                required: false,
+                description: 'The sort order of the scores',
+                options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
+                defaultValue: 'pp',
+                examples: ['sort:score', '-recent'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'reverse',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to reverse the sort order',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: ['reverse:true', '-reverse'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'page',
+                type: 'integer',
+                required: false,
+                description: 'The page of scores to show',
+                options: ['N/A'],
+                defaultValue: '1',
+                aliases: ['p'],
+                examples: ['page:6', '-p 4'],
+                commandTypes: ['message', 'interaction', 'button']
+            },
+            {
+                name: 'mapper',
+                type: 'string',
+                required: false,
+                description: 'The mapper to filter the scores by',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['mapper:Sotarks'],
+                commandTypes: ['interaction']
+            },
+            {
+                name: 'mods',
+                type: 'string',
+                required: false,
+                description: 'The mods to filter the scores by',
+                options: mods,
+                defaultValue: 'null',
+                examples: ['mods:HDHR'],
+                commandTypes: ['interaction']
+            },
+            {
+                name: 'detailed',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to show detailed information about the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: ['detailed:true', '-detailed'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'parse',
+                type: 'number',
+                required: false,
+                description: 'Parse the score with the specific index',
+                options: ['N/A'],
+                defaultValue: '0',
+                examples: ['-parse 5'],
+                commandTypes: ['message']
+            }
         ]
     },
     {
@@ -1076,7 +1242,9 @@ const osucmds: commandInfo[] = [
                 required: true,
                 description: 'The pp to estimate the rank of',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['12000', 'value:1000'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'mode',
@@ -1084,7 +1252,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mode to estimate the rank in',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu'
+                defaultValue: 'osu',
+                examples: ['mode:mania', '-ctb'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1111,7 +1281,9 @@ const osucmds: commandInfo[] = [
                 required: true,
                 description: 'The rank to estimate the pp of',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['value:5', '1'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'mode',
@@ -1119,7 +1291,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mode to show the scores in',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu'
+                defaultValue: 'osu',
+                examples: ['-fruits', 'mode:mania'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1149,7 +1323,9 @@ const osucmds: commandInfo[] = [
             required: false,
             description: 'The country code of the country to use',
             options: ['N/A'],
-            defaultValue: 'global'
+            defaultValue: 'global',
+            examples: ['AU', 'US', 'NZ'],
+            commandTypes: ['message', 'interaction']
         },
         {
             name: 'mode',
@@ -1158,7 +1334,8 @@ const osucmds: commandInfo[] = [
             description: 'The mode to show the scores in',
             options: ['osu', 'taiko', 'fruits', 'mania'],
             defaultValue: 'osu',
-            aliases: ['m']
+            examples: ['-fruits', 'mode:mania'],
+            commandTypes: ['message', 'interaction']
         },
         {
             name: 'page',
@@ -1167,7 +1344,9 @@ const osucmds: commandInfo[] = [
             description: 'The page of scores to show',
             options: ['N/A'],
             defaultValue: '1',
-            aliases: ['p']
+            aliases: ['p'],
+            examples: ['-p 4', 'page:3'],
+            commandTypes: ['message', 'interaction', 'button']
         },
         {
             name: 'type',
@@ -1175,7 +1354,9 @@ const osucmds: commandInfo[] = [
             required: false,
             description: 'The type of leaderboard to show',
             options: ['performance', 'charts', 'score', 'country'],
-            defaultValue: 'performance'
+            defaultValue: 'performance',
+            examples: ['type:charts'],
+            commandTypes: ['message', 'interaction']
         },
         {
             name: 'spotlight',
@@ -1183,7 +1364,9 @@ const osucmds: commandInfo[] = [
             required: false,
             description: 'The spotlight to show the scores of. Only works with type charts',
             options: ['N/A'],
-            defaultValue: 'latest'
+            defaultValue: 'latest',
+            examples: ['spotlight:227'],
+            commandTypes: ['message', 'interaction']
         }
         ]
     },
@@ -1230,7 +1413,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the score(s) of',
                 options: ['N/A'],
-                defaultValue: 'The user who ran the command'
+                defaultValue: 'The user who ran the command',
+                examples: ['SaberStrike', 'user:SaberStrike'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'page',
@@ -1239,7 +1424,9 @@ const osucmds: commandInfo[] = [
                 description: 'The page of scores to show',
                 options: ['N/A'],
                 defaultValue: '1',
-                aliases: ['p']
+                aliases: ['p'],
+                examples: ['-p 2', 'page:2'],
+                commandTypes: ['message', 'interaction', 'button']
             },
             {
                 name: 'mode',
@@ -1248,7 +1435,8 @@ const osucmds: commandInfo[] = [
                 description: 'The mode to show the score(s) in',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
                 defaultValue: 'osu',
-                aliases: ['m']
+                examples: ['-taiko', 'mode:fruits'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'list',
@@ -1257,7 +1445,9 @@ const osucmds: commandInfo[] = [
                 description: 'Whether to show multiple scores. If false, only the most recent score will be shown',
                 options: ['true', 'false'],
                 defaultValue: 'false',
-                aliases: ['l']
+                aliases: ['l'],
+                examples: ['-l', 'list:true'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1280,7 +1470,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the saved settings of',
                 options: ['N/A'],
-                defaultValue: 'you'
+                defaultValue: 'The user who ran the command',
+                examples: ['@SaberStrike'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1311,15 +1503,19 @@ const osucmds: commandInfo[] = [
                 required: true,
                 description: 'The id of the score',
                 options: ['N/A'],
-                defaultValue: 'null'
+                defaultValue: 'null',
+                examples: ['id:727'],
+                commandTypes: ['message', 'interaction', 'link']
             },
             {
                 name: 'mode',
                 type: 'string',
-                required: false,
+                required: 'false if message command, true if link',
                 description: 'The mode of the score',
                 options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu'
+                defaultValue: 'osu',
+                examples: ['mode:osu'],
+                commandTypes: ['message', 'interaction', 'link']
             }
         ]
     },
@@ -1354,15 +1550,19 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
-                defaultValue: 'The user who ran the command'
+                defaultValue: 'The user who ran the command',
+                examples: ['mrekk', 'user:mrekk'],
+                commandTypes: ['message', 'interaction']
             },
             {
-                name: 'id',
-                type: 'integer',
+                name: 'mode',
+                type: 'string',
                 required: false,
-                description: 'The beatmap id to show the scores of',
-                options: ['N/A'],
-                defaultValue: 'The most recent map in the guild'
+                description: 'The mode to show the scores in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu',
+                examples: ['taiko', 'mode:mania'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'sort',
@@ -1370,7 +1570,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The sort order of the scores',
                 options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
-                defaultValue: 'recent'
+                defaultValue: 'pp',
+                examples: ['sort:score', '-recent'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'reverse',
@@ -1378,7 +1580,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Whether to reverse the sort order',
                 options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: 'false',
+                examples: ['reverse:true', '-reverse'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'page',
@@ -1386,15 +1590,10 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The page of scores to show',
                 options: ['N/A'],
-                defaultValue: '1'
-            },
-            {
-                name: 'detailed',
-                type: 'boolean',
-                required: false,
-                description: 'Whether to show detailed information about the scores',
-                options: ['true', 'false'],
-                defaultValue: 'false'
+                defaultValue: '1',
+                aliases: ['p'],
+                examples: ['page:6', '-p 4'],
+                commandTypes: ['message', 'interaction', 'button']
             },
             {
                 name: 'parse',
@@ -1402,7 +1601,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'Parse the score with the specific index',
                 options: ['N/A'],
-                defaultValue: '0'
+                defaultValue: '0',
+                examples: ['-parse 5'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1425,7 +1626,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The beatmap id to simulate the score on',
                 options: ['N/A'],
-                defaultValue: 'The most recent map in the guild'
+                defaultValue: 'The most recent map in the guild',
+                examples: ['4204', 'id:4204'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'mods',
@@ -1433,7 +1636,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The mods to simulate the score with',
                 options: mods,
-                defaultValue: 'none'
+                defaultValue: 'none',
+                examples: ['+HDDT', 'mods:HDDT'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'accuracy',
@@ -1441,7 +1646,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The accuracy to simulate the score with',
                 options: ['0-100'],
-                defaultValue: '100'
+                defaultValue: '100',
+                examples: ['acc=98.79'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'combo',
@@ -1449,7 +1656,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The maximum combo to simulate the score with',
                 options: ['N/A'],
-                defaultValue: 'map max combo'
+                defaultValue: 'map max combo',
+                examples: ['combo=999'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'n300',
@@ -1457,7 +1666,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The number of hit 300s to simulate the score with',
                 options: ['N/A'],
-                defaultValue: 'calculated from accuracy'
+                defaultValue: 'calculated from accuracy',
+                examples: ['n300=1200'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'n100',
@@ -1465,7 +1676,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The number of hit 100s to simulate the score with',
                 options: ['N/A'],
-                defaultValue: 'calculated from accuracy'
+                defaultValue: 'calculated from accuracy',
+                examples: ['n100=12'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'n50',
@@ -1473,7 +1686,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The number of hit 50s to simulate the score with',
                 options: ['N/A'],
-                defaultValue: 'calculated from accuracy'
+                defaultValue: 'calculated from accuracy',
+                examples: ['n50=2'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'misses',
@@ -1481,7 +1696,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The number of misses to simulate the score with',
                 options: ['N/A'],
-                defaultValue: '0'
+                defaultValue: '0',
+                examples: ['miss=2'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1508,7 +1725,9 @@ const osucmds: commandInfo[] = [
                 required: true,
                 description: 'The user to add to the tracklist',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['SaberStrike', 'user:SaberStrike'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1535,7 +1754,9 @@ const osucmds: commandInfo[] = [
                 required: true,
                 description: 'The channel to send tracklist updates to',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['#trackchannel', '727'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1562,7 +1783,9 @@ const osucmds: commandInfo[] = [
                 required: true,
                 description: 'The user to remove from the tracklist',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['SaberStrike'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1588,7 +1811,9 @@ const osucmds: commandInfo[] = [
             required: false,
             description: 'The user to show the beatmaps of',
             options: ['N/A'],
-            defaultValue: 'The user who ran the command'
+            defaultValue: 'The user who ran the command',
+            examples: ['Sotarks', 'user:Mismagius'],
+            commandTypes: ['message', 'interaction']
         },
         {
             name: 'type',
@@ -1596,7 +1821,9 @@ const osucmds: commandInfo[] = [
             required: false,
             description: 'The type of beatmaps to show',
             options: ['Favourites', 'Ranked', 'Pending', 'Graveyard', 'Loved'],
-            defaultValue: 'Favourites'
+            defaultValue: 'Favourites',
+            examples: ['Ranked', 'type:Loved'],
+            commandTypes: ['message', 'interaction']
         },
         {
             name: 'reverse',
@@ -1604,7 +1831,9 @@ const osucmds: commandInfo[] = [
             required: false,
             description: 'Whether to sort the beatmaps in reverse',
             options: ['true', 'false'],
-            defaultValue: 'false'
+            defaultValue: 'false',
+            examples: ['-reverse', 'reverse:true'],
+            commandTypes: ['message', 'interaction']
         },
         {
             name: 'page',
@@ -1612,7 +1841,9 @@ const osucmds: commandInfo[] = [
             required: false,
             description: 'The page of beatmaps to show',
             options: ['N/A'],
-            defaultValue: '1'
+            defaultValue: '1',
+            examples: ['page:3', '-p 4'],
+            commandTypes: ['message', 'interaction', 'button']
         },
         {
             name: 'sort',
@@ -1620,9 +1851,11 @@ const osucmds: commandInfo[] = [
             required: false,
             description: 'The way to sort the beatmaps',
             options: ['Title', 'Artist', 'Difficulty', 'Status', 'Fails', 'Plays', 'Date Added', 'Favourites', 'BPM', 'CS', 'AR', 'OD', 'HP', 'Length'],
-            defaultValue: 'Date Added'
+            defaultValue: 'Date Added',
+            examples: ['sort:title'],
+            commandTypes: ['message', 'interaction']
         }
-    ]
+        ]
     },
     {
         name: 'whatif',
@@ -1647,7 +1880,9 @@ const osucmds: commandInfo[] = [
                 required: false,
                 description: 'The user to show the stats of',
                 options: ['N/A'],
-                defaultValue: 'The user who ran the command'
+                defaultValue: 'The user who ran the command',
+                examples: ['SaberStrike', 'user:SaberStrike'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'pp',
@@ -1655,7 +1890,9 @@ const osucmds: commandInfo[] = [
                 required: true,
                 description: 'The amount of raw pp to gain',
                 options: ['N/A'],
-                defaultValue: '0'
+                defaultValue: '0',
+                examples: ['72700', 'pp:72700'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     }
@@ -1695,7 +1932,9 @@ const othercmds: commandInfo[] = [
                 required: true,
                 description: 'The type of gif to send',
                 options: [],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1718,7 +1957,9 @@ const othercmds: commandInfo[] = [
                 required: true,
                 description: 'The image to search for',
                 options: [],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['osus', 'query:osus'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1733,8 +1974,8 @@ const othercmds: commandInfo[] = [
                 descriptor: 'Creates a poll with the question "djkfhgfbdkgbkfhdjgdkgd"'
             },
             {
-                text: '/poll title:What is your favorite color? options:red+green+blue',
-                descriptor: 'Creates a poll with the question "What is your favorite color?" and the options "red", "green", and "blue"'
+                text: '/poll title:What is your favorite colour? options:red+green+blue',
+                descriptor: 'Creates a poll with the question "What is your favorite colour?" and the options "red", "green", and "blue"'
             }
         ],
         aliases: ['vote'],
@@ -1745,7 +1986,9 @@ const othercmds: commandInfo[] = [
                 required: true,
                 description: 'The question/title of the poll',
                 options: [],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['question:what\'s your favourite colour?'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'options',
@@ -1753,7 +1996,9 @@ const othercmds: commandInfo[] = [
                 required: false,
                 description: 'The options for the poll',
                 options: ['format: option1+option2+option3...'],
-                defaultValue: 'yes+no'
+                defaultValue: 'yes+no',
+                examples: ['red+green+blue'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1780,7 +2025,9 @@ const othercmds: commandInfo[] = [
                 required: false,
                 description: 'The maximum number to roll',
                 options: ['N/A'],
-                defaultValue: '100'
+                defaultValue: '100',
+                examples: ['345', 'max:234'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'min',
@@ -1788,7 +2035,9 @@ const othercmds: commandInfo[] = [
                 required: false,
                 description: 'The minimum number to roll',
                 options: ['N/A'],
-                defaultValue: '1'
+                defaultValue: '1',
+                examples: ['12', 'min:34'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1811,7 +2060,9 @@ const othercmds: commandInfo[] = [
                 required: true,
                 description: 'The message to send',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'channel',
@@ -1819,7 +2070,9 @@ const othercmds: commandInfo[] = [
                 required: false,
                 description: 'The channel to send the message in',
                 options: ['N/A'],
-                defaultValue: 'current channel'
+                defaultValue: 'current channel',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1842,7 +2095,9 @@ const othercmds: commandInfo[] = [
                 required: true,
                 description: 'The video to search for',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['osus', 'query:osus'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     }
@@ -1868,7 +2123,9 @@ const admincmds: commandInfo[] = [
                 required: false,
                 description: 'The user to check the permissions of',
                 options: ['N/A'],
-                defaultValue: 'The user who ran the command'
+                defaultValue: 'The user who ran the command',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1899,7 +2156,9 @@ const admincmds: commandInfo[] = [
                 required: 'true (if id is not a mention)',
                 description: 'The type of object to find',
                 options: ['user', 'guild', 'channel', 'role', 'emoji'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'id',
@@ -1907,7 +2166,9 @@ const admincmds: commandInfo[] = [
                 required: true,
                 description: 'The id of the object to find',
                 options: ['N/A'],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
             },
         ]
     },
@@ -1930,7 +2191,9 @@ const admincmds: commandInfo[] = [
                 required: false,
                 description: 'The id of the guild to leave',
                 options: ['N/A'],
-                defaultValue: 'the guild the command was sent in'
+                defaultValue: 'the guild the command was sent in',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1953,7 +2216,9 @@ const admincmds: commandInfo[] = [
                 required: true,
                 description: 'The prefix to set',
                 options: [],
-                defaultValue: 'N/A'
+                defaultValue: 'N/A',
+                examples: ['!'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
