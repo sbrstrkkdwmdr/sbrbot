@@ -188,7 +188,6 @@ async function scorecalc(
                 const mapPath = await dlMap(obj.mapid, mapIsRank);
 
 
-                console.log(typeof mapPath)
                 if (!(typeof mapPath == 'string')) {
                     return mapPath;
                 }
@@ -1027,7 +1026,6 @@ export async function dlMap(mapid: number | string, isRanked?:string) {
     const mapFiles = fs.readdirSync('./files/maps')
     let mapDir = '';
     if (mapFiles.some(x => x.includes(`${mapid}`)) == false) {
-        console.log(mapFiles.some(x => x.includes(`${mapid}`)))
         let curType = 'temp'
         if(['ranked', 'loved', 'approved'].some(x => x.includes(isRanked ?? 'temp'))){
             curType = 'perm'
