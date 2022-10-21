@@ -1770,6 +1770,8 @@ export async function firsts(input: extypes.commandInput) {
     let mode = 'osu';
     let filteredMapper = null;
     let filteredMods = null;
+    let parseScore = false;
+    let parseId = null;
 
     switch (input.commandType) {
         case 'message': {
@@ -1784,6 +1786,12 @@ export async function firsts(input: extypes.commandInput) {
             if (input.args.includes('-p')) {
                 page = parseInt(input.args[input.args.indexOf('-p') + 1]);
                 input.args.splice(input.args.indexOf('-p'), 2);
+            }
+
+            if(input.args.includes('-parse')) {
+                parseScore = true;
+                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
+                input.args.splice(input.args.indexOf('-parse'), 2);
             }
 
             if (input.args.includes('-osu')) {
@@ -2176,6 +2184,15 @@ export async function firsts(input: extypes.commandInput) {
     }
     osufunc.debug(firstscoresdata, 'command', 'firsts', input.obj.guildId, 'firstsScoresData');
     func.storeFile(firstscoresdata, input.absoluteID, 'firstscoresdata')
+
+    if(parseScore == true){
+        input.overrides = {
+            mode: firstscoresdata?.[0]?.mode ?? 'osu',
+            id: firstscoresdata?.[parseInt(parseId)]?.best_id ?? firstscoresdata?.[0]?.best_id
+        }
+        await scoreparse(input)
+        return;
+    }
 
     const firstsEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.scorelist.dec)
@@ -2732,7 +2749,10 @@ export async function nochokes(input: extypes.commandInput) {
     let page;
     let mapper;
     let mods;
-    let searchid
+    let searchid;
+
+    let parseScore = false;
+    let parseId = null;
 
     switch (input.commandType) {
         case 'message': {
@@ -2753,6 +2773,13 @@ export async function nochokes(input: extypes.commandInput) {
             page = 1;
             mapper = null;
             mods = null;
+
+            if(input.args.includes('-parse')) {
+                parseScore = true;
+                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
+                input.args.splice(input.args.indexOf('-parse'), 2);
+            }
+
             if (input.args.includes('-page')) {
                 page = parseInt(input.args[input.args.indexOf('-page') + 1]);
                 input.args.splice(input.args.indexOf('-page'), 2);
@@ -3161,6 +3188,15 @@ export async function nochokes(input: extypes.commandInput) {
         page = Math.ceil(nochokedata.length / 5) - 1
     }
 
+    if(parseScore == true){
+        input.overrides = {
+            mode: nochokedata?.[0]?.mode ?? 'osu',
+            id: nochokedata?.[parseInt(parseId)]?.best_id ?? nochokedata?.[0]?.best_id
+        }
+        await scoreparse(input)
+        return;
+    }
+
     const topEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`Top no choke scores of ${nochokedata[0].user.username}`)
@@ -3269,7 +3305,10 @@ export async function osutop(input: extypes.commandInput) {
     let page;
     let mapper;
     let mods;
-    let searchid
+    let searchid;
+
+    let parseScore = false;
+    let parseId = null;
 
     switch (input.commandType) {
         case 'message': {
@@ -3284,6 +3323,12 @@ export async function osutop(input: extypes.commandInput) {
             mapper = null;
             mods = null;
             detailed = false;
+            if(input.args.includes('-parse')) {
+                parseScore = true;
+                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
+                input.args.splice(input.args.indexOf('-parse'), 2);
+            }
+
             if (input.args.includes('-page')) {
                 page = parseInt(input.args[input.args.indexOf('-page') + 1]);
                 input.args.splice(input.args.indexOf('-page'), 2);
@@ -3737,6 +3782,15 @@ export async function osutop(input: extypes.commandInput) {
         page = Math.ceil(osutopdata.length / 5) - 1
     }
 
+    if(parseScore == true){
+        input.overrides = {
+            mode: osutopdata?.[0]?.mode ?? 'osu',
+            id: osutopdata?.[parseInt(parseId)]?.best_id ?? osutopdata?.[0]?.best_id
+        }
+        await scoreparse(input)
+        return;
+    }
+
     const topEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`Top plays of ${osutopdata[0].user.username}`)
@@ -3893,12 +3947,21 @@ export async function pinned(input: extypes.commandInput) {
     let filteredMapper = null;
     let filteredMods = null;
 
+    let parseScore = false;
+    let parseId = null;
+
     switch (input.commandType) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
             //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+            if(input.args.includes('-parse')) {
+                parseScore = true;
+                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
+                input.args.splice(input.args.indexOf('-parse'), 2);
+            }
+
             if (input.args.includes('-page')) {
                 page = parseInt(input.args[input.args.indexOf('-page') + 1]);
                 input.args.splice(input.args.indexOf('-page'), 2);
@@ -4277,6 +4340,15 @@ export async function pinned(input: extypes.commandInput) {
 
     if (page >= Math.ceil(pinnedscoresdata.length / 5)) {
         page = Math.ceil(pinnedscoresdata.length / 5) - 1
+    }
+
+    if(parseScore == true){
+        input.overrides = {
+            mode: pinnedscoresdata?.[0]?.mode ?? 'osu',
+            id: pinnedscoresdata?.[parseInt(parseId)]?.best_id ?? pinnedscoresdata?.[0]?.best_id
+        }
+        await scoreparse(input)
+        return;
     }
 
     const pinnedEmbed = new Discord.EmbedBuilder()
@@ -5451,6 +5523,15 @@ export async function scoreparse(input: extypes.commandInput) {
         }
     }
 
+    if(input.overrides != null){
+        if(input.overrides?.id != null){
+            scoreid = input.overrides.id
+        }
+        if(input.overrides?.mode != null){
+            scoremode = input.overrides.mode
+        }
+    }
+
 
     //==============================================================================================================================================================================================
 
@@ -5765,11 +5846,20 @@ export async function scores(input: extypes.commandInput) {
     let filteredMapper = null;
     let filteredMods = null;
 
+    let parseScore = false;
+    let parseId = null;
+
     switch (input.commandType) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;//@ts-ignore
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+            if(input.args.includes('-parse')) {
+                parseScore = true;
+                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
+                input.args.splice(input.args.indexOf('-parse'), 2);
+            }
+
             if (input.args.includes('-page')) {
                 page = parseInt(input.args[input.args.indexOf('-page') + 1]);
                 input.args.splice(input.args.indexOf('-page'), 2);
@@ -6105,6 +6195,15 @@ export async function scores(input: extypes.commandInput) {
             .catch();
     }
     osufunc.debug(scoredata, 'command', 'scores', input.obj.guildId, 'scoreData');
+
+    if(parseScore == true){
+        input.overrides = {
+            mode: scoredata?.[0]?.mode ?? 'osu',
+            id: scoredata?.[parseInt(parseId)]?.best_id ?? scoredata?.[0]?.best_id
+        }
+        await scoreparse(input)
+        return;
+    }
 
     let mapdata: osuApiTypes.Beatmap;
     if (func.findFile(mapid, 'mapdata') &&
