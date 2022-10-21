@@ -234,13 +234,13 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
             case '8ball': case 'ask':
                 misccmds._8ball({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 break;
-            case 'gif':
-                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    misccmds.gif({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot')
-                }
-                break;
+            // case 'gif':
+            //     if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+            //         misccmds.gif({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+            //     } else {
+            //         checkcmds.noperms(commandType, obj, 'bot')
+            //     }
+            //     break;
             case 'image': case 'imagesearch':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     misccmds.image({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
@@ -261,13 +261,13 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
             case 'roll':
                 misccmds.roll({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 break;
-            case 'say':
-                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    misccmds.say({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot')
-                }
-                break;
+            // case 'say':
+            //     if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+            //         misccmds.say({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+            //     } else {
+            //         checkcmds.noperms(commandType, obj, 'bot')
+            //     }
+            //     break;
             case 'ytsearch': case 'yt':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     misccmds.ytsearch({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
@@ -619,13 +619,13 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     )
                 }
                 break;
-            case 'find':
-                if (checks.botHasPerms(obj, client, ['Administrator'])) {
-                    admincmds.find({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot')
-                }
-                break;
+            // case 'find':
+            //     if (checks.botHasPerms(obj, client, ['Administrator'])) {
+            //         admincmds.find({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+            //     } else {
+            //         checkcmds.noperms(commandType, obj, 'bot')
+            //     }
+            //     break;
             case 'leaveguild': case 'leave':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
                     admincmds.leaveguild({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })

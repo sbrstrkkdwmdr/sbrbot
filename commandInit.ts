@@ -29,20 +29,20 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
             }
         ]
     },
-    {
-        name: 'gif',
-        description: 'Sends a random gif',
-        dmPermission: false,
-        options: [
-            {
-                name: 'type',
-                description: 'The type of gif to send',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: true,
-                choices: cmdconfig.gifopts,
-            }
-        ]
-    },
+    // {
+    //     name: 'gif',
+    //     description: 'Sends a random gif',
+    //     dmPermission: false,
+    //     options: [
+    //         {
+    //             name: 'type',
+    //             description: 'The type of gif to send',
+    //             type: Discord.ApplicationCommandOptionType.String,
+    //             required: true,
+    //             choices: cmdconfig.gifopts,
+    //         }
+    //     ]
+    // },
     {
         name: 'image',
         description: 'Searches the Google API and returns the first five results',
@@ -172,25 +172,25 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
             }
         ]
     },
-    {
-        name: 'say',
-        description: 'Send a message to a channel',
-        dmPermission: false,
-        options: [
-            {
-                name: 'message',
-                description: 'The message to send',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: true
-            },
-            {
-                name: 'channel',
-                description: 'The channel to send the message to',
-                type: Discord.ApplicationCommandOptionType.Channel,
-                required: false
-            }
-        ]
-    },
+    // {
+    //     name: 'say',
+    //     description: 'Send a message to a channel',
+    //     dmPermission: false,
+    //     options: [
+    //         {
+    //             name: 'message',
+    //             description: 'The message to send',
+    //             type: Discord.ApplicationCommandOptionType.String,
+    //             required: true
+    //         },
+    //         {
+    //             name: 'channel',
+    //             description: 'The channel to send the message to',
+    //             type: Discord.ApplicationCommandOptionType.Channel,
+    //             required: false
+    //         }
+    //     ]
+    // },
     {
         name: 'poll',
         description: 'Creates a poll',
@@ -815,47 +815,33 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
             }
         ],
     },
-    {
-        name: 'find',
-        description: 'Returns the name of something from the id given',
-        dmPermission: false,
-        options: [
-            {
-                name: 'type',
-                description: 'The type of thing to find',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: true,
-                choices: [
-                    { name: 'User', value: 'user' },
-                    { name: 'Channel', value: 'channel' },
-                    { name: 'Guild', value: 'guild' },
-                    { name: 'Role', value: 'role' },
-                    { name: 'Emoji', value: 'emoji' },
-                ]
-            },
-            {
-                name: 'id',
-                description: 'The id of the thing to find',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: true,
-                minValue: 1
-            }
-        ]
-    },
-    {
-        name: 'log',
-        description: 'Displays the log of a server',
-        dmPermission: false,
-        options: [
-            {
-                name: 'guildid',
-                description: 'The guild to display the log of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-                minValue: 1
-            },
-        ]
-    },
+    // {
+    //     name: 'find',
+    //     description: 'Returns the name of something from the id given',
+    //     dmPermission: false,
+    //     options: [
+    //         {
+    //             name: 'type',
+    //             description: 'The type of thing to find',
+    //             type: Discord.ApplicationCommandOptionType.String,
+    //             required: true,
+    //             choices: [
+    //                 { name: 'User', value: 'user' },
+    //                 { name: 'Channel', value: 'channel' },
+    //                 { name: 'Guild', value: 'guild' },
+    //                 { name: 'Role', value: 'role' },
+    //                 { name: 'Emoji', value: 'emoji' },
+    //             ]
+    //         },
+    //         {
+    //             name: 'id',
+    //             description: 'The id of the thing to find',
+    //             type: Discord.ApplicationCommandOptionType.String,
+    //             required: true,
+    //             minValue: 1
+    //         }
+    //     ]
+    // },
     {
         name: 'purge',
         description: 'Purges a channel',
