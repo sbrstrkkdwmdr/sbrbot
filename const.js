@@ -828,7 +828,7 @@ const osucommands = [
         description: 'Shows information about a user\'s osu! profile',
         usage: 'osu [user] [-graph] [-detailed] [-(mode)]',
         slashusage: 'osu [user] [detailed] [mode]',
-        aliases: ['o', 'profile', 'user'],
+        aliases: ['o', 'profile'],
         examples: [
             {
                 text: 'PREFIXMSGosu SaberStrike',
@@ -2112,46 +2112,61 @@ const admincommands = [
         ]
     },
     {
-        name: 'find',
-        description: 'Finds a user/guild/channel/role/emoji in the database',
-        usage: 'find [type] [id]',
-        slashusage: 'find [type] [id]',
+        name: 'user',
+        description: 'Returns information about a user',
+        usage: 'user [user]',
+        slashusage: 'user [user]',
         examples: [
             {
-                text: 'PREFIXMSGfind user 1234567890',
-                descriptor: 'Finds the user with the id 1234567890'
+                text: 'PREFIXMSGuser @SSoB',
+                descriptor: 'Returns information about the user @SSoB'
             },
             {
-                text: 'PREFIXMSGfind @SSoB',
-                descriptor: 'Finds the user @SSoB'
-            },
-            {
-                text: 'PREFIXMSGfind emoji 944181096868884481',
-                descriptor: 'Finds the emoji with the id 944181096868884481'
+                text: '/user user:SSoB',
+                descriptor: 'Returns information about the user SSoB'
             }
         ],
-        aliases: [],
+        aliases: ['userinfo'],
         options: [
             {
-                name: 'type',
-                type: 'string',
-                required: 'true (if id is not a mention)',
-                description: 'The type of object to find',
-                options: ['user', 'guild', 'channel', 'role', 'emoji'],
-                defaultValue: 'N/A',
+                name: 'user',
+                type: 'integer/user mention',
+                required: false,
+                description: 'The user to get information about',
+                options: ['N/A'],
+                defaultValue: 'The user who ran the command',
                 examples: [''],
                 commandTypes: ['message', 'interaction']
+            }
+        ]
+    },
+    {
+        name: 'avatar',
+        description: 'Gets the avatar of a user',
+        usage: 'avatar [user]',
+        slashusage: 'avatar [user]',
+        examples: [
+            {
+                text: 'PREFIXMSGavatar @SSoB',
+                descriptor: 'Gets information about the user @SSoB'
             },
             {
-                name: 'id',
-                type: 'integer/user mention/channel mention/role mention/emoji',
-                required: true,
-                description: 'The id of the object to find',
+                text: '/avatar user:SSoB',
+                descriptor: 'Gets information about the user SSoB'
+            }
+        ],
+        aliases: ['av', 'pfp'],
+        options: [
+            {
+                name: 'user',
+                type: 'integer/user mention',
+                required: false,
+                description: 'The user to get the avator of',
                 options: ['N/A'],
-                defaultValue: 'N/A',
+                defaultValue: 'The user who ran the command',
                 examples: [''],
                 commandTypes: ['message', 'interaction']
-            },
+            }
         ]
     },
     {
