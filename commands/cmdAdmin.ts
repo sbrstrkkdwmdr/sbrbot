@@ -196,6 +196,265 @@ export function crash(input: extypes.commandInput) {
     process.exit(1)
 }
 
+export function getUser(input: extypes.commandInput) {
+
+    let commanduser;
+    let id;
+
+    switch (input.commandType) {
+        case 'message': {//@ts-ignore
+            commanduser = input.obj.author;
+            id = input.args[0];//@ts-ignore
+            if (input.obj.mentions.users.size > 0) {
+                //@ts-ignore
+                id = input.obj.mentions.users.first().id
+            }
+            //@ts-ignore
+            if (isNaN(id) && !input.obj.mentions.users.size > 0) {
+                id = commanduser.id
+            }
+        }
+            break;
+
+        //==============================================================================================================================================================================================
+
+        case 'interaction': {
+            commanduser = input.obj.member.user;//@ts-ignore
+            id = input.obj.options.getUser('user')?.id ?? commanduser.id;
+        }
+
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            commanduser = input.obj.member.user;
+        }
+            break;
+    }
+
+
+    //==============================================================================================================================================================================================
+
+    log.logFile(
+        'command',
+        log.commandLog('find', input.commandType, input.absoluteID, commanduser
+        ),
+        {
+            guildId: `${input.obj.guildId}`
+        })
+
+    //OPTIONS==============================================================================================================================================================================================
+
+    log.logFile('command',
+        log.optsLog(input.absoluteID, [
+            {
+                name: 'Id',
+                value: id
+            }
+        ]),
+        {
+            guildId: `${input.obj.guildId}`
+        }
+    )
+
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+
+
+    const Embedr = new Discord.EmbedBuilder()
+        .setTitle(`Error`)
+        .setThumbnail(`https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
+        .setDescription(`user does not exist or bot is not in the same guild as the user`);
+
+    let userfind;
+    input.client.guilds.cache.forEach(guild => {
+        if (guild.members.cache.has(id)) {
+            userfind = guild.members.cache.get(id)//.user.tag
+            let up = 'null or offline status';
+            if (userfind.presence) {
+                up = '';
+                for (let i = 0; i < userfind.presence.activities.length; i++) {
+                    /*                                     up += `
+                                                    ${userfind.presence.status}
+                                                    ${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].name : ''}
+                                                    ${userfind.presence.activities.length > 0 ? 'Activity Type: [' + userfind.presence.activities[i].type + '](https://discord.com/developers/docs/topics/gateway#activity-object-activity-types)': ''}
+                                                    \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
+                                                    ` */
+                    let t
+                    switch (userfind.presence.activities[i].type) {
+                        case 0:
+                            t = 'Playing'
+                            break;
+                        case 1:
+                            t = 'Streaming'
+                            break;
+                        case 2:
+                            t = 'Listening'
+                            break;
+                        case 3:
+                            t = 'Watching'
+                            break;
+                        case 4:
+                            t = 'Custom Status'
+                            break;
+                        case 5:
+                            t = 'Competing in'
+                            break;
+                        default:
+                            t = 'Unknown Activity Type'
+                            break;
+
+                    }
+                    up += `
+                    ${t} ${userfind.presence.activities.length > 0 && t != 'Custom Status' ? `\`${userfind.presence.activities[i].name}\`` : ''}
+                    \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
+                    `
+                }
+            }
+
+            Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`)
+            .setThumbnail(`${userfind.user.avatarURL()}?size=512`)
+            .setDescription(
+                `ID: ${userfind.user.id}
+                    Status: ${up}
+                    Account creation date: ${userfind.user.createdAt}
+                    Bot: ${userfind.user.bot}
+                    Flags: ${userfind.user.flags.toArray().join(',')}
+                    `);
+            return;
+        }
+    })
+
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+
+    msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [Embedr]
+        }
+    })
+
+    log.logFile('command',
+        `
+----------------------------------------------------
+success
+ID: ${input.absoluteID}
+----------------------------------------------------
+\n\n`,
+        { guildId: `${input.obj.guildId}` }
+    )
+
+}
+
+export function getUserAv(input: extypes.commandInput) {
+
+    let commanduser;
+    let id;
+
+    switch (input.commandType) {
+        case 'message': {//@ts-ignore
+            commanduser = input.obj.author;
+            id = input.args[0];//@ts-ignore
+            //@ts-ignore
+            if (input.obj.mentions.users.size > 0) {
+                //@ts-ignore
+                id = input.obj.mentions.users.first().id
+            }
+            //@ts-ignore
+            if (isNaN(id) && !input.obj.mentions.users.size > 0) {
+                id = commanduser.id
+            }
+        }
+            break;
+
+        //==============================================================================================================================================================================================
+
+        case 'interaction': {
+            commanduser = input.obj.member.user;//@ts-ignore
+            id = input.obj.options.getUser('user')?.id ?? commanduser.id;
+        }
+
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            commanduser = input.obj.member.user;
+        }
+            break;
+    }
+
+
+    //==============================================================================================================================================================================================
+
+    log.logFile(
+        'command',
+        log.commandLog('find', input.commandType, input.absoluteID, commanduser
+        ),
+        {
+            guildId: `${input.obj.guildId}`
+        })
+
+    //OPTIONS==============================================================================================================================================================================================
+
+    log.logFile('command',
+        log.optsLog(input.absoluteID, [
+            {
+                name: 'Id',
+                value: id
+            }
+        ]),
+        {
+            guildId: `${input.obj.guildId}`
+        }
+    )
+
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+
+
+    const Embedr = new Discord.EmbedBuilder()
+        .setTitle(`Error`)
+        .setImage(`https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
+        .setDescription(`user does not exist or bot is not in the same guild as the user`);
+    let userfind;
+    input.client.guilds.cache.forEach(guild => {
+        if (guild.members.cache.has(id)) {
+            userfind = guild.members.cache.get(id)//.user.tag
+            Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`)
+                .setImage(`${userfind.user.avatarURL()}?size=512`)
+                .setDescription('_')
+            return;
+        }
+    })
+
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+
+    msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [Embedr]
+        }
+    })
+
+    log.logFile('command',
+        `
+----------------------------------------------------
+success
+ID: ${input.absoluteID}
+----------------------------------------------------
+\n\n`,
+        { guildId: `${input.obj.guildId}` }
+    )
+
+}
+
+
 /**
  * find user/role/channel/guild/emoji from id 
  */

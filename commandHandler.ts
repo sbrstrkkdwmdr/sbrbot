@@ -367,7 +367,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'osu': case 'profile': case 'o': case 'user':
+            case 'osu': case 'profile': case 'o':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
@@ -579,7 +579,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
             case 'tracklist': case 'tl':
                 osucmds.tracklist({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings })
                 break;
-            case 'userbeatmaps':case 'ub': case 'userb': case 'ubm': case 'um':case 'usermaps':
+            case 'userbeatmaps': case 'ub': case 'userb': case 'ubm': case 'um': case 'usermaps':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.userBeatmaps({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 } else {
@@ -618,6 +618,21 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                         commandType, obj, 'user'
                     )
                 }
+                break;
+            case 'user':case 'userinfo':
+                if (checks.botHasPerms(obj, client, ['Administrator'])) {
+                    admincmds.getUser({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+            case 'avatar': case 'av':case 'pfp':
+                if (checks.botHasPerms(obj, client, ['Administrator'])) {
+                    admincmds.getUserAv({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
                 break;
             // case 'find':
             //     if (checks.botHasPerms(obj, client, ['Administrator'])) {

@@ -454,33 +454,6 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
             }
         ]
     },
-    {//alternate command for osu
-        name: 'user',
-        description: 'Displays the user\'s osu! profile',
-        dmPermission: false,
-        options: [
-            {
-                name: 'user',
-                description: 'The user to display the profile of',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-            },
-            {
-                name: 'detailed',
-                description: 'Displays extra information',
-                type: Discord.ApplicationCommandOptionType.Boolean,
-                required: false,
-                default: false
-            },
-            {
-                name: 'mode',
-                description: 'The mode to display the profile in',
-                type: Discord.ApplicationCommandOptionType.String,
-                required: false,
-                choices: cmdconfig.modeopts
-            }
-        ]
-    },
     {
         name: 'osuset',
         description: 'Sets the user\'s osu! profile',
@@ -842,6 +815,32 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
     //         }
     //     ]
     // },
+    {
+        name: 'user',
+        description: 'Returns information about a user',
+        dmPermission: false,
+        options: [
+            {
+                name: 'user',
+                description: 'The user to get information about',
+                type: Discord.ApplicationCommandOptionType.User,
+                required: false,
+            }
+        ]
+    },
+    {
+        name: 'avatar',
+        description: 'Returns the avatar of a user',
+        dmPermission: false,
+        options: [
+            {
+                name: 'user',
+                description: 'The user to get the avatar of',
+                type: Discord.ApplicationCommandOptionType.User,
+                required: false,
+            }
+        ]
+    },
     {
         name: 'purge',
         description: 'Purges a channel',
