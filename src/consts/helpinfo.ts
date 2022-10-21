@@ -1859,7 +1859,7 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'whatif',
-        description: 'Shows user stats if you gain a certain amount of raw pp',
+        description: 'Estimates user stats if they gain a certain amount of raw pp',
         usage: 'whatif [user] [pp]',
         slashusage: 'whatif [user] [pp]',
         examples: [
@@ -1892,6 +1892,16 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: '0',
                 examples: ['72700', 'pp:72700'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode to show the stats in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu',
+                examples: ['mode:taiko'],
                 commandTypes: ['message', 'interaction']
             }
         ]

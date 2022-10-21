@@ -8199,7 +8199,7 @@ export async function trackadd(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
         case 'interaction': {
             commanduser = input.obj.member.user;//@ts-ignore
-            user = input.obj.options.getInteger('user');
+            user = input.obj.options.getString('user');
 
         }
             //==============================================================================================================================================================================================
@@ -8315,7 +8315,7 @@ export async function trackremove(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
         case 'interaction': {
             commanduser = input.obj.member.user;//@ts-ignore
-            user = input.obj.options.getInteger('user');
+            user = input.obj.options.getString('user');
         }
             //==============================================================================================================================================================================================
 
@@ -9619,6 +9619,39 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
             //@ts-ignore
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
 
+            if (input.args.includes('-osu')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+
             if (!isNaN(+input.args[0])) {
                 pp = +input.args[0];
             }
@@ -9718,7 +9751,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
     ) {
         osudata = func.findFile(user, 'osudata')
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`)
+        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
     }
     func.storeFile(osudata, osudata.id, 'osudata')
     func.storeFile(osudata, user, 'osudata')
@@ -9755,7 +9788,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
 
     const bonus = osudata.statistics.pp - newBonus.reduce((a, b) => a + b, 0);
 
-    const guessrank = await osufunc.getRankPerformance('pp->rank', (total + bonus), input.userdata, 'osu', input.statsCache)
+    const guessrank = await osufunc.getRankPerformance('pp->rank', (total + bonus), input.userdata, `${osufunc.modeValidator(mode)}`, input.statsCache)
 
     const embed = new Discord.EmbedBuilder()
         .setTitle(`What if ${osudata.username} gained ${pp}pp?`)
