@@ -59,7 +59,7 @@ function botHasPerms(object: Discord.Interaction | Discord.Message, client: Disc
     const channel = client.channels.cache.get(object.channelId) as Discord.TextChannel | Discord.ThreadChannel
     const botchannelperms = channel.permissionsFor(client.user.id).toArray()
     let channelPermLen = 0
-    for (let i in requiredPerms) {
+    for (const i in requiredPerms) {
         if (botchannelperms.includes(requiredPerms[i])) {
             channelPermLen++
         }
