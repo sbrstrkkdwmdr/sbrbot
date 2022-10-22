@@ -325,13 +325,13 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
             name: 'nochokes',
             description: 'Displays the user\'s top scores without misses',
             dmPermission: false,
-            options: cmdconfig.playArrayOpts
+            options: cmdconfig.osutopOpts
         },
         {//alternate command for nochokes
             name: 'nc',
             description: 'Displays the user\'s top scores without misses',
             dmPermission: false,
-            options: cmdconfig.playArrayOpts
+            options: cmdconfig.osutopOpts
         },
         {
             name: 'osu',
@@ -446,7 +446,7 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
             name: 'osutop',
             description: 'Displays the top plays of the user',
             dmPermission: false,
-            options: cmdconfig.playArrayOpts
+            options: cmdconfig.osutopOpts
         },
         {
             name: 'pinned',
