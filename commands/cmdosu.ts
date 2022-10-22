@@ -3352,10 +3352,6 @@ export async function osutop(input: extypes.commandInput) {
                 page = parseInt(input.args[input.args.indexOf('-p') + 1]);
                 input.args.splice(input.args.indexOf('-p'), 2);
             }
-            if (input.args.includes('-mapper')) {
-                mapper = (input.args[input.args.indexOf('-mapper') + 1]);
-                input.args.splice(input.args.indexOf('-mapper'), 2);
-            }
             if (input.args.includes('-mods')) {
                 mods = (input.args[input.args.indexOf('-mods') + 1]);
                 input.args.splice(input.args.indexOf('-mods'), 2);
