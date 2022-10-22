@@ -29,10 +29,10 @@ export function checkperms(input: extypes.commandInput) {
     let searchUser;
     switch (input.commandType) {
         case 'message': {
-            //@ts-ignore
+            //@ts-expect-error null msg
             commanduser = input.obj.author;
-            if (input.args[0]) {//@ts-ignore
-                if (input.obj.mentions.users.size > 0) {//@ts-ignore
+            if (input.args[0]) {//@ts-expect-error null msg
+                if (input.obj.mentions.users.size > 0) {//@ts-expect-error null msg
                     searchUser = input.obj.mentions.users.first();
                 } else {
                     searchUser = input.client.users.cache.get(input.args.join(' '))
@@ -46,8 +46,8 @@ export function checkperms(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            if (input.obj.options.getUser('user')) {//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            if (input.obj.options.getUser('user')) {//@ts-expect-error null msg
                 searchUser = input.obj.options.getUser('user');
             } else {
                 searchUser = commanduser;
@@ -151,7 +151,7 @@ export function crash(input: extypes.commandInput) {
     let baseCommandType;
 
     switch (input.commandType) {
-        case 'message': {//@ts-ignore
+        case 'message': {//@ts-expect-error null msg
             commanduser = input.obj.author;
         }
             break;
@@ -202,14 +202,14 @@ export function getUser(input: extypes.commandInput) {
     let id;
 
     switch (input.commandType) {
-        case 'message': {//@ts-ignore
+        case 'message': {//@ts-expect-error null msg
             commanduser = input.obj.author;
-            id = input.args[0];//@ts-ignore
+            id = input.args[0];//@ts-expect-error null msg
             if (input.obj.mentions.users.size > 0) {
-                //@ts-ignore
+                //@ts-expect-error null msg
                 id = input.obj.mentions.users.first().id
             }
-            //@ts-ignore
+            //@ts-expect-error null msg
             if (isNaN(id) && !input.obj.mentions.users.size > 0) {
                 id = commanduser.id
             }
@@ -219,7 +219,7 @@ export function getUser(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
             id = input.obj.options.getUser('user')?.id ?? commanduser.id;
         }
 
@@ -355,15 +355,15 @@ export function getUserAv(input: extypes.commandInput) {
     let id;
 
     switch (input.commandType) {
-        case 'message': {//@ts-ignore
+        case 'message': {//@ts-expect-error null msg
             commanduser = input.obj.author;
-            id = input.args[0];//@ts-ignore
-            //@ts-ignore
+            id = input.args[0];
+            //@ts-expect-error null msg
             if (input.obj.mentions.users.size > 0) {
-                //@ts-ignore
+                //@ts-expect-error null msg
                 id = input.obj.mentions.users.first().id
             }
-            //@ts-ignore
+            //@ts-expect-error null msg
             if (isNaN(id) && !input.obj.mentions.users.size > 0) {
                 id = commanduser.id
             }
@@ -373,7 +373,7 @@ export function getUserAv(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
             id = input.obj.options.getUser('user')?.id ?? commanduser.id;
         }
 
@@ -465,28 +465,28 @@ export function find(input: extypes.commandInput) {
     let id;
 
     switch (input.commandType) {
-        case 'message': {//@ts-ignore
+        case 'message': {//@ts-expect-error null msg
             commanduser = input.obj.author;
             type = input.args[0];
-            id = input.args[1];//@ts-ignore
+            id = input.args[1];//@ts-expect-error null msg
             if (input.obj.mentions.users.size > 0) {
-                type = 'user';//@ts-ignore
+                type = 'user';//@ts-expect-error null msg
                 id = input.obj.mentions.users.first().id;
-            }//@ts-ignore
+            }//@ts-expect-error null msg
             if (input.obj.mentions.channels.size > 0) {
-                type = 'channel';//@ts-ignore
+                type = 'channel';//@ts-expect-error null msg
                 id = input.obj.mentions.channels.first().id
-            }//@ts-ignore
+            }//@ts-expect-error null msg
             if (input.obj.mentions.roles.size > 0) {
-                type = 'role';//@ts-ignore
+                type = 'role';//@ts-expect-error null msg
                 id = input.obj.mentions.roles.first().id
-            }//@ts-ignore
+            }//@ts-expect-error null msg
             if (input.obj.content.includes('<:') && !isNaN(input.obj.content.split('<:')[1].split('>')[0].split(':')[1])) {
-                type = 'emoji';//@ts-ignore
+                type = 'emoji';//@ts-expect-error null msg
                 id = input.obj.content.split('<:')[1].split('>')[0].split(':')[1]
-            }//@ts-ignore
+            }//@ts-expect-error null msg
             if (isNaN(id) && (!(input.obj.mentions.users.size > 0 && type == 'user') || !(input.obj.mentions.channels.size > 0 && type == 'channel') || !(input.obj.mentions.roles.size == 1 && type == 'roles'))) {
-                //@ts-ignore 
+                //@ts-expect-error null msg 
                 input.obj.reply({ content: 'Please specify an id to find', allowedMentions: { repliedUser: false } })
                     .catch(error => { });
                 return;
@@ -497,8 +497,8 @@ export function find(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            type = input.obj.options.getString('type');//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            type = input.obj.options.getString('type');//@ts-expect-error null msg
             id = input.obj.options.getString('id');
         }
 
@@ -752,7 +752,7 @@ export function leaveguild(input: extypes.commandInput) {
     let guildId;
 
     switch (input.commandType) {
-        case 'message': {//@ts-ignore
+        case 'message': {//@ts-expect-error null msg
             commanduser = input.obj.author;
             guildId = input.obj.guildId;
         }
@@ -761,7 +761,7 @@ export function leaveguild(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
             guildId = input.obj.options.getString('guild') ?? input.obj.guildId;
         }
 
@@ -846,7 +846,7 @@ export async function prefix(input: extypes.commandInput) {
     let newPrefix;
 
     switch (input.commandType) {
-        case 'message': {//@ts-ignore
+        case 'message': {//@ts-expect-error null msg
             commanduser = input.obj.author;
             newPrefix = input.args.join(' ');
         }
@@ -855,7 +855,7 @@ export async function prefix(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
             newPrefix = input.obj.options.getString('prefix');
         }
 
@@ -939,7 +939,7 @@ export function servers(input: extypes.commandInput) {
     let commanduser;
 
     switch (input.commandType) {
-        case 'message': {//@ts-ignore
+        case 'message': {//@ts-expect-error null msg
             commanduser = input.obj.author;
         }
             break;

@@ -206,7 +206,8 @@ export async function globals(input: extypes.commandInput) {
     switch (input.commandType) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-ignore
+            commanduser = input.obj.author;
+            //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             user = input.args.join(' ');
             if (!input.args[0] || input.args[0].includes(searchid)) {
@@ -219,20 +220,24 @@ export async function globals(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            commanduser = input.obj.member.user;
+            //@ts-expect-error options property does not exist on message
             user = input.obj.options.getString('user');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {
+            //@ts-expect-error message property does not exist on interaction/message 
             if (!input.obj.message.embeds[0]) {
                 return;
             }
 
-            commanduser = input.obj.member.user;//@ts-ignore
-            user = input.obj.message.embeds[0].title.split('for ')[1]//@ts-ignore
+            commanduser = input.obj.member.user;
+            //@ts-expect-error message property does not exist on interaction/message
+            user = input.obj.message.embeds[0].title.split('for ')[1]
+            //@ts-expect-error message property does not exist on interaction/message
             mode = cmdchecks.toAlphaNum(input.obj.message.embeds[0].description.split('\n')[1])
             page = 0;
 
@@ -300,7 +305,8 @@ export async function globals(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
     osufunc.debug(osudata, 'command', 'globals', input.obj.guildId, 'osuData');
-    if (osudata?.error) {//@ts-ignore
+    if (osudata?.error) {
+        //@ts-expect-error reply diff signatures
         if (input.commandType != 'button') input.obj.reply({
             content: `User not found`,
             allowedMentions: { repliedUser: false },
@@ -315,7 +321,8 @@ export async function globals(input: extypes.commandInput) {
 
     }
 
-    if (input.commandType == 'interaction') {//@ts-ignore
+    if (input.commandType == 'interaction') {
+        //@ts-expect-error reply diff signatures
         input.obj.reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
@@ -488,7 +495,7 @@ export async function lb(input: extypes.commandInput) {
     const rarr = [];
 
     if (input.commandType == 'interaction') {
-        //@ts-ignore
+        //@ts-expect-error reply diff signature
         input.obj.reply('loading...')
     }
 
@@ -756,11 +763,16 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            input.obj.options.getString('country') ? country = input.obj.options.getString('country').toUpperCase() : country = 'ALL';//@ts-ignore
-            input.obj.options.getString('mode') ? mode = input.obj.options.getString('mode').toLowerCase() : mode = 'osu';//@ts-ignore
-            input.obj.options.getString('type') ? type = input.obj.options.getString('type').toLowerCase() : type = 'performance';//@ts-ignore
-            input.obj.options.getInteger('page') ? page = input.obj.options.getInteger('page') - 1 : page = 0;//@ts-ignore
+            commanduser = input.obj.member.user;
+            //@ts-expect-error options property does not exist on message
+            input.obj.options.getString('country') ? country = input.obj.options.getString('country').toUpperCase() : country = 'ALL';
+            //@ts-expect-error options property does not exist on message
+            input.obj.options.getString('mode') ? mode = input.obj.options.getString('mode').toLowerCase() : mode = 'osu';
+            //@ts-expect-error options property does not exist on message
+            input.obj.options.getString('type') ? type = input.obj.options.getString('type').toLowerCase() : type = 'performance';
+            //@ts-expect-error options property does not exist on message
+            input.obj.options.getInteger('page') ? page = input.obj.options.getInteger('page') - 1 : page = 0;
+            //@ts-expect-error options property does not exist on message
             input.obj.options.getInteger('spotlight') ? spotlight = input.obj.options.getInteger('spotlight') : spotlight = undefined;
         }
             //==============================================================================================================================================================================================
@@ -768,7 +780,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
             break;
         case 'button': {
             commanduser = input.obj.member.user;
-            const pageParsed =//@ts-ignore
+            const pageParsed =//@ts-expect-error message property does not exist on interaction/message
                 parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0])
             page = pageParsed;
             switch (input.button) {
@@ -781,25 +793,28 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                 case 'RightArrow':
                     page = pageParsed + 1
                     break;
-                case 'BigRightArrow'://@ts-ignore
+                case 'BigRightArrow'://@ts-expect-error message property does not exist on interaction/message
                     page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
                     break;
                 default:
                     page = pageParsed
                     break;
-            }//@ts-ignore
+            }
+            //@ts-expect-error message property does not exist on interaction/message
             let base: string = input.obj.message.embeds[0].title;
             if (base.includes('Global')) {
                 base = base.split('Global ')[1];
             }
             if (base.includes('for ')) {
-                base = base.split('for ')[0];//@ts-ignore
+                base = base.split('for ')[0];
+                //@ts-expect-error message property does not exist on interaction/message
                 input.obj.message.embeds[0].footer ? country = input.obj.message.embeds[0].footer.text.split('Country: ')[1] : country = 'ALL';
             }
             mode = base.split(' ')[0].toLowerCase().replaceAll('!', '');
             //@ts-expect-error - type string not assignable to type RankingType
             type = base.split(' ')[1].toLowerCase();
-            if (type == 'charts') {//@ts-ignore
+            if (type == 'charts') {
+                //@ts-expect-error message property does not exist on interaction/message
                 spotlight = input.obj.message.embeds[0].description.split('\n')[1].split('?spotlight=')[1].split(')')[0];
             }
         }
@@ -904,7 +919,8 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
         rankingdata = func.findFile(input.absoluteID, 'rankingdata')
     } else {
         rankingdata = await osufunc.apiget('custom', url, null, 2, 0, true).catch(() => {
-            if (country != 'ALL') {//@ts-ignore
+            if (country != 'ALL') {
+                //@ts-expect-error reply diff signature
                 input.obj.reply({
                     content: 'Invalid country code',
                     embeds: [],
@@ -912,7 +928,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 }).catch()
-            } else {//@ts-ignore
+            } else {//@ts-expect-error reply diff signature
                 input.obj.reply({
                     content: 'Error',
                     embeds: [],
@@ -929,14 +945,14 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
     if (rankingdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
+                setTimeout(() => {//@ts-expect-error edit reply not property of msg
                     input.obj.editReply({
                         content: 'Error - could not fetch rankings',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
                 }, 1000)
-            } else {//@ts-ignore
+            } else {//@ts-expect-error reply diff signature
                 input.obj.reply({
                     content: 'Error - could not fetch rankings',
                     allowedMentions: { repliedUser: false },
@@ -952,7 +968,8 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
     } catch (e) {
         return;
     }
-    if (rankingdata.ranking.length == 0) {//@ts-ignore
+    if (rankingdata.ranking.length == 0) {
+        //@ts-expect-error reply diff signature
         input.obj.reply({
             content: 'No data found',
             embeds: [],
@@ -969,8 +986,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
     }
 
     if (country == 'ALL' && input.button == null) {
-        //@ts-ignore
-        osufunc.userStatsCache(rankingdata.ranking, input.statsCache, mode)
+        osufunc.userStatsCache(rankingdata.ranking, input.statsCache, osufunc.modeValidator(mode))
     }
 
     const embed = new Discord.EmbedBuilder()
@@ -1098,8 +1114,10 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            value = input.obj.options.getInteger('value') ?? 100;//@ts-ignore
+            commanduser = input.obj.member.user;
+            //@ts-expect-error options property does not exist on message
+            value = input.obj.options.getInteger('value') ?? 100;
+            //@ts-expect-error options property does not exist on message
             mode = input.obj.options.getString('mode') ?? 'osu';
         }
             //==============================================================================================================================================================================================
@@ -1110,8 +1128,8 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
         }
             break;
     }
-    if (input.overrides != null) {//@ts-ignore
-        type = input.overrides.type ?? 'pp';
+    if (input.overrides != null) {
+        type = input?.overrides?.type ?? 'pp';
     }
     //==============================================================================================================================================================================================
 
@@ -1888,21 +1906,21 @@ export async function firsts(input: extypes.commandInput) {
         case 'interaction': {
             commanduser = input.obj.member.user;
 
-            //@ts-ignore
+            //@ts-expect-error options property does not exist on message
             user = input.obj.options.getString('user');
-            //@ts-ignore
+            //@ts-expect-error options property does not exist on message
             page = input.obj.options.getInteger('page');
-            //@ts-ignore
+            //@ts-expect-error options property does not exist on message
             scoredetailed = input.obj.options.getBoolean('detailed');
-            //@ts-ignore
+            //@ts-expect-error options property does not exist on message
             sort = input.obj.options.getString('sort');
-            //@ts-ignore
+            //@ts-expect-error options property does not exist on message
             reverse = input.obj.options.getBoolean('reverse');
-            //@ts-ignore
+            //@ts-expect-error options property does not exist on message
             mode = input.obj.options.getString('mode') ?? 'osu';
-            //@ts-ignore
+            //@ts-expect-error options property does not exist on message
             filteredMapper = input.obj.options.getString('mapper');
-            //@ts-ignore
+            //@ts-expect-error options property does not exist on message
             filteredMods = input.obj.options.getString('mods');
         }
 
@@ -1910,26 +1928,26 @@ export async function firsts(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            //@ts-ignore
+            //@ts-expect-error message property does not exist on interaction/message
             if (!input.obj.message.embeds[0]) {
                 return;
             }
 
             commanduser = input.obj.member.user;
-            //@ts-ignore
+            //@ts-expect-error message property does not exist on interaction/message
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
-            //@ts-ignore
+            //@ts-expect-error message property does not exist on interaction/message
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
             page = 0;
-            //@ts-ignore
+            //@ts-expect-error message property does not exist on interaction/message
             if (input.obj.message.embeds[0].description) {
-                //@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-ignore
+                //@ts-expect-error message property does not exist on interaction/message
+                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-expect-error message property does not exist on interaction/message
                     filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-ignore
+                }//@ts-expect-error message property does not exist on interaction/message
+                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-expect-error message property does not exist on interaction/message
                     filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-ignore
+                }//@ts-expect-error message property does not exist on interaction/message
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -1956,14 +1974,14 @@ export async function firsts(input: extypes.commandInput) {
 
                 }
 
-                //@ts-ignore
+                //@ts-expect-error message property does not exist on interaction/message
                 const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
                     reverse = true
                 } else {
                     reverse = false
                 }
-                //@ts-ignore
+                //@ts-expect-error message property does not exist on interaction/message
                 const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
                 page = 0
                 switch (input.button) {
@@ -1977,7 +1995,7 @@ export async function firsts(input: extypes.commandInput) {
                         page = pageParsed + 1
                         break;
                     case 'BigRightArrow':
-                        //@ts-ignore
+                        //@ts-expect-error message property does not exist on interaction/message
                         page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
                         break;
                     default:
@@ -1991,7 +2009,6 @@ export async function firsts(input: extypes.commandInput) {
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            //@ts-ignore
             page = input.overrides.page
         }
     }
@@ -2111,7 +2128,7 @@ export async function firsts(input: extypes.commandInput) {
 
 
     if (input.commandType == 'interaction') {
-        //@ts-ignore
+        //@ts-expect-error reply diff signature
         input.obj.reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
@@ -2139,7 +2156,7 @@ export async function firsts(input: extypes.commandInput) {
 
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    //@ts-ignore
+                    //@ts-expect-error reply diff signatures
                     input.obj.reply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
@@ -2147,7 +2164,7 @@ export async function firsts(input: extypes.commandInput) {
                     })
                 }, 1000);
             } else {
-                //@ts-ignore
+                //@ts-expect-error reply diff signatures
                 input.obj.reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
@@ -2164,14 +2181,14 @@ export async function firsts(input: extypes.commandInput) {
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
+                    setTimeout(() => {//@ts-expect-error edit reply doesnt exist on msg
                         input.obj.editReply({
                             content: 'Error - could not find user\'s #1 scores',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-ignore
+                } else {//@ts-expect-error reply diff signatures
                     input.obj.reply({
                         content: 'Error - could not find user\'s #1 scores',
                         allowedMentions: { repliedUser: false },
@@ -2345,22 +2362,29 @@ export async function maplb(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            mapid = input.obj.options.getInteger('id');//@ts-ignore
-            page = input.obj.options.getInteger('page');//@ts-ignore
+            commanduser = input.obj.member.user;
+            //@ts-expect-error options does not exist on message
+            mapid = input.obj.options.getInteger('id');
+            //@ts-expect-error options does not exist on message
+            page = input.obj.options.getInteger('page');
+            //@ts-expect-error options does not exist on message
             mapmods = input.obj.options.getString('mods');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {
+            //@ts-expect-error message property does not exist on message/interaction
             if (!input.obj.message.embeds[0]) {
                 return;
             }
-            commanduser = input.obj.member.user;//@ts-ignore
-            mapid = input.obj.message.embeds[0].url.split('/b/')[1]//@ts-ignore
-            if (input.obj.message.embeds[0].title.includes('+')) {//@ts-ignore
+            commanduser = input.obj.member.user;
+            //@ts-expect-error message property does not exist on message/interaction
+            mapid = input.obj.message.embeds[0].url.split('/b/')[1]
+            //@ts-expect-error message property does not exist on message/interaction
+            if (input.obj.message.embeds[0].title.includes('+')) {
+                //@ts-expect-error message property does not exist on message/interaction
                 mapmods = input.obj.message.embeds[0].title.split('+')[1]
             }
             page = 0
@@ -2368,16 +2392,20 @@ export async function maplb(input: extypes.commandInput) {
                 case 'BigLeftArrow':
                     page = 1
                     break;
-                case 'LeftArrow'://@ts-ignore
+                case 'LeftArrow':
+                    //@ts-expect-error message property does not exist on message/interaction
                     page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
                     break;
-                case 'RightArrow'://@ts-ignore
+                case 'RightArrow':
+                    //@ts-expect-error message property does not exist on message/interaction
                     page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
                     break;
-                case 'BigRightArrow'://@ts-ignore
+                case 'BigRightArrow':
+                    //@ts-expect-error message property does not exist on message/interaction
                     page = parseInt((input.obj.message.embeds[0].description).split('/')[1].split('\n')[0])
                     break;
-                case 'Refresh'://@ts-ignore
+                case 'Refresh':
+                    //@ts-expect-error message property does not exist on message/interaction
                     page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1])
                     break;
             }
@@ -2464,7 +2492,7 @@ export async function maplb(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        //@ts-ignore
+        //@ts-expect-error reply diff signatures
         input.obj.reply({
             content: 'Loading...',
             allowMentions: { repliedUser: false },
@@ -2487,14 +2515,14 @@ export async function maplb(input: extypes.commandInput) {
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
+                setTimeout(() => {//@ts-expect-error edit reply diff signatures
                     input.obj.editReply({
                         content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
                 }, 1000)
-            } else {//@ts-ignore
+            } else {//@ts-expect-error reply diff signatures
                 input.obj.reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
@@ -2511,7 +2539,7 @@ export async function maplb(input: extypes.commandInput) {
     try {
         title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
         artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
-    } catch (error) {//@ts-ignore
+    } catch (error) {//@ts-expect-error reply diff signatures
         input.obj.reply({ content: 'error - map not found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
             .catch();
         return;
@@ -2541,14 +2569,16 @@ export async function maplb(input: extypes.commandInput) {
         if (lbdataf?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
+                    setTimeout(() => {
+                        //@ts-expect-error edit reply does not exist in message<Any>
                         input.obj.editReply({
                             content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-ignore
+                } else {
+                    //@ts-expect-error reply diff signatures
                     input.obj.reply({
                         content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
@@ -2653,14 +2683,14 @@ export async function maplb(input: extypes.commandInput) {
         if (lbdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
+                    setTimeout(() => {//@ts-expect-error edit reply does not exist in message<Any>
                         input.obj.editReply({
                             content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-ignore
+                } else {//@ts-expect-error reply diff signatures
                     input.obj.reply({
                         content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
@@ -2892,13 +2922,20 @@ export async function nochokes(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            user = input.obj.options.getString('user')//@ts-ignore
-            mode = input.obj.options.getString('mode')//@ts-ignore
-            mapper = input.obj.options.getString('mapper')//@ts-ignore
-            mods = input.obj.options.getString('mods')//@ts-ignore
-            sort = input.obj.options.getString('sort')//@ts-ignore
-            page = input.obj.options.getInteger('page')//@ts-ignore
+            commanduser = input.obj.member.user;
+            //@ts-expect-error options property does not exist on message
+            user = input.obj.options.getString('user')
+            //@ts-expect-error options property does not exist on message
+            mode = input.obj.options.getString('mode')
+            //@ts-expect-error options property does not exist on message
+            mapper = input.obj.options.getString('mapper')
+            //@ts-expect-error options property does not exist on message
+            mods = input.obj.options.getString('mods')
+            //@ts-expect-error options property does not exist on message
+            sort = input.obj.options.getString('sort')
+            //@ts-expect-error options property does not exist on message
+            page = input.obj.options.getInteger('page')
+            //@ts-expect-error options property does not exist on message
             reverse = input.obj.options.getBoolean('reverse')
             searchid = input.obj.member.user.id
         }
@@ -2906,23 +2943,23 @@ export async function nochokes(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {//@ts-expect-error message is not a property of message/interaction
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            //@ts-ignore
+            //@ts-expect-error message is not a property of message/interaction
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]//obj.message.embeds[0].title.split('Top no choke scores of ')[1]
-            //@ts-ignore
+            //@ts-expect-error message is not a property of message/interaction
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
-            //@ts-ignore
-            if (input.obj.message.embeds[0].description) {//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-ignore
+            //@ts-expect-error message is not a property of message/interaction
+            if (input.obj.message.embeds[0].description) {//@ts-expect-error message is not a property of message/interaction
+                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-expect-error message is not a property of message/interaction
                     mapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-ignore
+                }//@ts-expect-error message is not a property of message/interaction
+                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-expect-error message is not a property of message/interaction
                     mods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-ignore
+                }//@ts-expect-error message is not a property of message/interaction
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -2949,14 +2986,14 @@ export async function nochokes(input: extypes.commandInput) {
 
                 }
 
-                //@ts-ignore
+                //@ts-expect-error message is not a property of message/interaction
                 const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
                     reverse = true
                 } else {
                     reverse = false
                 }
-                //@ts-ignore
+                //@ts-expect-error message is not a property of message/interaction
                 const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
                 page = 0
                 switch (input.button) {
@@ -2969,7 +3006,7 @@ export async function nochokes(input: extypes.commandInput) {
                     case 'RightArrow':
                         page = pageParsed + 1
                         break;
-                    case 'BigRightArrow'://@ts-ignore
+                    case 'BigRightArrow'://@ts-expect-error message is not a property of message/interaction
                         page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
                         break;
                     default:
@@ -3104,7 +3141,8 @@ export async function nochokes(input: extypes.commandInput) {
                 .setEmoji(buttonsthing.label.page.last),
         );
 
-    if (input.commandType == 'interaction') {//@ts-ignore
+    if (input.commandType == 'interaction') {
+        //@ts-expect-error reply diff signatures
         input.obj.reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
@@ -3130,14 +3168,16 @@ export async function nochokes(input: extypes.commandInput) {
     if (osudata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
+                setTimeout(() => {
+                    //@ts-expect-error reply diff signatures
                     input.obj.reply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
                 }, 1000);
-            } else {//@ts-ignore
+            } else {
+                //@ts-expect-error reply diff signatures
                 input.obj.reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
@@ -3165,14 +3205,16 @@ export async function nochokes(input: extypes.commandInput) {
     if (nochokedata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
+                setTimeout(() => {
+                    //@ts-expect-error reply diff signatures
                     input.obj.reply({
                         content: `Error - could not find \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
                 }, 1000);
-            } else {//@ts-ignore
+            } else {
+                //@ts-expect-error reply diff signatures
                 input.obj.reply({
                     content: `Error - could not find \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
@@ -3188,7 +3230,8 @@ export async function nochokes(input: extypes.commandInput) {
     } catch (error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
+                setTimeout(() => {
+                    //@ts-expect-error reply diff signatures
                     input.obj.reply({
                         content: `Error - could not fetch \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
@@ -3196,7 +3239,8 @@ export async function nochokes(input: extypes.commandInput) {
                     })
                         .catch();
                 }, 1000);
-            } else {//@ts-ignore
+            } else {
+                //@ts-expect-error reply diff signatures
                 input.obj.reply({
                     content: `Error - could not fetch \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
@@ -3460,14 +3504,22 @@ export async function osutop(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            user = input.obj.options.getString('user')//@ts-ignore
-            mode = input.obj.options.getString('mode')//@ts-ignore
-            mapper = input.obj.options.getString('mapper')//@ts-ignore
-            mods = input.obj.options.getString('mods')//@ts-ignore
-            sort = input.obj.options.getString('sort')//@ts-ignore
-            page = input.obj.options.getInteger('page')//@ts-ignore
-            detailed = input.obj.options.getBoolean('detailed')//@ts-ignore
+            commanduser = input.obj.member.user;
+            //@ts-expect-error options property does not exist on message
+            user = input.obj.options.getString('user')
+            //@ts-expect-error options property does not exist on message
+            mode = input.obj.options.getString('mode')
+            //@ts-expect-error options property does not exist on message
+            mapper = input.obj.options.getString('mapper')
+            //@ts-expect-error options property does not exist on message
+            mods = input.obj.options.getString('mods')
+            //@ts-expect-error options property does not exist on message
+            sort = input.obj.options.getString('sort')
+            //@ts-expect-error options property does not exist on message
+            page = input.obj.options.getInteger('page')
+            //@ts-expect-error options property does not exist on message
+            detailed = input.obj.options.getBoolean('detailed')
+            //@ts-expect-error options property does not exist on message
             reverse = input.obj.options.getBoolean('reverse')
             searchid = input.obj.member.user.id
         }
@@ -3475,23 +3527,23 @@ export async function osutop(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {//@ts-expect-error message property does not exist on message/interaction
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            //@ts-ignore
+            //@ts-expect-error message property does not exist on message/interaction
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]//obj.message.embeds[0].title.split('Top plays of ')[1]
-            //@ts-ignore
+            //@ts-expect-error message property does not exist on message/interaction
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
-            //@ts-ignore
-            if (input.obj.message.embeds[0].description) {//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-ignore
+            //@ts-expect-error message property does not exist on message/interaction
+            if (input.obj.message.embeds[0].description) {//@ts-expect-error message property does not exist on message/interaction
+                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-expect-error message property does not exist on message/interaction
                     mapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-ignore
+                }//@ts-expect-error message property does not exist on message/interaction
+                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-expect-error message property does not exist on message/interaction
                     mods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-ignore
+                }//@ts-expect-error message property does not exist on message/interaction
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -3518,19 +3570,19 @@ export async function osutop(input: extypes.commandInput) {
 
                 }
 
-                //@ts-ignore
+                //@ts-expect-error message property does not exist on message/interaction
                 const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
                     reverse = true
                 } else {
                     reverse = false
                 }
-                //@ts-ignore
+                //@ts-expect-error message property does not exist on message/interaction
                 if (input.obj.message.embeds[0].fields.length == 7 || input.obj.message.embeds[0].fields.length == 11) {
                     detailed = true
                 } else {
                     detailed = false
-                }//@ts-ignore
+                }//@ts-expect-error message property does not exist on message/interaction
                 const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
                 page = 0
                 switch (input.button) {
@@ -3543,7 +3595,7 @@ export async function osutop(input: extypes.commandInput) {
                     case 'RightArrow':
                         page = pageParsed + 1
                         break;
-                    case 'BigRightArrow'://@ts-ignore
+                    case 'BigRightArrow'://@ts-expect-error message property does not exist on message/interaction
                         page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
                         break;
                     default:
@@ -3564,7 +3616,8 @@ export async function osutop(input: extypes.commandInput) {
         if (input.overrides.page != null) {
             page = input.overrides.page
         }
-        if (input.overrides.sort != null) {//@ts-ignore
+        if (input.overrides.sort != null) {
+            //@ts-expect-error some validation error idk
             sort = input.overrides.sort
         }
         if (input.overrides.reverse != null) {
@@ -3704,7 +3757,8 @@ export async function osutop(input: extypes.commandInput) {
                 .setEmoji(buttonsthing.label.page.last),
         );
 
-    if (input.commandType == 'interaction') {//@ts-ignore
+    if (input.commandType == 'interaction') {
+        //@ts-expect-error reply diff signatures
         input.obj.reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
@@ -3730,14 +3784,16 @@ export async function osutop(input: extypes.commandInput) {
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
+                setTimeout(() => {
+                    //@ts-expect-error reply diff signatures
                     input.obj.reply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
                 }, 1000);
-            } else {//@ts-ignore
+            } else {
+                //@ts-expect-error reply diff signatures
                 input.obj.reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
@@ -3765,14 +3821,16 @@ export async function osutop(input: extypes.commandInput) {
     if (osutopdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
+                setTimeout(() => {
+                    //@ts-expect-error reply diff signatures
                     input.obj.reply({
                         content: `Error - could not find \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
                 }, 1000);
-            } else {//@ts-ignore
+            } else {
+                //@ts-expect-error reply diff signatures
                 input.obj.reply({
                     content: `Error - could not find \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
@@ -3788,7 +3846,7 @@ export async function osutop(input: extypes.commandInput) {
     } catch (error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
+                setTimeout(() => {//@ts-expect-error reply diff signatures
                     input.obj.reply({
                         content: `Error - could not fetch \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
@@ -3796,7 +3854,7 @@ export async function osutop(input: extypes.commandInput) {
                     })
                         .catch();
                 }, 1000);
-            } else {//@ts-ignore
+            } else {//@ts-expect-error reply diff signatures
                 input.obj.reply({
                     content: `Error - could not fetch \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
@@ -4093,35 +4151,52 @@ export async function pinned(input: extypes.commandInput) {
 
         case 'interaction': {
             commanduser = input.obj.member.user;
-            searchid = input.obj.member.user.id;//@ts-ignore
-            user = input.obj.options.getString('user');//@ts-ignore
-            page = input.obj.options.getInteger('page');//@ts-ignore
-            scoredetailed = input.obj.options.getBoolean('detailed');//@ts-ignore
-            sort = input.obj.options.getString('sort');//@ts-ignore
-            reverse = input.obj.options.getBoolean('reverse');//@ts-ignore
-            mode = input.obj.options.getString('mode') ?? 'osu';//@ts-ignore
-            filteredMapper = input.obj.options.getString('mapper');//@ts-ignore
+            searchid = input.obj.member.user.id;
+            //@ts-expect-error options property does not exist on message
+            user = input.obj.options.getString('user');
+            //@ts-expect-error options property does not exist on message
+            page = input.obj.options.getInteger('page');
+            //@ts-expect-error options property does not exist on message
+            scoredetailed = input.obj.options.getBoolean('detailed');
+            //@ts-expect-error options property does not exist on message
+            sort = input.obj.options.getString('sort');
+            //@ts-expect-error options property does not exist on message
+            reverse = input.obj.options.getBoolean('reverse');
+            //@ts-expect-error options property does not exist on message
+            mode = input.obj.options.getString('mode') ?? 'osu';
+            //@ts-expect-error options property does not exist on message
+            filteredMapper = input.obj.options.getString('mapper');
+            //@ts-expect-error options property does not exist on message
             filteredMods = input.obj.options.getString('mods');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {
+            //@ts-expect-error message property does not exist on interaction/message
             if (!input.obj.message.embeds[0]) {
                 return;
             }
-            commanduser = input.obj.member.user;//@ts-ignore
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]//@ts-ignore
+            commanduser = input.obj.member.user;
+            //@ts-expect-error message property does not exist on interaction/message
+            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
+            //@ts-expect-error message property does not exist on interaction/message
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
-            page = 0;//@ts-ignore
-            if (input.obj.message.embeds[0].description) {//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-ignore
+            page = 0;
+            //@ts-expect-error message property does not exist on interaction/message
+            if (input.obj.message.embeds[0].description) {
+                //@ts-expect-error message property does not exist on interaction/message
+                if (input.obj.message.embeds[0].description.includes('mapper')) {
+                    //@ts-expect-error message property does not exist on interaction/message
                     filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-ignore
+                }
+                //@ts-expect-error message property does not exist on interaction/message
+                if (input.obj.message.embeds[0].description.includes('mods')) {
+                    //@ts-expect-error message property does not exist on interaction/message
                     filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-ignore
+                }
+                //@ts-expect-error message property does not exist on interaction/message
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -4148,13 +4223,15 @@ export async function pinned(input: extypes.commandInput) {
 
                 }
 
-                //@ts-ignore
+
+                //@ts-expect-error message property does not exist on interaction/message
                 const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
                     reverse = true
                 } else {
                     reverse = false
-                }//@ts-ignore
+                }
+                //@ts-expect-error message property does not exist on interaction/message
                 const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
                 page = 0
                 switch (input.button) {
@@ -4167,7 +4244,8 @@ export async function pinned(input: extypes.commandInput) {
                     case 'RightArrow':
                         page = pageParsed + 1
                         break;
-                    case 'BigRightArrow'://@ts-ignore
+                    case 'BigRightArrow':
+                        //@ts-expect-error message property does not exist on interaction/message
                         page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
                         break;
                     default:
@@ -4300,7 +4378,8 @@ export async function pinned(input: extypes.commandInput) {
 
     mode = osufunc.modeValidator(mode);
 
-    if (input.commandType == 'interaction') {//@ts-ignore
+    if (input.commandType == 'interaction') {
+        //@ts-expect-error reply diff signatures
         input.obj.reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
@@ -4324,14 +4403,16 @@ export async function pinned(input: extypes.commandInput) {
     osufunc.debug(osudata, 'command', 'pinned', input.obj.guildId, 'osuData');
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
-            setTimeout(() => {//@ts-ignore
+            setTimeout(() => {
+                //@ts-expect-error reply diff signatures
                 input.obj.reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
             }, 1000);
-        } else {//@ts-ignore
+        } else {
+            //@ts-expect-error reply diff signatures
             input.obj.reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
@@ -4347,14 +4428,14 @@ export async function pinned(input: extypes.commandInput) {
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
+                    setTimeout(() => {//@ts-expect-error null msg
                         input.obj.editReply({
                             content: 'Error - could not fetch user\'s pinned scores',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-ignore
+                } else {//@ts-expect-error null msg
                     input.obj.reply({
                         content: 'Error - could not fetch user\'s pinned scores',
                         allowedMentions: { repliedUser: false },
@@ -4557,26 +4638,26 @@ export async function recent(input: extypes.commandInput) {
 
         case 'interaction': {
             commanduser = input.obj.member.user;
-            searchid = input.obj.member.user.id;//@ts-ignore
-            user = input.obj.options.getString('user');//@ts-ignore
-            page = input.obj.options.getNumber('page');//@ts-ignore
-            mode = input.obj.options.getString('mode');//@ts-ignore
+            searchid = input.obj.member.user.id;//@ts-expect-error null msg
+            user = input.obj.options.getString('user');//@ts-expect-error null msg
+            page = input.obj.options.getNumber('page');//@ts-expect-error null msg
+            mode = input.obj.options.getString('mode');//@ts-expect-error null msg
             list = input.obj.options.getBoolean('list');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {//@ts-expect-error null msg
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            user =//@ts-ignore
-                input.obj.message.embeds[0].title.includes('play for') ?//@ts-ignore
-                    input.obj.message.embeds[0].title.split('most recent play for ')[1].split(' | ')[0] ://@ts-ignore
+            user =//@ts-expect-error null msg
+                input.obj.message.embeds[0].title.includes('play for') ?//@ts-expect-error null msg
+                    input.obj.message.embeds[0].title.split('most recent play for ')[1].split(' | ')[0] ://@ts-expect-error null msg
                     input.obj.message.embeds[0].title.split('plays for ')[1]
-            //@ts-ignore
+            //@ts-expect-error null msg
             const modething = input.obj.message.embeds[0].footer ? input.obj.message.embeds[0].description.split('\n')[1] : input.obj.message.embeds[0].description.split(' | ')[1].split('\n')[0]
             switch (true) {
                 case modething.includes('osu'): {
@@ -4600,41 +4681,41 @@ export async function recent(input: extypes.commandInput) {
             if (input.button == 'BigLeftArrow') {
                 page = 1
                 isFirstPage = true
-            }//@ts-ignore
+            }//@ts-expect-error null msg
             if (input.obj.message.embeds[0].title.includes('plays')) {
                 switch (input.button) {
-                    case 'LeftArrow'://@ts-ignore
+                    case 'LeftArrow'://@ts-expect-error null msg
                         page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1
                         break;
-                    case 'RightArrow'://@ts-ignore
+                    case 'RightArrow'://@ts-expect-error null msg
                         page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1
                         break;
-                    case 'BigRightArrow'://@ts-ignore
+                    case 'BigRightArrow'://@ts-expect-error null msg
                         page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))
                         break;
-                    case 'Refresh'://@ts-ignore
+                    case 'Refresh'://@ts-expect-error null msg
                         page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0])
                         break;
                 }
-                list = true//@ts-ignore
+                list = true//@ts-expect-error null msg
                 if (isNaN((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) || ((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) == 'NaN') {
                     page = 1
                 }
                 if (page < 2) {
                     isFirstPage = true;
-                }//@ts-ignore
+                }//@ts-expect-error null msg
                 if (page == parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))) {
                     isLastPage = true;
                 }
             } else {
                 switch (input.button) {
-                    case 'LeftArrow'://@ts-ignore
+                    case 'LeftArrow'://@ts-expect-error null msg
                         page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) - 1
                         break;
-                    case 'RightArrow'://@ts-ignore
+                    case 'RightArrow'://@ts-expect-error null msg
                         page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) + 1
                         break;
-                    case 'Refresh'://@ts-ignore
+                    case 'Refresh'://@ts-expect-error null msg
                         page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1])
                         break;
                 }
@@ -4778,7 +4859,7 @@ export async function recent(input: extypes.commandInput) {
     osufunc.debug(osudata, 'command', 'recent', input.obj.guildId, 'osuData');
 
     if (osudata?.error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {//@ts-ignore
+        if (input.commandType != 'button' && input.commandType != 'link') {//@ts-expect-error null msg
             input.obj.reply({
                 content: `Error - could not fetch user \`${user}\``,
                 allowedMentions: { repliedUser: false },
@@ -4789,7 +4870,7 @@ export async function recent(input: extypes.commandInput) {
     }
 
     if (!osudata.id) {
-        if (input.commandType != 'button' && input.commandType != 'link') {//@ts-ignore
+        if (input.commandType != 'button' && input.commandType != 'link') {//@ts-expect-error null msg
             input.obj.reply({
                 content: `Error - could not fetch user \`${user}\``,
                 allowedMentions: { repliedUser: false },
@@ -4799,7 +4880,7 @@ export async function recent(input: extypes.commandInput) {
         return;
     }
 
-    if (input.commandType == 'interaction') {//@ts-ignore
+    if (input.commandType == 'interaction') {//@ts-expect-error null msg
         input.obj.reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
@@ -4823,14 +4904,14 @@ export async function recent(input: extypes.commandInput) {
     if (rsdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
+                setTimeout(() => {//@ts-expect-error null msg
                     input.obj.editReply({
                         content: `Error - could not fetch \`${user}\`\'s recent scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
                 }, 1000)
-            } else {//@ts-ignore
+            } else {//@ts-expect-error null msg
                 input.obj.reply({
                     content: `Error - could not fetch \`${user}\`\'s recent scores`,
                     allowedMentions: { repliedUser: false },
@@ -4859,14 +4940,14 @@ export async function recent(input: extypes.commandInput) {
         if (!curscore || curscore == undefined || curscore == null) {
             if (input.button == null) {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
+                    setTimeout(() => {//@ts-expect-error null msg
                         input.obj.editReply({
                             content: `Error - \`${user}\` has no recent ${mode ?? 'osu'} scores`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-ignore
+                } else {//@ts-expect-error null msg
                     input.obj.reply(
                         {
                             content: `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores`,
@@ -4895,14 +4976,14 @@ export async function recent(input: extypes.commandInput) {
         if (mapdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
+                    setTimeout(() => {//@ts-expect-error null msg
                         input.obj.editReply({
                             content: 'Error - could not find beatmap',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-ignore
+                } else {//@ts-expect-error null msg
                     input.obj.reply({
                         content: 'Error - could not find beatmap',
                         allowedMentions: { repliedUser: false },
@@ -5565,7 +5646,7 @@ export async function scoreparse(input: extypes.commandInput) {
             break;
         case 'link': {
             //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-ignore
+            commanduser = input.obj.author;//@ts-expect-error null msg
             const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
             try {
                 scorelink = messagenohttp.split('/scores/')[1]
@@ -5633,7 +5714,7 @@ export async function scoreparse(input: extypes.commandInput) {
     func.storeFile(scoredata, scoreid, 'scoredata')
 
     if (scoredata?.error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {//@ts-ignore
+        if (input.commandType != 'button' && input.commandType != 'link') {//@ts-expect-error null msg
             input.obj.reply({
                 content: 'Error - could not fetch score data',
                 allowedMentions: { repliedUser: false },
@@ -5644,7 +5725,7 @@ export async function scoreparse(input: extypes.commandInput) {
         return;
     }
     try {
-        if (typeof scoredata?.error != 'undefined') {//@ts-ignore
+        if (typeof scoredata?.error != 'undefined') {//@ts-expect-error null msg
             input.obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
                 .catch();
             return;
@@ -5652,7 +5733,7 @@ export async function scoreparse(input: extypes.commandInput) {
     } catch (error) {
     }
 
-    if (input.commandType == 'interaction') {//@ts-ignore
+    if (input.commandType == 'interaction') {//@ts-expect-error null msg
         input.obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
             .catch();
 
@@ -5661,7 +5742,7 @@ export async function scoreparse(input: extypes.commandInput) {
     osufunc.debug(scoredata, 'command', 'scoreparse', input.obj.guildId, 'scoreData');
     try {
         scoredata.rank.toUpperCase();
-    } catch (error) {//@ts-ignore
+    } catch (error) {//@ts-expect-error null msg
         input.obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
             .catch();
         return;
@@ -5679,14 +5760,14 @@ export async function scoreparse(input: extypes.commandInput) {
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
+                setTimeout(() => {//@ts-expect-error null msg
                     input.obj.editReply({
                         content: 'Error - could not fetch beatmap data',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
                 }, 1000)
-            } else {//@ts-ignore
+            } else {//@ts-expect-error null msg
                 input.obj.reply({
                     content: 'Error - could not fetch beatmap data',
                     allowedMentions: { repliedUser: false },
@@ -5822,14 +5903,14 @@ export async function scoreparse(input: extypes.commandInput) {
     osufunc.debug(osudata, 'command', 'scoreparse', input.obj.guildId, 'osuData')
     if (osudata?.error) {
         if (input.commandType == 'interaction') {
-            setTimeout(() => {//@ts-ignore
+            setTimeout(() => {//@ts-expect-error null msg
                 input.obj.reply({
                     content: `Error - could not find user \`${scoredata?.user?.username}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
             }, 1000);
-        } else {//@ts-ignore
+        } else {//@ts-expect-error null msg
             input.obj.reply({
                 content: `Error - could not find user \`${scoredata?.user?.username}\``,
                 allowedMentions: { repliedUser: false },
@@ -5906,7 +5987,7 @@ export async function scores(input: extypes.commandInput) {
     switch (input.commandType) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-ignore
+            commanduser = input.obj.author;//@ts-expect-error null msg
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-parse')) {
                 parseScore = true;
@@ -5943,31 +6024,31 @@ export async function scores(input: extypes.commandInput) {
 
         case 'interaction': {
             commanduser = input.obj.member.user;
-            searchid = input.obj.member.user.id;//@ts-ignore
-            user = input.obj.options.getString('username');//@ts-ignore
-            mapid = input.obj.options.getNumber('id');//@ts-ignore
-            sort = input.obj.options.getString('sort');//@ts-ignore
+            searchid = input.obj.member.user.id;//@ts-expect-error null msg
+            user = input.obj.options.getString('username');//@ts-expect-error null msg
+            mapid = input.obj.options.getNumber('id');//@ts-expect-error null msg
+            sort = input.obj.options.getString('sort');//@ts-expect-error null msg
             reverse = input.obj.options.getBoolean('reverse');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {//@ts-expect-error null msg
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            page = 0;//@ts-ignore
-            user = input.obj.message.embeds[0].author.name.split(' (#')[0]//@ts-ignore
-            mapid = input.obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]//@ts-ignore
-            if (input.obj.message.embeds[0].description) {//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-ignore
+            page = 0;//@ts-expect-error null msg
+            user = input.obj.message.embeds[0].author.name.split(' (#')[0]//@ts-expect-error null msg
+            mapid = input.obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]//@ts-expect-error null msg
+            if (input.obj.message.embeds[0].description) {//@ts-expect-error null msg
+                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-expect-error null msg
                     filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-ignore
+                }//@ts-expect-error null msg
+                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-expect-error null msg
                     filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-ignore
+                }//@ts-expect-error null msg
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -5994,7 +6075,7 @@ export async function scores(input: extypes.commandInput) {
 
                 }
 
-                //@ts-ignore
+                //@ts-expect-error null msg
                 const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
                     reverse = true
@@ -6006,21 +6087,21 @@ export async function scores(input: extypes.commandInput) {
                     case 'BigLeftArrow':
                         page = 1
                         break;
-                    case 'LeftArrow'://@ts-ignore
+                    case 'LeftArrow'://@ts-expect-error null msg
                         page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
                         break;
-                    case 'RightArrow'://@ts-ignore
+                    case 'RightArrow'://@ts-expect-error null msg
                         page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
                         break;
-                    case 'BigRightArrow'://@ts-ignore
+                    case 'BigRightArrow'://@ts-expect-error null msg
                         page = parseInt((input.obj.message.embeds[0].description).split('/')[1].split('\n')[0])
                         break;
-                    case 'Refresh'://@ts-ignore
+                    case 'Refresh'://@ts-expect-error null msg
                         page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1])
                         break;
-                }//@ts-ignore
+                }//@ts-expect-error null msg
                 mode = input.obj.message.embeds[0].description.split('mode: ')[1].split('\n')[0]
-            }//@ts-ignore
+            }//@ts-expect-error null msg
             const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
             page = 0
             switch (input.button) {
@@ -6033,7 +6114,7 @@ export async function scores(input: extypes.commandInput) {
                 case 'RightArrow':
                     page = pageParsed + 1
                     break;
-                case 'BigRightArrow'://@ts-ignore
+                case 'BigRightArrow'://@ts-expect-error null msg
                     page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
 
                     break;
@@ -6168,7 +6249,7 @@ export async function scores(input: extypes.commandInput) {
         mapid = osufunc.getPreviousId('map', input.obj.guildId);
     }
 
-    if (input.commandType == 'interaction') {//@ts-ignore
+    if (input.commandType == 'interaction') {//@ts-expect-error null msg
         input.obj.reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
@@ -6193,14 +6274,14 @@ export async function scores(input: extypes.commandInput) {
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
-            setTimeout(() => {//@ts-ignore
+            setTimeout(() => {//@ts-expect-error null msg
                 input.obj.reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
             }, 1000);
-        } else {//@ts-ignore
+        } else {//@ts-expect-error null msg
             input.obj.reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
@@ -6227,14 +6308,14 @@ export async function scores(input: extypes.commandInput) {
     if (scoredataPresort?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
+                setTimeout(() => {//@ts-expect-error null msg
                     input.obj.editReply({
                         content: 'Error - could not fetch scores',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
                 }, 1000)
-            } else {//@ts-ignore
+            } else {//@ts-expect-error null msg
                 input.obj.reply({
                     content: 'Error - could not fetch scores',
                     allowedMentions: { repliedUser: false },
@@ -6248,7 +6329,7 @@ export async function scores(input: extypes.commandInput) {
     const scoredata: osuApiTypes.Score[] = scoredataPresort.scores
     try {
         scoredata.length < 1
-    } catch (error) {//@ts-ignore
+    } catch (error) {//@ts-expect-error null msg
         return input.obj.reply({
             content: `Error - no scores found for \`${user}\` on map \`${mapid}\``,
             allowedMentions: { repliedUser: false },
@@ -6290,14 +6371,14 @@ export async function scores(input: extypes.commandInput) {
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
+                setTimeout(() => {//@ts-expect-error null msg
                     input.obj.editReply({
                         content: 'Error - could not fetch beatmap data',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
                 }, 1000)
-            } else {//@ts-ignore
+            } else {//@ts-expect-error null msg
                 input.obj.reply({
                     content: 'Error - could not fetch beatmap data',
                     allowedMentions: { repliedUser: false },
@@ -6427,7 +6508,7 @@ export async function simulate(input: extypes.commandInput) {
     switch (input.commandType) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-ignore
+            commanduser = input.obj.author;//@ts-expect-error null msg
             const ctn = input.obj.content;
             if (ctn.includes('-mods')) {
                 mods = input.args[input.args.indexOf('-mods') + 1]
@@ -6525,14 +6606,14 @@ export async function simulate(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            mapid = input.obj.options.getInteger('id')//@ts-ignore
-            mods = input.obj.options.getString('mods')//@ts-ignore
-            acc = input.obj.options.getNumber('accuracy')//@ts-ignore
-            combo = input.obj.options.getInteger('combo')//@ts-ignore
-            n300 = input.obj.options.getInteger('n300')//@ts-ignore
-            n100 = input.obj.options.getInteger('n100')//@ts-ignore
-            n50 = input.obj.options.getInteger('n50')//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            mapid = input.obj.options.getInteger('id')//@ts-expect-error null msg
+            mods = input.obj.options.getString('mods')//@ts-expect-error null msg
+            acc = input.obj.options.getNumber('accuracy')//@ts-expect-error null msg
+            combo = input.obj.options.getInteger('combo')//@ts-expect-error null msg
+            n300 = input.obj.options.getInteger('n300')//@ts-expect-error null msg
+            n100 = input.obj.options.getInteger('n100')//@ts-expect-error null msg
+            n50 = input.obj.options.getInteger('n50')//@ts-expect-error null msg
             nMiss = input.obj.options.getInteger('miss')
         }
 
@@ -6604,7 +6685,7 @@ export async function simulate(input: extypes.commandInput) {
         mapid = osufunc.getPreviousId('map', input.obj.guildId);
     }
 
-    if (input.commandType == 'interaction') {//@ts-ignore
+    if (input.commandType == 'interaction') {//@ts-expect-error null msg
         input.obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
             .catch();
 
@@ -6776,21 +6857,21 @@ export async function map(input: extypes.commandInput) {
 
         case 'interaction': {
             commanduser = input.obj.member.user;
-            //@ts-ignore
-            mapid = input.obj.options.getInteger('id');//@ts-ignore
-            mapmods = input.obj.options.getString('mods');//@ts-ignore
-            detailed = input.obj.options.getBoolean('detailed');//@ts-ignore
+            //@ts-expect-error null msg
+            mapid = input.obj.options.getInteger('id');//@ts-expect-error null msg
+            mapmods = input.obj.options.getString('mods');//@ts-expect-error null msg
+            detailed = input.obj.options.getBoolean('detailed');//@ts-expect-error null msg
             maptitleq = input.obj.options.getString('query');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {//@ts-expect-error null msg
             if (!input.obj.message.embeds[0]) {
                 return;
             }
-            commanduser = input.obj.member.user;//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
             const urlnohttp = input.obj.message.embeds[0].url.split('https://')[1];
             const setid = urlnohttp.split('/')[2].split('#')[0];
             const curid = urlnohttp.split('/')[3];
@@ -6834,10 +6915,10 @@ export async function map(input: extypes.commandInput) {
             if (input.button == `BigLeftArrow`) {
                 mapid = bmstosr[0].id;
             }
-            //@ts-ignore
+            //@ts-expect-error null msg
             if (input.obj.message.embeds[0].fields[1].value.includes('aim') || input.obj.message.embeds[0].fields[0].value.includes('ms')) {
                 detailed = true
-            }//@ts-ignore
+            }//@ts-expect-error null msg
             mapmods = input.obj.message.embeds[0].title.split('+')[1];
             if (input.button == 'DetailEnable') {
                 detailed = true;
@@ -6846,7 +6927,7 @@ export async function map(input: extypes.commandInput) {
                 detailed = false;
             }
             if (input.button == 'Refresh') {
-                mapid = curid;//@ts-ignore
+                mapid = curid;//@ts-expect-error null msg
                 detailed = input.obj.message.embeds[0].fields[1].value.includes('aim') || input.obj.message.embeds[0].fields[0].value.includes('ms')
             }
         }
@@ -6855,9 +6936,9 @@ export async function map(input: extypes.commandInput) {
         case 'link': {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
-            //@ts-ignore
+            //@ts-expect-error null msg
             const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
-            mapmods =//@ts-ignore
+            mapmods =//@ts-expect-error null msg
                 input.obj.content.includes('+') ?
                     messagenohttp.split('+')[1] : 'NM';
             if (input.args[0] && input.args[0].startsWith('query')) {
@@ -6883,7 +6964,7 @@ export async function map(input: extypes.commandInput) {
                     } else {
                         mapid = parseInt(idfirst)
                     }
-                } catch (error) {//@ts-ignore
+                } catch (error) {//@ts-expect-error null msg
                     input.obj.reply({
                         content: 'Please enter a valid beatmap link.',
                         allowedMentions: { repliedUser: false }
@@ -6917,7 +6998,7 @@ export async function map(input: extypes.commandInput) {
                 }
                 try {
                     mapid = bmsdata.beatmaps[0].id;
-                } catch (error) {//@ts-ignore
+                } catch (error) {//@ts-expect-error null msg
                     input.obj.reply({
                         content: 'Please enter a valid beatmap link.',
                         allowedMentions: {
@@ -7019,7 +7100,7 @@ export async function map(input: extypes.commandInput) {
 
         if (mapdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                //@ts-ignore
+                //@ts-expect-error null msg
                 input.obj.reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
@@ -7079,7 +7160,7 @@ export async function map(input: extypes.commandInput) {
         osufunc.debug(mapidtest, 'command', 'map', input.obj.guildId, 'mapIdTestData');
 
         if (mapidtest?.error) {
-            if (input.commandType != 'button' && input.commandType != 'link') {//@ts-ignore
+            if (input.commandType != 'button' && input.commandType != 'link') {//@ts-expect-error null msg
                 input.obj.reply({
                     content: 'Error - could not fetch beatmap search data.',
                     allowedMentions: { repliedUser: false },
@@ -7091,7 +7172,7 @@ export async function map(input: extypes.commandInput) {
 
         let mapidtest2;
 
-        if (mapidtest.length == 0) {//@ts-ignore
+        if (mapidtest.length == 0) {//@ts-expect-error null msg
             input.obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 .catch();
 
@@ -7099,7 +7180,7 @@ export async function map(input: extypes.commandInput) {
         }
         try {
             mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating)
-        } catch (error) {//@ts-ignore
+        } catch (error) {//@ts-expect-error null msg
             input.obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 .catch();
             return;
@@ -7132,7 +7213,7 @@ export async function map(input: extypes.commandInput) {
         osufunc.debug(mapdata, 'command', 'map', input.obj.guildId, 'mapData');
         if (mapdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                //@ts-ignore
+                //@ts-expect-error null msg
                 input.obj.reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
@@ -7167,7 +7248,7 @@ export async function map(input: extypes.commandInput) {
         mapmods = osumodcalc.OrderMods(mapmods.toUpperCase());
     }
     let statusimg = emojis.rankedstatus.graveyard;
-    if (input.commandType == 'interaction') {//@ts-ignore
+    if (input.commandType == 'interaction') {//@ts-expect-error null msg
         input.obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
             .catch();
 
@@ -7579,8 +7660,8 @@ export async function maplocal(input: extypes.commandInput) {
     const errmap = fs.readFileSync('./files/errmap.osu', 'utf-8')
     let errtxt = '';
     let mods = 'NM'
-    //@ts-ignore
-    if (input.obj.content.includes('+')) {//@ts-ignore
+    //@ts-expect-error null msg
+    if (input.obj.content.includes('+')) {//@ts-expect-error null msg
         mods = input.obj.content.split('+')[1].split(' ')[0]
     }
 
@@ -7776,7 +7857,7 @@ export async function maplocal(input: extypes.commandInput) {
     osufunc.debug(strains, 'fileparse', 'osu', input.obj.guildId, 'strains');
     try {
         mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
-    } catch (error) {//@ts-ignore
+    } catch (error) {//@ts-expect-error null msg
         input.obj.reply({
             content: 'Error - calculating strain graph.',
             allowedMentions: { repliedUser: false },
@@ -7815,7 +7896,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
                 }
             ])
             .setImage(`${mapgraph}`)
-    } catch (error) {//@ts-ignore
+    } catch (error) {//@ts-expect-error null msg
         input.obj.reply({
             content: 'Error - unknown',
             allowedMentions: { repliedUser: false },
@@ -7949,7 +8030,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
             if (!curembed) return;
             user = curembed.author.url.split('u/')[1]
             sort = 'dateadded';
-            //@ts-ignore
+            //@ts-expect-error null msg
             filter = curembed.title.split('Maps')[0].split('\'s')[1].toLowerCase().replaceAll(' ', '')
             const curpage = parseInt(
                 curembed.description.split('Page: ')[1].split('/')[0]
@@ -7964,7 +8045,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 case 'RightArrow':
                     page = curpage + 1
                     break;
-                case 'BigRightArrow'://@ts-ignore
+                case 'BigRightArrow':
                     page = parseInt(
                         curembed.description.split('Page: ')[1].split('/')[1].split('\n')[0]
                     )
@@ -8062,7 +8143,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
         user = cuser.username;
     }
 
-    if (input.commandType == 'interaction') {//@ts-ignore
+    if (input.commandType == 'interaction') {//@ts-expect-error null msg
         input.obj.reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
@@ -8086,14 +8167,14 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
-            setTimeout(() => {//@ts-ignore
+            setTimeout(() => {//@ts-expect-error null msg
                 input.obj.reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
             }, 1000);
-        } else {//@ts-ignore
+        } else {//@ts-expect-error null msg
             input.obj.reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
@@ -8110,14 +8191,14 @@ export async function userBeatmaps(input: extypes.commandInput) {
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
+                    setTimeout(() => {//@ts-expect-error null msg
                         input.obj.editReply({
                             content: `Error - could not find user\'s ${calc.toCapital(filter)} Maps`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-ignore
+                } else {//@ts-expect-error null msg
                     input.obj.reply({
                         content: `Error - could not find user\'s ${calc.toCapital(filter)} Maps`,
                         allowedMentions: { repliedUser: false },
@@ -8253,7 +8334,7 @@ export async function trackadd(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
             user = input.obj.options.getString('user');
 
         }
@@ -8296,7 +8377,7 @@ export async function trackadd(input: extypes.commandInput) {
         where: { guildId: input.obj.guildId }
     })
 
-    if (!guildsetting.dataValues.trackChannel) {//@ts-ignore
+    if (!guildsetting.dataValues.trackChannel) {//@ts-expect-error null msg
         input.obj.reply({
             content: 'The current guild does not have a tracking channel',
             embeds: [],
@@ -8374,7 +8455,7 @@ export async function trackremove(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
             user = input.obj.options.getString('user');
         }
             //==============================================================================================================================================================================================
@@ -8416,7 +8497,7 @@ export async function trackremove(input: extypes.commandInput) {
         where: { guildId: input.obj.guildId }
     })
 
-    // if (!guildsetting.dataValues.trackChannel) {//@ts-ignore
+    // if (!guildsetting.dataValues.trackChannel) {//@ts-expect-error null msg
     //     input.obj.reply({
     //         content: 'The current guild does not have a tracking channel',
     //         embeds: [],
@@ -8491,15 +8572,15 @@ export async function trackchannel(input: extypes.commandInput) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
-            channelId = input.args[0];//@ts-ignore
-            if (input.obj.content.includes('<#')) {//@ts-ignore
+            channelId = input.args[0];//@ts-expect-error null msg
+            if (input.obj.content.includes('<#')) {//@ts-expect-error null msg
                 channelId = input.obj.content.split('<#')[1].split('>')[0]
             }
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
             channelId = (input.obj.options.getChannel('channel')).id;
         }
             //==============================================================================================================================================================================================
@@ -8541,7 +8622,7 @@ export async function trackchannel(input: extypes.commandInput) {
 
     if (!channelId) {
         //the current channel is...
-        if (!guildsetting.dataValues.trackChannel) {//@ts-ignore
+        if (!guildsetting.dataValues.trackChannel) {//@ts-expect-error null msg
             input.obj.reply({
                 content: 'The current guild does not have a tracking channel',
                 embeds: [],
@@ -8550,7 +8631,7 @@ export async function trackchannel(input: extypes.commandInput) {
                 failIfNotExists: true
             }).catch()
             return;
-        }//@ts-ignore
+        }//@ts-expect-error null msg
         input.obj.reply({
             content: `The current tracking channel is <#${guildsetting.dataValues.trackChannel}>`,
             embeds: [],
@@ -8561,7 +8642,7 @@ export async function trackchannel(input: extypes.commandInput) {
         return;
     }
 
-    if (!channelId || isNaN(+channelId) || !input.client.channels.cache.get(channelId)) {//@ts-ignore
+    if (!channelId || isNaN(+channelId) || !input.client.channels.cache.get(channelId)) {//@ts-expect-error null msg
         input.obj.reply({
             content: 'Please provide a valid channel ID',
             embeds: [],
@@ -8757,14 +8838,14 @@ export async function compare(input: extypes.commandInput) {
     switch (input.commandType) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-ignore
-            if (input.obj.mentions.users.size > 1) {//@ts-ignore
-                firstsearchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;//@ts-ignore
-                secondsearchid = input.obj.mentions.users.size > 1 ? input.obj.mentions.users.at(1).id : null;//@ts-ignore
-            } else if (input.obj.mentions.users.size == 1) {//@ts-ignore
-                firstsearchid = input.obj.author.id;//@ts-ignore
+            commanduser = input.obj.author;//@ts-expect-error null msg
+            if (input.obj.mentions.users.size > 1) {//@ts-expect-error null msg
+                firstsearchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;//@ts-expect-error null msg
+                secondsearchid = input.obj.mentions.users.size > 1 ? input.obj.mentions.users.at(1).id : null;//@ts-expect-error null msg
+            } else if (input.obj.mentions.users.size == 1) {//@ts-expect-error null msg
+                firstsearchid = input.obj.author.id;//@ts-expect-error null msg
                 secondsearchid = input.obj.mentions.users.at(0).id
-            } else {//@ts-ignore
+            } else {//@ts-expect-error null msg
                 firstsearchid = input.obj.author.id
             }
             first = null;
@@ -8779,11 +8860,11 @@ export async function compare(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            type = input.obj.options.getString('type') ?? 'profile';//@ts-ignore
-            first = input.obj.options.getString('first');//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            type = input.obj.options.getString('type') ?? 'profile';//@ts-expect-error null msg
+            first = input.obj.options.getString('first');//@ts-expect-error null msg
             second = input.obj.options.getString('second');
-            firstsearchid = commanduser.id//@ts-ignore
+            firstsearchid = commanduser.id//@ts-expect-error null msg
             mode = input.obj.options.getString('mode') ?? 'osu'
             if (second == null && first != null) {
                 second = first;
@@ -8794,14 +8875,14 @@ export async function compare(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            //@ts-ignore
+            //@ts-expect-error null msg
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            type = 'top';//@ts-ignore
+            type = 'top';//@ts-expect-error null msg
             const pawge = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[0])
-            //@ts-ignore
+            //@ts-expect-error null msg
             const pagefin = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[1])
             switch (input.button) {
                 case 'BigLeftArrow': {
@@ -8828,8 +8909,8 @@ export async function compare(input: extypes.commandInput) {
 
             if (page > pagefin) page = pagefin;
 
-            //@ts-ignore
-            const firsti = input.obj.message.embeds[0].description.split('and')[0]//@ts-ignore
+            //@ts-expect-error null msg
+            const firsti = input.obj.message.embeds[0].description.split('and')[0]//@ts-expect-error null msg
             const secondi = input.obj.message.embeds[0].description.split('and')[1].split('have')[0]
 
             //user => [name](url)
@@ -8838,7 +8919,7 @@ export async function compare(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {//@ts-ignore
+    if (input.overrides != null) {//@ts-expect-error null msg
         if (input.overrides.type != null) type = input.overrides.type;
     }
     //==============================================================================================================================================================================================
@@ -9263,9 +9344,9 @@ export async function osuset(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            name = input.obj.options.getString('user');//@ts-ignore
-            mode = input.obj.options.getString('mode');//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            name = input.obj.options.getString('user');//@ts-expect-error null msg
+            mode = input.obj.options.getString('mode');//@ts-expect-error null msg
             skin = input.obj.options.getString('skin');
             type = 'interaction';
         }
@@ -9334,7 +9415,7 @@ export async function osuset(input: extypes.commandInput) {
     )
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    // if (typeof name == 'undefined' || name == null) {//@ts-ignore
+    // if (typeof name == 'undefined' || name == null) {//@ts-expect-error null msg
     //     input.obj.reply({
     //         content: 'Error - username undefined',
     //         allowedMentions: { repliedUser: false },
@@ -9349,7 +9430,7 @@ export async function osuset(input: extypes.commandInput) {
         const thing = osufunc.modeValidatorAlt(mode)
         mode = thing.mode;
         if (thing.isincluded == false) {
-            //@ts-ignore
+            //@ts-expect-error null msg
             input.obj.reply({
                 content: 'Error - invalid mode given',
                 allowedMentions: { repliedUser: false },
@@ -9563,7 +9644,7 @@ export async function skin(input: extypes.commandInput) {
     switch (input.commandType) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-ignore
+            commanduser = input.obj.author;//@ts-expect-error null msg
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
 
             string = input.args.join(' ')
@@ -9574,9 +9655,9 @@ export async function skin(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            commanduser = input.obj.member.user;//@ts-expect-error null msg
             string = input.obj.options.getString('string')
-            if (!string) {//@ts-ignore
+            if (!string) {//@ts-expect-error null msg
                 string = input.obj.options.getUser('user');
             }
         }
@@ -9691,7 +9772,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
-            //@ts-ignore
+            //@ts-expect-error null msg
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
 
             if (input.args.includes('-osu')) {
@@ -9746,10 +9827,13 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            commanduser = input.obj.member.user;
+            //@ts-expect-error options property does not exist on message
             user = input.obj.options.getString('user');
-            searchid = input.obj.member.user.id;//@ts-ignore
-            mode = input.obj.options.getString('mode');//@ts-ignore
+            searchid = input.obj.member.user.id;
+            //@ts-expect-error options property does not exist on message
+            mode = input.obj.options.getString('mode');
+            //@ts-expect-error options property does not exist on message
             pp = input.obj.options.getNumber('pp');
         }
 
