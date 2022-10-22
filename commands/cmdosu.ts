@@ -1543,11 +1543,12 @@ export async function osu(input: extypes.commandInput) {
         const chartrank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank');
 
         const ChartsEmbedRank = new Discord.EmbedBuilder()
-            .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
+            .setTitle(`${osudata.username}`)
+            .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
             .setImage(`${chartrank}`);
 
         const ChartsEmbedPlay = new Discord.EmbedBuilder()
-            .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
+            .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
             .setImage(`${chartplay}`);
 
         useEmbeds.push(ChartsEmbedRank, ChartsEmbedPlay);
@@ -1733,7 +1734,7 @@ ${onlinestatus}
         obj: input.obj,
         args: {
             embeds: useEmbeds,
-            components: [buttons],
+            components: graphonly == true ? [] : [buttons],
             edit: true
         }
     })
@@ -6425,7 +6426,7 @@ export async function simulate(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-n100'), 2)
             }
             if (ctn.includes('-100s')) {
-                n100 =  parseInt(input.args[input.args.indexOf('-100s') + 1])
+                n100 = parseInt(input.args[input.args.indexOf('-100s') + 1])
                 input.args.splice(input.args.indexOf('-100s'), 2)
             }
             if (ctn.includes('-n50')) {
