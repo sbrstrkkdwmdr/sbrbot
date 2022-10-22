@@ -81,7 +81,7 @@ const cacheById = [
  * @param id command id. if storing a map use the map id/md5 or user id if storing a user
  * @param name 
  */
-export function storeFile(data: {}, id: string | number, name: string) {
+export function storeFile(data: any, id: string | number, name: string) {
     try {
         if (cacheById.some(x => name.includes(x))) {
             if (name.includes('mapdata')) {

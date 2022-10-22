@@ -51,7 +51,7 @@ function botHasPerms(object: Discord.Interaction | Discord.Message, client: Disc
     //if all of the elements in requiredPerms are in botperms return true
     const len = requiredPerms.length
     let newLen = 0
-    for (let i in requiredPerms) {
+    for (const i in requiredPerms) {
         if (botperms.includes(requiredPerms[i])) {
             newLen++
         }

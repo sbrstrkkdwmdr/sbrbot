@@ -91,7 +91,7 @@ async function mapcalc(
                 return mapPath;
             }
 
-            let mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
+            const mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
 
             mapscore = {
                 path: mapPath,
@@ -728,8 +728,7 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
         }
     }
     let data;
-    let datafirst;
-    datafirst = await fetch(url, {
+    let datafirst = await fetch(url, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${access_token}`,

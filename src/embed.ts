@@ -158,9 +158,9 @@ export async function scoreList(
 
         if (detailed === true) {
             const ranking = curscore.rank.toUpperCase()
-            let grade: string = gradeToEmoji(ranking);
+            const grade: string = gradeToEmoji(ranking);
             const hitstats = curscore.statistics
-            let hitlist: string = hitList(
+            const hitlist: string = hitList(
                 {
                     gamemode: curscore.mode,
                     count_geki: hitstats.count_geki,
@@ -252,11 +252,11 @@ ${pptxt} | ${weighted}
             )
         } else {
             const ranking = curscore.rank.toUpperCase()
-            let grade: string = gradeToEmoji(ranking);
+            const grade: string = gradeToEmoji(ranking);
 
             const hitstats = curscore.statistics
 
-            let hitlist: string = hitList(
+            const hitlist: string = hitList(
                 {
                     gamemode: curscore.mode,
                     count_geki: hitstats.count_geki,
@@ -445,13 +445,13 @@ export async function mapList(
 ) {
     let filterinfo: string = '';
     let newData = [];
-    let mapsArr: Discord.EmbedField[] = [];
+    const mapsArr: Discord.EmbedField[] = [];
     let page = data.page;
     let sortinfo = '';
 
     switch (data.type) {
         case 'mapset': {
-            let maps = data.maps as osuapitypes.Beatmapset[];
+            const maps = data.maps as osuapitypes.Beatmapset[];
             switch (data.sort) {
                 case 'title':
                     maps.sort((a, b) => a.title.localeCompare(b.title))
@@ -575,9 +575,9 @@ ${topmap.status == 'ranked' ?
             }
         }
             break;
-        case 'map': {
+        // case 'map': {
 
-        }
+        // }
             break;
     }
 

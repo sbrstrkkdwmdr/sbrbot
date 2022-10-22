@@ -28,7 +28,7 @@ export async function sendMessage(input: {
                 //==============================================================================================================================================================================================
 
                 case 'interaction': {
-                    //@ts-expect-error
+                    //@ts-expect-error wwwwwwww
                     //This expression is not callable.
                     //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
                     input.obj.reply({
