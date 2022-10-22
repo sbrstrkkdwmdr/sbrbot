@@ -1125,7 +1125,16 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
         })
     //OPTIONS==============================================================================================================================================================================================
     log.logFile('command',
-        log.optsLog(input.absoluteID, []),
+        log.optsLog(input.absoluteID, [
+            {
+                name: 'Type',
+                value: type
+            },
+            {
+                name: 'Value',
+                value: `${value}`
+            }
+        ]),
         {
             guildId: `${input.obj.guildId}`
         }
@@ -1385,6 +1394,10 @@ export async function osu(input: extypes.commandInput) {
             {
                 name: 'Gamemode',
                 value: mode
+            },
+            {
+                name: 'Graph',
+                value: `${graphonly}`
             }
             ]
         ), {
@@ -2032,6 +2045,10 @@ export async function firsts(input: extypes.commandInput) {
             {
                 name: 'Detailed',
                 value: scoredetailed
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
             }
         ]),
         {
@@ -3021,6 +3038,10 @@ export async function nochokes(input: extypes.commandInput) {
             {
                 name: 'Mods',
                 value: mods
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
             }
             ]
         ), {
@@ -3600,6 +3621,10 @@ export async function osutop(input: extypes.commandInput) {
             {
                 name: 'Mods',
                 value: mods
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
             }
             ],
         ),
@@ -4216,6 +4241,10 @@ export async function pinned(input: extypes.commandInput) {
             {
                 name: 'Detailed',
                 value: scoredetailed
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
             }
         ]),
         {
@@ -6073,6 +6102,14 @@ export async function scores(input: extypes.commandInput) {
                 name: 'Reverse',
                 value: reverse
             },
+            {
+                name: 'Mode',
+                value: mode
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
+            }
         ]),
         {
             guildId: `${input.obj.guildId}`
@@ -7979,7 +8016,28 @@ export async function userBeatmaps(input: extypes.commandInput) {
         })
     //OPTIONS==============================================================================================================================================================================================
     log.logFile('command',
-        log.optsLog(input.absoluteID, []),
+        log.optsLog(input.absoluteID, [
+            {
+                name: 'User',
+                value: user
+            },
+            {
+                name: 'Type',
+                value: filter
+            },
+            {
+                name: 'Reverse',
+                value: `${reverse}`
+            },
+            {
+                name: 'Page',
+                value: `${page}`
+            },
+            {
+                name: 'Sort',
+                value: sort
+            }
+        ]),
         {
             guildId: `${input.obj.guildId}`
         }
@@ -8221,7 +8279,12 @@ export async function trackadd(input: extypes.commandInput) {
         })
     //OPTIONS==============================================================================================================================================================================================
     log.logFile('command',
-        log.optsLog(input.absoluteID, []),
+        log.optsLog(input.absoluteID, [
+            {
+                name: 'user',
+                value: `${user}`
+            }
+        ]),
         {
             guildId: `${input.obj.guildId}`
         }
@@ -8336,7 +8399,12 @@ export async function trackremove(input: extypes.commandInput) {
         })
     //OPTIONS==============================================================================================================================================================================================
     log.logFile('command',
-        log.optsLog(input.absoluteID, []),
+        log.optsLog(input.absoluteID, [
+            {
+                name: 'user',
+                value: `${user}`
+            }
+        ]),
         {
             guildId: `${input.obj.guildId}`
         }
@@ -8456,7 +8524,12 @@ export async function trackchannel(input: extypes.commandInput) {
         })
     //OPTIONS==============================================================================================================================================================================================
     log.logFile('command',
-        log.optsLog(input.absoluteID, []),
+        log.optsLog(input.absoluteID, [
+            {
+                name: 'Channel id',
+                value: `${channelId}`
+            }
+        ]),
         {
             guildId: `${input.obj.guildId}`
         }
@@ -9416,7 +9489,12 @@ export async function saved(input: extypes.commandInput) {
         })
     //OPTIONS==============================================================================================================================================================================================
     log.logFile('command',
-        log.optsLog(input.absoluteID, []),
+        log.optsLog(input.absoluteID, [
+            {
+                name: 'User id',
+                value: searchid
+            }
+        ]),
         {
             guildId: `${input.obj.guildId}`
         }

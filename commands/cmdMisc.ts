@@ -1005,12 +1005,7 @@ export async function ytsearch(input: extypes.commandInput) {
     //OPTIONS==============================================================================================================================================================================================
 
     log.logFile('command',
-        log.optsLog(input.absoluteID, [
-            {
-                name: 'Query',
-                value: query
-            }
-        ]),
+        log.optsLog(input.absoluteID, []),
         {
             guildId: `${input.obj.guildId}`
         }
