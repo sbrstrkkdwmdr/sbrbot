@@ -321,7 +321,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                 break;
             case 'rank':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    let overrides = {
+                    const overrides = {
                         type: 'rank'
                     }
                     osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
@@ -331,7 +331,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                 break;
             case 'pp':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    let overrides = {
+                    const overrides = {
                         type: 'pp'
                     }
                     osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
@@ -418,7 +418,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tc': case 'tctb': case 'tf':
+            case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tctb': case 'tf':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'fruits'

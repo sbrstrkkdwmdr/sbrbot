@@ -74,14 +74,14 @@ async function mapcalc(
         mapid: number,
         calctype: number | null
     },
-    mapIsRank?:string
-    ) {
+    mapIsRank?: string
+) {
     let ppl
     let mapscore
     const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
 
     switch (calctyper) {
-        case 0: default:
+        case 0: default: {
             if (!fs.existsSync('files/maps/')) {
                 fs.mkdirSync('files/maps/');
             }
@@ -134,6 +134,7 @@ async function mapcalc(
             }
 
             ppl = await rosu.calculate(mapscore);
+        }
             break;
         case 1:
             break;
@@ -169,12 +170,12 @@ async function scorecalc(
         acc: number | null, maxcombo?: number | null, score?: number | null,
         calctype?: number | null, passedObj?: number | null, failed?: boolean | null
     },
-    mapIsRank?:string
+    mapIsRank?: string
 ) {
     let ppl;
     let scorenofc;
     let scorefc;
-    let failed = obj.failed ?? false;
+    const failed = obj.failed ?? false;
 
 
     const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
@@ -191,7 +192,7 @@ async function scorecalc(
                 if (!(typeof mapPath == 'string')) {
                     return mapPath;
                 }
-                let mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
+                const mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
 
 
                 let mode;
@@ -319,7 +320,7 @@ async function scorecalc(
 async function straincalc(mapid: number, mods: string, calctype: number, mode: string) {
     let strains;
     switch (calctype) {
-        case 0: default:
+        case 0: default: {
             const mapPath = await dlMap(mapid);
 
             if (!(typeof mapPath == 'string')) {
@@ -349,8 +350,9 @@ async function straincalc(mapid: number, mods: string, calctype: number, mode: s
                         value: totalval,
                     }
                 }
-                    break;
             }
+            break;
+        }
 
 
 
@@ -1022,12 +1024,12 @@ export function getMapImages(mapSetId: string | number) {
     }
 }
 
-export async function dlMap(mapid: number | string, isRanked?:string) {
+export async function dlMap(mapid: number | string, isRanked?: string) {
     const mapFiles = fs.readdirSync('./files/maps')
     let mapDir = '';
     if (mapFiles.some(x => x.includes(`${mapid}`)) == false) {
         let curType = 'temp'
-        if(['ranked', 'loved', 'approved'].some(x => x.includes(isRanked ?? 'temp'))){
+        if (['ranked', 'loved', 'approved'].some(x => x.includes(isRanked ?? 'temp'))) {
             curType = 'perm'
         }
 

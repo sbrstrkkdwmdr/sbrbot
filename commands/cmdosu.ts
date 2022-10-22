@@ -95,7 +95,7 @@ export async function bws(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        //@ts-expect-error
+        //@ts-expect-error   aaaaa
         //This expression is not callable.
         //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
         input.obj.reply({
@@ -119,7 +119,7 @@ export async function bws(input: extypes.commandInput) {
                     })
                 }, 1000);
             } else {
-                //@ts-expect-error
+                //@ts-expect-error aaaaa
                 //This expression is not callable.
                 //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
                 input.obj.reply({
@@ -506,9 +506,9 @@ export async function lb(input: extypes.commandInput) {
         guild.members.cache.forEach(async member => {
             if (`${member.id}` == `${user.userid}`) {
                 if (user != null && !rtxt.includes(`${member.user.id}`)) {
-                    let acc: any;
-                    let pp: any;
-                    let rank: any;
+                    let acc: string | number;
+                    let pp: string | number;
+                    let rank: string | number;
                     switch (mode) {
                         case 'osu':
                         default:
@@ -4906,14 +4906,14 @@ export async function recent(input: extypes.commandInput) {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {//@ts-expect-error null msg
                     input.obj.editReply({
-                        content: `Error - could not fetch \`${user}\`\'s recent scores`,
+                        content: `Error - could not fetch \`${user}\`'s recent scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
                 }, 1000)
             } else {//@ts-expect-error null msg
                 input.obj.reply({
-                    content: `Error - could not fetch \`${user}\`\'s recent scores`,
+                    content: `Error - could not fetch \`${user}\`'s recent scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 }).catch()
@@ -5975,7 +5975,7 @@ export async function scores(input: extypes.commandInput) {
     let page = 1;
 
     const scoredetailed = false;
-    let sort: any = 'recent';
+    let sort: embedStuff.scoreSort = 'recent';
     let reverse = false;
     let mode = 'osu';
     let filteredMapper = null;
@@ -6130,6 +6130,7 @@ export async function scores(input: extypes.commandInput) {
             page = input.overrides.page
         }
         if (input.overrides.sort != null) {
+            //@ts-expect-error null msg
             sort = input.overrides.sort
         }
         if (input.overrides.reverse != null) {
@@ -8193,14 +8194,14 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {//@ts-expect-error null msg
                         input.obj.editReply({
-                            content: `Error - could not find user\'s ${calc.toCapital(filter)} Maps`,
+                            content: `Error - could not find user's ${calc.toCapital(filter)} Maps`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
                     }, 1000)
                 } else {//@ts-expect-error null msg
                     input.obj.reply({
-                        content: `Error - could not find user\'s ${calc.toCapital(filter)} Maps`,
+                        content: `Error - could not find user's ${calc.toCapital(filter)} Maps`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
@@ -8345,10 +8346,7 @@ export async function trackadd(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
         }
             break;
-    }
-    if (input.overrides != null) {
-
-    }
+    } 
     //==============================================================================================================================================================================================
 
     log.logFile(
@@ -8373,7 +8371,7 @@ export async function trackadd(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let guildsetting = await input.guildSettings.findOne({
+    const guildsetting = await input.guildSettings.findOne({
         where: { guildId: input.obj.guildId }
     })
 
@@ -8465,10 +8463,7 @@ export async function trackremove(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
         }
             break;
-    }
-    if (input.overrides != null) {
-
-    }
+    } 
     //==============================================================================================================================================================================================
 
     log.logFile(
@@ -8493,9 +8488,9 @@ export async function trackremove(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let guildsetting = await input.guildSettings.findOne({
-        where: { guildId: input.obj.guildId }
-    })
+    // const guildsetting = await input.guildSettings.findOne({
+    //     where: { guildId: input.obj.guildId }
+    // })
 
     // if (!guildsetting.dataValues.trackChannel) {//@ts-expect-error null msg
     //     input.obj.reply({
@@ -8590,9 +8585,6 @@ export async function trackchannel(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
         }
             break;
-    }
-    if (input.overrides != null) {
-
     }
     //==============================================================================================================================================================================================
 
@@ -8709,9 +8701,6 @@ export async function tracklist(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
 
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
@@ -8765,7 +8754,7 @@ export async function tracklist(input: extypes.commandInput) {
     const useridsarraylen = await input.trackDb.count();
     // const user: extypes.dbUser = userids[i].dataValues;
 
-    let userList: {
+    const userList: {
         osuid: string,
         userid: string
     }[] = [];
@@ -8986,9 +8975,9 @@ export async function compare(input: extypes.commandInput) {
         inline: false
     }
     let embedTitle: string = 'w';
-    let usefields: Discord.EmbedField[] = []
+    const usefields: Discord.EmbedField[] = []
 
-    let useComponents: Discord.ActionRowBuilder[] = []
+    const useComponents: Discord.ActionRowBuilder[] = []
     let embedescription = null;
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
@@ -9154,7 +9143,7 @@ export async function compare(input: extypes.commandInput) {
                     }
                     return;
                 }
-                let filterfirst = [];
+                const filterfirst = [];
                 //filter so that scores that have a shared beatmap id with the second user are kept
                 for (let i = 0; i < firsttopdata.length; i++) {
                     if (secondtopdata.find(score => score.beatmap.id == firsttopdata[i].beatmap.id)) {
@@ -9163,7 +9152,7 @@ export async function compare(input: extypes.commandInput) {
                 }
                 filterfirst.sort((a, b) => b.pp - a.pp)
                 embedTitle = 'Comparing top scores'
-                let arrscore = [];
+                const arrscore = [];
 
 
 
@@ -9556,9 +9545,7 @@ export async function saved(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {
 
-    }
     //==============================================================================================================================================================================================
 
     log.logFile(
@@ -9924,7 +9911,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
     const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
     osufunc.debug(osutopdata, 'command', 'whatif', input.obj.guildId, 'osuTopData');
 
-    let pparr = osutopdata.slice().map(x => x.pp);
+    const pparr = osutopdata.slice().map(x => x.pp);
     pparr.push(pp);
     pparr.sort((a, b) => b - a);
     const ppindex = pparr.indexOf(pp);

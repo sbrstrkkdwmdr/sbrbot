@@ -912,9 +912,9 @@ export function help(input: extypes.commandInput) {
 
         }
 
-        let commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none'
+        const commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none'
         // let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
-        let commandexamples = command.examples && command.examples.length > 0 ? command.examples.map(x => x.text).join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
+        const commandexamples = command.examples && command.examples.length > 0 ? command.examples.map(x => x.text).join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
 
         embed.setTitle("Command info for: " + command.name)
         embed.setDescription(desc)
@@ -1535,7 +1535,7 @@ ${trueping}`);
 
 
     const preEdit = new Date()
-    //@ts-expect-error
+    //@ts-expect-error aaaaaaaaaa
     //This expression is not callable.
     //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
     input.obj.reply({

@@ -17,7 +17,7 @@ export async function sendMessage(input: {
         if (input.args.react == true) {
             switch (input.commandType) {
                 case 'message': {
-                    //@ts-expect-error
+                    //@ts-expect-error aaaaaaaaa
                     //This expression is not callable.
                     //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
                     input.obj.react('✅')
@@ -53,7 +53,7 @@ export async function sendMessage(input: {
         } else {
             switch (input.commandType) {
                 case 'message': case 'link': {
-                    //@ts-expect-error
+                    //@ts-expect-error aaaaaaaaaaa
                     //This expression is not callable.
                     //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
                     input.obj.reply({
@@ -86,7 +86,7 @@ export async function sendMessage(input: {
                                 .catch();
                         }, 1000);
                     } else {
-                        //@ts-expect-error
+                        //@ts-expect-error aaaaaaa
                         //This expression is not callable.
                         //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
                         input.obj.reply({
