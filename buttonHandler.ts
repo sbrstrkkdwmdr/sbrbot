@@ -14,7 +14,6 @@ module.exports = (userdata, client, config, oncooldown, statsCache) => {
         if (interaction.applicationId != client.application.id) return;
 
         const currentDate = new Date();
-        // const absoluteID = currentDate.getTime();
 
         const args = null;
         const obj = interaction;
