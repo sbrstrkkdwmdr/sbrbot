@@ -1,5 +1,6 @@
 import Discord = require('discord.js');
 import Sequelize = require('sequelize');
+import embedStuff = require('../embed');
 type config = {
     token: string,
     prefix: string,
@@ -174,7 +175,7 @@ type overrides = {
     user?: any,
     page?: number,
     mode?: string,
-    sort?: string,
+    sort?: embedStuff.scoreSort,
     reverse?: boolean,
     ex?: string | number,
     id?: string | number,
