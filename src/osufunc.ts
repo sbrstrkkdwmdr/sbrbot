@@ -766,6 +766,158 @@ async function apiget(type: apiGetStrings, mainparam: string, params?: string, v
     return data;
 }
 
+/**
+ * 
+ * @param type type of api call to make
+ * @param params
+ * @param version 1 or 2. defaults to 2
+ * @param callNum number of times this function has been called (used for recursion/error handling)
+ * @returns data
+ */
+export async function apigetAlt(
+    input: {
+        type: apiGetStrings,
+        params?: {
+            username?: string,
+            userid?:string,
+            id?: string,
+            md5?: string,
+            searchString?: string,
+            mode?: osuApiTypes.GameMode,
+            category?: string,
+            opts?: string[],
+            urlOverride?: string
+        },
+        version?: number,
+        callNum?: number,
+        ignoreNonAlphaChar?: boolean
+    }) {
+    if (!input.callNum) input.callNum = 0;
+    if (input.callNum > 5) throw new Error('Too many calls to api');
+
+
+    const baseurl = 'https://osu.ppy.sh/api'
+    const accessN = fs.readFileSync('config/osuauth.json', 'utf-8');
+    let access_token
+    try {
+        access_token = JSON.parse(accessN).access_token;
+    } catch (error) {
+        access_token = ''
+    }
+    const key = config.osuApiKey
+    if (!input.version) {
+        input.version = 2
+    }
+    let url = `${baseurl}/v${input.version}/`
+
+    switch (input.version) {
+        case 1: {
+            url = `${baseurl}/`
+            switch (input.type) {
+                case 'scores_get_map':
+                    url += `get_scores?k=${key}&b=${input.params.id}&mods=${input.params.opts.join('')}&limit=100`
+                    break;
+            }
+        }
+
+        case 2: {
+            switch (input.type) {
+                case 'custom':
+                    url += `${input.params.urlOverride}`
+                    break;
+                case 'map_search':
+                    break;
+                case 'map_get': case 'map':
+                    url += `beatmaps/${input.params.id}`
+                    break;
+                case 'map_get_md5':
+                    url += `beatmaps/lookup?checksum=${input.params.md5}`
+                    break;
+                case 'mapset_get': case 'mapset':
+                    url += `beatmapsets/${input.params.id}`
+                    break;
+                case 'mapset_search':
+                    url += `beatmapsets/search?q=${input.params.searchString}&s=any`
+                    break;
+                case 'score_get': case 'score':
+                    url += `scores/${input.params.mode ?? 'osu'}/${input.params.id}`
+                    break;
+                case 'scores_get_best': case 'osutop': case 'best':
+                    url += `users/${input.params.username ?? input.params.userid}/scores/best?mode=${input.params.mode ?? 'osu'}&limit=100&offset=0`
+                    break;
+                case 'scores_get_first': case 'firsts':
+                    url += `users/${input.params.username ?? input.params.userid}/scores/firsts?mode=${input.params.mode ?? 'osu'}&limit=100`
+                    break;
+                case 'firsts_alt':
+                    url += `users/${input.params.username ?? input.params.userid}/scores/firsts?limit=100&${input.params.opts.join('&')}`
+                    break;
+                case 'scores_get_map': case 'maplb':
+                    url += `beatmaps/${input.params.id}/scores`
+                    break;
+                case 'scores_get_pinned': case 'pinned':
+                    url += `users/${input.params.username ?? input.params.userid}/scores/pinned?mode=${input.params.mode ?? 'osu'}&limit=100`
+                    break;
+                case 'pinned_alt':
+                    url += `users/${input.params.username ?? input.params.userid}/scores/pinned?limit=100&${input.params}`
+                    break;
+                case 'scores_get_recent': case 'recent':
+                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?include_fails=1&mode=${input.params.mode ?? 'osu'}&limit=100&offset=0`
+                    break;
+                case 'recent_alt':
+                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?include_fails=1&limit=100&${input.params.opts.join('&')}`
+                    break;
+                case 'user_get': case 'user':
+                    url += `users/${input.params.username ?? input.params.userid}/${input.params.mode ?? 'osu'}`
+                    break;
+                case 'user_get_most_played': case 'most_played':
+                    url += `users/${input.params.username ?? input.params.userid}/beatmapsets/most_played`
+                    break;
+                case 'user_get_scores_map':
+                    url += `beatmaps/${input.params.id}/scores/users/${input.params.username}/all`
+                    break;
+                case 'user_get_maps':
+                    url += `users/${input.params.username ?? input.params.userid}/beatmapsets/${input.params.category ?? 'favourite'}?limit=100`
+                    break;
+                case 'user_get_maps_alt':
+                    url += `users/${input.params.username ?? input.params.userid}/beatmapsets/${input.params.category ?? 'favourite'}&limit=100`
+                    break;
+            }
+        }
+    }
+    let data;
+    let datafirst;
+    datafirst = await fetch(url, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json"
+        }
+    }).then(res => res.json())
+
+    try {
+        if (datafirst?.authentication) {
+            await updateToken()
+            const tempobj = Object.assign({
+                callNum: input.callNum ? input.callNum + 1 : 1
+            }, input)
+            datafirst = await apigetAlt(tempobj)
+        }
+        if ('error' in datafirst && !input.type.includes('search')) {
+            throw new Error('nullwww')
+        }
+        data = datafirst;
+    } catch (error) {
+        data = {
+            error: error,
+            url: url,
+            input: input,
+            apiData: datafirst
+        }
+    }
+    logCall(url)
+    return data;
+}
 
 async function updateToken() {
     const clientId = config.osuClientID
