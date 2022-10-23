@@ -145,7 +145,7 @@ progress: ${m.progress ? m.progress : 'none'}
             const osrdlfile = fs.createWriteStream('./files/replay.osr')
             https.get(`${attachosr}`, function (response) {
                 response.pipe(osrdlfile);
-            });
+            });//
             setTimeout(() => {
                 osucmds.replayparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
             }, 1500)
