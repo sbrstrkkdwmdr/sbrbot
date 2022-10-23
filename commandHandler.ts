@@ -312,33 +312,6 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
             case 'globals':
                 osucmds.globals({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 break;
-            case 'ranking':
-                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.ranking({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot')
-                }
-                break;
-            case 'rank':
-                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    const overrides = {
-                        type: 'rank'
-                    }
-                    osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot')
-                }
-                break;
-            case 'pp':
-                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    const overrides = {
-                        type: 'pp'
-                    }
-                    osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot')
-                }
-                break;
             case 'leaderboard': case 'maplb': case 'mapleaderboard':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.maplb({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
@@ -445,8 +418,47 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
+            case 'pp':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    const overrides = {
+                        type: 'pp'
+                    }
+                    osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+            case 'rank':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    const overrides = {
+                        type: 'rank'
+                    }
+                    osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+            case 'ranking':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    osucmds.ranking({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
             case 'rs': case 'recent': case 'r':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+            case 'rs best': case 'recent best': case 'rb':
+            case 'rsbest': case 'recentbest': case 'rb':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    overrides = {
+                        type: 'list',
+                        sort: 'pp'
+                    }
                     osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
@@ -619,14 +631,14 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     )
                 }
                 break;
-            case 'user':case 'userinfo':
+            case 'user': case 'userinfo':
                 if (checks.botHasPerms(obj, client, ['Administrator'])) {
                     admincmds.getUser({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'avatar': case 'av':case 'pfp':
+            case 'avatar': case 'av': case 'pfp':
                 if (checks.botHasPerms(obj, client, ['Administrator'])) {
                     admincmds.getUserAv({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
