@@ -5,7 +5,7 @@ import emojis = require('../src/consts/emojis');
 import colours = require('../src/consts/colours');
 import colourfunc = require('../src/colourcalc');
 import osufunc = require('../src/osufunc');
-import osumodcalc = require('osumodcalculator');
+import osumodcalc = require('../src/osumodcalc');
 import osuApiTypes = require('../src/types/osuApiTypes');
 import Discord = require('discord.js');
 import log = require('../src/log');
@@ -3617,7 +3617,6 @@ export async function osutop(input: extypes.commandInput) {
             page = input.overrides.page
         }
         if (input.overrides.sort != null) {
-            //@ts-expect-error some validation error idk
             sort = input.overrides.sort
         }
         if (input.overrides.reverse != null) {
@@ -4590,7 +4589,8 @@ export async function recent(input: extypes.commandInput) {
     let searchid;
     let page = 0;
     let mode = null;
-    let list;
+    let list = false;
+    let sort: embedStuff.scoreSort = 'recent';
 
     let isFirstPage = false;
     let isLastPage = false;
@@ -4676,6 +4676,10 @@ export async function recent(input: extypes.commandInput) {
                     mode = 'mania';
                 }
             }
+            //@ts-expect-error null msg
+            if(input.obj.message.embeds[0].title.includes('Best')){
+                sort = 'pp'
+            }
 
             page = 0
             if (input.button == 'BigLeftArrow') {
@@ -4746,6 +4750,9 @@ export async function recent(input: extypes.commandInput) {
                 list = true
                 mode = 'mania'
             }
+        }
+        if (input?.overrides?.sort != null) {
+            sort = input?.overrides?.sort ?? 'recent'
         }
         if (input.overrides.mode != null) {
             mode = input.overrides.mode
@@ -5278,6 +5285,10 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
             .setTitle(`Recent plays for ${osudata.username}`)
             .setThumbnail(`${osudata.avatar_url ?? def.images.any.url}`)
             ;
+        if (sort == 'pp') {
+            rsEmbed.setTitle(`Best recent plays for ${osudata.username}`)
+        }
+
         const scoresarg = await embedStuff.scoreList(
             {
                 scores: rsdata,
@@ -5285,8 +5296,8 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                 showWeights: false,
                 page: page,
                 showMapTitle: true,
-                showTruePosition: false,
-                sort: 'recent',
+                showTruePosition: (sort != 'recent'),
+                sort: sort,
                 truePosType: 'recent',
                 filteredMapper: null,
                 filteredMods: null,
@@ -6130,7 +6141,6 @@ export async function scores(input: extypes.commandInput) {
             page = input.overrides.page
         }
         if (input.overrides.sort != null) {
-            //@ts-expect-error null msg
             sort = input.overrides.sort
         }
         if (input.overrides.reverse != null) {
@@ -8346,7 +8356,7 @@ export async function trackadd(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
         }
             break;
-    } 
+    }
     //==============================================================================================================================================================================================
 
     log.logFile(
@@ -8463,7 +8473,7 @@ export async function trackremove(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
         }
             break;
-    } 
+    }
     //==============================================================================================================================================================================================
 
     log.logFile(
