@@ -81,7 +81,7 @@ const cacheById = [
  * @param id command id. if storing a map use the map id/md5 or user id if storing a user
  * @param name 
  */
-export function storeFile(data: any, id: string | number, name: string) {
+export function storeFile(data: any, id: string | number, name: string, mode?: osuApiTypes.GameMode) {
     try {
         if (cacheById.some(x => name.includes(x))) {
             if (name.includes('mapdata')) {
@@ -105,7 +105,10 @@ export function storeFile(data: any, id: string | number, name: string) {
                         break;
                 }
                 fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2))
-            } else {
+            } else if (name.includes('osudata')) {
+                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, JSON.stringify(data, null, 2))
+            }
+            else {
                 fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2))
             }
         } else {
@@ -123,19 +126,26 @@ export function storeFile(data: any, id: string | number, name: string) {
  * @param name 
  * @returns 
  */
-export function findFile(id: string | number, name: string) {
+export function findFile(id: string | number, name: string, mode?: osuApiTypes.GameMode) {
     if (cacheById.some(x => name.includes(x))) {
         if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`)) {
             return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, 'utf-8'));
         }
-        else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`)) {
-            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`, 'utf-8'));
-        } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`)) {
-            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`, 'utf-8'));
-        } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`)) {
-            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`, 'utf-8'));
-        } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`)) {
-            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`, 'utf-8'));
+        if (name.includes('osudata')) {
+            if(fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`)){
+                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, 'utf-8'));
+            }
+        }
+        else if (name.includes('mapdata')) {
+            if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`, 'utf-8'));
+            }
         }
         else {
             return false;

@@ -1469,16 +1469,16 @@ export async function osu(input: extypes.commandInput) {
 
     let osudata: osuApiTypes.User;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', mode) &&
+        !('error' in func.findFile(user, 'osudata', mode)) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudata = func.findFile(user, 'osudata', mode)
     } else {
         osudata = await osufunc.apiget('user', `${await user}`, mode)
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
+    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
     osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
 
@@ -2138,16 +2138,16 @@ export async function firsts(input: extypes.commandInput) {
 
     let osudata: osuApiTypes.User;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
         osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
+    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
     osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
 
@@ -3152,16 +3152,16 @@ export async function nochokes(input: extypes.commandInput) {
 
     let osudata: osuApiTypes.User;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
         osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
+    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
     osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
 
@@ -3767,16 +3767,16 @@ export async function osutop(input: extypes.commandInput) {
 
     let osudata: osuApiTypes.User;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
         osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
+    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
     osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
 
@@ -4388,16 +4388,16 @@ export async function pinned(input: extypes.commandInput) {
 
     let osudata: osuApiTypes.User;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
         osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
+    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
     osufunc.debug(osudata, 'command', 'pinned', input.obj.guildId, 'osuData');
     if (osudata?.error || !osudata.id) {
@@ -4853,16 +4853,16 @@ export async function recent(input: extypes.commandInput) {
                 .setDisabled(isLastPage),
         );
     let osudata: osuApiTypes.User;
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
         osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
+    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudata, user, 'osudata', osudata.playmode)
     osufunc.debug(osudata, 'command', 'recent', input.obj.guildId, 'osuData');
 
     if (osudata?.error) {
@@ -5459,8 +5459,8 @@ export async function replayparse(input: extypes.commandInput) {
     } else {
         osudata = await osufunc.apiget('user', `${await replay.playerName}`)
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, replay.playerName, 'osudata')
+    func.storeFile(osudata, osudata.id, 'osudata', osufunc.modeValidator(replay.gameMode))
+    func.storeFile(osudata, replay.playerName, 'osudata', osufunc.modeValidator(replay.gameMode))
     osufunc.debug(osudata, 'fileparse', 'replay', input.obj.guildId, 'osuData');
     let userid: string | number;
     try {
@@ -5909,8 +5909,8 @@ export async function scoreparse(input: extypes.commandInput) {
     } else {
         osudata = await osufunc.apiget('user', `${await scoredata.user.username}`, `${mode}`)
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, scoredata.user.username, 'osudata')
+    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudata, scoredata.user.username, 'osudata', osudata.playmode)
     osufunc.debug(osudata, 'command', 'scoreparse', input.obj.guildId, 'osuData')
     if (osudata?.error) {
         if (input.commandType == 'interaction') {
@@ -6270,16 +6270,16 @@ export async function scores(input: extypes.commandInput) {
 
     let osudata: osuApiTypes.User;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
         osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
+    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
     osufunc.debug(osudata, 'command', 'scores', input.obj.guildId, 'osuData');
 
@@ -8163,16 +8163,16 @@ export async function userBeatmaps(input: extypes.commandInput) {
     }
 
     let osudata: osuApiTypes.User;
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', 'osu') &&
+        !('error' in func.findFile(user, 'osudata', 'osu')) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata');
+        osudata = func.findFile(user, 'osudata', 'osu');
     } else {
         osudata = await osufunc.apiget('user', `${await user}`);
     }
-    func.storeFile(osudata, osudata.id, 'osudata');
-    func.storeFile(osudata, user, 'osudata');
+    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode);
+    func.storeFile(osudata, user, 'osudata', osudata.playmode);
 
     osufunc.debug(osudata, 'command', 'userbeatmaps', input.obj.guildId, 'osuData');
 
@@ -8398,10 +8398,10 @@ export async function trackadd(input: extypes.commandInput) {
 
     let osudata: osuApiTypes.User;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata'))
+    if (func.findFile(user, 'osudata', 'osu') &&
+        !('error' in func.findFile(user, 'osudata', 'osu'))
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudata = func.findFile(user, 'osudata', 'osu')
     } else {
         osudata = await osufunc.apiget('user', `${await user}`)
     }
@@ -8414,8 +8414,8 @@ export async function trackadd(input: extypes.commandInput) {
 
         replymsg = `Added \`${osudata.username}\` to the tracking list`
 
-        func.storeFile(osudata, osudata.id, 'osudata')
-        func.storeFile(osudata, user, 'osudata')
+        func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
+        func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
         trackfunc.editTrackUser({
             database: input.trackDb,
@@ -8515,10 +8515,10 @@ export async function trackremove(input: extypes.commandInput) {
 
     let osudata: osuApiTypes.User;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata'))
+    if (func.findFile(user, 'osudata', 'osu') &&
+        !('error' in func.findFile(user, 'osudata', 'osu'))
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudata = func.findFile(user, 'osudata', 'osu')
     } else {
         osudata = await osufunc.apiget('user', `${await user}`)
     }
@@ -8531,8 +8531,8 @@ export async function trackremove(input: extypes.commandInput) {
 
         replymsg = `Removed \`${osudata.username}\` from the tracking list`
 
-        func.storeFile(osudata, osudata.id, 'osudata')
-        func.storeFile(osudata, user, 'osudata')
+        func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
+        func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
         trackfunc.editTrackUser({
             database: input.trackDb,
@@ -9901,16 +9901,16 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
 
     let osudata: osuApiTypes.User;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
         osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
+    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
     osufunc.debug(osudata, 'command', 'whatif', input.obj.guildId, 'osuData');
 
