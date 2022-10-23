@@ -1,5 +1,5 @@
 import rosu = require('rosu-pp');
-import osumodcalc = require('osumodcalculator');
+import osumodcalc = require('./osumodcalc');
 import fs = require('fs');
 import charttoimg = require('chartjs-to-image');
 import fetch from 'node-fetch';

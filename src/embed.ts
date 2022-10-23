@@ -1,5 +1,5 @@
 import osuapitypes = require('./types/osuApiTypes');
-import osumodcalc = require('osumodcalculator');
+import osumodcalc = require('./osumodcalc');
 import emojis = require('./consts/emojis');
 import osufunc = require('./osufunc');
 import fs = require('fs');
@@ -65,32 +65,35 @@ export async function scoreList(
     let sortinfo;
     switch (sort) {
         case 'score':
-            newData = filtereddata.slice().sort((a, b) => b.score - a.score)
+            newData = await filtereddata.slice().sort((a, b) => b.score - a.score)
             sortinfo = `\nsorted by highest score`
             break;
         case 'acc':
-            newData = filtereddata.slice().sort((a, b) => b.accuracy - a.accuracy)
+            newData = await filtereddata.slice().sort((a, b) => b.accuracy - a.accuracy)
             sortinfo = `\nsorted by highest accuracy`
             break;
         case 'pp': default:
-            newData = filtereddata.slice().sort((a, b) => b.pp - a.pp)
+            newData = await filtereddata.slice().sort((a, b) => b.pp - a.pp)
             sortinfo = `\nsorted by highest pp`
             sort = 'pp'
             break;
         case 'recent':
-            newData = filtereddata.slice().sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
+            newData = await filtereddata.slice().sort((a, b) => 
+            parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) 
+            - 
+            parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
             sortinfo = `\nsorted by most recent`
             break;
         case 'combo':
-            newData = filtereddata.slice().sort((a, b) => b.max_combo - a.max_combo)
+            newData = await filtereddata.slice().sort((a, b) => b.max_combo - a.max_combo)
             sortinfo = `\nsorted by highest combo`
             break;
         case 'miss':
-            newData = filtereddata.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
+            newData = await filtereddata.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
             sortinfo = `\nsorted by least misses`
             break;
         case 'rank':
-            newData = filtereddata.slice().sort((a, b) => a.rank.localeCompare(b.rank))
+            newData = await filtereddata.slice().sort((a, b) => a.rank.localeCompare(b.rank))
             sortinfo = `\nsorted by best rank`
             break;
     }
@@ -136,7 +139,33 @@ export async function scoreList(
     let truePosArr = newData.slice()
 
     if (showTruePosition && sort != truePosType) {
-        truePosArr = await scores.slice().sort((a, b) => b.pp - a.pp)
+        switch (truePosType) {
+            case 'score':
+                truePosArr = await scores.slice().sort((a, b) => b.score - a.score)
+                break;
+            case 'acc':
+                truePosArr = await scores.slice().sort((a, b) => b.accuracy - a.accuracy)
+                break;
+            case 'pp': default:
+                truePosArr = await scores.slice().sort((a, b) => b.pp - a.pp)
+                break;
+            case 'recent':
+                truePosArr = await scores.slice().sort((a, b) => 
+                parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) 
+                - 
+                parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
+                )
+                break;
+            case 'combo':
+                truePosArr = await scores.slice().sort((a, b) => b.max_combo - a.max_combo)
+                break;
+            case 'miss':
+                truePosArr = await scores.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
+                break;
+            case 'rank':
+                truePosArr = await scores.slice().sort((a, b) => a.rank.localeCompare(b.rank))
+                break;
+        }
     }
 
     for (let i = 0; i < 5 && i < newData.length; i++) {
@@ -575,9 +604,9 @@ ${topmap.status == 'ranked' ?
             }
         }
             break;
-        // case 'map': {
+            // case 'map': {
 
-        // }
+            // }
             break;
     }
 

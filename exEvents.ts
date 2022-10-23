@@ -1,5 +1,5 @@
 import fs = require('fs');
-import osumodcalc = require('osumodcalculator');
+import osumodcalc = require('./src/osumodcalc');
 import fetch from 'node-fetch';
 import osuapitypes = require('./src/types/osuApiTypes');
 import extypes = require('./src/types/extraTypes');
