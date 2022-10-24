@@ -12,7 +12,13 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
 
     async function trackUser(fr: { user: string, mode: string, inital?: boolean }) {
         if (!fr.user) return;
-        const curdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('osutop', fr.user, fr.mode)
+        const curdata: osuApiTypes.Score[] & osuApiTypes.Error = (await osufunc.apiget({
+            type: 'osutop',
+            params: {
+                username: fr.user,
+                mode: osufunc.modeValidator(fr.mode)
+            }
+        })).apiData;
         // const thisUser: osuApiTypes.User = await osufunc.apiget('user', fr.user, fr.mode)
         if (!curdata?.[0]?.user_id) return;
 

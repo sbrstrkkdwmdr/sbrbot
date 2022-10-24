@@ -3,6 +3,7 @@ import osumodcalc = require('./osumodcalc');
 import fs = require('fs');
 import charttoimg = require('chartjs-to-image');
 import fetch from 'node-fetch';
+import perf = require('perf_hooks');
 import osuApiTypes = require('./types/osuApiTypes');
 import config = require('../config/config.json');
 import cmdchecks = require('./checks');
@@ -14,7 +15,7 @@ import Sequelize = require('sequelize');
  * @param {*} arr array of scores
  * @returns most common mod combinations
  */
-function modemods(arr) {
+export function modemods(arr) {
     return arr.sort((a, b) => //swap b and a to make it least common
         arr.filter(v => v.mods === a.mods).length
         - arr.filter(v => v.mods === b.mods).length
@@ -25,7 +26,7 @@ function modemods(arr) {
  * @param {*} arr array of scores
  * @returns most common mapper
  */
-function modemappers(arr) {
+export function modemappers(arr) {
     return arr.sort((a, b) => //swap b and a to make it least common
         arr.filter(v => v.beatmapset.creator === a.beatmapset.creator).length
         - arr.filter(v => v.beatmapset.creator === b.beatmapset.creator).length
@@ -34,12 +35,8 @@ function modemappers(arr) {
 /* module.exports = {
     modemods, modemappers
 } */
-export {
-    modemods, modemappers
-};
-export { mapcalc, scorecalc, straincalc, graph, mapcalclocal, straincalclocal, apiget, updateToken, updateUserStats };
 
-type Score = {
+export type calcScore = {
     mode?: rosu.GameMode;
     mods?: number;
     acc?: number;
@@ -67,7 +64,7 @@ type Score = {
  * @param calctype 0 = rosu, 1 = booba, 2 = osu api extended
  * @returns 
  */
-async function mapcalc(
+export async function mapcalc(
     obj: {
         mods: string,
         gamemode: string,
@@ -163,7 +160,7 @@ async function mapcalc(
  * @param obj.failed whether the score is failed or not
  * @returns 
  */
-async function scorecalc(
+export async function scorecalc(
     obj: {
         mods: string, gamemode: string, mapid: number,
         hitgeki?: number | null, hit300?: number | null, hitkatu?: number | null, hit100?: number | null, hit50?: number | null, miss: number | null,
@@ -249,7 +246,7 @@ async function scorecalc(
                 if (isNaN(newacc)) {
                     newacc = obj.acc;
                 }
-                let basescore: Score = {
+                let basescore: calcScore = {
                     mode,
                     mods: osumodcalc.ModStringToInt(mods),
                     combo: obj.maxcombo,
@@ -317,7 +314,7 @@ async function scorecalc(
  * @param mode 
  * @returns the strains of a beatmap. times given in milliseconds
  */
-async function straincalc(mapid: number, mods: string, calctype: number, mode: string) {
+export async function straincalc(mapid: number, mods: string, calctype: number, mode: string) {
     let strains;
     switch (calctype) {
         case 0: default: {
@@ -370,7 +367,7 @@ async function straincalc(mapid: number, mods: string, calctype: number, mode: s
  * @param mode 
  * @returns the strains of a beatmap. times given in milliseconds
  */
-async function straincalclocal(path: string | null, mods: string, calctype: number, mode: string) {
+export async function straincalclocal(path: string | null, mods: string, calctype: number, mode: string) {
     if (path == null) {
         path = './files/tempdiff.osu'
     }
@@ -428,7 +425,7 @@ async function straincalclocal(path: string | null, mods: string, calctype: numb
  * @param secondYlabel label for second set of data
  * @returns graph url
  */
-async function graph(x: number[] | string[], y: number[], label: string, startzero?: boolean | null, reverse?: boolean | null, showlabelx?: boolean | null, showlabely?: boolean | null, fill?: boolean | null, settingsoverride?: overrideGraph | null, displayLegend?: boolean, secondY?: number[], secondLabel?: string) {
+export async function graph(x: number[] | string[], y: number[], label: string, startzero?: boolean | null, reverse?: boolean | null, showlabelx?: boolean | null, showlabely?: boolean | null, fill?: boolean | null, settingsoverride?: overrideGraph | null, displayLegend?: boolean, secondY?: number[], secondLabel?: string) {
 
     if (startzero == null || typeof startzero == 'undefined') {
         startzero = true
@@ -562,7 +559,7 @@ type overrideGraph = 'replay' | 'rank' | 'strains' | 'bar' | 'health'
  * @param calctype 0 = rosu, 1 = booba, 2 = osu api extended
  * @returns 
  */
-async function mapcalclocal(
+export async function mapcalclocal(
     mods: string, gamemode: string, path: string | null,
     calctype: number | null,
 ) {
@@ -628,170 +625,59 @@ async function mapcalclocal(
 }
 
 /**
- * 
- * @param type type of api call to make
- * @param mainparam main parameter to pass to api
- * @param params separate each param with +
- * @param version 1 or 2. defaults to 2
- * @param callNum number of times this function has been called (used for recursion/error handling)
- * @returns data
+ * @param url url used in the api call
+ * @param totaltimeNum total time taken in seconds 
+ * @param input input to the api call 
+ * @param apiData data returned from the api call
+ * @param error error returned from the api call
  */
-async function apiget(type: apiGetStrings, mainparam: string, params?: string, version?: number, callNum?: number, ignoreNonAlphaChar?: boolean) {
-    if (!callNum) callNum = 0;
-    if (callNum > 5) throw new Error('Too many calls to api');
-
-
-    const baseurl = 'https://osu.ppy.sh/api'
-    const accessN = fs.readFileSync('config/osuauth.json', 'utf-8');
-    let access_token
-    try {
-        access_token = JSON.parse(accessN).access_token;
-    } catch (error) {
-        access_token = ''
-    }
-    const key = config.osuApiKey
-    if (!version) {
-        version = 2
-    }
-    let url = `${baseurl}/v${version}/`
-    if (version == 1) {
-        url = `${baseurl}/`
-        switch (type) {
-            case 'scores_get_map':
-                url += `get_scores?k=${key}&b=${mainparam}&mods=${params}&limit=100`
-                break;
-        }
-    }
-    if (ignoreNonAlphaChar != true) mainparam = cmdchecks.toHexadecimal(mainparam)
-    if (params && ignoreNonAlphaChar != true) params = cmdchecks.toHexadecimal(params);
-    if (version == 2) {
-        switch (type) {
-            case 'custom':
-                url += `${mainparam}`
-                break;
-            case 'map_search':
-                break;
-            case 'map_get': case 'map':
-                url += `beatmaps/${mainparam}`
-                break;
-            case 'map_get_md5':
-                url += `beatmaps/lookup?checksum=${mainparam}`
-                break;
-            case 'mapset_get': case 'mapset':
-                url += `beatmapsets/${mainparam}`
-                break;
-            case 'mapset_search':
-                url += `beatmapsets/search?q=${mainparam}&s=any`
-                break;
-            case 'score_get': case 'score':
-                url += `scores/${params ?? 'osu'}/${mainparam}`
-                break;
-            case 'scores_get_best': case 'osutop': case 'best':
-                url += `users/${mainparam}/scores/best?mode=${params ?? 'osu'}&limit=100&offset=0`
-                break;
-            case 'scores_get_first': case 'firsts':
-                url += `users/${mainparam}/scores/firsts?mode=${params ?? 'osu'}&limit=100`
-                break;
-            case 'firsts_alt':
-                url += `users/${mainparam}/scores/firsts?limit=100&${params}`
-                break;
-            case 'scores_get_map': case 'maplb':
-                url += `beatmaps/${mainparam}/scores`
-                break;
-            case 'scores_get_pinned': case 'pinned':
-                url += `users/${mainparam}/scores/pinned?mode=${params ? params : 'osu'}&limit=100`
-                break;
-            case 'pinned_alt':
-                url += `users/${mainparam}/scores/pinned?limit=100&${params}`
-                break;
-            case 'scores_get_recent': case 'recent':
-                url += `users/${mainparam}/scores/recent?include_fails=1&mode=${params ? params : 'osu'}&limit=100&offset=0`
-                break;
-            case 'recent_alt':
-                url += `users/${mainparam}/scores/recent?include_fails=1&limit=100&${params}`
-                break;
-            case 'user_get': case 'user':
-                url += `users/${mainparam}/${params ? params : 'osu'}`
-                break;
-            case 'user_get_most_played': case 'most_played':
-                url += `users/${mainparam}/beatmapsets/most_played`
-                break;
-            case 'user_get_scores_map':
-                url += `beatmaps/${mainparam}/scores/users/${params}/all`
-                break;
-            case 'user_get_maps':
-                url += `users/${mainparam}/beatmapsets/${params ?? 'favourite'}?limit=100`
-                break;
-            case 'user_get_maps_alt':
-                url += `users/${mainparam}/beatmapsets/${params ?? 'favourite'}&limit=100`
-                break;
-        }
-    }
-    let data;
-    let datafirst = await fetch(url, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${access_token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json"
-        }
-    }).then(res => res.json())
-
-    try {
-        if (datafirst?.authentication) {
-            await updateToken()
-            datafirst = await apiget(type, mainparam, params, version, callNum + 1)
-        }
-        if ('error' in datafirst && !type.includes('search')) {
-            throw new Error('nullwww')
-        }
-        data = datafirst;
-    } catch (error) {
-        data = {
-            error: error,
-            url: url,
-            params: {
-                type: type,
-                mainparam: mainparam,
-                params: params,
-                version: version,
-            },
-            apiData: datafirst
-        }
-        if (params) {
-            data.params.params = params
-        }
-    }
-    logCall(url)
-    return data;
+export type apiReturn = {
+    url: string,
+    totaltimeNum: number,
+    input: apiInput,
+    apiData: any,
+    error?: Error,
 }
 
 /**
- * 
  * @param type type of api call to make
- * @param params
+ * @param params params to pass to the api call
+ * @param params.username username to get data for
+ * @param params.id map id or score id
+ * @param params.md5 map md5 hash string
+ * @param params.searchString if using search, the string to search for
+ * @param params.mode osu gamemode
+ * @param params.category map category
+ * @param params.opts options to pass to the api call. formnat as ['x=y', 'x=y']                                        
+ * @param params.urlOverride force api call to use this url and ignore other params
  * @param version 1 or 2. defaults to 2
  * @param callNum number of times this function has been called (used for recursion/error handling)
- * @returns data
+ * @param ignoreNonAlphaChar if true, will ignore non-alphanumeric characters in the username. Otherwise, they will be converted to hexadecimals */
+export type apiInput = {
+    type: apiGetStrings,
+    params: {
+        username?: string,
+        userid?: string | number,
+        id?: string | number,
+        md5?: string,
+        searchString?: string,
+        mode?: osuApiTypes.GameMode,
+        category?: string,
+        mods?: string,
+        opts?: string[],
+        urlOverride?: string
+    },
+    version?: number,
+    callNum?: number,
+    ignoreNonAlphaChar?: boolean
+}
+/**
+ * @param input - see apiInput
+ * @returns apiReturn
+ * @property url
+ * @property
  */
-export async function apigetAlt(
-    input: {
-        type: apiGetStrings,
-        params?: {
-            username?: string,
-            userid?:string,
-            id?: string,
-            md5?: string,
-            searchString?: string,
-            mode?: osuApiTypes.GameMode,
-            category?: string,
-            opts?: string[],
-            urlOverride?: string
-        },
-        version?: number,
-        callNum?: number,
-        ignoreNonAlphaChar?: boolean
-    }) {
+export async function apiget(input: apiInput) {
     if (!input.callNum) input.callNum = 0;
     if (input.callNum > 5) throw new Error('Too many calls to api');
 
@@ -815,7 +701,7 @@ export async function apigetAlt(
             url = `${baseurl}/`
             switch (input.type) {
                 case 'scores_get_map':
-                    url += `get_scores?k=${key}&b=${input.params.id}&mods=${input.params.opts.join('')}&limit=100`
+                    url += `get_scores?k=${key}&b=${input.params.id}&mods=${osumodcalc.ModStringToInt(input.params.mods)}&limit=100`
                     break;
             }
         }
@@ -849,7 +735,7 @@ export async function apigetAlt(
                     url += `users/${input.params.username ?? input.params.userid}/scores/firsts?mode=${input.params.mode ?? 'osu'}&limit=100`
                     break;
                 case 'firsts_alt':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/firsts?limit=100&${input.params.opts.join('&')}`
+                    url += `users/${input.params.username ?? input.params.userid}/scores/firsts?limit=100`
                     break;
                 case 'scores_get_map': case 'maplb':
                     url += `beatmaps/${input.params.id}/scores`
@@ -864,7 +750,7 @@ export async function apigetAlt(
                     url += `users/${input.params.username ?? input.params.userid}/scores/recent?include_fails=1&mode=${input.params.mode ?? 'osu'}&limit=100&offset=0`
                     break;
                 case 'recent_alt':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?include_fails=1&limit=100&${input.params.opts.join('&')}`
+                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?include_fails=1&limit=100`
                     break;
                 case 'user_get': case 'user':
                     url += `users/${input.params.username ?? input.params.userid}/${input.params.mode ?? 'osu'}`
@@ -884,8 +770,24 @@ export async function apigetAlt(
             }
         }
     }
-    let data;
+
+    if (input.params.opts) {
+        const urlSplit = url.split('/')[url.split('/').length - 1]
+        if (urlSplit.includes('?')) {
+            url += `&${input.params.opts.join('&')}`
+        } else {
+            url += `?${input.params.opts.join('&')}`
+        }
+    }
+
+    let data: apiReturn = {
+        url: null,
+        totaltimeNum: null,
+        input: input,
+        apiData: null,
+    };
     let datafirst;
+    const before = perf.performance.now();
     datafirst = await fetch(url, {
         method: 'GET',
         headers: {
@@ -893,33 +795,40 @@ export async function apigetAlt(
             "Content-Type": "application/json",
             Accept: "application/json"
         }
-    }).then(res => res.json())
-
+    }).then(res => res.json());
+    const after = perf.performance.now();
     try {
         if (datafirst?.authentication) {
             await updateToken()
             const tempobj = Object.assign({
                 callNum: input.callNum ? input.callNum + 1 : 1
             }, input)
-            datafirst = await apigetAlt(tempobj)
+            datafirst = await apiget(tempobj)
         }
         if ('error' in datafirst && !input.type.includes('search')) {
             throw new Error('nullwww')
         }
-        data = datafirst;
+        data = {
+            url,
+            input,
+            totaltimeNum: after - before,
+            apiData: datafirst
+        };
     } catch (error) {
         data = {
-            error: error,
-            url: url,
-            input: input,
-            apiData: datafirst
+            url,
+            input,
+            totaltimeNum: after - before,
+            apiData: datafirst,
+            error
         }
+        fs.writeFileSync(`./cache/err${Date.now()}.json`, JSON.stringify(data, null, 2))
     }
     logCall(url)
     return data;
 }
 
-async function updateToken() {
+export async function updateToken() {
     const clientId = config.osuClientID
     const clientSecret = config.osuClientSecret
     const newtoken: osuApiTypes.OAuth = await fetch('https://osu.ppy.sh/oauth/token', {
@@ -959,7 +868,7 @@ export function logCall(data: string, title?: string) {
     return;
 }
 
-async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase: any) {
+export async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase: any) {
     const allUsers = await sqlDatabase.findAll()
 
     let findname;
@@ -1019,10 +928,17 @@ async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase
 }
 
 export async function getUser(username: string) {
-    return await apiget('user_get', username);
+    return await apiget({
+        type: 'user',
+        params: {
+            username
+        }
+        // url: `https://osu.ppy.sh/api/v2/users/${username}`,
+    })
+    //apiget('user_get', username);
 }
 
-type apiGetStrings =
+export type apiGetStrings =
     'custom' |
 
     'map_search' |

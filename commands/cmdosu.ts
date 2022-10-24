@@ -105,8 +105,27 @@ export async function bws(input: extypes.commandInput) {
         }).catch()
     }
 
-    const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `osu`)
-    osufunc.debug(osudata, 'command', 'bws', input.obj.guildId, 'osuData');
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(user, 'osudata', osufunc.modeValidator('osu')) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator('osu'))) &&
+        input.button != 'Refresh'
+    ) {
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'))
+    } else {
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator('osu')
+            }
+        })
+    }
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'bws', input.obj.guildId, 'osuData');
+
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
@@ -303,8 +322,15 @@ export async function globals(input: extypes.commandInput) {
         user = cuser.username;
     }
 
-    const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
-    osufunc.debug(osudata, 'command', 'globals', input.obj.guildId, 'osuData');
+    const osudataReq: osufunc.apiReturn = await osufunc.apiget({
+        type: 'user',
+        params: {
+            username: cmdchecks.toHexadecimal(user),
+            mode: 'osu'
+        }
+    })
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+    osufunc.debug(osudataReq, 'command', 'globals', input.obj.guildId, 'osuData');
     if (osudata?.error) {
         //@ts-expect-error reply diff signatures
         if (input.commandType != 'button') input.obj.reply({
@@ -910,15 +936,24 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
         url += '?spotlight=' + spotlight;
     }
 
+    let rankingdataReq: osufunc.apiReturn;
     let rankingdata: osuApiTypes.Rankings;
     if (func.findFile(input.absoluteID, 'rankingdata') &&
         input.commandType == 'button' &&
         !('error' in func.findFile(input.absoluteID, 'rankingdata')) &&
         input.button != 'Refresh'
     ) {
-        rankingdata = func.findFile(input.absoluteID, 'rankingdata')
+        rankingdataReq = func.findFile(input.absoluteID, 'rankingdata')
     } else {
-        rankingdata = await osufunc.apiget('custom', url, null, 2, 0, true).catch(() => {
+        //@ts-expect-error - type void is not assignable to type apiReturn
+        rankingdataReq = await osufunc.apiget({
+            type: 'custom',
+            params: {
+                urlOverride: url
+            },
+            ignoreNonAlphaChar: true,
+            version: 2
+        }).catch(() => {
             if (country != 'ALL') {
                 //@ts-expect-error reply diff signature
                 input.obj.reply({
@@ -940,7 +975,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
             return;
         })
     }
-    func.storeFile(rankingdata, input.absoluteID, 'rankingdata')
+    func.storeFile(rankingdataReq, input.absoluteID, 'rankingdata')
 
     if (rankingdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -963,8 +998,10 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
         return;
     }
 
+    rankingdata = rankingdataReq.apiData;
+
     try {
-        osufunc.debug(rankingdata, 'command', 'ranking', input.obj.guildId, 'rankingData')
+        osufunc.debug(rankingdataReq, 'command', 'ranking', input.obj.guildId, 'rankingData')
     } catch (e) {
         return;
     }
@@ -1467,20 +1504,29 @@ export async function osu(input: extypes.commandInput) {
         }).catch()
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(user, 'osudata', mode) &&
-        !('error' in func.findFile(user, 'osudata', mode)) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata', mode)
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, mode)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        })
     }
-    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
-    osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
+    let osudata: osuApiTypes.User = osudataReq.apiData;
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+
+    osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -1514,8 +1560,15 @@ export async function osu(input: extypes.commandInput) {
         osudata.playmode != 'osu' &&
         typeof mode != 'undefined') {
         mode = osudata.playmode
-        osudata = await osufunc.apiget('user', `${user}`, `${mode}`);
-        osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        })
+        osudata = osudataReq.apiData;
+        osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
     } else {
         mode = mode ?? 'osu'
     }
@@ -1620,8 +1673,25 @@ export async function osu(input: extypes.commandInput) {
                 .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
                 .setImage(`${chartplay}`);
 
-            const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-            osufunc.debug(osutopdata, 'command', 'osu', input.obj.guildId, 'osuTopData');
+            let osutopdataReq: osufunc.apiReturn;
+            if (func.findFile(input.absoluteID, 'osutopdata') &&
+                input.commandType == 'button' &&
+                !('error' in func.findFile(input.absoluteID, 'osutopdata')) &&
+                input.button != 'Refresh'
+            ) {
+                osutopdataReq = func.findFile(input.absoluteID, 'osutopdata')
+            } else {
+                osutopdataReq = await osufunc.apiget({
+                    type: 'best',
+                    params: {
+                        userid: osudata.id,
+                        mode: mode
+                    }
+                })
+            }
+
+            const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData;
+            osufunc.debug(osutopdataReq, 'command', 'osu', input.obj.guildId, 'osuTopData');
 
             if (osutopdata?.error) {
                 if (input.commandType != 'button' && input.commandType != 'link') {
@@ -1646,8 +1716,15 @@ export async function osu(input: extypes.commandInput) {
                 return;
             }
 
-            const mostplayeddata: osuApiTypes.BeatmapPlaycount[] & osuApiTypes.Error = await osufunc.apiget('most_played', `${osudata.id}`)
-            osufunc.debug(mostplayeddata, 'command', 'osu', input.obj.guildId, 'mostPlayedData');
+            //await osufunc.apiget('most_played', `${osudata.id}`)
+            const mostplayeddataReq: osufunc.apiReturn = await osufunc.apiget({
+                type: 'most_played',
+                params: {
+                    userid: osudata.id,
+                }
+            })
+            const mostplayeddata: osuApiTypes.BeatmapPlaycount[] & osuApiTypes.Error = mostplayeddataReq.apiData;
+            osufunc.debug(mostplayeddataReq, 'command', 'osu', input.obj.guildId, 'mostPlayedData');
 
             if (mostplayeddata?.error) {
                 if (input.commandType != 'button' && input.commandType != 'link') {
@@ -2136,20 +2213,29 @@ export async function firsts(input: extypes.commandInput) {
         }).catch()
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
     if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        })
     }
-    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
-    osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+
+    osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -2177,7 +2263,16 @@ export async function firsts(input: extypes.commandInput) {
 
     let firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []
     async function getScoreCount(cinitnum) {
-        const fd: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('firsts_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
+        const fdReq: osufunc.apiReturn = await osufunc.apiget({
+            type: 'firsts',
+            params: {
+                userid: `${osudata.id}`,
+                opts: [`offset=${cinitnum}`],
+            },
+            version: 2,
+
+        })
+        const fd: osuApiTypes.Score[] & osuApiTypes.Error = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
@@ -2500,17 +2595,26 @@ export async function maplb(input: extypes.commandInput) {
         }).catch()
     }
 
+    let mapdataReq: osufunc.apiReturn;
     let mapdata: osuApiTypes.Beatmap;
     if (func.findFile(mapid, 'mapdata') &&
         !('error' in func.findFile(mapid, 'mapdata')) &&
         input.button != 'Refresh'
     ) {
-        mapdata = func.findFile(mapid, 'mapdata')
+        mapdataReq = func.findFile(mapid, 'mapdata')
     } else {
-        mapdata = await osufunc.apiget('map', `${mapid}`)
+        mapdataReq = await osufunc.apiget(
+            {
+                type: 'map',
+                params: {
+                    id: mapid
+                }
+            }
+        )
     }
-    func.storeFile(mapdata, mapid, 'mapdata')
-    osufunc.debug(mapdata, 'command', 'maplb', input.obj.guildId, 'mapData');
+    mapdata = mapdataReq.apiData
+    func.storeFile(mapdataReq, mapid, 'mapdata')
+    osufunc.debug(mapdataReq, 'command', 'maplb', input.obj.guildId, 'mapData');
 
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -2552,6 +2656,7 @@ export async function maplb(input: extypes.commandInput) {
     }
     const lbEmbed = new Discord.EmbedBuilder()
 
+    let lbdataReq: osufunc.apiReturn;
     if (mods == null) {
         let lbdataf: osuApiTypes.BeatmapScores;
         if (func.findFile(input.absoluteID, 'lbdata') &&
@@ -2559,12 +2664,19 @@ export async function maplb(input: extypes.commandInput) {
             !('error' in func.findFile(input.absoluteID, 'lbdata')) &&
             input.button != 'Refresh'
         ) {
-            lbdataf = func.findFile(input.absoluteID, 'lbdata')
+            lbdataReq = func.findFile(input.absoluteID, 'lbdata')
         } else {
-            lbdataf = await osufunc.apiget('scores_get_map', `${mapid}`)
+            lbdataReq = await osufunc.apiget({
+                type: 'scores_get_map',
+                params: {
+                    id: mapid
+                }
+            })
         }
-        func.storeFile(lbdataf, input.absoluteID, 'lbdata')
-        osufunc.debug(lbdataf, 'command', 'maplb', input.obj.guildId, 'lbDataF');
+        lbdataf = lbdataReq.apiData
+
+        func.storeFile(lbdataReq, input.absoluteID, 'lbdata')
+        osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbDataF');
 
         if (lbdataf?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
@@ -2609,7 +2721,7 @@ export async function maplb(input: extypes.commandInput) {
             page = Math.ceil(lbdata.length / 5) - 1
         }
 
-        osufunc.debug(lbdata, 'command', 'maplb', input.obj.guildId, 'lbData');
+        osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbData');
 
         const scoresarg = await embedStuff.scoreList({
             scores: lbdata,
@@ -2667,18 +2779,27 @@ export async function maplb(input: extypes.commandInput) {
 
         osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
     } else {
-        let lbdata;
         if (func.findFile(input.absoluteID, 'lbdata') &&
             input.commandType == 'button' &&
             !('error' in func.findFile(input.absoluteID, 'lbdata')) &&
             input.button != 'Refresh'
         ) {
-            lbdata = func.findFile(input.absoluteID, 'lbdata')
+            lbdataReq = func.findFile(input.absoluteID, 'lbdata')
         } else {
-            lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1)
+            lbdataReq = await osufunc.apiget(
+                {
+                    type: 'scores_get_map',
+                    params: {
+                        id: mapid,
+                        mods: mods //function auto converts to id
+                    },
+                    version: 1
+                }
+            )
         }
-        func.storeFile(lbdata, input.absoluteID, 'lbdata')
-        osufunc.debug(lbdata, 'command', 'maplb', input.obj.guildId, 'lbData');
+        const lbdata = lbdataReq.apiData
+        func.storeFile(lbdataReq, input.absoluteID, 'lbdata')
+        osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbData');
 
         if (lbdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
@@ -3150,20 +3271,29 @@ export async function nochokes(input: extypes.commandInput) {
         }).catch()
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
     if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        })
     }
-    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
-    osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+
+    osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
     if (osudata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -3188,19 +3318,26 @@ export async function nochokes(input: extypes.commandInput) {
         return;
     }
 
-    let nochokedata: osuApiTypes.Score[] & osuApiTypes.Error
+    let nochokedataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'nochokedata') &&
         input.commandType == 'button' &&
         !('error' in func.findFile(input.absoluteID, 'nochokedata')) &&
         input.button != 'Refresh'
     ) {
-        nochokedata = func.findFile(input.absoluteID, 'nochokedata')
+        nochokedataReq = func.findFile(input.absoluteID, 'nochokedata')
     } else {
-        nochokedata = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
+        nochokedataReq = await osufunc.apiget({
+            type: 'best',
+            params: {
+                userid: osudata.id,
+                mode: mode
+            }
+        })
     }
+    const nochokedata: osuApiTypes.Score[] & osuApiTypes.Error = nochokedataReq.apiData;
 
-    osufunc.debug(nochokedata, 'command', 'osutop', input.obj.guildId, 'noChokeData');
-    func.storeFile(nochokedata, input.absoluteID, 'nochokedata')
+    osufunc.debug(nochokedataReq, 'command', 'osutop', input.obj.guildId, 'noChokeData');
+    func.storeFile(nochokedataReq, input.absoluteID, 'nochokedata')
 
     if (nochokedata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -3765,20 +3902,29 @@ export async function osutop(input: extypes.commandInput) {
         }).catch()
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
     if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        })
     }
-    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
-    osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+
+    osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -3803,19 +3949,27 @@ export async function osutop(input: extypes.commandInput) {
         return;
     }
 
-    let osutopdata: osuApiTypes.Score[] & osuApiTypes.Error
+    let osutopdataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'osutopdata') &&
         input.commandType == 'button' &&
         !('error' in func.findFile(input.absoluteID, 'osutopdata')) &&
         input.button != 'Refresh'
     ) {
-        osutopdata = func.findFile(input.absoluteID, 'osutopdata')
+        osutopdataReq = func.findFile(input.absoluteID, 'osutopdata')
     } else {
-        osutopdata = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
+        osutopdataReq = await osufunc.apiget({
+            type: 'best',
+            params: {
+                userid: osudata.id,
+                mode: mode
+            }
+        })
     }
 
-    osufunc.debug(osutopdata, 'command', 'osutop', input.obj.guildId, 'osuTopData');
-    func.storeFile(osutopdata, input.absoluteID, 'osutopdata')
+    const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData;
+
+    osufunc.debug(osutopdataReq, 'command', 'osutop', input.obj.guildId, 'osuTopData');
+    func.storeFile(osutopdataReq, input.absoluteID, 'osutopdata')
 
     if (osutopdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -4386,20 +4540,29 @@ export async function pinned(input: extypes.commandInput) {
         }).catch()
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
     if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        })
     }
-    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
-    osufunc.debug(osudata, 'command', 'pinned', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+
+    osufunc.debug(osudataReq, 'command', 'pinned', input.obj.guildId, 'osuData');
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
             setTimeout(() => {
@@ -4423,20 +4586,29 @@ export async function pinned(input: extypes.commandInput) {
 
     let pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []; //= await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
     async function getScoreCount(cinitnum) {
-        const fd: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('pinned_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
+        const fdReq: osufunc.apiReturn = await osufunc.apiget({
+            type: 'pinned',
+            params: {
+                userid: `${osudata.id}`,
+                opts: [`offset=${cinitnum}`],
+            },
+            version: 2,
+
+        })
+        const fd: osuApiTypes.Score[] & osuApiTypes.Error = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-expect-error null msg
+                    setTimeout(() => {//@ts-expect-error edit reply doesnt exist on msg
                         input.obj.editReply({
-                            content: 'Error - could not fetch user\'s pinned scores',
+                            content: 'Error - could not find user\'s pinned scores',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-expect-error null msg
+                } else {//@ts-expect-error reply diff signatures
                     input.obj.reply({
-                        content: 'Error - could not fetch user\'s pinned scores',
+                        content: 'Error - could not find user\'s pinned scores',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch()
@@ -4446,6 +4618,7 @@ export async function pinned(input: extypes.commandInput) {
         }
         for (let i = 0; i < fd.length; i++) {
             if (!fd[i] || typeof fd[i] == 'undefined') { break; }
+
             await pinnedscoresdata.push(fd[i])
         }
         if (fd.length == 100) {
@@ -4591,6 +4764,7 @@ export async function recent(input: extypes.commandInput) {
     let mode = null;
     let list = false;
     let sort: embedStuff.scoreSort = 'recent';
+    let showFails = 1;
 
     let isFirstPage = false;
     let isLastPage = false;
@@ -4624,6 +4798,18 @@ export async function recent(input: extypes.commandInput) {
             if (input.args.includes('-m')) {
                 mode = (input.args[input.args.indexOf('-m') + 1]);
                 input.args.splice(input.args.indexOf('-m'), 2);
+            }
+            if (input.args.includes('-passes=true')) {
+                showFails = 0;
+                input.args.splice(input.args.indexOf('-passes=true'), 1);
+            }
+            if (input.args.includes('-passes')) {
+                showFails = 0;
+                input.args.splice(input.args.indexOf('-passes=true'), 1);
+            }
+            if (input.args.includes('-pass')) {
+                showFails = 0;
+                input.args.splice(input.args.indexOf('-pass'), 1);
             }
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
@@ -4677,7 +4863,7 @@ export async function recent(input: extypes.commandInput) {
                 }
             }
             //@ts-expect-error null msg
-            if(input.obj.message.embeds[0].title.includes('Best')){
+            if (input.obj.message.embeds[0].title.includes('Best')) {
                 sort = 'pp'
             }
 
@@ -4852,18 +5038,29 @@ export async function recent(input: extypes.commandInput) {
                 .setEmoji(buttonsthing.label.page.last)
                 .setDisabled(isLastPage),
         );
-    let osudata: osuApiTypes.User;
+
+    let osudataReq: osufunc.apiReturn;
+
     if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        })
     }
-    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudata, user, 'osudata', osudata.playmode)
-    osufunc.debug(osudata, 'command', 'recent', input.obj.guildId, 'osuData');
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+    osufunc.debug(osudataReq, 'command', 'recent', input.obj.guildId, 'osuData');
 
     if (osudata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {//@ts-expect-error null msg
@@ -4896,18 +5093,28 @@ export async function recent(input: extypes.commandInput) {
             .catch()
     }
 
-    let rsdata: osuApiTypes.Score[] & osuApiTypes.Error;
+    let rsdataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'rsdata') &&
         input.commandType == 'button' &&
         !('error' in func.findFile(input.absoluteID, 'rsdata')) &&
         input.button != 'Refresh'
     ) {
-        rsdata = func.findFile(input.absoluteID, 'rsdata')
+        rsdataReq = func.findFile(input.absoluteID, 'rsdata')
     } else {
-        rsdata = await osufunc.apiget('recent_alt', `${osudata.id}`, `mode=${mode}&offset=0`, 2, 0, true)
+        rsdataReq = await osufunc.apiget({
+            type: 'recent',
+            params: {
+                userid: osudata.id,
+                mode,
+                opts: [`include_fails=${showFails}`]
+            }
+        })
     }
-    osufunc.debug(rsdata, 'command', 'recent', input.obj.guildId, 'rsData');
-    func.storeFile(rsdata, input.absoluteID, 'rsdata')
+
+    const rsdata: osuApiTypes.Score[] & osuApiTypes.Error = rsdataReq.apiData;
+
+    osufunc.debug(rsdataReq, 'command', 'recent', input.obj.guildId, 'rsData');
+    func.storeFile(rsdataReq, input.absoluteID, 'rsdata')
     if (rsdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
@@ -4969,17 +5176,24 @@ export async function recent(input: extypes.commandInput) {
         const curbm = curscore.beatmap
         const curbms = curscore.beatmapset
 
-        let mapdata: osuApiTypes.Beatmap;
+        let mapdataReq: osufunc.apiReturn;
         if (func.findFile(curbm.id, 'mapdata') &&
             !('error' in func.findFile(curbm.id, 'mapdata')) &&
             input.button != 'Refresh'
         ) {
-            mapdata = func.findFile(curbm.id, 'mapdata')
+            mapdataReq = func.findFile(curbm.id, 'mapdata')
         } else {
-            mapdata = await osufunc.apiget('map', `${curbm.id}`)
+            mapdataReq = await osufunc.apiget({
+                type: 'map',
+                params: {
+                    id: curbm.id
+                }
+            })
         }
-        osufunc.debug(mapdata, 'command', 'recent', input.obj.guildId, 'mapData');
-        func.storeFile(mapdata, curbm.id, 'mapdata')
+        const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData
+
+        osufunc.debug(mapdataReq, 'command', 'recent', input.obj.guildId, 'mapData');
+        func.storeFile(mapdataReq, curbm.id, 'mapdata')
         if (mapdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
@@ -5436,32 +5650,51 @@ export async function replayparse(input: extypes.commandInput) {
     osufunc.debug(replay, 'fileparse', 'replay', input.obj.guildId, 'replayData');
 
     let mapdata: osuApiTypes.Beatmap;
+    let mapdataReq: osufunc.apiReturn;
+
     if (func.findFile(replay.beatmapMD5, `mapdata`) &&
 
         !('error' in func.findFile(replay.beatmapMD5, `mapdata`)) &&
         input.button != 'Refresh') {
-        mapdata = func.findFile(replay.beatmapMD5, `mapdata`)
+        mapdataReq = func.findFile(replay.beatmapMD5, `mapdata`)
     } else {
-        mapdata = await osufunc.apiget('map_get_md5', replay.beatmapMD5)
+        mapdataReq = await osufunc.apiget(
+            {
+                type: 'map_get_md5',
+                params: {
+                    md5: replay.beatmapMD5
+                }
+            })
     }
-    func.storeFile(mapdata, replay.beatmapMD5, 'mapdata')
+    mapdata = mapdataReq.apiData;
+    func.storeFile(mapdataReq, replay.beatmapMD5, 'mapdata')
 
-    osufunc.debug(mapdata, 'fileparse', 'replay', input.obj.guildId, 'mapData');
+    osufunc.debug(mapdataReq, 'fileparse', 'replay', input.obj.guildId, 'mapData');
     if (mapdata?.id) {
         typeof mapdata.id == 'number' ? osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`) : ''
     }
-    let osudata: osuApiTypes.User;
-    if (func.findFile(replay.playerName, 'osudata') &&
-        !('error' in func.findFile(replay.playerName, 'osudata')) &&
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu')) &&
+        !('error' in func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu'))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(replay.playerName, 'osudata')
+        osudataReq = func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu'))
     } else {
-        osudata = await osufunc.apiget('user', `${await replay.playerName}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: replay.playerName,
+                mode: osufunc.modeValidator('osu')
+            }
+        })
     }
-    func.storeFile(osudata, osudata.id, 'osudata', osufunc.modeValidator(replay.gameMode))
-    func.storeFile(osudata, replay.playerName, 'osudata', osufunc.modeValidator(replay.gameMode))
-    osufunc.debug(osudata, 'fileparse', 'replay', input.obj.guildId, 'osuData');
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(replay.gameMode))
+    func.storeFile(osudataReq, replay.playerName, 'osudata', osufunc.modeValidator(replay.gameMode))
+    osufunc.debug(osudataReq, 'fileparse', 'replay', input.obj.guildId, 'osuData');
     let userid: string | number;
     try {
         userid = osudata.id
@@ -5712,17 +5945,28 @@ export async function scoreparse(input: extypes.commandInput) {
     )
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+    let scoredataReq: osufunc.apiReturn;
     let scoredata: osuApiTypes.Score;
 
     if (func.findFile(scoreid, 'scoredata') &&
         !('error' in func.findFile(scoreid, 'scoredata')) &&
         input.button != 'Refresh'
     ) {
-        scoredata = func.findFile(scoreid, 'scoredata')
+        scoredataReq = func.findFile(scoreid, 'scoredata')
     } else {
-        scoredata = await osufunc.apiget('score', `${scoreid}`, `${scoremode}`)
+        scoredataReq = await osufunc.apiget(
+            {
+                type: 'score',
+                params: {
+                    id: scoreid,
+                    mode: osufunc.modeValidator(scoremode)
+                }
+            })
     }
-    func.storeFile(scoredata, scoreid, 'scoredata')
+
+    scoredata = scoredataReq.apiData
+
+    func.storeFile(scoredataReq, scoreid, 'scoredata')
 
     if (scoredata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {//@ts-expect-error null msg
@@ -5750,7 +5994,7 @@ export async function scoreparse(input: extypes.commandInput) {
 
     }
 
-    osufunc.debug(scoredata, 'command', 'scoreparse', input.obj.guildId, 'scoreData');
+    osufunc.debug(scoredataReq, 'command', 'scoreparse', input.obj.guildId, 'scoreData');
     try {
         scoredata.rank.toUpperCase();
     } catch (error) {//@ts-expect-error null msg
@@ -5758,15 +6002,24 @@ export async function scoreparse(input: extypes.commandInput) {
             .catch();
         return;
     }
+    let mapdataReq: osufunc.apiReturn;
     let mapdata: osuApiTypes.Beatmap;
     if (func.findFile(scoredata.beatmap.id, 'mapdata') &&
         !('error' in func.findFile(scoredata.beatmap.id, 'mapdata')) &&
         input.button != 'Refresh') {
-        mapdata = func.findFile(scoredata.beatmap.id, 'mapdata')
+        mapdataReq = func.findFile(scoredata.beatmap.id, 'mapdata')
     } else {
-        mapdata = await osufunc.apiget('map_get', `${scoredata.beatmap.id}`)
+        mapdataReq = await osufunc.apiget({
+            type: 'map',
+            params: {
+                id: scoredata.beatmap.id,
+            }
+        })
     }
-    func.storeFile(mapdata, scoredata.beatmap.id, 'mapdata')
+
+    mapdata = mapdataReq.apiData
+
+    func.storeFile(mapdataReq, scoredata.beatmap.id, 'mapdata')
 
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -5900,18 +6153,28 @@ export async function scoreparse(input: extypes.commandInput) {
         }
     }
 
-    let osudata: osuApiTypes.User;
-    if (func.findFile(scoredata.user.username, 'osudata') &&
-        !('error' in func.findFile(scoredata.user.username, 'osudata')) &&
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(scoredata.user.username, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(scoredata.user.username, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(scoredata.user.username, 'osudata')
+        osudataReq = func.findFile(scoredata.user.username, 'osudata', osufunc.modeValidator(mode))
     } else {
-        osudata = await osufunc.apiget('user', `${await scoredata.user.username}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: scoredata.user.username,
+                mode: osufunc.modeValidator(mode)
+            }
+        })
     }
-    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudata, scoredata.user.username, 'osudata', osudata.playmode)
-    osufunc.debug(osudata, 'command', 'scoreparse', input.obj.guildId, 'osuData')
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, scoredata.user.username, 'osudata', osudata.playmode)
+    osufunc.debug(osudataReq, 'command', 'scoreparse', input.obj.guildId, 'osuData')
     if (osudata?.error) {
         if (input.commandType == 'interaction') {
             setTimeout(() => {//@ts-expect-error null msg
@@ -6268,20 +6531,29 @@ export async function scores(input: extypes.commandInput) {
         }).catch()
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
     if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        })
     }
-    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
-    osufunc.debug(osudata, 'command', 'scores', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+
+    osufunc.debug(osudataReq, 'command', 'scores', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
@@ -6303,18 +6575,28 @@ export async function scores(input: extypes.commandInput) {
 
     }
 
+    let scoredataReq: osufunc.apiReturn;
     let scoredataPresort: osuApiTypes.ScoreArrA;
     if (func.findFile(input.absoluteID, 'scores') &&
         input.commandType == 'button' &&
         !('error' in func.findFile(input.absoluteID, 'scores')) &&
         input.button != 'Refresh'
     ) {
-        scoredataPresort = func.findFile(input.absoluteID, 'scores')
+        scoredataReq = func.findFile(input.absoluteID, 'scores')
     } else {
-        scoredataPresort = await osufunc.apiget('user_get_scores_map', `${mapid}`, `${osudata.id}`)
+        scoredataReq = await osufunc.apiget({
+            type: 'user_get_scores_map',
+            params: {
+                userid: osudata.id,
+                id: mapid,
+            }
+        })
     }
-    osufunc.debug(scoredataPresort, 'command', 'scores', input.obj.guildId, 'scoreDataPresort');
-    func.storeFile(scoredataPresort, input.absoluteID, 'scores')
+
+    scoredataPresort = scoredataReq.apiData;
+
+    osufunc.debug(scoredataReq, 'command', 'scores', input.obj.guildId, 'scoreDataPresort');
+    func.storeFile(scoredataReq, input.absoluteID, 'scores')
 
     if (scoredataPresort?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -6348,7 +6630,7 @@ export async function scores(input: extypes.commandInput) {
         })
             .catch();
     }
-    osufunc.debug(scoredata, 'command', 'scores', input.obj.guildId, 'scoreData');
+    osufunc.debug(scoredataReq, 'command', 'scores', input.obj.guildId, 'scoreData');
 
     if (parseScore == true) {
         let pid = parseInt(parseId) - 1
@@ -6368,17 +6650,25 @@ export async function scores(input: extypes.commandInput) {
         return;
     }
 
+    let mapdataReq: osufunc.apiReturn;
     let mapdata: osuApiTypes.Beatmap;
     if (func.findFile(mapid, 'mapdata') &&
         !('error' in func.findFile(mapid, 'mapdata')) &&
         input.button != 'Refresh'
     ) {
-        mapdata = func.findFile(mapid, 'mapdata')
+        mapdataReq = func.findFile(mapid, 'mapdata')
     } else {
-        mapdata = await osufunc.apiget('map', `${mapid}`)
+        mapdataReq = await osufunc.apiget({
+            type: 'map',
+            params: {
+                id: mapid
+            }
+        })
     }
-    osufunc.debug(mapdata, 'command', 'scores', input.obj.guildId, 'mapData');
-    func.storeFile(mapdata, mapid, 'mapdata')
+    mapdata = mapdataReq.apiData
+
+    osufunc.debug(mapdataReq, 'command', 'scores', input.obj.guildId, 'mapData');
+    func.storeFile(mapdataReq, mapid, 'mapdata')
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
@@ -6702,8 +6992,29 @@ export async function simulate(input: extypes.commandInput) {
 
     }
 
-    const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
-    osufunc.debug(mapdata, 'command', 'map', input.obj.guildId, 'mapData');
+    let mapdataReq: osufunc.apiReturn;
+    let mapdata: osuApiTypes.Beatmap;
+
+    if (func.findFile(mapid, 'mapdata') &&
+        !('error' in func.findFile(mapid, 'mapdata')) &&
+        input.button != 'Refresh') {
+        mapdataReq = func.findFile(mapid, 'mapdata')
+    } else {
+        mapdataReq = await osufunc.apiget({
+            type: 'map_get',
+            params: {
+                id: mapid
+            }
+        })
+    }
+
+    mapdata = mapdataReq.apiData;
+
+    func.storeFile(mapdataReq, mapid, 'mapdata')
+
+    osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
+
+
 
     if (!mods) {
         mods = 'NM'
@@ -6887,17 +7198,27 @@ export async function map(input: extypes.commandInput) {
             const setid = urlnohttp.split('/')[2].split('#')[0];
             const curid = urlnohttp.split('/')[3];
             mapid = curid;
-            let bmsdata: osuApiTypes.Beatmapset;
+
+            let bmsdataReq: osufunc.apiReturn;
             if (func.findFile(setid, `bmsdata`) &&
                 !('error' in func.findFile(setid, `bmsdata`)) &&
                 input.button != 'Refresh') {
-                bmsdata = func.findFile(setid, `bmsdata`)
+                bmsdataReq = func.findFile(setid, `bmsdata`)
             } else {
-                bmsdata = await osufunc.apiget('mapset_get', `${setid}`)
+                bmsdataReq = await osufunc.apiget({
+                    type: 'mapset_get',
+                    params: {
+                        id: setid
+                    }
+                })
+                // bmsdataReq = await osufunc.apiget('mapset_get', `${setid}`)
             }
-            func.storeFile(bmsdata, setid, `bmsdata`)
 
-            osufunc.debug(bmsdata, 'command', 'map', input.obj.guildId, 'bmsData');
+            const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
+
+            func.storeFile(bmsdataReq, setid, `bmsdata`)
+
+            osufunc.debug(bmsdataReq, 'command', 'map', input.obj.guildId, 'bmsData');
 
             if (bmsdata?.error) {
                 return;
@@ -7003,7 +7324,22 @@ export async function map(input: extypes.commandInput) {
                         setid = messagenohttp.split('/s/')[1].split(' ')[0]
                     }
                 }
-                const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
+                let bmsdataReq: osufunc.apiReturn;
+                if (func.findFile(setid, `bmsdata`) &&
+                    !('error' in func.findFile(setid, `bmsdata`)) &&
+                    input.button != 'Refresh') {
+                    bmsdataReq = func.findFile(setid, `bmsdata`)
+                } else {
+                    bmsdataReq = await osufunc.apiget({
+                        type: 'mapset_get',
+                        params: {
+                            id: setid
+                        }
+                    })
+                    // bmsdataReq = await osufunc.apiget('mapset_get', `${setid}`)
+                }
+
+                const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
                 if (bmsdata?.error) {
                     return;
                 }
@@ -7091,7 +7427,10 @@ export async function map(input: extypes.commandInput) {
                 .setEmoji(buttonsthing.label.main.detailed)
         )
     }
+    let mapdataReq: osufunc.apiReturn;
     let mapdata: osuApiTypes.Beatmap;
+    let bmsdataReq: osufunc.apiReturn;
+    let bmsdata: osuApiTypes.Beatmapset;
 
     const inputModal = new Discord.SelectMenuBuilder()
         .setCustomId(`Select-map-${commanduser.id}-${input.absoluteID}`)
@@ -7101,13 +7440,21 @@ export async function map(input: extypes.commandInput) {
         if (func.findFile(mapid, 'mapdata') &&
             !('error' in func.findFile(mapid, 'mapdata')) &&
             input.button != 'Refresh') {
-            mapdata = func.findFile(mapid, 'mapdata')
+            mapdataReq = func.findFile(mapid, 'mapdata')
         } else {
-            mapdata = await osufunc.apiget('map_get', `${mapid}`)
+            mapdataReq = await osufunc.apiget({
+                type: 'map_get',
+                params: {
+                    id: mapid
+                }
+            })
         }
-        func.storeFile(mapdata, mapid, 'mapdata')
 
-        osufunc.debug(mapdata, 'command', 'map', input.obj.guildId, 'mapData');
+        mapdata = mapdataReq.apiData;
+
+        func.storeFile(mapdataReq, mapid, 'mapdata')
+
+        osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
 
         if (mapdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
@@ -7121,19 +7468,26 @@ export async function map(input: extypes.commandInput) {
             }
             return;
         }
-        let bmsdata: osuApiTypes.Beatmapset;
+
         if (func.findFile(mapdata.beatmapset_id, `bmsdata`) &&
             !('error' in func.findFile(mapdata.beatmapset_id, `bmsdata`)) &&
             input.button != 'Refresh') {
-            bmsdata = func.findFile(mapdata.beatmapset_id, `bmsdata`)
+            bmsdataReq = func.findFile(mapdata.beatmapset_id, `bmsdata`)
         } else {
-            bmsdata = await osufunc.apiget('mapset_get', `${mapdata.beatmapset_id}`)
+            bmsdataReq = await osufunc.apiget(
+                {
+                    type: 'mapset_get',
+                    params: {
+                        id: mapdata.beatmapset_id
+                    }
+                })
         }
-        func.storeFile(bmsdata, mapdata.beatmapset_id, `bmsdata`)
+        bmsdata = bmsdataReq.apiData;
+        func.storeFile(bmsdataReq, mapdata.beatmapset_id, `bmsdata`)
 
-        osufunc.debug(bmsdata, 'command', 'map', input.obj.guildId, 'bmsData');
+        osufunc.debug(bmsdataReq, 'command', 'map', input.obj.guildId, 'bmsData');
 
-        if (typeof bmsdata.beatmaps == 'undefined' || bmsdata.beatmaps.length < 2) {
+        if (typeof bmsdata?.beatmaps == 'undefined' || bmsdata?.beatmaps?.length < 2) {
             inputModal.addOptions(
                 new Discord.SelectMenuOptionBuilder()
                     .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
@@ -7167,8 +7521,14 @@ export async function map(input: extypes.commandInput) {
     }
 
     if (maptitleq != null) {
-        const mapidtest = await osufunc.apiget('mapset_search', `${maptitleq}`)
-        osufunc.debug(mapidtest, 'command', 'map', input.obj.guildId, 'mapIdTestData');
+        const mapidtestReq = await osufunc.apiget({
+            type: 'mapset_search',
+            params: {
+                searchString: maptitleq,
+            }
+        })
+        const mapidtest = mapidtestReq.apiData
+        osufunc.debug(mapidtestReq, 'command', 'map', input.obj.guildId, 'mapIdTestData');
 
         if (mapidtest?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {//@ts-expect-error null msg
@@ -7215,13 +7575,22 @@ export async function map(input: extypes.commandInput) {
             input.commandType == 'button' &&
             !('error' in func.findFile(mapidtest2[0].id, 'mapdata')) &&
             input.button != 'Refresh') {
-            mapdata = func.findFile(mapidtest2[0].id, 'mapdata')
+            mapdataReq = func.findFile(mapidtest2[0].id, 'mapdata')
         } else {
-            mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
+            mapdataReq = await osufunc.apiget({
+                type: 'map_get',
+                params: {
+                    id: mapidtest2[0].id
+                }
+            })
+            // mapdataReq = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
         }
-        func.storeFile(mapdata, mapidtest2[0].id, 'mapdata')
 
-        osufunc.debug(mapdata, 'command', 'map', input.obj.guildId, 'mapData');
+        mapdata = mapdataReq.apiData
+
+        func.storeFile(mapdataReq, mapidtest2[0].id, 'mapdata')
+
+        osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
         if (mapdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 //@ts-expect-error null msg
@@ -7372,17 +7741,27 @@ export async function map(input: extypes.commandInput) {
     const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
     const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
 
+    let mapperdataReq: osufunc.apiReturn;
     let mapperdata: osuApiTypes.User;
     if (func.findFile(mapdata.beatmapset.user_id, `osudata`) &&
         !('error' in func.findFile(mapdata.beatmapset.user_id, `osudata`)) &&
         input.button != 'Refresh') {
-        mapperdata = func.findFile(mapdata.beatmapset.user_id, `osudata`)
+        mapperdataReq = func.findFile(mapdata.beatmapset.user_id, `osudata`)
     } else {
-        mapperdata = await osufunc.apiget('user', `${mapdata.beatmapset.user_id}`)
+        mapperdataReq = await osufunc.apiget(
+            {
+                type: 'user',
+                params: {
+                    userid: mapdata.beatmapset.user_id,
+                }
+            })
     }
-    func.storeFile(mapperdata, mapperdata.id, `osudata`)
 
-    osufunc.debug(mapperdata, 'command', 'map', input.obj.guildId, 'mapperData');
+    mapperdata = mapperdataReq.apiData;
+
+    func.storeFile(mapperdataReq, mapperdata.id, `osudata`)
+
+    osufunc.debug(mapperdataReq, 'command', 'map', input.obj.guildId, 'mapperData');
 
     if (mapperdata?.error) {
         mapperdata = JSON.parse(fs.readFileSync('./files/defaults/mapper.json', 'utf8'));
@@ -8162,19 +8541,29 @@ export async function userBeatmaps(input: extypes.commandInput) {
         }).catch()
     }
 
-    let osudata: osuApiTypes.User;
-    if (func.findFile(user, 'osudata', 'osu') &&
-        !('error' in func.findFile(user, 'osudata', 'osu')) &&
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(user, 'osudata', osufunc.modeValidator('osu')) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator('osu'))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata', 'osu');
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'))
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`);
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator('osu')
+            }
+        })
     }
-    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode);
-    func.storeFile(osudata, user, 'osudata', osudata.playmode);
 
-    osufunc.debug(osudata, 'command', 'userbeatmaps', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode);
+    func.storeFile(osudataReq, user, 'osudata', osudata.playmode);
+
+    osufunc.debug(osudataReq, 'command', 'userbeatmaps', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
@@ -8198,7 +8587,17 @@ export async function userBeatmaps(input: extypes.commandInput) {
     let maplistdata: osuApiTypes.Beatmapset[] & osuApiTypes.Error = []
 
     async function getScoreCount(cinitnum) {
-        const fd: osuApiTypes.Beatmapset[] & osuApiTypes.Error = await osufunc.apiget('user_get_maps_alt', `${osudata.id}`, `${filter + `?offset=${cinitnum}`}`, 2, 0, true);
+        const fdReq: osufunc.apiReturn = await osufunc.apiget({
+            type: 'user_get_maps',
+            params: {
+                userid: osudata.id,
+                category: filter,
+                opts: [`offset=${cinitnum}`]
+            },
+            version: 2,
+
+        })
+        const fd: osuApiTypes.Beatmapset[] & osuApiTypes.Error = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
@@ -8396,15 +8795,24 @@ export async function trackadd(input: extypes.commandInput) {
         return;
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(user, 'osudata', 'osu') &&
-        !('error' in func.findFile(user, 'osudata', 'osu'))
+    if (func.findFile(user, 'osudata', osufunc.modeValidator('osu')) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator('osu'))) &&
+        input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata', 'osu')
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'))
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator('osu')
+            }
+        })
     }
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
 
     let replymsg;
 
@@ -8414,8 +8822,8 @@ export async function trackadd(input: extypes.commandInput) {
 
         replymsg = `Added \`${osudata.username}\` to the tracking list`
 
-        func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
-        func.storeFile(osudata, user, 'osudata', osudata.playmode)
+        func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
+        func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
 
         trackfunc.editTrackUser({
             database: input.trackDb,
@@ -8513,15 +8921,24 @@ export async function trackremove(input: extypes.commandInput) {
     //     return;
     // }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(user, 'osudata', 'osu') &&
-        !('error' in func.findFile(user, 'osudata', 'osu'))
+    if (func.findFile(user, 'osudata', osufunc.modeValidator('osu')) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator('osu'))) &&
+        input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata', 'osu')
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'))
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator('osu')
+            }
+        })
     }
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
 
     let replymsg;
 
@@ -8531,8 +8948,8 @@ export async function trackremove(input: extypes.commandInput) {
 
         replymsg = `Removed \`${osudata.username}\` from the tracking list`
 
-        func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
-        func.storeFile(osudata, user, 'osudata', osudata.playmode)
+        func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
+        func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
 
         trackfunc.editTrackUser({
             database: input.trackDb,
@@ -9031,15 +9448,23 @@ export async function compare(input: extypes.commandInput) {
             }
         }
 
-        let firstuser: osuApiTypes.User;
+        let firstuserReq: osufunc.apiReturn;
         if (func.findFile(first, 'osudata') &&
             !('error' in func.findFile(first, 'osudata')) &&
             input.button != 'Refresh'
         ) {
-            firstuser = func.findFile(first, 'osudata')
+            firstuserReq = func.findFile(first, 'osudata')
         } else {
-            firstuser = await osufunc.apiget('user', `${await first}`)
+            firstuserReq = await osufunc.apiget(
+                {
+                    type: 'user',
+                    params: {
+                        username: first
+                    }
+                })
         }
+
+        const firstuser = firstuserReq.apiData
 
         if (firstuser?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
@@ -9050,15 +9475,23 @@ export async function compare(input: extypes.commandInput) {
         }
 
 
-        let seconduser: osuApiTypes.User;
+        let seconduserReq: osufunc.apiReturn;
         if (func.findFile(second, 'osudata') &&
             !('error' in func.findFile(second, 'osudata')) &&
             input.button != 'Refresh'
         ) {
-            seconduser = func.findFile(second, 'osudata')
+            seconduserReq = func.findFile(second, 'osudata')
         } else {
-            seconduser = await osufunc.apiget('user', `${await second}`)
+            seconduserReq = await osufunc.apiget(
+                {
+                    type: 'user',
+                    params: {
+                        username: second
+                    }
+                })
         }
+
+        const seconduser = seconduserReq.apiData
 
         if (seconduser?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
@@ -9067,10 +9500,10 @@ export async function compare(input: extypes.commandInput) {
             return;
         }
 
-        func.storeFile(firstuser, firstuser.id, 'osudata')
-        func.storeFile(firstuser, first, 'osudata')
-        func.storeFile(seconduser, seconduser.id, 'osudata')
-        func.storeFile(seconduser, second, 'osudata')
+        func.storeFile(firstuserReq, first, 'osudata')
+        func.storeFile(firstuserReq, firstuser.id, 'osudata')
+        func.storeFile(seconduserReq, seconduser.id, 'osudata')
+        func.storeFile(seconduserReq, second, 'osudata')
 
 
         switch (type) {
@@ -9117,15 +9550,23 @@ export async function compare(input: extypes.commandInput) {
 
             case 'top': {
                 page
-                let firsttopdata: osuApiTypes.Score[] & osuApiTypes.Error;
+                let firsttopdataReq: osufunc.apiReturn;
                 if (func.findFile(input.absoluteID, 'firsttopdata') &&
                     !('error' in func.findFile(input.absoluteID, 'firsttopdata')) &&
                     input.button != 'Refresh'
                 ) {
-                    firsttopdata = func.findFile(input.absoluteID, 'firsttopdata')
+                    firsttopdataReq = func.findFile(input.absoluteID, 'firsttopdata')
                 } else {
-                    firsttopdata = await osufunc.apiget('best', `${firstuser.id}`, `${mode}`)
+                    firsttopdataReq = await osufunc.apiget({
+                        type: 'best',
+                        params: {
+                            userid: firstuser.id,
+                            mode: osufunc.modeValidator(mode),
+                        }
+                    })
                 }
+
+                const firsttopdata: osuApiTypes.Score[] & osuApiTypes.Error = firsttopdataReq.apiData;
 
                 if (firsttopdata?.error) {
                     if (input.commandType != 'button' && input.commandType != 'link') {
@@ -9134,18 +9575,26 @@ export async function compare(input: extypes.commandInput) {
                     return;
                 }
 
-                let secondtopdata: osuApiTypes.Score[] & osuApiTypes.Error;
+                let secondtopdataReq: osufunc.apiReturn;
                 if (func.findFile(input.absoluteID, 'secondtopdata') &&
                     !('error' in func.findFile(input.absoluteID, 'secondtopdata')) &&
                     input.button != 'Refresh'
                 ) {
-                    secondtopdata = func.findFile(input.absoluteID, 'secondtopdata')
+                    secondtopdataReq = func.findFile(input.absoluteID, 'secondtopdata')
                 } else {
-                    secondtopdata = await osufunc.apiget('best', `${seconduser.id}`, `${mode}`)
+                    secondtopdataReq = await osufunc.apiget({
+                        type: 'best',
+                        params: {
+                            userid: seconduser.id,
+                            mode: osufunc.modeValidator(mode),
+                        }
+                    })
                 }
 
-                func.storeFile(firsttopdata, input.absoluteID, 'firsttopdata')
-                func.storeFile(secondtopdata, input.absoluteID, 'secondtopdata')
+                const secondtopdata: osuApiTypes.Score[] & osuApiTypes.Error = firsttopdataReq.apiData;
+
+                func.storeFile(firsttopdataReq, input.absoluteID, 'firsttopdata')
+                func.storeFile(secondtopdataReq, input.absoluteID, 'secondtopdata')
 
                 if (secondtopdata?.error) {
                     if (input.commandType != 'button' && input.commandType != 'link') {
@@ -9899,27 +10348,44 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
         pp = 100;
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
     if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        })
     }
-    func.storeFile(osudata, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudata, user, 'osudata', osudata.playmode)
 
-    osufunc.debug(osudata, 'command', 'whatif', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+
+    osufunc.debug(osudataReq, 'command', 'whatif', input.obj.guildId, 'osuData');
 
     if (mode == null) {
         mode = osudata.playmode;
     }
 
-    const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-    osufunc.debug(osutopdata, 'command', 'whatif', input.obj.guildId, 'osuTopData');
+    let osutopdataReq: osufunc.apiReturn = await osufunc.apiget({
+        type: 'best',
+        params: {
+            userid: osudata.id,
+            mode: mode
+        }
+    })
+
+
+    const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData; osufunc.debug(osutopdataReq, 'command', 'whatif', input.obj.guildId, 'osuTopData');
 
     const pparr = osutopdata.slice().map(x => x.pp);
     pparr.push(pp);

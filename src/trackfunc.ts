@@ -8,8 +8,31 @@ import embedstuff = require('./embed');
 import log = require('./log');
 
 async function trackUser(fr: { user: string, mode: string, inital?: boolean }) {
-    const curdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('osutop', fr.user, fr.mode)
-    const thisUser: osuApiTypes.User = await osufunc.apiget('user', fr.user, fr.mode)
+    
+    const curdata: osuApiTypes.Score[] & osuApiTypes.Error = (await osufunc.apiget({
+        type:'osutop', 
+        params: {
+            username: fr.user,
+            mode: osufunc.modeValidator(fr.mode)
+        }
+    })).apiData;
+        let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(fr.user, 'osudata', osufunc.modeValidator(fr.mode)) &&
+        !('error' in func.findFile(fr.user, 'osudata', osufunc.modeValidator(fr.mode)))
+    ) {
+        osudataReq = func.findFile(fr.user, 'osudata', osufunc.modeValidator(fr.mode))
+    } else {
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: fr.user,
+                mode: osufunc.modeValidator(fr.mode)
+            }
+        })
+    }
+
+    const thisUser: osuApiTypes.User = osudataReq.apiData;
     if (!curdata?.[0]?.id) return;
     if (curdata?.[0]?.id && fr.inital == true) {
         fs.writeFileSync(`trackingFiles/${curdata[0].user_id}.json`, JSON.stringify(curdata, null, 2))
