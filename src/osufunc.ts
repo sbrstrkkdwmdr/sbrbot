@@ -747,10 +747,10 @@ export async function apiget(input: apiInput) {
                     url += `users/${input.params.username ?? input.params.userid}/scores/pinned?limit=100&${input.params}`
                     break;
                 case 'scores_get_recent': case 'recent':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?include_fails=1&mode=${input.params.mode ?? 'osu'}&limit=100&offset=0`
+                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?mode=${input.params.mode ?? 'osu'}&limit=100&offset=0`
                     break;
                 case 'recent_alt':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?include_fails=1&limit=100`
+                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?limit=100`
                     break;
                 case 'user_get': case 'user':
                     url += `users/${input.params.username ?? input.params.userid}/${input.params.mode ?? 'osu'}`
