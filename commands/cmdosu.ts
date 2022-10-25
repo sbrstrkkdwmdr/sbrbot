@@ -5503,7 +5503,7 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                 {
                     name: 'SCORE DETAILS',
                     value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}` +
-                        `${rspassinfo}\n${hitlist}\n${curscore.max_combo}x combo`,
+                        `${rspassinfo}\n${hitlist}\n${curscore.max_combo}x/**${mapdata.max_combo}x** combo`,
                     inline: true
                 },
                 {
