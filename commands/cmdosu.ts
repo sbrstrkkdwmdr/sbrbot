@@ -4858,9 +4858,7 @@ export async function recent(input: extypes.commandInput) {
             }
             commanduser = input.obj.member.user;
             user =//@ts-expect-error null msg
-                input.obj.message.embeds[0].title.includes('play for') ?//@ts-expect-error null msg
-                    input.obj.message.embeds[0].title.split('most recent play for ')[1].split(' | ')[0] ://@ts-expect-error null msg
-                    input.obj.message.embeds[0].title.split('plays for ')[1]
+                input.obj.message.embeds[0].title.split('for ')[1]
             //@ts-expect-error null msg
             const modething = input.obj.message.embeds[0].footer ? input.obj.message.embeds[0].description.split('\n')[1] : input.obj.message.embeds[0].description.split(' | ')[1].split('\n')[0]
             switch (true) {
@@ -4890,7 +4888,7 @@ export async function recent(input: extypes.commandInput) {
                 page = 1
                 isFirstPage = true
             }//@ts-expect-error null msg
-            if (input.obj.message.embeds[0].title.includes('plays')) {
+            if (input.obj.message.embeds[0].title.includes('plays') || input.obj.message.embeds[0].title.includes('passes')) {
                 switch (input.button) {
                     case 'LeftArrow'://@ts-expect-error null msg
                         page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1
@@ -4930,6 +4928,12 @@ export async function recent(input: extypes.commandInput) {
                 if (page < 2) {
                     page == 1
                 }
+            }
+            //@ts-expect-error null msg
+            if (input.obj.message.embeds[0].title.includes('passes')){
+                showFails = 0
+            } else {
+                showFails = 1
             }
         }
             break;
@@ -5450,7 +5454,7 @@ export async function recent(input: extypes.commandInput) {
         const trycountstr = `try #${trycount}`;
 
         rsEmbed
-            .setTitle(`#${page + 1} most recent play for ${curscore.user.username} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>`)
+            .setTitle(`#${page + 1} most recent ${showFails == 1 ? 'play' : 'pass'} for ${curscore.user.username} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>`)
             .setURL(`https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}`)
             .setAuthor({
                 name: `${trycountstr}`,
@@ -5514,11 +5518,11 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
             )
         rsEmbed
             .setColor(colours.embedColour.scorelist.dec)
-            .setTitle(`Recent plays for ${osudata.username}`)
+            .setTitle(`Recent ${showFails == 1 ? 'plays' : 'passes'} for ${osudata.username}`)
             .setThumbnail(`${osudata.avatar_url ?? def.images.any.url}`)
             ;
         if (sort == 'pp') {
-            rsEmbed.setTitle(`Best recent plays for ${osudata.username}`)
+            rsEmbed.setTitle(`Best recent ${showFails == 1 ? 'play' : 'passes'} for ${osudata.username}`)
         }
 
         const scoresarg = await embedStuff.scoreList(
