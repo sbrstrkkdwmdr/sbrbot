@@ -1523,8 +1523,8 @@ export async function osu(input: extypes.commandInput) {
 
     let osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
 
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
@@ -2232,8 +2232,8 @@ export async function firsts(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
 
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
@@ -3300,8 +3300,8 @@ export async function nochokes(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
 
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
@@ -3931,8 +3931,8 @@ export async function osutop(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
 
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
@@ -4569,8 +4569,8 @@ export async function pinned(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
 
     osufunc.debug(osudataReq, 'command', 'pinned', input.obj.guildId, 'osuData');
     if (osudata?.error || !osudata.id) {
@@ -5080,8 +5080,8 @@ export async function recent(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
     osufunc.debug(osudataReq, 'command', 'recent', input.obj.guildId, 'osuData');
 
     if (osudata?.error) {
@@ -6194,8 +6194,8 @@ export async function scoreparse(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudataReq, scoredata.user.username, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, scoredata.user.username, 'osudata', osufunc.modeValidator(mode))
     osufunc.debug(osudataReq, 'command', 'scoreparse', input.obj.guildId, 'osuData')
     if (osudata?.error) {
         if (input.commandType == 'interaction') {
@@ -6572,8 +6572,8 @@ export async function scores(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
 
     osufunc.debug(osudataReq, 'command', 'scores', input.obj.guildId, 'osuData');
 
@@ -8582,8 +8582,8 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode);
-    func.storeFile(osudataReq, user, 'osudata', osudata.playmode);
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator('osu'));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator('osu'));
 
     osufunc.debug(osudataReq, 'command', 'userbeatmaps', input.obj.guildId, 'osuData');
 
@@ -8844,8 +8844,8 @@ export async function trackadd(input: extypes.commandInput) {
 
         replymsg = `Added \`${osudata.username}\` to the tracking list`
 
-        func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
-        func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+        func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator('osu'))
+        func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator('osu'))
 
         trackfunc.editTrackUser({
             database: input.trackDb,
@@ -8970,8 +8970,8 @@ export async function trackremove(input: extypes.commandInput) {
 
         replymsg = `Removed \`${osudata.username}\` from the tracking list`
 
-        func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
-        func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+        func.storeFile(osudataReq, osudata.id, 'osudata', 'osu')
+        func.storeFile(osudataReq, user, 'osudata', 'osu')
 
         trackfunc.editTrackUser({
             database: input.trackDb,
@@ -10389,8 +10389,8 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osudata.playmode)
-    func.storeFile(osudataReq, user, 'osudata', osudata.playmode)
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
 
     osufunc.debug(osudataReq, 'command', 'whatif', input.obj.guildId, 'osuData');
 
