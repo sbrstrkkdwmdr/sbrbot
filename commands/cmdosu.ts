@@ -787,9 +787,17 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                 mode = 'fruits'
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-f'))
+            }
             if (input.args.includes('-mania')) {
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-m'))
             }
 
             input.args = cleanArgs(input.args);
@@ -1152,9 +1160,17 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
                 mode = 'fruits'
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-f'))
+            }
             if (input.args.includes('-mania')) {
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-m'))
             }
 
             input.args = cleanArgs(input.args);
@@ -1311,6 +1327,7 @@ export async function osu(input: extypes.commandInput) {
                 graphonly = true;
                 input.args.splice(input.args.indexOf('-g'), 1);
             }
+
             if (input.args.includes('-osu')) {
                 mode = 'osu'
                 input.args.splice(input.args.indexOf('-osu'), 1);
@@ -1339,9 +1356,17 @@ export async function osu(input: extypes.commandInput) {
                 mode = 'fruits'
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-f'))
+            }
             if (input.args.includes('-mania')) {
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-m'))
             }
 
             input.args = cleanArgs(input.args);
@@ -1947,10 +1972,19 @@ export async function firsts(input: extypes.commandInput) {
                 mode = 'fruits'
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-f'))
+            }
             if (input.args.includes('-mania')) {
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
+            if (input.args.includes('-m')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-m'))
+            }
+
             if (input.args.includes('-recent')) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
@@ -2464,11 +2498,11 @@ export async function maplb(input: extypes.commandInput) {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
 
-            if(input.args.includes('-page')){
+            if (input.args.includes('-page')) {
                 page = parseInt(input.args[input.args.indexOf('-page') + 1])
                 input.args.splice(input.args.indexOf('-page'), 2)
             }
-            if(input.args.includes('-p')){
+            if (input.args.includes('-p')) {
                 page = parseInt(input.args[input.args.indexOf('-p') + 1])
                 input.args.splice(input.args.indexOf('-p'), 2)
             }
@@ -3024,10 +3058,19 @@ export async function nochokes(input: extypes.commandInput) {
                 mode = 'fruits'
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-f'))
+            }
             if (input.args.includes('-mania')) {
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
+            if (input.args.includes('-m')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-m'))
+            }
+
             if (input.args.includes('-recent')) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
@@ -3625,10 +3668,19 @@ export async function osutop(input: extypes.commandInput) {
                 mode = 'fruits'
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-f'))
+            }
             if (input.args.includes('-mania')) {
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
+            if (input.args.includes('-m')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-m'))
+            }
+
             if (input.args.includes('-recent')) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
@@ -4289,10 +4341,19 @@ export async function pinned(input: extypes.commandInput) {
                 mode = 'fruits'
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-f'))
+            }
             if (input.args.includes('-mania')) {
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
+            if (input.args.includes('-m')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-m'))
+            }
+
             if (input.args.includes('-recent')) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
@@ -4329,7 +4390,7 @@ export async function pinned(input: extypes.commandInput) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
-            
+
             input.args = cleanArgs(input.args);
 
             user = input.args.join(' ');
@@ -4858,7 +4919,7 @@ export async function recent(input: extypes.commandInput) {
                 showFails = 0;
                 input.args.splice(input.args.indexOf('-nf'), 1);
             }
-            
+
             input.args = cleanArgs(input.args);
 
             user = input.args.join(' ');
@@ -4962,7 +5023,7 @@ export async function recent(input: extypes.commandInput) {
                 }
             }
             //@ts-expect-error null msg
-            if (input.obj.message.embeds[0].title.includes('passes')){
+            if (input.obj.message.embeds[0].title.includes('passes')) {
                 showFails = 0
             } else {
                 showFails = 1
@@ -8800,13 +8861,49 @@ export async function trackadd(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
     let user;
+    let mode: osuApiTypes.GameMode = 'osu';
 
     switch (input.commandType) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
+            if (input.args.includes('-osu')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-m'), 1)
+            }
             user = input.args[0];
-
         }
             break;
         //==============================================================================================================================================================================================
@@ -9250,7 +9347,8 @@ export async function tracklist(input: extypes.commandInput) {
 
     const userList: {
         osuid: string,
-        userid: string
+        userid: string,
+        mode: string,
     }[] = [];
 
 
@@ -9271,7 +9369,8 @@ export async function tracklist(input: extypes.commandInput) {
         if (guilds.includes(input.obj.guildId)) {
             userList.push({
                 osuid: `${user.osuid}`,
-                userid: `${user.userid}`
+                userid: `${user.userid}`,
+                mode: `${user.mode}`
             })
         }
     }
@@ -9279,7 +9378,7 @@ export async function tracklist(input: extypes.commandInput) {
         .setTitle(`All tracked users in ${input.obj.guild.name}`)
         .setColor(colours.embedColour.userlist.dec)
         .setDescription(`There are ${userList.length} users being tracked in this server\n\n` +
-            `${userList.map((user, i) => `${i + 1}. https://osu.ppy.sh/u/${user.osuid}`).join('\n')}`
+            `${userList.map((user, i) => `${i + 1}. [${user.mode}]https://osu.ppy.sh/u/${user.osuid}`).join('\n')}`
         )
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -9843,9 +9942,17 @@ export async function osuset(input: extypes.commandInput) {
                 mode = 'fruits'
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-f'))
+            }
             if (input.args.includes('-mania')) {
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-m'))
             }
 
             if (input.args.includes('-skin')) {
@@ -10318,9 +10425,17 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
                 mode = 'fruits'
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-f'))
+            }
             if (input.args.includes('-mania')) {
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-m'))
             }
 
             input.args = cleanArgs(input.args);
@@ -10527,7 +10642,7 @@ ID: ${input.absoluteID}
  * @returns args with 0 length strings and args starting with the - prefix removed
  */
 export function cleanArgs(args: string[]) {
-    const newArgs:string[] = [];
+    const newArgs: string[] = [];
     for (let i = 0; i < args.length; i++) {
         if (args[i] != '' && !args[i].startsWith('-')) {
             newArgs.push(args[i]);
