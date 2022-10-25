@@ -374,14 +374,14 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'osutop': case 'top': case 't': case 'ot':
+            case 'osutop': case 'top': case 't': case 'ot':case 'toposu': case 'topo':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'taikotop': case 'toptaiko': case 'tt':
+            case 'taikotop': case 'toptaiko': case 'tt':case 'topt':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'taiko'
@@ -391,7 +391,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tctb': case 'tf':
+            case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tctb': case 'tf':case 'topf':case 'topc':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'fruits'
@@ -401,7 +401,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'maniatop': case 'topmania': case 'tm':
+            case 'maniatop': case 'topmania': case 'tm':case 'topm':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'mania'

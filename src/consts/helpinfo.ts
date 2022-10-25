@@ -1001,10 +1001,10 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: [
-            'top', 't', 'ot',
-            'taikotop', 'toptaiko', 'tt',
-            'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tf', 'tctb',
-            'maniatop', 'topmania', 'tm'
+            'top', 't', 'ot', 'topo', 'toposu',
+            'taikotop', 'toptaiko', 'tt', 'topt',
+            'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tf', 'tctb', 'topf', 'topc',
+            'maniatop', 'topmania', 'tm', 'topm'
         ],
         options: [
             {
