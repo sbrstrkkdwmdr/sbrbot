@@ -424,7 +424,7 @@ const osucommands = [
     {
         name: 'firsts',
         description: 'Shows the #1 global scores of a user',
-        usage: 'firsts [user] [-page] [-(mode)] [-parse]',
+        usage: 'firsts [user] [-page/-p] [-(mode)] [-parse]',
         slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods]',
         examples: [
             {
@@ -655,7 +655,7 @@ const osucommands = [
     {
         name: 'maplb',
         description: 'Shows the leaderboard of a map',
-        usage: 'maplb [id]',
+        usage: 'maplb [id] [-page/-p]',
         slashusage: 'maplb [id] [page] [mods]',
         examples: [
             {
@@ -704,7 +704,7 @@ const osucommands = [
     {
         name: 'nochokes',
         description: 'Shows the user\'s top plays without misses',
-        usage: 'nochokes [user] [-page] [-(mode)] [-parse]',
+        usage: 'nochokes [user] [-page/-p] [-(mode)] [-parse]',
         slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
         examples: [
             {
@@ -826,7 +826,7 @@ const osucommands = [
     {
         name: 'osu',
         description: 'Shows information about a user\'s osu! profile',
-        usage: 'osu [user] [-graph] [-detailed] [-(mode)]',
+        usage: 'osu [user] [-graph/-g] [-detailed/-d] [-(mode)]',
         slashusage: 'osu [user] [detailed] [mode]',
         aliases: ['o', 'profile'],
         examples: [
@@ -954,7 +954,7 @@ const osucommands = [
     {
         name: 'osutop',
         description: 'Shows the top scores of a user',
-        usage: 'osutop [user] [-page] [-(mode)] [-mapper] [-mods] [-reverse] [-(sort)] [-parse]',
+        usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-reverse] [-(sort)] [-parse]',
         slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
         examples: [
             {
@@ -985,7 +985,7 @@ const osucommands = [
         aliases: [
             'top', 't', 'ot',
             'taikotop', 'toptaiko', 'tt',
-            'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tc', 'tf', 'tctb',
+            'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tf', 'tctb',
             'maniatop', 'topmania', 'tm'
         ],
         options: [
@@ -1085,7 +1085,7 @@ const osucommands = [
     {
         name: 'pinned',
         description: 'Shows the pinned scores of a user',
-        usage: 'pinned [user] [-page] [-(mode)]',
+        usage: 'pinned [user] [-page/-p] [-(mode)]',
         slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods]',
         examples: [
             {
@@ -1282,7 +1282,7 @@ const osucommands = [
     {
         name: 'ranking',
         description: 'Displays the global leaderboards',
-        usage: 'ranking [country] [-page][-(mode)]',
+        usage: 'ranking [country] [-page/-p][-(mode)]',
         slashusage: 'ranking [country] [mode] [page] [type] [spotlight]',
         examples: [
             {
@@ -1355,7 +1355,7 @@ const osucommands = [
     {
         name: 'recent',
         description: 'Shows the recent score(s) of a user',
-        usage: 'recent [user] [-page] [-list] [-(mode)]',
+        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf]',
         slashusage: 'recent [user] [page] [mode] [list]',
         examples: [
             {
@@ -1385,6 +1385,10 @@ const osucommands = [
             {
                 text: 'PREFIXMSGrt -p 2',
                 descriptor: 'Shows your second most recent taiko score'
+            },
+            {
+                text: 'PREFIXMSGrl -passes',
+                descriptor: 'Shows your recent scores excluding fails'
             }
         ],
         aliases: ['rs', 'r', 'rt', 'rf', 'rm', 'rctb', 'rl', 'rlt', 'rlf', 'rlm', 'rlctb'],
@@ -1430,6 +1434,17 @@ const osucommands = [
                 aliases: ['l'],
                 examples: ['-l', 'list:true'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'passes',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to show only scores that were passed. If false, all scores will be shown',
+                options: ['true', 'false'],
+                defaultValue: 'true',
+                aliases: ['pass', 'nofail', 'nf'],
+                examples: ['-pass',],
+                commandTypes: ['message']
             }
         ]
     },
@@ -1504,7 +1519,7 @@ const osucommands = [
     {
         name: 'scores',
         description: 'Shows the scores of a user on a beatmap',
-        usage: 'scores [user] [id] [-page]',
+        usage: 'scores [user] [id] [-page/-p]',
         slashusage: 'scores [user] [id] [sort] [reverse] [page] [detailed]',
         examples: [
             {
@@ -1592,7 +1607,7 @@ const osucommands = [
     {
         name: 'simulate',
         description: 'Simulates a score on a beatmap',
-        usage: 'simulate [id] +[mods] -acc [accuracy] -combo [combo] -n300 [n300] -n100 [n100] -n50 [n50] -miss [misses]',
+        usage: 'simulate [id] +[mods]  -acc [accuracy] -combo [combo] -n300 [n300] -n100 [n100] -n50 [n50] -miss [misses]',
         slashusage: 'simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses]',
         examples: [
             {
@@ -1774,7 +1789,7 @@ const osucommands = [
     {
         name: 'userbeatmaps',
         description: 'Shows a user\'s beatmaps (favourites/ranked/pending/graveyard/loved)',
-        usage: 'userbeatmaps [user] [-(type)] [-reverse] [-page]',
+        usage: 'userbeatmaps [user] [-(type)] [-reverse] [-page/-p]',
         slashusage: 'userbeatmaps [user] [type] [reverse] [page] [sort]',
         examples: [
             {
@@ -1841,7 +1856,7 @@ const osucommands = [
     },
     {
         name: 'whatif',
-        description: 'Shows user stats if you gain a certain amount of raw pp',
+        description: 'Estimates user stats if they gain a certain amount of raw pp',
         usage: 'whatif [user] [pp]',
         slashusage: 'whatif [user] [pp]',
         examples: [
@@ -1874,6 +1889,16 @@ const osucommands = [
                 options: ['N/A'],
                 defaultValue: '0',
                 examples: ['72700', 'pp:72700'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode to show the stats in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu',
+                examples: ['mode:taiko'],
                 commandTypes: ['message', 'interaction']
             }
         ]
