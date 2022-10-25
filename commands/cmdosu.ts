@@ -2444,6 +2444,16 @@ export async function maplb(input: extypes.commandInput) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
+
+            if(input.args.includes('-page')){
+                page = parseInt(input.args[input.args.indexOf('-page') + 1])
+                input.args.splice(input.args.indexOf('-page'), 2)
+            }
+            if(input.args.includes('-p')){
+                page = parseInt(input.args[input.args.indexOf('-p') + 1])
+                input.args.splice(input.args.indexOf('-p'), 2)
+            }
+
             mapid = input.args[0]
             if (isNaN(mapid)) {
                 mapid = undefined;
@@ -4810,6 +4820,14 @@ export async function recent(input: extypes.commandInput) {
             if (input.args.includes('-pass')) {
                 showFails = 0;
                 input.args.splice(input.args.indexOf('-pass'), 1);
+            }
+            if (input.args.includes('-nofail')) {
+                showFails = 0;
+                input.args.splice(input.args.indexOf('-nofail'), 1);
+            }
+            if (input.args.includes('-nf')) {
+                showFails = 0;
+                input.args.splice(input.args.indexOf('-nf'), 1);
             }
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
