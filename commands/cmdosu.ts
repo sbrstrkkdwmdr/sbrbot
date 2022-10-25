@@ -39,6 +39,9 @@ export async function bws(input: extypes.commandInput) {
             commanduser = input.obj.author;
             //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+
+            input.args = cleanArgs(input.args);
+
             user = input.args.join(' ');
             if (!input.args[0] || input.args[0].includes(searchid)) {
                 user = null
@@ -228,6 +231,9 @@ export async function globals(input: extypes.commandInput) {
             commanduser = input.obj.author;
             //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+
+            input.args = cleanArgs(input.args);
+
             user = input.args.join(' ');
             if (!input.args[0] || input.args[0].includes(searchid)) {
                 user = null
@@ -415,6 +421,7 @@ export async function lb(input: extypes.commandInput) {
             if (gamemode == 'mania' || gamemode == 'm' || gamemode == '3' || gamemode == 'piano') {
                 mode = 'mania'
             }
+            input.args = cleanArgs(input.args);
         }
             break;
 
@@ -784,6 +791,9 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
+
+            input.args = cleanArgs(input.args);
+
             input.args[0] && input.args[0].length == 2 ? country = input.args[0].toUpperCase() : country = 'ALL';
         }
             break;
@@ -1146,6 +1156,9 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
+
+            input.args = cleanArgs(input.args);
+
             value = input.args[0] ?? 100;
         }
             break;
@@ -1330,6 +1343,9 @@ export async function osu(input: extypes.commandInput) {
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
+
+            input.args = cleanArgs(input.args);
+
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null
@@ -1971,6 +1987,9 @@ export async function firsts(input: extypes.commandInput) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
+
+            input.args = cleanArgs(input.args);
+
             user = input.args.join(' ');
             if (!input.args[0] || input.args[0].includes(searchid)) {
                 user = null
@@ -2453,6 +2472,8 @@ export async function maplb(input: extypes.commandInput) {
                 page = parseInt(input.args[input.args.indexOf('-p') + 1])
                 input.args.splice(input.args.indexOf('-p'), 2)
             }
+
+            input.args = cleanArgs(input.args);
 
             mapid = input.args[0]
             if (isNaN(mapid)) {
@@ -3043,6 +3064,9 @@ export async function nochokes(input: extypes.commandInput) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
+
+            input.args = cleanArgs(input.args);
+
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null
@@ -3641,7 +3665,9 @@ export async function osutop(input: extypes.commandInput) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
+
             user = input.args.join(' ');
+
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null
             }
@@ -4303,6 +4329,9 @@ export async function pinned(input: extypes.commandInput) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
+            
+            input.args = cleanArgs(input.args);
+
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null
@@ -4829,6 +4858,9 @@ export async function recent(input: extypes.commandInput) {
                 showFails = 0;
                 input.args.splice(input.args.indexOf('-nf'), 1);
             }
+            
+            input.args = cleanArgs(input.args);
+
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null
@@ -6299,18 +6331,24 @@ export async function scores(input: extypes.commandInput) {
                 page = parseInt(input.args[input.args.indexOf('-p') + 1]);
                 input.args.splice(input.args.indexOf('-p'), 2);
             }
-            user = input.args.join(' ');
-            if (!input.args[0] || input.args.join(' ').includes(searchid) || isNaN(+input.args[0])) {
-                user = null
-            }
+
+            input.args = cleanArgs(input.args);
+
             mapid = null;
             if (!isNaN(+input.args[0])) {
                 mapid = +input.args[0];
+                input.args.splice(0, 1);
             }
             //find if any string in input.args is a number
             const number = input.args.find(arg => !isNaN(+arg));
             if (number) {
                 mapid = +number;
+            }
+
+            user = input.args.join(' ');
+
+            if (!input.args[0] || input.args.join(' ').includes(searchid) || isNaN(+input.args[0])) {
+                user = null
             }
 
         }
@@ -6917,6 +6955,9 @@ export async function simulate(input: extypes.commandInput) {
             if (ctn.includes('misses=')) {
                 nMiss = parseInt(ctn.split('misses=')[1].split(' ')[0])
             }
+
+            input.args = cleanArgs(input.args);
+
             if (isNaN(+input.args[0])) {
                 mapid = +input.args[0]
             }
@@ -7194,6 +7235,8 @@ export async function map(input: extypes.commandInput) {
             if (input.args.join(' ').includes('"')) {
                 maptitleq = input.args.join(' ').split('"')[1]
             }
+
+            input.args = cleanArgs(input.args);
         }
             break;
 
@@ -8410,6 +8453,8 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 reverse = true;
                 input.args.splice(input.args.indexOf('-reverse'), 1);
             }
+
+            input.args = cleanArgs(input.args);
 
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
@@ -9807,6 +9852,9 @@ export async function osuset(input: extypes.commandInput) {
                 skin = input.args.slice(input.args.indexOf('-skin') + 1).join(' ')
                 input.args.splice(input.args.indexOf('-skin'))
             }
+
+            input.args = cleanArgs(input.args);
+
             name = input.args.join(' ');
         }
             break;
@@ -10114,7 +10162,6 @@ export async function skin(input: extypes.commandInput) {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;//@ts-expect-error null msg
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-
             string = input.args.join(' ')
 
         }
@@ -10275,6 +10322,8 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
                 mode = 'mania'
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
+
+            input.args = cleanArgs(input.args);
 
             if (!isNaN(+input.args[0])) {
                 pp = +input.args[0];
@@ -10472,3 +10521,17 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * 
+ * @param args 
+ * @returns args with 0 length strings and args starting with the - prefix removed
+ */
+export function cleanArgs(args: string[]) {
+    const newArgs:string[] = [];
+    for (let i = 0; i < args.length; i++) {
+        if (args[i] != '' && !args[i].startsWith('-')) {
+            newArgs.push(args[i]);
+        }
+    }
+    return newArgs;
+}
