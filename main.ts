@@ -110,6 +110,9 @@ const trackDb = sequelize.define('trackUsers', {
     },
     guilds: {
         type: Sequelize.STRING,
+    },
+    mode:{
+        type: Sequelize.STRING
     }
 })
 

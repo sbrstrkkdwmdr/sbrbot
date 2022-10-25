@@ -177,7 +177,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
             } else {
                 trackUser({
                     user: user.dataValues.osuid,
-                    mode: user.dataValues.mode,
+                    mode: user.dataValues.mode ?? 'osu',
                     inital: false
                 })
             }
