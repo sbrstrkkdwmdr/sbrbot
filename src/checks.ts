@@ -352,6 +352,14 @@ function toMath(str: string) {
     return newstr;
 }
 
+export function isNotNull(property:string){
+    //(`${user.guildstaiko}` != 'null' || `${user.guildstaiko}` != 'undefined' || user.guildstaiko != null || user.guildstaiko != undefined)
+    if(property != 'null' && property != 'undefined' && property != null && property != undefined){
+        return true;
+    } 
+    return false;
+}
+
 /* module.exports = {
     audiofiletype,
     checkisfileblocked,
