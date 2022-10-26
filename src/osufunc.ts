@@ -723,16 +723,16 @@ export async function apiget(input: apiInput) {
                     url += `beatmapsets/${input.params.id}`
                     break;
                 case 'mapset_search':
-                    url += `beatmapsets/search?q=${input.params.searchString}&s=any`
+                    url += `beatmapsets/search?q=${input.params.searchString}`
                     break;
                 case 'score_get': case 'score':
                     url += `scores/${input.params.mode ?? 'osu'}/${input.params.id}`
                     break;
                 case 'scores_get_best': case 'osutop': case 'best':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/best?mode=${input.params.mode ?? 'osu'}&limit=100&offset=0`
+                    url += `users/${input.params.username ?? input.params.userid}/scores/best?mode=${input.params.mode ?? 'osu'}&offset=0`
                     break;
                 case 'scores_get_first': case 'firsts':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/firsts?mode=${input.params.mode ?? 'osu'}&limit=100`
+                    url += `users/${input.params.username ?? input.params.userid}/scores/firsts?mode=${input.params.mode ?? 'osu'}`
                     break;
                 case 'firsts_alt':
                     url += `users/${input.params.username ?? input.params.userid}/scores/firsts?limit=100`
@@ -741,13 +741,13 @@ export async function apiget(input: apiInput) {
                     url += `beatmaps/${input.params.id}/scores`
                     break;
                 case 'scores_get_pinned': case 'pinned':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/pinned?mode=${input.params.mode ?? 'osu'}&limit=100`
+                    url += `users/${input.params.username ?? input.params.userid}/scores/pinned?mode=${input.params.mode ?? 'osu'}`
                     break;
                 case 'pinned_alt':
                     url += `users/${input.params.username ?? input.params.userid}/scores/pinned?limit=100&${input.params}`
                     break;
                 case 'scores_get_recent': case 'recent':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?mode=${input.params.mode ?? 'osu'}&limit=100&offset=0`
+                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?mode=${input.params.mode ?? 'osu'}`
                     break;
                 case 'recent_alt':
                     url += `users/${input.params.username ?? input.params.userid}/scores/recent?limit=100`

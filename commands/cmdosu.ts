@@ -1726,7 +1726,8 @@ export async function osu(input: extypes.commandInput) {
                     type: 'best',
                     params: {
                         userid: osudata.id,
-                        mode: mode
+                        mode: mode,
+                        opts: ['limit=100']
                     }
                 })
             }
@@ -2278,7 +2279,7 @@ export async function firsts(input: extypes.commandInput) {
             type: 'user',
             params: {
                 username: cmdchecks.toHexadecimal(user),
-                mode: osufunc.modeValidator(mode)
+                mode: osufunc.modeValidator(mode),
             }
         })
     }
@@ -2320,7 +2321,7 @@ export async function firsts(input: extypes.commandInput) {
             type: 'firsts',
             params: {
                 userid: `${osudata.id}`,
-                opts: [`offset=${cinitnum}`],
+                opts: [`offset=${cinitnum}`, 'limit=100'],
             },
             version: 2,
 
@@ -2857,6 +2858,7 @@ export async function maplb(input: extypes.commandInput) {
                     params: {
                         id: mapid,
                         mods: mods //function auto converts to id
+                        
                     },
                     version: 1
                 }
@@ -3407,7 +3409,8 @@ export async function nochokes(input: extypes.commandInput) {
             type: 'best',
             params: {
                 userid: osudata.id,
-                mode: mode
+                mode: mode,
+                opts: ['limit=100']
             }
         })
     }
@@ -4049,7 +4052,8 @@ export async function osutop(input: extypes.commandInput) {
             type: 'best',
             params: {
                 userid: osudata.id,
-                mode: mode
+                mode: mode,
+                opts: ['limit=100']
             }
         })
     }
@@ -4690,7 +4694,7 @@ export async function pinned(input: extypes.commandInput) {
             type: 'pinned',
             params: {
                 userid: `${osudata.id}`,
-                opts: [`offset=${cinitnum}`],
+                opts: [`offset=${cinitnum}`, 'limit=100'],
             },
             version: 2,
 
@@ -5221,7 +5225,7 @@ export async function recent(input: extypes.commandInput) {
             params: {
                 userid: osudata.id,
                 mode,
-                opts: [`include_fails=${showFails}`]
+                opts: [`include_fails=${showFails}`, 'offset=0']
             }
         })
     }
@@ -7651,6 +7655,7 @@ export async function map(input: extypes.commandInput) {
             type: 'mapset_search',
             params: {
                 searchString: maptitleq,
+                opts: ['s=any']
             }
         })
         const mapidtest = mapidtestReq.apiData
@@ -9728,6 +9733,7 @@ export async function compare(input: extypes.commandInput) {
                         params: {
                             userid: firstuser.id,
                             mode: osufunc.modeValidator(mode),
+                            opts: ['limit=100']
                         }
                     })
                 }
@@ -9753,6 +9759,7 @@ export async function compare(input: extypes.commandInput) {
                         params: {
                             userid: seconduser.id,
                             mode: osufunc.modeValidator(mode),
+                            opts: ['limit=100']
                         }
                     })
                 }
@@ -10566,7 +10573,8 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
         type: 'best',
         params: {
             userid: osudata.id,
-            mode: mode
+            mode: mode,
+            opts: ['limit=100']
         }
     })
 

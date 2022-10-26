@@ -16,7 +16,8 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
             type: 'osutop',
             params: {
                 username: fr.user,
-                mode: osufunc.modeValidator(fr.mode)
+                mode: osufunc.modeValidator(fr.mode),
+                opts: ['limit=100']
             }
         })).apiData;
         // const thisUser: osuApiTypes.User = await osufunc.apiget('user', fr.user, fr.mode)
