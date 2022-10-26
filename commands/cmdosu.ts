@@ -8967,17 +8967,17 @@ export async function trackadd(input: extypes.commandInput) {
 
     let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(user, 'osudata', osufunc.modeValidator('osu')) &&
-        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator('osu'))) &&
+    if (func.findFile(user, 'osudata', mode) &&
+        !('error' in func.findFile(user, 'osudata', mode)) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'))
+        osudataReq = func.findFile(user, 'osudata', mode)
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
             params: {
                 username: cmdchecks.toHexadecimal(user),
-                mode: osufunc.modeValidator('osu')
+                mode: mode
             }
         })
     }
@@ -8990,10 +8990,10 @@ export async function trackadd(input: extypes.commandInput) {
         replymsg = `Error - could not find user \`${user}\``
     } else {
 
-        replymsg = `Added \`${osudata.username}\` to the tracking list`
+        replymsg = `Added \`${osudata.username}\` to the tracking list\nGamemode: \`${mode}\``
 
-        func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator('osu'))
-        func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator('osu'))
+        func.storeFile(osudataReq, osudata.id, 'osudata', mode)
+        func.storeFile(osudataReq, user, 'osudata', mode)
 
         trackfunc.editTrackUser({
             database: input.trackDb,
@@ -9001,6 +9001,7 @@ export async function trackadd(input: extypes.commandInput) {
             action: 'add',
             guildId: input.obj.guildId,
             guildSettings: input.guildSettings,
+            mode: mode
         })
     }
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -9031,11 +9032,48 @@ ID: ${input.absoluteID}
 export async function trackremove(input: extypes.commandInput) {
     let commanduser: Discord.User;
     let user;
+    let mode: osuApiTypes.GameMode = 'osu';
 
     switch (input.commandType) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
+            if (input.args.includes('-osu')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-m'), 1)
+            }
             user = input.args[0];
         }
             break;
@@ -9093,17 +9131,17 @@ export async function trackremove(input: extypes.commandInput) {
 
     let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(user, 'osudata', osufunc.modeValidator('osu')) &&
-        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator('osu'))) &&
+    if (func.findFile(user, 'osudata', mode) &&
+        !('error' in func.findFile(user, 'osudata', mode)) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'))
+        osudataReq = func.findFile(user, 'osudata', mode)
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
             params: {
                 username: cmdchecks.toHexadecimal(user),
-                mode: osufunc.modeValidator('osu')
+                mode
             }
         })
     }
@@ -9118,8 +9156,8 @@ export async function trackremove(input: extypes.commandInput) {
 
         replymsg = `Removed \`${osudata.username}\` from the tracking list`
 
-        func.storeFile(osudataReq, osudata.id, 'osudata', 'osu')
-        func.storeFile(osudataReq, user, 'osudata', 'osu')
+        func.storeFile(osudataReq, osudata.id, 'osudata', mode)
+        func.storeFile(osudataReq, user, 'osudata', mode)
 
         trackfunc.editTrackUser({
             database: input.trackDb,
@@ -9127,6 +9165,7 @@ export async function trackremove(input: extypes.commandInput) {
             action: 'remove',
             guildId: input.obj.guildId,
             guildSettings: input.guildSettings,
+            mode
         })
     }
 

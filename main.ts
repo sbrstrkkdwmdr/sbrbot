@@ -111,9 +111,18 @@ const trackDb = sequelize.define('trackUsers', {
     guilds: {
         type: Sequelize.STRING,
     },
-    mode:{
-        type: Sequelize.STRING
-    }
+    guildsosu: {
+        type: Sequelize.STRING,
+    },
+    guildstaiko: {
+        type: Sequelize.STRING,
+    },
+    guildsfruits: {
+        type: Sequelize.STRING,
+    },
+    guildsmania: {
+        type: Sequelize.STRING,
+    },
 })
 
 const statsCache = sequelize.define('statsCache', {

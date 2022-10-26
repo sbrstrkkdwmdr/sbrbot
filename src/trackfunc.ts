@@ -7,6 +7,7 @@ import func = require('./tools');
 import embedstuff = require('./embed');
 import log = require('./log');
 
+//use the one in src/osutrack.ts instead
 async function trackUser(fr: { user: string, mode: string, inital?: boolean }) {
     
     const curdata: osuApiTypes.Score[] & osuApiTypes.Error = (await osufunc.apiget({
@@ -61,6 +62,7 @@ async function editTrackUser(fr: {
     action?: 'add' | 'remove',
     guildId: string | number,
     guildSettings: Sequelize.ModelStatic<any>,
+    mode: string
 }
 ) {
 
@@ -68,7 +70,7 @@ async function editTrackUser(fr: {
         try {
             await fr.database.create({
                 osuid: fr.userid,
-                guilds: fr.guildId
+                [`guilds${fr.mode}`]: fr.guildId
             })
 
         } catch (error) {
@@ -84,7 +86,7 @@ async function editTrackUser(fr: {
 
             await fr.database.update({
                 osuid: fr.userid,
-                guilds: prevchannels.join(',')
+                [`guilds${fr.mode}`]: prevchannels.join(',')
             }, {
                 where: {
                     osuid: fr.userid,
@@ -93,11 +95,11 @@ async function editTrackUser(fr: {
         }
     } else {
         const curuser = await fr.database.findOne({ where: { osuid: fr.userid } })
-        const curguilds: string[] = curuser.dataValues.guilds.split(',')
+        const curguilds: string[] = curuser.dataValues[`guilds${fr.mode}`].split(',')
         const newguilds = curguilds.filter(channel => channel != fr.guildId)
         await fr.database.update({
             osuid: fr.userid,
-            guilds: newguilds.join(',')
+            [`guilds${fr.mode}`]: newguilds.join(',')
         }, {
             where: {
                 osuid: fr.userid
@@ -108,6 +110,7 @@ async function editTrackUser(fr: {
     return true;
 }
 
+//use the one in src/osutrack.ts instead
 async function getEmbed(
     data: {
         scoredata: osuApiTypes.Score,
@@ -162,6 +165,7 @@ async function getEmbed(
     return embed;
 }
 
+//use the one in src/osutrack.ts instead
 async function trackUsers(db) {
     const allUsers = await db.findAll()
     allUsers.forEach(user => {
@@ -173,6 +177,7 @@ async function trackUsers(db) {
     })
 }
 
+//use the one in src/osutrack.ts instead
 function sendMsg(embed: Discord.EmbedBuilder) {
 
 }

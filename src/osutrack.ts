@@ -26,17 +26,17 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
         // osufunc.updateUserStats(thisUser, fr.mode, userdata)
 
         if (curdata?.[0]?.user_id && fr.inital == true) {
-            fs.writeFileSync(`trackingFiles/${curdata[0].user_id}.json`, JSON.stringify(curdata, null, 2))
+            fs.writeFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata, null, 2))
             return;
         }
         if (curdata?.[0]?.user_id) {
-            if (fs.existsSync(`trackingFiles/${curdata[0].user_id}.json`)) {
+            if (fs.existsSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`)) {
                 let previous: osuApiTypes.Score[] & osuApiTypes.Error;
                 try {
-                    previous = JSON.parse(fs.readFileSync(`trackingFiles/${curdata[0].user_id}.json`, 'utf-8'))
+                    previous = JSON.parse(fs.readFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, 'utf-8'))
                 }
                 catch {
-                    fs.writeFileSync(`trackingFiles/${curdata[0].user_id}.json`, JSON.stringify(curdata, null, 2))
+                    fs.writeFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata, null, 2))
                     return;
                 }
 
@@ -52,58 +52,58 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
                     }
                 }
             }
-            fs.writeFileSync(`trackingFiles/${curdata[0].user_id}.json`, JSON.stringify(curdata, null, 2))
+            fs.writeFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata, null, 2))
         }
     }
 
-    async function editTrackUser(
-        fr: {
-            database: Sequelize.ModelStatic<any>,
-            discuser: string | number,
-            user: string | number,
-            action?: 'add' | 'remove',
-            guildId: string | number,
-            guildSettings: Sequelize.ModelStatic<any>,
-        }
+    //use the one in src/trackfunc.ts instead
+    async function editTrackUser(fr: {
+        database: Sequelize.ModelStatic<any>,
+        userid: string | number,
+        action?: 'add' | 'remove',
+        guildId: string | number,
+        guildSettings: Sequelize.ModelStatic<any>,
+        mode: string
+    }
     ) {
+
         if (!fr.action || fr.action == 'add') {
             try {
                 await fr.database.create({
-                    userid: fr.discuser,
-                    osuid: fr.user,
-                    guilds: fr.guildId
+                    osuid: fr.userid,
+                    [`guilds${fr.mode}`]: fr.guildId
                 })
-            } catch (error) {
-                log.logFile('error', log.errLog('database update', error))
 
-                const previous = await fr.database.findOne({ where: { userid: fr.discuser } })
+            } catch (error) {
+                log.logFile('error', log.errLog('database track user creation err', error))
+                const previous = await fr.database.findOne({ where: { osuid: fr.userid } })
                 const prevchannels: string[] = previous?.dataValues?.guilds?.split(',') ?? []
 
                 if (!prevchannels.includes(`${fr.guildId}`)) {
                     prevchannels.push(`${fr.guildId}`)
                 }
 
+
+
                 await fr.database.update({
-                    userid: fr.discuser,
-                    osuid: fr.user,
-                    guilds: prevchannels.join(',')
+                    osuid: fr.userid,
+                    [`guilds${fr.mode}`]: prevchannels.join(',')
                 }, {
                     where: {
-                        userid: fr.discuser
+                        osuid: fr.userid,
                     }
                 })
             }
         } else {
-            const curuser = await fr.database.findOne({ where: { userid: fr.discuser } })
+            const curuser = await fr.database.findOne({ where: { osuid: fr.userid } })
             const curguilds: string[] = curuser.dataValues.guilds.split(',')
             const newguilds = curguilds.filter(channel => channel != fr.guildId)
             await fr.database.update({
-                userid: fr.discuser,
-                osuid: fr.user,
-                guilds: newguilds.join(',')
+                osuid: fr.userid,
+                [`guilds${fr.mode}`]: newguilds.join(',')
             }, {
                 where: {
-                    userid: fr.discuser
+                    osuid: fr.userid
                 }
             })
 
@@ -169,19 +169,56 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
     async function trackUsers(db) {
         const allUsers = await db.findAll()
         allUsers.forEach(user => {
-            osufunc.logCall(user.dataValues.osuid, 'Tracking user: ')
-            if (user.dataValues.osuid == null) {
-                osufunc.logCall('null id', 'Cancelling tracking')
+            let willFetch = false
+            console.log(user.osuid)
+            console.log(user.guildsfruits)
+            console.log(`${user.guildsfruits}`.length)
+            if (!(typeof user.osuid == 'undefined' || user.osuid == null || user.osuid == undefined)) {
+                if (`${user.guildsosu}`.length > 0 && (`${user.guildsosu}` != 'null' || `${user.guildsosu}` != 'undefined' || user.guildsosu != null || user.guildsosu != undefined)) {
+                    // trackUser({
+                    //     user: user.osuid,
+                    //     mode: 'osu',
+                    //     inital: false
+                    // })
+                    console.log('osu')
+                    willFetch = true
+                }
+                if (`${user.guildstaiko}`.length > 0 && (`${user.guildstaiko}` != 'null' || `${user.guildstaiko}` != 'undefined' || user.guildstaiko != null || user.guildstaiko != undefined)) {
+                    // trackUser({
+                    //     user: user.osuid,
+                    //     mode: 'taiko',
+                    //     inital: false
+                    // })
+                    console.log('taiko')
+                    console.log(`${user.guildstaiko}`)
+                    willFetch = true
+                }
+                if (`${user.guildsfruits}`.length > 0 && (`${user.guildsfruits}` != 'null' || `${user.guildsfruits}` != 'undefined' || user.guildsfruits != null || user.guildsfruits != undefined)) {
+                    // trackUser({
+                    //     user: user.osuid,
+                    //     mode: 'fruits',
+                    //     inital: false
+                    // })
+                    console.log('fruits')
+                    willFetch = true
+                }
+                if (`${user.guildsmania}`.length > 0 && (`${user.guildsmania}` != 'null' || `${user.guildsmania}` != 'undefined' || user.guildsmania != null || user.guildsmania != undefined)) {
+                    // trackUser({
+                    //     user: user.osuid,
+                    //     mode: 'mania',
+                    //     inital: false
+                    // })
+                    console.log('mania')
+                    willFetch = true
+                }
             }
-            else if (user.dataValues.guilds.length < 1) {
-                osufunc.logCall(`User is not assigned to any guild (${user.dataValues.osuid})`, 'Cancelling tracking')
+
+            if (willFetch == true) {
+                osufunc.logCall(`Fetching ${user.osuid}`, 'Tracking')
             } else {
-                trackUser({
-                    user: user.dataValues.osuid,
-                    mode: user.dataValues.mode ?? 'osu',
-                    inital: false
-                })
+                osufunc.logCall(`User ${user.osuid} has no tracked channels`, 'Tracking cancelled')
             }
+
         })
     }
 
@@ -236,7 +273,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
 
     }
 
-    // trackUsers(trackDb)
+    trackUsers(trackDb)
 
     setInterval(() => {
         trackUsers(trackDb)
