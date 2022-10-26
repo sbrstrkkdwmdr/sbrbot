@@ -7281,6 +7281,7 @@ export async function map(input: extypes.commandInput) {
     let mapmods;
     let maptitleq = null;
     let detailed = false;
+    let searchRestrict = 'any';
 
     const useComponents = [];
     let overwriteModal = null;
@@ -7655,7 +7656,7 @@ export async function map(input: extypes.commandInput) {
             type: 'mapset_search',
             params: {
                 searchString: maptitleq,
-                opts: ['s=any']
+                opts: [`s=${searchRestrict}`]
             }
         })
         const mapidtest = mapidtestReq.apiData
