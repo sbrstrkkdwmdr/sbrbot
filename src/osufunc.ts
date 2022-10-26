@@ -959,6 +959,27 @@ export type apiGetStrings =
     'user_get_scores_map' |
     'user_get_maps' | 'user_get_maps_alt'
 
+export type apiGetStringsNew = 'custom' | 
+'beatmap_lookup' | //returns Beatmap
+'beatmap_user_score' | //returns BeatmapUserScore
+'beatmap_user_scores' | //returns Score[]
+'beatmap_scores' | //returns BeatmapScores (CHANGING)
+'beatmaps' | //returns Beatmap[]
+'beatmap' | //returns Beatmap
+'beatmap_attributes' | //returns DifficultyAttributes
+'beatmapset_discussion_posts' | //returns (WIP)
+'beatmapset_discussion_votes' | //returns (WIP)
+'beatmapset_discussions' | //returns (WIP)
+
+'changelog_build' | //returns Build
+'changelog_listing' | //returns {Build[],search{from?:string,limit:number,max_id?:number,stream?:string,to?:string},streams:UpdateStream[]}
+'changelog_build_lookup' | //returns Build (???)
+
+'chat_tdl' | 
+''
+
+
+
 export async function searchUser(searchid: string, userdata: any, findMode: boolean) {
     const findname = await userdata.findOne({ where: { userid: searchid } })
     let user;
