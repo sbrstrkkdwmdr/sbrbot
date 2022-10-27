@@ -1919,8 +1919,11 @@ export async function firsts(input: extypes.commandInput) {
     let sort: embedStuff.scoreSort = 'recent';
     let reverse = false;
     let mode = 'osu';
+
     let filteredMapper = null;
     let filteredMods = null;
+    let filterTitle = null;
+
     let parseScore = false;
     let parseId = null;
 
@@ -2022,6 +2025,21 @@ export async function firsts(input: extypes.commandInput) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
+            if (input.args.includes('-?')) {
+                filterTitle = input.args[input.args.indexOf('-?') + 1];
+                if (filterTitle.includes('"')) {
+                    filterTitle = (input.obj as Discord.Message<any>).content.split('-?')[1].split('"')[1]
+                    for (let i = 0; i < input.args.length; i++) {
+                        if (filterTitle.includes(input.args[i].replaceAll('"', '')) && i > input.args.indexOf('-?')) {
+                            input.args.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    input.args.splice(input.args.indexOf('-?'), 1);
+                } else {
+                    input.args.splice(input.args.indexOf('-?'), 2);
+                }
+            }
 
             input.args = cleanArgs(input.args);
 
@@ -2073,12 +2091,21 @@ export async function firsts(input: extypes.commandInput) {
             //@ts-expect-error message property does not exist on interaction/message
             if (input.obj.message.embeds[0].description) {
                 //@ts-expect-error message property does not exist on interaction/message
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-expect-error message property does not exist on interaction/message
+                if (input.obj.message.embeds[0].description.includes('mapper')) {
+                    //@ts-expect-error message property does not exist on interaction/message
                     filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-expect-error message property does not exist on interaction/message
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-expect-error message property does not exist on interaction/message
+                }
+                //@ts-expect-error message property does not exist on interaction/message
+                if (input.obj.message.embeds[0].description.includes('mods')) {
+                    //@ts-expect-error message property does not exist on interaction/message
                     filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-expect-error message property does not exist on interaction/message
+                }
+                //@ts-expect-error message property does not exist on interaction/message
+                if (input.obj.message.embeds[0].description.includes('map')) {
+                    //@ts-expect-error message property does not exist on interaction/message
+                    filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
+                }
+                //@ts-expect-error message property does not exist on interaction/message
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -2411,6 +2438,7 @@ export async function firsts(input: extypes.commandInput) {
         truePosType: 'recent',
         filteredMapper: filteredMapper,
         filteredMods: filteredMods,
+        filterMapTitle: filterTitle,
         reverse: reverse
     })
     firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n`)
@@ -2800,6 +2828,7 @@ export async function maplb(input: extypes.commandInput) {
             truePosType: 'score',
             filteredMapper: null,
             filteredMods: null,
+            filterMapTitle: null,
             reverse: false,
             mapidOverride: mapdata.id,
             showUserName: true
@@ -2858,7 +2887,7 @@ export async function maplb(input: extypes.commandInput) {
                     params: {
                         id: mapid,
                         mods: mods //function auto converts to id
-                        
+
                     },
                     version: 1
                 }
@@ -2993,6 +3022,7 @@ export async function nochokes(input: extypes.commandInput) {
     let mapper;
     let mods;
     let searchid;
+    let filterTitle = null;
 
     let parseScore = false;
     let parseId = null;
@@ -3109,6 +3139,21 @@ export async function nochokes(input: extypes.commandInput) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
+            if (input.args.includes('-?')) {
+                filterTitle = input.args[input.args.indexOf('-?') + 1];
+                if (filterTitle.includes('"')) {
+                    filterTitle = (input.obj as Discord.Message<any>).content.split('-?')[1].split('"')[1]
+                    for (let i = 0; i < input.args.length; i++) {
+                        if (filterTitle.includes(input.args[i].replaceAll('"', '')) && i > input.args.indexOf('-?')) {
+                            input.args.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    input.args.splice(input.args.indexOf('-?'), 1);
+                } else {
+                    input.args.splice(input.args.indexOf('-?'), 2);
+                }
+            }
 
             input.args = cleanArgs(input.args);
 
@@ -3154,12 +3199,21 @@ export async function nochokes(input: extypes.commandInput) {
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
             //@ts-expect-error message is not a property of message/interaction
             if (input.obj.message.embeds[0].description) {//@ts-expect-error message is not a property of message/interaction
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-expect-error message is not a property of message/interaction
+                if (input.obj.message.embeds[0].description.includes('mapper')) {
+                    //@ts-expect-error message is not a property of message/interaction
                     mapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-expect-error message is not a property of message/interaction
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-expect-error message is not a property of message/interaction
+                }
+                //@ts-expect-error message is not a property of message/interaction
+                if (input.obj.message.embeds[0].description.includes('mods')) {
+                    //@ts-expect-error message is not a property of message/interaction
                     mods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-expect-error message is not a property of message/interaction
+                }
+                //@ts-expect-error message property does not exist on interaction/message
+                if (input.obj.message.embeds[0].description.includes('map')) {
+                    //@ts-expect-error message property does not exist on interaction/message
+                    filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
+                }
+                //@ts-expect-error message is not a property of message/interaction
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -3516,6 +3570,7 @@ export async function nochokes(input: extypes.commandInput) {
             truePosType: 'pp',
             filteredMapper: mapper,
             filteredMods: mods,
+            filterMapTitle: filterTitle,
             reverse: reverse
         })
     topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`)
@@ -3602,6 +3657,8 @@ export async function osutop(input: extypes.commandInput) {
     let page;
     let mapper;
     let mods;
+    let filterTitle;
+
     let searchid;
 
     let parseScore = false;
@@ -3720,6 +3777,21 @@ export async function osutop(input: extypes.commandInput) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
+            if (input.args.includes('-?')) {
+                filterTitle = input.args[input.args.indexOf('-?') + 1];
+                if (filterTitle.includes('"')) {
+                    filterTitle = (input.obj as Discord.Message<any>).content.split('-?')[1].split('"')[1]
+                    for (let i = 0; i < input.args.length; i++) {
+                        if (filterTitle.includes(input.args[i].replaceAll('"', '')) && i > input.args.indexOf('-?')) {
+                            input.args.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    input.args.splice(input.args.indexOf('-?'), 1);
+                } else {
+                    input.args.splice(input.args.indexOf('-?'), 2);
+                }
+            }
 
             user = input.args.join(' ');
 
@@ -3768,10 +3840,18 @@ export async function osutop(input: extypes.commandInput) {
             if (input.obj.message.embeds[0].description) {//@ts-expect-error message property does not exist on message/interaction
                 if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-expect-error message property does not exist on message/interaction
                     mapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-expect-error message property does not exist on message/interaction
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-expect-error message property does not exist on message/interaction
+                }
+                //@ts-expect-error message property does not exist on message/interaction
+                if (input.obj.message.embeds[0].description.includes('mods')) {
+                    //@ts-expect-error message property does not exist on message/interaction
                     mods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-expect-error message property does not exist on message/interaction
+                }
+                //@ts-expect-error message property does not exist on interaction/message
+                if (input.obj.message.embeds[0].description.includes('map')) {
+                    //@ts-expect-error message property does not exist on interaction/message
+                    filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
+                }
+                //@ts-expect-error message property does not exist on message/interaction
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -4159,6 +4239,7 @@ export async function osutop(input: extypes.commandInput) {
             truePosType: 'pp',
             filteredMapper: mapper,
             filteredMods: mods,
+            filterMapTitle: filterTitle,
             reverse: reverse
         })
     topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`)
@@ -4292,6 +4373,7 @@ export async function pinned(input: extypes.commandInput) {
     let mode = 'osu';
     let filteredMapper = null;
     let filteredMods = null;
+    let filterTitle = null;
 
     let parseScore = false;
     let parseId = null;
@@ -4394,6 +4476,21 @@ export async function pinned(input: extypes.commandInput) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
+            if (input.args.includes('-?')) {
+                filterTitle = input.args[input.args.indexOf('-?') + 1];
+                if (filterTitle.includes('"')) {
+                    filterTitle = (input.obj as Discord.Message<any>).content.split('-?')[1].split('"')[1]
+                    for (let i = 0; i < input.args.length; i++) {
+                        if (filterTitle.includes(input.args[i].replaceAll('"', '')) && i > input.args.indexOf('-?')) {
+                            input.args.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    input.args.splice(input.args.indexOf('-?'), 1);
+                } else {
+                    input.args.splice(input.args.indexOf('-?'), 2);
+                }
+            }
 
             input.args = cleanArgs(input.args);
 
@@ -4453,6 +4550,12 @@ export async function pinned(input: extypes.commandInput) {
                     //@ts-expect-error message property does not exist on interaction/message
                     filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
                 }
+                //@ts-expect-error message property does not exist on interaction/message
+                if (input.obj.message.embeds[0].description.includes('map')) {
+                    //@ts-expect-error message property does not exist on interaction/message
+                    filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
+                }
+
                 //@ts-expect-error message property does not exist on interaction/message
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
@@ -4785,6 +4888,7 @@ export async function pinned(input: extypes.commandInput) {
             truePosType: 'recent',
             filteredMapper: filteredMapper,
             filteredMods: filteredMods,
+            filterMapTitle: filterTitle,
             reverse: false
         });
     pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n`)
@@ -4869,6 +4973,7 @@ export async function recent(input: extypes.commandInput) {
     let list = false;
     let sort: embedStuff.scoreSort = 'recent';
     let showFails = 1;
+    let filterTitle = null;
 
     let isFirstPage = false;
     let isLastPage = false;
@@ -4923,6 +5028,21 @@ export async function recent(input: extypes.commandInput) {
                 showFails = 0;
                 input.args.splice(input.args.indexOf('-nf'), 1);
             }
+            if (input.args.includes('-?')) {
+                filterTitle = input.args[input.args.indexOf('-?') + 1];
+                if (filterTitle.includes('"')) {
+                    filterTitle = (input.obj as Discord.Message<any>).content.split('-?')[1].split('"')[1]
+                    for (let i = 0; i < input.args.length; i++) {
+                        if (filterTitle.includes(input.args[i].replaceAll('"', '')) && i > input.args.indexOf('-?')) {
+                            input.args.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    input.args.splice(input.args.indexOf('-?'), 1);
+                } else {
+                    input.args.splice(input.args.indexOf('-?'), 2);
+                }
+            }
 
             input.args = cleanArgs(input.args);
 
@@ -4955,7 +5075,8 @@ export async function recent(input: extypes.commandInput) {
             }
             commanduser = input.obj.member.user;
             user =//@ts-expect-error null msg
-                input.obj.message.embeds[0].title.split('for ')[1]
+                (input.obj.message as Discord.Message<any>).embeds[0].author.url.split('u/')[1]
+            //title.split('for ')[1]
             //@ts-expect-error null msg
             const modething = input.obj.message.embeds[0].footer ? input.obj.message.embeds[0].description.split('\n')[1] : input.obj.message.embeds[0].description.split(' | ')[1].split('\n')[0]
             switch (true) {
@@ -5230,7 +5351,7 @@ export async function recent(input: extypes.commandInput) {
         })
     }
 
-    const rsdata: osuApiTypes.Score[] & osuApiTypes.Error = rsdataReq.apiData;
+    let rsdata: osuApiTypes.Score[] & osuApiTypes.Error = rsdataReq.apiData;
 
     osufunc.debug(rsdataReq, 'command', 'recent', input.obj.guildId, 'rsData');
     func.storeFile(rsdataReq, input.absoluteID, 'rsdata')
@@ -5264,6 +5385,15 @@ export async function recent(input: extypes.commandInput) {
         });
     if (list != true) {
         rsEmbed.setColor(colours.embedColour.score.dec)
+
+        if (filterTitle != null) {
+            rsdata = rsdata.filter(array =>
+                array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                ||
+                filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
+            )
+        }
+
 
         if (input.button == 'BigRightArrow') {
             page = rsdata.length - 1
@@ -5634,6 +5764,7 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                 truePosType: 'recent',
                 filteredMapper: null,
                 filteredMods: null,
+                filterMapTitle: filterTitle,
                 reverse: false
             })
         if (scoresarg.fields.length == 0) {
@@ -6849,6 +6980,7 @@ export async function scores(input: extypes.commandInput) {
             truePosType: sort,
             filteredMapper: filteredMapper,
             filteredMods: filteredMods,
+            filterMapTitle: null,
             reverse: reverse,
             mapidOverride: mapdata.id
         })

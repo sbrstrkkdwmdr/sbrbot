@@ -20,6 +20,7 @@ export async function scoreList(
         truePosType: scoreSort,
         filteredMapper: string,
         filteredMods: string,
+        filterMapTitle: string,
         reverse: boolean,
         mapidOverride?: number,
         showUserName?: boolean,
@@ -29,7 +30,7 @@ export async function scoreList(
     let filterinfo = '';
 
     if (asObj.filteredMapper != null) {
-        filtereddata = asObj.scores.slice().filter(array => array.beatmapset.creator.toLowerCase() == asObj.filteredMapper.toLowerCase())
+        filtereddata = filtereddata.filter(array => array.beatmapset.creator.toLowerCase() == asObj.filteredMapper.toLowerCase())
         filterinfo += `\nmapper: ${asObj.filteredMapper}`
     }
     let calcmods = osumodcalc.OrderMods(asObj.filteredMods + '')
@@ -38,12 +39,16 @@ export async function scoreList(
         asObj.filteredMods = null
     }
     if (asObj.filteredMods != null && !asObj.filteredMods.includes('any')) {
-        filtereddata = asObj.scores.slice().filter(array => array.mods.toString().replaceAll(',', '') == calcmods)
+        filtereddata = filtereddata.filter(array => array.mods.toString().replaceAll(',', '') == calcmods)
         filterinfo += `\nmods: ${asObj.filteredMods}`
     }
     if (asObj.filteredMods != null && asObj.filteredMods.includes('any')) {
-        filtereddata = asObj.scores.slice().filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods))
+        filtereddata = filtereddata.filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods))
         filterinfo += `\nmods: ${asObj.filteredMods}`
+    }
+    if(asObj.filterMapTitle != null){
+        filtereddata = filtereddata.filter(array => array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(asObj.filterMapTitle.toLowerCase().replaceAll(' ', '')) || asObj.filterMapTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', '')))
+        filterinfo += `\nmap: ${asObj.filterMapTitle}`
     }
 
     let newData = filtereddata.slice()
