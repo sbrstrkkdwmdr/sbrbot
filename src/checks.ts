@@ -354,7 +354,7 @@ function toMath(str: string) {
 
 export function isNotNull(property:string){
     //(`${user.guildstaiko}` != 'null' || `${user.guildstaiko}` != 'undefined' || user.guildstaiko != null || user.guildstaiko != undefined)
-    if(property != 'null' && property != 'undefined' && property != null && property != undefined){
+    if(`${property}`.toLowerCase() != 'null' && `${property}`.toLowerCase() != 'undefined' && property != null && property != undefined){
         return true;
     } 
     return false;

@@ -174,41 +174,36 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
             console.log(user.guildsfruits)
             console.log(`${user.guildsfruits}`.length)
             if (!(typeof user.osuid == 'undefined' || user.osuid == null || user.osuid == undefined)) {
-                if (`${user.guildsosu}`.length > 0 && (`${user.guildsosu}` != 'null' || `${user.guildsosu}` != 'undefined' || user.guildsosu != null || user.guildsosu != undefined)) {
-                    // trackUser({
-                    //     user: user.osuid,
-                    //     mode: 'osu',
-                    //     inital: false
-                    // })
-                    console.log('osu')
+                if (`${user.guildsosu}`.length > 0 && `${user.guildsosu}`.length != 4) {
+                    trackUser({
+                        user: user.osuid,
+                        mode: 'osu',
+                        inital: false
+                    })
                     willFetch = true
                 }
-                if (`${user.guildstaiko}`.length > 0 && (`${user.guildstaiko}` != 'null' || `${user.guildstaiko}` != 'undefined' || user.guildstaiko != null || user.guildstaiko != undefined)) {
-                    // trackUser({
-                    //     user: user.osuid,
-                    //     mode: 'taiko',
-                    //     inital: false
-                    // })
-                    console.log('taiko')
-                    console.log(`${user.guildstaiko}`)
+                if (`${user.guildstaiko}`.length > 0 && `${user.guildstaiko}`.length != 4) {
+                    trackUser({
+                        user: user.osuid,
+                        mode: 'taiko',
+                        inital: false
+                    })
                     willFetch = true
                 }
-                if (`${user.guildsfruits}`.length > 0 && (`${user.guildsfruits}` != 'null' || `${user.guildsfruits}` != 'undefined' || user.guildsfruits != null || user.guildsfruits != undefined)) {
-                    // trackUser({
-                    //     user: user.osuid,
-                    //     mode: 'fruits',
-                    //     inital: false
-                    // })
-                    console.log('fruits')
+                if (`${user.guildsfruits}`.length > 0 && `${user.guildsfruits}`.length != 4) {
+                    trackUser({
+                        user: user.osuid,
+                        mode: 'fruits',
+                        inital: false
+                    })
                     willFetch = true
                 }
-                if (`${user.guildsmania}`.length > 0 && (`${user.guildsmania}` != 'null' || `${user.guildsmania}` != 'undefined' || user.guildsmania != null || user.guildsmania != undefined)) {
-                    // trackUser({
-                    //     user: user.osuid,
-                    //     mode: 'mania',
-                    //     inital: false
-                    // })
-                    console.log('mania')
+                if (`${user.guildsmania}`.length > 0 && `${user.guildsfruits}`.length != 4) {
+                    trackUser({
+                        user: user.osuid,
+                        mode: 'mania',
+                        inital: false
+                    })
                     willFetch = true
                 }
             }
