@@ -467,23 +467,23 @@ export async function lb(input: extypes.commandInput) {
         .addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`BigLeftArrow-lb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.first),
             new Discord.ButtonBuilder()
                 .setCustomId(`LeftArrow-lb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous),
             new Discord.ButtonBuilder()
                 .setCustomId(`Search-lb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.search),
             new Discord.ButtonBuilder()
                 .setCustomId(`RightArrow-lb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.next),
             new Discord.ButtonBuilder()
                 .setCustomId(`BigRightArrow-lb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
 
@@ -6678,7 +6678,7 @@ export async function scores(input: extypes.commandInput) {
         .addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`Refresh-scores-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         )
 
@@ -6737,23 +6737,23 @@ export async function scores(input: extypes.commandInput) {
         .addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`BigLeftArrow-scores-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.first).setDisabled(false),
             new Discord.ButtonBuilder()
                 .setCustomId(`LeftArrow-scores-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous),
             new Discord.ButtonBuilder()
                 .setCustomId(`Search-scores-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.search),
             new Discord.ButtonBuilder()
                 .setCustomId(`RightArrow-scores-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.next),
             new Discord.ButtonBuilder()
                 .setCustomId(`BigRightArrow-scores-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
 
@@ -9480,21 +9480,21 @@ export async function tracklist(input: extypes.commandInput) {
         .addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji('⬅')
             /* .setLabel('Start') */,
             new Discord.ButtonBuilder()
                 .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji('◀'),
             new Discord.ButtonBuilder()
                 .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji('▶')
             /* .setLabel('Next') */,
             new Discord.ButtonBuilder()
                 .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji('➡')
             /* .setLabel('End') */,
         );
@@ -9502,7 +9502,7 @@ export async function tracklist(input: extypes.commandInput) {
         .addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`Refresh-COMMANDNAME-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji('🔁'),
         );
 
