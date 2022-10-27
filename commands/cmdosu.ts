@@ -1991,35 +1991,39 @@ export async function firsts(input: extypes.commandInput) {
 
             if (input.args.includes('-recent')) {
                 sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-recent'), 1);
             }
             if (input.args.includes('-performance')) {
                 sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-performance'), 1);
             }
             if (input.args.includes('-pp')) {
                 sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-pp'), 1);
             }
             if (input.args.includes('-score')) {
                 sort = 'score';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-score'), 1);
             }
             if (input.args.includes('-acc')) {
                 sort = 'acc';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-acc'), 1);
             }
             if (input.args.includes('-combo')) {
                 sort = 'combo';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-combo'), 1);
+            }
+            if (input.args.includes('-misses')) {
+                sort = 'miss',
+                    input.args.splice(input.args.indexOf('-misses'))
             }
             if (input.args.includes('-miss')) {
                 sort = 'miss';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-miss'), 1);
             }
             if (input.args.includes('-rank')) {
                 sort = 'rank';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-rank'), 1);
             }
             if (input.args.includes('-r')) {
                 sort = 'recent';
@@ -3158,40 +3162,45 @@ export async function nochokes(input: extypes.commandInput) {
 
             if (input.args.includes('-recent')) {
                 sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-recent'), 1);
             }
             if (input.args.includes('-performance')) {
                 sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-performance'), 1);
             }
             if (input.args.includes('-pp')) {
                 sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-pp'), 1);
             }
             if (input.args.includes('-score')) {
                 sort = 'score';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-score'), 1);
             }
             if (input.args.includes('-acc')) {
                 sort = 'acc';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-acc'), 1);
             }
             if (input.args.includes('-combo')) {
                 sort = 'combo';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-combo'), 1);
+            }
+            if (input.args.includes('-misses')) {
+                sort = 'miss',
+                    input.args.splice(input.args.indexOf('-misses'))
             }
             if (input.args.includes('-miss')) {
                 sort = 'miss';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-miss'), 1);
             }
             if (input.args.includes('-rank')) {
                 sort = 'rank';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-rank'), 1);
             }
             if (input.args.includes('-r')) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
+
             if (input.args.includes('-?')) {
                 filterTitle = input.args[input.args.indexOf('-?') + 1];
                 if (filterTitle.includes('"')) {
@@ -3803,40 +3812,45 @@ export async function osutop(input: extypes.commandInput) {
 
             if (input.args.includes('-recent')) {
                 sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-recent'), 1);
             }
             if (input.args.includes('-performance')) {
                 sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-performance'), 1);
             }
             if (input.args.includes('-pp')) {
                 sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-pp'), 1);
             }
             if (input.args.includes('-score')) {
                 sort = 'score';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-score'), 1);
             }
             if (input.args.includes('-acc')) {
                 sort = 'acc';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-acc'), 1);
             }
             if (input.args.includes('-combo')) {
                 sort = 'combo';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-combo'), 1);
+            }
+            if (input.args.includes('-misses')) {
+                sort = 'miss',
+                    input.args.splice(input.args.indexOf('-misses'))
             }
             if (input.args.includes('-miss')) {
                 sort = 'miss';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-miss'), 1);
             }
             if (input.args.includes('-rank')) {
                 sort = 'rank';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-rank'), 1);
             }
             if (input.args.includes('-r')) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
+
             if (input.args.includes('-?')) {
                 filterTitle = input.args[input.args.indexOf('-?') + 1];
                 if (filterTitle.includes('"')) {
@@ -4509,40 +4523,45 @@ export async function pinned(input: extypes.commandInput) {
 
             if (input.args.includes('-recent')) {
                 sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-recent'), 1);
             }
             if (input.args.includes('-performance')) {
                 sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-performance'), 1);
             }
             if (input.args.includes('-pp')) {
                 sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-pp'), 1);
             }
             if (input.args.includes('-score')) {
                 sort = 'score';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-score'), 1);
             }
             if (input.args.includes('-acc')) {
                 sort = 'acc';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-acc'), 1);
             }
             if (input.args.includes('-combo')) {
                 sort = 'combo';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-combo'), 1);
+            }
+            if (input.args.includes('-misses')) {
+                sort = 'miss',
+                    input.args.splice(input.args.indexOf('-misses'))
             }
             if (input.args.includes('-miss')) {
                 sort = 'miss';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-miss'), 1);
             }
             if (input.args.includes('-rank')) {
                 sort = 'rank';
-                input.args.splice(input.args.indexOf('-r'), 1);
+                input.args.splice(input.args.indexOf('-rank'), 1);
             }
             if (input.args.includes('-r')) {
                 sort = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
+
             if (input.args.includes('-?')) {
                 filterTitle = input.args[input.args.indexOf('-?') + 1];
                 if (filterTitle.includes('"')) {
