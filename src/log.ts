@@ -6,6 +6,7 @@ function commandLog(commandname: string, baseCommandType: string, absoluteID: nu
 ----------------------------------------------------
 COMMAND EVENT - ${commandname} (${baseCommandType})
 ${currentDate} | ${currentDate.toISOString()}
+current epoch: ${currentDate.getTime()}
 requested by ${commanduser.id} AKA ${commanduser.tag}
 cmd ID: ${absoluteID}
 ----------------------------------------------------
@@ -16,6 +17,7 @@ function optsLog(absoluteID: number, options: { name: string, value: string | nu
     let firstlog = `
 ----------------------------------------------------
 ${currentDate} | ${currentDate.toISOString()}
+current epoch: ${currentDate.getTime()}
 cmd ID: ${absoluteID}
 Options: \n`;
     let optslog = ''
@@ -31,10 +33,15 @@ Options: \n`;
 }
 
 function errLog(errType: string, err: string, ID?: string) {
+    const currentDate = new Date();
     const errorstring = `
+----------------------------------------------------
+${currentDate} | ${currentDate.toISOString()}
+current epoch: ${currentDate.getTime()}
 ${ID ? 'ID: ' + ID : ''}
 Error: ${errType}
 Text: ${err}
+----------------------------------------------------
 `
     return errorstring;
 }
@@ -52,3 +59,4 @@ function logFile(type: string, text: string, opts?: {
 }
 
 export { commandLog, optsLog, errLog, logFile };
+
