@@ -443,7 +443,7 @@ const osucmds: commandInfo[] = [
         name: 'firsts',
         description: 'Shows the #1 global scores of a user',
         usage: 'firsts [user] [-page/-p] [-(mode)] [-parse] [-?]',
-        slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods]',
+        slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter]',
         examples: [
             {
                 text: 'PREFIXMSGfirsts SaberStrike',
@@ -557,18 +557,19 @@ const osucmds: commandInfo[] = [
                 description: 'Parse the score with the specific index',
                 options: ['N/A'],
                 defaultValue: '0',
-                examples: ['-parse 5'],
-                commandTypes: ['message']
+                examples: ['-parse 5', 'parse:5'],
+                commandTypes: ['message', 'interaction']
             },
             {
-                name: '?',
+                name: 'filter',
                 type: 'string',
                 required: false,
                 description: 'Filters all scores to only show maps with the specified string',
                 options: ['N/A'],
                 defaultValue: 'null',
-                examples: ['-? "Mismagius The Big Black"', '-? sotarks'],
-                commandTypes: ['message']
+                examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
+                aliases: ['?'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -683,8 +684,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'maplb',
         description: 'Shows the leaderboard of a map',
-        usage: 'maplb [id] [-page/-p]',
-        slashusage: 'maplb [id] [page] [mods]',
+        usage: 'maplb [id] [-page/-p] [-parse]',
+        slashusage: 'maplb [id] [page] [mods] [parse]',
         examples: [
             {
                 text: 'PREFIXMSGmaplb 32345',
@@ -727,13 +728,23 @@ const osucmds: commandInfo[] = [
                 examples: ['+HDHR', 'mods:EZFL'],
                 commandTypes: ['message', 'interaction']
             },
+            {
+                name: 'parse',
+                type: 'number',
+                required: false,
+                description: 'Parse the score with the specific index',
+                options: ['N/A'],
+                defaultValue: '0',
+                examples: ['-parse 5', 'parse:5'],
+                commandTypes: ['message', 'interaction']
+            },
         ]
     },
     {
         name: 'nochokes',
         description: 'Shows the user\'s top plays without misses',
         usage: 'nochokes [user] [-page/-p] [-(mode)] [-parse] [-?]',
-        slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
+        slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter]',
         examples: [
             {
                 text: 'PREFIXMSGnochokes SaberStrike',
@@ -846,18 +857,19 @@ const osucmds: commandInfo[] = [
                 description: 'Parse the score with the specific index',
                 options: ['N/A'],
                 defaultValue: '0',
-                examples: ['-parse 5'],
-                commandTypes: ['message']
+                examples: ['-parse 5', 'parse:5'],
+                commandTypes: ['message', 'interaction']
             },
             {
-                name: '?',
+                name: 'filter',
                 type: 'string',
                 required: false,
                 description: 'Filters all scores to only show maps with the specified string',
                 options: ['N/A'],
                 defaultValue: 'null',
-                examples: ['-? "Mismagius The Big Black"', '-? sotarks'],
-                commandTypes: ['message']
+                examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
+                aliases: ['?'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -993,7 +1005,7 @@ const osucmds: commandInfo[] = [
         name: 'osutop',
         description: 'Shows the top scores of a user',
         usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-reverse] [-(sort)] [-parse] [-?]',
-        slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
+        slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter]',
         examples: [
             {
                 text: 'PREFIXMSGosutop SaberStrike',
@@ -1115,18 +1127,19 @@ const osucmds: commandInfo[] = [
                 description: 'Parse the score with the specific index',
                 options: ['N/A'],
                 defaultValue: '0',
-                examples: ['-parse 5'],
-                commandTypes: ['message']
+                examples: ['-parse 5', 'parse:5'],
+                commandTypes: ['message', 'interaction']
             },
             {
-                name: '?',
+                name: 'filter',
                 type: 'string',
                 required: false,
                 description: 'Filters all scores to only show maps with the specified string',
                 options: ['N/A'],
                 defaultValue: 'null',
-                examples: ['-? "Mismagius The Big Black"', '-? sotarks'],
-                commandTypes: ['message']
+                examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
+                aliases: ['?'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1134,7 +1147,7 @@ const osucmds: commandInfo[] = [
         name: 'pinned',
         description: 'Shows the pinned scores of a user',
         usage: 'pinned [user] [-page/-p] [-(mode)] [-parse] [-?]',
-        slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods]',
+        slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter]',
         examples: [
             {
                 text: 'PREFIXMSGpinned SaberStrike',
@@ -1244,18 +1257,19 @@ const osucmds: commandInfo[] = [
                 description: 'Parse the score with the specific index',
                 options: ['N/A'],
                 defaultValue: '0',
-                examples: ['-parse 5'],
-                commandTypes: ['message']
+                examples: ['-parse 5', 'parse:5'],
+                commandTypes: ['message', 'interaction']
             },
             {
-                name: '?',
+                name: 'filter',
                 type: 'string',
                 required: false,
                 description: 'Filters all scores to only show maps with the specified string',
                 options: ['N/A'],
                 defaultValue: 'null',
-                examples: ['-? "Mismagius The Big Black"', '-? sotarks'],
-                commandTypes: ['message']
+                examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
+                aliases: ['?'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1413,8 +1427,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'recent',
         description: 'Shows the recent score(s) of a user',
-        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf]',
-        slashusage: 'recent [user] [page] [mode] [list]',
+        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-?]',
+        slashusage: 'recent [user] [page] [mode] [list] [filter]',
         examples: [
             {
                 text: 'PREFIXMSGrecent',
@@ -1503,6 +1517,17 @@ const osucmds: commandInfo[] = [
                 aliases: ['pass', 'nofail', 'nf'],
                 examples: ['-pass',],
                 commandTypes: ['message']
+            },
+            {
+                name: 'filter',
+                type: 'string',
+                required: false,
+                description: 'Filters all scores to only show maps with the specified string',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
+                aliases: ['?'],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -1577,8 +1602,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'scores',
         description: 'Shows the scores of a user on a beatmap',
-        usage: 'scores [user] [id] [-page/-p]',
-        slashusage: 'scores [user] [id] [sort] [reverse] [page] [detailed]',
+        usage: 'scores [user] [id] [-page/-p] [-parse]',
+        slashusage: 'scores [user] [id] [sort] [reverse] [page] [detailed] [parse]',
         examples: [
             {
                 text: 'PREFIXMSGscores saberstrike',
@@ -1659,7 +1684,17 @@ const osucmds: commandInfo[] = [
                 defaultValue: '0',
                 examples: ['-parse 5'],
                 commandTypes: ['message', 'interaction']
-            }
+            },
+            {
+                name: 'parse',
+                type: 'number',
+                required: false,
+                description: 'Parse the score with the specific index',
+                options: ['N/A'],
+                defaultValue: '0',
+                examples: ['-parse 5', 'parse:5'],
+                commandTypes: ['message', 'interaction']
+            },
         ]
     },
     {

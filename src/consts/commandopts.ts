@@ -569,6 +569,18 @@ const osutopOpts = [
         type: Discord.ApplicationCommandOptionType.Boolean,
         required: false,
         default: false
+    },
+    {
+        name: 'parse',
+        description: 'Parse the score with the specified index',
+        type: Discord.ApplicationCommandOptionType.Integer,
+        required: false,
+    },
+    {
+        name: 'filter',
+        description: 'Show scores with maps that match this filter',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
     }
 
 ]
@@ -622,6 +634,18 @@ const playArrayOpts = [
         type: Discord.ApplicationCommandOptionType.String,
         required: false,
     },
+    {
+        name: 'parse',
+        description: 'Parse the score with the specified index',
+        type: Discord.ApplicationCommandOptionType.Integer,
+        required: false,
+    },
+    {
+        name: 'filter',
+        description: 'Show scores with maps that match this filter',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+    }
 ]
 
 const useridsortopts = [
@@ -660,12 +684,11 @@ const useridsortopts = [
         maxValue: 20
     },
     {
-        name: 'detailed',
-        description: 'Show all details',
-        type: Discord.ApplicationCommandOptionType.Boolean,
+        name: 'parse',
+        description: 'Parse the score with the specified index',
+        type: Discord.ApplicationCommandOptionType.Integer,
         required: false,
-        default: false
-    }
+    },
 ]
 
 const useroffsetmodeopts = [
@@ -717,6 +740,12 @@ const rsopts = [
         required: false,
         type: ApplicationCommandOptionType.Boolean,
         default: false
+    },
+    {
+        name: 'filter',
+        description: 'Show scores with maps that match this filter',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
     }
 ]
 

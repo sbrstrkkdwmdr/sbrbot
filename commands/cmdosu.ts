@@ -2071,6 +2071,13 @@ export async function firsts(input: extypes.commandInput) {
             filteredMapper = input.obj.options.getString('mapper');
             //@ts-expect-error options property does not exist on message
             filteredMods = input.obj.options.getString('mods');
+            //@ts-expect-error options property does not exist on message
+            filterTitle = input.obj.options.getString('filter');
+            //@ts-expect-error options property does not exist on message
+            parseId = input.obj.options.getInteger('parse');
+            if (parseId != null) {
+                parseScore = true
+            }
         }
 
             //==============================================================================================================================================================================================
@@ -2521,6 +2528,8 @@ export async function maplb(input: extypes.commandInput) {
     let mapid;
     let mapmods;
     let page;
+    let parseId = null;
+    let parseScore = false;
 
     switch (input.commandType) {
         case 'message': {
@@ -2534,6 +2543,12 @@ export async function maplb(input: extypes.commandInput) {
             if (input.args.includes('-p')) {
                 page = parseInt(input.args[input.args.indexOf('-p') + 1])
                 input.args.splice(input.args.indexOf('-p'), 2)
+            }
+
+            if (input.args.includes('-parse')) {
+                parseScore = true;
+                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
+                input.args.splice(input.args.indexOf('-parse'), 2);
             }
 
             input.args = cleanArgs(input.args);
@@ -2558,6 +2573,11 @@ export async function maplb(input: extypes.commandInput) {
             page = input.obj.options.getInteger('page');
             //@ts-expect-error options does not exist on message
             mapmods = input.obj.options.getString('mods');
+            //@ts-expect-error options property does not exist on message
+            parseId = input.obj.options.getInteger('parse');
+            if (parseId != null) {
+                parseScore = true
+            }
         }
 
             //==============================================================================================================================================================================================
@@ -2796,6 +2816,23 @@ export async function maplb(input: extypes.commandInput) {
         }
 
         const lbdata = lbdataf.scores
+
+        if (parseScore == true) {
+            let pid = parseInt(parseId) - 1
+            if (pid < 0) {
+                pid = 0
+            }
+            if (pid > lbdata.length) {
+                pid = lbdata.length - 1
+            }
+            input.overrides = {
+                mode: lbdata?.[0]?.mode ?? 'osu',
+                id: lbdata?.[pid]?.best_id
+            }
+            await scoreparse(input)
+            return;
+        }
+
         lbEmbed
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`Score leaderboard of ${fulltitle}`)
@@ -2915,6 +2952,22 @@ export async function maplb(input: extypes.commandInput) {
                     }).catch()
                 }
             }
+            return;
+        }
+
+        if (parseScore == true) {
+            let pid = parseInt(parseId) - 1
+            if (pid < 0) {
+                pid = 0
+            }
+            if (pid > lbdata.length) {
+                pid = lbdata.length - 1
+            }
+            input.overrides = {
+                mode: lbdata?.[0]?.mode ?? 'osu',
+                id: lbdata?.[pid]?.best_id
+            }
+            await scoreparse(input)
             return;
         }
 
@@ -3169,19 +3222,26 @@ export async function nochokes(input: extypes.commandInput) {
         case 'interaction': {
             commanduser = input.obj.member.user;
             //@ts-expect-error options property does not exist on message
-            user = input.obj.options.getString('user')
+            user = input.obj.options.getString('user');
             //@ts-expect-error options property does not exist on message
-            mode = input.obj.options.getString('mode')
+            mode = input.obj.options.getString('mode');
             //@ts-expect-error options property does not exist on message
-            mapper = input.obj.options.getString('mapper')
+            mapper = input.obj.options.getString('mapper');
             //@ts-expect-error options property does not exist on message
-            mods = input.obj.options.getString('mods')
+            mods = input.obj.options.getString('mods');
             //@ts-expect-error options property does not exist on message
-            sort = input.obj.options.getString('sort')
+            sort = input.obj.options.getString('sort');
             //@ts-expect-error options property does not exist on message
-            page = input.obj.options.getInteger('page')
+            page = input.obj.options.getInteger('page');
             //@ts-expect-error options property does not exist on message
-            reverse = input.obj.options.getBoolean('reverse')
+            reverse = input.obj.options.getBoolean('reverse');
+            //@ts-expect-error options property does not exist on message
+            filterTitle = input.obj.options.getString('filter');
+            //@ts-expect-error options property does not exist on message
+            parseId = input.obj.options.getInteger('parse');
+            if (parseId != null) {
+                parseScore = true
+            }
             searchid = input.obj.member.user.id
         }
 
@@ -3819,6 +3879,13 @@ export async function osutop(input: extypes.commandInput) {
             page = input.obj.options.getInteger('page')
             //@ts-expect-error options property does not exist on message
             detailed = input.obj.options.getBoolean('detailed')
+            //@ts-expect-error options property does not exist on message
+            filterTitle = input.obj.options.getString('filter');
+            //@ts-expect-error options property does not exist on message
+            parseId = input.obj.options.getInteger('parse');
+            if (parseId != null) {
+                parseScore = true
+            }
             //@ts-expect-error options property does not exist on message
             reverse = input.obj.options.getBoolean('reverse')
             searchid = input.obj.member.user.id
@@ -4521,6 +4588,13 @@ export async function pinned(input: extypes.commandInput) {
             //@ts-expect-error options property does not exist on message
             filteredMapper = input.obj.options.getString('mapper');
             //@ts-expect-error options property does not exist on message
+            filterTitle = input.obj.options.getString('filter');
+            //@ts-expect-error options property does not exist on message
+            parseId = input.obj.options.getInteger('parse');
+            if (parseId != null) {
+                parseScore = true
+            }
+            //@ts-expect-error options property does not exist on message
             filteredMods = input.obj.options.getString('mods');
         }
 
@@ -5064,6 +5138,8 @@ export async function recent(input: extypes.commandInput) {
             page = input.obj.options.getNumber('page');//@ts-expect-error null msg
             mode = input.obj.options.getString('mode');//@ts-expect-error null msg
             list = input.obj.options.getBoolean('list');
+            //@ts-expect-error options property does not exist on message
+            filterTitle = input.obj.options.getString('filter');
         }
 
             //==============================================================================================================================================================================================
@@ -6246,7 +6322,7 @@ export async function scoreparse(input: extypes.commandInput) {
     } catch (error) {
     }
 
-    if (input.commandType == 'interaction') {//@ts-expect-error null msg
+    if (input.commandType == 'interaction' && input.overrides == null) {//@ts-expect-error null msg
         input.obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
             .catch();
 
@@ -6478,7 +6554,8 @@ ${pptxt}\n${ppissue}
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [scoreembed]
+            embeds: [scoreembed],
+            edit: true
         }
     })
 
@@ -6567,6 +6644,11 @@ export async function scores(input: extypes.commandInput) {
             mapid = input.obj.options.getNumber('id');//@ts-expect-error null msg
             sort = input.obj.options.getString('sort');//@ts-expect-error null msg
             reverse = input.obj.options.getBoolean('reverse');
+            //@ts-expect-error options property does not exist on message
+            parseId = input.obj.options.getInteger('parse');
+            if (parseId != null) {
+                parseScore = true
+            }
         }
 
             //==============================================================================================================================================================================================

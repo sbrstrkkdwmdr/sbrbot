@@ -289,6 +289,12 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                     description: 'What mods to sort',
                     required: false,
                     type: Discord.ApplicationCommandOptionType.String
+                },
+                {
+                    name: 'parse',
+                    description: 'Parse the score with the specified index',
+                    type: Discord.ApplicationCommandOptionType.Integer,
+                    required: false,
                 }
             ]
         },
@@ -318,6 +324,12 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                     description: 'What mods to sort',
                     required: false,
                     type: Discord.ApplicationCommandOptionType.String
+                },
+                {
+                    name: 'parse',
+                    description: 'Parse the score with the specified index',
+                    type: Discord.ApplicationCommandOptionType.Integer,
+                    required: false,
                 }
             ]
         },
