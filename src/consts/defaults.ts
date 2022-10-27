@@ -13,6 +13,7 @@ const defaultClientConfig: extypes.config = {
     },
     useScreenshotParse: false,
     LogApiCalls: false,
+    enableTracking: true,
 }
 
 const defaultGuildSettings: extypes.guildSettings = {
