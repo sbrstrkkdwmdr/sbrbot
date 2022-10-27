@@ -5401,11 +5401,16 @@ export async function recent(input: extypes.commandInput) {
 
         const curscore = rsdata[0 + page]
         if (!curscore || curscore == undefined || curscore == null) {
+            let err = `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores`
+            if(filterTitle){
+                err = `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores matching \`${filterTitle}\``
+            }
+            
             if (input.button == null) {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {//@ts-expect-error null msg
                         input.obj.editReply({
-                            content: `Error - \`${user}\` has no recent ${mode ?? 'osu'} scores`,
+                            content: err,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         }).catch()
@@ -5413,7 +5418,7 @@ export async function recent(input: extypes.commandInput) {
                 } else {//@ts-expect-error null msg
                     input.obj.reply(
                         {
-                            content: `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores`,
+                            content: err,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
