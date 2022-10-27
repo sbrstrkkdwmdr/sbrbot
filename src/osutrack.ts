@@ -274,8 +274,9 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
     }
 
     // trackUsers(trackDb)
-
-    setInterval(() => {
-        trackUsers(trackDb)
-    }, 60 * 1000 * 15); //requests every 15 min
+    if (config.enableTracking == true) {
+        setInterval(() => {
+            trackUsers(trackDb)
+        }, 60 * 1000 * 15); //requests every 15 min
+    }
 }
