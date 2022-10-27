@@ -5387,11 +5387,14 @@ export async function recent(input: extypes.commandInput) {
         rsEmbed.setColor(colours.embedColour.score.dec)
 
         if (filterTitle != null) {
-            rsdata = rsdata.filter(array =>
+            const temp = rsdata.slice().filter(array =>
                 array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
                 ||
                 filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
             )
+            page = temp[page] ? rsdata.indexOf(temp[page]) :
+                temp[0] ? rsdata.indexOf(temp[0]) :
+                    0
         }
 
 
@@ -5402,10 +5405,10 @@ export async function recent(input: extypes.commandInput) {
         const curscore = rsdata[0 + page]
         if (!curscore || curscore == undefined || curscore == null) {
             let err = `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores`
-            if(filterTitle){
+            if (filterTitle) {
                 err = `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores matching \`${filterTitle}\``
             }
-            
+
             if (input.button == null) {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {//@ts-expect-error null msg
