@@ -442,7 +442,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'firsts',
         description: 'Shows the #1 global scores of a user',
-        usage: 'firsts [user] [-page/-p] [-(mode)] [-parse]',
+        usage: 'firsts [user] [-page/-p] [-(mode)] [-parse] [-?]',
         slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods]',
         examples: [
             {
@@ -558,6 +558,16 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: '0',
                 examples: ['-parse 5'],
+                commandTypes: ['message']
+            },
+            {
+                name: '?',
+                type: 'string',
+                required: false,
+                description: 'Filters all scores to only show maps with the specified string',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['-? "Mismagius The Big Black"', '-? sotarks'],
                 commandTypes: ['message']
             }
         ]
@@ -722,7 +732,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'nochokes',
         description: 'Shows the user\'s top plays without misses',
-        usage: 'nochokes [user] [-page/-p] [-(mode)] [-parse]',
+        usage: 'nochokes [user] [-page/-p] [-(mode)] [-parse] [-?]',
         slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
         examples: [
             {
@@ -837,6 +847,16 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: '0',
                 examples: ['-parse 5'],
+                commandTypes: ['message']
+            },
+            {
+                name: '?',
+                type: 'string',
+                required: false,
+                description: 'Filters all scores to only show maps with the specified string',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['-? "Mismagius The Big Black"', '-? sotarks'],
                 commandTypes: ['message']
             }
         ]
@@ -972,7 +992,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'osutop',
         description: 'Shows the top scores of a user',
-        usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-reverse] [-(sort)] [-parse]',
+        usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-reverse] [-(sort)] [-parse] [-?]',
         slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed]',
         examples: [
             {
@@ -1097,13 +1117,23 @@ const osucmds: commandInfo[] = [
                 defaultValue: '0',
                 examples: ['-parse 5'],
                 commandTypes: ['message']
+            },
+            {
+                name: '?',
+                type: 'string',
+                required: false,
+                description: 'Filters all scores to only show maps with the specified string',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['-? "Mismagius The Big Black"', '-? sotarks'],
+                commandTypes: ['message']
             }
         ]
     },
     {
         name: 'pinned',
         description: 'Shows the pinned scores of a user',
-        usage: 'pinned [user] [-page/-p] [-(mode)]',
+        usage: 'pinned [user] [-page/-p] [-(mode)] [-parse] [-?]',
         slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods]',
         examples: [
             {
@@ -1215,6 +1245,16 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: '0',
                 examples: ['-parse 5'],
+                commandTypes: ['message']
+            },
+            {
+                name: '?',
+                type: 'string',
+                required: false,
+                description: 'Filters all scores to only show maps with the specified string',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['-? "Mismagius The Big Black"', '-? sotarks'],
                 commandTypes: ['message']
             }
         ]
