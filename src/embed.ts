@@ -46,8 +46,26 @@ export async function scoreList(
         filtereddata = filtereddata.filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods))
         filterinfo += `\nmods: ${asObj.filteredMods}`
     }
-    if(asObj.filterMapTitle != null){
-        filtereddata = filtereddata.filter(array => array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(asObj.filterMapTitle.toLowerCase().replaceAll(' ', '')) || asObj.filterMapTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', '')))
+    if (asObj.filterMapTitle != null) {
+        filtereddata = filtereddata.filter(array =>
+            (
+                array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmap.version.toLowerCase().replaceAll(' ', '')
+            )
+                .includes(asObj.filterMapTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            asObj.filterMapTitle.toLowerCase().replaceAll(' ', '')
+                .includes((
+                    array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                    +
+                    array.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                    +
+                    array.beatmap.version.toLowerCase().replaceAll(' ', '')
+                ))
+        )
         filterinfo += `\nmap: ${asObj.filterMapTitle}`
     }
 
@@ -68,10 +86,10 @@ export async function scoreList(
             asObj.sort = 'pp'
             break;
         case 'recent':
-            newData = await filtereddata.slice().sort((a, b) => 
-            parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) 
-            - 
-            parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
+            newData = await filtereddata.slice().sort((a, b) =>
+                parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
+                -
+                parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
             sortinfo = `\nsorted by most recent`
             break;
         case 'combo':
@@ -140,10 +158,10 @@ export async function scoreList(
                 truePosArr = await asObj.scores.slice().sort((a, b) => b.pp - a.pp)
                 break;
             case 'recent':
-                truePosArr = await asObj.scores.slice().sort((a, b) => 
-                parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) 
-                - 
-                parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
+                truePosArr = await asObj.scores.slice().sort((a, b) =>
+                    parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
+                    -
+                    parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
                 )
                 break;
             case 'combo':
@@ -609,7 +627,7 @@ ${topmap.status == 'ranked' ?
     }
 }
 
-export async function sortScores(input:{
+export async function sortScores(input: {
     scores: osuapitypes.Score[],
     detailed: boolean,
     showWeights: boolean,
@@ -623,8 +641,8 @@ export async function sortScores(input:{
     reverse: boolean,
     mapidOverride?: number,
     showUserName?: boolean,
-}){
-    
+}) {
+
 }
 
 export type mapSort = 'title' | 'artist' |
