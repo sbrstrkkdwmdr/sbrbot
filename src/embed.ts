@@ -25,45 +25,30 @@ export async function scoreList(
         showUserName?: boolean,
     }
 ) {
-
-    const scores = asObj.scores
-    const detailed = asObj.detailed
-    const showWeights = asObj.showWeights
-    let page = asObj.page
-    const showMapTitle = asObj.showMapTitle
-    const showTruePosition = asObj.showTruePosition
-    let sort = asObj.sort
-    const truePosType = asObj.truePosType
-    const filteredMapper = asObj.filteredMapper
-    let filteredMods = asObj.filteredMods
-    const reverse = asObj.reverse
-    const mapidOverride = asObj.mapidOverride
-
-
-    let filtereddata = scores.slice()
+    let filtereddata = asObj.scores.slice()
     let filterinfo = '';
 
-    if (filteredMapper != null) {
-        filtereddata = scores.slice().filter(array => array.beatmapset.creator.toLowerCase() == filteredMapper.toLowerCase())
-        filterinfo += `\nmapper: ${filteredMapper}`
+    if (asObj.filteredMapper != null) {
+        filtereddata = asObj.scores.slice().filter(array => array.beatmapset.creator.toLowerCase() == asObj.filteredMapper.toLowerCase())
+        filterinfo += `\nmapper: ${asObj.filteredMapper}`
     }
-    let calcmods = osumodcalc.OrderMods(filteredMods + '')
+    let calcmods = osumodcalc.OrderMods(asObj.filteredMods + '')
     if (calcmods.length < 1) {
         calcmods = 'NM'
-        filteredMods = null
+        asObj.filteredMods = null
     }
-    if (filteredMods != null && !filteredMods.includes('any')) {
-        filtereddata = scores.slice().filter(array => array.mods.toString().replaceAll(',', '') == calcmods)
-        filterinfo += `\nmods: ${filteredMods}`
+    if (asObj.filteredMods != null && !asObj.filteredMods.includes('any')) {
+        filtereddata = asObj.scores.slice().filter(array => array.mods.toString().replaceAll(',', '') == calcmods)
+        filterinfo += `\nmods: ${asObj.filteredMods}`
     }
-    if (filteredMods != null && filteredMods.includes('any')) {
-        filtereddata = scores.slice().filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods))
-        filterinfo += `\nmods: ${filteredMods}`
+    if (asObj.filteredMods != null && asObj.filteredMods.includes('any')) {
+        filtereddata = asObj.scores.slice().filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods))
+        filterinfo += `\nmods: ${asObj.filteredMods}`
     }
 
     let newData = filtereddata.slice()
     let sortinfo;
-    switch (sort) {
+    switch (asObj.sort) {
         case 'score':
             newData = await filtereddata.slice().sort((a, b) => b.score - a.score)
             sortinfo = `\nsorted by highest score`
@@ -75,7 +60,7 @@ export async function scoreList(
         case 'pp': default:
             newData = await filtereddata.slice().sort((a, b) => b.pp - a.pp)
             sortinfo = `\nsorted by highest pp`
-            sort = 'pp'
+            asObj.sort = 'pp'
             break;
         case 'recent':
             newData = await filtereddata.slice().sort((a, b) => 
@@ -97,9 +82,9 @@ export async function scoreList(
             sortinfo = `\nsorted by best rank`
             break;
     }
-    if (reverse == true) {
+    if (asObj.reverse == true) {
         newData.reverse()
-        switch (sort) {
+        switch (asObj.sort) {
             case 'score':
                 sortinfo = `\nsorted by lowest score`
                 break;
@@ -125,57 +110,57 @@ export async function scoreList(
     }
     filterinfo += sortinfo
 
-    if (page >= Math.ceil(newData.length / 5)) {
-        page = Math.ceil(newData.length / 5) - 1
+    if (asObj.page >= Math.ceil(newData.length / 5)) {
+        asObj.page = Math.ceil(newData.length / 5) - 1
     }
 
     const scoresAsArrStr = [];
     const scoresAsFields: Discord.EmbedField[] = [];
 
-    fs.writeFileSync('debug.json', JSON.stringify(scores, null, 2));
+    fs.writeFileSync('debug.json', JSON.stringify(asObj.scores, null, 2));
 
     let trueIndex: string | number = '';
 
     let truePosArr = newData.slice()
 
-    if (showTruePosition && sort != truePosType) {
-        switch (truePosType) {
+    if (asObj.showTruePosition && asObj.sort != asObj.truePosType) {
+        switch (asObj.truePosType) {
             case 'score':
-                truePosArr = await scores.slice().sort((a, b) => b.score - a.score)
+                truePosArr = await asObj.scores.slice().sort((a, b) => b.score - a.score)
                 break;
             case 'acc':
-                truePosArr = await scores.slice().sort((a, b) => b.accuracy - a.accuracy)
+                truePosArr = await asObj.scores.slice().sort((a, b) => b.accuracy - a.accuracy)
                 break;
             case 'pp': default:
-                truePosArr = await scores.slice().sort((a, b) => b.pp - a.pp)
+                truePosArr = await asObj.scores.slice().sort((a, b) => b.pp - a.pp)
                 break;
             case 'recent':
-                truePosArr = await scores.slice().sort((a, b) => 
+                truePosArr = await asObj.scores.slice().sort((a, b) => 
                 parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) 
                 - 
                 parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
                 )
                 break;
             case 'combo':
-                truePosArr = await scores.slice().sort((a, b) => b.max_combo - a.max_combo)
+                truePosArr = await asObj.scores.slice().sort((a, b) => b.max_combo - a.max_combo)
                 break;
             case 'miss':
-                truePosArr = await scores.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
+                truePosArr = await asObj.scores.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
                 break;
             case 'rank':
-                truePosArr = await scores.slice().sort((a, b) => a.rank.localeCompare(b.rank))
+                truePosArr = await asObj.scores.slice().sort((a, b) => a.rank.localeCompare(b.rank))
                 break;
         }
     }
 
     for (let i = 0; i < 5 && i < newData.length; i++) {
-        const scoreoffset = page * 5 + i
+        const scoreoffset = asObj.page * 5 + i
         const curscore = newData[scoreoffset]
 
         if (!curscore) {
             break;
         }
-        if (showTruePosition && sort != truePosType) {
+        if (asObj.showTruePosition && asObj.sort != asObj.truePosType) {
             if (curscore.id != truePosArr[scoreoffset].id) {
                 trueIndex = await truePosArr.indexOf(curscore) + 1
             } else {
@@ -183,9 +168,9 @@ export async function scoreList(
             }
         }
 
-        const mapid = mapidOverride ?? curscore.beatmap.id;
+        const mapid = asObj.mapidOverride ?? curscore.beatmap.id;
 
-        if (detailed === true) {
+        if (asObj.detailed === true) {
             const ranking = curscore.rank.toUpperCase()
             const grade: string = gradeToEmoji(ranking);
             const hitstats = curscore.statistics
@@ -216,7 +201,7 @@ export async function scoreList(
                     mods: curscore.mods.join('').length > 1 ?
                         curscore.mods.join('') : 'NM',
                     gamemode: curscore.mode,
-                    mapid: curscore.beatmap.id,
+                    mapid,
                     miss: hitstats.count_miss,
                     acc: curscore.accuracy,
                     maxcombo: curscore.max_combo,
@@ -246,23 +231,23 @@ export async function scoreList(
             }
             let showtitle: string;
 
-            if (showMapTitle == true) {
+            if (asObj.showMapTitle == true) {
                 showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}`
             } else {
-                showtitle = `Score #${i + 1 + (page * 5)}${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods}`
+                showtitle = `Score #${i + 1 + (asObj.page * 5)}${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods}`
             }
             if (asObj.showUserName == true) {
                 showtitle = `[${curscore.user.username}](https://osu.ppy.sh/u/${curscore.user.id})`
             }
             let weighted;
-            if (showWeights == true) {
+            if (asObj.showWeights == true) {
                 weighted = `${(curscore?.weight?.pp)?.toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`
             } else {
                 weighted = ''
             }
 
             scoresAsFields.push({
-                name: `#${i + 1 + (page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
+                name: `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
                 value: `
 **${showtitle}**
 [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
@@ -272,7 +257,7 @@ ${pptxt} | ${weighted}
                 inline: false
             })
             scoresAsArrStr.push(
-                `\n**#${i + 1 + (page * 5)} | **${showtitle}**
+                `\n**#${i + 1 + (asObj.page * 5)} | **${showtitle}**
 [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 ${func.separateNum(curscore.score)} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
 ${pptxt} | ${weighted}
@@ -314,7 +299,7 @@ ${pptxt} | ${weighted}
                     mods: curscore.mods.join('').length > 1 ?
                         curscore.mods.join('') : 'NM',
                     gamemode: curscore.mode,
-                    mapid: curscore.beatmap.id,
+                    mapid,
                     miss: hitstats.count_miss,
                     acc: curscore.accuracy,
                     maxcombo: curscore.max_combo,
@@ -332,17 +317,17 @@ ${pptxt} | ${weighted}
 
             let showtitle: string;
 
-            if (showMapTitle == true) {
+            if (asObj.showMapTitle == true) {
                 showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}\n`
             } else {
-                showtitle = `[Score #${i + 1 + (page * 5)}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
+                showtitle = `[Score #${i + 1 + (asObj.page * 5)}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
             }
             if (asObj.showUserName == true) {
                 showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
             }
 
             scoresAsFields.push({
-                name: `#${i + 1 + (page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
+                name: `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
                 value: `
 **${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${pptxt}
@@ -351,7 +336,7 @@ ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${pptxt}
                 inline: false
             })
             scoresAsArrStr.push(
-                `#${i + 1 + (page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
+                `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
 **${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${pptxt}
 \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
@@ -365,8 +350,8 @@ ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${pptxt}
         fields: scoresAsFields,
         filter: filterinfo,
         maxPages: Math.ceil(newData.length / 5),
-        isFirstPage: page == 0,
-        isLastPage: page >= Math.ceil(newData.length / 5) - 1
+        isFirstPage: asObj.page == 0,
+        isLastPage: asObj.page >= Math.ceil(newData.length / 5) - 1
     }
 
 }
@@ -617,6 +602,24 @@ ${topmap.status == 'ranked' ?
         isFirstPage: page == 0,
         isLastPage: page >= Math.ceil(newData.length / 5) - 1
     }
+}
+
+export async function sortScores(input:{
+    scores: osuapitypes.Score[],
+    detailed: boolean,
+    showWeights: boolean,
+    page: number,
+    showMapTitle: boolean,
+    showTruePosition: boolean,
+    sort: scoreSort,
+    truePosType: scoreSort,
+    filteredMapper: string,
+    filteredMods: string,
+    reverse: boolean,
+    mapidOverride?: number,
+    showUserName?: boolean,
+}){
+    
 }
 
 export type mapSort = 'title' | 'artist' |
