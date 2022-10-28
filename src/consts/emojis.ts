@@ -40,6 +40,15 @@ const onlinestatus = {
     online: '<:osu_online:927800818445455421>',
     offline: '<:osu_offline:927800829153513472>'
 }
+const mods = {
+    none: '',
+    easy: '',
+    nofail: '',
+    halftime: '',
+    hidden: '',
+    hardrock: '',
+    doubletime: '',
+}
 
 //module.exports = { mapobjs, gamemodes, rankedstatus, grades, onlinestatus }
 export { mapobjs, gamemodes, rankedstatus, grades, onlinestatus }
