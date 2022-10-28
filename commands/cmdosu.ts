@@ -10045,7 +10045,7 @@ export async function compare(input: extypes.commandInput) {
                     })
                 }
 
-                const secondtopdata: osuApiTypes.Score[] & osuApiTypes.Error = firsttopdataReq.apiData;
+                const secondtopdata: osuApiTypes.Score[] & osuApiTypes.Error = secondtopdataReq.apiData;
 
                 func.storeFile(firsttopdataReq, input.absoluteID, 'firsttopdata')
                 func.storeFile(secondtopdataReq, input.absoluteID, 'secondtopdata')
