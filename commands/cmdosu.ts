@@ -2421,8 +2421,8 @@ export async function firsts(input: extypes.commandInput) {
     osufunc.debug(firstscoresdata, 'command', 'firsts', input.obj.guildId, 'firstsScoresData');
     func.storeFile(firstscoresdata, input.absoluteID, 'firstscoresdata')
 
-    if(filterTitle){
-        firstscoresdata = firstscoresdata.filter((array) => 
+    if (filterTitle) {
+        firstscoresdata = firstscoresdata.filter((array) =>
             (
                 array.beatmapset.title.toLowerCase().replaceAll(' ', '')
                 +
@@ -2434,7 +2434,7 @@ export async function firsts(input: extypes.commandInput) {
             array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
             ||
             array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            || 
+            ||
             array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
             ||
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
@@ -3664,8 +3664,8 @@ export async function nochokes(input: extypes.commandInput) {
         page = Math.ceil(nochokedata.length / 5) - 1
     }
 
-    if(filterTitle){
-        nochokedata = nochokedata.filter((array) => 
+    if (filterTitle) {
+        nochokedata = nochokedata.filter((array) =>
             (
                 array.beatmapset.title.toLowerCase().replaceAll(' ', '')
                 +
@@ -3677,7 +3677,7 @@ export async function nochokes(input: extypes.commandInput) {
             array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
             ||
             array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            || 
+            ||
             array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
             ||
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
@@ -4379,8 +4379,8 @@ export async function osutop(input: extypes.commandInput) {
         page = Math.ceil(osutopdata.length / 5) - 1
     }
 
-    if(filterTitle){
-        osutopdata = osutopdata.filter((array) => 
+    if (filterTitle) {
+        osutopdata = osutopdata.filter((array) =>
             (
                 array.beatmapset.title.toLowerCase().replaceAll(' ', '')
                 +
@@ -4392,7 +4392,7 @@ export async function osutop(input: extypes.commandInput) {
             array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
             ||
             array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            || 
+            ||
             array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
             ||
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
@@ -5073,8 +5073,8 @@ export async function pinned(input: extypes.commandInput) {
         page = Math.ceil(pinnedscoresdata.length / 5) - 1
     }
 
-    if(filterTitle){
-        pinnedscoresdata = pinnedscoresdata.filter((array) => 
+    if (filterTitle) {
+        pinnedscoresdata = pinnedscoresdata.filter((array) =>
             (
                 array.beatmapset.title.toLowerCase().replaceAll(' ', '')
                 +
@@ -5086,7 +5086,7 @@ export async function pinned(input: extypes.commandInput) {
             array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
             ||
             array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            || 
+            ||
             array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
             ||
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
@@ -5409,6 +5409,11 @@ export async function recent(input: extypes.commandInput) {
             } else {
                 showFails = 1
             }
+            //@ts-expect-error null msg
+            if(input.obj.message.embeds[0].description.includes('Filter:')){
+            //@ts-expect-error null msg
+                filterTitle = input.obj.message.embeds[0].description.split('Filter: ')[1].split('\n')[0]
+            }
         }
             break;
     }
@@ -5606,7 +5611,7 @@ export async function recent(input: extypes.commandInput) {
             params: {
                 userid: osudata.id,
                 mode,
-                opts: [`include_fails=${showFails}`, 'offset=0']
+                opts: [`include_fails=${showFails}`, 'offset=0', 'limit=100']
             }
         })
     }
@@ -5637,6 +5642,30 @@ export async function recent(input: extypes.commandInput) {
         return;
     }
 
+    if (filterTitle) {
+        rsdata = rsdata.filter((array) =>
+            (
+                array.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmap.version.toLowerCase().replaceAll(' ', '')
+            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
+        )
+    }
+
     const rsEmbed = new Discord.EmbedBuilder()
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
@@ -5646,17 +5675,7 @@ export async function recent(input: extypes.commandInput) {
     if (list != true) {
         rsEmbed.setColor(colours.embedColour.score.dec)
 
-        if (filterTitle != null) {
-            const temp = rsdata.slice().filter(array =>
-                array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-                ||
-                filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
-            )
-            page = temp[page] ? rsdata.indexOf(temp[page]) :
-                temp[0] ? rsdata.indexOf(temp[0]) :
-                    0
-        }
-
+        page = rsdata[page] ? page : 0
 
         if (input.button == 'BigRightArrow') {
             page = rsdata.length - 1
@@ -5942,6 +5961,7 @@ export async function recent(input: extypes.commandInput) {
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
 ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
+${filterTitle ? `Filter: ${filterTitle}` : ''}
 `)
             .addFields([
                 {
@@ -6037,7 +6057,10 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
                 rsEmbed.addFields(scoresarg.fields[i])
             }
         }
-        rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 5)}\n${emojis.gamemodes[mode]}`)
+rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 5)}
+${emojis.gamemodes[mode]}
+${filterTitle ? `Filter: ${filterTitle}` : ''}
+`)
         rsEmbed.setFooter({ text: `-` })
         if (scoresarg.isFirstPage) {
             //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
@@ -7173,7 +7196,7 @@ export async function scores(input: extypes.commandInput) {
     }
     osufunc.debug(scoredataReq, 'command', 'scores', input.obj.guildId, 'scoreData');
 
-    
+
     if (parseScore == true) {
         let pid = parseInt(parseId) - 1
         if (pid < 0) {
@@ -7716,11 +7739,11 @@ export async function map(input: extypes.commandInput) {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
 
-            if(input.args.includes('-detailed')){
+            if (input.args.includes('-detailed')) {
                 detailed = true;
                 input.args.splice(input.args.indexOf('-detailed'), 1)
             }
-            if(input.args.includes('-d')){
+            if (input.args.includes('-d')) {
                 detailed = true;
                 input.args.splice(input.args.indexOf('-d'), 1)
             }
@@ -9280,8 +9303,8 @@ export async function userBeatmaps(input: extypes.commandInput) {
     osufunc.debug(maplistdata, 'command', 'userbeatmaps', input.obj.guildId, 'mapListData');
     func.storeFile(maplistdata, input.absoluteID, 'maplistdata');
 
-    if(filterTitle){
-        maplistdata = maplistdata.filter((map) => 
+    if (filterTitle) {
+        maplistdata = maplistdata.filter((map) =>
             (
                 map.title.toLowerCase().replaceAll(' ', '')
                 +
@@ -9293,7 +9316,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
             map.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
             ||
             map.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            || 
+            ||
             map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
             ||
             filterTitle.toLowerCase().replaceAll(' ', '').includes(map.title.toLowerCase().replaceAll(' ', ''))
