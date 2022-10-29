@@ -2561,15 +2561,14 @@ export async function maplb(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-parse'), 2);
             }
 
+            if (input.args.join(' ').includes('+')) {
+                mapmods = input.args.join(' ').split('+')[1]
+                mapmods.includes(' ') ? mapmods = mapmods.split(' ')[0] : null;
+                input.args = input.args.join(' ').replace('+', '').replace(mapmods, '').split(' ')
+            }
             input.args = cleanArgs(input.args);
 
-            mapid = input.args[0]
-            if (isNaN(mapid)) {
-                mapid = undefined;
-            }
-            if (input.args.join(' ').includes('+')) {
-                mapmods = input.args.join(' ').split('+')[1];
-            }
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map
         }
             break;
 
@@ -6652,23 +6651,16 @@ export async function scores(input: extypes.commandInput) {
 
             input.args = cleanArgs(input.args);
 
-            mapid = null;
-            if (!isNaN(+input.args[0])) {
-                mapid = +input.args[0];
-                input.args.splice(0, 1);
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map
+            if(mapid != null){
+                input.args.splice(input.args.indexOf(input.args.find(arg => arg.includes('https://osu.ppy.sh/'))), 1)
             }
-            //find if any string in input.args is a number
-            const number = input.args.find(arg => !isNaN(+arg));
-            if (number) {
-                mapid = +number;
-            }
+            
+            user = input.args.join(' ')
 
-            user = input.args.join(' ');
-
-            if (!input.args[0] || input.args.join(' ').includes(searchid) || isNaN(+input.args[0])) {
+            if (!input.args[0] || input.args.join(' ').includes(searchid) || user == undefined) {
                 user = null
             }
-
         }
             break;
 
@@ -7550,18 +7542,22 @@ export async function map(input: extypes.commandInput) {
         case 'message': {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
-            if (!isNaN(+input.args[0])) {
-                mapid = input.args[0];
-            }
 
             if (input.args.join(' ').includes('"')) {
-                maptitleq = input.args.join(' ').split('"')[1]
+                maptitleq = input.args.join(' ').substring(
+                    input.args.join(' ').indexOf('"') + 1,
+                    input.args.join(' ').lastIndexOf('"')
+                )
+                input.args = input.args.join(' ').replace(maptitleq, '').split(' ')
             }
             if (input.args.join(' ').includes('+')) {
                 mapmods = input.args.join(' ').split('+')[1]
+                mapmods.includes(' ') ? mapmods = mapmods.split(' ')[0] : null;
+                input.args = input.args.join(' ').replace('+', '').replace(mapmods, '').split(' ')
             }
-
             input.args = cleanArgs(input.args);
+
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map
         }
             break;
 

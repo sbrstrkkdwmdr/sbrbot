@@ -73,7 +73,7 @@ export async function mapcalc(
     },
     mapIsRank?: string
 ) {
-    let ppl:rosu.PerformanceAttributes[]
+    let ppl: rosu.PerformanceAttributes[]
     const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
 
     switch (calctyper) {
@@ -141,7 +141,7 @@ export async function scorecalc(
     },
     mapIsRank?: string
 ) {
-    let ppl:rosu.PerformanceAttributes[];
+    let ppl: rosu.PerformanceAttributes[];
 
     const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
     switch (obj.calctype) {
@@ -541,7 +541,7 @@ export async function mapcalclocal(
     mods: string, gamemode: string, path: string | null,
     calctype: number | null,
 ) {
-    let ppl:rosu.PerformanceAttributes[]
+    let ppl: rosu.PerformanceAttributes[]
     let mapscore
     const calctyper = osumodcalc.ModeNameToInt(gamemode)
 
@@ -705,7 +705,7 @@ export async function apiget(input: apiInput) {
                     url += `users/${input.params.username ?? input.params.userid}/beatmapsets/most_played`
                     break;
                 case 'user_get_scores_map':
-                    url += `beatmaps/${input.params.id}/scores/users/${input.params.username}/all`
+                    url += `beatmaps/${input.params.id}/scores/users/${input.params.username ?? input.params.userid}/all`
                     break;
                 case 'user_get_maps':
                     url += `users/${input.params.username ?? input.params.userid}/beatmapsets/${input.params.category ?? 'favourite'}?limit=100`
@@ -1528,4 +1528,79 @@ export async function userStatsCacheFix(database: Sequelize.ModelStatic<any>, mo
             where: { osuid: curuser.uid }
         })
     }
+}
+
+/**
+ * checks url for beatmap id. if url given is just a number, then map id is the number
+ * @param url the url to check
+ * @param callIfMapIdNull if only set id is found, then send an api request to fetch the map id
+ */
+export async function mapIdFromLink(url: string, callIfMapIdNull: boolean) {
+
+    if(url.includes(' ')){
+        const temp = url.split(' ')
+        //get arg that has osu.ppy.sh
+        for (let i = 0; i < temp.length; i++) {
+            const curarg = temp[i];
+            if(curarg.includes('osu.ppy.sh')){
+                url = curarg;
+                break;
+            }
+        }
+    }
+
+    let object = {
+        set: null,
+        mode: null,
+        map: null,
+    }
+
+    //patterns: 
+    /**
+     *
+     * osu.ppy.sh/b/{map}
+     * osu.ppy.sh/beatmaps/{map}
+     * osu.ppy.sh/b/{map}?m={mode}
+     * osu.ppy.sh/beatmaps/{map}?m={mode}
+     * osu.ppy.sh/s/{set} //mapset
+     * osu.ppy.sh/beatmapsets/{set}#{mode}/{map}
+     * osu.ppy.sh/beatmapsets/{set}
+     */
+
+    switch (true) {
+        case url.includes('?m='):
+            object.mode = url.split('?m=')[1]
+            object.map = url.split('?m=')[0]
+            break;
+        case url.includes('/b/'):
+            object.map = url.split('/b/')[1]
+            break;
+        case url.includes('beatmaps/'):
+            object.map = url.split('/beatmaps/')[1]
+            break;
+        case url.includes('beatmapsets') && url.includes('#'):
+            object.set = url.split('beatmapsets/')[1].split('#')[0]
+            object.mode = url.split('#')[1].split('/')[0]
+            object.map = url.split('#')[1].split('/')[1]
+            break;
+        case url.includes('/s/'):
+            object.set = url.split('/s/')[1]
+            break;
+        case url.includes('beatmapsets/'):
+            object.set = url.split('/beatmapsets/')[1]
+            break;
+        case !isNaN(+url):
+            object.map = url
+            break;
+    }
+    if (callIfMapIdNull && object.map == null) {
+        const bmsdataReq = await apiget({
+            type: 'mapset_get',
+            params: {
+                id: object.set
+            }
+        });
+        object.map = (bmsdataReq.apiData as osuApiTypes.Beatmapset)?.beatmaps?.[0]?.id ?? null
+    }
+    return object;
 }
