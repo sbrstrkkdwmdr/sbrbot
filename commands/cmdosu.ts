@@ -1223,6 +1223,10 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
             {
                 name: 'Value',
                 value: `${value}`
+            },
+            {
+                name: 'Mode',
+                value: `${mode}`
             }
         ]),
         {
@@ -2241,6 +2245,10 @@ export async function firsts(input: extypes.commandInput) {
             {
                 name: 'Parse',
                 value: `${parseId}`
+            },
+            {
+                name: 'Filter',
+                value: filterTitle
             }
         ]),
         {
@@ -2413,6 +2421,30 @@ export async function firsts(input: extypes.commandInput) {
     osufunc.debug(firstscoresdata, 'command', 'firsts', input.obj.guildId, 'firstsScoresData');
     func.storeFile(firstscoresdata, input.absoluteID, 'firstscoresdata')
 
+    if(filterTitle){
+        firstscoresdata = firstscoresdata.filter((array) => 
+            (
+                array.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmap.version.toLowerCase().replaceAll(' ', '')
+            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            || 
+            array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
+        )
+    }
+
     if (parseScore == true) {
         let pid = parseInt(parseId) - 1
         if (pid < 0) {
@@ -2427,8 +2459,8 @@ export async function firsts(input: extypes.commandInput) {
             commanduser,
             commandAs: input.commandType
         }
-                input.commandType = 'other';
-        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
+        input.commandType = 'other';
+        if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             return;
         }
         await scoreparse(input)
@@ -2462,7 +2494,7 @@ export async function firsts(input: extypes.commandInput) {
         filteredMapper: filteredMapper,
         filteredMods: filteredMods,
         filterMapTitle: filterTitle,
-        reverse: reverse
+        reverse: reverse,
     })
     firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n`)
 
@@ -2698,7 +2730,11 @@ export async function maplb(input: extypes.commandInput) {
             {
                 name: 'Page',
                 value: page
-            }
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
+            },
         ]),
         {
             guildId: `${input.obj.guildId}`
@@ -2846,10 +2882,10 @@ export async function maplb(input: extypes.commandInput) {
                 commanduser,
                 commandAs: input.commandType
             }
-                input.commandType = 'other';
-        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
-            return;
-        }
+            input.commandType = 'other';
+            if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+                return;
+            }
             await scoreparse(input)
             return;
         }
@@ -2990,10 +3026,10 @@ export async function maplb(input: extypes.commandInput) {
                 commanduser,
                 commandAs: input.commandType
             }
-                input.commandType = 'other';
-        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
-            return;
-        }
+            input.commandType = 'other';
+            if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+                return;
+            }
             await scoreparse(input)
             return;
         }
@@ -3425,6 +3461,10 @@ export async function nochokes(input: extypes.commandInput) {
             {
                 name: 'Parse',
                 value: `${parseId}`
+            },
+            {
+                name: 'Filter',
+                value: filterTitle
             }
             ]
         ), {
@@ -3560,7 +3600,7 @@ export async function nochokes(input: extypes.commandInput) {
             }
         })
     }
-    const nochokedata: osuApiTypes.Score[] & osuApiTypes.Error = nochokedataReq.apiData;
+    let nochokedata: osuApiTypes.Score[] & osuApiTypes.Error = nochokedataReq.apiData;
 
     osufunc.debug(nochokedataReq, 'command', 'osutop', input.obj.guildId, 'noChokeData');
     func.storeFile(nochokedataReq, input.absoluteID, 'nochokedata')
@@ -3624,6 +3664,30 @@ export async function nochokes(input: extypes.commandInput) {
         page = Math.ceil(nochokedata.length / 5) - 1
     }
 
+    if(filterTitle){
+        nochokedata = nochokedata.filter((array) => 
+            (
+                array.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmap.version.toLowerCase().replaceAll(' ', '')
+            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            || 
+            array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
+        )
+    }
+
     if (parseScore == true) {
         let pid = parseInt(parseId) - 1
         if (pid < 0) {
@@ -3638,8 +3702,8 @@ export async function nochokes(input: extypes.commandInput) {
             commanduser,
             commandAs: input.commandType
         }
-                input.commandType = 'other';
-        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
+        input.commandType = 'other';
+        if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             return;
         }
         await scoreparse(input)
@@ -4095,6 +4159,10 @@ export async function osutop(input: extypes.commandInput) {
             {
                 name: 'Parse',
                 value: `${parseId}`
+            },
+            {
+                name: 'Filter',
+                value: filterTitle
             }
             ],
         ),
@@ -4248,7 +4316,7 @@ export async function osutop(input: extypes.commandInput) {
         })
     }
 
-    const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData;
+    let osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData;
 
     osufunc.debug(osutopdataReq, 'command', 'osutop', input.obj.guildId, 'osuTopData');
     func.storeFile(osutopdataReq, input.absoluteID, 'osutopdata')
@@ -4311,6 +4379,30 @@ export async function osutop(input: extypes.commandInput) {
         page = Math.ceil(osutopdata.length / 5) - 1
     }
 
+    if(filterTitle){
+        osutopdata = osutopdata.filter((array) => 
+            (
+                array.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmap.version.toLowerCase().replaceAll(' ', '')
+            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            || 
+            array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
+        )
+    }
+
     if (parseScore == true) {
         let pid = parseInt(parseId) - 1
         if (pid < 0) {
@@ -4325,8 +4417,8 @@ export async function osutop(input: extypes.commandInput) {
             commanduser,
             commandAs: input.commandType
         }
-                input.commandType = 'other';
-        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
+        input.commandType = 'other';
+        if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             return;
         }
         await scoreparse(input)
@@ -4811,6 +4903,10 @@ export async function pinned(input: extypes.commandInput) {
             {
                 name: 'Parse',
                 value: `${parseId}`
+            },
+            {
+                name: 'Filter',
+                value: filterTitle
             }
         ]),
         {
@@ -4977,6 +5073,30 @@ export async function pinned(input: extypes.commandInput) {
         page = Math.ceil(pinnedscoresdata.length / 5) - 1
     }
 
+    if(filterTitle){
+        pinnedscoresdata = pinnedscoresdata.filter((array) => 
+            (
+                array.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmap.version.toLowerCase().replaceAll(' ', '')
+            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            || 
+            array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
+        )
+    }
+
     if (parseScore == true) {
         let pid = parseInt(parseId) - 1
         if (pid < 0) {
@@ -4991,8 +5111,8 @@ export async function pinned(input: extypes.commandInput) {
             commanduser,
             commandAs: input.commandType
         }
-                input.commandType = 'other';
-        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
+        input.commandType = 'other';
+        if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             return;
         }
         await scoreparse(input)
@@ -5362,6 +5482,10 @@ export async function recent(input: extypes.commandInput) {
                 name: 'List',
                 value: list
             },
+            {
+                name: 'Filter',
+                value: filterTitle
+            }
         ]),
         {
             guildId: `${input.obj.guildId}`
@@ -6283,10 +6407,10 @@ export async function scoreparse(input: extypes.commandInput) {
         if (input.overrides?.mode != null) {
             scoremode = input.overrides.mode
         }
-        if(input.overrides?.commanduser != null){
+        if (input.overrides?.commanduser != null) {
             commanduser = input.overrides.commanduser
         }
-        if(input.overrides?.commandAs != null){
+        if (input.overrides?.commandAs != null) {
             input.commandType = input.overrides.commandAs
         }
     }
@@ -7049,6 +7173,7 @@ export async function scores(input: extypes.commandInput) {
     }
     osufunc.debug(scoredataReq, 'command', 'scores', input.obj.guildId, 'scoreData');
 
+    
     if (parseScore == true) {
         let pid = parseInt(parseId) - 1
         if (pid < 0) {
@@ -7065,8 +7190,8 @@ export async function scores(input: extypes.commandInput) {
             commanduser,
             commandAs: input.commandType
         }
-                input.commandType = 'other';
-        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
+        input.commandType = 'other';
+        if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             return;
         }
         await scoreparse(input)
@@ -7794,16 +7919,16 @@ export async function map(input: extypes.commandInput) {
             break;
     }
     if (input.overrides != null) {
-        if(input.overrides?.overwriteModal != null){
+        if (input.overrides?.overwriteModal != null) {
             overwriteModal = input?.overrides?.overwriteModal ?? overwriteModal
         }
-        if(input.overrides?.id != null){
+        if (input.overrides?.id != null) {
             mapid = input?.overrides?.id ?? mapid
         }
-        if(input.overrides?.commanduser != null){
+        if (input.overrides?.commanduser != null) {
             commanduser = input.overrides.commanduser
         }
-        if(input.overrides?.commandAs != null){
+        if (input.overrides?.commandAs != null) {
             input.commandType = input.overrides.commandAs
         }
     }
@@ -8793,6 +8918,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
     let page = 1;
     let parseMap = false;
     let parseId;
+    let filterTitle = null;
 
     let commanduser: Discord.User;
 
@@ -8852,11 +8978,25 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 reverse = true;
                 input.args.splice(input.args.indexOf('-reverse'), 1);
             }
-
             if (input.args.includes('-parse')) {
                 parseMap = true;
                 parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
                 input.args.splice(input.args.indexOf('-parse'), 2);
+            }
+            if (input.args.includes('-?')) {
+                filterTitle = input.args[input.args.indexOf('-?') + 1];
+                if (filterTitle.includes('"')) {
+                    filterTitle = (input.obj as Discord.Message<any>).content.split('-?')[1].split('"')[1]
+                    for (let i = 0; i < input.args.length; i++) {
+                        if (filterTitle.includes(input.args[i].replaceAll('"', '')) && i > input.args.indexOf('-?')) {
+                            input.args.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    input.args.splice(input.args.indexOf('-?'), 1);
+                } else {
+                    input.args.splice(input.args.indexOf('-?'), 2);
+                }
             }
 
             input.args = cleanArgs(input.args);
@@ -8880,6 +9020,8 @@ export async function userBeatmaps(input: extypes.commandInput) {
             //@ts-expect-error options property does not exist on message
             reverse = input.obj.options.getBoolean('reverse') ?? false;
             //@ts-expect-error options property does not exist on message
+            filterTitle = input.obj.options.getString('filter');
+            //@ts-expect-error options property does not exist on message
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
                 parseMap = true
@@ -8902,6 +9044,9 @@ export async function userBeatmaps(input: extypes.commandInput) {
             const curpage = parseInt(
                 curembed.description.split('Page: ')[1].split('/')[0]
             )
+
+            filterTitle = curembed.description.split('Filter: ')[1].split('\n')[0]
+
             switch (input.button) {
                 case 'BigLeftArrow':
                     page = 1
@@ -8984,6 +9129,14 @@ export async function userBeatmaps(input: extypes.commandInput) {
             {
                 name: 'Sort',
                 value: sort
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
+            },
+            {
+                name: 'Filter',
+                value: filterTitle
             }
         ]),
         {
@@ -9118,7 +9271,31 @@ export async function userBeatmaps(input: extypes.commandInput) {
     osufunc.debug(maplistdata, 'command', 'userbeatmaps', input.obj.guildId, 'mapListData');
     func.storeFile(maplistdata, input.absoluteID, 'maplistdata');
 
-    if(parseMap == true){
+    if(filterTitle){
+        maplistdata = maplistdata.filter((map) => 
+            (
+                map.title.toLowerCase().replaceAll(' ', '')
+                +
+                map.artist.toLowerCase().replaceAll(' ', '')
+                +
+                map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', '')
+            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            map.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            map.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            || 
+            map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(map.title.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(map.artist.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', ''))
+        )
+    }
+
+    if (parseMap == true) {
         let pid = parseInt(parseId) - 1
         if (pid < 0) {
             pid = 0;
@@ -9132,7 +9309,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
             commandAs: input.commandType
         }
         input.commandType = 'other';
-        if(input.overrides.id == null){
+        if (input.overrides.id == null) {
             return;
         }
         await map(input)
@@ -9194,7 +9371,11 @@ export async function userBeatmaps(input: extypes.commandInput) {
         //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
         pgbuttons.components[4].setDisabled(true)
     }
-    mapList.setDescription(`${mapsarg.filter}\nPage: ${page + 1}/${Math.ceil(mapsarg.maxPages)}\n`)
+    mapList.setDescription(`
+${mapsarg.filter}
+Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}
+Filter: ${filterTitle}
+`)
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage({

@@ -47,25 +47,6 @@ export async function scoreList(
         filterinfo += `\nmods: ${asObj.filteredMods}`
     }
     if (asObj.filterMapTitle != null) {
-        filtereddata = filtereddata.filter(array =>
-            (
-                array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
-                +
-                array.beatmapset.title.toLowerCase().replaceAll(' ', '')
-                +
-                array.beatmap.version.toLowerCase().replaceAll(' ', '')
-            )
-                .includes(asObj.filterMapTitle.toLowerCase().replaceAll(' ', ''))
-            ||
-            asObj.filterMapTitle.toLowerCase().replaceAll(' ', '')
-                .includes((
-                    array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
-                    +
-                    array.beatmapset.title.toLowerCase().replaceAll(' ', '')
-                    +
-                    array.beatmap.version.toLowerCase().replaceAll(' ', '')
-                ))
-        )
         filterinfo += `\nmap: ${asObj.filterMapTitle}`
     }
 
