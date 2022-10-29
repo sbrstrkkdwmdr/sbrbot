@@ -2423,7 +2423,13 @@ export async function firsts(input: extypes.commandInput) {
         }
         input.overrides = {
             mode: firstscoresdata?.[0]?.mode ?? 'osu',
-            id: firstscoresdata?.[pid]?.best_id
+            id: firstscoresdata?.[pid]?.best_id,
+            commanduser,
+            commandAs: input.commandType
+        }
+                input.commandType = 'other';
+        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
+            return;
         }
         await scoreparse(input)
         return;
@@ -2836,8 +2842,14 @@ export async function maplb(input: extypes.commandInput) {
             }
             input.overrides = {
                 mode: lbdata?.[0]?.mode ?? 'osu',
-                id: lbdata?.[pid]?.best_id
+                id: lbdata?.[pid]?.best_id,
+                commanduser,
+                commandAs: input.commandType
             }
+                input.commandType = 'other';
+        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
+            return;
+        }
             await scoreparse(input)
             return;
         }
@@ -2974,8 +2986,14 @@ export async function maplb(input: extypes.commandInput) {
             }
             input.overrides = {
                 mode: lbdata?.[0]?.mode ?? 'osu',
-                id: lbdata?.[pid]?.best_id
+                id: lbdata?.[pid]?.best_id,
+                commanduser,
+                commandAs: input.commandType
             }
+                input.commandType = 'other';
+        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
+            return;
+        }
             await scoreparse(input)
             return;
         }
@@ -3616,7 +3634,13 @@ export async function nochokes(input: extypes.commandInput) {
         }
         input.overrides = {
             mode: nochokedata?.[0]?.mode ?? 'osu',
-            id: nochokedata?.[pid]?.best_id
+            id: nochokedata?.[pid]?.best_id,
+            commanduser,
+            commandAs: input.commandType
+        }
+                input.commandType = 'other';
+        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
+            return;
         }
         await scoreparse(input)
         return;
@@ -4297,7 +4321,13 @@ export async function osutop(input: extypes.commandInput) {
         }
         input.overrides = {
             mode: osutopdata?.[0]?.mode ?? 'osu',
-            id: osutopdata?.[pid]?.best_id
+            id: osutopdata?.[pid]?.best_id,
+            commanduser,
+            commandAs: input.commandType
+        }
+                input.commandType = 'other';
+        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
+            return;
         }
         await scoreparse(input)
         return;
@@ -4957,7 +4987,13 @@ export async function pinned(input: extypes.commandInput) {
         }
         input.overrides = {
             mode: pinnedscoresdata?.[0]?.mode ?? 'osu',
-            id: pinnedscoresdata?.[pid]?.best_id
+            id: pinnedscoresdata?.[pid]?.best_id,
+            commanduser,
+            commandAs: input.commandType
+        }
+                input.commandType = 'other';
+        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
+            return;
         }
         await scoreparse(input)
         return;
@@ -6247,6 +6283,12 @@ export async function scoreparse(input: extypes.commandInput) {
         if (input.overrides?.mode != null) {
             scoremode = input.overrides.mode
         }
+        if(input.overrides?.commanduser != null){
+            commanduser = input.overrides.commanduser
+        }
+        if(input.overrides?.commandAs != null){
+            input.commandType = input.overrides.commandAs
+        }
     }
 
 
@@ -6652,10 +6694,10 @@ export async function scores(input: extypes.commandInput) {
             input.args = cleanArgs(input.args);
 
             mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map
-            if(mapid != null){
+            if (mapid != null) {
                 input.args.splice(input.args.indexOf(input.args.find(arg => arg.includes('https://osu.ppy.sh/'))), 1)
             }
-            
+
             user = input.args.join(' ')
 
             if (!input.args[0] || input.args.join(' ').includes(searchid) || user == undefined) {
@@ -7019,7 +7061,13 @@ export async function scores(input: extypes.commandInput) {
             mode: scoredata?.[0]?.mode ?? 'osu',
             id: scoredata.slice().sort((a, b) =>
                 parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
-            )?.[pid]?.best_id
+            )?.[pid]?.best_id,
+            commanduser,
+            commandAs: input.commandType
+        }
+                input.commandType = 'other';
+        if(input.overrides.id == null || typeof input.overrides.id == 'undefined'){
+            return;
         }
         await scoreparse(input)
         return;
@@ -7746,8 +7794,18 @@ export async function map(input: extypes.commandInput) {
             break;
     }
     if (input.overrides != null) {
-        overwriteModal = input.overrides.overwriteModal ?? overwriteModal
-        mapid = input.overrides.id ?? mapid
+        if(input.overrides?.overwriteModal != null){
+            overwriteModal = input?.overrides?.overwriteModal ?? overwriteModal
+        }
+        if(input.overrides?.id != null){
+            mapid = input?.overrides?.id ?? mapid
+        }
+        if(input.overrides?.commanduser != null){
+            commanduser = input.overrides.commanduser
+        }
+        if(input.overrides?.commandAs != null){
+            input.commandType = input.overrides.commandAs
+        }
     }
 
     //==============================================================================================================================================================================================
@@ -8733,6 +8791,8 @@ export async function userBeatmaps(input: extypes.commandInput) {
     let user;
     let searchid;
     let page = 1;
+    let parseMap = false;
+    let parseId;
 
     let commanduser: Discord.User;
 
@@ -8793,6 +8853,12 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-reverse'), 1);
             }
 
+            if (input.args.includes('-parse')) {
+                parseMap = true;
+                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
+                input.args.splice(input.args.indexOf('-parse'), 2);
+            }
+
             input.args = cleanArgs(input.args);
 
             user = input.args.join(' ');
@@ -8813,6 +8879,11 @@ export async function userBeatmaps(input: extypes.commandInput) {
             sort = input.obj.options.getString('sort') ?? 'dateadded';
             //@ts-expect-error options property does not exist on message
             reverse = input.obj.options.getBoolean('reverse') ?? false;
+            //@ts-expect-error options property does not exist on message
+            parseId = input.obj.options.getInteger('parse');
+            if (parseId != null) {
+                parseMap = true
+            }
 
         }
             //==============================================================================================================================================================================================
@@ -9046,6 +9117,27 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
     osufunc.debug(maplistdata, 'command', 'userbeatmaps', input.obj.guildId, 'mapListData');
     func.storeFile(maplistdata, input.absoluteID, 'maplistdata');
+
+    if(parseMap == true){
+        let pid = parseInt(parseId) - 1
+        if (pid < 0) {
+            pid = 0;
+        }
+        if (pid > maplistdata.length) {
+            pid = maplistdata.length - 1;
+        }
+        input.overrides = {
+            id: maplistdata[pid]?.beatmaps[0]?.id,
+            commanduser,
+            commandAs: input.commandType
+        }
+        input.commandType = 'other';
+        if(input.overrides.id == null){
+            return;
+        }
+        await map(input)
+        return;
+    }
 
     if (page >= Math.ceil(maplistdata.length / 5)) {
         page = Math.ceil(maplistdata.length / 5) - 1

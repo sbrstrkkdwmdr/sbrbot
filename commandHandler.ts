@@ -421,7 +421,8 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
             case 'pp':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     const overrides = {
-                        type: 'pp'
+                        type: 'pp',
+                        commandAs: commandType
                     }
                     osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
                 } else {
@@ -431,7 +432,8 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
             case 'rank':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     const overrides = {
-                        type: 'rank'
+                        type: 'rank',
+                        commandAs: commandType
                     }
                     osucmds.rankpp({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache })
                 } else {

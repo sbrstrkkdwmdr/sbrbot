@@ -6,6 +6,7 @@ import osucmds = require('./commands/cmdosu');
 import admincmds = require('./commands/cmdAdmin');
 import misccmds = require('./commands/cmdMisc');
 import checkcmds = require('./commands/cmdChecks');
+import extypes = require('./src/types/extratypes');
 
 module.exports = (userdata, client, config, oncooldown, statsCache) => {
 
@@ -24,7 +25,7 @@ module.exports = (userdata, client, config, oncooldown, statsCache) => {
 
         //buttonType-baseCommand-userId-commandId
 
-        const commandType = 'button';
+        const commandType:extypes.commandType = 'button';
         const overrides = {
             user: null,
             page: null,
@@ -34,6 +35,7 @@ module.exports = (userdata, client, config, oncooldown, statsCache) => {
             ex: null,
             id: null,
             overwriteModal: null,
+            commandAs: commandType,
         }
         if (specid && specid != interaction.user.id) {
             interaction.deferUpdate()

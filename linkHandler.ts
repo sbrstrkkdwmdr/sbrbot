@@ -22,7 +22,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings) => {
         const args = []
         const obj = message
         let parse = null
-        const commandType = 'link'
+        const commandType:extypes.commandType = 'link'
         if (!(message.content.startsWith('http') || message.content.includes('osu.') || message.attachments.size > 0)) {
             return;
         }
@@ -33,6 +33,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings) => {
             sort: null,
             reverse: null,
             ex: null,
+            commandAs: commandType
         }
         let absoluteID = null
 

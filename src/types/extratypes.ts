@@ -167,7 +167,7 @@ type dbUser = {
     maniarank: number,
 }
 
-type commandType = 'message' | 'interaction' | 'button' | 'link'
+type commandType = 'message' | 'interaction' | 'button' | 'link' | 'other'
 
 // type commandObject = any//Discord.Message | Discord.CommandInteraction | Discord.ButtonInteraction
 type commandObject = Discord.Message<any> | Discord.ChatInputCommandInteraction<any> | Discord.ButtonInteraction<any>
@@ -182,6 +182,8 @@ type overrides = {
     id?: string | number,
     overwriteModal?: Discord.SelectMenuComponent | Discord.SelectMenuBuilder,
     type?: string,
+    commanduser?: Discord.User,
+    commandAs: commandType,
 } | null
 
 type data = Sequelize.ModelStatic<any>

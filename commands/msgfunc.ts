@@ -1,5 +1,6 @@
 import extypes = require('../src/types/extraTypes');
 import Discord = require('discord.js');
+import log = require('../src/log');
 export async function sendMessage(input: {
     commandType: extypes.commandType
     obj: extypes.commandObject,
@@ -121,6 +122,7 @@ export async function sendMessage(input: {
             }
         }
     } catch (error) {
+        log.errLog('message error', error);
         return error;
     }
     return true;
