@@ -596,11 +596,21 @@ const osucmds: commandInfo[] = [
     {
         name: 'lb',
         description: 'Shows the leaderboard of the current server',
-        usage: 'lb',
-        slashusage: 'lb',
+        usage: 'lb [-(mode)]',
+        slashusage: 'lb [mode]',
         examples: [],
         aliases: [],
         options: [
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode to show the leaderboard in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu',
+                examples: ['-taiko', 'mode:mania'],
+                commandTypes: ['message', 'interaction']
+            },
             {
                 name: 'page',
                 type: 'integer',
@@ -1882,8 +1892,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'userbeatmaps',
         description: 'Shows a user\'s beatmaps (favourites/ranked/pending/graveyard/loved)',
-        usage: 'userbeatmaps [user] [-(type)] [-reverse] [-page/-p]',
-        slashusage: 'userbeatmaps [user] [type] [reverse] [page] [sort]',
+        usage: 'userbeatmaps [user] [-(type)] [-reverse] [-page/-p] [-parse] [-?]',
+        slashusage: 'userbeatmaps [user] [type] [reverse] [page] [sort] [parse] [filter]',
         examples: [
             {
                 text: 'PREFIXMSGubm sotarks -p 4 -ranked',
@@ -1943,6 +1953,26 @@ const osucmds: commandInfo[] = [
             options: ['Title', 'Artist', 'Difficulty', 'Status', 'Fails', 'Plays', 'Date Added', 'Favourites', 'BPM', 'CS', 'AR', 'OD', 'HP', 'Length'],
             defaultValue: 'Date Added',
             examples: ['sort:title'],
+            commandTypes: ['message', 'interaction']
+        },
+        {
+            name: 'parse',
+            type: 'integer',
+            required: false,
+            description: 'Parses the beatmap with the given index',
+            options: ['N/A'],
+            defaultValue: '1',
+            examples: ['parse:3', '-parse 727'],
+            commandTypes: ['message', 'interaction']
+        },
+        {
+            name: 'filter',
+            type: 'string',
+            required: false,
+            description: 'Filters the beatmaps by the given string',
+            options: ['N/A'],
+            defaultValue: 'N/A',
+            examples: ['filter:hard', '-? "blue dragon"'],
             commandTypes: ['message', 'interaction']
         }
         ]
