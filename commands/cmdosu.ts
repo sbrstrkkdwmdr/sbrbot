@@ -7716,6 +7716,15 @@ export async function map(input: extypes.commandInput) {
             //@ts-expect-error author property does not exist on interaction
             commanduser = input.obj.author;
 
+            if(input.args.includes('-detailed')){
+                detailed = true;
+                input.args.splice(input.args.indexOf('-detailed'), 1)
+            }
+            if(input.args.includes('-d')){
+                detailed = true;
+                input.args.splice(input.args.indexOf('-d'), 1)
+            }
+
             if (input.args.join(' ').includes('"')) {
                 maptitleq = input.args.join(' ').substring(
                     input.args.join(' ').indexOf('"') + 1,
