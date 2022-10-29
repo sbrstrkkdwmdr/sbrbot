@@ -18,6 +18,12 @@ import msgfunc = require('./msgfunc');
 import embedStuff = require('../src/embed');
 import replayparser = require('osureplayparser');
 import trackfunc = require('../src/trackfunc');
+import {
+    CatchPerformanceAttributes,
+    ManiaPerformanceAttributes, OsuPerformanceAttributes, PerformanceAttributes, TaikoPerformanceAttributes
+} from 'rosu-pp';
+
+
 
 export async function name(input: extypes.commandInput) {
 }
@@ -5709,7 +5715,7 @@ export async function recent(input: extypes.commandInput) {
         }
         let rspp: string | number = 0;
         let ppissue: string = '';
-        let ppcalcing
+        let ppcalcing: PerformanceAttributes[];
         try {
             ppcalcing = await osufunc.scorecalc({
                 mods: curscore.mods.join('').length > 1 ?
@@ -5721,29 +5727,10 @@ export async function recent(input: extypes.commandInput) {
                 maxcombo: curscore.max_combo,
                 score: curscore.score,
                 calctype: 0,
-                passedObj: 0,
-                failed: false
-            },
+                passedObj: embedStuff.getTotalHits(curscore.mode, curscore),
+            })
 
-            )
-            if (curscore.rank == 'F') {
-                ppcalcing = await osufunc.scorecalc({
-                    mods: curscore.mods.join('').length > 1 ?
-                        curscore.mods.join('') : 'NM',
-                    gamemode: curscore.mode,
-                    mapid: curscore.beatmap.id,
-                    miss: gamehits.count_miss,
-                    acc: curscore.accuracy,
-                    maxcombo: curscore.max_combo,
-                    score: curscore.score,
-                    calctype: 0,
-                    passedObj: totalhits,
-                    failed: true
-                }
-                )
-            }
-
-            totaldiff = ppcalcing[0].stars.toFixed(2)
+            totaldiff = ppcalcing[0].difficulty.stars.toFixed(2)
 
             rspp =
                 curscore.pp ?
@@ -6130,7 +6117,6 @@ export async function replayparse(input: extypes.commandInput) {
             score: replay.score,
             calctype: 0,
             passedObj: totalhits,
-            failed: failed
         })
         ppissue = ''
     } catch (error) {
@@ -6450,7 +6436,7 @@ export async function scoreparse(input: extypes.commandInput) {
         hitlist = `${gamehits.count_geki}/${gamehits.count_300}/${gamehits.count_katu}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
         fcacc = osumodcalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy
     }
-    let ppcalcing;
+    let ppcalcing: PerformanceAttributes[];
     try {
         ppcalcing = await osufunc.scorecalc({
             mods: scoredata.mods.join('').length > 1 ?
@@ -6462,18 +6448,50 @@ export async function scoreparse(input: extypes.commandInput) {
             maxcombo: scoredata.max_combo,
             score: scoredata.score,
             calctype: 0,
-            passedObj: 0,
-            failed: false
+            passedObj: embedStuff.getTotalHits(scoredata.mode, scoredata),
         })
 
         ppissue = '';
         osufunc.debug(ppcalcing, 'command', 'scoreparse', input.obj.guildId, 'ppCalcing');
     } catch (error) {
-        ppcalcing = [{
-            pp: 0.000
-        }, {
-            pp: 0.000
-        }]
+        const ppComputedTemp: PerformanceAttributes = {
+            mode: mapdata.mode_int,
+            pp: 0,
+            difficulty: {
+                mode: mapdata.mode_int,
+                stars: mapdata.difficulty_rating,
+                maxCombo: mapdata.max_combo,
+                aim: 0,
+                speed: 0,
+                flashlight: 0,
+                sliderFactor: 0,
+                speedNoteCount: 0,
+                ar: mapdata.ar,
+                od: mapdata.accuracy,
+                nCircles: mapdata.count_circles,
+                nSliders: mapdata.count_sliders,
+                nSpinners: mapdata.count_spinners,
+                stamina: 0,
+                rhythm: 0,
+                color: 0,
+                hitWindow: 0,
+                nFruits: mapdata.count_circles,
+                nDroplets: mapdata.count_sliders,
+                nTinyDroplets: mapdata.count_spinners,
+            },
+            ppAcc: 0,
+            ppAim: 0,
+            ppDifficulty: 0,
+            ppFlashlight: 0,
+            ppSpeed: 0,
+            effectiveMissCount: 0,
+
+        };
+        ppcalcing = [
+            ppComputedTemp,
+            ppComputedTemp,
+            ppComputedTemp
+        ]
         ppissue = 'Error - pp calculator could not fetch beatmap'
 
     }
@@ -7536,11 +7554,11 @@ export async function map(input: extypes.commandInput) {
                 mapid = input.args[0];
             }
 
-            if (input.args.join(' ').includes('+')) {
-                mapmods = input.args.join(' ').split('+')[1]
-            }
             if (input.args.join(' ').includes('"')) {
                 maptitleq = input.args.join(' ').split('"')[1]
+            }
+            if (input.args.join(' ').includes('+')) {
+                mapmods = input.args.join(' ').split('+')[1]
             }
 
             input.args = cleanArgs(input.args);
@@ -8044,9 +8062,9 @@ export async function map(input: extypes.commandInput) {
             mapimg = emojis.gamemodes.mania;
             break;
     }
-    let ppComputed: object;
+    let ppComputed: PerformanceAttributes[];
     let ppissue: string;
-    let totaldiff = mapdata.difficulty_rating;
+    let totaldiff: string | number = mapdata.difficulty_rating;
     try {
         ppComputed = await osufunc.mapcalc({
             mods: mapmods,
@@ -8056,7 +8074,7 @@ export async function map(input: extypes.commandInput) {
         })
         ppissue = '';
         try {
-            totaldiff = ppComputed[0].stars?.toFixed(2)
+            totaldiff = ppComputed[0].difficulty.stars?.toFixed(2)
         } catch (error) {
             totaldiff = mapdata.difficulty_rating;
         }
@@ -8072,25 +8090,38 @@ export async function map(input: extypes.commandInput) {
         if ((tstmods.includes('DT') || tstmods.includes('NC')) && tstmods.includes('HT')) {
             ppissue += '\nInvalid mod combinations: DT/NC + HT';
         }
-        const ppComputedTemp = {
-            "mode": 0,
-            "stars": 1.00,
-            "pp": 0.0,
-            "ppAcc": 0.0,
-            "ppAim": 0.0,
-            "ppFlashlight": 0.0,
-            "ppSpeed": 0.0,
-            "ppStrain": 0.0,
-            "ar": 1,
-            "cs": 1,
-            "hp": 1,
-            "od": 1,
-            "bpm": 1,
-            "clockRate": 1,
-            "timePreempt": null,
-            "greatHitWindow": 0,
-            "nCircles": 0,
-            "nSliders": 0
+        const ppComputedTemp: PerformanceAttributes = {
+            mode: mapdata.mode_int,
+            pp: 0,
+            difficulty: {
+                mode: mapdata.mode_int,
+                stars: mapdata.difficulty_rating,
+                maxCombo: mapdata.max_combo,
+                aim: 0,
+                speed: 0,
+                flashlight: 0,
+                sliderFactor: 0,
+                speedNoteCount: 0,
+                ar: mapdata.ar,
+                od: mapdata.accuracy,
+                nCircles: mapdata.count_circles,
+                nSliders: mapdata.count_sliders,
+                nSpinners: mapdata.count_spinners,
+                stamina: 0,
+                rhythm: 0,
+                color: 0,
+                hitWindow: 0,
+                nFruits: mapdata.count_circles,
+                nDroplets: mapdata.count_sliders,
+                nTinyDroplets: mapdata.count_spinners,
+            },
+            ppAcc: 0,
+            ppAim: 0,
+            ppDifficulty: 0,
+            ppFlashlight: 0,
+            ppSpeed: 0,
+            effectiveMissCount: 0,
+
         };
         ppComputed = [
             ppComputedTemp,
@@ -8165,36 +8196,40 @@ export async function map(input: extypes.commandInput) {
     if (detailed == true) {
         switch (mapdata.mode) {
             case 'osu': {
-                detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Aim: ${ppComputed[0].ppAim?.toFixed(2)} | Speed: ${ppComputed[0].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} \n ` +
-                    `**99**: ${ppComputed[1].pp?.toFixed(2)} | Aim: ${ppComputed[1].ppAim?.toFixed(2)} | Speed: ${ppComputed[1].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} \n ` +
-                    `**97**: ${ppComputed[3].pp?.toFixed(2)} | Aim: ${ppComputed[3].ppAim?.toFixed(2)} | Speed: ${ppComputed[3].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} \n ` +
-                    `**95**: ${ppComputed[5].pp?.toFixed(2)} | Aim: ${ppComputed[5].ppAim?.toFixed(2)} | Speed: ${ppComputed[5].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} \n ` +
+                const curattr = ppComputed as OsuPerformanceAttributes[]
+                detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Aim: ${curattr[0].ppAim?.toFixed(2)} | Speed: ${curattr[0].ppSpeed?.toFixed(2)} | Acc: ${curattr[0].ppAcc?.toFixed(2)} \n ` +
+                    `**99**: ${curattr[1].pp?.toFixed(2)} | Aim: ${curattr[1].ppAim?.toFixed(2)} | Speed: ${curattr[1].ppSpeed?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} \n ` +
+                    `**97**: ${curattr[3].pp?.toFixed(2)} | Aim: ${curattr[3].ppAim?.toFixed(2)} | Speed: ${curattr[3].ppSpeed?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} \n ` +
+                    `**95**: ${curattr[5].pp?.toFixed(2)} | Aim: ${curattr[5].ppAim?.toFixed(2)} | Speed: ${curattr[5].ppSpeed?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} \n ` +
                     `${modissue}\n${ppissue}`
             }
                 break;
             case 'taiko': {
-                detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} | Strain: ${ppComputed[0].ppStrain?.toFixed(2)} \n ` +
-                    `**99**: ${ppComputed[1].pp?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} | Strain: ${ppComputed[1]?.ppStrain?.toFixed(2)} \n ` +
-                    `**97**: ${ppComputed[3].pp?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} | Strain: ${ppComputed[3]?.ppStrain?.toFixed(2)} \n ` +
-                    `**95**: ${ppComputed[5].pp?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} | Strain: ${ppComputed[5]?.ppStrain?.toFixed(2)} \n ` +
+                const curattr = ppComputed as TaikoPerformanceAttributes[]
+                detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Acc: ${curattr[0].ppAcc?.toFixed(2)} | Strain: ${curattr[0].ppDifficulty?.toFixed(2)} \n ` +
+                    `**99**: ${curattr[1].pp?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
+                    `**97**: ${curattr[3].pp?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
+                    `**95**: ${curattr[5].pp?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
                     `${modissue}\n${ppissue}`
             }
                 break;
             case 'fruits': {
-                detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} \n ` +
-                    `**99**: ${ppComputed[1].pp?.toFixed(2)} \n ` +
-                    `**98**: ${ppComputed[2].pp?.toFixed(2)} \n ` +
-                    `**97**: ${ppComputed[3].pp?.toFixed(2)} \n ` +
-                    `**96**: ${ppComputed[4].pp?.toFixed(2)} \n ` +
-                    `**95**: ${ppComputed[5].pp?.toFixed(2)} \n ` +
+                const curattr = ppComputed as CatchPerformanceAttributes[]
+                detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Strain: ${curattr[0].ppDifficulty?.toFixed(2)} \n ` +
+                    `**99**: ${curattr[1].pp?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
+                    `**97**: ${curattr[3].pp?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
+                    `**95**: ${curattr[5].pp?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
                     `${modissue}\n${ppissue}`
             }
                 break;
             case 'mania': {
-                detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} | Strain: ${ppComputed[0].ppStrain?.toFixed(2)} \n ` +
-                    `**99**: ${ppComputed[1].pp?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} | Strain: ${ppComputed[1].ppStrain?.toFixed(2)} \n ` +
-                    `**97**: ${ppComputed[3].pp?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} | Strain: ${ppComputed[3].ppStrain?.toFixed(2)} \n ` +
-                    `**95**: ${ppComputed[5].pp?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} | Strain: ${ppComputed[5].ppStrain?.toFixed(2)} \n ` +
+                const curattr = ppComputed as ManiaPerformanceAttributes[]
+                detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} \n ` +
+                    `**99**: ${curattr[1].pp?.toFixed(2)} \n ` +
+                    `**98**: ${curattr[2].pp?.toFixed(2)} \n ` +
+                    `**97**: ${curattr[3].pp?.toFixed(2)} \n ` +
+                    `**96**: ${curattr[4].pp?.toFixed(2)} \n ` +
+                    `**95**: ${curattr[5].pp?.toFixed(2)} \n ` +
                     `${modissue}\n${ppissue}`
             }
                 break;
@@ -8440,7 +8475,7 @@ export async function maplocal(input: extypes.commandInput) {
         errtxt += '\nError - invalid section: [Metadata]'
         metadata = errmap.split('[Metadata]')[1].split('[')[0]
     }
-    let ppcalcing;
+    let ppcalcing: PerformanceAttributes[];
     try {
         ppcalcing = await osufunc.mapcalclocal(mods, 'osu', null, 0)
     } catch (error) {

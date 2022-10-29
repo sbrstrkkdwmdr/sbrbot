@@ -73,8 +73,7 @@ export async function mapcalc(
     },
     mapIsRank?: string
 ) {
-    let ppl
-    let mapscore
+    let ppl:rosu.PerformanceAttributes[]
     const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
 
     switch (calctyper) {
@@ -90,47 +89,20 @@ export async function mapcalc(
 
             const mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
 
-            mapscore = {
-                path: mapPath,
-                params: [
-                    {
-                        mode: obj.gamemode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        acc: 100,
+            const map = new rosu.Beatmap({ path: mapPath })
 
-                    },
-                    {
-                        mode: obj.gamemode,
+            let curacc = 100
+            ppl = []
+            for (let i = 0; i < 10; i++) {
+                ppl.push((
+                    new rosu.Calculator({
+                        mode: osumodcalc.ModeNameToInt(obj.gamemode),
                         mods: osumodcalc.ModStringToInt(mods),
-                        acc: 99,
-
-                    },
-                    {
-                        mode: obj.gamemode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        acc: 98,
-
-                    },
-                    {
-                        mode: obj.gamemode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        acc: 97,
-
-                    },
-                    {
-                        mode: obj.gamemode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        acc: 96
-                    },
-                    {
-                        mode: obj.gamemode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        acc: 95,
-                    }
-                ]
+                        acc: 100 - i
+                    })
+                ).performance(map)
+                )
             }
-
-            ppl = await rosu.calculate(mapscore);
         }
             break;
         case 1:
@@ -169,11 +141,7 @@ export async function scorecalc(
     },
     mapIsRank?: string
 ) {
-    let ppl;
-    let scorenofc;
-    let scorefc;
-    const failed = obj.failed ?? false;
-
+    let ppl:rosu.PerformanceAttributes[];
 
     const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
     switch (obj.calctype) {
@@ -189,6 +157,11 @@ export async function scorecalc(
                 if (!(typeof mapPath == 'string')) {
                     return mapPath;
                 }
+
+                const map = new rosu.Beatmap({
+                    path: mapPath
+                })
+
                 const mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
 
 
@@ -246,56 +219,53 @@ export async function scorecalc(
                 if (isNaN(newacc)) {
                     newacc = obj.acc;
                 }
-                let basescore: calcScore = {
-                    mode,
-                    mods: osumodcalc.ModStringToInt(mods),
-                    combo: obj.maxcombo,
-                    acc: obj?.acc ? obj.acc * 100 : 100,
-                    score: obj.score != null && !isNaN(obj.score) ? obj.score : 0,
-                }
-                if (failed == true) {
-                    basescore = {
+                const calcScores = [
+                    new rosu.Calculator({
                         mode,
                         mods: osumodcalc.ModStringToInt(mods),
                         combo: obj.maxcombo,
                         acc: obj?.acc ? obj.acc * 100 : 100,
-                        score: obj.score != null && !isNaN(obj.score) ? obj.score : 0,
                         passedObjects: obj.passedObj
-                    }
-                }
-                if (obj.hit300 != null && !isNaN(obj.hit300)) {
-                    basescore.n300 = obj.hit300
-                }
-                if (obj.hit100 != null && !isNaN(obj.hit100)) {
-                    basescore.n100 = obj.hit100
-                }
-                if (obj.hit50 != null && !isNaN(obj.hit50)) {
-                    basescore.n50 = obj.hit50
-                }
-                if (obj.miss != null && !isNaN(obj.miss)) {
-                    basescore.nMisses = obj.miss
-                }
-                if (obj.hitkatu != null && !isNaN(obj.hitkatu)) {
-                    basescore.nKatu = obj.hitkatu
-                }
-                scorenofc = {
-                    path: mapPath,
-                    params: [
-                        basescore,
-                        {
-                            mode,
-                            mods: osumodcalc.ModStringToInt(mods),
-                            acc: newacc * 100,
-                        },
-                        {
-                            mode,
-                            mods: osumodcalc.ModStringToInt(mods),
-                            acc: 100,
-                        }
-                    ]
+                    }).performance(map)
+                ]
+
+                let baseScore: calcScore = {
+                    mode,
+                    mods: osumodcalc.ModStringToInt(mods),
+                    combo: obj.maxcombo,
+                    acc: obj?.acc ? obj.acc * 100 : 100,
+                    passedObjects: obj.passedObj
                 }
 
-                ppl = await rosu.calculate(scorenofc);
+                if (obj.hit300 != null && !isNaN(obj.hit300)) {
+                    baseScore.n300 = obj.hit300
+                }
+                if (obj.hit100 != null && !isNaN(obj.hit100)) {
+                    baseScore.n100 = obj.hit100
+                }
+                if (obj.hit50 != null && !isNaN(obj.hit50)) {
+                    baseScore.n50 = obj.hit50
+                }
+                if (obj.miss != null && !isNaN(obj.miss)) {
+                    baseScore.nMisses = obj.miss
+                }
+                if (obj.hitkatu != null && !isNaN(obj.hitkatu)) {
+                    baseScore.nKatu = obj.hitkatu
+                }
+                ppl = [
+                    new rosu.Calculator(baseScore).performance(map),
+                    new rosu.Calculator({
+                        mode,
+                        mods: osumodcalc.ModStringToInt(mods),
+                        acc: newacc * 100,
+                    }).performance(map),
+                    new rosu.Calculator({
+                        mode,
+                        mods: osumodcalc.ModStringToInt(mods),
+                        acc: 100,
+                    }).performance(map)
+                ]
+
 
             }
             break;
@@ -325,7 +295,12 @@ export async function straincalc(mapid: number, mods: string, calctype: number, 
             }
             switch (mode) {
                 case 'osu': {
-                    const strains1 = JSON.parse(JSON.stringify(await rosu.strains(`${mapPath}`, osumodcalc.ModStringToInt(mods)), null, 2));
+                    const strains1 = JSON.parse(JSON.stringify(
+                        new rosu.Calculator({
+                            mods: osumodcalc.ModStringToInt(mods)
+                        }).strains(new rosu.Beatmap({ path: mapPath })),
+                        null, 2
+                    ));
                     const aimval = strains1.aim;
                     const aimnoslideval = strains1.aimNoSliders;
                     const speedval = strains1.speed;
@@ -376,7 +351,10 @@ export async function straincalclocal(path: string | null, mods: string, calctyp
         case 0: default:
             switch (mode) {
                 case 'osu': {
-                    const strains1 = JSON.parse(JSON.stringify(await rosu.strains(`${path}`, osumodcalc.ModStringToInt(mods)), null, 2));
+                    const strains1 = JSON.parse(JSON.stringify(
+                        new rosu.Calculator({
+                            mods: osumodcalc.ModStringToInt(mods)
+                        }).strains(new rosu.Beatmap({ path })), null, 2));
                     const aimval = strains1.aim;
                     const aimnoslideval = strains1.aimNoSliders;
                     const speedval = strains1.speed;
@@ -563,7 +541,7 @@ export async function mapcalclocal(
     mods: string, gamemode: string, path: string | null,
     calctype: number | null,
 ) {
-    let ppl
+    let ppl:rosu.PerformanceAttributes[]
     let mapscore
     const calctyper = osumodcalc.ModeNameToInt(gamemode)
 
@@ -574,47 +552,17 @@ export async function mapcalclocal(
     switch (calctyper) {
         case 0: default:
 
-            mapscore = {
-                path: path,
-                params: [
-                    {
-                        mode: gamemode,
+            ppl = []
+            for (let i = 0; i < 10; i++) {
+                ppl.push((
+                    new rosu.Calculator({
+                        mode: osumodcalc.ModeNameToInt(gamemode),
                         mods: osumodcalc.ModStringToInt(mods),
-                        acc: 100,
-
-                    },
-                    {
-                        mode: gamemode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        acc: 99,
-
-                    },
-                    {
-                        mode: gamemode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        acc: 98,
-
-                    },
-                    {
-                        mode: gamemode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        acc: 97,
-
-                    },
-                    {
-                        mode: gamemode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        acc: 96
-                    },
-                    {
-                        mode: gamemode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        acc: 95,
-                    }
-                ]
+                        acc: 100 - i
+                    })
+                ).performance(new rosu.Beatmap({ path }))
+                )
             }
-
-            ppl = await rosu.calculate(mapscore);
             break;
         case 1:
             break;
@@ -957,99 +905,99 @@ export type apiGetStringsDep =
     'user_get_scores_map' |
     'user_get_maps' | 'user_get_maps_alt'
 
-    
-export type apiGetStrings = 
-//custom
-'custom' | 
-'map_get' | 'map' | //beatmap
-'map_get_md5' | //beatmap_lookup
-'mapset_get' | 'mapset' | //beatmapset
-'mapset_search' | //beatmapset search
-'score_get' | //score
-'scores_get_best' | 'osutop' | 'best' | 'osutop_alt' | //user scores best
-'scores_get_first' | 'firsts' | 'firsts_alt' | //user scores first
-'scores_get_pinned' | 'pinned' | 'pinned_alt' | //user scores pinned
-'scores_get_recent' | 'recent' | 'recent_alt' | //user scores recent
-'scores_get_map' | 'maplb' | //scores map
-'user_get' | //user
-'user_get_most_played' | 'most_played' | //user most played
-'user_get_scores_map' | //user scores map
-'user_get_maps' | 'user_get_maps_alt' | //user maps
 
-//beatmaps
-'beatmap_lookup' | //returns Beatmap
-'beatmap_user_score' | //returns BeatmapUserScore
-'beatmap_user_scores' | //returns Score[]
-'beatmap_scores' | //returns BeatmapScores (CHANGING)
-'beatmaps' | //returns Beatmap[]
-'beatmap' | //returns Beatmap
-'beatmap_attributes' | //returns DifficultyAttributes
-'beatmapset_discussion_posts' | //returns (WIP)
-'beatmapset_discussion_votes' | //returns (WIP)
-'beatmapset_discussions' | //returns (WIP)
-'beatmaps_solo_scores' | //(UNDOCUMENTED) (LAZER ONLY) 
-'beatmaps_solo_scores_token' | //(UNDOCUMENTED) (LAZER ONLY)
-'beatmapset_events' | //returns (UNDOCUMENTED) (WIP)
-'beatmapset_favourites' | //returns (UNDOCUMENTED) (LAZER ONLY)
-'beatmapset_search' | //returns (UNDOCUMENTED)
-'beatmapset_lookup' | //returns Beatmapset (UNDOCUMENTED)
-'beatmapset' | //returns Beatmapset (UNDOCUMENTED)
+export type apiGetStrings =
+    //custom
+    'custom' |
+    'map_get' | 'map' | //beatmap
+    'map_get_md5' | //beatmap_lookup
+    'mapset_get' | 'mapset' | //beatmapset
+    'mapset_search' | //beatmapset search
+    'score_get' | //score
+    'scores_get_best' | 'osutop' | 'best' | 'osutop_alt' | //user scores best
+    'scores_get_first' | 'firsts' | 'firsts_alt' | //user scores first
+    'scores_get_pinned' | 'pinned' | 'pinned_alt' | //user scores pinned
+    'scores_get_recent' | 'recent' | 'recent_alt' | //user scores recent
+    'scores_get_map' | 'maplb' | //scores map
+    'user_get' | //user
+    'user_get_most_played' | 'most_played' | //user most played
+    'user_get_scores_map' | //user scores map
+    'user_get_maps' | 'user_get_maps_alt' | //user maps
+
+    //beatmaps
+    'beatmap_lookup' | //returns Beatmap
+    'beatmap_user_score' | //returns BeatmapUserScore
+    'beatmap_user_scores' | //returns Score[]
+    'beatmap_scores' | //returns BeatmapScores (CHANGING)
+    'beatmaps' | //returns Beatmap[]
+    'beatmap' | //returns Beatmap
+    'beatmap_attributes' | //returns DifficultyAttributes
+    'beatmapset_discussion_posts' | //returns (WIP)
+    'beatmapset_discussion_votes' | //returns (WIP)
+    'beatmapset_discussions' | //returns (WIP)
+    'beatmaps_solo_scores' | //(UNDOCUMENTED) (LAZER ONLY) 
+    'beatmaps_solo_scores_token' | //(UNDOCUMENTED) (LAZER ONLY)
+    'beatmapset_events' | //returns (UNDOCUMENTED) (WIP)
+    'beatmapset_favourites' | //returns (UNDOCUMENTED) (LAZER ONLY)
+    'beatmapset_search' | //returns (UNDOCUMENTED)
+    'beatmapset_lookup' | //returns Beatmapset (UNDOCUMENTED)
+    'beatmapset' | //returns Beatmapset (UNDOCUMENTED)
 
 
-//changelog
-'changelog_build' | //returns Build
-'changelog_listing' | //returns {Build[],search{from?:string,limit:number,max_id?:number,stream?:string,to?:string},streams:UpdateStream[]}
-'changelog_build_lookup' | //returns Build (???)
+    //changelog
+    'changelog_build' | //returns Build
+    'changelog_listing' | //returns {Build[],search{from?:string,limit:number,max_id?:number,stream?:string,to?:string},streams:UpdateStream[]}
+    'changelog_build_lookup' | //returns Build (???)
 
-//chat
-'chat_tdl' | 
+    //chat
+    'chat_tdl' |
 
-//comments
-'comments_tdl' | 
+    //comments
+    'comments_tdl' |
 
-//forums
-'forum_tdl' |
+    //forums
+    'forum_tdl' |
 
-//home
-'home_tdl' |
+    //home
+    'home_tdl' |
 
-//multiplayer
-'multiplayer_tdl' |
+    //multiplayer
+    'multiplayer_tdl' |
 
-//news
-'news_tdl' |
+    //news
+    'news_tdl' |
 
-//notifications
-'notifications_tdl' |
+    //notifications
+    'notifications_tdl' |
 
-//oauth
-'oauth_tdl' |
+    //oauth
+    'oauth_tdl' |
 
-//rankings
-'rankings' | //returns Rankings
-'spotlights' | //returns Spotlights
+    //rankings
+    'rankings' | //returns Rankings
+    'spotlights' | //returns Spotlights
 
-//score
-'score' | //returns Score (UNDOCUMENTED)
-'score_download' | //returns `.osr` file (UNDOCUMENTED)
+    //score
+    'score' | //returns Score (UNDOCUMENTED)
+    'score_download' | //returns `.osr` file (UNDOCUMENTED)
 
-//users
-'me' | //returns User
-'kudosu' | //returns KudosuHistory[]
-'user_scores' | //returns Score[]
-'user_beatmaps' | //returns Beatmap[] or BeatmapPlaycount[]
-'user_recent_activity' | //returns Event[]
-'user' | //returns User
-'users' | //returns UserCompact[]
+    //users
+    'me' | //returns User
+    'kudosu' | //returns KudosuHistory[]
+    'user_scores' | //returns Score[]
+    'user_beatmaps' | //returns Beatmap[] or BeatmapPlaycount[]
+    'user_recent_activity' | //returns Event[]
+    'user' | //returns User
+    'users' | //returns UserCompact[]
 
-//wiki
-'wiki_tdl' |
+    //wiki
+    'wiki_tdl' |
 
-//Websocket
-'notification_connection' | 
-'notification_connection_logout' |
-'notification_connection_new' |
-'notification_connection_read'
+    //Websocket
+    'notification_connection' |
+    'notification_connection_logout' |
+    'notification_connection_new' |
+    'notification_connection_read'
 
 
 export async function searchUser(searchid: string, userdata: any, findMode: boolean) {

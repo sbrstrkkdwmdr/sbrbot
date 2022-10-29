@@ -22,7 +22,7 @@
         "discord.js": "^14.6.0",
         "node-fetch": "^2.6.7",
         "osureplayparser": "^1.0.1",
-        "rosu-pp": "^0.8.0",
+        "rosu-pp": "^0.9.1",
         "sequelize": "^6.25.0",
         "sqlite3": "^5.1.2",
         "tesseract.js": "^3.0.3",

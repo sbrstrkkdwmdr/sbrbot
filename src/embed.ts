@@ -193,179 +193,101 @@ export async function scoreList(
 
         const mapid = asObj.mapidOverride ?? curscore.beatmap.id;
 
-        if (asObj.detailed === true) {
-            const ranking = curscore.rank.toUpperCase()
-            const grade: string = gradeToEmoji(ranking);
-            const hitstats = curscore.statistics
-            const hitlist: string = hitList(
-                {
-                    gamemode: curscore.mode,
-                    count_geki: hitstats.count_geki,
-                    count_300: hitstats.count_300,
-                    count_katu: hitstats.count_katu,
-                    count_100: hitstats.count_100,
-                    count_50: hitstats.count_50,
-                    count_miss: hitstats.count_miss,
-                }
-            )
+        const ranking = curscore.rank.toUpperCase()
+        const grade: string = gradeToEmoji(ranking);
 
-            const tempMods = curscore.mods
-            let ifmods: string;
+        const hitstats = curscore.statistics
 
-            if (!tempMods || tempMods.join('') == '' || tempMods == null || tempMods == undefined) {
-                ifmods = ''
-            } else {
-                ifmods = '+' + tempMods.toString().replaceAll(",", '')
+        const hitlist: string = hitList(
+            {
+                gamemode: curscore.mode,
+                count_geki: hitstats.count_geki,
+                count_300: hitstats.count_300,
+                count_katu: hitstats.count_katu,
+                count_100: hitstats.count_100,
+                count_50: hitstats.count_50,
+                count_miss: hitstats.count_miss,
             }
+        )
 
-            let pptxt: string;
-            const ppcalcing =
-                await osufunc.scorecalc({
-                    mods: curscore.mods.join('').length > 1 ?
-                        curscore.mods.join('') : 'NM',
-                    gamemode: curscore.mode,
-                    mapid,
-                    miss: hitstats.count_miss,
-                    acc: curscore.accuracy,
-                    maxcombo: curscore.max_combo,
-                    score: curscore.score,
-                    calctype: 0,
-                    passedObj: 0,
-                    failed: false
-                })
-            if (curscore.accuracy != 1) {
-                if (curscore.pp == null || isNaN(curscore.pp)) {
-                    pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
-                } else {
-                    pptxt = `${curscore.pp.toFixed(2)}pp`
-                }
-                if (curscore.perfect == false) {
-                    pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`
-                }
-                pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`
-            } else {
-                if (curscore.pp == null || isNaN(curscore.pp)) {
-                    pptxt =
-                        `${await ppcalcing[0].pp.toFixed(2)}pp`
-                } else {
-                    pptxt =
-                        `${curscore.pp.toFixed(2)}pp`
-                }
-            }
-            let showtitle: string;
+        const tempMods = curscore.mods
+        let ifmods: string;
 
-            if (asObj.showMapTitle == true) {
-                showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}`
-            } else {
-                showtitle = `Score #${i + 1 + (asObj.page * 5)}${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods}`
-            }
-            if (asObj.showUserName == true) {
-                showtitle = `[${curscore.user.username}](https://osu.ppy.sh/u/${curscore.user.id})`
-            }
-            let weighted;
-            if (asObj.showWeights == true) {
-                weighted = `${(curscore?.weight?.pp)?.toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`
-            } else {
-                weighted = ''
-            }
-
-            scoresAsFields.push({
-                name: `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
-                value: `
-**${showtitle}**
-[**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${func.separateNum(curscore.score)} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
-${pptxt} | ${weighted}
-`,
-                inline: false
-            })
-            scoresAsArrStr.push(
-                `\n**#${i + 1 + (asObj.page * 5)} | **${showtitle}**
-[**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${func.separateNum(curscore.score)} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
-${pptxt} | ${weighted}
-
-`
-            )
+        if (!tempMods || tempMods.join('') == '' || tempMods == null || tempMods == undefined) {
+            ifmods = ''
         } else {
-            const ranking = curscore.rank.toUpperCase()
-            const grade: string = gradeToEmoji(ranking);
+            ifmods = '+' + osumodcalc.OrderMods(tempMods.join(''))
+        }
 
-            const hitstats = curscore.statistics
-
-            const hitlist: string = hitList(
-                {
-                    gamemode: curscore.mode,
-                    count_geki: hitstats.count_geki,
-                    count_300: hitstats.count_300,
-                    count_katu: hitstats.count_katu,
-                    count_100: hitstats.count_100,
-                    count_50: hitstats.count_50,
-                    count_miss: hitstats.count_miss,
-                }
-            )
-
-            const tempMods = curscore.mods
-            let ifmods: string;
-
-            if (!tempMods || tempMods.join('') == '' || tempMods == null || tempMods == undefined) {
-                ifmods = ''
-            } else {
-                ifmods = '+' + osumodcalc.OrderMods(tempMods.join(''))
-            }
-
-            let pptxt: string;
-
-
+        let pptxt: string;
+        const ppcalcing =
+            await osufunc.scorecalc({
+                mods: curscore.mods.join('').length > 1 ?
+                    curscore.mods.join('') : 'NM',
+                gamemode: curscore.mode,
+                mapid,
+                miss: hitstats.count_miss,
+                acc: curscore.accuracy,
+                maxcombo: curscore.max_combo,
+                score: curscore.score,
+                calctype: 0,
+                passedObj: 0,
+                failed: false
+            })
+        if (curscore.accuracy != 1) {
             if (curscore.pp == null || isNaN(curscore.pp)) {
-                const ppcalcing = await osufunc.scorecalc({
-                    mods: curscore.mods.join('').length > 1 ?
-                        curscore.mods.join('') : 'NM',
-                    gamemode: curscore.mode,
-                    mapid,
-                    miss: hitstats.count_miss,
-                    acc: curscore.accuracy,
-                    maxcombo: curscore.max_combo,
-                    score: curscore.score,
-                    calctype: 0,
-                    passedObj: 0,
-                    failed: false
-                })
+                pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
+            } else {
+                pptxt = `${curscore.pp.toFixed(2)}pp`
+            }
+            if (curscore.perfect == false) {
+                pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`
+            }
+            pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`
+        } else {
+            if (curscore.pp == null || isNaN(curscore.pp)) {
                 pptxt =
                     `${await ppcalcing[0].pp.toFixed(2)}pp`
             } else {
                 pptxt =
                     `${curscore.pp.toFixed(2)}pp`
             }
-
-            let showtitle: string;
-
-            if (asObj.showMapTitle == true) {
-                showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}\n`
-            } else {
-                showtitle = `[Score #${i + 1 + (asObj.page * 5)}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
-            }
-            if (asObj.showUserName == true) {
-                showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
-            }
-
-            scoresAsFields.push({
-                name: `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
-                value: `
-**${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${pptxt}
-\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
-`,
-                inline: false
-            })
-            scoresAsArrStr.push(
-                `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
-**${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${pptxt}
-\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
-`
-            )
         }
+
+        let showtitle: string;
+
+        if (asObj.showMapTitle == true) {
+            showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}\n`
+        } else {
+            showtitle = `[Score #${i + 1 + (asObj.page * 5)}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
+        }
+        if (asObj.showUserName == true) {
+            showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
+        }
+
+        let weighted;
+        if (asObj.showWeights == true) {
+            weighted = `\n${(curscore?.weight?.pp)?.toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`
+        } else {
+            weighted = ''
+        }
+
+        scoresAsFields.push({
+            name: `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
+            value: `
+**${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+${pptxt} ${weighted}`,
+            inline: false
+        })
+        scoresAsArrStr.push(
+            `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
+**${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+${pptxt} ${weighted}
+`
+        )
+
     }
 
     return {
@@ -650,3 +572,23 @@ export type mapSort = 'title' | 'artist' |
     'fails' | 'plays' |
     'dateadded' | 'favourites' | 'bpm' |
     'cs' | 'ar' | 'od' | 'hp' | 'length'
+
+export function getTotalHits(mode: osuapitypes.GameMode, score: osuapitypes.Score) {
+    let totalHits = 0;
+    const stats = score.statistics
+    switch (mode) {
+        case 'osu': default:
+            totalHits = stats.count_300 + stats.count_100 + stats.count_50 + stats.count_miss
+            break;
+        case 'taiko':
+            totalHits = stats.count_300 + stats.count_100 + stats.count_miss
+            break;
+        case 'fruits':
+            totalHits = stats.count_300 + stats.count_100 + stats.count_50 + stats.count_miss
+            break;
+        case 'mania':
+            totalHits = stats.count_geki + stats.count_300 + stats.count_katu + stats.count_100 + stats.count_50 + stats.count_miss
+            break;
+    }
+    return totalHits;
+}

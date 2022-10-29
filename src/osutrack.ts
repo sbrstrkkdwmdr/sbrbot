@@ -56,61 +56,6 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
         }
     }
 
-    //use the one in src/trackfunc.ts instead
-    async function editTrackUser(fr: {
-        database: Sequelize.ModelStatic<any>,
-        userid: string | number,
-        action?: 'add' | 'remove',
-        guildId: string | number,
-        guildSettings: Sequelize.ModelStatic<any>,
-        mode: string
-    }
-    ) {
-
-        if (!fr.action || fr.action == 'add') {
-            try {
-                await fr.database.create({
-                    osuid: fr.userid,
-                    [`guilds${fr.mode}`]: fr.guildId
-                })
-
-            } catch (error) {
-                log.logFile('error', log.errLog('database track user creation err', error))
-                const previous = await fr.database.findOne({ where: { osuid: fr.userid } })
-                const prevchannels: string[] = previous?.dataValues?.guilds?.split(',') ?? []
-
-                if (!prevchannels.includes(`${fr.guildId}`)) {
-                    prevchannels.push(`${fr.guildId}`)
-                }
-
-
-
-                await fr.database.update({
-                    osuid: fr.userid,
-                    [`guilds${fr.mode}`]: prevchannels.join(',')
-                }, {
-                    where: {
-                        osuid: fr.userid,
-                    }
-                })
-            }
-        } else {
-            const curuser = await fr.database.findOne({ where: { osuid: fr.userid } })
-            const curguilds: string[] = curuser.dataValues.guilds.split(',')
-            const newguilds = curguilds.filter(channel => channel != fr.guildId)
-            await fr.database.update({
-                osuid: fr.userid,
-                [`guilds${fr.mode}`]: newguilds.join(',')
-            }, {
-                where: {
-                    osuid: fr.userid
-                }
-            })
-
-        }
-        return true;
-    }
-
     async function getEmbed(
         data: {
             scoredata: osuApiTypes.Score,
@@ -151,7 +96,7 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
             .setImage(`${data.scoredata.beatmapset.covers['cover@2x']}`)
             .setDescription(
                 `${data.scoredata.mods.length > 0 ? '+' + data.scoredata.mods.join('') + ' | ' : ''} **Score set** <t:${new Date(data.scoredata.created_at).getTime() / 1000}:R>\n` +
-                `${(data.scoredata.accuracy * 100).toFixed(2)}% | ${embedstuff.gradeToEmoji(data.scoredata.rank)} | ${(ppcalc?.[0]?.stars ?? data.scoredata.beatmap.difficulty_rating).toFixed(2)}⭐\n` +
+                `${(data.scoredata.accuracy * 100).toFixed(2)}% | ${embedstuff.gradeToEmoji(data.scoredata.rank)} | ${(ppcalc?.[0]?.difficulty?.stars ?? data.scoredata.beatmap.difficulty_rating).toFixed(2)}⭐\n` +
                 `${embedstuff.hitList({
                     gamemode: data.scoredata.mode,
                     count_geki: data.scoredata.statistics.count_geki,
