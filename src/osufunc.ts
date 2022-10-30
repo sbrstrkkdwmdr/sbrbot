@@ -92,7 +92,6 @@ export async function mapcalc(
 
             const map = new rosu.Beatmap({ path: mapPath })
 
-            let curacc = 100
             ppl = []
 
             for (let i = 0; i < 10; i++) {
@@ -226,17 +225,8 @@ export async function scorecalc(
                 if (isNaN(newacc)) {
                     newacc = obj.acc;
                 }
-                const calcScores = [
-                    new rosu.Calculator({
-                        mode,
-                        mods: osumodcalc.ModStringToInt(mods),
-                        combo: obj.maxcombo,
-                        acc: obj?.acc ? obj.acc * 100 : 100,
-                        passedObjects: obj.passedObj
-                    }).performance(map)
-                ]
 
-                let baseScore: calcScore = {
+                const baseScore: calcScore = {
                     mode,
                     mods: osumodcalc.ModStringToInt(mods),
                     combo: obj.maxcombo,
@@ -1559,7 +1549,7 @@ export async function mapIdFromLink(url: string, callIfMapIdNull: boolean) {
         }
     }
 
-    let object = {
+    const object = {
         set: null,
         mode: null,
         map: null,

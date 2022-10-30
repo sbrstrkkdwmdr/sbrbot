@@ -454,7 +454,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'rs best': case 'recent best': case 'rb':
+            case 'rs best': case 'recent best':
             case 'rsbest': case 'recentbest': case 'rb':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
