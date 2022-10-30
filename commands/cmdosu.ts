@@ -8163,7 +8163,7 @@ export async function map(input: extypes.commandInput) {
             mapid: mapdata.id,
             calctype: 0,
             clockRate: overrideSpeed ?? 1,
-        })
+        });
         ppissue = '';
         try {
             totaldiff = ppComputed[0].difficulty.stars?.toFixed(2)

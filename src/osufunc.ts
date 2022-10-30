@@ -78,7 +78,7 @@ export async function mapcalc(
     let ppl: rosu.PerformanceAttributes[]
     const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
 
-    switch (calctyper) {
+    switch (obj.calctype) {
         case 0: default: {
             if (!fs.existsSync('files/maps/')) {
                 fs.mkdirSync('files/maps/');
@@ -95,6 +95,7 @@ export async function mapcalc(
 
             let curacc = 100
             ppl = []
+
             for (let i = 0; i < 10; i++) {
                 ppl.push((
                     new rosu.Calculator({
