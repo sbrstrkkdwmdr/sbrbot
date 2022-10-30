@@ -627,8 +627,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'map',
         description: 'Shows information about a beatmap',
-        usage: 'map "query" [id] +[mods]',
-        slashusage: 'map [query] [id] [mods] [detailed]',
+        usage: 'map "query" [id] +[mods] [-bpm] [-speed]',
+        slashusage: 'map [query] [id] [mods] [detailed] [bpm] [speed]',
         examples: [
             {
                 text: 'PREFIXMSGmap "kimi no shiranai monogatari"',
@@ -688,6 +688,26 @@ const osucmds: commandInfo[] = [
                 defaultValue: 'false',
                 examples: ['detailed:true'],
                 commandTypes: ['message', 'interaction', 'button']
+            },
+            {
+                name: 'bpm',
+                type: 'float',
+                required: false,
+                description: 'The BPM to calculate the map with',
+                options: ['N/A'],
+                defaultValue: 'the map\'s BPM',
+                examples: ['-bpm 200', 'bpm:200'],
+                commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'speed',
+                type: 'float',
+                required: false,
+                description: 'The speed multiplier to calculate the map with. Overrides BPM',
+                options: ['N/A'],
+                defaultValue: '1',
+                examples: ['-speed 1.5', 'speed:1.5'],
+                commandTypes: ['message', 'interaction', 'link']
             }
         ]
     },

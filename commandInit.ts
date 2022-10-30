@@ -148,7 +148,7 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
         },
         {
             name: 'compare',
-            description: 'Compares two users/scores',
+            description: 'Compares two users/top plays',
             dmPermission: false,
             options: [
                 {
@@ -171,6 +171,32 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                         // },
                     ]
                 },
+                {
+                    name: 'first',
+                    description: 'The first user to compare',
+                    required: false,
+                    type: Discord.ApplicationCommandOptionType.String,
+                },
+                {
+                    name: 'second',
+                    description: 'The second user to compare',
+                    required: false,
+                    type: Discord.ApplicationCommandOptionType.String,
+                },
+                {
+                    name: 'mode',
+                    description: 'The gamemode to use',
+                    required: false,
+                    type: Discord.ApplicationCommandOptionType.String,
+                    choices: cmdconfig.modeopts
+                }
+            ]
+        },
+        {//alias for compare
+            name: 'common',
+            description: 'Compares two user\'s top plays',
+            dmPermission: false,
+            options: [
                 {
                     name: 'first',
                     description: 'The first user to compare',
@@ -233,6 +259,22 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                     description: 'The name of the map to display',
                     type: Discord.ApplicationCommandOptionType.String,
                     required: false,
+                },
+                {
+                    name: 'bpm',
+                    description: 'The BPM to calculate the map with',
+                    type: Discord.ApplicationCommandOptionType.Number,
+                    required: false,
+                    minValue: 1,
+                    maxValue: 1000
+                },
+                {
+                    name: 'speed',
+                    description: 'The speed to calculate the map with',
+                    type: Discord.ApplicationCommandOptionType.Number,
+                    required: false,
+                    minValue: 0.1,
+                    maxValue: 10
                 }
             ]
         },
@@ -260,6 +302,28 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                     type: Discord.ApplicationCommandOptionType.Boolean,
                     required: false,
                     default: false
+                },
+                {
+                    name: 'query',
+                    description: 'The name of the map to display',
+                    type: Discord.ApplicationCommandOptionType.String,
+                    required: false,
+                },
+                {
+                    name: 'bpm',
+                    description: 'The BPM to calculate the map with',
+                    type: Discord.ApplicationCommandOptionType.Number,
+                    required: false,
+                    minValue: 1,
+                    maxValue: 1000
+                },
+                {
+                    name: 'speed',
+                    description: 'The speed to calculate the map with',
+                    type: Discord.ApplicationCommandOptionType.Number,
+                    required: false,
+                    minValue: 0.1,
+                    maxValue: 10
                 }
             ]
         },
@@ -730,6 +794,19 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                         { name: 'HP', value: 'hp' },
                         { name: 'Song Length', value: 'length' },
                     ]
+                },
+                {
+                    name: 'filter',
+                    description: 'Show maps matching this string',
+                    type: Discord.ApplicationCommandOptionType.String,
+                    required: false,
+                },
+                {
+                    name: 'parse',
+                    description: 'Parse the map matching this index',
+                    type: Discord.ApplicationCommandOptionType.Integer,
+                    required: false,
+                    minValue: 1
                 }
             ]
         },

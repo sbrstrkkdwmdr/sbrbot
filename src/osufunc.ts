@@ -62,6 +62,7 @@ export type calcScore = {
  * @param gamemode 
  * @param mapid 
  * @param calctype 0 = rosu, 1 = booba, 2 = osu api extended
+ * @param clockRate modify map speed. uses mods if null
  * @returns 
  */
 export async function mapcalc(
@@ -69,7 +70,8 @@ export async function mapcalc(
         mods: string,
         gamemode: string,
         mapid: number,
-        calctype: number | null
+        calctype: number | null,
+        clockRate: number | null,
     },
     mapIsRank?: string
 ) {
@@ -98,6 +100,7 @@ export async function mapcalc(
                     new rosu.Calculator({
                         mode: osumodcalc.ModeNameToInt(obj.gamemode),
                         mods: osumodcalc.ModStringToInt(mods),
+                        clockRate: obj.clockRate ?? 1,
                         acc: 100 - i
                     })
                 ).performance(map)

@@ -41,9 +41,8 @@ export async function bws(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
 
             input.args = cleanArgs(input.args);
@@ -56,15 +55,16 @@ export async function bws(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
             searchid = commanduser.id
-            //@ts-expect-error options property does not exist on message
             user = input.obj.options.getString('user');
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -104,10 +104,7 @@ export async function bws(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        //@ts-expect-error   aaaaa
-        //This expression is not callable.
-        //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-        input.obj.reply({
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
@@ -139,18 +136,13 @@ export async function bws(input: extypes.commandInput) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    //@ts-expect-error editReply does not exist on message
-                    input.obj.editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                 }, 1000);
             } else {
-                //@ts-expect-error aaaaa
-                //This expression is not callable.
-                //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-                input.obj.reply({
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -233,9 +225,8 @@ export async function globals(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
 
             input.args = cleanArgs(input.args);
@@ -251,8 +242,8 @@ export async function globals(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property does not exist on message
             user = input.obj.options.getString('user');
         }
 
@@ -260,15 +251,12 @@ export async function globals(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            //@ts-expect-error message property does not exist on interaction/message 
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
-
             commanduser = input.obj.member.user;
-            //@ts-expect-error message property does not exist on interaction/message
             user = input.obj.message.embeds[0].title.split('for ')[1]
-            //@ts-expect-error message property does not exist on interaction/message
             mode = cmdchecks.toAlphaNum(input.obj.message.embeds[0].description.split('\n')[1])
             page = 0;
 
@@ -344,8 +332,7 @@ export async function globals(input: extypes.commandInput) {
     const osudata: osuApiTypes.User = osudataReq.apiData;
     osufunc.debug(osudataReq, 'command', 'globals', input.obj.guildId, 'osuData');
     if (osudata?.error) {
-        //@ts-expect-error reply diff signatures
-        if (input.commandType != 'button') input.obj.reply({
+        if (input.commandType != 'button') (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: `User not found`,
             allowedMentions: { repliedUser: false },
             failIfNotExists: false,
@@ -360,8 +347,7 @@ export async function globals(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        //@ts-expect-error reply diff signatures
-        input.obj.reply({
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
             failIfNotExists: false,
@@ -412,7 +398,7 @@ export async function lb(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             const gamemode = input.args[0];
             if (!input.args[0] || gamemode == 'osu' || gamemode == 'o' || gamemode == '0' || gamemode == 'standard' || gamemode == 'std') {
@@ -434,8 +420,8 @@ export async function lb(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property does not exist on message
             const gamemode = input.obj.options.getString('mode');
             if (!gamemode || gamemode == 'osu' || gamemode == 'o' || gamemode == '0' || gamemode == 'standard' || gamemode == 'std') {
                 mode = 'osu'
@@ -455,7 +441,7 @@ export async function lb(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            //@ts-expect-error message property does not exist on message
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
@@ -534,8 +520,7 @@ export async function lb(input: extypes.commandInput) {
     const rarr = [];
 
     if (input.commandType == 'interaction') {
-        //@ts-expect-error reply diff signature
-        input.obj.reply('loading...')
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply('loading...')
     }
 
 
@@ -706,16 +691,13 @@ export async function lb(input: extypes.commandInput) {
     const timeelapsed = endofcommand - input.currentDate.getTime();
 
     if (page <= 1) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (page + 1 >= Math.ceil(rarr.length / 10)) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -755,7 +737,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             if (input.args.includes('-page')) {
                 page = parseInt(input.args[input.args.indexOf('-page') + 1]);
@@ -813,24 +795,21 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property does not exist on message
             input.obj.options.getString('country') ? country = input.obj.options.getString('country').toUpperCase() : country = 'ALL';
-            //@ts-expect-error options property does not exist on message
             input.obj.options.getString('mode') ? mode = input.obj.options.getString('mode').toLowerCase() : mode = 'osu';
-            //@ts-expect-error options property does not exist on message
-            input.obj.options.getString('type') ? type = input.obj.options.getString('type').toLowerCase() : type = 'performance';
-            //@ts-expect-error options property does not exist on message
+            input.obj.options.getString('type') ? type = input.obj.options.getString('type').toLowerCase() as osuApiTypes.RankingType : type = 'performance';
             input.obj.options.getInteger('page') ? page = input.obj.options.getInteger('page') - 1 : page = 0;
-            //@ts-expect-error options property does not exist on message
             input.obj.options.getInteger('spotlight') ? spotlight = input.obj.options.getInteger('spotlight') : spotlight = undefined;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
-            const pageParsed =//@ts-expect-error message property does not exist on interaction/message
+            const pageParsed =
                 parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0])
             page = pageParsed;
             switch (input.button) {
@@ -843,28 +822,24 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                 case 'RightArrow':
                     page = pageParsed + 1
                     break;
-                case 'BigRightArrow'://@ts-expect-error message property does not exist on interaction/message
+                case 'BigRightArrow':
                     page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
                     break;
                 default:
                     page = pageParsed
                     break;
             }
-            //@ts-expect-error message property does not exist on interaction/message
             let base: string = input.obj.message.embeds[0].title;
             if (base.includes('Global')) {
                 base = base.split('Global ')[1];
             }
             if (base.includes('for ')) {
                 base = base.split('for ')[0];
-                //@ts-expect-error message property does not exist on interaction/message
                 input.obj.message.embeds[0].footer ? country = input.obj.message.embeds[0].footer.text.split('Country: ')[1] : country = 'ALL';
             }
             mode = base.split(' ')[0].toLowerCase().replaceAll('!', '');
-            //@ts-expect-error - type string not assignable to type RankingType
-            type = base.split(' ')[1].toLowerCase();
+            type = base.split(' ')[1].toLowerCase() as osuApiTypes.RankingType;
             if (type == 'charts') {
-                //@ts-expect-error message property does not exist on interaction/message
                 spotlight = input.obj.message.embeds[0].description.split('\n')[1].split('?spotlight=')[1].split(')')[0];
             }
         }
@@ -969,8 +944,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
     ) {
         rankingdataReq = func.findFile(input.absoluteID, 'rankingdata')
     } else {
-        //@ts-expect-error - type void is not assignable to type apiReturn
-        rankingdataReq = await osufunc.apiget({
+        rankingdataReq = (await osufunc.apiget({
             type: 'custom',
             params: {
                 urlOverride: url
@@ -979,16 +953,15 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
             version: 2
         }).catch(() => {
             if (country != 'ALL') {
-                //@ts-expect-error reply diff signature
-                input.obj.reply({
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: 'Invalid country code',
                     embeds: [],
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 }).catch()
-            } else {//@ts-expect-error reply diff signature
-                input.obj.reply({
+            } else {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: 'Error',
                     embeds: [],
                     files: [],
@@ -997,22 +970,21 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                 }).catch()
             }
             return;
-        })
+        })) as osufunc.apiReturn;
     }
     func.storeFile(rankingdataReq, input.absoluteID, 'rankingdata')
 
     if (rankingdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-expect-error edit reply not property of msg
-                    input.obj.editReply({
+                setTimeout(() => {
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: 'Error - could not fetch rankings',
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     }).catch()
                 }, 1000)
-            } else {//@ts-expect-error reply diff signature
-                input.obj.reply({
+            } else {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: 'Error - could not fetch rankings',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -1030,8 +1002,8 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
         return;
     }
     if (rankingdata.ranking.length == 0) {
-        //@ts-expect-error reply diff signature
-        input.obj.reply({
+
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'No data found',
             embeds: [],
             files: [],
@@ -1090,16 +1062,16 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
         )
     }
     if (page + 1 >= Math.ceil(rankingdata.ranking.length / 5)) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true);
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true);
+
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
     if (page == 0) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true);
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true);
+
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -1136,7 +1108,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
     let mode: osuApiTypes.GameMode = 'osu';
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
                 mode = 'osu'
@@ -1186,16 +1158,16 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property does not exist on message
             value = input.obj.options.getInteger('value') ?? 100;
-            //@ts-expect-error options property does not exist on message
-            mode = input.obj.options.getString('mode') ?? 'osu';
+            mode = input.obj.options.getString('mode') as osuApiTypes.GameMode ?? 'osu';
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1309,9 +1281,8 @@ export async function osu(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-details')) {
                 detailed = true;
@@ -1391,12 +1362,10 @@ export async function osu(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property does not exist on message
             user = input.obj.options.getString('user');
-            //@ts-expect-error options property does not exist on message
             detailed = input.obj.options.getBoolean('detailed');
-            //@ts-expect-error options property does not exist on message
             mode = input.obj.options.getString('mode');
             searchid = input.obj.member.user.id;
         }
@@ -1405,20 +1374,15 @@ export async function osu(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            //@ts-expect-error message property does not exist on interaction
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            //@ts-expect-error message property does not exist on interaction
             if (input.obj.message.embeds[0].fields[0]) {
                 detailed = true
             }
-
-
-            //@ts-expect-error message property does not exist on interaction
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
-            //@ts-expect-error message property does not exist on interaction
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
 
             if (input.button == 'DetailEnable') {
@@ -1428,7 +1392,6 @@ export async function osu(input: extypes.commandInput) {
                 detailed = false;
             }
             if (input.button == 'Refresh') {
-                //@ts-expect-error message property does not exist on interaction
                 if (input.obj.message.embeds[0].fields[0]) {
                     detailed = true
                 } else {
@@ -1436,20 +1399,18 @@ export async function osu(input: extypes.commandInput) {
                 }
             }
 
-            //@ts-expect-error message property does not exist on interaction
             if (!input.obj.message.embeds[0].title) {
                 graphonly = true
             }
         }
             break;
         case 'link': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
 
-            //@ts-expect-error content property does not exist on interaction
             const msgnohttp: string = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
 
-            //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             user = msgnohttp.includes(' ') ? msgnohttp.split('/')[2].split(' ')[0] : msgnohttp.split('/')[2]
             mode = msgnohttp.includes(' ') ?
@@ -1547,8 +1508,8 @@ export async function osu(input: extypes.commandInput) {
     mode = mode ? osufunc.modeValidator(mode) : null;
 
     if (input.commandType == 'interaction') {
-        //@ts-expect-error reply smth smth signature invalid not compatible
-        input.obj.reply({
+
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
             failIfNotExists: false,
@@ -1583,16 +1544,14 @@ export async function osu(input: extypes.commandInput) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    //@ts-expect-error reply smth smth signature invalid not compatible
-                    input.obj.editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                 }, 1000);
             } else {
-                //@ts-expect-error reply smth smth signature invalid not compatible
-                input.obj.reply({
+
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -1604,8 +1563,8 @@ export async function osu(input: extypes.commandInput) {
 
     //check for player's default mode if mode is null
     if ((
-        //@ts-expect-error options property does not exist on message
-        (input.commandType == 'interaction' && !input.obj?.options?.getString('mode'))
+
+        (input.commandType == 'interaction' && !(input.obj as Discord.ChatInputCommandInteraction<any>)?.options?.getString('mode'))
         || input.commandType == 'message' || input.commandType == 'link'
     ) &&
         osudata.playmode != 'osu' &&
@@ -1699,11 +1658,10 @@ export async function osu(input: extypes.commandInput) {
             if (input.commandType != 'button') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        //@ts-expect-error reply smth smth signature invalid not compatible
-                        input.obj.editReply({
+
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             embeds: [loading],
                             allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
                         })
                             .catch();
                     }, 1000);
@@ -1749,16 +1707,14 @@ export async function osu(input: extypes.commandInput) {
                 if (input.commandType != 'button' && input.commandType != 'link') {
                     if (input.commandType == 'interaction') {
                         setTimeout(() => {
-                            //@ts-expect-error reply smth smth signature invalid not compatible
-                            input.obj.editReply({
+                            (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                                 content: 'Error - could not fetch user\'s top scores',
                                 allowedMentions: { repliedUser: false },
-                                failIfNotExists: true
                             }).catch()
                         }, 1000)
                     } else {
-                        //@ts-expect-error reply smth smth signature invalid not compatible
-                        input.obj.reply({
+
+                        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                             content: 'Error - could not fetch user\'s top scores',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
@@ -1782,16 +1738,14 @@ export async function osu(input: extypes.commandInput) {
                 if (input.commandType != 'button' && input.commandType != 'link') {
                     if (input.commandType == 'interaction') {
                         setTimeout(() => {
-                            //@ts-expect-error reply smth smth signature invalid not compatible
-                            input.obj.editReply({
+                            (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                                 content: 'Error - could not fetch user\'s most played beatmaps',
                                 allowedMentions: { repliedUser: false },
-                                failIfNotExists: true
                             }).catch()
                         }, 1000)
                     } else {
-                        //@ts-expect-error reply smth smth signature invalid not compatible
-                        input.obj.reply({
+
+                        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                             content: 'Error - could not fetch user\'s most played beatmaps',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
@@ -1939,9 +1893,8 @@ export async function firsts(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-page')) {
                 page = parseInt(input.args[input.args.indexOf('-page') + 1]);
@@ -2067,27 +2020,18 @@ export async function firsts(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
 
-            //@ts-expect-error options property does not exist on message
             user = input.obj.options.getString('user');
-            //@ts-expect-error options property does not exist on message
             page = input.obj.options.getInteger('page');
-            //@ts-expect-error options property does not exist on message
             scoredetailed = input.obj.options.getBoolean('detailed');
-            //@ts-expect-error options property does not exist on message
-            sort = input.obj.options.getString('sort');
-            //@ts-expect-error options property does not exist on message
+            sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
             reverse = input.obj.options.getBoolean('reverse');
-            //@ts-expect-error options property does not exist on message
             mode = input.obj.options.getString('mode') ?? 'osu';
-            //@ts-expect-error options property does not exist on message
             filteredMapper = input.obj.options.getString('mapper');
-            //@ts-expect-error options property does not exist on message
             filteredMods = input.obj.options.getString('mods');
-            //@ts-expect-error options property does not exist on message
             filterTitle = input.obj.options.getString('filter');
-            //@ts-expect-error options property does not exist on message
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
                 parseScore = true
@@ -2098,35 +2042,25 @@ export async function firsts(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            //@ts-expect-error message property does not exist on interaction/message
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
 
             commanduser = input.obj.member.user;
-            //@ts-expect-error message property does not exist on interaction/message
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
-            //@ts-expect-error message property does not exist on interaction/message
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
             page = 0;
-            //@ts-expect-error message property does not exist on interaction/message
             if (input.obj.message.embeds[0].description) {
-                //@ts-expect-error message property does not exist on interaction/message
                 if (input.obj.message.embeds[0].description.includes('mapper')) {
-                    //@ts-expect-error message property does not exist on interaction/message
                     filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
                 }
-                //@ts-expect-error message property does not exist on interaction/message
                 if (input.obj.message.embeds[0].description.includes('mods')) {
-                    //@ts-expect-error message property does not exist on interaction/message
                     filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
                 }
-                //@ts-expect-error message property does not exist on interaction/message
                 if (input.obj.message.embeds[0].description.includes('map')) {
-                    //@ts-expect-error message property does not exist on interaction/message
                     filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
                 }
-                //@ts-expect-error message property does not exist on interaction/message
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -2153,14 +2087,12 @@ export async function firsts(input: extypes.commandInput) {
 
                 }
 
-                //@ts-expect-error message property does not exist on interaction/message
                 const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
                     reverse = true
                 } else {
                     reverse = false
                 }
-                //@ts-expect-error message property does not exist on interaction/message
                 const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
                 page = 0
                 switch (input.button) {
@@ -2174,7 +2106,6 @@ export async function firsts(input: extypes.commandInput) {
                         page = pageParsed + 1
                         break;
                     case 'BigRightArrow':
-                        //@ts-expect-error message property does not exist on interaction/message
                         page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
                         break;
                     default:
@@ -2311,8 +2242,8 @@ export async function firsts(input: extypes.commandInput) {
 
 
     if (input.commandType == 'interaction') {
-        //@ts-expect-error reply diff signature
-        input.obj.reply({
+
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
             failIfNotExists: false,
@@ -2348,16 +2279,14 @@ export async function firsts(input: extypes.commandInput) {
 
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    //@ts-expect-error reply diff signatures
-                    input.obj.reply({
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
                 }, 1000);
             } else {
-                //@ts-expect-error reply diff signatures
-                input.obj.reply({
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -2382,15 +2311,14 @@ export async function firsts(input: extypes.commandInput) {
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-expect-error edit reply doesnt exist on msg
-                        input.obj.editReply({
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: 'Error - could not find user\'s #1 scores',
                             allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-expect-error reply diff signatures
-                    input.obj.reply({
+                } else {
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: 'Error - could not find user\'s #1 scores',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -2503,17 +2431,12 @@ export async function firsts(input: extypes.commandInput) {
             name: 'Error',
             value: 'No scores found',
             inline: false
-        }])
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[2].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        }]);
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         for (let i = 0; i < scoresarg.fields.length; i++) {
             firstsEmbed.addFields([scoresarg.fields[i]])
@@ -2521,16 +2444,12 @@ export async function firsts(input: extypes.commandInput) {
     }
 
     if (scoresarg.isFirstPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (scoresarg.isLastPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
@@ -2581,7 +2500,7 @@ export async function maplb(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
 
             if (input.args.includes('-page')) {
@@ -2613,14 +2532,11 @@ export async function maplb(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options does not exist on message
             mapid = input.obj.options.getInteger('id');
-            //@ts-expect-error options does not exist on message
             page = input.obj.options.getInteger('page');
-            //@ts-expect-error options does not exist on message
             mapmods = input.obj.options.getString('mods');
-            //@ts-expect-error options property does not exist on message
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
                 parseScore = true
@@ -2631,16 +2547,13 @@ export async function maplb(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            //@ts-expect-error message property does not exist on message/interaction
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            //@ts-expect-error message property does not exist on message/interaction
             mapid = input.obj.message.embeds[0].url.split('/b/')[1]
-            //@ts-expect-error message property does not exist on message/interaction
             if (input.obj.message.embeds[0].title.includes('+')) {
-                //@ts-expect-error message property does not exist on message/interaction
                 mapmods = input.obj.message.embeds[0].title.split('+')[1]
             }
             page = 0
@@ -2649,19 +2562,15 @@ export async function maplb(input: extypes.commandInput) {
                     page = 1
                     break;
                 case 'LeftArrow':
-                    //@ts-expect-error message property does not exist on message/interaction
                     page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
                     break;
                 case 'RightArrow':
-                    //@ts-expect-error message property does not exist on message/interaction
                     page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
                     break;
                 case 'BigRightArrow':
-                    //@ts-expect-error message property does not exist on message/interaction
                     page = parseInt((input.obj.message.embeds[0].description).split('/')[1].split('\n')[0])
                     break;
                 case 'Refresh':
-                    //@ts-expect-error message property does not exist on message/interaction
                     page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1])
                     break;
             }
@@ -2752,10 +2661,9 @@ export async function maplb(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        //@ts-expect-error reply diff signatures
-        input.obj.reply({
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
-            allowMentions: { repliedUser: false },
+            allowedMentions: { repliedUser: false },
             failIfNotExists: true
         }).catch()
     }
@@ -2784,15 +2692,14 @@ export async function maplb(input: extypes.commandInput) {
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-expect-error edit reply diff signatures
-                    input.obj.editReply({
+                setTimeout(() => {
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     }).catch()
                 }, 1000)
-            } else {//@ts-expect-error reply diff signatures
-                input.obj.reply({
+            } else {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -2808,8 +2715,8 @@ export async function maplb(input: extypes.commandInput) {
     try {
         title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
         artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
-    } catch (error) {//@ts-expect-error reply diff signatures
-        input.obj.reply({ content: 'error - map not found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+    } catch (error) {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'error - map not found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
             .catch();
         return;
     }
@@ -2847,16 +2754,13 @@ export async function maplb(input: extypes.commandInput) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        //@ts-expect-error edit reply does not exist in message<Any>
-                        input.obj.editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                             allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
                         }).catch()
                     }, 1000)
                 } else {
-                    //@ts-expect-error reply diff signatures
-                    input.obj.reply({
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -2934,16 +2838,11 @@ export async function maplb(input: extypes.commandInput) {
                 value: 'No scores found',
                 inline: false
             }]);
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[0].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[1].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[2].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[3].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[4].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
 
         } else {
             for (let i = 0; i < scoresarg.fields.length; i++) {
@@ -2954,16 +2853,12 @@ export async function maplb(input: extypes.commandInput) {
         lbEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(scoresarg.maxPages)}`)
 
         if (scoresarg.isFirstPage) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[0].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[1].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
         }
         if (scoresarg.isLastPage) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[3].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[4].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         }
 
         osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
@@ -2994,15 +2889,14 @@ export async function maplb(input: extypes.commandInput) {
         if (lbdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-expect-error edit reply does not exist in message<Any>
-                        input.obj.editReply({
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                             allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-expect-error reply diff signatures
-                    input.obj.reply({
+                } else {
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -3086,17 +2980,13 @@ export async function maplb(input: extypes.commandInput) {
         osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
 
         if (page <= 1) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[0].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[1].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
         }
 
         if (page >= (lbdata.length / 5) - 1) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[3].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[4].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         }
     }
 
@@ -3145,9 +3035,8 @@ export async function nochokes(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-page')) {
                 page = parseInt(input.args[input.args.indexOf('-page') + 1]);
@@ -3288,24 +3177,25 @@ export async function nochokes(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property does not exist on message
+
             user = input.obj.options.getString('user');
-            //@ts-expect-error options property does not exist on message
+
             mode = input.obj.options.getString('mode');
-            //@ts-expect-error options property does not exist on message
+
             mapper = input.obj.options.getString('mapper');
-            //@ts-expect-error options property does not exist on message
+
             mods = input.obj.options.getString('mods');
-            //@ts-expect-error options property does not exist on message
+
             sort = input.obj.options.getString('sort');
-            //@ts-expect-error options property does not exist on message
+
             page = input.obj.options.getInteger('page');
-            //@ts-expect-error options property does not exist on message
+
             reverse = input.obj.options.getBoolean('reverse');
-            //@ts-expect-error options property does not exist on message
+
             filterTitle = input.obj.options.getString('filter');
-            //@ts-expect-error options property does not exist on message
+
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
                 parseScore = true
@@ -3316,32 +3206,33 @@ export async function nochokes(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-expect-error message is not a property of message/interaction
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            //@ts-expect-error message is not a property of message/interaction
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]//obj.message.embeds[0].title.split('Top no choke scores of ')[1]
-            //@ts-expect-error message is not a property of message/interaction
+
+            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
+
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
-            //@ts-expect-error message is not a property of message/interaction
-            if (input.obj.message.embeds[0].description) {//@ts-expect-error message is not a property of message/interaction
+
+            if (input.obj.message.embeds[0].description) {
                 if (input.obj.message.embeds[0].description.includes('mapper')) {
-                    //@ts-expect-error message is not a property of message/interaction
+
                     mapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
                 }
-                //@ts-expect-error message is not a property of message/interaction
+
                 if (input.obj.message.embeds[0].description.includes('mods')) {
-                    //@ts-expect-error message is not a property of message/interaction
+
                     mods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
                 }
-                //@ts-expect-error message property does not exist on interaction/message
+
                 if (input.obj.message.embeds[0].description.includes('map')) {
-                    //@ts-expect-error message property does not exist on interaction/message
+
                     filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
                 }
-                //@ts-expect-error message is not a property of message/interaction
+
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -3368,14 +3259,14 @@ export async function nochokes(input: extypes.commandInput) {
 
                 }
 
-                //@ts-expect-error message is not a property of message/interaction
+
                 const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
                     reverse = true
                 } else {
                     reverse = false
                 }
-                //@ts-expect-error message is not a property of message/interaction
+
                 const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
                 page = 0
                 switch (input.button) {
@@ -3388,7 +3279,7 @@ export async function nochokes(input: extypes.commandInput) {
                     case 'RightArrow':
                         page = pageParsed + 1
                         break;
-                    case 'BigRightArrow'://@ts-expect-error message is not a property of message/interaction
+                    case 'BigRightArrow':
                         page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
                         break;
                     default:
@@ -3528,8 +3419,8 @@ export async function nochokes(input: extypes.commandInput) {
         );
 
     if (input.commandType == 'interaction') {
-        //@ts-expect-error reply diff signatures
-        input.obj.reply({
+
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
             failIfNotExists: false,
@@ -3564,16 +3455,14 @@ export async function nochokes(input: extypes.commandInput) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    //@ts-expect-error reply diff signatures
-                    input.obj.reply({
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
                 }, 1000);
             } else {
-                //@ts-expect-error reply diff signatures
-                input.obj.reply({
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -3609,16 +3498,15 @@ export async function nochokes(input: extypes.commandInput) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    //@ts-expect-error reply diff signatures
-                    input.obj.reply({
+
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
                 }, 1000);
             } else {
-                //@ts-expect-error reply diff signatures
-                input.obj.reply({
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -3634,8 +3522,7 @@ export async function nochokes(input: extypes.commandInput) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    //@ts-expect-error reply diff signatures
-                    input.obj.reply({
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not fetch \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -3643,8 +3530,7 @@ export async function nochokes(input: extypes.commandInput) {
                         .catch();
                 }, 1000);
             } else {
-                //@ts-expect-error reply diff signatures
-                input.obj.reply({
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not fetch \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -3741,17 +3627,12 @@ export async function nochokes(input: extypes.commandInput) {
             name: 'Error',
             value: 'No scores found',
             inline: false
-        }])
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[2].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        }]);
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         for (let i = 0; scoresarg.fields.length > i; i++) {
             topEmbed.addFields(scoresarg.fields[i])
@@ -3761,16 +3642,12 @@ export async function nochokes(input: extypes.commandInput) {
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
 
     if (scoresarg.isFirstPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (scoresarg.isLastPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
@@ -3828,9 +3705,8 @@ export async function osutop(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             mode = null;
             sort = 'pp';
@@ -3971,29 +3847,21 @@ export async function osutop(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property does not exist on message
-            user = input.obj.options.getString('user')
-            //@ts-expect-error options property does not exist on message
-            mode = input.obj.options.getString('mode')
-            //@ts-expect-error options property does not exist on message
-            mapper = input.obj.options.getString('mapper')
-            //@ts-expect-error options property does not exist on message
-            mods = input.obj.options.getString('mods')
-            //@ts-expect-error options property does not exist on message
-            sort = input.obj.options.getString('sort')
-            //@ts-expect-error options property does not exist on message
-            page = input.obj.options.getInteger('page')
-            //@ts-expect-error options property does not exist on message
-            detailed = input.obj.options.getBoolean('detailed')
-            //@ts-expect-error options property does not exist on message
+            user = input.obj.options.getString('user');
+            mode = input.obj.options.getString('mode');
+            mapper = input.obj.options.getString('mapper');
+            mods = input.obj.options.getString('mods');
+            sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
+            page = input.obj.options.getInteger('page');
+            detailed = input.obj.options.getBoolean('detailed');
             filterTitle = input.obj.options.getString('filter');
-            //@ts-expect-error options property does not exist on message
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
                 parseScore = true
             }
-            //@ts-expect-error options property does not exist on message
+
             reverse = input.obj.options.getBoolean('reverse')
             searchid = input.obj.member.user.id
         }
@@ -4001,31 +3869,32 @@ export async function osutop(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-expect-error message property does not exist on message/interaction
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            //@ts-expect-error message property does not exist on message/interaction
+
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]//obj.message.embeds[0].title.split('Top plays of ')[1]
-            //@ts-expect-error message property does not exist on message/interaction
+
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
-            //@ts-expect-error message property does not exist on message/interaction
-            if (input.obj.message.embeds[0].description) {//@ts-expect-error message property does not exist on message/interaction
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-expect-error message property does not exist on message/interaction
+
+            if (input.obj.message.embeds[0].description) {
+                if (input.obj.message.embeds[0].description.includes('mapper')) {
                     mapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
                 }
-                //@ts-expect-error message property does not exist on message/interaction
+
                 if (input.obj.message.embeds[0].description.includes('mods')) {
-                    //@ts-expect-error message property does not exist on message/interaction
+
                     mods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
                 }
-                //@ts-expect-error message property does not exist on interaction/message
+
                 if (input.obj.message.embeds[0].description.includes('map')) {
-                    //@ts-expect-error message property does not exist on interaction/message
+
                     filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
                 }
-                //@ts-expect-error message property does not exist on message/interaction
+
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -4052,19 +3921,19 @@ export async function osutop(input: extypes.commandInput) {
 
                 }
 
-                //@ts-expect-error message property does not exist on message/interaction
+
                 const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
                     reverse = true
                 } else {
                     reverse = false
                 }
-                //@ts-expect-error message property does not exist on message/interaction
+
                 if (input.obj.message.embeds[0].fields.length == 7 || input.obj.message.embeds[0].fields.length == 11) {
                     detailed = true
                 } else {
                     detailed = false
-                }//@ts-expect-error message property does not exist on message/interaction
+                }
                 const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
                 page = 0
                 switch (input.button) {
@@ -4077,7 +3946,7 @@ export async function osutop(input: extypes.commandInput) {
                     case 'RightArrow':
                         page = pageParsed + 1
                         break;
-                    case 'BigRightArrow'://@ts-expect-error message property does not exist on message/interaction
+                    case 'BigRightArrow':
                         page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
                         break;
                     default:
@@ -4243,8 +4112,7 @@ export async function osutop(input: extypes.commandInput) {
         );
 
     if (input.commandType == 'interaction') {
-        //@ts-expect-error reply diff signatures
-        input.obj.reply({
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
             failIfNotExists: false,
@@ -4279,16 +4147,14 @@ export async function osutop(input: extypes.commandInput) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    //@ts-expect-error reply diff signatures
-                    input.obj.reply({
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
                 }, 1000);
             } else {
-                //@ts-expect-error reply diff signatures
-                input.obj.reply({
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -4325,16 +4191,14 @@ export async function osutop(input: extypes.commandInput) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    //@ts-expect-error reply diff signatures
-                    input.obj.reply({
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
                 }, 1000);
             } else {
-                //@ts-expect-error reply diff signatures
-                input.obj.reply({
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -4349,16 +4213,16 @@ export async function osutop(input: extypes.commandInput) {
     } catch (error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-expect-error reply diff signatures
-                    input.obj.reply({
+                setTimeout(() => {
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not fetch \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     })
                         .catch();
                 }, 1000);
-            } else {//@ts-expect-error reply diff signatures
-                input.obj.reply({
+            } else {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not fetch \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -4456,17 +4320,12 @@ export async function osutop(input: extypes.commandInput) {
             name: 'Error',
             value: 'No scores found',
             inline: false
-        }])
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[2].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        }]);
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         for (let i = 0; scoresarg.fields.length > i; i++) {
             topEmbed.addFields(scoresarg.fields[i])
@@ -4522,16 +4381,12 @@ export async function osutop(input: extypes.commandInput) {
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
 
     if (scoresarg.isFirstPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (scoresarg.isLastPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
@@ -4588,9 +4443,10 @@ export async function pinned(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
+
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-parse')) {
                 parseScore = true;
@@ -4717,30 +4573,30 @@ export async function pinned(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
             searchid = input.obj.member.user.id;
-            //@ts-expect-error options property does not exist on message
+
             user = input.obj.options.getString('user');
-            //@ts-expect-error options property does not exist on message
+
             page = input.obj.options.getInteger('page');
-            //@ts-expect-error options property does not exist on message
+
             scoredetailed = input.obj.options.getBoolean('detailed');
-            //@ts-expect-error options property does not exist on message
-            sort = input.obj.options.getString('sort');
-            //@ts-expect-error options property does not exist on message
+            sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
+
             reverse = input.obj.options.getBoolean('reverse');
-            //@ts-expect-error options property does not exist on message
+
             mode = input.obj.options.getString('mode') ?? 'osu';
-            //@ts-expect-error options property does not exist on message
+
             filteredMapper = input.obj.options.getString('mapper');
-            //@ts-expect-error options property does not exist on message
+
             filterTitle = input.obj.options.getString('filter');
-            //@ts-expect-error options property does not exist on message
+
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
                 parseScore = true
             }
-            //@ts-expect-error options property does not exist on message
+
             filteredMods = input.obj.options.getString('mods');
         }
 
@@ -4748,35 +4604,36 @@ export async function pinned(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            //@ts-expect-error message property does not exist on interaction/message
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            //@ts-expect-error message property does not exist on interaction/message
+
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
-            //@ts-expect-error message property does not exist on interaction/message
+
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
             page = 0;
-            //@ts-expect-error message property does not exist on interaction/message
+
             if (input.obj.message.embeds[0].description) {
-                //@ts-expect-error message property does not exist on interaction/message
+
                 if (input.obj.message.embeds[0].description.includes('mapper')) {
-                    //@ts-expect-error message property does not exist on interaction/message
+
                     filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
                 }
-                //@ts-expect-error message property does not exist on interaction/message
+
                 if (input.obj.message.embeds[0].description.includes('mods')) {
-                    //@ts-expect-error message property does not exist on interaction/message
+
                     filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
                 }
-                //@ts-expect-error message property does not exist on interaction/message
+
                 if (input.obj.message.embeds[0].description.includes('map')) {
-                    //@ts-expect-error message property does not exist on interaction/message
+
                     filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
                 }
 
-                //@ts-expect-error message property does not exist on interaction/message
+
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -4804,14 +4661,14 @@ export async function pinned(input: extypes.commandInput) {
                 }
 
 
-                //@ts-expect-error message property does not exist on interaction/message
+
                 const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
                     reverse = true
                 } else {
                     reverse = false
                 }
-                //@ts-expect-error message property does not exist on interaction/message
+
                 const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
                 page = 0
                 switch (input.button) {
@@ -4825,7 +4682,7 @@ export async function pinned(input: extypes.commandInput) {
                         page = pageParsed + 1
                         break;
                     case 'BigRightArrow':
-                        //@ts-expect-error message property does not exist on interaction/message
+
                         page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
                         break;
                     default:
@@ -4963,8 +4820,7 @@ export async function pinned(input: extypes.commandInput) {
     mode = osufunc.modeValidator(mode);
 
     if (input.commandType == 'interaction') {
-        //@ts-expect-error reply diff signatures
-        input.obj.reply({
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
             failIfNotExists: false,
@@ -4997,16 +4853,14 @@ export async function pinned(input: extypes.commandInput) {
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
             setTimeout(() => {
-                //@ts-expect-error reply diff signatures
-                input.obj.reply({
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
             }, 1000);
         } else {
-            //@ts-expect-error reply diff signatures
-            input.obj.reply({
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -5030,15 +4884,14 @@ export async function pinned(input: extypes.commandInput) {
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-expect-error edit reply doesnt exist on msg
-                        input.obj.editReply({
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: 'Error - could not find user\'s pinned scores',
                             allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-expect-error reply diff signatures
-                    input.obj.reply({
+                } else {
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: 'Error - could not find user\'s pinned scores',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -5151,33 +5004,24 @@ export async function pinned(input: extypes.commandInput) {
             name: 'Error',
             value: 'No scores found',
             inline: false
-        }])
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[2].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        }]);
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         for (let i = 0; i < scoresarg.fields.length; i++) {
             pinnedEmbed.addFields([scoresarg.fields[i]])
         }
     }
     if (scoresarg.isFirstPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (scoresarg.isLastPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
@@ -5234,9 +5078,10 @@ export async function recent(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
+
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-list')) {
                 list = true;
@@ -5312,28 +5157,28 @@ export async function recent(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            searchid = input.obj.member.user.id;//@ts-expect-error null msg
-            user = input.obj.options.getString('user');//@ts-expect-error null msg
-            page = input.obj.options.getNumber('page');//@ts-expect-error null msg
-            mode = input.obj.options.getString('mode');//@ts-expect-error null msg
+            searchid = input.obj.member.user.id;
+            user = input.obj.options.getString('user');
+            page = input.obj.options.getNumber('page');
+            mode = input.obj.options.getString('mode');
             list = input.obj.options.getBoolean('list');
-            //@ts-expect-error options property does not exist on message
+
             filterTitle = input.obj.options.getString('filter');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-expect-error null msg
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            user =//@ts-expect-error null msg
-                (input.obj.message as Discord.Message<any>).embeds[0].author.url.split('u/')[1]
+            user = (input.obj.message as Discord.Message<any>).embeds[0].author.url.split('u/')[1]
             //title.split('for ')[1]
-            //@ts-expect-error null msg
             const modething = input.obj.message.embeds[0].footer ? input.obj.message.embeds[0].description.split('\n')[1] : input.obj.message.embeds[0].description.split(' | ')[1].split('\n')[0]
             switch (true) {
                 case modething.includes('osu'): {
@@ -5352,7 +5197,7 @@ export async function recent(input: extypes.commandInput) {
                     mode = 'mania';
                 }
             }
-            //@ts-expect-error null msg
+
             if (input.obj.message.embeds[0].title.includes('Best')) {
                 sort = 'pp'
             }
@@ -5361,41 +5206,41 @@ export async function recent(input: extypes.commandInput) {
             if (input.button == 'BigLeftArrow') {
                 page = 1
                 isFirstPage = true
-            }//@ts-expect-error null msg
+            }
             if (input.obj.message.embeds[0].title.includes('plays') || input.obj.message.embeds[0].title.includes('passes')) {
                 switch (input.button) {
-                    case 'LeftArrow'://@ts-expect-error null msg
+                    case 'LeftArrow':
                         page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1
                         break;
-                    case 'RightArrow'://@ts-expect-error null msg
+                    case 'RightArrow':
                         page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1
                         break;
-                    case 'BigRightArrow'://@ts-expect-error null msg
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))
+                    case 'BigRightArrow':
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n')[0])
                         break;
-                    case 'Refresh'://@ts-expect-error null msg
+                    case 'Refresh':
                         page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0])
                         break;
                 }
-                list = true//@ts-expect-error null msg
-                if (isNaN((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) || ((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) == 'NaN') {
+                list = true
+                if (isNaN(+(input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) || ((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) == 'NaN') {
                     page = 1
                 }
                 if (page < 2) {
                     isFirstPage = true;
-                }//@ts-expect-error null msg
-                if (page == parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))) {
+                }
+                if (page == parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n')[0])) {
                     isLastPage = true;
                 }
             } else {
                 switch (input.button) {
-                    case 'LeftArrow'://@ts-expect-error null msg
+                    case 'LeftArrow':
                         page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) - 1
                         break;
-                    case 'RightArrow'://@ts-expect-error null msg
+                    case 'RightArrow':
                         page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) + 1
                         break;
-                    case 'Refresh'://@ts-expect-error null msg
+                    case 'Refresh':
                         page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1])
                         break;
                 }
@@ -5403,15 +5248,15 @@ export async function recent(input: extypes.commandInput) {
                     page == 1
                 }
             }
-            //@ts-expect-error null msg
+
             if (input.obj.message.embeds[0].title.includes('passes')) {
                 showFails = 0
             } else {
                 showFails = 1
             }
-            //@ts-expect-error null msg
-            if(input.obj.message.embeds[0].description.includes('Filter:')){
-            //@ts-expect-error null msg
+
+            if (input.obj.message.embeds[0].description.includes('Filter:')) {
+
                 filterTitle = input.obj.message.embeds[0].description.split('Filter: ')[1].split('\n')[0]
             }
         }
@@ -5568,8 +5413,8 @@ export async function recent(input: extypes.commandInput) {
     osufunc.debug(osudataReq, 'command', 'recent', input.obj.guildId, 'osuData');
 
     if (osudata?.error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {//@ts-expect-error null msg
-            input.obj.reply({
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                 content: `Error - could not fetch user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -5579,8 +5424,8 @@ export async function recent(input: extypes.commandInput) {
     }
 
     if (!osudata.id) {
-        if (input.commandType != 'button' && input.commandType != 'link') {//@ts-expect-error null msg
-            input.obj.reply({
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                 content: `Error - could not fetch user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -5589,8 +5434,8 @@ export async function recent(input: extypes.commandInput) {
         return;
     }
 
-    if (input.commandType == 'interaction') {//@ts-expect-error null msg
-        input.obj.reply({
+    if (input.commandType == 'interaction') {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
@@ -5623,15 +5468,14 @@ export async function recent(input: extypes.commandInput) {
     if (rsdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-expect-error null msg
-                    input.obj.editReply({
+                setTimeout(() => {
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: `Error - could not fetch \`${user}\`'s recent scores`,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     }).catch()
                 }, 1000)
-            } else {//@ts-expect-error null msg
-                input.obj.reply({
+            } else {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not fetch \`${user}\`'s recent scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -5690,15 +5534,14 @@ export async function recent(input: extypes.commandInput) {
 
             if (input.button == null) {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-expect-error null msg
-                        input.obj.editReply({
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: err,
                             allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-expect-error null msg
-                    input.obj.reply(
+                } else {
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply(
                         {
                             content: err,
                             allowedMentions: { repliedUser: false },
@@ -5733,15 +5576,14 @@ export async function recent(input: extypes.commandInput) {
         if (mapdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-expect-error null msg
-                        input.obj.editReply({
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: 'Error - could not find beatmap',
                             allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-expect-error null msg
-                    input.obj.reply({
+                } else {
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: 'Error - could not find beatmap',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -5978,10 +5820,8 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
             ])
 
         if (page >= rsdata.length - 1) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[2].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[3].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
         }
 
         osufunc.writePreviousId('map', input.obj.guildId, `${curbm.id}`)
@@ -6041,38 +5881,29 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
                 name: 'Error',
                 value: 'No scores found',
                 inline: false
-            }])
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[0].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[1].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[2].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[3].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[4].setDisabled(true)
+            }]);
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         } else {
             for (let i = 0; scoresarg.fields.length > i; i++) {
                 rsEmbed.addFields(scoresarg.fields[i])
             }
         }
-rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 5)}
+        rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 5)}
 ${emojis.gamemodes[mode]}
 ${filterTitle ? `Filter: ${filterTitle}` : ''}
 `)
         rsEmbed.setFooter({ text: `-` })
         if (scoresarg.isFirstPage) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[0].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[1].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
         }
         if (scoresarg.isLastPage) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[3].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[4].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         }
     }
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
@@ -6118,7 +5949,8 @@ export async function replayparse(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
         }
             break;
@@ -6126,6 +5958,7 @@ export async function replayparse(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
@@ -6133,11 +5966,13 @@ export async function replayparse(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
         case 'link': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
         } break;
     }
@@ -6388,7 +6223,8 @@ export async function scoreparse(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
             scorelink = null;
             scoremode = input.args[1] ?? 'osu';
@@ -6399,6 +6235,7 @@ export async function scoreparse(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
@@ -6406,12 +6243,14 @@ export async function scoreparse(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
         case 'link': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.Message<any>);
+
+            commanduser = input.obj.author;
             const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
             try {
                 scorelink = messagenohttp.split('/scores/')[1]
@@ -6496,8 +6335,8 @@ export async function scoreparse(input: extypes.commandInput) {
     func.storeFile(scoredataReq, scoreid, 'scoredata')
 
     if (scoredata?.error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {//@ts-expect-error null msg
-            input.obj.reply({
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                 content: 'Error - could not fetch score data',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -6507,16 +6346,16 @@ export async function scoreparse(input: extypes.commandInput) {
         return;
     }
     try {
-        if (typeof scoredata?.error != 'undefined') {//@ts-expect-error null msg
-            input.obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
+        if (typeof scoredata?.error != 'undefined') {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
                 .catch();
             return;
         }
     } catch (error) {
     }
 
-    if (input.commandType == 'interaction' && input.overrides == null) {//@ts-expect-error null msg
-        input.obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
+    if (input.commandType == 'interaction' && input.overrides == null) {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
             .catch();
 
     }
@@ -6524,8 +6363,8 @@ export async function scoreparse(input: extypes.commandInput) {
     osufunc.debug(scoredataReq, 'command', 'scoreparse', input.obj.guildId, 'scoreData');
     try {
         scoredata.rank.toUpperCase();
-    } catch (error) {//@ts-expect-error null msg
-        input.obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
+    } catch (error) {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
             .catch();
         return;
     }
@@ -6551,15 +6390,14 @@ export async function scoreparse(input: extypes.commandInput) {
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-expect-error null msg
-                    input.obj.editReply({
+                setTimeout(() => {
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: 'Error - could not fetch beatmap data',
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     }).catch()
                 }, 1000)
-            } else {//@ts-expect-error null msg
-                input.obj.reply({
+            } else {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: 'Error - could not fetch beatmap data',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -6736,15 +6574,15 @@ export async function scoreparse(input: extypes.commandInput) {
     osufunc.debug(osudataReq, 'command', 'scoreparse', input.obj.guildId, 'osuData')
     if (osudata?.error) {
         if (input.commandType == 'interaction') {
-            setTimeout(() => {//@ts-expect-error null msg
-                input.obj.reply({
+            setTimeout(() => {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${scoredata?.user?.username}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
             }, 1000);
-        } else {//@ts-expect-error null msg
-            input.obj.reply({
+        } else {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                 content: `Error - could not find user \`${scoredata?.user?.username}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -6820,8 +6658,9 @@ export async function scores(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.Message<any>);
+
+            commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-parse')) {
                 parseScore = true;
@@ -6856,13 +6695,14 @@ export async function scores(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            searchid = input.obj.member.user.id;//@ts-expect-error null msg
-            user = input.obj.options.getString('username');//@ts-expect-error null msg
-            mapid = input.obj.options.getNumber('id');//@ts-expect-error null msg
-            sort = input.obj.options.getString('sort');//@ts-expect-error null msg
+            searchid = input.obj.member.user.id;
+            user = input.obj.options.getString('username');
+            mapid = input.obj.options.getNumber('id');
+            sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
             reverse = input.obj.options.getBoolean('reverse');
-            //@ts-expect-error options property does not exist on message
+
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
                 parseScore = true
@@ -6872,21 +6712,22 @@ export async function scores(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-expect-error null msg
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            page = 0;//@ts-expect-error null msg
-            user = input.obj.message.embeds[0].author.name.split(' (#')[0]//@ts-expect-error null msg
-            mapid = input.obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]//@ts-expect-error null msg
-            if (input.obj.message.embeds[0].description) {//@ts-expect-error null msg
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-expect-error null msg
+            page = 0;
+            user = input.obj.message.embeds[0].author.name.split(' (#')[0]
+            mapid = input.obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]
+            if (input.obj.message.embeds[0].description) {
+                if (input.obj.message.embeds[0].description.includes('mapper')) {
                     filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-expect-error null msg
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-expect-error null msg
+                }
+                if (input.obj.message.embeds[0].description.includes('mods')) {
                     filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-expect-error null msg
+                }
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 switch (true) {
                     case sort1.includes('score'):
@@ -6913,7 +6754,7 @@ export async function scores(input: extypes.commandInput) {
 
                 }
 
-                //@ts-expect-error null msg
+
                 const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
                     reverse = true
@@ -6925,21 +6766,21 @@ export async function scores(input: extypes.commandInput) {
                     case 'BigLeftArrow':
                         page = 1
                         break;
-                    case 'LeftArrow'://@ts-expect-error null msg
+                    case 'LeftArrow':
                         page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
                         break;
-                    case 'RightArrow'://@ts-expect-error null msg
+                    case 'RightArrow':
                         page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
                         break;
-                    case 'BigRightArrow'://@ts-expect-error null msg
+                    case 'BigRightArrow':
                         page = parseInt((input.obj.message.embeds[0].description).split('/')[1].split('\n')[0])
                         break;
-                    case 'Refresh'://@ts-expect-error null msg
+                    case 'Refresh':
                         page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1])
                         break;
-                }//@ts-expect-error null msg
+                }
                 mode = input.obj.message.embeds[0].description.split('mode: ')[1].split('\n')[0]
-            }//@ts-expect-error null msg
+            }
             const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
             page = 0
             switch (input.button) {
@@ -6952,7 +6793,7 @@ export async function scores(input: extypes.commandInput) {
                 case 'RightArrow':
                     page = pageParsed + 1
                     break;
-                case 'BigRightArrow'://@ts-expect-error null msg
+                case 'BigRightArrow':
                     page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
 
                     break;
@@ -7087,8 +6928,8 @@ export async function scores(input: extypes.commandInput) {
         mapid = osufunc.getPreviousId('map', input.obj.guildId);
     }
 
-    if (input.commandType == 'interaction') {//@ts-expect-error null msg
-        input.obj.reply({
+    if (input.commandType == 'interaction') {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
             failIfNotExists: false,
@@ -7121,15 +6962,15 @@ export async function scores(input: extypes.commandInput) {
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
-            setTimeout(() => {//@ts-expect-error null msg
-                input.obj.reply({
+            setTimeout(() => {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
             }, 1000);
-        } else {//@ts-expect-error null msg
-            input.obj.reply({
+        } else {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -7165,15 +7006,14 @@ export async function scores(input: extypes.commandInput) {
     if (scoredataPresort?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-expect-error null msg
-                    input.obj.editReply({
+                setTimeout(() => {
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: 'Error - could not fetch scores',
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     }).catch()
                 }, 1000)
-            } else {//@ts-expect-error null msg
-                input.obj.reply({
+            } else {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: 'Error - could not fetch scores',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -7186,8 +7026,8 @@ export async function scores(input: extypes.commandInput) {
     const scoredata: osuApiTypes.Score[] = scoredataPresort.scores
     try {
         scoredata.length < 1
-    } catch (error) {//@ts-expect-error null msg
-        return input.obj.reply({
+    } catch (error) {
+        return (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: `Error - no scores found for \`${user}\` on map \`${mapid}\``,
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
@@ -7243,15 +7083,14 @@ export async function scores(input: extypes.commandInput) {
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-expect-error null msg
-                    input.obj.editReply({
+                setTimeout(() => {
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: 'Error - could not fetch beatmap data',
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     }).catch()
                 }, 1000)
-            } else {//@ts-expect-error null msg
-                input.obj.reply({
+            } else {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: 'Error - could not fetch beatmap data',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -7305,17 +7144,12 @@ export async function scores(input: extypes.commandInput) {
             name: 'Error',
             value: 'No scores found',
             inline: false
-        }])
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[2].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        }]);
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         for (let i = 0; i < scoresarg.fields.length && i < 5; i++) {
             scoresEmbed.addFields([scoresarg.fields[i]])
@@ -7327,16 +7161,12 @@ export async function scores(input: extypes.commandInput) {
     osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
 
     if (scoresarg.isFirstPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (scoresarg.isLastPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -7380,8 +7210,9 @@ export async function simulate(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.Message<any>);
+
+            commanduser = input.obj.author;
             const ctn = input.obj.content;
             if (ctn.includes('-mods')) {
                 mods = input.args[input.args.indexOf('-mods') + 1]
@@ -7482,14 +7313,15 @@ export async function simulate(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
-            mapid = input.obj.options.getInteger('id')//@ts-expect-error null msg
-            mods = input.obj.options.getString('mods')//@ts-expect-error null msg
-            acc = input.obj.options.getNumber('accuracy')//@ts-expect-error null msg
-            combo = input.obj.options.getInteger('combo')//@ts-expect-error null msg
-            n300 = input.obj.options.getInteger('n300')//@ts-expect-error null msg
-            n100 = input.obj.options.getInteger('n100')//@ts-expect-error null msg
-            n50 = input.obj.options.getInteger('n50')//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+            mapid = input.obj.options.getInteger('id')
+            mods = input.obj.options.getString('mods')
+            acc = input.obj.options.getNumber('accuracy')
+            combo = input.obj.options.getInteger('combo')
+            n300 = input.obj.options.getInteger('n300')
+            n100 = input.obj.options.getInteger('n100')
+            n50 = input.obj.options.getInteger('n50')
             nMiss = input.obj.options.getInteger('miss')
         }
 
@@ -7497,6 +7329,7 @@ export async function simulate(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -7561,8 +7394,8 @@ export async function simulate(input: extypes.commandInput) {
         mapid = osufunc.getPreviousId('map', input.obj.guildId);
     }
 
-    if (input.commandType == 'interaction') {//@ts-expect-error null msg
-        input.obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
+    if (input.commandType == 'interaction') {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
             .catch();
 
     }
@@ -7631,7 +7464,8 @@ export async function simulate(input: extypes.commandInput) {
         mods,
         gamemode: 'osu',
         mapid,
-        calctype: 0
+        calctype: 0,
+        clockRate: 1
     });
 
     const title = mapdata.beatmapset?.title ?
@@ -7726,9 +7560,11 @@ export async function map(input: extypes.commandInput) {
 
     let mapid;
     let mapmods;
-    let maptitleq = null;
+    let maptitleq: string = null;
     let detailed = false;
     let searchRestrict = 'any';
+    let overrideSpeed = 1;
+    let overrideBpm: number = null;
 
     const useComponents = [];
     let overwriteModal = null;
@@ -7736,7 +7572,8 @@ export async function map(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
 
             if (input.args.includes('-detailed')) {
@@ -7746,6 +7583,14 @@ export async function map(input: extypes.commandInput) {
             if (input.args.includes('-d')) {
                 detailed = true;
                 input.args.splice(input.args.indexOf('-d'), 1)
+            }
+            if (input.args.includes('-bpm')) {
+                overrideBpm = parseFloat(input.args[input.args.indexOf('-bpm') + 1])
+                input.args.splice(input.args.indexOf('-bpm'), 2)
+            }
+            if (input.args.includes('-speed')) {
+                overrideSpeed = parseFloat(input.args[input.args.indexOf('-speed') + 1])
+                input.args.splice(input.args.indexOf('-speed'), 2)
             }
 
             if (input.args.join(' ').includes('"')) {
@@ -7769,22 +7614,26 @@ export async function map(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error null msg
-            mapid = input.obj.options.getInteger('id');//@ts-expect-error null msg
-            mapmods = input.obj.options.getString('mods');//@ts-expect-error null msg
-            detailed = input.obj.options.getBoolean('detailed');//@ts-expect-error null msg
+
+            mapid = input.obj.options.getInteger('id');
+            mapmods = input.obj.options.getString('mods');
+            detailed = input.obj.options.getBoolean('detailed');
             maptitleq = input.obj.options.getString('query');
+            input.obj.options.getNumber('bpm') ? overrideBpm = input.obj.options.getNumber('bpm') : null;
+            input.obj.options.getNumber('speed') ? overrideSpeed = input.obj.options.getNumber('speed') : null;
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-expect-error null msg
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            commanduser = input.obj.member.user;
             const urlnohttp = input.obj.message.embeds[0].url.split('https://')[1];
             const setid = urlnohttp.split('/')[2].split('#')[0];
             const curid = urlnohttp.split('/')[3];
@@ -7817,7 +7666,7 @@ export async function map(input: extypes.commandInput) {
             const bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
             osufunc.debug(bmstosr, 'command', 'map', input.obj.guildId, 'bmsToSr');
 
-            const curmapindex = bmstosr.findIndex(x => x.id == curid);
+            const curmapindex = bmstosr.findIndex(x => `${x.id}` == `${curid}`);
             if (input.button == `RightArrow`) {
                 if (curmapindex == bmstosr.length - 1) {
                     mapid = curid;
@@ -7838,10 +7687,10 @@ export async function map(input: extypes.commandInput) {
             if (input.button == `BigLeftArrow`) {
                 mapid = bmstosr[0].id;
             }
-            //@ts-expect-error null msg
+
             if (input.obj.message.embeds[0].fields[1].value.includes('aim') || input.obj.message.embeds[0].fields[0].value.includes('ms')) {
                 detailed = true
-            }//@ts-expect-error null msg
+            }
             mapmods = input.obj.message.embeds[0].title.split('+')[1];
             if (input.button == 'DetailEnable') {
                 detailed = true;
@@ -7850,18 +7699,22 @@ export async function map(input: extypes.commandInput) {
                 detailed = false;
             }
             if (input.button == 'Refresh') {
-                mapid = curid;//@ts-expect-error null msg
+                mapid = curid;
                 detailed = input.obj.message.embeds[0].fields[1].value.includes('aim') || input.obj.message.embeds[0].fields[0].value.includes('ms')
+            }
+            if (input.obj.message.embeds[0].fields[0].value.includes('=>')) {
+                overrideBpm = parseFloat(input.obj.message.embeds[0].fields[0].value.split('=>')[1].split('\n')[0])
             }
         }
             break;
 
         case 'link': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
-            //@ts-expect-error null msg
+
             const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
-            mapmods =//@ts-expect-error null msg
+            mapmods =
                 input.obj.content.includes('+') ?
                     messagenohttp.split('+')[1] : 'NM';
             if (input.args[0] && input.args[0].startsWith('query')) {
@@ -7887,8 +7740,8 @@ export async function map(input: extypes.commandInput) {
                     } else {
                         mapid = parseInt(idfirst)
                     }
-                } catch (error) {//@ts-expect-error null msg
-                    input.obj.reply({
+                } catch (error) {
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: 'Please enter a valid beatmap link.',
                         allowedMentions: { repliedUser: false }
                     })
@@ -7903,16 +7756,16 @@ export async function map(input: extypes.commandInput) {
             } else {
                 let setid = 910392;
                 if (!messagenohttp.includes('/beatmapsets/')) {
-                    setid = messagenohttp.split('/s/')[1]
+                    setid = +messagenohttp.split('/s/')[1]
 
                     if (isNaN(setid)) {
-                        setid = messagenohttp.split('/s/')[1].split(' ')[0]
+                        setid = +messagenohttp.split('/s/')[1].split(' ')[0]
                     }
                 } else if (!messagenohttp.includes('/s/')) {
-                    setid = messagenohttp.split('/beatmapsets/')[1]
+                    setid = +messagenohttp.split('/beatmapsets/')[1]
 
                     if (isNaN(setid)) {
-                        setid = messagenohttp.split('/s/')[1].split(' ')[0]
+                        setid = +messagenohttp.split('/s/')[1].split(' ')[0]
                     }
                 }
                 let bmsdataReq: osufunc.apiReturn;
@@ -7936,8 +7789,8 @@ export async function map(input: extypes.commandInput) {
                 }
                 try {
                     mapid = bmsdata.beatmaps[0].id;
-                } catch (error) {//@ts-expect-error null msg
-                    input.obj.reply({
+                } catch (error) {
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: 'Please enter a valid beatmap link.',
                         allowedMentions: {
                             repliedUser: false
@@ -7946,6 +7799,14 @@ export async function map(input: extypes.commandInput) {
                         .catch(error => { });
                     return;
                 }
+            }
+            if (input.args.includes('-bpm')) {
+                overrideBpm = parseFloat(input.args[input.args.indexOf('-bpm') + 1])
+                input.args.splice(input.args.indexOf('-bpm'), 2)
+            }
+            if (input.args.includes('-speed')) {
+                overrideSpeed = parseFloat(input.args[input.args.indexOf('-speed') + 1])
+                input.args.splice(input.args.indexOf('-speed'), 2)
             }
         }
             break;
@@ -8037,6 +7898,7 @@ export async function map(input: extypes.commandInput) {
         .setCustomId(`Select-map-${commanduser.id}-${input.absoluteID}`)
         .setPlaceholder('Select a map')
 
+    //fetch map data and mapset data from id
     if (maptitleq == null) {
         if (func.findFile(mapid, 'mapdata') &&
             !('error' in func.findFile(mapid, 'mapdata')) &&
@@ -8059,8 +7921,8 @@ export async function map(input: extypes.commandInput) {
 
         if (mapdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                //@ts-expect-error null msg
-                input.obj.reply({
+
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -8088,6 +7950,8 @@ export async function map(input: extypes.commandInput) {
 
         osufunc.debug(bmsdataReq, 'command', 'map', input.obj.guildId, 'bmsData');
 
+
+        //options thing to switch to other maps in the mapset
         if (typeof bmsdata?.beatmaps == 'undefined' || bmsdata?.beatmaps?.length < 2) {
             inputModal.addOptions(
                 new Discord.SelectMenuOptionBuilder()
@@ -8121,6 +7985,7 @@ export async function map(input: extypes.commandInput) {
         }
     }
 
+    //fetch mapdata and mapset data from title query
     if (maptitleq != null) {
         const mapidtestReq = await osufunc.apiget({
             type: 'mapset_search',
@@ -8133,8 +7998,8 @@ export async function map(input: extypes.commandInput) {
         osufunc.debug(mapidtestReq, 'command', 'map', input.obj.guildId, 'mapIdTestData');
 
         if (mapidtest?.error) {
-            if (input.commandType != 'button' && input.commandType != 'link') {//@ts-expect-error null msg
-                input.obj.reply({
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: 'Error - could not fetch beatmap search data.',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -8145,21 +8010,22 @@ export async function map(input: extypes.commandInput) {
 
         let mapidtest2;
 
-        if (mapidtest.length == 0) {//@ts-expect-error null msg
-            input.obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+        if (mapidtest.length == 0) {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 .catch();
 
             return;
         }
         try {
             mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating)
-        } catch (error) {//@ts-expect-error null msg
-            input.obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+        } catch (error) {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 .catch();
             return;
         }
         const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset }[] = [];
 
+        //get maps to add to options menu
         for (let i = 0; i < mapidtest.beatmapsets.length; i++) {
             if (!mapidtest.beatmapsets[i]) break;
 
@@ -8195,8 +8061,8 @@ export async function map(input: extypes.commandInput) {
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
         if (mapdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                //@ts-expect-error null msg
-                input.obj.reply({
+
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -8205,6 +8071,7 @@ export async function map(input: extypes.commandInput) {
             return;
         }
 
+        //options menu to switch to other maps
         for (let i = 0; i < allmaps.length && i < 25; i++) {
             const curmap = allmaps[i]
             if (!curmap.map) break;
@@ -8223,6 +8090,8 @@ export async function map(input: extypes.commandInput) {
         }
     }
 
+
+    //parsing maps
     if (mapmods == null || mapmods == '') {
         mapmods = 'NM';
     }
@@ -8230,8 +8099,11 @@ export async function map(input: extypes.commandInput) {
         mapmods = osumodcalc.OrderMods(mapmods.toUpperCase());
     }
     let statusimg = emojis.rankedstatus.graveyard;
-    if (input.commandType == 'interaction') {//@ts-expect-error null msg
-        input.obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
+    if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+            content: "Loading...",
+            allowedMentions: { repliedUser: false }
+        })
             .catch();
 
     }
@@ -8276,12 +8148,21 @@ export async function map(input: extypes.commandInput) {
     let ppComputed: PerformanceAttributes[];
     let ppissue: string;
     let totaldiff: string | number = mapdata.difficulty_rating;
+
+    if (overrideBpm != null && isNaN(overrideBpm) == false && (overrideSpeed == null || isNaN(overrideSpeed) == true) && overrideBpm != mapdata.bpm) {
+        overrideSpeed = overrideBpm / mapdata.bpm;
+    }
+    if (overrideSpeed != null && isNaN(overrideSpeed) == false && (overrideBpm == null || isNaN(overrideBpm) == true) && overrideSpeed != 1) {
+        overrideBpm = mapdata.bpm * overrideSpeed;
+    }
+
     try {
         ppComputed = await osufunc.mapcalc({
             mods: mapmods,
             gamemode: mapdata.mode,
             mapid: mapdata.id,
-            calctype: 0
+            calctype: 0,
+            clockRate: overrideSpeed ?? 1,
         })
         ppissue = '';
         try {
@@ -8381,7 +8262,7 @@ export async function map(input: extypes.commandInput) {
     if (mapperdata?.error) {
         mapperdata = JSON.parse(fs.readFileSync('./files/defaults/mapper.json', 'utf8'));
         // if (commandType != 'button' && commandType != 'link') {
-        //     input.obj.reply({
+        //     (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
         //         content: 'Error - could not find mapper',
         //         allowedMentions: { repliedUser: false },
         //         failIfNotExists: true
@@ -8473,8 +8354,8 @@ export async function map(input: extypes.commandInput) {
             {
                 name: 'MAP VALUES',
                 value:
-                    `${basicvals}\n` +
-                    `${totaldiff}⭐ ${emojis.mapobjs.bpm}${allvals.bpm}\n` +
+                    `${basicvals} ${totaldiff}⭐\n` +
+                    `${emojis.mapobjs.bpm}${allvals.bpm}${overrideBpm ? `=>${overrideBpm}` : ''}\n` +
                     `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
                     `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull}\n` +
                     `${mapdata.max_combo}x combo`,
@@ -8615,7 +8496,8 @@ export async function maplocal(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
         }
             break;
@@ -8623,6 +8505,7 @@ export async function maplocal(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
@@ -8630,11 +8513,13 @@ export async function maplocal(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
         case 'link': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
         } break;
     }
@@ -8669,9 +8554,9 @@ export async function maplocal(input: extypes.commandInput) {
     const errmap = fs.readFileSync('./files/errmap.osu', 'utf-8')
     let errtxt = '';
     let mods = 'NM'
-    //@ts-expect-error null msg
-    if (input.obj.content.includes('+')) {//@ts-expect-error null msg
-        mods = input.obj.content.split('+')[1].split(' ')[0]
+
+    if ((input.obj as Discord.Message<any>).content.includes('+')) {
+        mods = (input.obj as Discord.Message<any>).content.split('+')[1].split(' ')[0]
     }
 
     try {
@@ -8866,8 +8751,8 @@ export async function maplocal(input: extypes.commandInput) {
     osufunc.debug(strains, 'fileparse', 'osu', input.obj.guildId, 'strains');
     try {
         mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
-    } catch (error) {//@ts-expect-error null msg
-        input.obj.reply({
+    } catch (error) {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Error - calculating strain graph.',
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
@@ -8905,8 +8790,8 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
                 }
             ])
             .setImage(`${mapgraph}`)
-    } catch (error) {//@ts-expect-error null msg
-        input.obj.reply({
+    } catch (error) {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Error - unknown',
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
@@ -8957,9 +8842,9 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property only exists on message
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
+
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-page')) {
                 page = parseInt(input.args[input.args.indexOf('-page') + 1]);
@@ -9041,19 +8926,20 @@ export async function userBeatmaps(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
-            //@ts-expect-error options property does not exist on message
+
             user = input.obj.options.getString('user') ?? null;
-            //@ts-expect-error options property does not exist on message
+            //@ts-expect-error string not assignable blah blah
             filter = input.obj.options.getString('type') ?? 'favourite';
-            //@ts-expect-error options property does not exist on message
+            //@ts-expect-error string not assignable blah blah
             sort = input.obj.options.getString('sort') ?? 'dateadded';
-            //@ts-expect-error options property does not exist on message
+
             reverse = input.obj.options.getBoolean('reverse') ?? false;
-            //@ts-expect-error options property does not exist on message
+
             filterTitle = input.obj.options.getString('filter');
-            //@ts-expect-error options property does not exist on message
+
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
                 parseMap = true
@@ -9064,14 +8950,14 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
-            //@ts-expect-error messsage property does not exist on message
             const curembed: Discord.Embed = input.obj.message.embeds[0];
             if (!curembed) return;
             user = curembed.author.url.split('u/')[1]
             sort = 'dateadded';
-            //@ts-expect-error null msg
+            //@ts-expect-error string not assignable blah blah
             filter = curembed.title.split('Maps')[0].split('\'s')[1].toLowerCase().replaceAll(' ', '')
             const curpage = parseInt(
                 curembed.description.split('Page: ')[1].split('/')[0]
@@ -9195,8 +9081,8 @@ export async function userBeatmaps(input: extypes.commandInput) {
         user = cuser.username;
     }
 
-    if (input.commandType == 'interaction') {//@ts-expect-error null msg
-        input.obj.reply({
+    if (input.commandType == 'interaction') {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
             failIfNotExists: false,
@@ -9229,15 +9115,15 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
-            setTimeout(() => {//@ts-expect-error null msg
-                input.obj.reply({
+            setTimeout(() => {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
                 })
             }, 1000);
-        } else {//@ts-expect-error null msg
-            input.obj.reply({
+        } else {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -9263,15 +9149,14 @@ export async function userBeatmaps(input: extypes.commandInput) {
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-expect-error null msg
-                        input.obj.editReply({
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not find user's ${calc.toCapital(filter)} Maps`,
                             allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
                         }).catch()
                     }, 1000)
-                } else {//@ts-expect-error null msg
-                    input.obj.reply({
+                } else {
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find user's ${calc.toCapital(filter)} Maps`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -9375,33 +9260,24 @@ export async function userBeatmaps(input: extypes.commandInput) {
             name: 'Error',
             value: 'No mapsets found',
             inline: false
-        }])
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[2].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        }]);
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         for (let i = 0; i < mapsarg.fields.length; i++) {
             mapList.addFields([mapsarg.fields[i]])
         }
     }
     if (mapsarg.isFirstPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (mapsarg.isLastPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
     mapList.setDescription(`
 ${mapsarg.filter}
@@ -9448,7 +9324,8 @@ export async function trackadd(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
                 mode = 'osu'
@@ -9491,7 +9368,8 @@ export async function trackadd(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
             user = input.obj.options.getString('user');
 
         }
@@ -9499,6 +9377,7 @@ export async function trackadd(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -9531,8 +9410,8 @@ export async function trackadd(input: extypes.commandInput) {
         where: { guildId: input.obj.guildId }
     })
 
-    if (!guildsetting.dataValues.trackChannel) {//@ts-expect-error null msg
-        input.obj.reply({
+    if (!guildsetting.dataValues.trackChannel) {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'The current guild does not have a tracking channel',
             embeds: [],
             files: [],
@@ -9613,7 +9492,8 @@ export async function trackremove(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
                 mode = 'osu'
@@ -9656,13 +9536,15 @@ export async function trackremove(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
             user = input.obj.options.getString('user');
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -9695,8 +9577,8 @@ export async function trackremove(input: extypes.commandInput) {
     //     where: { guildId: input.obj.guildId }
     // })
 
-    // if (!guildsetting.dataValues.trackChannel) {//@ts-expect-error null msg
-    //     input.obj.reply({
+    // if (!guildsetting.dataValues.trackChannel) {
+    //     (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
     //         content: 'The current guild does not have a tracking channel',
     //         embeds: [],
     //         files: [],
@@ -9778,23 +9660,26 @@ export async function trackchannel(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
-            channelId = input.args[0];//@ts-expect-error null msg
-            if (input.obj.content.includes('<#')) {//@ts-expect-error null msg
+            channelId = input.args[0];
+            if (input.obj.content.includes('<#')) {
                 channelId = input.obj.content.split('<#')[1].split('>')[0]
             }
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
             channelId = (input.obj.options.getChannel('channel')).id;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -9827,8 +9712,8 @@ export async function trackchannel(input: extypes.commandInput) {
 
     if (!channelId) {
         //the current channel is...
-        if (!guildsetting.dataValues.trackChannel) {//@ts-expect-error null msg
-            input.obj.reply({
+        if (!guildsetting.dataValues.trackChannel) {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                 content: 'The current guild does not have a tracking channel',
                 embeds: [],
                 files: [],
@@ -9836,8 +9721,8 @@ export async function trackchannel(input: extypes.commandInput) {
                 failIfNotExists: true
             }).catch()
             return;
-        }//@ts-expect-error null msg
-        input.obj.reply({
+        }
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: `The current tracking channel is <#${guildsetting.dataValues.trackChannel}>`,
             embeds: [],
             files: [],
@@ -9847,8 +9732,8 @@ export async function trackchannel(input: extypes.commandInput) {
         return;
     }
 
-    if (!channelId || isNaN(+channelId) || !input.client.channels.cache.get(channelId)) {//@ts-expect-error null msg
-        input.obj.reply({
+    if (!channelId || isNaN(+channelId) || !input.client.channels.cache.get(channelId)) {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Please provide a valid channel ID',
             embeds: [],
             files: [],
@@ -9898,18 +9783,21 @@ export async function tracklist(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -10041,15 +9929,15 @@ export async function compare(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-expect-error null msg
-            if (input.obj.mentions.users.size > 1) {//@ts-expect-error null msg
-                firstsearchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;//@ts-expect-error null msg
-                secondsearchid = input.obj.mentions.users.size > 1 ? input.obj.mentions.users.at(1).id : null;//@ts-expect-error null msg
-            } else if (input.obj.mentions.users.size == 1) {//@ts-expect-error null msg
-                firstsearchid = input.obj.author.id;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+            if (input.obj.mentions.users.size > 1) {
+                firstsearchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+                secondsearchid = input.obj.mentions.users.size > 1 ? input.obj.mentions.users.at(1).id : null;
+            } else if (input.obj.mentions.users.size == 1) {
+                firstsearchid = input.obj.author.id;
                 secondsearchid = input.obj.mentions.users.at(0).id
-            } else {//@ts-expect-error null msg
+            } else {
                 firstsearchid = input.obj.author.id
             }
             first = null;
@@ -10064,11 +9952,14 @@ export async function compare(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
-            type = input.obj.options.getString('type') ?? 'profile';//@ts-expect-error null msg
-            first = input.obj.options.getString('first');//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+
+            commanduser = input.obj.member.user;
+            //@ts-expect-error string not assignable blah blah
+            type = input.obj.options.getString('type') ?? 'profile';
+            first = input.obj.options.getString('first');
             second = input.obj.options.getString('second');
-            firstsearchid = commanduser.id//@ts-expect-error null msg
+            firstsearchid = commanduser.id
             mode = input.obj.options.getString('mode') ?? 'osu'
             if (second == null && first != null) {
                 second = first;
@@ -10079,14 +9970,15 @@ export async function compare(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            //@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            type = 'top';//@ts-expect-error null msg
+            type = 'top';
             const pawge = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[0])
-            //@ts-expect-error null msg
+
             const pagefin = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[1])
             switch (input.button) {
                 case 'BigLeftArrow': {
@@ -10113,8 +10005,8 @@ export async function compare(input: extypes.commandInput) {
 
             if (page > pagefin) page = pagefin;
 
-            //@ts-expect-error null msg
-            const firsti = input.obj.message.embeds[0].description.split('and')[0]//@ts-expect-error null msg
+
+            const firsti = input.obj.message.embeds[0].description.split('and')[0]
             const secondi = input.obj.message.embeds[0].description.split('and')[1].split('have')[0]
 
             //user => [name](url)
@@ -10123,7 +10015,8 @@ export async function compare(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {//@ts-expect-error null msg
+    if (input.overrides != null) {
+        //@ts-expect-error string not assignable blah blah
         if (input.overrides.type != null) type = input.overrides.type;
     }
     //==============================================================================================================================================================================================
@@ -10536,7 +10429,8 @@ export async function osuset(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
                 mode = 'osu'
@@ -10593,9 +10487,10 @@ export async function osuset(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
-            name = input.obj.options.getString('user');//@ts-expect-error null msg
-            mode = input.obj.options.getString('mode');//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+            name = input.obj.options.getString('user');
+            mode = input.obj.options.getString('mode');
             skin = input.obj.options.getString('skin');
             type = 'interaction';
         }
@@ -10604,6 +10499,7 @@ export async function osuset(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -10664,8 +10560,8 @@ export async function osuset(input: extypes.commandInput) {
     )
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    // if (typeof name == 'undefined' || name == null) {//@ts-expect-error null msg
-    //     input.obj.reply({
+    // if (typeof name == 'undefined' || name == null) {
+    //     (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
     //         content: 'Error - username undefined',
     //         allowedMentions: { repliedUser: false },
     //         failIfNotExists: true
@@ -10679,8 +10575,8 @@ export async function osuset(input: extypes.commandInput) {
         const thing = osufunc.modeValidatorAlt(mode)
         mode = thing.mode;
         if (thing.isincluded == false) {
-            //@ts-expect-error null msg
-            input.obj.reply({
+
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                 content: 'Error - invalid mode given',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -10787,20 +10683,22 @@ export async function saved(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property only exists on message
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
+
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -10890,10 +10788,13 @@ export async function skin(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            string = input.args.join(' ')
+            string = input.args.join(' ').trim();
+            if (string.includes(searchid)) {
+                string = null;
+            }
 
         }
             break;
@@ -10901,10 +10802,11 @@ export async function skin(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
             string = input.obj.options.getString('string')
-            if (!string) {//@ts-expect-error null msg
-                string = input.obj.options.getUser('user');
+            if (!string) {
+                searchid = input.obj.options.getUser('user').id;
             }
         }
 
@@ -10912,6 +10814,7 @@ export async function skin(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -10954,7 +10857,7 @@ export async function skin(input: extypes.commandInput) {
             findType = 'id'
         }
             break;
-        case (string != null || string.length > 0): {
+        case (string != null || (typeof string == 'string' && string.length > 0)): {
             findType = 'string'
         }
             break;
@@ -10966,15 +10869,16 @@ export async function skin(input: extypes.commandInput) {
     const allUsers = await input.userdata.findAll()
 
     if (findType == 'id') {
-        userF = allUsers.find(user => user.id == searchid)
+        console.log('id')
+        console.log(searchid)
+        userF = allUsers.find(user => `${user.dataValues.id}`.trim() == `${searchid}`.trim())
     } else {
+        console.log('string')
         userF = allUsers.find(user => user.osuname.toLowerCase().includes(string.toLowerCase()))
     }
-    let skinstring;
+    let skinstring = `User is not saved in the database`;
     if (userF) {
         skinstring = `${userF.dataValues.skin}`
-    } else {
-        skinstring = `User is not saved in the database`
     }
 
     const embed = new Discord.EmbedBuilder()
@@ -11016,9 +10920,10 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message<any>);
+
             commanduser = input.obj.author;
-            //@ts-expect-error null msg
+
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
 
             if (input.args.includes('-osu')) {
@@ -11083,13 +10988,14 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property does not exist on message
+
             user = input.obj.options.getString('user');
             searchid = input.obj.member.user.id;
-            //@ts-expect-error options property does not exist on message
+
             mode = input.obj.options.getString('mode');
-            //@ts-expect-error options property does not exist on message
+
             pp = input.obj.options.getNumber('pp');
         }
 
@@ -11097,6 +11003,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
