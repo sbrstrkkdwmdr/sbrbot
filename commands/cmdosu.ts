@@ -7207,6 +7207,8 @@ export async function simulate(input: extypes.commandInput) {
     let n100 = null;
     let n50 = null;
     let nMiss = null;
+    let overrideSpeed = 1;
+    let overrideBpm:number = null;
 
     switch (input.commandType) {
         case 'message': {
@@ -7261,6 +7263,15 @@ export async function simulate(input: extypes.commandInput) {
             }
             if (ctn.includes('-misses')) {
                 nMiss = parseInt(input.args[input.args.indexOf('-misses') + 1])
+                input.args.splice(input.args.indexOf('-misses'), 2)
+            }
+            if (input.args.includes('-bpm')) {
+                overrideBpm = parseFloat(input.args[input.args.indexOf('-bpm') + 1])
+                input.args.splice(input.args.indexOf('-bpm'), 2)
+            }
+            if (input.args.includes('-speed')) {
+                overrideSpeed = parseFloat(input.args[input.args.indexOf('-speed') + 1])
+                input.args.splice(input.args.indexOf('-speed'), 2)
             }
             if (ctn.includes('mods=')) {
                 mods = ctn.split('mods=')[1].split(' ')[0]
@@ -7297,6 +7308,12 @@ export async function simulate(input: extypes.commandInput) {
             }
             if (ctn.includes('misses=')) {
                 nMiss = parseInt(ctn.split('misses=')[1].split(' ')[0])
+            }
+            if (input.args.includes('bpm=')) {
+                overrideBpm = parseFloat(ctn.split('bpm=')[1].split(' ')[0])
+            }
+            if (input.args.includes('speed=')) {
+                overrideSpeed = parseFloat(ctn.split('speed=')[1].split(' ')[0])
             }
 
             input.args = cleanArgs(input.args);
@@ -7431,6 +7448,13 @@ export async function simulate(input: extypes.commandInput) {
         combo = mapdata.max_combo
     }
 
+    if(overrideBpm && !overrideSpeed){
+        overrideSpeed = overrideBpm / mapdata.bpm
+    }
+    if(overrideSpeed && !overrideBpm){
+        overrideBpm = overrideSpeed * mapdata.bpm
+    }
+
     const score = await osufunc.scorecalc({
         mods,
         gamemode: 'osu',
@@ -7443,7 +7467,8 @@ export async function simulate(input: extypes.commandInput) {
         maxcombo: combo,
         score: null,
         calctype: 0,
-        failed: false
+        failed: false,
+        clockRate: overrideSpeed
     });
     osufunc.debug(score, 'command', 'simulate', input.obj.guildId, 'ppCalc');
 
@@ -7486,6 +7511,7 @@ export async function simulate(input: extypes.commandInput) {
 ${combo ?? mapdata.max_combo}x/**${mapdata.max_combo}**x
 ${mods ?? 'No mods'}
 \`${n300}/${n100}/${n50}/${nMiss}\`
+Speed: ${overrideSpeed ?? 1}x (${overrideBpm ?? mapdata.bpm}BPM)
 `,
                 inline: false
             },

@@ -76,7 +76,6 @@ export async function mapcalc(
     mapIsRank?: string
 ) {
     let ppl: rosu.PerformanceAttributes[]
-    const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
 
     switch (obj.calctype) {
         case 0: default: {
@@ -141,13 +140,17 @@ export async function scorecalc(
         mods: string, gamemode: string, mapid: number,
         hitgeki?: number | null, hit300?: number | null, hitkatu?: number | null, hit100?: number | null, hit50?: number | null, miss: number | null,
         acc: number | null, maxcombo?: number | null, score?: number | null,
-        calctype?: number | null, passedObj?: number | null, failed?: boolean | null
+        calctype?: number | null, passedObj?: number | null, failed?: boolean | null,
+        clockRate?: number | null
     },
     mapIsRank?: string
 ) {
     let ppl: rosu.PerformanceAttributes[];
 
-    const calctyper = osumodcalc.ModeNameToInt(obj.gamemode)
+    if(obj.clockRate == null) {
+        obj.clockRate = 1;
+    }
+
     switch (obj.calctype) {
         case 0: default:
             {
@@ -546,14 +549,13 @@ export async function mapcalclocal(
     calctype: number | null,
 ) {
     let ppl: rosu.PerformanceAttributes[]
-    let mapscore
-    const calctyper = osumodcalc.ModeNameToInt(gamemode)
+    let mapscore;
 
     if (path == null) {
         path = `files/tempdiff.osu`
     }
 
-    switch (calctyper) {
+    switch (calctype) {
         case 0: default:
 
             ppl = []
@@ -775,6 +777,10 @@ export async function apiget(input: apiInput) {
         fs.writeFileSync(`./cache/err${Date.now()}.json`, JSON.stringify(data, null, 2))
     }
     logCall(url)
+
+    if(data.apiData.apiData){
+        data = data.apiData
+    }
     return data;
 }
 

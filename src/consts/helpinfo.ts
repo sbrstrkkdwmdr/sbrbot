@@ -1730,8 +1730,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'simulate',
         description: 'Simulates a score on a beatmap',
-        usage: 'simulate [id] +[mods]  -acc [accuracy] -combo [combo] -n300 [n300] -n100 [n100] -n50 [n50] -miss [misses]',
-        slashusage: 'simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses]',
+        usage: 'simulate [id] +[(mods)]  [-acc] [-combo] [-n300] [-n100] [-n50] [-miss] [-bpm] [-speed]',
+        slashusage: 'simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses] [bpm] [speed]',
         examples: [
             {
                 text: 'PREFIXMSGsimulate +HDHR misses=0 acc=97.86',
@@ -1818,6 +1818,26 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: '0',
                 examples: ['miss=2'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'bpm',
+                type: 'float',
+                required: false,
+                description: 'The bpm to simulate the score with',
+                options: ['N/A'],
+                defaultValue: 'map bpm',
+                examples: ['-bpm 200'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'speed',
+                type: 'float',
+                required: false,
+                description: 'The speed multiplier to simulate the score with',
+                options: ['N/A'],
+                defaultValue: '1',
+                examples: ['-speed 1.5'],
                 commandTypes: ['message', 'interaction']
             }
         ]
