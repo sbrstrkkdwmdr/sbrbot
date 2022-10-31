@@ -937,9 +937,9 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
 
     let rankingdataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'rankingdata') &&
-    input.commandType == 'button' &&
-    !('error' in func.findFile(input.absoluteID, 'rankingdata')) &&
-    input.button != 'Refresh'
+        input.commandType == 'button' &&
+        !('error' in func.findFile(input.absoluteID, 'rankingdata')) &&
+        input.button != 'Refresh'
     ) {
         rankingdataReq = func.findFile(input.absoluteID, 'rankingdata')
     } else {
@@ -972,7 +972,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
         })) as osufunc.apiReturn;
     }
     func.storeFile(rankingdataReq, input.absoluteID, 'rankingdata')
-    
+
     const rankingdata: osuApiTypes.Rankings = rankingdataReq.apiData;
 
     if (rankingdata?.error) {
@@ -5817,10 +5817,24 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
                 }
             ])
 
+        //if first page, disable previous button
+        if (page == 0) {
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        } else {
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(false);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(false);
+        }
+
+        //if last page, disable next button
         if (page >= rsdata.length - 1) {
             (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
             (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        } else {
+            (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(false);
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(false);
         }
+
 
         osufunc.writePreviousId('map', input.obj.guildId, `${curbm.id}`)
         osufunc.writePreviousId('score', input.obj.guildId, JSON.stringify(curscore))
@@ -7449,10 +7463,10 @@ export async function simulate(input: extypes.commandInput) {
         overrideBpm = overrideSpeed * mapdata.bpm
     }
 
-    if(mods.includes('DT') || mods.includes('NC')) {
+    if (mods.includes('DT') || mods.includes('NC')) {
         overrideSpeed = overrideSpeed * 1.5
     }
-    if(mods.includes('HT')) {
+    if (mods.includes('HT')) {
         overrideSpeed = overrideSpeed * 0.75
     }
 
@@ -7464,7 +7478,7 @@ export async function simulate(input: extypes.commandInput) {
         hit100: n100,
         hit50: n50,
         miss: nMiss,
-        acc: acc/100,
+        acc: acc / 100,
         maxcombo: combo,
         score: null,
         calctype: 0,
@@ -8182,10 +8196,10 @@ export async function map(input: extypes.commandInput) {
         overrideBpm = mapdata.bpm * overrideSpeed;
     }
 
-    if(mapmods.includes('DT') || mapmods.includes('NC')) {
+    if (mapmods.includes('DT') || mapmods.includes('NC')) {
         overrideSpeed = overrideSpeed * 1.5
     }
-    if(mapmods.includes('HT')) {
+    if (mapmods.includes('HT')) {
         overrideSpeed = overrideSpeed * 0.75
     }
 
