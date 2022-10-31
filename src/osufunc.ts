@@ -140,13 +140,13 @@ export async function scorecalc(
         hitgeki?: number | null, hit300?: number | null, hitkatu?: number | null, hit100?: number | null, hit50?: number | null, miss: number | null,
         acc: number | null, maxcombo?: number | null, score?: number | null,
         calctype?: number | null, passedObj?: number | null, failed?: boolean | null,
-        clockRate?: number | null
+        clockRate?: number | null, 
     },
     mapIsRank?: string
 ) {
     let ppl: rosu.PerformanceAttributes[];
 
-    if(obj.clockRate == null) {
+    if (obj.clockRate == null) {
         obj.clockRate = 1;
     }
 
@@ -181,7 +181,7 @@ export async function scorecalc(
                             if (obj.hit50) {
                                 osumodcalc.calcgrade(obj.hit300, obj.hit100, obj.hit50, 0).accuracy;
                             } else {
-                                newacc = obj.acc
+                                newacc = (obj.acc/100)
                             }
                             break;
                         case 'taiko':
@@ -193,7 +193,7 @@ export async function scorecalc(
                             if (obj.hit50) {
                                 newacc = osumodcalc.calcgradeCatch(obj.hit300, obj.hit100, obj.hit50, 0, obj.hitkatu).accuracy;
                             } else {
-                                newacc = obj.acc
+                                newacc = (obj.acc/100)
                             }
                             break;
                         case 'mania':
@@ -201,12 +201,12 @@ export async function scorecalc(
                             if (obj.hitgeki && obj.hitkatu && obj.hit50) {
                                 newacc = osumodcalc.calcgradeMania(obj.hitgeki, obj.hit300, obj.hitkatu, obj.hit100, obj.hit50, 0).accuracy;
                             } else {
-                                newacc = obj.acc
+                                newacc = (obj.acc/100)
                             }
                             break;
                     }
                 } else {
-                    newacc = obj.acc
+                    newacc = (obj.acc/100)
                     switch (obj.gamemode) {
                         case 'osu': default:
                             mode = 0
@@ -223,7 +223,10 @@ export async function scorecalc(
                     }
                 }
                 if (isNaN(newacc)) {
-                    newacc = obj.acc;
+                    newacc = (obj.acc / 100);
+                }
+                if(newacc == 0){
+                    newacc = 1;
                 }
 
                 const baseScore: calcScore = {
@@ -231,7 +234,8 @@ export async function scorecalc(
                     mods: osumodcalc.ModStringToInt(mods),
                     combo: obj.maxcombo,
                     acc: obj?.acc ? obj.acc * 100 : 100,
-                    passedObjects: obj.passedObj
+                    passedObjects: obj.passedObj,
+                    clockRate: obj.clockRate ?? 1,
                 }
 
                 if (obj.hit300 != null && !isNaN(obj.hit300)) {
@@ -249,17 +253,20 @@ export async function scorecalc(
                 if (obj.hitkatu != null && !isNaN(obj.hitkatu)) {
                     baseScore.nKatu = obj.hitkatu
                 }
+
                 ppl = [
                     new rosu.Calculator(baseScore).performance(map),
                     new rosu.Calculator({
                         mode,
                         mods: osumodcalc.ModStringToInt(mods),
                         acc: newacc * 100,
+                        clockRate: obj.clockRate ?? 1,
                     }).performance(map),
                     new rosu.Calculator({
                         mode,
                         mods: osumodcalc.ModStringToInt(mods),
                         acc: 100,
+                        clockRate: obj.clockRate ?? 1,
                     }).performance(map)
                 ]
 
@@ -768,7 +775,7 @@ export async function apiget(input: apiInput) {
     }
     logCall(url)
 
-    if(data.apiData.apiData){
+    if (data.apiData.apiData) {
         data = data.apiData
     }
     return data;
@@ -1537,12 +1544,12 @@ export async function userStatsCacheFix(database: Sequelize.ModelStatic<any>, mo
  */
 export async function mapIdFromLink(url: string, callIfMapIdNull: boolean) {
 
-    if(url.includes(' ')){
+    if (url.includes(' ')) {
         const temp = url.split(' ')
         //get arg that has osu.ppy.sh
         for (let i = 0; i < temp.length; i++) {
             const curarg = temp[i];
-            if(curarg.includes('osu.ppy.sh')){
+            if (curarg.includes('osu.ppy.sh')) {
                 url = curarg;
                 break;
             }

@@ -7449,6 +7449,13 @@ export async function simulate(input: extypes.commandInput) {
         overrideBpm = overrideSpeed * mapdata.bpm
     }
 
+    if(mods.includes('DT') || mods.includes('NC')) {
+        overrideSpeed = overrideSpeed * 1.5
+    }
+    if(mods.includes('HT')) {
+        overrideSpeed = overrideSpeed * 0.75
+    }
+
     const score = await osufunc.scorecalc({
         mods,
         gamemode: 'osu',
@@ -7457,11 +7464,10 @@ export async function simulate(input: extypes.commandInput) {
         hit100: n100,
         hit50: n50,
         miss: nMiss,
-        acc,
+        acc: acc/100,
         maxcombo: combo,
         score: null,
         calctype: 0,
-        failed: false,
         clockRate: overrideSpeed
     });
     osufunc.debug(score, 'command', 'simulate', input.obj.guildId, 'ppCalc');
@@ -8174,6 +8180,13 @@ export async function map(input: extypes.commandInput) {
     }
     if (overrideSpeed != null && isNaN(overrideSpeed) == false && (overrideBpm == null || isNaN(overrideBpm) == true) && overrideSpeed != 1) {
         overrideBpm = mapdata.bpm * overrideSpeed;
+    }
+
+    if(mapmods.includes('DT') || mapmods.includes('NC')) {
+        overrideSpeed = overrideSpeed * 1.5
+    }
+    if(mapmods.includes('HT')) {
+        overrideSpeed = overrideSpeed * 0.75
     }
 
     try {
