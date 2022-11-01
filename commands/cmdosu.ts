@@ -10788,7 +10788,7 @@ export async function saved(input: extypes.commandInput) {
 
     const allUsers = await input.userdata.findAll()
 
-    const cuser = allUsers.find(user => user.userid == searchid)
+    const cuser = allUsers.find(wuser => wuser.userid == searchid)
 
     if (cuser) {
         Embed.addFields([{
@@ -10836,8 +10836,9 @@ ID: ${input.absoluteID}
 export async function skin(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
-    let string: string;
-    let searchid: string;
+    let searchid;
+    let string;
+    let type:'string'|'id' = 'id';
 
     switch (input.commandType) {
         case 'message': {
@@ -10845,8 +10846,11 @@ export async function skin(input: extypes.commandInput) {
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             string = input.args.join(' ').trim();
-            if (string.includes(searchid)) {
+            if (string.includes(searchid) || string.length < 1) {
                 string = null;
+                type = 'id'
+            } else {
+                type = 'string'
             }
 
         }
@@ -10904,30 +10908,13 @@ export async function skin(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
     let userF;
-    let findType: 'string' | 'id'
-    switch (true) {
-        case (searchid != commanduser.id): {
-            findType = 'id'
-        }
-            break;
-        case (string != null || (typeof string == 'string' && string.length > 0)): {
-            findType = 'string'
-        }
-            break;
-        default: {
-            findType = 'id'
-        }
-    }
 
     const allUsers = await input.userdata.findAll()
 
-    if (findType == 'id') {
-        console.log('id')
-        console.log(searchid)
-        userF = allUsers.find(user => `${user.dataValues.id}`.trim() == `${searchid}`.trim())
+    if (type == 'id') {
+        userF = allUsers.find(wuser => `${wuser.userid}`.trim() == `${searchid}`.trim())
     } else {
-        console.log('string')
-        userF = allUsers.find(user => user.osuname.toLowerCase().includes(string.toLowerCase()))
+        userF = allUsers.find(user => user.dataValues.osuname.toLowerCase().trim() == (string.toLowerCase()))
     }
     let skinstring = `User is not saved in the database`;
     if (userF) {
