@@ -165,11 +165,13 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
                 osuid: curuser
             }
         })
-        const guilds = userobj.guilds.split(',')
+        const guilds = userobj.guilds.includes(',') ? userobj.guilds.split(',')
+        :
+        [userobj.guilds]
 
         let channels = []
 
-        guilds.forEach(guild => {
+        guilds.forEach(() => {
             client.guilds.cache.forEach(async guild2 => {
                 if (guilds.includes(guild2.id)) {
                     const curset = await guildSettings.findOne({
