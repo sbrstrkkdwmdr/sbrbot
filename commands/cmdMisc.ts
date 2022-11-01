@@ -26,21 +26,21 @@ export function _8ball(input: extypes.commandInput) {
     let commanduser;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
         }
             break;
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -103,7 +103,7 @@ export function gif(input: extypes.commandInput) {
     let type;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             type = input.args.join(' ');
         }
@@ -111,15 +111,15 @@ export function gif(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
             type = input.obj.options.getString('type');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -359,7 +359,8 @@ export function gif(input: extypes.commandInput) {
     }
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             input.obj.delete()
                 .catch();
         }
@@ -367,13 +368,13 @@ export function gif(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {//@ts-expect-error null msg
+        case 'interaction': {
+            input.obj =(input.obj as Discord.ChatInputCommandInteraction)
             input.obj.reply({
                 content: 'success',
                 embeds: [],
                 files: [],
                 allowedMentions: { repliedUser: false },
-                failIfNotExists: true,
                 ephemeral: true
             })
                 .catch();
@@ -381,17 +382,6 @@ export function gif(input: extypes.commandInput) {
 
             //==============================================================================================================================================================================================
 
-            break;
-        case 'button': {//@ts-expect-error null msg
-            input.obj.edit({
-                content: '',
-                embeds: [],
-                files: [],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
-                .catch();
-        }
             break;
     }
 
@@ -420,7 +410,7 @@ export async function image(input: extypes.commandInput) {
     let iserr = false;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             query = input.args.join(' ');
             if (!input.args[0]) {
@@ -431,15 +421,15 @@ export async function image(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
             query = input.obj.options.getString('query')
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -478,8 +468,8 @@ export async function image(input: extypes.commandInput) {
     )
 
 
-    if (!res || res.status !== 200) {//@ts-expect-error null msg
-        input.obj.reply({
+    if (!res || res.status !== 200) {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction).reply({
             content: 'Error: could not fetch the requested image.',
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
@@ -491,8 +481,8 @@ export async function image(input: extypes.commandInput) {
     const response: extypes.imagesearches = await res.json() as any;
     fs.writeFileSync(`debug/command-image=imageSearch=${input.obj.guildId}.json`, JSON.stringify(response, null, 4), 'utf-8')
 
-    if (!response.items) {//@ts-expect-error null msg
-        input.obj.reply({
+    if (!response.items) {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction).reply({
             content: `Error: no results found for \`${query}\``,
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
@@ -552,7 +542,7 @@ export function poll(input: extypes.commandInput) {
     let pollOptsInit: string;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             pollTitle = input.args.join(' ')
             pollOpts = ['yes', 'no']
@@ -562,9 +552,9 @@ export function poll(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
-            pollTitle = input.obj.options.getString('title')//@ts-expect-error null msg
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+            pollTitle = input.obj.options.getString('title')
             pollOptsInit = input.obj.options.getString('options')
             if (pollOptsInit.includes(',')) {
                 pollOpts = pollOptsInit.split(',')
@@ -585,7 +575,7 @@ export function poll(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -678,7 +668,7 @@ export function poll(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     switch (input.commandType) {
-        case 'message': case 'interaction': {
+        case 'message': case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             input.obj.channel.send({
                 content: '',
                 embeds: [pollEmbed],
@@ -690,7 +680,7 @@ export function poll(input: extypes.commandInput) {
                 }
             })
                 .catch();
-            if (input.commandType == 'interaction') {//@ts-expect-error null msg
+            if (input.commandType == 'interaction') {
                 input.obj.reply({
                     content: '✔',
                     allowedMentions: { repliedUser: false },
@@ -725,7 +715,7 @@ export function roll(input: extypes.commandInput) {
     let minNum: number;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             maxNum = parseInt(input.args[0])
             minNum = parseInt(input.args[1])
@@ -740,16 +730,16 @@ export function roll(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
-            maxNum = input.obj.options.getNumber('max') ? Math.floor(input.obj.options.getNumber('max')) : 100;//@ts-expect-error null msg
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+            maxNum = input.obj.options.getNumber('max') ? Math.floor(input.obj.options.getNumber('max')) : 100;
             minNum = input.obj.options.getNumber('min') ? Math.floor(input.obj.options.getNumber('min')) : 0;
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -825,7 +815,7 @@ export function say(input: extypes.commandInput) {
     let channel;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             channel = input.obj.channel;
             msg = input.args.join(' ')
@@ -834,19 +824,19 @@ export function say(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
             channel = input.obj.options.getChannel('channel');
             if (channel == null || channel == undefined) {
                 channel = input.obj.channel;
-            }//@ts-expect-error null msg
+            }
             msg = input.obj.options.getString('message');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -902,12 +892,12 @@ export function say(input: extypes.commandInput) {
     switch (input.commandType) {
         //==============================================================================================================================================================================================
 
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             input.obj.delete().catch();
         }
             break;
-        case 'interaction': {//@ts-expect-error null msg
-            input.obj.reply({
+        case 'interaction': {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction).reply({
                 content: 'success!',
                 embeds: [],
                 files: [],
@@ -946,7 +936,7 @@ export async function ytsearch(input: extypes.commandInput) {
     let query: string;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             query = input.args.join(' ');
         }
@@ -954,15 +944,15 @@ export async function ytsearch(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
             query = input.obj.options.getString('query');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1013,8 +1003,8 @@ export async function ytsearch(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    if (!query || query.length < 1) {//@ts-expect-error null msg
-        return input.obj.reply({
+    if (!query || query.length < 1) {
+        return (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction).reply({
             content: 'Please provide a search query.',
             ephemeral: true
         })

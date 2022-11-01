@@ -29,10 +29,11 @@ export function checkperms(input: extypes.commandInput) {
     let searchUser;
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error null msg
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            if (input.args[0]) {//@ts-expect-error null msg
-                if (input.obj.mentions.users.size > 0) {//@ts-expect-error null msg
+
+            if (input.args[0]) {
+                if (input.obj.mentions.users.size > 0) {
                     searchUser = input.obj.mentions.users.first();
                 } else {
                     searchUser = input.client.users.cache.get(input.args.join(' '))
@@ -46,8 +47,10 @@ export function checkperms(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
-            if (input.obj.options.getUser('user')) {//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+
+            if (input.obj.options.getUser('user')) {
                 searchUser = input.obj.options.getUser('user');
             } else {
                 searchUser = commanduser;
@@ -58,6 +61,7 @@ export function checkperms(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -151,7 +155,8 @@ export function crash(input: extypes.commandInput) {
     let baseCommandType;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
         }
             break;
@@ -159,6 +164,7 @@ export function crash(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
@@ -166,6 +172,7 @@ export function crash(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -202,15 +209,16 @@ export function getUser(input: extypes.commandInput) {
     let id;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            id = input.args[0];//@ts-expect-error null msg
+            id = input.args[0];
             if (input.obj.mentions.users.size > 0) {
-                //@ts-expect-error null msg
+
                 id = input.obj.mentions.users.first().id
             }
-            //@ts-expect-error null msg
-            if (isNaN(id) && !input.obj.mentions.users.size > 0) {
+
+            if (isNaN(id) && !(input.obj.mentions.users.size > 0)) {
                 id = commanduser.id
             }
         }
@@ -219,7 +227,8 @@ export function getUser(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
             id = input.obj.options.getUser('user')?.id ?? commanduser.id;
         }
 
@@ -227,6 +236,7 @@ export function getUser(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -314,9 +324,9 @@ export function getUser(input: extypes.commandInput) {
             }
 
             Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`)
-            .setThumbnail(`${userfind.user.avatarURL()}?size=512`)
-            .setDescription(
-                `ID: ${userfind.user.id}
+                .setThumbnail(`${userfind.user.avatarURL()}?size=512`)
+                .setDescription(
+                    `ID: ${userfind.user.id}
                     Status: ${up}
                     Account creation date: ${userfind.user.createdAt}
                     Bot: ${userfind.user.bot}
@@ -355,16 +365,17 @@ export function getUserAv(input: extypes.commandInput) {
     let id;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             id = input.args[0];
-            //@ts-expect-error null msg
+
             if (input.obj.mentions.users.size > 0) {
-                //@ts-expect-error null msg
+
                 id = input.obj.mentions.users.first().id
             }
-            //@ts-expect-error null msg
-            if (isNaN(id) && !input.obj.mentions.users.size > 0) {
+
+            if (isNaN(id) && !(input.obj.mentions.users.size > 0)) {
                 id = commanduser.id
             }
         }
@@ -373,7 +384,8 @@ export function getUserAv(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
             id = input.obj.options.getUser('user')?.id ?? commanduser.id;
         }
 
@@ -381,6 +393,7 @@ export function getUserAv(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -465,28 +478,30 @@ export function find(input: extypes.commandInput) {
     let id;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
+
             type = input.args[0];
-            id = input.args[1];//@ts-expect-error null msg
+            id = input.args[1];
             if (input.obj.mentions.users.size > 0) {
-                type = 'user';//@ts-expect-error null msg
+                type = 'user';
                 id = input.obj.mentions.users.first().id;
-            }//@ts-expect-error null msg
+            }
             if (input.obj.mentions.channels.size > 0) {
-                type = 'channel';//@ts-expect-error null msg
+                type = 'channel';
                 id = input.obj.mentions.channels.first().id
-            }//@ts-expect-error null msg
+            }
             if (input.obj.mentions.roles.size > 0) {
-                type = 'role';//@ts-expect-error null msg
+                type = 'role';
                 id = input.obj.mentions.roles.first().id
-            }//@ts-expect-error null msg
-            if (input.obj.content.includes('<:') && !isNaN(input.obj.content.split('<:')[1].split('>')[0].split(':')[1])) {
-                type = 'emoji';//@ts-expect-error null msg
+            }
+            if (input.obj.content.includes('<:') && !isNaN(+input.obj.content.split('<:')[1].split('>')[0].split(':')[1])) {
+                type = 'emoji';
                 id = input.obj.content.split('<:')[1].split('>')[0].split(':')[1]
-            }//@ts-expect-error null msg
+            }
             if (isNaN(id) && (!(input.obj.mentions.users.size > 0 && type == 'user') || !(input.obj.mentions.channels.size > 0 && type == 'channel') || !(input.obj.mentions.roles.size == 1 && type == 'roles'))) {
-                //@ts-expect-error null msg 
+
                 input.obj.reply({ content: 'Please specify an id to find', allowedMentions: { repliedUser: false } })
                     .catch(error => { });
                 return;
@@ -497,8 +512,9 @@ export function find(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
-            type = input.obj.options.getString('type');//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+            type = input.obj.options.getString('type');
             id = input.obj.options.getString('id');
         }
 
@@ -506,6 +522,7 @@ export function find(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -752,7 +769,8 @@ export function leaveguild(input: extypes.commandInput) {
     let guildId;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             guildId = input.obj.guildId;
         }
@@ -761,7 +779,8 @@ export function leaveguild(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
             guildId = input.obj.options.getString('guild') ?? input.obj.guildId;
         }
 
@@ -769,6 +788,7 @@ export function leaveguild(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -846,7 +866,8 @@ export async function prefix(input: extypes.commandInput) {
     let newPrefix;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             newPrefix = input.args.join(' ');
         }
@@ -855,7 +876,8 @@ export async function prefix(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-expect-error null msg
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
             newPrefix = input.obj.options.getString('prefix');
         }
 
@@ -863,6 +885,7 @@ export async function prefix(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -939,7 +962,8 @@ export function servers(input: extypes.commandInput) {
     let commanduser;
 
     switch (input.commandType) {
-        case 'message': {//@ts-expect-error null msg
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
         }
             break;
@@ -947,6 +971,7 @@ export function servers(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
@@ -954,6 +979,7 @@ export function servers(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;

@@ -28,8 +28,7 @@ export function convert(input: extypes.commandInput) {
     let num;
 
     switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author property only exists on message
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             cat1 = input.args[0]
             cat2 = input.args[1]
@@ -51,20 +50,20 @@ export function convert(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property only exists on interaction
+            
             cat1 = input.obj.options.getString('from')
-            //@ts-expect-error options property only exists on interaction
+            
             cat2 = input.obj.options.getString('to')
-            //@ts-expect-error options property only exists on interaction
+            
             num = input.obj.options.getNumber('number')
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -321,8 +320,6 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
 
         //time
         case ((cat1 == 's' || cat1 == 'seconds' || cat1 == 'secs') && cat2 == 'min' || cat2 == 'minutes'):
-            console.log(cat1 == 's')
-            console.log(cat2 == 'min')
             conv = 'Time conversion'
             convtype = 'Seconds to Minutes'
             eq = `${num}s => ${num / 60}min`
@@ -842,8 +839,7 @@ export function help(input: extypes.commandInput) {
         });
 
     switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author property only exists on message
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             command = input.args[0];
             if (!input.args[0]) {
@@ -854,16 +850,15 @@ export function help(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property does not exist on message
             command = input.obj.options.getString('command');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
             if (input.button == 'Random') {
                 rdm = true;
@@ -1186,8 +1181,6 @@ export function help(input: extypes.commandInput) {
                 .setComponents(inputMenu));
     }
 
-    console.log(useComponents)
-
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage(
         {
@@ -1220,22 +1213,21 @@ export function info(input: extypes.commandInput) {
     let commanduser;
 
     switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author is not a property of interaction
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
         }
             break;
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1322,8 +1314,7 @@ export function math(input: extypes.commandInput) {
     let num2;
 
     switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author is not a property of interaction
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             type = 'basic';
         }
@@ -1331,20 +1322,17 @@ export function math(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options is not a property of message
-            type = input.obj.options.getString('type')
-            //@ts-expect-error options is not a property of message
-            num1 = parseFloat(input.obj.options.getNumber('num1'))
-            //@ts-expect-error options is not a property of message
+            type = input.obj.options.getString('type');
+            num1 = input.obj.options.getNumber('num1');
             num2 = input.obj.options.getNumber('num2');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1514,22 +1502,21 @@ export function ping(input: extypes.commandInput) {
     let commanduser;
 
     switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author property only exists on message
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
         }
             break;
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1650,13 +1637,11 @@ export function remind(input: extypes.commandInput) {
     let user;
 
     switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author property only exists on message
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             time = input.args[0]
             remindertxt = input.args.join(' ').replaceAll(input.args[0], '')
             sendtochannel = false;
-            //@ts-expect-error author property only exists on message
             user = input.obj.author;
 
             if (!input.args[0]) {
@@ -1686,16 +1671,16 @@ export function remind(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
 
-            //@ts-expect-error options property only exists on interaction
+            
             remindertxt = input.obj.options.getString('reminder');
-            //@ts-expect-error options property only exists on interaction
+            
             time = input.obj.options.getString('time').replaceAll(' ', '');
             sendtochannel =
                 (cmdchecks.isOwner(commanduser.id) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)) ?
-                    //@ts-expect-error options property only exists on interaction
+                    
                     input.obj.options.getBoolean('sendinchannel') : false;
             user = input.obj.member.user;
 
@@ -1714,7 +1699,7 @@ export function remind(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1816,22 +1801,21 @@ export function stats(input: extypes.commandInput) {
     let commanduser;
 
     switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author property only exists on message
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
         }
             break;
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1918,8 +1902,7 @@ export function time(input: extypes.commandInput) {
     let fetchtimezone;
 
     switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author property only exists on message
+        case 'message': {input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             fetchtimezone = input.args.join(' ')
         }
@@ -1927,16 +1910,16 @@ export function time(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
+        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property only exists on interaction
+            
             fetchtimezone = input.obj.options.getString('timezone')
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
+        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
