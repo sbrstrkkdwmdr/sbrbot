@@ -115,9 +115,6 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
         const allUsers = await db.findAll()
         allUsers.forEach(user => {
             let willFetch = false
-            console.log(user.osuid)
-            console.log(user.guildsfruits)
-            console.log(`${user.guildsfruits}`.length)
             if (!(typeof user.osuid == 'undefined' || user.osuid == null || user.osuid == undefined)) {
                 if (`${user.guildsosu}`.length > 0 && `${user.guildsosu}`.length != 4) {
                     trackUser({
