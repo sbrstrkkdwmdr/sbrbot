@@ -570,7 +570,12 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                 break;
             case 'skin':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.skin({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                    overrides = {
+                        type: 'skin',
+                        ex: 'skin',
+                        commandAs: commandType 
+                    }
+                    osucmds.saved({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }

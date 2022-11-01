@@ -5764,7 +5764,7 @@ export async function recent(input: extypes.commandInput) {
                     `\n**${ppcalcing[1].pp.toFixed(2)}**pp IF ${fcaccgr.accuracy.toFixed(2)}% FC
                 **${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
             }
-            if(curscore.perfect == true && curscore.accuracy == 1){
+            if (curscore.perfect == true && curscore.accuracy == 1) {
                 fcflag = 'FC'
             }
 
@@ -10733,6 +10733,13 @@ ID: ${input.absoluteID}
 export async function saved(input: extypes.commandInput) {
     let commanduser: Discord.User;
     let searchid;
+    let user;
+    let show = {
+        name: true,
+        mode: true,
+        skin: true
+    };
+    let overrideTitle;
 
     switch (input.commandType) {
         case 'message': {
@@ -10740,6 +10747,10 @@ export async function saved(input: extypes.commandInput) {
             commanduser = input.obj.author;
 
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+            user = input.args.join(' ');
+            if (!input.args[0] || input.args[0].includes(searchid)) {
+                user = null
+            }
         }
             break;
         //==============================================================================================================================================================================================
@@ -10755,6 +10766,37 @@ export async function saved(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
         }
             break;
+    }
+
+    if (input.overrides) {
+        if (input?.overrides?.type != null) {
+            switch (input?.overrides?.type) {
+                case 'username':
+                    show = {
+                        name: true,
+                        mode: false,
+                        skin: false
+                    }
+                    break;
+                case 'mode':
+                    show = {
+                        name: false,
+                        mode: true,
+                        skin: false
+                    }
+                    break;
+                case 'skin':
+                    show = {
+                        name: false,
+                        mode: false,
+                        skin: true
+                    }
+                    break;
+            }
+        }
+        if (input?.overrides?.ex != null) {
+            overrideTitle = input?.overrides?.ex
+        }
     }
 
     //==============================================================================================================================================================================================
@@ -10781,32 +10823,50 @@ export async function saved(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const user = input.client.users.cache.get(searchid);
+    let cuser: any = {
+        osuname: 'null',
+        mode: 'osu! (Default)',
+        skin: 'osu! classic'
+    };
+
+    let fr;
+    if (user == null) {
+        fr = input.client.users.cache.get(searchid)?.username ?? 'null';
+    }
 
     const Embed = new Discord.EmbedBuilder()
-        .setTitle(`${user.username}'s saved settings`)
+        .setTitle(`${user != null ? user : fr}'s ${overrideTitle ?? 'saved settings'}`)
 
-    const allUsers = await input.userdata.findAll()
+    if (user == null) {
+        cuser = await input.userdata.findOne({ where: { userid: searchid } });
+    } else {
+        const allUsers = await input.userdata.findAll();
 
-    const cuser = allUsers.find(wuser => wuser.userid == searchid)
+        cuser = allUsers.filter(x => (`${x.osuname}`.trim().toLowerCase() == `${user}`.trim().toLowerCase()))[0]
+    }
 
     if (cuser) {
-        Embed.addFields([{
-            name: 'Username',
-            value: `${cuser.osuname && cuser.mode.length > 1 ? cuser.osuname : 'undefined'}`,
-            inline: true
-        },
-        {
-            name: 'Mode',
-            value: `${cuser.mode && cuser.mode.length > 1 ? cuser.mode : 'osu (default)'}`,
-        },
-        {
-            name: 'Skin',
-            value: `${cuser.skin && cuser.skin.length > 1 ? cuser.skin : 'None'}`,
+        const fields = []
+        if (show.name == true) {
+            fields.push({
+                name: 'Username',
+                value: `${cuser.osuname && cuser.mode.length > 1 ? cuser.osuname : 'undefined'}`,
+                inline: true
+            })
         }
-        ]
-
-        )
+        if (show.mode == true) {
+            fields.push({
+                name: 'Mode',
+                value: `${cuser.mode && cuser.mode.length > 1 ? cuser.mode : 'osu (default)'}`,
+            })
+        }
+        if (show.skin == true) {
+            fields.push({
+                name: 'Skin',
+                value: `${cuser.skin && cuser.skin.length > 1 ? cuser.skin : 'None'}`,
+            })
+        }
+        Embed.addFields(fields)
     } else {
         Embed.setDescription('No saved settings found')
     }
@@ -10828,123 +10888,6 @@ ID: ${input.absoluteID}
 \n\n`,
         { guildId: `${input.obj.guildId}` }
     )
-}
-
-/**
- * return skin
- */
-export async function skin(input: extypes.commandInput) {
-
-    let commanduser: Discord.User;
-    let searchid;
-    let string;
-    let type:'string'|'id' = 'id';
-
-    switch (input.commandType) {
-        case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
-            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            string = input.args.join(' ').trim();
-            if (string.includes(searchid) || string.length < 1) {
-                string = null;
-                type = 'id'
-            } else {
-                type = 'string'
-            }
-
-        }
-            break;
-
-        //==============================================================================================================================================================================================
-
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
-            commanduser = input.obj.member.user;
-            string = input.obj.options.getString('string')
-            if (!string) {
-                searchid = input.obj.options.getUser('user').id;
-            }
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            break;
-    }
-
-
-    //==============================================================================================================================================================================================
-
-    log.logFile(
-        'command',
-        log.commandLog('skin', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
-            {
-                name: 'String',
-                value: string
-            },
-            {
-                name: 'Search ID',
-                value: searchid
-            }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
-
-    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-    let userF;
-
-    const allUsers = await input.userdata.findAll()
-
-    if (type == 'id') {
-        userF = allUsers.find(wuser => `${wuser.userid}`.trim() == `${searchid}`.trim())
-    } else {
-        userF = allUsers.find(user => user.dataValues.osuname.toLowerCase().trim() == (string.toLowerCase()))
-    }
-    let skinstring = `User is not saved in the database`;
-    if (userF) {
-        skinstring = `${userF.dataValues.skin}`
-    }
-
-    const embed = new Discord.EmbedBuilder()
-        .setTitle(`${userF?.osuname ?? `<@${searchid}>`}'s skin`)
-        .setDescription(skinstring)
-
-
-    //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
-        commandType: input.commandType,
-        obj: input.obj,
-        args: {
-            embeds: [embed],
-        }
-    })
-
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
-
 }
 
 /**
