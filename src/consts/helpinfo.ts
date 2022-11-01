@@ -27,7 +27,7 @@ export type commandInfo = {
         type: string,
         required: string | boolean,
         description: string,
-        options: string[] | boolean[],
+        options: string[],
         defaultValue: string,
         commandTypes: extypes.commandType[],
         examples: string[],

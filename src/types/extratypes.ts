@@ -205,8 +205,8 @@ type commandInput = {
 
 type commandButtonTypes = 
 'BigLeftArrow' | 'LeftArrow' | 'Search' | 'RightArrow' | 'BigRightArrow' |
-'Refresh' | 'Select' | 
-'DetailEnable' | 'DetailDisable'
+'Refresh' | 'Select' | 'Random' |
+'DetailEnable' | 'DetailDisable' | 'Detailed' | 'Details'
 
 type osustatscache = {
     osuid: string,
