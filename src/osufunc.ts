@@ -82,7 +82,7 @@ export async function mapcalc(
             if (!fs.existsSync('files/maps/')) {
                 fs.mkdirSync('files/maps/');
             }
-            const mapPath = await dlMap(obj.mapid, mapIsRank);
+            const mapPath = await dlMap(obj.mapid, 0, mapIsRank);
 
             if (!(typeof mapPath == 'string')) {
                 return mapPath;
@@ -140,7 +140,7 @@ export async function scorecalc(
         hitgeki?: number | null, hit300?: number | null, hitkatu?: number | null, hit100?: number | null, hit50?: number | null, miss: number | null,
         acc: number | null, maxcombo?: number | null, score?: number | null,
         calctype?: number | null, passedObj?: number | null, failed?: boolean | null,
-        clockRate?: number | null, 
+        clockRate?: number | null,
     },
     mapIsRank?: string
 ) {
@@ -157,7 +157,7 @@ export async function scorecalc(
                     console.log('creating files/maps/');
                     fs.mkdirSync('files/maps/');
                 }
-                const mapPath = await dlMap(obj.mapid, mapIsRank);
+                const mapPath = await dlMap(obj.mapid, 0, mapIsRank);
 
 
                 if (!(typeof mapPath == 'string')) {
@@ -181,7 +181,7 @@ export async function scorecalc(
                             if (obj.hit50) {
                                 osumodcalc.calcgrade(obj.hit300, obj.hit100, obj.hit50, 0).accuracy;
                             } else {
-                                newacc = (obj.acc/100)
+                                newacc = (obj.acc / 100)
                             }
                             break;
                         case 'taiko':
@@ -193,7 +193,7 @@ export async function scorecalc(
                             if (obj.hit50) {
                                 newacc = osumodcalc.calcgradeCatch(obj.hit300, obj.hit100, obj.hit50, 0, obj.hitkatu).accuracy;
                             } else {
-                                newacc = (obj.acc/100)
+                                newacc = (obj.acc / 100)
                             }
                             break;
                         case 'mania':
@@ -201,12 +201,12 @@ export async function scorecalc(
                             if (obj.hitgeki && obj.hitkatu && obj.hit50) {
                                 newacc = osumodcalc.calcgradeMania(obj.hitgeki, obj.hit300, obj.hitkatu, obj.hit100, obj.hit50, 0).accuracy;
                             } else {
-                                newacc = (obj.acc/100)
+                                newacc = (obj.acc / 100)
                             }
                             break;
                     }
                 } else {
-                    newacc = (obj.acc/100)
+                    newacc = (obj.acc / 100)
                     switch (obj.gamemode) {
                         case 'osu': default:
                             mode = 0
@@ -225,7 +225,7 @@ export async function scorecalc(
                 if (isNaN(newacc)) {
                     newacc = (obj.acc / 100);
                 }
-                if(newacc == 0){
+                if (newacc == 0) {
                     newacc = 1;
                 }
 
@@ -292,7 +292,7 @@ export async function straincalc(mapid: number, mods: string, calctype: number, 
     let strains;
     switch (calctype) {
         case 0: default: {
-            const mapPath = await dlMap(mapid);
+            const mapPath = await dlMap(mapid, 0);
 
             if (!(typeof mapPath == 'string')) {
                 return mapPath;
@@ -630,8 +630,6 @@ export type apiInput = {
  */
 export async function apiget(input: apiInput) {
     if (!input.callNum) input.callNum = 0;
-    if (input.callNum > 5) throw new Error('Too many calls to api');
-
 
     const baseurl = 'https://osu.ppy.sh/api'
     const accessN = fs.readFileSync('config/osuauth.json', 'utf-8');
@@ -729,6 +727,17 @@ export async function apiget(input: apiInput) {
         }
     }
 
+    if (input.callNum > 3) {
+        return {
+            url,
+            input,
+            totaltimeNum: NaN,
+            apiData: {
+                error: 'Too many calls made to the api'
+            },
+        }
+    };
+
     let data: apiReturn = {
         url: null,
         totaltimeNum: null,
@@ -737,22 +746,32 @@ export async function apiget(input: apiInput) {
     };
     let datafirst;
     const before = perf.performance.now();
-    datafirst = await fetch(url, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${access_token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json"
+    try {
+        datafirst = await fetch(url, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            }
+        }).then(res => res.json());
+    } catch (error) {
+        data = {
+            url,
+            input,
+            totaltimeNum: perf.performance.now() - before,
+            apiData: datafirst,
+            error
         }
-    }).then(res => res.json());
+        fs.writeFileSync(`./cache/err${Date.now()}.json`, JSON.stringify(data, null, 2))
+    }
     const after = perf.performance.now();
     try {
         if (datafirst?.authentication) {
             await updateToken()
-            const tempobj = Object.assign({
-                callNum: input.callNum ? input.callNum + 1 : 1
-            }, input)
-            datafirst = await apiget(tempobj)
+            input.callNum ? input.callNum = input.callNum + 1 : input.callNum = 1;
+            datafirst = await apiget(input)
+            
         }
         if ('error' in datafirst && !input.type.includes('search')) {
             throw new Error('nullwww')
@@ -1139,7 +1158,14 @@ export function getMapImages(mapSetId: string | number) {
     }
 }
 
-export async function dlMap(mapid: number | string, isRanked?: string) {
+/**
+ * 
+ * @param mapid - map id
+ * @param isRanked ranked status - ranked, loved, approved, pending, graveyard
+ * @param curCall - start at 0
+ * @returns 
+ */
+export async function dlMap(mapid: number | string, curCall: number, isRanked?: string,) {
     const mapFiles = fs.readdirSync('./files/maps')
     let mapDir = '';
     if (mapFiles.some(x => x.includes(`${mapid}`)) == false) {
@@ -1172,6 +1198,18 @@ export async function dlMap(mapid: number | string, isRanked?: string) {
             }
         }
         logCall(mapDir.replace('./', ''), 'found file')
+    }
+    const fileStat = fs.statSync(mapDir.replace('./', ''))
+    if (fileStat.size < 500) {
+        await fs.unlinkSync(mapDir.replace('./', ''))
+        if (!curCall) {
+            curCall = 0
+        }
+        if (curCall > 3) {
+            throw new Error('Map file size is too small. Deleting file...')
+        } else {
+            return await dlMap(mapid, curCall + 1, isRanked)
+        }
     }
     return mapDir.replace('./', '');
 }

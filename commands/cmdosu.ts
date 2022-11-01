@@ -4876,7 +4876,6 @@ export async function pinned(input: extypes.commandInput) {
                 opts: [`offset=${cinitnum}`, 'limit=100'],
             },
             version: 2,
-
         })
         const fd: osuApiTypes.Score[] & osuApiTypes.Error = fdReq.apiData;
         if (fd?.error) {
@@ -5734,6 +5733,7 @@ export async function recent(input: extypes.commandInput) {
         let rspp: string | number = 0;
         let ppissue: string = '';
         let ppcalcing: PerformanceAttributes[];
+        let fcflag = ''
         try {
             ppcalcing = await osufunc.scorecalc({
                 mods: curscore.mods.join('').length > 1 ?
@@ -5755,21 +5755,27 @@ export async function recent(input: extypes.commandInput) {
                     curscore.pp.toFixed(2) :
                     ppcalcing[0].pp.toFixed(2)
             osufunc.debug(ppcalcing, 'command', 'recent', input.obj.guildId, 'ppCalcing');
+
+            if (curscore.accuracy < 1 && curscore.perfect == true) {
+                fcflag = `FC\n**${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
+            }
+            if (curscore.perfect == false) {
+                fcflag =
+                    `\n**${ppcalcing[1].pp.toFixed(2)}**pp IF ${fcaccgr.accuracy.toFixed(2)}% FC
+                **${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
+            }
+            if(curscore.perfect == true && curscore.accuracy == 1){
+                fcflag = 'FC'
+            }
+
+
         } catch (error) {
             rspp =
                 curscore.pp ?
                     curscore.pp.toFixed(2) :
                     NaN
             ppissue = 'Error - pp calculator could not calculate beatmap'
-        }
-        let fcflag = 'FC'
-        if (curscore.accuracy != 100) {
-            fcflag += `\n**${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
-        }
-        if (curscore.perfect == false) {
-            fcflag =
-                `\n**${ppcalcing[1].pp.toFixed(2)}**pp IF ${fcaccgr.accuracy.toFixed(2)}% FC
-            **${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
+            console.log(error)
         }
         const title =
             curbms.title == curbms.title_unicode ?
