@@ -163,8 +163,6 @@ export async function getEmbed(
         pp = `${data.scoredata.pp}pp (SS)`
     }
 
-    console.log(ppcalc)
-
     const embed = new Discord.EmbedBuilder()
         .setTitle(`${data.scoredata.beatmapset.title} [${data.scoredata.beatmap.version}]`)
         .setURL(`https://osu.ppy.sh/beatmapsets/${data.scoredata.beatmapset.id}#osu/${data.scoredata.beatmap.id}`)
