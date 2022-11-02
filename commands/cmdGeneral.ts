@@ -798,50 +798,6 @@ ID: ${input.absoluteID}
     )
 
 }
-/**
- * return debug stuff ie command files, server list, etc.
- */
-export function debug(input: extypes.commandInput) {
-    let type: 'commandFile' | 'servers' | 'channels' | 'users' | 'forcetrack' | 'curCmdId' = 'commandFile';
-    let inputstr;
-    if (inputstr == 1) {
-        type = inputstr
-    }
-
-    switch (type) {
-        //return api files for []
-        case 'commandFile': {
-
-        }
-            break;
-            //list all servers
-        case 'servers': {
-
-        }
-            break;
-            //list all channels of server x
-        case 'channels': {
-
-        }
-            break;
-            //list all users of server x
-        case 'users': {
-
-        }
-            break;
-            //force osutrack to update
-        case 'forcetrack': {
-
-        }
-            break;
-            //get id of current cmd
-        case 'curCmdId': {
-            const fr = require('../src/osutrack');
-            
-        }
-            break;
-    }
-}
 
 /**
  * list all commands or info about a specific command

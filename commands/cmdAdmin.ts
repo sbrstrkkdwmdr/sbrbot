@@ -15,6 +15,8 @@ import buttonsthing = require('../src/consts/buttons');
 import extypes = require('../src/types/extraTypes');
 import helpinfo = require('../src/consts/helpinfo');
 import msgfunc = require('./msgfunc');
+import trackfunc = require('../src/trackfunc');
+
 
 export function name(input: extypes.commandInput) {
 
@@ -467,6 +469,275 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * return debug stuff ie command files, server list, etc.
+ */
+export async function debug(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+
+    type debugtype = 'commandfile' | 'servers' | 'channels' | 'users' | 'forcetrack' | 'curcmdid' | 'logs';
+
+    let type: debugtype;
+    let inputstr;
+    let failed = false;
+    let errorstr = 'Error: null'
+    if (inputstr == 1) {
+        type = inputstr
+    }
+
+    let usemsgArgs: any = {
+        content: 'null'
+    }
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+            if (!input.args[0]) {
+                failed = true
+                errorstr = 'Error: missing first argument (type)'
+            }
+            type = input.args?.[0] as debugtype;
+
+            input.args.shift()
+            inputstr = input.args?.join(' ')
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+
+    }
+    //==============================================================================================================================================================================================
+    log.logFile(
+        'command',
+        log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
+        ),
+        {
+            guildId: `${input.obj.guildId}`
+        })
+    //OPTIONS==============================================================================================================================================================================================
+    log.logFile('command',
+        log.optsLog(input.absoluteID, []),
+        {
+            guildId: `${input.obj.guildId}`
+        }
+    )
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    if (failed == true) {
+        msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: errorstr
+            }
+        })
+        return;
+    }
+
+    switch (type) {
+        //return api files for []
+        case 'commandfile': {
+            let cmdidcur = '0'
+            if (!inputstr || isNaN(+inputstr)) {
+                cmdidcur = fs.readFileSync('id.txt', 'utf-8')
+            } else {
+                cmdidcur = inputstr
+            }
+            const files = fs.readdirSync('cache/commandData/')
+            if (files.length < 1) {
+                usemsgArgs = {
+                    content: 'Cache folder is currently empty'
+                }
+            } else {
+                const searchfiles = files.filter(x => `${x}`.includes(`${cmdidcur}`))
+                if (searchfiles.length < 1) {
+                    usemsgArgs = {
+                        content: `No files found with the id ${cmdidcur}`
+                    }
+                } else {
+                    usemsgArgs = {
+                        content: `Files found matching ${cmdidcur}: `,
+                        files: searchfiles.map(x => './cache/commandData/' + x)
+                    }
+                }
+            }
+        }
+            break;
+        //list all servers
+        case 'servers': {
+            {
+                const servers = ((input.client.guilds.cache.map((guild) => {
+             return `
+----------------------------------------------------
+Name:     ${guild.name}
+ID:       ${guild.id}
+Owner ID: ${guild.ownerId}
+----------------------------------------------------
+`
+}
+                )))
+                    .join('\n')
+                    console.log(servers)
+                fs.writeFileSync('files/servers.txt', servers, 'utf-8')
+            }
+            usemsgArgs = {
+                content: 'All servers connected to the client',
+                files: ['files/servers.txt']
+            }
+
+        }
+            break;
+        //list all channels of server x
+        case 'channels': {
+            let serverId: string;
+            if (!inputstr || isNaN(+inputstr)) {
+                serverId = input.obj.guildId
+            } else {
+                serverId = inputstr
+            }
+            const curServer = input.client.guilds.cache.get(serverId)
+            if (!curServer) {
+                usemsgArgs = {
+                    content: `Server ${serverId} not found - does not exist or bot is not in the guild`
+                }
+            } else {
+                const channels = curServer.channels.cache.map(channel =>
+                    `
+----------------------------------------------------
+Name:      ${channel.name}
+ID:        ${channel.id}
+Type:      ${channel.type}
+Parent:    ${channel.parent}
+Parent ID: ${channel.parentId}
+Created:   ${channel.createdAt}
+----------------------------------------------------
+`
+                ).join('\n')
+                fs.writeFileSync(`files/channels${serverId}.txt`, channels, 'utf-8')
+
+                usemsgArgs = {
+                    content: `Channels in guild ${serverId}`,
+                    files: [`files/channels${serverId}.txt`]
+                }
+            }
+
+        }
+            break;
+        //list all users of server x
+        case 'users': {
+            let serverId: string;
+            if (!inputstr || isNaN(+inputstr)) {
+                serverId = input.obj.guildId
+            } else {
+                serverId = inputstr
+            }
+            const curServer = input.client.guilds.cache.get(serverId)
+            if (!curServer) {
+                usemsgArgs = {
+                    content: `Server ${serverId} not found - does not exist or bot is not in the guild`
+                }
+            } else {
+                const users = curServer.members.cache.map(member =>
+                    `
+----------------------------------------------------
+Username:       ${member.user.username}
+ID:             ${member.id}
+Tag:            ${member.user.tag}
+Discriminator:  ${member.user.discriminator}
+Nickname:       ${member.displayName}
+AvatarURL:      ${member.avatarURL()}
+Created:        ${member.user.createdAt}
+Created(EPOCH): ${member.user.createdTimestamp}
+Joined:         ${member.joinedAt}
+Joined(EPOCH):  ${member.joinedTimestamp}
+----------------------------------------------------
+`
+                ).join('\n')
+                fs.writeFileSync(`files/users${serverId}.txt`, users, 'utf-8')
+
+                usemsgArgs = {
+                    content: `Users in guild ${serverId}`,
+                    files: [`files/users${serverId}.txt`]
+                }
+            }
+        }
+            break;
+        //force osutrack to update
+        case 'forcetrack': {
+            trackfunc.trackUsers(input.trackDb, input.client, input.guildSettings)
+            usemsgArgs = {
+                content: `Running osu!track...`
+            }
+        }
+            break;
+        //get id of current cmd
+        case 'curcmdid': {
+            const cmdidcur = fs.readFileSync('id.txt', 'utf-8')
+            usemsgArgs = {
+                content: 'Last command\'s ID is ' + cmdidcur
+            }
+        }
+            break;
+        //returns command logs for server
+        case 'logs': {
+            let serverId: string;
+            if (!inputstr || isNaN(+inputstr)) {
+                serverId = input.obj.guildId
+            } else {
+                serverId = inputstr
+            }
+            const curServer = fs.existsSync(`logs/cmd/commands${serverId}.log`)
+            if (!curServer) {
+                usemsgArgs = {
+                    content: `Server ${serverId} not found - does not exist or bot is not in the guild`
+                }
+            } else {
+                usemsgArgs = {
+                    content: `Logs for ${serverId}`,
+                    files: [`logs/cmd/commands${serverId}.log`]
+                }
+            }
+        }
+            break;
+        default: {
+            usemsgArgs = {
+                content: 'Invalid type. Valid types are: \`commandfile\`,\`servers\`,\`channels\`,\`users\`,\`forcetrack\`,\`curcmdid\`,\`logs\`'
+            }
+        }
+    }
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: usemsgArgs
+    })
+
+    log.logFile('command',
+        `
+----------------------------------------------------
+success
+ID: ${input.absoluteID}
+----------------------------------------------------
+\n\n`,
+        { guildId: `${input.obj.guildId}` }
+    )
+}
 
 /**
  * find user/role/channel/guild/emoji from id 

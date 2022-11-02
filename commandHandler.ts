@@ -374,14 +374,14 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'osutop': case 'top': case 't': case 'ot':case 'toposu': case 'topo':
+            case 'osutop': case 'top': case 't': case 'ot': case 'toposu': case 'topo':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'taikotop': case 'toptaiko': case 'tt':case 'topt':
+            case 'taikotop': case 'toptaiko': case 'tt': case 'topt':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'taiko'
@@ -391,7 +391,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tctb': case 'tf':case 'topf':case 'topc':
+            case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tctb': case 'tf': case 'topf': case 'topc':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'fruits'
@@ -401,7 +401,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'maniatop': case 'topmania': case 'tm':case 'topm':
+            case 'maniatop': case 'topmania': case 'tm': case 'topm':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'mania'
@@ -573,7 +573,7 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     overrides = {
                         type: 'skin',
                         ex: 'skin',
-                        commandAs: commandType 
+                        commandAs: commandType
                     }
                     osucmds.saved({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
                 } else {
@@ -614,6 +614,13 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                 break;
 
             //admincmds below
+            case 'avatar': case 'av': case 'pfp':
+                if (checks.botHasPerms(obj, client, ['Administrator'])) {
+                    admincmds.getUserAv({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
             case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
                 if (checks.botHasPerms(obj, client, ['Administrator'])) {
                     if ((checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid))) {
@@ -638,20 +645,19 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     )
                 }
                 break;
-            case 'user': case 'userinfo':
-                if (checks.botHasPerms(obj, client, ['Administrator'])) {
-                    admincmds.getUser({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+            case 'debug':
+                if (checks.isOwner(userid)) {
+                    admincmds.debug({
+                        commandType, obj, args, button,
+                        config, client,
+                        absoluteID, currentDate, overrides,
+                        userdata, trackDb, guildSettings
+                    })
                 } else {
-                    checkcmds.noperms(commandType, obj, 'bot')
+                    checkcmds.noperms(
+                        commandType, obj, 'user'
+                    )
                 }
-                break;
-            case 'avatar': case 'av': case 'pfp':
-                if (checks.botHasPerms(obj, client, ['Administrator'])) {
-                    admincmds.getUserAv({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot')
-                }
-                break;
                 break;
             // case 'find':
             //     if (checks.botHasPerms(obj, client, ['Administrator'])) {
@@ -677,6 +683,13 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(
                         commandType, obj, 'user'
                     )
+                }
+                break;
+            case 'user': case 'userinfo':
+                if (checks.botHasPerms(obj, client, ['Administrator'])) {
+                    admincmds.getUser({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
         }
