@@ -168,11 +168,11 @@ export async function scorecalc(
                     path: mapPath
                 })
 
-                const mods = 
-                obj.mods ? 
-                obj.mods.length < 1 ? 'NM' : obj.mods
-                : 'NM'
-                ;
+                const mods =
+                    obj.mods ?
+                        obj.mods.length < 1 ? 'NM' : obj.mods
+                        : 'NM'
+                    ;
                 let mode;
                 let newacc = osumodcalc.calcgrade(obj.hit300, obj.hit100, obj.hit50, 0).accuracy;
                 if (obj.hit300 && obj.hit100) {
@@ -182,7 +182,7 @@ export async function scorecalc(
                             if (obj.hit50) {
                                 osumodcalc.calcgrade(obj.hit300, obj.hit100, obj.hit50, 0).accuracy;
                             } else {
-                                newacc = (obj.acc / 100)
+                                newacc = obj.acc
                             }
                             break;
                         case 'taiko':
@@ -194,7 +194,7 @@ export async function scorecalc(
                             if (obj.hit50) {
                                 newacc = osumodcalc.calcgradeCatch(obj.hit300, obj.hit100, obj.hit50, 0, obj.hitkatu).accuracy;
                             } else {
-                                newacc = (obj.acc / 100)
+                                newacc = obj.acc
                             }
                             break;
                         case 'mania':
@@ -202,12 +202,12 @@ export async function scorecalc(
                             if (obj.hitgeki && obj.hitkatu && obj.hit50) {
                                 newacc = osumodcalc.calcgradeMania(obj.hitgeki, obj.hit300, obj.hitkatu, obj.hit100, obj.hit50, 0).accuracy;
                             } else {
-                                newacc = (obj.acc / 100)
+                                newacc = obj.acc
                             }
                             break;
                     }
                 } else {
-                    newacc = (obj.acc / 100)
+                    newacc = obj.acc
                     switch (obj.gamemode) {
                         case 'osu': default:
                             mode = 0
@@ -224,10 +224,13 @@ export async function scorecalc(
                     }
                 }
                 if (isNaN(newacc)) {
-                    newacc = (obj.acc / 100);
+                    newacc = obj.acc * 100;
                 }
                 if (newacc == 0) {
-                    newacc = 1;
+                    newacc = 100;
+                }
+                if (newacc <= 1) {
+                    newacc *= 100
                 }
 
                 const baseScore: calcScore = {
@@ -255,18 +258,21 @@ export async function scorecalc(
                     baseScore.nKatu = obj.hitkatu
                 }
 
+                console.log(obj)
+                console.log(baseScore)
+                console.log(newacc)
                 ppl = [
                     new rosu.Calculator(baseScore).performance(map),
                     new rosu.Calculator({
                         mode,
                         mods: osumodcalc.ModStringToInt(mods),
-                        acc: newacc * 100,
+                        acc: newacc,
                         clockRate: obj.clockRate ?? 1,
                     }).performance(map),
                     new rosu.Calculator({
                         mode,
                         mods: osumodcalc.ModStringToInt(mods),
-                        acc: 1,
+                        acc: 100,
                         clockRate: obj.clockRate ?? 1,
                         nMisses: 0,
                     }).performance(map)
@@ -773,7 +779,7 @@ export async function apiget(input: apiInput) {
             await updateToken()
             input.callNum ? input.callNum = input.callNum + 1 : input.callNum = 1;
             datafirst = await apiget(input)
-            
+
         }
         if ('error' in datafirst && !input.type.includes('search')) {
             throw new Error('nullwww')
