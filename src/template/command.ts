@@ -35,19 +35,26 @@ module.exports = {
 
         switch (input.commandType) {
             case 'message': {
-                //@ts-expect-error author property only exists on message
+                input.obj = (input.obj as Discord.Message<any>);
                 commanduser = input.obj.author;
             }
                 break;
             //==============================================================================================================================================================================================
             case 'interaction': {
+                input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
                 commanduser = input.obj.member.user;
             }
                 //==============================================================================================================================================================================================
 
                 break;
             case 'button': {
+                input.obj = (input.obj as Discord.ButtonInteraction<any>);
                 commanduser = input.obj.member.user;
+            }
+                break;
+            case 'link': {
+                input.obj = (input.obj as Discord.Message<any>);
+                commanduser = input.obj.author;
             }
                 break;
         }

@@ -38,5 +38,7 @@ const images = {
     }
 }
 
+export const invisbleChar = '⠀'
+
 export { defaultClientConfig, defaultGuildSettings, chocoMOF, images };
 
