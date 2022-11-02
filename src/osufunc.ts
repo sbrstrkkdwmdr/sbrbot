@@ -168,11 +168,12 @@ export async function scorecalc(
                     path: mapPath
                 })
 
-                const mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
-
-
+                const mods = 
+                obj.mods ? 
+                obj.mods.length < 1 ? 'NM' : obj.mods
+                : 'NM'
+                ;
                 let mode;
-
                 let newacc = osumodcalc.calcgrade(obj.hit300, obj.hit100, obj.hit50, 0).accuracy;
                 if (obj.hit300 && obj.hit100) {
                     switch (obj.gamemode) {
@@ -265,8 +266,9 @@ export async function scorecalc(
                     new rosu.Calculator({
                         mode,
                         mods: osumodcalc.ModStringToInt(mods),
-                        acc: 100,
+                        acc: 1,
                         clockRate: obj.clockRate ?? 1,
+                        nMisses: 0,
                     }).performance(map)
                 ]
 

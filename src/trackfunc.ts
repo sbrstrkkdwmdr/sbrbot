@@ -7,7 +7,7 @@ import func = require('./tools');
 import embedstuff = require('./embed');
 import log = require('./log');
 import def = require('./consts/defaults');
-
+import rosu = require('rosu-pp')
 export async function editTrackUser(fr: {
     database: Sequelize.ModelStatic<any>,
     userid: string | number,
@@ -102,12 +102,16 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
                         scoredata: curdata[i],
                         scorepos: i
                     }), fr.user,
-                    trackDb, client, guildSettings
+                        trackDb, client, guildSettings
                     )
                 }
             }
         }
-        fs.writeFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata, null, 2))
+        fs.writeFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata.slice().sort((a, b) =>
+            parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
+            -
+            parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
+        ), null, 2))
     }
 }
 
@@ -117,18 +121,38 @@ export async function getEmbed(
         scorepos: number,
     }
 ) {
-    const ppcalc =
+    const curscore = data.scoredata;
+    const scorestats = data.scoredata.statistics;
+    let totalhits = 0;
+
+    switch (curscore.mode) {
+        case 'osu': default:
+            totalhits = scorestats.count_300 + scorestats.count_100 + scorestats.count_50 + scorestats.count_miss
+            break;
+        case 'taiko':
+            totalhits = scorestats.count_300 + scorestats.count_100 + scorestats.count_miss
+            break;
+        case 'fruits':
+            totalhits = scorestats.count_300 + scorestats.count_100 + scorestats.count_50 + scorestats.count_miss
+            break;
+        case 'mania':
+            totalhits = scorestats.count_geki + scorestats.count_300 + scorestats.count_katu + scorestats.count_100 + scorestats.count_50 + scorestats.count_miss
+            break;
+    }
+
+    const ppcalc: rosu.OsuPerformanceAttributes[] | rosu.TaikoPerformanceAttributes[] | rosu.CatchPerformanceAttributes[] | rosu.ManiaPerformanceAttributes[]
+        =
         await osufunc.scorecalc({
-            mods: data.scoredata.mods.join('').length > 1 ?
-                data.scoredata.mods.join('') : 'NM',
-            gamemode: data.scoredata.mode,
-            mapid: data.scoredata.beatmap.id,
-            miss: data.scoredata.statistics.count_miss,
-            acc: data.scoredata.accuracy,
-            maxcombo: data.scoredata.max_combo,
-            score: data.scoredata.score,
+            mods: curscore.mods.join('').length > 1 ?
+                curscore.mods.join('') : 'NM',
+            gamemode: curscore.mode,
+            mapid: curscore.beatmap.id,
+            miss: curscore.statistics.count_miss,
+            acc: curscore.accuracy,
+            maxcombo: curscore.max_combo,
+            score: curscore.score,
             calctype: 0,
-            passedObj: 0,
+            passedObj: totalhits,
             failed: false
         })
 
@@ -138,6 +162,8 @@ export async function getEmbed(
     } else {
         pp = `${data.scoredata.pp}pp (SS)`
     }
+
+    console.log(ppcalc)
 
     const embed = new Discord.EmbedBuilder()
         .setTitle(`${data.scoredata.beatmapset.title} [${data.scoredata.beatmap.version}]`)
@@ -151,7 +177,7 @@ export async function getEmbed(
         .setImage(`${data.scoredata.beatmapset.covers['cover@2x']}`)
         .setDescription(
             `${data.scoredata.mods.length > 0 ? '+' + data.scoredata.mods.join('') + ' | ' : ''} **Score set** <t:${new Date(data.scoredata.created_at).getTime() / 1000}:R>\n` +
-            `${(data.scoredata.accuracy * 100).toFixed(2)}% | ${embedstuff.gradeToEmoji(data.scoredata.rank)} | ${(ppcalc?.[0]?.difficulty?.stars ?? data.scoredata.beatmap.difficulty_rating).toFixed(2)}⭐\n` +
+            `${(data.scoredata.accuracy * 100).toFixed(2)}% | ${embedstuff.gradeToEmoji(data.scoredata.rank)} | ${(ppcalc[0].difficulty.stars ?? data.scoredata.beatmap.difficulty_rating).toFixed(2)}⭐\n` +
             `${embedstuff.hitList({
                 gamemode: data.scoredata.mode,
                 count_geki: data.scoredata.statistics.count_geki,
@@ -167,6 +193,16 @@ export async function getEmbed(
 }
 
 export async function trackUsers(db, client, guildSettings) {
+
+
+    if (!db || !client || !guildSettings) {
+        osufunc.logCall(`Missing object`, 'Error')
+        osufunc.logCall(`${db != null}`, 'Database exists')
+        osufunc.logCall(`${client != null}`, 'Client exists')
+        osufunc.logCall(`${guildSettings != null}`, 'Guild Settings exists')
+        return;
+    }
+
     const allUsers = await db.findAll()
     allUsers.forEach(user => {
         let willFetch = false
@@ -221,8 +257,8 @@ export async function sendMsg(embed: Discord.EmbedBuilder, curuser: string, trac
         }
     })
     const guilds = userobj.guilds.includes(',') ? userobj.guilds.split(',')
-    :
-    [userobj.guilds]
+        :
+        [userobj.guilds]
 
     let channels = []
 
