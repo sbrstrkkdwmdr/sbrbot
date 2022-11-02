@@ -28,7 +28,8 @@ export function convert(input: extypes.commandInput) {
     let num;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             cat1 = input.args[0]
             cat2 = input.args[1]
@@ -50,20 +51,22 @@ export function convert(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            
+
             cat1 = input.obj.options.getString('from')
-            
+
             cat2 = input.obj.options.getString('to')
-            
+
             num = input.obj.options.getNumber('number')
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -795,6 +798,50 @@ ID: ${input.absoluteID}
     )
 
 }
+/**
+ * return debug stuff ie command files, server list, etc.
+ */
+export function debug(input: extypes.commandInput) {
+    let type: 'commandFile' | 'servers' | 'channels' | 'users' | 'forcetrack' | 'curCmdId' = 'commandFile';
+    let inputstr;
+    if (inputstr == 1) {
+        type = inputstr
+    }
+
+    switch (type) {
+        //return api files for []
+        case 'commandFile': {
+
+        }
+            break;
+            //list all servers
+        case 'servers': {
+
+        }
+            break;
+            //list all channels of server x
+        case 'channels': {
+
+        }
+            break;
+            //list all users of server x
+        case 'users': {
+
+        }
+            break;
+            //force osutrack to update
+        case 'forcetrack': {
+
+        }
+            break;
+            //get id of current cmd
+        case 'curCmdId': {
+            const fr = require('../src/osutrack');
+            
+        }
+            break;
+    }
+}
 
 /**
  * list all commands or info about a specific command
@@ -839,7 +886,8 @@ export function help(input: extypes.commandInput) {
         });
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             command = input.args[0];
             if (!input.args[0]) {
@@ -850,7 +898,8 @@ export function help(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
             command = input.obj.options.getString('command');
         }
@@ -858,7 +907,8 @@ export function help(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
             if (input.button == 'Random') {
                 rdm = true;
@@ -1213,21 +1263,24 @@ export function info(input: extypes.commandInput) {
     let commanduser;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
         }
             break;
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1314,7 +1367,8 @@ export function math(input: extypes.commandInput) {
     let num2;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             type = 'basic';
         }
@@ -1322,7 +1376,8 @@ export function math(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
             type = input.obj.options.getString('type');
             num1 = input.obj.options.getNumber('num1');
@@ -1332,7 +1387,8 @@ export function math(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1502,21 +1558,24 @@ export function ping(input: extypes.commandInput) {
     let commanduser;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
         }
             break;
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1637,7 +1696,8 @@ export function remind(input: extypes.commandInput) {
     let user;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             time = input.args[0]
             remindertxt = input.args.join(' ').replaceAll(input.args[0], '')
@@ -1671,16 +1731,17 @@ export function remind(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
 
-            
+
             remindertxt = input.obj.options.getString('reminder');
-            
+
             time = input.obj.options.getString('time').replaceAll(' ', '');
             sendtochannel =
                 (cmdchecks.isOwner(commanduser.id) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)) ?
-                    
+
                     input.obj.options.getBoolean('sendinchannel') : false;
             user = input.obj.member.user;
 
@@ -1699,7 +1760,8 @@ export function remind(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1801,21 +1863,24 @@ export function stats(input: extypes.commandInput) {
     let commanduser;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
         }
             break;
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1902,7 +1967,8 @@ export function time(input: extypes.commandInput) {
     let fetchtimezone;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             fetchtimezone = input.args.join(' ')
         }
@@ -1910,16 +1976,18 @@ export function time(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            
+
             fetchtimezone = input.obj.options.getString('timezone')
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
