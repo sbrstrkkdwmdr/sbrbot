@@ -258,9 +258,6 @@ export async function scorecalc(
                     baseScore.nKatu = obj.hitkatu
                 }
 
-                console.log(obj)
-                console.log(baseScore)
-                console.log(newacc)
                 ppl = [
                     new rosu.Calculator(baseScore).performance(map),
                     new rosu.Calculator({
