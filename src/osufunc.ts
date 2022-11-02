@@ -149,6 +149,13 @@ export async function scorecalc(
     if (obj.clockRate == null) {
         obj.clockRate = 1;
     }
+    if(obj.mods.includes('DT') || obj.mods.includes('NC')){
+        obj.clockRate = 1.5
+    }
+    if(obj.mods.includes('HT')){
+        obj.clockRate = 0.75
+    }
+
 
     switch (obj.calctype) {
         case 0: default:
