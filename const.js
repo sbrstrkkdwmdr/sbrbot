@@ -138,7 +138,37 @@ const generalcommands = [
                 options: ['N/A'],
                 defaultValue: 'N/A',
                 examples: ['recent', 'command:osutop'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction', 'button']
+            },
+            {
+                name: 'category',
+                type: 'string',
+                required: false,
+                description: 'Shows a list of commands in a category',
+                options: ['General', 'osu', 'Admin', 'Misc'],
+                defaultValue: 'N/A',
+                examples: ['osu', 'category:osu'],
+                commandTypes: ['button']
+            },
+            {
+                name: 'Menu',
+                type: 'boolean',
+                required: false,
+                description: 'Shows a list of all commands. True if command is not specified',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: [],
+                commandTypes: ['button']
+            },
+            {
+                name: 'Random',
+                type: 'boolean',
+                required: false,
+                description: 'Shows a random command',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: [],
+                commandTypes: ['button']
             }
         ]
     },
@@ -418,6 +448,16 @@ const osucommands = [
                 defaultValue: 'most recent user fetched in the guild',
                 examples: ['Soragaton', 'second:Soragaton'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'page',
+                type: 'number',
+                required: false,
+                description: 'The page of the compared plays to show',
+                options: ['N/A'],
+                defaultValue: '1',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -552,6 +592,16 @@ const osucommands = [
                 examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -578,11 +628,21 @@ const osucommands = [
     {
         name: 'lb',
         description: 'Shows the leaderboard of the current server',
-        usage: 'lb',
-        slashusage: 'lb',
+        usage: 'lb [-(mode)]',
+        slashusage: 'lb [mode]',
         examples: [],
         aliases: [],
         options: [
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode to show the leaderboard in',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu',
+                examples: ['-taiko', 'mode:mania'],
+                commandTypes: ['message', 'interaction']
+            },
             {
                 name: 'page',
                 type: 'integer',
@@ -599,8 +659,8 @@ const osucommands = [
     {
         name: 'map',
         description: 'Shows information about a beatmap',
-        usage: 'map "query" [id] +[mods]',
-        slashusage: 'map [query] [id] [mods] [detailed]',
+        usage: 'map "query" [id] +[mods] [-bpm] [-speed]',
+        slashusage: 'map [query] [id] [mods] [detailed] [bpm] [speed]',
         examples: [
             {
                 text: 'PREFIXMSGmap "kimi no shiranai monogatari"',
@@ -639,7 +699,7 @@ const osucommands = [
                 options: ['N/A'],
                 defaultValue: 'the most recent map in the guild',
                 examples: ['4204', 'id:4204'],
-                commandTypes: ['message', 'interaction', 'link']
+                commandTypes: ['message', 'interaction', 'link', 'button']
             },
             {
                 name: 'mods',
@@ -660,6 +720,36 @@ const osucommands = [
                 defaultValue: 'false',
                 examples: ['detailed:true'],
                 commandTypes: ['message', 'interaction', 'button']
+            },
+            {
+                name: 'bpm',
+                type: 'float',
+                required: false,
+                description: 'The BPM to calculate the map with',
+                options: ['N/A'],
+                defaultValue: 'the map\'s BPM',
+                examples: ['-bpm 200', 'bpm:200'],
+                commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'speed',
+                type: 'float',
+                required: false,
+                description: 'The speed multiplier to calculate the map with. Overrides BPM',
+                options: ['N/A'],
+                defaultValue: '1',
+                examples: ['-speed 1.5', 'speed:1.5'],
+                commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Recalculates the map',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -720,6 +810,16 @@ const osucommands = [
                 examples: ['-parse 5', 'parse:5'],
                 commandTypes: ['message', 'interaction']
             },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
+            }
         ]
     },
     {
@@ -852,6 +952,16 @@ const osucommands = [
                 examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -919,6 +1029,16 @@ const osucommands = [
                 defaultValue: 'false',
                 examples: ['-g', '-graph'],
                 commandTypes: ['message']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Recalculates the user\'s statistics',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -1122,6 +1242,16 @@ const osucommands = [
                 examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -1252,6 +1382,16 @@ const osucommands = [
                 examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -1403,6 +1543,16 @@ const osucommands = [
             defaultValue: 'latest',
             examples: ['spotlight:227'],
             commandTypes: ['message', 'interaction']
+        },
+        {
+            name: 'Refresh',
+            type: 'boolean',
+            required: false,
+            description: 'Refreshes the leaderboard',
+            options: ['true', 'false'],
+            defaultValue: 'false',
+            examples: [''],
+            commandTypes: ['button']
         }
         ]
     },
@@ -1510,8 +1660,86 @@ const osucommands = [
                 examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the score(s)',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
+    },
+    {
+        name: 'render',
+        description: 'Renders the last requested beatmap',
+        usage: 'render [-(comboColour)] [+(mods)] [-start] [-end] [-speed]',
+        slashusage: 'render [comboColour] [mods] [start] [end] [speed]',
+        examples: [
+            {
+                text: 'PREFIXMSGrender',
+                descriptor: 'Renders the last requested beatmap'
+            },
+            {
+                text: 'PREFIXMSGrender -speed 1.5 -start 00:00:00 -end 00:00:30',
+                descriptor: 'Renders the beatmap at 1.5x speed, from 00:00:00 to 00:00:30'
+            },
+            {
+                text: 'PREFIXMSGrender +DT',
+                descriptor: 'Renders the beatmap with DT'
+            },
+            {
+                text: 'PREFIXMSGrender -nocolour',
+                descriptor: 'Renders the beatmap with white combo colours'
+            }
+        ],
+        aliases: ['rdr'],
+        options: [
+            {
+                name: 'comboColour',
+                type: 'boolean',
+                required: false,
+                description: 'Enables/disables combo colour. If disabled, the combo colour will be white',
+                options: ['nocolour', 'colour', 'true', 'false'],
+                defaultValue: 'colour',
+                examples: ['-nocolour', 'comboColour:true'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'mods',
+                type: 'string',
+                required: false,
+                description: 'What mods to render with',
+                options: ['N/A'],
+                defaultValue: 'NM',
+                examples: ['+HDHR', 'mods:HDDT'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'start',
+                type: 'integer',
+                required: false,
+                description: 'The start time of the render in seconds. Overrides [section]',
+                options: ['N/A'],
+                defaultValue: '0',
+                examples: ['-start 50.565', 'start:50'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'end',
+                type: 'integer',
+                required: false,
+                description: 'The end time of the render in seconds. Overrides [section]',
+                options: ['N/A'],
+                defaultValue: 'The end of the beatmap',
+                examples: ['-end 234.2', 'end:10000'],
+                commandTypes: ['message', 'interaction']
+            }
+        ],
+
     },
     {
         name: 'saved',
@@ -1664,26 +1892,85 @@ const osucommands = [
                 description: 'Parse the score with the specific index',
                 options: ['N/A'],
                 defaultValue: '0',
-                examples: ['-parse 5'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'parse',
-                type: 'number',
-                required: false,
-                description: 'Parse the score with the specific index',
-                options: ['N/A'],
-                defaultValue: '0',
                 examples: ['-parse 5', 'parse:5'],
                 commandTypes: ['message', 'interaction']
             },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
+            }
+        ]
+    },
+    {
+        name: 'scorestats',
+        description: 'Shows the stats of a user\'s scores',
+        usage: 'scorestats [user] [-(type)] [-(mode)]',
+        slashusage: 'scorestats [user] [type] [mode]',
+        examples: [
+            {
+                text: 'PREFIXMSGscorestats @SaberStrike',
+                descriptor: 'Shows scorestats for SaberStrike\'s top plays'
+            },
+            {
+                text: 'PREFIXMSGscorestats mrekk -firsts',
+                descriptor: 'Shows scorestats for mrekk\'s firsts'
+            }
+        ],
+        aliases: ['ss'],
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the scores of',
+                options: ['N/A'],
+                defaultValue: 'The user who ran the command',
+                examples: ['mrekk', 'user:mrekk'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'type',
+                type: 'string',
+                required: false,
+                description: 'The type of scores to use',
+                options: ['best', 'firsts', 'recent', 'pinned'],
+                defaultValue: 'best',
+                examples: ['type:recent', '-firsts'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode to use',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu',
+                examples: ['-taiko', 'mode:mania'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'details',
+                type: 'boolean',
+                required: false,
+                description: 'Sends two txt files with every mapper and mod combination calculated',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [],
+                commandTypes: ['button']
+            }
         ]
     },
     {
         name: 'simulate',
         description: 'Simulates a score on a beatmap',
-        usage: 'simulate [id] +[mods]  -acc [accuracy] -combo [combo] -n300 [n300] -n100 [n100] -n50 [n50] -miss [misses]',
-        slashusage: 'simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses]',
+        usage: 'simulate [id] +[(mods)]  [-acc] [-combo] [-n300] [-n100] [-n50] [-miss] [-bpm] [-speed]',
+        slashusage: 'simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses] [bpm] [speed]',
         examples: [
             {
                 text: 'PREFIXMSGsimulate +HDHR misses=0 acc=97.86',
@@ -1770,6 +2057,26 @@ const osucommands = [
                 options: ['N/A'],
                 defaultValue: '0',
                 examples: ['miss=2'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'bpm',
+                type: 'float',
+                required: false,
+                description: 'The bpm to simulate the score with',
+                options: ['N/A'],
+                defaultValue: 'map bpm',
+                examples: ['-bpm 200'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'speed',
+                type: 'float',
+                required: false,
+                description: 'The speed multiplier to simulate the score with',
+                options: ['N/A'],
+                defaultValue: '1',
+                examples: ['-speed 1.5'],
                 commandTypes: ['message', 'interaction']
             }
         ]
@@ -1864,8 +2171,8 @@ const osucommands = [
     {
         name: 'userbeatmaps',
         description: 'Shows a user\'s beatmaps (favourites/ranked/pending/graveyard/loved)',
-        usage: 'userbeatmaps [user] [-(type)] [-reverse] [-page/-p]',
-        slashusage: 'userbeatmaps [user] [type] [reverse] [page] [sort]',
+        usage: 'userbeatmaps [user] [-(type)] [-reverse] [-page/-p] [-parse] [-?]',
+        slashusage: 'userbeatmaps [user] [type] [reverse] [page] [sort] [parse] [filter]',
         examples: [
             {
                 text: 'PREFIXMSGubm sotarks -p 4 -ranked',
@@ -1926,6 +2233,36 @@ const osucommands = [
             defaultValue: 'Date Added',
             examples: ['sort:title'],
             commandTypes: ['message', 'interaction']
+        },
+        {
+            name: 'parse',
+            type: 'integer',
+            required: false,
+            description: 'Parses the beatmap with the given index',
+            options: ['N/A'],
+            defaultValue: '1',
+            examples: ['parse:3', '-parse 727'],
+            commandTypes: ['message', 'interaction']
+        },
+        {
+            name: 'filter',
+            type: 'string',
+            required: false,
+            description: 'Filters the beatmaps by the given string',
+            options: ['N/A'],
+            defaultValue: 'N/A',
+            examples: ['filter:hard', '-? "blue dragon"'],
+            commandTypes: ['message', 'interaction']
+        },
+        {
+            name: 'Refresh',
+            type: 'boolean',
+            required: false,
+            description: 'Refreshes the scores',
+            options: ['true', 'false'],
+            defaultValue: 'false',
+            examples: [''],
+            commandTypes: ['button']
         }
         ]
     },
