@@ -643,6 +643,37 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
             options: cmdconfig.useridsortopts
         },
         {
+            name: 'scorestats',
+            description: 'Displays statistics for a user\'s scores',
+            dmPermission: false,
+            options: [
+                {
+                    name: 'user',
+                    description: 'The user to display the statistics of',
+                    type: Discord.ApplicationCommandOptionType.String,
+                    required: false,
+                },
+                {
+                    name: 'mode',
+                    description: 'The mode to display the statistics in',
+                    type: Discord.ApplicationCommandOptionType.String,
+                    required: false,
+                },
+                {
+                    name: 'type',
+                    description: 'The type of scores to use',
+                    type: Discord.ApplicationCommandOptionType.String,
+                    required: false,
+                    choices: [
+                        { name: 'firsts', value: 'firsts' },
+                        { name: 'top', value: 'best'},
+                        { name: 'recent', value: 'recent' },
+                        { name: 'pinned', value: 'pinned' },
+                    ]
+                }
+            ]
+        },
+        {
             name: 'simulate',
             description: 'Simulates a play on a map',
             dmPermission: false,

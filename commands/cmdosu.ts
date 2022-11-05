@@ -7334,6 +7334,10 @@ export async function scorestats(input: extypes.commandInput) {
         case 'button': {
             input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
+            user = input.obj.message.embeds[0].author.url.split('/u/')[1].split('/')[0];
+            mode = input.obj.message.embeds[0].author.url.split('/u/')[1].split('/')[1] as osuApiTypes.GameMode;
+            //user's {type} scores
+            scoreTypes = input.obj.message.embeds[0].title.split(' scores')[0].split(' ')[0].toLowerCase() as scoretypes;
         }
             break;
         case 'link': {
@@ -7346,6 +7350,17 @@ export async function scorestats(input: extypes.commandInput) {
 
     }
     //==============================================================================================================================================================================================
+
+    //detailed button
+
+    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`Details-scorestats-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.detailed),
+        );
+
 
     log.logFile(
         'command',
@@ -7475,14 +7490,25 @@ export async function scorestats(input: extypes.commandInput) {
             await getScoreCount(cinitnum + 100)
         }
     }
-    await getScoreCount(0);
+    if (func.findFile(input.absoluteID, 'reqdata') &&
+        input.commandType == 'button' &&
+        !('error' in func.findFile(input.absoluteID, 'reqdata')) &&
+        input.button != 'Refresh'
+    ) {
+        scoresdata = func.findFile(input.absoluteID, 'reqdata')
+    } else {
+        await getScoreCount(0);
+    }
+    func.storeFile(scoresdata, input.absoluteID, 'reqdata')
+
+    let useFiles: string[] = [];
 
     const Embed: Discord.EmbedBuilder = new Discord.EmbedBuilder()
         .setTitle(`Statistics for ${osudata.username}'s ${scoreTypes} scores`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            url: `https://osu.ppy.sh/u/${osudata.id}/${osufunc.modeValidator(mode)}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
     if (scoresdata.length == 0) {
@@ -7495,65 +7521,100 @@ export async function scorestats(input: extypes.commandInput) {
         const pp = osufunc.PerformanceStats(scoresdata);
         const combo = osufunc.ComboStats(scoresdata);
 
-        let mappersStr = '';
-        for (let i = 0; i < mappers.length && i < 5; i++) {
-            mappersStr += `#${i + 1}. ${mappers[i].mapper} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`
-        }
-        let modsStr = '';
-        for (let i = 0; i < mods.length && i < 5; i++) {
-            modsStr += `#${i + 1}. ${mods[i].mods} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`
-        }
 
-        Embed.addFields([{
-            name: 'Mappers',
-            value: mappersStr,
-            inline: true,
-        },
-        {
-            name: 'Mods',
-            value: modsStr,
-            inline: true
-        },
-        {
-            name: 'Accuracy',
-            value: `
+        if (input.commandType == 'button') {
+            let frmappertxt = ''
+            let frmodstxt = ''
+            for (let i = 0; i < mappers.length; i++) {
+                frmappertxt += `#${i + 1}. ${mappers[i].mapper} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`
+            }
+            for (let i = 0; i < mods.length; i++) {
+                frmodstxt += `#${i + 1}. ${mods[i].mods} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`
+            }
+
+            fs.writeFileSync(`cache/commandData/${input.absoluteID}Mappers.txt`, frmappertxt, 'utf-8')
+            fs.writeFileSync(`cache/commandData/${input.absoluteID}Mods.txt`, frmodstxt, 'utf-8')
+            useFiles = [`cache/commandData/${input.absoluteID}Mappers.txt`, `cache/commandData/${input.absoluteID}Mods.txt`]
+        } else {
+            let mappersStr = '';
+            for (let i = 0; i < mappers.length && i < 5; i++) {
+                mappersStr += `#${i + 1}. ${mappers[i].mapper} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`
+            }
+            let modsStr = '';
+            for (let i = 0; i < mods.length && i < 5; i++) {
+                modsStr += `#${i + 1}. ${mods[i].mods} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`
+            }
+
+            Embed.addFields([{
+                name: 'Mappers',
+                value: mappersStr,
+                inline: true,
+            },
+            {
+                name: 'Mods',
+                value: modsStr,
+                inline: true
+            },
+            {
+                name: 'Accuracy',
+                value: `
 Highest: ${(acc?.highest * 100)?.toFixed(2)}%
 Lowest: ${(acc?.lowest * 100)?.toFixed(2)}%
 Average: ${(acc?.average * 100)?.toFixed(2)}%
 `,
-            inline: false
-        },
-        {
-            name: 'PP',
-            value: `
+                inline: false
+            },
+            {
+                name: 'PP',
+                value: `
 Highest: ${pp?.highest?.toFixed(2)}pp
 Lowest: ${pp?.lowest?.toFixed(2)}pp
 Average: ${pp?.average?.toFixed(2)}pp
 `,
-            inline: true
-        },
-        {
-            name: 'Combo',
-            value: `
+                inline: true
+            },
+            {
+                name: 'Combo',
+                value: `
 Highest: ${combo?.highest}
 Lowest: ${combo?.lowest}
 Average: ${combo?.average}
 `,
-            inline: true
+                inline: true
+            }
+            ])
         }
-        ])
     }
 
 
+
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
-        commandType: input.commandType,
-        obj: input.obj,
-        args: {
-            embeds: [Embed],
-            edit: true,
-        }
-    })
+    if (input.commandType == 'button') { 
+        input.obj = input.obj as Discord.ButtonInteraction<any>;
+
+        input.obj.reply({
+            files: useFiles,
+            ephemeral: true
+        }).catch(error => {
+            (input.obj as Discord.ButtonInteraction<any>).editReply({
+                files: useFiles,
+            })  
+        })
+
+
+    } else {
+
+        msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                embeds: [Embed],
+                edit: true,
+                components: [buttons],
+                files: useFiles
+            }
+        })
+    }
 
     log.logFile('command',
         `

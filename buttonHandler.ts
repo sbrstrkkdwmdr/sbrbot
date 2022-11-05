@@ -25,7 +25,7 @@ module.exports = (userdata, client, config, oncooldown, statsCache) => {
 
         //buttonType-baseCommand-userId-commandId
 
-        const commandType:extypes.commandType = 'button';
+        const commandType: extypes.commandType = 'button';
         const overrides = {
             user: null,
             page: null,
@@ -164,6 +164,10 @@ module.exports = (userdata, client, config, oncooldown, statsCache) => {
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
+            case 'scorestats':
+                osucmds.scorestats({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
+                break;
+
             case 'userbeatmaps':
                 osucmds.userBeatmaps({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata });
                 interaction.deferUpdate()
