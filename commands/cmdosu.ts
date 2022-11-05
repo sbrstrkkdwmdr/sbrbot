@@ -7349,7 +7349,7 @@ export async function scorestats(input: extypes.commandInput) {
 
     log.logFile(
         'command',
-        log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
+        log.commandLog('scorestats', input.commandType, input.absoluteID, commanduser
         ),
         {
             guildId: `${input.obj.guildId}`
@@ -10220,31 +10220,24 @@ export async function tracklist(input: extypes.commandInput) {
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
+                .setCustomId(`BigLeftArrow-tracklist-${commanduser.id}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji('⬅')
             /* .setLabel('Start') */,
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
+                .setCustomId(`LeftArrow-tracklist-${commanduser.id}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji('◀'),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
+                .setCustomId(`RightArrow-tracklist-${commanduser.id}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji('▶')
             /* .setLabel('Next') */,
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
+                .setCustomId(`BigRightArrow-tracklist-${commanduser.id}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji('➡')
             /* .setLabel('End') */,
-        );
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-COMMANDNAME-${commanduser.id}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji('🔁'),
         );
 
     log.logFile(
@@ -11163,7 +11156,7 @@ export async function saved(input: extypes.commandInput) {
 
     log.logFile(
         'command',
-        log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
+        log.commandLog('saved', input.commandType, input.absoluteID, commanduser
         ),
         {
             guildId: `${input.obj.guildId}`

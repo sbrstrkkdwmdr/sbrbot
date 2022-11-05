@@ -1728,7 +1728,7 @@ export function remind(input: extypes.commandInput) {
 
     log.logFile(
         'command',
-        log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
+        log.commandLog('remind', input.commandType, input.absoluteID, commanduser
         ),
         {
             guildId: `${input.obj.guildId}`
@@ -1954,7 +1954,7 @@ export function time(input: extypes.commandInput) {
 
     log.logFile(
         'command',
-        log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
+        log.commandLog('time', input.commandType, input.absoluteID, commanduser
         ),
         {
             guildId: `${input.obj.guildId}`

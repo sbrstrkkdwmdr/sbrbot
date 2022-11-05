@@ -447,24 +447,34 @@ export function toOrdinal(num: number) {
  * @param decimal how many decimals to show
  * @returns shorthand ie 1000 -> 1k, 1254 -> 1.25k
  */
-export function shorthandNumber(number:number, decimal?:number){
-    let newNum:string = `0`
-    if(!decimal){
+export function shorthandNumber(number: number, decimal?: number) {
+    let newNum: string = `0`
+    if (!decimal) {
         decimal = 2
     }
-    if(number > 10**12){
-        newNum = (number/1000).toFixed(decimal) + 'T'
+    if (number > 10 ** 12) {
+        newNum = (number / 1000).toFixed(decimal) + 'T'
     }
-    if(number > 10**9){
-        newNum = (number/1000).toFixed(decimal) + 'B'
+    if (number > 10 ** 9) {
+        newNum = (number / 1000).toFixed(decimal) + 'B'
     }
-    if(number > 10**6){
-        newNum = (number/1000).toFixed(decimal) + 'M'
+    if (number > 10 ** 6) {
+        newNum = (number / 1000).toFixed(decimal) + 'M'
     }
-    if(number > 10**3){
-        newNum = (number/1000).toFixed(decimal) + 'k'
+    if (number > 10 ** 3) {
+        newNum = (number / 1000).toFixed(decimal) + 'k'
     }
-    return newNum;   
+    return newNum;
+}
+
+export async function waitPls(func: () => any, seconds: number) {
+    await new Promise(resolve => {
+        setTimeout(() => {
+            func();
+            resolve('success');
+        }, seconds);
+    })
+    return;
 }
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };

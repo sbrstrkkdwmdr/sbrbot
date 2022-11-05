@@ -523,7 +523,7 @@ export async function debug(input: extypes.commandInput) {
     //==============================================================================================================================================================================================
     log.logFile(
         'command',
-        log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
+        log.commandLog('debug', input.commandType, input.absoluteID, commanduser
         ),
         {
             guildId: `${input.obj.guildId}`
