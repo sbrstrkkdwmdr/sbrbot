@@ -104,10 +104,9 @@ export async function bws(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-            failIfNotExists: true
         }).catch()
     }
 
@@ -142,7 +141,7 @@ export async function bws(input: extypes.commandInput) {
                     })
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -347,10 +346,9 @@ export async function globals(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
         }).catch()
     }
 
@@ -520,7 +518,10 @@ export async function lb(input: extypes.commandInput) {
     const rarr = [];
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply('loading...')
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+            content: 'Loading...',
+            allowedMentions: { repliedUser: false },
+        }).catch()
     }
 
 
@@ -985,7 +986,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                     }).catch()
                 }, 1000)
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: 'Error - could not fetch rankings',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -1509,10 +1510,9 @@ export async function osu(input: extypes.commandInput) {
 
     if (input.commandType == 'interaction') {
 
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
         }).catch()
     }
 
@@ -1535,9 +1535,6 @@ export async function osu(input: extypes.commandInput) {
 
     let osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
-
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
@@ -1551,7 +1548,7 @@ export async function osu(input: extypes.commandInput) {
                 }, 1000);
             } else {
 
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -1582,6 +1579,9 @@ export async function osu(input: extypes.commandInput) {
     } else {
         mode = mode ?? 'osu'
     }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
 
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
@@ -1714,7 +1714,7 @@ export async function osu(input: extypes.commandInput) {
                         }, 1000)
                     } else {
 
-                        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                        (input.obj as Discord.Message<any>).reply({
                             content: 'Error - could not fetch user\'s top scores',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
@@ -1745,7 +1745,7 @@ export async function osu(input: extypes.commandInput) {
                         }, 1000)
                     } else {
 
-                        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                        (input.obj as Discord.Message<any>).reply({
                             content: 'Error - could not fetch user\'s most played beatmaps',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
@@ -2243,10 +2243,9 @@ export async function firsts(input: extypes.commandInput) {
 
     if (input.commandType == 'interaction') {
 
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
         }).catch()
     }
 
@@ -2269,9 +2268,6 @@ export async function firsts(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
-
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
@@ -2279,14 +2275,13 @@ export async function firsts(input: extypes.commandInput) {
 
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -2295,6 +2290,9 @@ export async function firsts(input: extypes.commandInput) {
         }
         return;
     }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     let firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []
     async function getScoreCount(cinitnum) {
@@ -2318,7 +2316,7 @@ export async function firsts(input: extypes.commandInput) {
                         }).catch()
                     }, 1000)
                 } else {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.Message<any>).reply({
                         content: 'Error - could not find user\'s #1 scores',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -2347,7 +2345,7 @@ export async function firsts(input: extypes.commandInput) {
         await getScoreCount(0);
     }
     osufunc.debug(firstscoresdata, 'command', 'firsts', input.obj.guildId, 'firstsScoresData');
-    func.storeFile(firstscoresdata, input.absoluteID, 'firstscoresdata')
+    func.storeFile(firstscoresdata, input.absoluteID, 'firstscoresdata');
 
     if (filterTitle) {
         firstscoresdata = firstscoresdata.filter((array) =>
@@ -2661,10 +2659,9 @@ export async function maplb(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-            failIfNotExists: true
         }).catch()
     }
 
@@ -2685,7 +2682,6 @@ export async function maplb(input: extypes.commandInput) {
         )
     }
     const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
-    func.storeFile(mapdataReq, mapid, 'mapdata')
     osufunc.debug(mapdataReq, 'command', 'maplb', input.obj.guildId, 'mapData');
 
     if (mapdata?.error) {
@@ -2698,7 +2694,7 @@ export async function maplb(input: extypes.commandInput) {
                     }).catch()
                 }, 1000)
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -2707,6 +2703,8 @@ export async function maplb(input: extypes.commandInput) {
         }
         return;
     }
+
+    func.storeFile(mapdataReq, mapid, 'mapdata')
 
     let title = 'n';
     let fulltitle = 'n';
@@ -2745,7 +2743,6 @@ export async function maplb(input: extypes.commandInput) {
         }
         const lbdataf: osuApiTypes.BeatmapScores = lbdataReq.apiData
 
-        func.storeFile(lbdataReq, input.absoluteID, 'lbdata')
         osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbDataF');
 
         if (lbdataf?.error) {
@@ -2758,7 +2755,7 @@ export async function maplb(input: extypes.commandInput) {
                         }).catch()
                     }, 1000)
                 } else {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -2767,6 +2764,7 @@ export async function maplb(input: extypes.commandInput) {
             }
             return;
         }
+        func.storeFile(lbdataReq, input.absoluteID, 'lbdata')
 
         const lbdata = lbdataf.scores
 
@@ -2881,7 +2879,6 @@ export async function maplb(input: extypes.commandInput) {
             )
         }
         const lbdata = lbdataReq.apiData
-        func.storeFile(lbdataReq, input.absoluteID, 'lbdata')
         osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbData');
 
         if (lbdata?.error) {
@@ -2894,7 +2891,7 @@ export async function maplb(input: extypes.commandInput) {
                         }).catch()
                     }, 1000)
                 } else {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -2903,6 +2900,8 @@ export async function maplb(input: extypes.commandInput) {
             }
             return;
         }
+
+        func.storeFile(lbdataReq, input.absoluteID, 'lbdata')
 
         if (parseScore == true) {
             let pid = parseInt(parseId) - 1
@@ -3418,10 +3417,9 @@ export async function nochokes(input: extypes.commandInput) {
 
     if (input.commandType == 'interaction') {
 
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
         }).catch()
     }
 
@@ -3444,23 +3442,19 @@ export async function nochokes(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
-
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
     if (osudata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -3469,6 +3463,9 @@ export async function nochokes(input: extypes.commandInput) {
         }
         return;
     }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     let nochokedataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'nochokedata') &&
@@ -3489,22 +3486,19 @@ export async function nochokes(input: extypes.commandInput) {
     }
     let nochokedata: osuApiTypes.Score[] & osuApiTypes.Error = nochokedataReq.apiData;
 
-    osufunc.debug(nochokedataReq, 'command', 'osutop', input.obj.guildId, 'noChokeData');
-    func.storeFile(nochokedataReq, input.absoluteID, 'nochokedata')
 
     if (nochokedata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
 
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -3514,21 +3508,23 @@ export async function nochokes(input: extypes.commandInput) {
         return;
     }
 
+    func.storeFile(nochokedataReq, input.absoluteID, 'nochokedata');
+    osufunc.debug(nochokedataReq, 'command', 'osutop', input.obj.guildId, 'noChokeData');
+
     try {
         nochokedata[0].user.username
     } catch (error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not fetch \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                         .catch();
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not fetch \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -4110,10 +4106,9 @@ export async function osutop(input: extypes.commandInput) {
         );
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
         }).catch()
     }
 
@@ -4136,23 +4131,19 @@ export async function osutop(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
-
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -4161,6 +4152,9 @@ export async function osutop(input: extypes.commandInput) {
         }
         return;
     }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     let osutopdataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'osutopdata') &&
@@ -4183,20 +4177,18 @@ export async function osutop(input: extypes.commandInput) {
     let osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData;
 
     osufunc.debug(osutopdataReq, 'command', 'osutop', input.obj.guildId, 'osuTopData');
-    func.storeFile(osutopdataReq, input.absoluteID, 'osutopdata')
 
     if (osutopdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -4206,21 +4198,22 @@ export async function osutop(input: extypes.commandInput) {
         return;
     }
 
+    func.storeFile(osutopdataReq, input.absoluteID, 'osutopdata')
+
     try {
         osutopdata[0].user.username
     } catch (error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not fetch \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                         .catch();
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not fetch \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -4818,10 +4811,9 @@ export async function pinned(input: extypes.commandInput) {
     mode = osufunc.modeValidator(mode);
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
         }).catch()
     }
 
@@ -4844,21 +4836,17 @@ export async function pinned(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
-
     osufunc.debug(osudataReq, 'command', 'pinned', input.obj.guildId, 'osuData');
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
             setTimeout(() => {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
                 })
             }, 1000);
         } else {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+            (input.obj as Discord.Message<any>).reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -4866,6 +4854,9 @@ export async function pinned(input: extypes.commandInput) {
         }
         return;
     }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     let pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []; //= await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
     async function getScoreCount(cinitnum) {
@@ -4888,7 +4879,7 @@ export async function pinned(input: extypes.commandInput) {
                         }).catch()
                     }, 1000)
                 } else {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.Message<any>).reply({
                         content: 'Error - could not find user\'s pinned scores',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -5405,8 +5396,6 @@ export async function recent(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
     osufunc.debug(osudataReq, 'command', 'recent', input.obj.guildId, 'osuData');
 
     if (osudata?.error) {
@@ -5431,11 +5420,13 @@ export async function recent(input: extypes.commandInput) {
         return;
     }
 
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
+
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-            failIfNotExists: true
         })
             .catch()
     }
@@ -5461,7 +5452,6 @@ export async function recent(input: extypes.commandInput) {
     let rsdata: osuApiTypes.Score[] & osuApiTypes.Error = rsdataReq.apiData;
 
     osufunc.debug(rsdataReq, 'command', 'recent', input.obj.guildId, 'rsData');
-    func.storeFile(rsdataReq, input.absoluteID, 'rsdata')
     if (rsdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
@@ -5472,7 +5462,7 @@ export async function recent(input: extypes.commandInput) {
                     }).catch()
                 }, 1000)
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not fetch \`${user}\`'s recent scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -5482,6 +5472,8 @@ export async function recent(input: extypes.commandInput) {
         }
         return;
     }
+
+    func.storeFile(rsdataReq, input.absoluteID, 'rsdata')
 
     if (filterTitle) {
         rsdata = rsdata.filter((array) =>
@@ -5538,7 +5530,7 @@ export async function recent(input: extypes.commandInput) {
                         }).catch()
                     }, 1000)
                 } else {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply(
+                    (input.obj as Discord.Message<any>).reply(
                         {
                             content: err,
                             allowedMentions: { repliedUser: false },
@@ -5569,7 +5561,6 @@ export async function recent(input: extypes.commandInput) {
         const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData
 
         osufunc.debug(mapdataReq, 'command', 'recent', input.obj.guildId, 'mapData');
-        func.storeFile(mapdataReq, curbm.id, 'mapdata')
         if (mapdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
@@ -5580,7 +5571,7 @@ export async function recent(input: extypes.commandInput) {
                         }).catch()
                     }, 1000)
                 } else {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.Message<any>).reply({
                         content: 'Error - could not find beatmap',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -5589,6 +5580,8 @@ export async function recent(input: extypes.commandInput) {
             }
             return;
         }
+
+        func.storeFile(mapdataReq, curbm.id, 'mapdata')
 
         let accgr;
         let fcaccgr;
@@ -6048,6 +6041,7 @@ export async function replayparse(input: extypes.commandInput) {
     if (mapdata?.id) {
         typeof mapdata.id == 'number' ? osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`) : ''
     }
+
     let osudataReq: osufunc.apiReturn;
 
     if (func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu')) &&
@@ -6350,7 +6344,6 @@ export async function scoreparse(input: extypes.commandInput) {
 
     scoredata = scoredataReq.apiData
 
-    func.storeFile(scoredataReq, scoreid, 'scoredata')
 
     if (scoredata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -6371,9 +6364,10 @@ export async function scoreparse(input: extypes.commandInput) {
         }
     } catch (error) {
     }
+    func.storeFile(scoredataReq, scoreid, 'scoredata')
 
     if (input.commandType == 'interaction' && input.overrides == null) {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
             .catch();
 
     }
@@ -6402,8 +6396,6 @@ export async function scoreparse(input: extypes.commandInput) {
 
     const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
 
-    func.storeFile(mapdataReq, scoredata.beatmap.id, 'mapdata')
-
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
@@ -6414,7 +6406,7 @@ export async function scoreparse(input: extypes.commandInput) {
                     }).catch()
                 }, 1000)
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: 'Error - could not fetch beatmap data',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -6422,6 +6414,8 @@ export async function scoreparse(input: extypes.commandInput) {
             }
         }
     }
+
+    func.storeFile(mapdataReq, scoredata.beatmap.id, 'mapdata');
 
     const ranking = scoredata.rank ? scoredata.rank : 'f'
     let scoregrade = emojis.grades.F
@@ -6586,20 +6580,17 @@ export async function scoreparse(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
-    func.storeFile(osudataReq, scoredata.user.username, 'osudata', osufunc.modeValidator(mode))
     osufunc.debug(osudataReq, 'command', 'scoreparse', input.obj.guildId, 'osuData')
     if (osudata?.error) {
         if (input.commandType == 'interaction') {
             setTimeout(() => {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${scoredata?.user?.username}\``,
                     allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
                 })
             }, 1000);
         } else {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+            (input.obj as Discord.Message<any>).reply({
                 content: `Error - could not find user \`${scoredata?.user?.username}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -6607,6 +6598,10 @@ export async function scoreparse(input: extypes.commandInput) {
         }
         return;
     }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, scoredata.user.username, 'osudata', osufunc.modeValidator(mode));
+
     const scoreembed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.score.dec)
         .setAuthor({
@@ -6946,10 +6941,9 @@ export async function scores(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
         }).catch()
     }
 
@@ -6972,22 +6966,18 @@ export async function scores(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
-
     osufunc.debug(osudataReq, 'command', 'scores', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
             setTimeout(() => {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
                 })
             }, 1000);
         } else {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+            (input.obj as Discord.Message<any>).reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -6996,6 +6986,9 @@ export async function scores(input: extypes.commandInput) {
         return;
 
     }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
 
     let scoredataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'scores') &&
@@ -7017,7 +7010,6 @@ export async function scores(input: extypes.commandInput) {
     const scoredataPresort: osuApiTypes.ScoreArrA = scoredataReq.apiData;
 
     osufunc.debug(scoredataReq, 'command', 'scores', input.obj.guildId, 'scoreDataPresort');
-    func.storeFile(scoredataReq, input.absoluteID, 'scores')
 
     if (scoredataPresort?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -7029,7 +7021,7 @@ export async function scores(input: extypes.commandInput) {
                     }).catch()
                 }, 1000)
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: 'Error - could not fetch scores',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -7038,6 +7030,8 @@ export async function scores(input: extypes.commandInput) {
         }
         return;
     }
+
+    func.storeFile(scoredataReq, input.absoluteID, 'scores')
 
     const scoredata: osuApiTypes.Score[] = scoredataPresort.scores
     try {
@@ -7094,7 +7088,6 @@ export async function scores(input: extypes.commandInput) {
     const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData
 
     osufunc.debug(mapdataReq, 'command', 'scores', input.obj.guildId, 'mapData');
-    func.storeFile(mapdataReq, mapid, 'mapdata')
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
@@ -7105,7 +7098,7 @@ export async function scores(input: extypes.commandInput) {
                     }).catch()
                 }, 1000)
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message<any>).reply({
                     content: 'Error - could not fetch beatmap data',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -7114,6 +7107,8 @@ export async function scores(input: extypes.commandInput) {
         }
         return;
     }
+
+    func.storeFile(mapdataReq, mapid, 'mapdata')
 
     const title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
     const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
@@ -7397,10 +7392,9 @@ export async function scorestats(input: extypes.commandInput) {
     mode = mode ? osufunc.modeValidator(mode) : null;
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
         }).catch()
     }
 
@@ -7447,8 +7441,8 @@ export async function scorestats(input: extypes.commandInput) {
         return;
     }
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     let scoresdata: osuApiTypes.Score[] & osuApiTypes.Error = [];
 
@@ -7473,7 +7467,7 @@ export async function scorestats(input: extypes.commandInput) {
                         }).catch()
                     }, 1000)
                 } else {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not find user\'s ${scoreTypes} scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -7589,7 +7583,7 @@ Average: ${combo?.average}
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    if (input.commandType == 'button') { 
+    if (input.commandType == 'button') {
         input.obj = input.obj as Discord.ButtonInteraction<any>;
 
         input.obj.reply({
@@ -7598,7 +7592,7 @@ Average: ${combo?.average}
         }).catch(error => {
             (input.obj as Discord.ButtonInteraction<any>).editReply({
                 files: useFiles,
-            })  
+            })
         })
 
 
@@ -7848,7 +7842,7 @@ export async function simulate(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
             .catch();
 
     }
@@ -7870,9 +7864,21 @@ export async function simulate(input: extypes.commandInput) {
 
     const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
 
-    func.storeFile(mapdataReq, mapid, 'mapdata')
-
     osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
+
+    if (mapdata?.error) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            }).catch()
+
+        }
+        return;
+    }
+    func.storeFile(mapdataReq, mapid, 'mapdata');
 
 
 
@@ -8123,13 +8129,15 @@ export async function map(input: extypes.commandInput) {
 
             const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
 
-            func.storeFile(bmsdataReq, setid, `bmsdata`)
 
             osufunc.debug(bmsdataReq, 'command', 'map', input.obj.guildId, 'bmsData');
 
             if (bmsdata?.error) {
                 return;
             }
+
+            func.storeFile(bmsdataReq, setid, `bmsdata`);
+
             const bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
             osufunc.debug(bmstosr, 'command', 'map', input.obj.guildId, 'bmsToSr');
 
@@ -8382,7 +8390,6 @@ export async function map(input: extypes.commandInput) {
 
         mapdata = mapdataReq.apiData;
 
-        func.storeFile(mapdataReq, mapid, 'mapdata')
 
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
 
@@ -8399,6 +8406,8 @@ export async function map(input: extypes.commandInput) {
             return;
         }
 
+        func.storeFile(mapdataReq, mapid, 'mapdata')
+
         if (func.findFile(mapdata.beatmapset_id, `bmsdata`) &&
             !('error' in func.findFile(mapdata.beatmapset_id, `bmsdata`)) &&
             input.button != 'Refresh') {
@@ -8413,10 +8422,23 @@ export async function map(input: extypes.commandInput) {
                 })
         }
         bmsdata = bmsdataReq.apiData;
-        func.storeFile(bmsdataReq, mapdata.beatmapset_id, `bmsdata`)
 
         osufunc.debug(bmsdataReq, 'command', 'map', input.obj.guildId, 'bmsData');
 
+        if (bmsdata?.error) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).catch()
+
+            }
+            return;
+        }
+
+        func.storeFile(bmsdataReq, mapdata.beatmapset_id, `bmsdata`)
 
         //options thing to switch to other maps in the mapset
         if (typeof bmsdata?.beatmaps == 'undefined' || bmsdata?.beatmaps?.length < 2) {
@@ -8523,7 +8545,6 @@ export async function map(input: extypes.commandInput) {
 
         mapdata = mapdataReq.apiData
 
-        func.storeFile(mapdataReq, mapidtest2[0].id, 'mapdata')
 
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
         if (mapdata?.error) {
@@ -8537,6 +8558,8 @@ export async function map(input: extypes.commandInput) {
             }
             return;
         }
+
+        func.storeFile(mapdataReq, mapidtest2[0].id, 'mapdata')
 
         //options menu to switch to other maps
         for (let i = 0; i < allmaps.length && i < 25; i++) {
@@ -8729,7 +8752,6 @@ export async function map(input: extypes.commandInput) {
 
     mapperdata = mapperdataReq.apiData;
 
-    func.storeFile(mapperdataReq, mapperdata.id, `osudata`)
 
     osufunc.debug(mapperdataReq, 'command', 'map', input.obj.guildId, 'mapperData');
 
@@ -8744,6 +8766,7 @@ export async function map(input: extypes.commandInput) {
         // }
         // return;
     }
+    func.storeFile(mapperdataReq, mapperdata.id, `osudata`)
 
     const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
     try {
@@ -9556,10 +9579,9 @@ export async function userBeatmaps(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
         }).catch()
     }
 
@@ -9582,22 +9604,18 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator('osu'));
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator('osu'));
-
     osufunc.debug(osudataReq, 'command', 'userbeatmaps', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
             setTimeout(() => {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
                 })
             }, 1000);
         } else {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+            (input.obj as Discord.Message<any>).reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -9605,6 +9623,9 @@ export async function userBeatmaps(input: extypes.commandInput) {
         }
         return;
     }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator('osu'));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator('osu'));
 
     let maplistdata: osuApiTypes.Beatmapset[] & osuApiTypes.Error = []
 
@@ -9630,7 +9651,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
                         }).catch()
                     }, 1000)
                 } else {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not find user's ${calc.toCapital(filter)} Maps`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -9922,8 +9943,8 @@ export async function trackadd(input: extypes.commandInput) {
 
         replymsg = `Added \`${osudata.username}\` to the tracking list\nGamemode: \`${mode}\``
 
-        func.storeFile(osudataReq, osudata.id, 'osudata', mode)
-        func.storeFile(osudataReq, user, 'osudata', mode)
+        func.storeFile(osudataReq, osudata.id, 'osudata', mode);
+        func.storeFile(osudataReq, user, 'osudata', mode);
 
         trackfunc.editTrackUser({
             database: input.trackDb,
@@ -10743,15 +10764,15 @@ export async function compare(input: extypes.commandInput) {
 
                 const secondtopdata: osuApiTypes.Score[] & osuApiTypes.Error = secondtopdataReq.apiData;
 
-                func.storeFile(firsttopdataReq, input.absoluteID, 'firsttopdata')
-                func.storeFile(secondtopdataReq, input.absoluteID, 'secondtopdata')
-
                 if (secondtopdata?.error) {
                     if (input.commandType != 'button' && input.commandType != 'link') {
                         throw new Error('could not fetch second user\'s top scores')
                     }
                     return;
                 }
+                func.storeFile(firsttopdataReq, input.absoluteID, 'firsttopdata')
+                func.storeFile(secondtopdataReq, input.absoluteID, 'secondtopdata')
+
                 const filterfirst = [];
                 //filter so that scores that have a shared beatmap id with the second user are kept
                 for (let i = 0; i < firsttopdata.length; i++) {
@@ -11480,6 +11501,26 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    if (osudata?.error || !osudata.id) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            if (input.commandType == 'interaction') {
+                setTimeout(() => {
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        content: `Error - could not find user \`${user}\``,
+                        allowedMentions: { repliedUser: false },
+                    })
+                }, 1000);
+            } else {
+                (input.obj as Discord.Message<any>).reply({
+                    content: `Error - could not find user \`${user}\``,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                })
+            }
+        }
+        return;
+    }
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))

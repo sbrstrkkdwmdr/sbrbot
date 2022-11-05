@@ -156,7 +156,37 @@ const cmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: 'N/A',
                 examples: ['recent', 'command:osutop'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction', 'button']
+            },
+            {
+                name: 'category',
+                type: 'string',
+                required: false,
+                description: 'Shows a list of commands in a category',
+                options: ['General', 'osu', 'Admin', 'Misc'],
+                defaultValue: 'N/A',
+                examples: ['osu', 'category:osu'],
+                commandTypes: ['button']
+            },
+            {
+                name: 'Menu',
+                type: 'boolean',
+                required: false,
+                description: 'Shows a list of all commands. True if command is not specified',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: [],
+                commandTypes: ['button']
+            },
+            {
+                name: 'Random',
+                type: 'boolean',
+                required: false,
+                description: 'Shows a random command',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: [],
+                commandTypes: ['button']
             }
         ]
     },
@@ -436,6 +466,16 @@ const osucmds: commandInfo[] = [
                 defaultValue: 'most recent user fetched in the guild',
                 examples: ['Soragaton', 'second:Soragaton'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'page',
+                type: 'number',
+                required: false,
+                description: 'The page of the compared plays to show',
+                options: ['N/A'],
+                defaultValue: '1',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -570,6 +610,16 @@ const osucmds: commandInfo[] = [
                 examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -667,7 +717,7 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: 'the most recent map in the guild',
                 examples: ['4204', 'id:4204'],
-                commandTypes: ['message', 'interaction', 'link']
+                commandTypes: ['message', 'interaction', 'link', 'button']
             },
             {
                 name: 'mods',
@@ -708,6 +758,16 @@ const osucmds: commandInfo[] = [
                 defaultValue: '1',
                 examples: ['-speed 1.5', 'speed:1.5'],
                 commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Recalculates the map',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -768,6 +828,16 @@ const osucmds: commandInfo[] = [
                 examples: ['-parse 5', 'parse:5'],
                 commandTypes: ['message', 'interaction']
             },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
+            }
         ]
     },
     {
@@ -900,6 +970,16 @@ const osucmds: commandInfo[] = [
                 examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -967,6 +1047,16 @@ const osucmds: commandInfo[] = [
                 defaultValue: 'false',
                 examples: ['-g', '-graph'],
                 commandTypes: ['message']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Recalculates the user\'s statistics',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -1170,6 +1260,16 @@ const osucmds: commandInfo[] = [
                 examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -1300,6 +1400,16 @@ const osucmds: commandInfo[] = [
                 examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -1451,6 +1561,16 @@ const osucmds: commandInfo[] = [
             defaultValue: 'latest',
             examples: ['spotlight:227'],
             commandTypes: ['message', 'interaction']
+        },
+        {
+            name: 'Refresh',
+            type: 'boolean',
+            required: false,
+            description: 'Refreshes the leaderboard',
+            options: ['true', 'false'],
+            defaultValue: 'false',
+            examples: [''],
+            commandTypes: ['button']
         }
         ]
     },
@@ -1558,6 +1678,16 @@ const osucmds: commandInfo[] = [
                 examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the score(s)',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
             }
         ]
     },
@@ -1780,19 +1910,19 @@ const osucmds: commandInfo[] = [
                 description: 'Parse the score with the specific index',
                 options: ['N/A'],
                 defaultValue: '0',
-                examples: ['-parse 5'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'parse',
-                type: 'number',
-                required: false,
-                description: 'Parse the score with the specific index',
-                options: ['N/A'],
-                defaultValue: '0',
                 examples: ['-parse 5', 'parse:5'],
                 commandTypes: ['message', 'interaction']
             },
+            {
+                name: 'Refresh',
+                type: 'boolean',
+                required: false,
+                description: 'Refreshes the scores',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [''],
+                commandTypes: ['button']
+            }
         ]
     },
     {
@@ -1841,6 +1971,16 @@ const osucmds: commandInfo[] = [
                 defaultValue: 'osu',
                 examples: ['-taiko', 'mode:mania'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'details',
+                type: 'boolean',
+                required: false,
+                description: 'Sends two txt files with every mapper and mod combination calculated',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [],
+                commandTypes: ['button']
             }
         ]
     },
@@ -2131,6 +2271,16 @@ const osucmds: commandInfo[] = [
             defaultValue: 'N/A',
             examples: ['filter:hard', '-? "blue dragon"'],
             commandTypes: ['message', 'interaction']
+        },
+        {
+            name: 'Refresh',
+            type: 'boolean',
+            required: false,
+            description: 'Refreshes the scores',
+            options: ['true', 'false'],
+            defaultValue: 'false',
+            examples: [''],
+            commandTypes: ['button']
         }
         ]
     },
