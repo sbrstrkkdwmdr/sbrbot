@@ -10,28 +10,6 @@ import cmdchecks = require('./checks');
 import extypes = require('./types/extratypes');
 import Sequelize = require('sequelize');
 
-/**
- * 
- * @param {*} arr array of scores
- * @returns most common mod combinations
- */
-export function modemods(arr) {
-    return arr.sort((a, b) => //swap b and a to make it least common
-        arr.filter(v => v.mods === a.mods).length
-        - arr.filter(v => v.mods === b.mods).length
-    ).pop();
-}
-/**
- * 
- * @param {*} arr array of scores
- * @returns most common mapper
- */
-export function modemappers(arr) {
-    return arr.sort((a, b) => //swap b and a to make it least common
-        arr.filter(v => v.beatmapset.creator === a.beatmapset.creator).length
-        - arr.filter(v => v.beatmapset.creator === b.beatmapset.creator).length
-    ).pop();
-}
 /* module.exports = {
     modemods, modemappers
 } */
@@ -149,10 +127,10 @@ export async function scorecalc(
     if (obj.clockRate == null) {
         obj.clockRate = 1;
     }
-    if(obj.mods.includes('DT') || obj.mods.includes('NC')){
+    if (obj.mods.includes('DT') || obj.mods.includes('NC')) {
         obj.clockRate = 1.5
     }
-    if(obj.mods.includes('HT')){
+    if (obj.mods.includes('HT')) {
         obj.clockRate = 0.75
     }
 
@@ -1660,4 +1638,134 @@ export async function mapIdFromLink(url: string, callIfMapIdNull: boolean) {
         object.map = (bmsdataReq.apiData as osuApiTypes.Beatmapset)?.beatmaps?.[0]?.id ?? null
     }
     return object;
+}
+
+
+
+/**
+ * 
+ * @param {*} arr array of scores
+ * @returns most common mod combinations
+ */
+export function modemods(arr: osuApiTypes.Score[]) {
+    return arr.sort((a, b) => //swap b and a to make it least common
+        arr.filter(v => v.mods === a.mods).length
+        - arr.filter(v => v.mods === b.mods).length
+    ).pop();
+}
+/**
+ * 
+ * @param {*} arr array of scores
+ * @returns most common mapper
+ */
+export function modemappers(arr: osuApiTypes.Score[]) {
+    return arr.sort((a, b) => //swap b and a to make it least common
+        arr.filter(v => v.beatmapset.creator === a.beatmapset.creator).length
+        - arr.filter(v => v.beatmapset.creator === b.beatmapset.creator).length
+    ).pop();
+}
+
+type stat = {
+    highest: number,
+    average: number,
+    lowest: number
+}
+
+/**
+ * 
+ * @param arr array of scores
+ * @returns highest, lowest and average accuracy
+ */
+export function AccStats(arr: osuApiTypes.Score[]) {
+    arr = arr.filter(x => x.accuracy != null)
+    arr.sort((a, b) => b.accuracy - a.accuracy)
+
+    const stats: stat = {
+        highest: arr[0].accuracy,
+        average: (arr.map(x => x.accuracy).reduce((b, a) => b + a, 0) / arr.length),
+        lowest: arr[arr.length - 1].accuracy
+    }
+    return stats;
+}
+
+/**
+ * 
+ * @param arr array of scores
+ * @returns highest, lowest and average pp
+ */
+export function PerformanceStats(arr: osuApiTypes.Score[]) {
+    arr = arr.filter(x => x.pp != null)
+    arr.sort((a, b) => b.pp - a.pp)
+
+    const stats: stat = {
+        highest: arr[0].pp,
+        average: (arr.map(x => x.pp).reduce((b, a) => b + a, 0) / arr.length),
+        lowest: arr[arr.length - 1].pp
+    }
+    return stats;
+}
+
+export function ComboStats(arr: osuApiTypes.Score[]) {
+    arr = arr.filter(x => x.max_combo != null)
+    arr.sort((a, b) => b.max_combo - a.max_combo)
+
+    const stats: stat = {
+        highest: arr[0].max_combo,
+        average: (arr.map(x => x.max_combo).reduce((b, a) => b + a, 0) / arr.length),
+        lowest: arr[arr.length - 1].max_combo
+    }
+    return stats;
+}
+
+/**
+ * 
+ * @param arr array of scores
+ * @returns mappers of scores in order of most common to least common, with percentage
+ */
+export function CommonMappers(arr: osuApiTypes.Score[]) {
+    let mapperArray: {
+        mapper: string,
+        count: number,
+        percentage: number
+    }[] = [];
+    arr.forEach(score => {
+        const mapper = score.beatmapset.creator;
+        const mapperIndex = mapperArray.findIndex(x => x.mapper == mapper);
+        if (mapperIndex == -1) {
+            mapperArray.push({
+                mapper,
+                count: 1,
+                percentage: 0
+            })
+        } else {
+            mapperArray[mapperIndex].count++;
+        }
+    })
+    mapperArray.sort((a, b) => b.count - a.count)
+    mapperArray.forEach(x => x.percentage = (x.count / arr.length) * 100)
+    return mapperArray;
+}
+
+export function CommonMods(arr: osuApiTypes.Score[]) {
+    let modComboArray: {
+        mods: string,
+        count: number,
+        percentage: number
+    }[] = [];
+    arr.forEach(score => {
+        const mods = score.mods.length != 0 ? score.mods.join('') : 'NM';
+        const modComboIndex = modComboArray.findIndex(x => x.mods == mods);
+        if (modComboIndex == -1) {
+            modComboArray.push({
+                mods,
+                count: 1,
+                percentage: 0
+            })
+        } else {
+            modComboArray[modComboIndex].count++;
+        }
+    })
+    modComboArray.sort((a, b) => b.count - a.count)
+    modComboArray.forEach(x => x.percentage = (x.count / arr.length) * 100)
+    return modComboArray;
 }

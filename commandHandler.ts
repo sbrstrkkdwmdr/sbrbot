@@ -561,6 +561,13 @@ module.exports = (userdata, client, config, oncooldown, guildSettings, trackDb, 
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
+            case 'scorestats':case 'ss':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    osucmds.scorestats({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
             case 'simplay': case 'simulate': case 'sim':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.simulate({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata })

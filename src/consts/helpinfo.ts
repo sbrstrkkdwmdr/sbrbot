@@ -1796,6 +1796,55 @@ const osucmds: commandInfo[] = [
         ]
     },
     {
+        name: 'scorestats',
+        description: 'Shows the stats of a user\'s scores',
+        usage: 'scorestats [user] [-(type)] [-(mode)]',
+        slashusage: 'scorestats [user] [type] [mode]',
+        examples: [
+            {
+                text: 'PREFIXMSGscorestats @SaberStrike',
+                descriptor: 'Shows scorestats for SaberStrike\'s top plays'
+            },
+            {
+                text: 'PREFIXMSGscorestats mrekk -firsts',
+                descriptor: 'Shows scorestats for mrekk\'s firsts'
+            }
+        ],
+        aliases: ['ss'],
+        options: [
+            {
+                name: 'user',
+                type: 'string/integer/user mention',
+                required: false,
+                description: 'The user to show the scores of',
+                options: ['N/A'],
+                defaultValue: 'The user who ran the command',
+                examples: ['mrekk', 'user:mrekk'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'type',
+                type: 'string',
+                required: false,
+                description: 'The type of scores to use',
+                options: ['best', 'firsts', 'recent', 'pinned'],
+                defaultValue: 'best',
+                examples: ['type:recent', '-firsts'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: false,
+                description: 'The mode to use',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu',
+                examples: ['-taiko', 'mode:mania'],
+                commandTypes: ['message', 'interaction']
+            }
+        ]
+    },
+    {
         name: 'simulate',
         description: 'Simulates a score on a beatmap',
         usage: 'simulate [id] +[(mods)]  [-acc] [-combo] [-n300] [-n100] [-n50] [-miss] [-bpm] [-speed]',

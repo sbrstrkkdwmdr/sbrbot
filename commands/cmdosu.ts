@@ -7209,6 +7209,366 @@ ID: ${input.absoluteID}
 }
 
 /**
+ * statistics for scores
+ */
+export async function scorestats(input: extypes.commandInput) {
+
+    let commanduser: Discord.User;
+    type scoretypes = 'firsts' | 'best' | 'recent' | 'pinned'
+    let scoreTypes: scoretypes = 'best';
+    let user = null;
+    let searchid;
+    let mode: osuApiTypes.GameMode;
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+            if (input.args.includes('-osu')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu'
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko'
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-f')) {
+                mode = 'fruits'
+                input.args.splice(input.args.indexOf('-f'))
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania'
+                input.args.splice(input.args.indexOf('-m'))
+            }
+
+            if (input.args.includes('-firsts')) {
+                scoreTypes = 'firsts'
+                input.args.splice(input.args.indexOf('-firsts'), 1);
+            }
+            if (input.args.includes('-first')) {
+                scoreTypes = 'firsts'
+                input.args.splice(input.args.indexOf('-first'), 1);
+            }
+            if (input.args.includes('-globals')) {
+                scoreTypes = 'firsts'
+                input.args.splice(input.args.indexOf('-globals'), 1);
+            }
+            if (input.args.includes('-global')) {
+                scoreTypes = 'firsts'
+                input.args.splice(input.args.indexOf('-global'), 1);
+            }
+            if (input.args.includes('-osutop')) {
+                scoreTypes = 'best'
+                input.args.splice(input.args.indexOf('-osutop'), 1);
+            }
+            if (input.args.includes('-top')) {
+                scoreTypes = 'best'
+                input.args.splice(input.args.indexOf('-top'), 1);
+            }
+            if (input.args.includes('-recent')) {
+                scoreTypes = 'recent'
+                input.args.splice(input.args.indexOf('-recent'), 1);
+            }
+            if (input.args.includes('-r')) {
+                scoreTypes = 'recent'
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-pinned')) {
+                scoreTypes = 'pinned'
+                input.args.splice(input.args.indexOf('-pinned'), 1);
+            }
+            if (input.args.includes('-pins')) {
+                scoreTypes = 'pinned'
+                input.args.splice(input.args.indexOf('-pins'), 1);
+            }
+            if (input.args.includes('-pin')) {
+                scoreTypes = 'pinned'
+                input.args.splice(input.args.indexOf('-pin'), 1);
+            }
+
+            input.args = cleanArgs(input.args);
+
+            user = input.args.join(' ');
+            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+                user = null
+            }
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+            searchid = input.obj.member.user.id;
+            input.obj.options.getString('user') ? user = input.obj.options.getString('user') : null;
+            input.obj.options.getString('type') ? scoreTypes = input.obj.options.getString('type') as scoretypes : null;
+            input.obj.options.getString('mode') ? mode = input.obj.options.getString('mode') as osuApiTypes.GameMode : null;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+
+    }
+    //==============================================================================================================================================================================================
+
+    log.logFile(
+        'command',
+        log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
+        ),
+        {
+            guildId: `${input.obj.guildId}`
+        })
+    //OPTIONS==============================================================================================================================================================================================
+    log.logFile('command',
+        log.optsLog(input.absoluteID, []),
+        {
+            guildId: `${input.obj.guildId}`
+        }
+    )
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    //if user is null, use searchid
+    if (user == null) {
+        const cuser = await osufunc.searchUser(searchid, input.userdata, true);
+        user = cuser.username;
+        if (mode == null) {
+            mode = cuser.gamemode;
+        }
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
+    }
+
+    mode = mode ? osufunc.modeValidator(mode) : null;
+
+    if (input.commandType == 'interaction') {
+        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+            content: 'Loading...',
+            allowedMentions: { repliedUser: false },
+            failIfNotExists: false,
+        }).catch()
+    }
+
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
+        input.button != 'Refresh'
+    ) {
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+    } else {
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        })
+    }
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'scorestats', input.obj.guildId, 'osuData');
+
+    if (osudata?.error) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                content: `Error - could not fetch user \`${user}\``,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            }).catch()
+        }
+        return;
+    }
+
+    if (!osudata.id) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                content: `Error - could not fetch user \`${user}\``,
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            }).catch()
+        }
+        return;
+    }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
+
+    let scoresdata: osuApiTypes.Score[] & osuApiTypes.Error = [];
+
+    async function getScoreCount(cinitnum) {
+        const req: osufunc.apiReturn = await osufunc.apiget({
+            type: scoreTypes,
+            params: {
+                userid: `${osudata.id}`,
+                opts: [`offset=${cinitnum}`, 'limit=100'],
+            },
+            version: 2,
+
+        })
+        const fd: osuApiTypes.Score[] & osuApiTypes.Error = req.apiData;
+        if (fd?.error) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                if (input.commandType == 'interaction') {
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                            content: `Error - could not find user\'s ${scoreTypes} scores`,
+                            allowedMentions: { repliedUser: false },
+                        }).catch()
+                    }, 1000)
+                } else {
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                        content: `Error - could not find user\'s ${scoreTypes} scores`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
+            }
+            return;
+        }
+        for (let i = 0; i < fd.length; i++) {
+            if (!fd[i] || typeof fd[i] == 'undefined') { break; }
+            await scoresdata.push(fd[i])
+        }
+        if (fd.length == 100 && (scoreTypes == 'firsts' || scoreTypes == 'pinned')) {
+            await getScoreCount(cinitnum + 100)
+        }
+    }
+    await getScoreCount(0);
+
+    const Embed: Discord.EmbedBuilder = new Discord.EmbedBuilder()
+        .setTitle(`Statistics for ${osudata.username}'s ${scoreTypes} scores`)
+        .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
+        .setAuthor({
+            name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
+            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
+        });
+    if (scoresdata.length == 0) {
+        Embed.setDescription('No scores found')
+    } else {
+        Embed.setDescription(`${func.separateNum(scoresdata.length)} scores found`)
+        const mappers = osufunc.CommonMappers(scoresdata);
+        const mods = osufunc.CommonMods(scoresdata);
+        const acc = osufunc.AccStats(scoresdata);
+        const pp = osufunc.PerformanceStats(scoresdata);
+        const combo = osufunc.ComboStats(scoresdata);
+
+        let mappersStr = '';
+        for (let i = 0; i < mappers.length && i < 5; i++) {
+            mappersStr += `#${i + 1}. ${mappers[i].mapper} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`
+        }
+        let modsStr = '';
+        for (let i = 0; i < mods.length && i < 5; i++) {
+            modsStr += `#${i + 1}. ${mods[i].mods} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`
+        }
+
+        Embed.addFields([{
+            name: 'Mappers',
+            value: mappersStr,
+            inline: true,
+        },
+        {
+            name: 'Mods',
+            value: modsStr,
+            inline: true
+        },
+        {
+            name: 'Accuracy',
+            value: `
+Highest: ${(acc?.highest * 100)?.toFixed(2)}%
+Lowest: ${(acc?.lowest * 100)?.toFixed(2)}%
+Average: ${(acc?.average * 100)?.toFixed(2)}%
+`,
+            inline: false
+        },
+        {
+            name: 'PP',
+            value: `
+Highest: ${pp?.highest?.toFixed(2)}pp
+Lowest: ${pp?.lowest?.toFixed(2)}pp
+Average: ${pp?.average?.toFixed(2)}pp
+`,
+            inline: true
+        },
+        {
+            name: 'Combo',
+            value: `
+Highest: ${combo?.highest}
+Lowest: ${combo?.lowest}
+Average: ${combo?.average}
+`,
+            inline: true
+        }
+        ])
+    }
+
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [Embed],
+            edit: true,
+        }
+    })
+
+    log.logFile('command',
+        `
+----------------------------------------------------
+success
+ID: ${input.absoluteID}
+----------------------------------------------------
+\n\n`,
+        { guildId: `${input.obj.guildId}` }
+    )
+
+}
+
+
+/**
  * simulate play on a map
  */
 export async function simulate(input: extypes.commandInput) {
