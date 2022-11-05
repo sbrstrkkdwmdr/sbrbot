@@ -34,8 +34,6 @@ export async function editTrackUser(fr: {
                 prevchannels.push(`${fr.guildId}`)
             }
 
-
-
             await fr.database.update({
                 osuid: fr.userid,
                 [`guilds${fr.mode}`]: prevchannels.join(',')
@@ -254,11 +252,14 @@ export async function sendMsg(embed: Discord.EmbedBuilder, curuser: string, trac
             osuid: curuser
         }
     })
-    const guilds = userobj.guilds.includes(',') ? userobj.guilds.split(',')
+    const guilds = userobj?.guilds?.includes(',') ? userobj?.guilds?.split(',')
         :
-        [userobj.guilds]
+        [userobj?.guilds]
 
     let channels = []
+    if(!guilds[0]){
+        return;
+    }
 
     guilds.forEach(() => {
         client.guilds.cache.forEach(async guild2 => {
