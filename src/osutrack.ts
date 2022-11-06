@@ -11,12 +11,23 @@ import trackfunc = require('./trackfunc');
 
 module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.ModelStatic<any>, guildSettings: Sequelize.ModelStatic<any>) => {
     // trackUsers(trackDb)
-    if (config.enableTracking == true) {
+    let enableTrack = config.enableTracking;
+
+    if (enableTrack == true) {
         setInterval(() => {
-            trackfunc.trackUsers(trackDb, client, guildSettings)
+            try {
+                trackfunc.trackUsers(trackDb, client, guildSettings)
+            } catch (err) {
+                console.log(err)
+                console.log('temporarily disabling tracking for an hour')
+                enableTrack = false;
+                setTimeout(() => {
+                    enableTrack = true;
+                }, 1000 * 60 * 60);
+            }
         }, 60 * 1000 * 15); //requests every 15 min
     }
-    function a(){
+    function a() {
         return 'string'
     }
 }
