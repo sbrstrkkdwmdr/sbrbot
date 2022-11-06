@@ -18,19 +18,19 @@ export type ValObj = {
     ar: number,
     od: number,
     hp: number,
-    bpm?:number,
-    length?:number,
-    mods?:string,
-    error?:string|boolean,
+    bpm?: number,
+    length?: number,
+    mods?: string,
+    error?: string | boolean,
     details?: {
         csRadius: number,
         arMs: number,
         odMs: OverallDifficultyObj,
-        lengthFull:string,
+        lengthFull: string,
     }
 }
 export type ModList =
-    'EZ' | 'HD' | 'FI' | 'HT' | 'DT' | 'NC' | 'HR' | 'SD' | 'PF' | 'FL' | 'NF' | 'AT' | 'RX' | 'AP' | 'TP' | 'SO' | '1K' | '2K' | '3K' | '4K' | '5K' | '6K' | '7K' | '8K' | '9K' | 'CP' | 'RD' | 'MR'
+    'EZ' | 'HD' | 'FI' | 'HT' | 'DT' | 'NC' | 'HR' | 'SD' | 'PF' | 'FL' | 'NF' | 'AT' | 'RX' | 'AP' | 'TP' | 'SO' | 'TD' | '1K' | '2K' | '3K' | '4K' | '5K' | '6K' | '7K' | '8K' | '9K' | 'CP' | 'RD' | 'MR'
 
 
 /**
@@ -537,8 +537,12 @@ function ModIntToString(modInt: number) {
  * @returns reorders mods to be in the correct order and removes duplicates.
  */
 function OrderMods(modString: string) {
-    const ModsOrder: ModList[] = ['EZ', 'HD', 'FI', 'HT', 'DT', 'NC', 'HR', 'SD', 'PF', 'FL', 'NF', 'AT', 'RX', 'AP', 'TP', 'SO', '1K', '2K', '3K', '4K', '5K', '6K', '7K', '8K', '9K', 'CP', 'RD', 'MR']
-    const modStringArray = modString.toUpperCase().replaceAll(' ', '').replaceAll(',', '').replace(/(.{2})/g, "$1 ").split(' ')
+    const ModsOrder: ModList[] = ['EZ', 'HD', 'FI', 'HT', 'DT', 'NC', 'HR', 'SD', 'PF', 'FL', 'NF', 'AT', 'RX', 'AP', 'TP', 'SO', 'TD', '1K', '2K', '3K', '4K', '5K', '6K', '7K', '8K', '9K', 'CP', 'RD', 'MR']
+    const modStringArray = modString.toUpperCase().replaceAll(' ', '').replaceAll(',', '').replace(/(.{2})/g, "$1 ")
+        .replaceAll('RLX', 'RX')
+        .replaceAll('RL', 'RX')
+        .replaceAll('AU', 'AT')
+        .split(' ')
     const modStringArrayOrdered = []
     const modStringArrayOrderedtest = []
     for (let i = 0; i < ModsOrder.length; i++) {
