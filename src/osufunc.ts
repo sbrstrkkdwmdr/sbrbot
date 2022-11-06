@@ -825,7 +825,10 @@ export async function updateToken() {
 
 export function logCall(data: string, title?: string) {
     if (config.LogApiCalls == true) {
-        console.log((title ? title : 'Api call') + ': ' + data)
+        console.log((title ? title : 'Api call') + ': ' + data);
+    }
+    if (config.LogApiCallsToFile == true) {
+        fs.appendFileSync("logs/console.log", `${(title ? title : 'Api call') + ': ' + data}`);
     }
     return;
 }
