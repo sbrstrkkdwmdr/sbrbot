@@ -9,7 +9,7 @@ import Sequelize = require('sequelize');
 import osufunc = require('./src/osufunc');
 import osuApiTypes = require('./src/types/osuApiTypes');
 
-module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, trackDb, statsCache) => {
+module.exports = (userdata, client, config:extypes.config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, trackDb, statsCache) => {
 
     setInterval(() => {
         clearMapFiles();
@@ -44,62 +44,119 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
         "The Big Black [WHO'S AFRAID OF THE BIG BLACK]"
     ]
 
-    const activityarr = [
+    const activities = [
         {
-            name: "240BPM | sbr-help",
+            name: `240BPM | ${config.prefix}-help`,
             type: 1,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: songsarr[Math.floor(Math.random() * songsarr.length)] + " | sbr-help",
+            name: songsarr[Math.floor(Math.random() * songsarr.length)] + ` | ${config.prefix}-help`,
             type: 2,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: "dt farm maps | sbr-help",
+            name: `dt farm maps | ${config.prefix}-help`,
             type: 0,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: "nothing in particular | sbr-help",
+            name: `nothing in particular | ${config.prefix}-help`,
             type: 3,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: "no mod farm maps | sbr-help",
+            name: `games | ${config.prefix}-help`,
             type: 0,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: "hr | sbr-help",
+            name: `hr | ${config.prefix}-help`,
             type: 0,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: songsarr[Math.floor(Math.random() * songsarr.length)] + " | sbr-help",
+            name: songsarr[Math.floor(Math.random() * songsarr.length)] + ` | ${config.prefix}-help`,
             type: 0,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: "you | sbr-help",
+            name: `you | ${config.prefix}-help`,
             type: 3,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         }
     ]
+    const activityChristmas = [{
+        name: `Merry Christmas! | ${config.prefix}-help`,
+        type: 0,
+        url: 'https://twitch.tv/sbrstrkkdwmdr',
+    }]
+    const activityHalloween = [{
+        name: `Happy Halloween! | ${config.prefix}-help`,
+        type: 0,
+        url: 'https://twitch.tv/sbrstrkkdwmdr',
+    },
+    {
+        name: `🎃 | ${config.prefix}-help`,
+        type: 0,
+        url: 'https://twitch.tv/sbrstrkkdwmdr',
+    }
+
+    ]
+    const activityNewYear = [{
+        name: `Happy New Year! | ${config.prefix}-help`,
+        type: 0,
+        url: 'https://twitch.tv/sbrstrkkdwmdr',
+    }]
 
     client.user.setPresence({
-        activities: [activityarr[0]],
+        activities: [activities[0]],
         status: 'dnd',
         afk: false
     });
+
+    //seasonal status updates
+    const Events = ['None', 'New Years', 'Halloween', 'Christmas'];
+
+    let curEvent = Events[0];
+    let activityarr = activities;
     setInterval(() => {
+        updateStatus();
+    }, 60 * 1000);
+    updateStatus();
+
+    function updateStatus() {
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        if ((month == 12 && day == 31) || (month == 1 && day == 1)) {
+            if (curEvent != Events[1]) {
+                curEvent = Events[1];
+                activityarr = activityNewYear;
+            }
+        }
+        else if (month == 10 && day == 31) {
+            if (curEvent != Events[2]) {
+                curEvent = Events[2];
+                activityarr = activityHalloween;
+            }
+        } else if (month == 12 && day == 25) {
+            if (curEvent != Events[3]) {
+                curEvent = Events[3];
+                activityarr = activityChristmas;
+            }
+        } else {
+            if (curEvent != Events[0]) {
+                curEvent = Events[0];
+                activityarr = activities;
+            }
+        }
         client.user.setPresence({
             activities: [activityarr[Math.floor(Math.random() * activityarr.length)]],
             status: 'dnd',
             afk: false
         });
-    }, 60 * 1000);
-
+    }
 
     client.on('messageCreate', async (message) => {
 
