@@ -14,6 +14,7 @@ type config = {
     },
     useScreenshotParse: boolean,
     LogApiCalls: boolean,
+    LogApiCallsToFile: boolean,
     enableTracking: boolean,
 }
 
