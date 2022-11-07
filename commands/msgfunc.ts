@@ -1,6 +1,8 @@
 import extypes = require('../src/types/extraTypes');
 import Discord = require('discord.js');
 import log = require('../src/log');
+import fs = require('fs');
+
 export async function sendMessage(input: {
     commandType: extypes.commandType
     obj: extypes.commandObject,
@@ -129,22 +131,21 @@ export async function sendMessage(input: {
 
 }
 
-export function SendFileToChannel(channel:Discord.GuildTextBasedChannel, filePath:string){
-    if(!filePath.includes('/')){
-        return 'https://cdn.discordapp.com/attachments/762455063922737174/1039051414082691112/image.png'
-    }
-        let msg:Discord.Message<any>
-    channel.send({
-        files: [filePath]
-    }).then(message => {
-        msg = message;
-    });
-    // path = './www'
-    //path = './penis/owo'
-    //path = 'penis/owo'
-    //get after '/'
+export async function SendFileToChannel(channel: Discord.GuildTextBasedChannel, filePath: string) {
+    let url = 'https://cdn.discordapp.com/attachments/762455063922737174/1039051414082691112/image.png'
+    await new Promise(async (resolve, reject) => {
 
-    const attachment = filePath.split('/')[filePath.split('/').length - 1]
+        if (!filePath.includes('/') || typeof channel == 'undefined' || !fs.existsSync(filePath)) {
+            reject('invalid/null path')
+        }
 
-    return `https://cdn.discordapp.com/attachments/${channel.id}/${msg.id}/${attachment}`
+        channel.send({
+            files: [filePath]
+        }).then(message => {
+            const attachment = filePath.split('/')[filePath.split('/').length - 1]
+            url = message.attachments.at(0).url
+            resolve(1);
+        });
+    })
+    return url;
 }
