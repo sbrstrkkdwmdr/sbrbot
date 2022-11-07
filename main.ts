@@ -224,6 +224,11 @@ Current Client ID:        ${client.user.id}
         console.log(`Creating previous IDs folder (./previous)`);
         fs.mkdirSync(`./cache/previous`);
     }
+    if(!fs.existsSync(`./cache/graphs`)){
+        console.log(`Creating ./cache/graphs/ folder`);
+        fs.mkdirSync(`./cache/graphs`);
+    }
+
     (async () => {
         await client.guilds.cache.forEach(guild => {
             if (!fs.existsSync(`./logs/moderator/${guild.id}.log`)) {

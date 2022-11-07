@@ -1,6 +1,6 @@
 import fs = require('fs');
 
-function commandLog(commandname: string, baseCommandType: string, absoluteID: number, commanduser) {
+function commandLog(commandname: string, baseCommandType: string, absoluteID: number | string, commanduser) {
     const currentDate = new Date();
     return `
 ----------------------------------------------------
@@ -12,7 +12,7 @@ cmd ID: ${absoluteID}
 ----------------------------------------------------
 `;
 }
-function optsLog(absoluteID: number, options: { name: string, value: string | number }[]) {
+function optsLog(absoluteID: number | string, options: { name: string, value: string | number }[]) {
     const currentDate = new Date();
     let firstlog = `
 ----------------------------------------------------

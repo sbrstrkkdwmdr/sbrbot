@@ -9,6 +9,7 @@ import config = require('../config/config.json');
 import cmdchecks = require('./checks');
 import extypes = require('./types/extratypes');
 import Sequelize = require('sequelize');
+import msgfunc = require('../commands/msgfunc');
 
 /* module.exports = {
     modemods, modemappers
@@ -397,7 +398,7 @@ export async function straincalclocal(path: string | null, mods: string, calctyp
  * @param secondYlabel label for second set of data
  * @returns graph url
  */
-export async function graph(x: number[] | string[], y: number[], label: string, startzero?: boolean | null, reverse?: boolean | null, showlabelx?: boolean | null, showlabely?: boolean | null, fill?: boolean | null, settingsoverride?: overrideGraph | null, displayLegend?: boolean, secondY?: number[], secondLabel?: string) {
+export function graph(x: number[] | string[], y: number[], label: string, startzero?: boolean | null, reverse?: boolean | null, showlabelx?: boolean | null, showlabely?: boolean | null, fill?: boolean | null, settingsoverride?: overrideGraph | null, displayLegend?: boolean, secondY?: number[], secondLabel?: string) {
 
     if (startzero == null || typeof startzero == 'undefined') {
         startzero = true
@@ -517,7 +518,9 @@ export async function graph(x: number[] | string[], y: number[], label: string, 
         })
     chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250)
 
-    return await chart.getShortUrl();
+    chart.toFile(`./cache/graphs/${(new Date).getTime()}.jpg`);
+
+    return `./cache/graphs/${(new Date).getTime()}.jpg`;
 
 }
 

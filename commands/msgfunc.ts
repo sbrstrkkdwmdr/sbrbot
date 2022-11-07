@@ -128,3 +128,23 @@ export async function sendMessage(input: {
     return true;
 
 }
+
+export function SendFileToChannel(channel:Discord.GuildTextBasedChannel, filePath:string){
+    if(!filePath.includes('/')){
+        return 'https://cdn.discordapp.com/attachments/762455063922737174/1039051414082691112/image.png'
+    }
+        let msg:Discord.Message<any>
+    channel.send({
+        files: [filePath]
+    }).then(message => {
+        msg = message;
+    });
+    // path = './www'
+    //path = './penis/owo'
+    //path = 'penis/owo'
+    //get after '/'
+
+    const attachment = filePath.split('/')[filePath.split('/').length - 1]
+
+    return `https://cdn.discordapp.com/attachments/${channel.id}/${msg.id}/${attachment}`
+}

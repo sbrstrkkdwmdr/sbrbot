@@ -1633,8 +1633,8 @@ export async function osu(input: extypes.commandInput) {
         const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
         const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
 
-        const chartplay = await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true);
-        const chartrank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank');
+        const chartplay = msgfunc.SendFileToChannel(input.graphChannel, osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true));
+        const chartrank = msgfunc.SendFileToChannel(input.graphChannel, osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank'));
 
         const ChartsEmbedRank = new Discord.EmbedBuilder()
             .setTitle(`${osudata.username}`)
@@ -1670,8 +1670,8 @@ export async function osu(input: extypes.commandInput) {
             const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
             const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
 
-            const chartplay = await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true);
-            const chartrank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank');
+            const chartplay = msgfunc.SendFileToChannel(input.graphChannel, osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true));
+            const chartrank = msgfunc.SendFileToChannel(input.graphChannel, osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank'));
 
             const ChartsEmbedRank = new Discord.EmbedBuilder()
                 .setDescription('Click on the image to see the full chart')
@@ -6180,7 +6180,7 @@ export async function replayparse(input: extypes.commandInput) {
         `${passper.toFixed(2)}% passed (${calc.secondsToTime(passper / 100 * mapdata.hit_length)}/${calc.secondsToTime(mapdata.hit_length)})`
         : ''
 
-    const chart = await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay')
+    const chart = msgfunc.SendFileToChannel(input.graphChannel, osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay'))
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.score.dec)
         .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
@@ -8777,7 +8777,7 @@ export async function map(input: extypes.commandInput) {
     }
     let mapgraph;
     if (strains) {
-        mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
+        mapgraph = msgfunc.SendFileToChannel(input.graphChannel, osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains'))
     } else {
         mapgraph = null
     }
@@ -8933,7 +8933,7 @@ export async function map(input: extypes.commandInput) {
             numofval.push(i)
         }
 
-        const passurl = await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits');
+        const passurl = msgfunc.SendFileToChannel(input.graphChannel, osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits'));
         const passEmbed = new Discord.EmbedBuilder()
             .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
             .setImage(`${passurl}`);
@@ -9247,7 +9247,7 @@ export async function maplocal(input: extypes.commandInput) {
 
     osufunc.debug(strains, 'fileparse', 'osu', input.obj.guildId, 'strains');
     try {
-        mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
+        mapgraph = msgfunc.SendFileToChannel(input.graphChannel, osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains'));
     } catch (error) {
         (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Error - calculating strain graph.',
