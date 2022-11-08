@@ -2396,7 +2396,7 @@ export async function firsts(input: extypes.commandInput) {
     const firstsEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`#1 scores for ${osudata.username}`)
-        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${firstscoresdata?.[0]?.mode ?? 'osu'}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${firstscoresdata?.[0]?.mode ?? osufunc.modeValidator(mode)}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
@@ -3592,9 +3592,9 @@ export async function nochokes(input: extypes.commandInput) {
 
     const topEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.scorelist.dec)
-        .setTitle(`Top no choke scores of ${nochokedata[0].user.username}`)
+        .setTitle(`Top no choke scores of ${osudata.username}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
-        .setURL(`https://osu.ppy.sh/users/${nochokedata[0].user.id}/${nochokedata[0].mode}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${nochokedata?.[0]?.mode ?? osufunc.modeValidator(mode)}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
@@ -4282,9 +4282,9 @@ export async function osutop(input: extypes.commandInput) {
 
     const topEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.scorelist.dec)
-        .setTitle(`Top plays of ${osutopdata[0].user.username}`)
+        .setTitle(`Top plays of ${osudata.username}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
-        .setURL(`https://osu.ppy.sh/users/${osutopdata[0].user.id}/${osutopdata[0].mode}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osutopdata?.[0]?.mode ?? osufunc.modeValidator(mode)}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
@@ -4963,7 +4963,7 @@ export async function pinned(input: extypes.commandInput) {
     const pinnedEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`Pinned scores for ${osudata.username}`)
-        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${pinnedscoresdata[0].mode}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${pinnedscoresdata?.[0]?.mode ?? osufunc.modeValidator(mode)}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
