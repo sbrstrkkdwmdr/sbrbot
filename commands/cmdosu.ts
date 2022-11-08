@@ -9460,7 +9460,10 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 curembed.description.split('Page: ')[1].split('/')[0]
             )
 
-            filterTitle = curembed.description.split('Filter: ')[1].split('\n')[0]
+
+            curembed.description.includes('Filter:') ? 
+            filterTitle = curembed.description.split('Filter: ')[1].split('\n')[0] : 
+            null;
 
             switch (input.button) {
                 case 'BigLeftArrow':
@@ -9777,7 +9780,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
     mapList.setDescription(`
 ${mapsarg.filter}
 Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}
-Filter: ${filterTitle}
+${filterTitle ? `Filter: ${filterTitle}` : ''}
 `)
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
