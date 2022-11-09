@@ -9,6 +9,7 @@ import config = require('../config/config.json');
 import cmdchecks = require('./checks');
 import extypes = require('./types/extratypes');
 import Sequelize = require('sequelize');
+import msgfunc = require('../commands/msgfunc');
 
 /* module.exports = {
     modemods, modemappers
@@ -517,7 +518,11 @@ export async function graph(x: number[] | string[], y: number[], label: string, 
         })
     chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250)
 
-    return await chart.getShortUrl();
+    const curt = `./cache/graphs/${(new Date).getTime()}.jpg`
+
+    await chart.toFile(curt);
+
+    return curt;
 
 }
 

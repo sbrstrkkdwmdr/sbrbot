@@ -13,7 +13,9 @@ const defaultClientConfig: extypes.config = {
     },
     useScreenshotParse: false,
     LogApiCalls: false,
+    LogApiCallsToFile: true,
     enableTracking: true,
+    graphChannelId: null
 }
 
 const defaultGuildSettings: extypes.guildSettings = {

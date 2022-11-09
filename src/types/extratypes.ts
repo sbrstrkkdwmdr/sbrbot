@@ -1,7 +1,7 @@
 import Discord = require('discord.js');
 import Sequelize = require('sequelize');
 import embedStuff = require('../embed');
-type config = {
+export type config = {
     token: string,
     prefix: string,
     osuClientID: string,
@@ -16,10 +16,11 @@ type config = {
     LogApiCalls: boolean,
     LogApiCallsToFile: boolean,
     enableTracking: boolean,
+    graphChannelId: string,
 }
 
-type guildSettings = {
-    guildid: number,
+export type guildSettings = {
+    guildid: number | string,
     guildname: string,
     prefix: string,
     osuParseLinks: boolean,
@@ -27,7 +28,7 @@ type guildSettings = {
     osuParseReplays: boolean,
 }
 
-type imagesearches = {
+export type imagesearches = {
     kind: string,
     url: {
         type: string,
@@ -71,7 +72,7 @@ type imagesearches = {
     items: googleSearchItem[]
 }
 
-type googleSearchItem = {
+export type googleSearchItem = {
     kind: string,
     title: string,
     htmlTitle: string,
@@ -92,7 +93,7 @@ type googleSearchItem = {
     }
 }
 
-type ytSearch = {
+export type ytSearch = {
     all?: ytSearchItem[],
     videos?: ytSearchVideo[],
     live?: ytSearchLive[],
@@ -102,8 +103,8 @@ type ytSearch = {
     accounts?: ytSearchAccount[],
 }
 
-type ytSearchItem = ytSearchVideo | ytSearchChannel
-type ytSearchVideo = {
+export type ytSearchItem = ytSearchVideo | ytSearchChannel
+export type ytSearchVideo = {
     type: string,
     videoId: string,
     url: string,
@@ -125,11 +126,11 @@ type ytSearchVideo = {
     }
 }
 
-type ytSearchPlaylist = {
+export type ytSearchPlaylist = {
     type: string,
 }
 
-type ytSearchChannel = {
+export type ytSearchChannel = {
     type: string,
     name: string,
     url: string,
@@ -142,14 +143,14 @@ type ytSearchChannel = {
     subCountLabel: string,
 }
 
-type ytSearchLive = any//{}
+export type ytSearchLive = any//{}
 
-type ytSearchAccount = any
+export type ytSearchAccount = any
 
-type ytSearchList = any//{}
+export type ytSearchList = any//{}
 
 
-type dbUser = {
+export type dbUser = {
     id: number,
     userid: number,
     osuname: string,
@@ -168,12 +169,12 @@ type dbUser = {
     maniarank: number,
 }
 
-type commandType = 'message' | 'interaction' | 'button' | 'link' | 'other'
+export type commandType = 'message' | 'interaction' | 'button' | 'link' | 'other'
 
 // type commandObject = any//Discord.Message | Discord.CommandInteraction | Discord.ButtonInteraction
-type commandObject = Discord.Message<any> | Discord.ChatInputCommandInteraction<any> | Discord.ButtonInteraction<any>
+export type commandObject = Discord.Message<any> | Discord.ChatInputCommandInteraction<any> | Discord.ButtonInteraction<any>
 
-type overrides = {
+export type overrides = {
     user?: any,
     page?: number,
     mode?: string,
@@ -187,32 +188,34 @@ type overrides = {
     commandAs: commandType,
 } | null
 
-type data = Sequelize.ModelStatic<any>
+export type data = Sequelize.ModelStatic<any>
 
-type commandInput = {
+export type commandInput = {
     commandType: commandType,
     obj: commandObject,
     args: string[],
     button?: commandButtonTypes,
     config?: config,
     client?: Discord.Client,
-    absoluteID?: number,
+    absoluteID?: number | string,
     currentDate?: Date,
     overrides?: overrides,
     userdata?: data,
     trackDb?: data,
     guildSettings?: data,
+    graphChannel: Discord.TextChannel
 }
 
-type commandButtonTypes = 
-'BigLeftArrow' | 'LeftArrow' | 'Search' | 'RightArrow' | 'BigRightArrow' |
-'Refresh' | 'Select' | 'Random' |
-'DetailEnable' | 'DetailDisable' | 'Detailed' | 'Details'
+export type commandButtonTypes =
+    'BigLeftArrow' | 'LeftArrow' | 'Search' | 'RightArrow' | 'BigRightArrow' |
+    'Refresh' | 'Select' | 'Random' |
+    'DetailEnable' | 'DetailDisable' | 'Detailed' | 'Details' |
+    'SearchMenu' | 'Sort' | 'SortMenu'
 
-type osustatscache = {
+export type osustatscache = {
     osuid: string,
     country: string,
-    
+
     osupp: string,
     osurank: string,
     osuacc: string,
@@ -229,19 +232,4 @@ type osustatscache = {
     maniarank: string,
     maniaacc: string,
 }
-
-export {
-    config,
-    guildSettings,
-    imagesearches,
-    googleSearchItem,
-    ytSearch,
-    dbUser,
-    commandType,
-    commandObject,
-    overrides,
-    data,
-    commandInput,
-    osustatscache
-};
 

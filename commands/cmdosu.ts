@@ -1633,8 +1633,8 @@ export async function osu(input: extypes.commandInput) {
         const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
         const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
 
-        const chartplay = await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true);
-        const chartrank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank');
+                    const chartplay = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true));
+                    const chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
 
         const ChartsEmbedRank = new Discord.EmbedBuilder()
             .setTitle(`${osudata.username}`)
@@ -1670,8 +1670,8 @@ export async function osu(input: extypes.commandInput) {
             const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
             const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
 
-            const chartplay = await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true);
-            const chartrank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank');
+            const chartplay = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true));
+            const chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
 
             const ChartsEmbedRank = new Discord.EmbedBuilder()
                 .setDescription('Click on the image to see the full chart')
@@ -2396,7 +2396,7 @@ export async function firsts(input: extypes.commandInput) {
     const firstsEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`#1 scores for ${osudata.username}`)
-        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${firstscoresdata?.[0]?.mode ?? 'osu'}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${firstscoresdata?.[0]?.mode ?? osufunc.modeValidator(mode)}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
@@ -3592,9 +3592,9 @@ export async function nochokes(input: extypes.commandInput) {
 
     const topEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.scorelist.dec)
-        .setTitle(`Top no choke scores of ${nochokedata[0].user.username}`)
+        .setTitle(`Top no choke scores of ${osudata.username}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
-        .setURL(`https://osu.ppy.sh/users/${nochokedata[0].user.id}/${nochokedata[0].mode}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${nochokedata?.[0]?.mode ?? osufunc.modeValidator(mode)}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
@@ -4282,9 +4282,9 @@ export async function osutop(input: extypes.commandInput) {
 
     const topEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.scorelist.dec)
-        .setTitle(`Top plays of ${osutopdata[0].user.username}`)
+        .setTitle(`Top plays of ${osudata.username}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
-        .setURL(`https://osu.ppy.sh/users/${osutopdata[0].user.id}/${osutopdata[0].mode}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osutopdata?.[0]?.mode ?? osufunc.modeValidator(mode)}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
@@ -4963,7 +4963,7 @@ export async function pinned(input: extypes.commandInput) {
     const pinnedEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`Pinned scores for ${osudata.username}`)
-        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${pinnedscoresdata[0].mode}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${pinnedscoresdata?.[0]?.mode ?? osufunc.modeValidator(mode)}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
@@ -6180,7 +6180,7 @@ export async function replayparse(input: extypes.commandInput) {
         `${passper.toFixed(2)}% passed (${calc.secondsToTime(passper / 100 * mapdata.hit_length)}/${calc.secondsToTime(mapdata.hit_length)})`
         : ''
 
-    const chart = await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay')
+    const chart = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay'))
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.score.dec)
         .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
@@ -8777,7 +8777,7 @@ export async function map(input: extypes.commandInput) {
     }
     let mapgraph;
     if (strains) {
-        mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
+        mapgraph = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains'))
     } else {
         mapgraph = null
     }
@@ -8933,7 +8933,7 @@ export async function map(input: extypes.commandInput) {
             numofval.push(i)
         }
 
-        const passurl = await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits');
+        const passurl = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits'));
         const passEmbed = new Discord.EmbedBuilder()
             .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
             .setImage(`${passurl}`);
@@ -9247,7 +9247,7 @@ export async function maplocal(input: extypes.commandInput) {
 
     osufunc.debug(strains, 'fileparse', 'osu', input.obj.guildId, 'strains');
     try {
-        mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
+        mapgraph = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains'));
     } catch (error) {
         (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Error - calculating strain graph.',
@@ -9460,7 +9460,10 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 curembed.description.split('Page: ')[1].split('/')[0]
             )
 
-            filterTitle = curembed.description.split('Filter: ')[1].split('\n')[0]
+
+            curembed.description.includes('Filter:') ? 
+            filterTitle = curembed.description.split('Filter: ')[1].split('\n')[0] : 
+            null;
 
             switch (input.button) {
                 case 'BigLeftArrow':
@@ -9777,7 +9780,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
     mapList.setDescription(`
 ${mapsarg.filter}
 Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}
-Filter: ${filterTitle}
+${filterTitle ? `Filter: ${filterTitle}` : ''}
 `)
 
     //SEND/EDIT MSG==============================================================================================================================================================================================

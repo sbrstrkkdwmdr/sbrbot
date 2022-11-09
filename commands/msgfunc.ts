@@ -1,6 +1,8 @@
 import extypes = require('../src/types/extraTypes');
 import Discord = require('discord.js');
 import log = require('../src/log');
+import fs = require('fs');
+
 export async function sendMessage(input: {
     commandType: extypes.commandType
     obj: extypes.commandObject,
@@ -127,4 +129,23 @@ export async function sendMessage(input: {
     }
     return true;
 
+}
+
+export async function SendFileToChannel(channel: Discord.GuildTextBasedChannel, filePath: string) {
+    let url = 'https://cdn.discordapp.com/attachments/762455063922737174/1039051414082691112/image.png'
+    await new Promise(async (resolve, reject) => {
+
+        if (!filePath.includes('/') || typeof channel == 'undefined' || !fs.existsSync(filePath)) {
+            reject('invalid/null path')
+        }
+
+        channel.send({
+            files: [filePath]
+        }).then(message => {
+            const attachment = filePath.split('/')[filePath.split('/').length - 1]
+            url = message.attachments.at(0).url
+            resolve(1);
+        });
+    })
+    return url;
 }
