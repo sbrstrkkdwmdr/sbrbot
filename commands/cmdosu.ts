@@ -1891,6 +1891,8 @@ export async function firsts(input: extypes.commandInput) {
     let parseScore = false;
     let parseId = null;
 
+    let reachedMaxCount = false;
+
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
@@ -2294,8 +2296,13 @@ export async function firsts(input: extypes.commandInput) {
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
-    let firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []
+    let firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = [];
     async function getScoreCount(cinitnum) {
+        if (cinitnum >= 499) {
+            reachedMaxCount = true;
+            return;
+        }
+
         const fdReq: osufunc.apiReturn = await osufunc.apiget({
             type: 'firsts',
             params: {
@@ -2333,7 +2340,7 @@ export async function firsts(input: extypes.commandInput) {
         if (fd.length == 100) {
             await getScoreCount(cinitnum + 100)
         }
-
+        return;
     }
     if (func.findFile(input.absoluteID, 'firstscoresdata') &&
         input.commandType == 'button' &&
@@ -2422,7 +2429,7 @@ export async function firsts(input: extypes.commandInput) {
         filterMapTitle: filterTitle,
         reverse: reverse,
     })
-    firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n`)
+    firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`)
 
     if (scoresarg.fields.length == 0) {
         firstsEmbed.addFields([{
@@ -4432,6 +4439,8 @@ export async function pinned(input: extypes.commandInput) {
     let parseScore = false;
     let parseId = null;
 
+    let reachedMaxCount = false;
+
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
@@ -4860,6 +4869,10 @@ export async function pinned(input: extypes.commandInput) {
 
     let pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []; //= await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
     async function getScoreCount(cinitnum) {
+        if (cinitnum >= 499) {
+            reachedMaxCount = true;
+            return;
+        }
         const fdReq: osufunc.apiReturn = await osufunc.apiget({
             type: 'pinned',
             params: {
@@ -4986,7 +4999,7 @@ export async function pinned(input: extypes.commandInput) {
             filterMapTitle: filterTitle,
             reverse: false
         });
-    pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n`)
+    pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`)
     if (scoresarg.fields.length == 0) {
         pinnedEmbed.addFields([{
             name: 'Error',
@@ -7215,6 +7228,8 @@ export async function scorestats(input: extypes.commandInput) {
     let searchid;
     let mode: osuApiTypes.GameMode;
 
+    let reachedMaxCount = false;
+
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
@@ -7481,7 +7496,7 @@ export async function scorestats(input: extypes.commandInput) {
             await scoresdata.push(fd[i])
         }
         if (fd.length == 100 && (scoreTypes == 'firsts' || scoreTypes == 'pinned')) {
-            await getScoreCount(cinitnum + 100)
+            reachedMaxCount = true;
         }
     }
     if (func.findFile(input.absoluteID, 'reqdata') &&
@@ -7508,7 +7523,7 @@ export async function scorestats(input: extypes.commandInput) {
     if (scoresdata.length == 0) {
         Embed.setDescription('No scores found')
     } else {
-        Embed.setDescription(`${func.separateNum(scoresdata.length)} scores found`)
+        Embed.setDescription(`${func.separateNum(scoresdata.length)} scores found\n${reachedMaxCount ? 'Only first 100 scores are calculated' : ''}`)
         const mappers = osufunc.CommonMappers(scoresdata);
         const mods = osufunc.CommonMods(scoresdata);
         const acc = osufunc.AccStats(scoresdata);
@@ -9341,7 +9356,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
     let filterTitle = null;
 
     let commanduser: Discord.User;
-
+    let reachedMaxCount = false;
 
     switch (input.commandType) {
         case 'message': {
@@ -9639,6 +9654,10 @@ export async function userBeatmaps(input: extypes.commandInput) {
     let maplistdata: osuApiTypes.Beatmapset[] & osuApiTypes.Error = []
 
     async function getScoreCount(cinitnum) {
+        if(cinitnum  >= 499){
+            reachedMaxCount = true;
+            return;
+        }
         const fdReq: osufunc.apiReturn = await osufunc.apiget({
             type: 'user_get_maps',
             params: {
@@ -9787,6 +9806,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
 ${mapsarg.filter}
 Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}
 ${filterTitle ? `Filter: ${filterTitle}` : ''}
+${reachedMaxCount ? 'Only the first 500 mapsets are shown' : ''}
 `)
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
