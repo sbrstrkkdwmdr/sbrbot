@@ -2300,7 +2300,7 @@ export async function firsts(input: extypes.commandInput) {
             type: 'firsts',
             params: {
                 userid: `${osudata.id}`,
-                opts: [`offset=${cinitnum}`, 'limit=100'],
+                opts: [`offset=${cinitnum}`, 'limit=100', `mode=${mode}`],
             },
             version: 2,
 
@@ -4864,7 +4864,7 @@ export async function pinned(input: extypes.commandInput) {
             type: 'pinned',
             params: {
                 userid: `${osudata.id}`,
-                opts: [`offset=${cinitnum}`, 'limit=100'],
+                opts: [`offset=${cinitnum}`, 'limit=100', `mode=${mode}`],
             },
             version: 2,
         })
@@ -7451,7 +7451,7 @@ export async function scorestats(input: extypes.commandInput) {
             type: scoreTypes,
             params: {
                 userid: `${osudata.id}`,
-                opts: [`offset=${cinitnum}`, 'limit=100'],
+                opts: [`offset=${cinitnum}`, 'limit=100', `mode=${mode}`],
             },
             version: 2,
 
