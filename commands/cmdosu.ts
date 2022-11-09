@@ -1633,8 +1633,8 @@ export async function osu(input: extypes.commandInput) {
         const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
         const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
 
-                    const chartplay = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true));
-                    const chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
+        const chartplay = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true));
+        const chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
 
         const ChartsEmbedRank = new Discord.EmbedBuilder()
             .setTitle(`${osudata.username}`)
@@ -8721,13 +8721,19 @@ export async function map(input: extypes.commandInput) {
             ppComputedTemp,
         ]
     }
-    let basicvals = `CS${allvals.cs} AR${allvals.ar} OD${allvals.od} HP${allvals.hp}`;
+    const baseCS = allvals.cs != mapdata.cs ? `${allvals.cs} (${mapdata.cs})` : allvals.cs
+    const baseAR = allvals.ar != mapdata.ar ? `${allvals.ar} (${mapdata.ar})` : allvals.ar
+    const baseOD = allvals.od != mapdata.accuracy ? `${allvals.od} (${mapdata.accuracy})` : allvals.od
+    const baseHP = allvals.hp != mapdata.drain ? `${allvals.hp} (${mapdata.drain})` : allvals.hp
+    const baseBPM = allvals.bpm != mapdata.bpm ? `${allvals.bpm} (${mapdata.bpm})` : allvals.bpm
+
+    let basicvals = `CS${baseCS} AR${baseAR} OD${baseOD} HP${baseHP}`;
     if (detailed == true) {
         basicvals =
-            `CS${allvals.cs} (${allvals.details.csRadius?.toFixed(2)}r)
-            AR${allvals.ar}  (${allvals.details.arMs?.toFixed(2)}ms)
-            OD${allvals.od} (300: ${allvals.details.odMs.hitwindow_300?.toFixed(2)}ms 100: ${allvals.details.odMs.hitwindow_100?.toFixed(2)}ms 50:  ${allvals.details.odMs.hitwindow_50?.toFixed(2)}ms)
-            HP${allvals.hp}`
+            `CS${baseCS} (${allvals.details.csRadius?.toFixed(2)}r)
+AR${baseAR}  (${allvals.details.arMs?.toFixed(2)}ms)
+OD${baseOD} (300: ${allvals.details.odMs.hitwindow_300?.toFixed(2)}ms 100: ${allvals.details.odMs.hitwindow_100?.toFixed(2)}ms 50:  ${allvals.details.odMs.hitwindow_50?.toFixed(2)}ms)
+HP${baseHP}`
     }
 
     const mapname = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
@@ -8852,7 +8858,7 @@ export async function map(input: extypes.commandInput) {
                 name: 'MAP VALUES',
                 value:
                     `${basicvals} ${totaldiff}⭐\n` +
-                    `${emojis.mapobjs.bpm}${allvals.bpm}${overrideBpm ? `=>${overrideBpm}` : ''}\n` +
+                    `${emojis.mapobjs.bpm}${baseBPM}${overrideBpm ? `=>${overrideBpm}` : ''}\n` +
                     `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
                     `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull}\n` +
                     `${mapdata.max_combo}x combo`,
@@ -9461,9 +9467,9 @@ export async function userBeatmaps(input: extypes.commandInput) {
             )
 
 
-            curembed.description.includes('Filter:') ? 
-            filterTitle = curembed.description.split('Filter: ')[1].split('\n')[0] : 
-            null;
+            curembed.description.includes('Filter:') ?
+                filterTitle = curembed.description.split('Filter: ')[1].split('\n')[0] :
+                null;
 
             switch (input.button) {
                 case 'BigLeftArrow':
