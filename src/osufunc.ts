@@ -833,7 +833,7 @@ export function logCall(data: string, title?: string) {
         console.log((title ? title : 'Api call') + ': ' + data);
     }
     if (config.LogApiCallsToFile == true) {
-        fs.appendFileSync("logs/console.log", `${(title ? title : 'Api call') + ': ' + data}`);
+        fs.appendFileSync("logs/console.log", `${(title ? title : 'Api call') + ': ' + data}\n`);
     }
     return;
 }
