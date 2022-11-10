@@ -9091,11 +9091,11 @@ Could not find beatmap data
             ppComputedTemp,
         ]
     }
-    const baseCS = allvals.cs != mapdata.cs ? `${allvals.cs} (${mapdata.cs})` : allvals.cs
-    const baseAR = allvals.ar != mapdata.ar ? `${allvals.ar} (${mapdata.ar})` : allvals.ar
-    const baseOD = allvals.od != mapdata.accuracy ? `${allvals.od} (${mapdata.accuracy})` : allvals.od
-    const baseHP = allvals.hp != mapdata.drain ? `${allvals.hp} (${mapdata.drain})` : allvals.hp
-    const baseBPM = allvals.bpm != mapdata.bpm ? `${allvals.bpm} (${mapdata.bpm})` : allvals.bpm
+    const baseCS = allvals.cs != mapdata.cs ? `${mapdata.cs}=>${allvals.cs}` : allvals.cs
+    const baseAR = allvals.ar != mapdata.ar ? `${mapdata.ar}=>${allvals.ar}` : allvals.ar
+    const baseOD = allvals.od != mapdata.accuracy ? `${mapdata.accuracy}=>${allvals.od}` : allvals.od
+    const baseHP = allvals.hp != mapdata.drain ? `${mapdata.drain}=>${allvals.hp}` : allvals.hp
+    const baseBPM = allvals.bpm != mapdata.bpm ? `${mapdata.bpm}=>${allvals.bpm}` : allvals.bpm
 
     let basicvals = `CS${baseCS} AR${baseAR} OD${baseOD} HP${baseHP}`;
     if (detailed == true) {
