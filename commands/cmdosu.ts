@@ -8357,6 +8357,11 @@ export async function map(input: extypes.commandInput) {
     const useComponents = [];
     let overwriteModal = null;
 
+    let customCS = 'current';
+    let customAR = 'current';
+    let customOD = 'current';
+    let customHP = 'current';
+
 
     switch (input.commandType) {
         case 'message': {
@@ -8380,6 +8385,8 @@ export async function map(input: extypes.commandInput) {
                 overrideSpeed = parseFloat(input.args[input.args.indexOf('-speed') + 1])
                 input.args.splice(input.args.indexOf('-speed'), 2)
             }
+
+            if(input.args)
 
             if (input.args.join(' ').includes('"')) {
                 maptitleq = input.args.join(' ').substring(
