@@ -4,6 +4,7 @@ import { path } from '../path';
 const truepath = `${path}`
 import osuApiTypes = require('../src/types/osuApiTypes');
 import calc = require('./calc');
+import osufunc = require('./osufunc');
 // truepath.path
 
 export function generateId() {
@@ -81,11 +82,11 @@ const cacheById = [
  * @param id command id. if storing a map use the map id/md5 or user id if storing a user
  * @param name 
  */
-export function storeFile(data: any, id: string | number, name: string, mode?: osuApiTypes.GameMode) {
+export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuApiTypes.Beatmapset[] | osuApiTypes.Beatmap[]) & osuApiTypes.Error), id: string | number, name: string, mode?: osuApiTypes.GameMode) {
     try {
         if (cacheById.some(x => name.includes(x))) {
             if (name.includes('mapdata')) {
-                const datamap: osuApiTypes.Beatmap = data as any
+                const datamap: osuApiTypes.Beatmap = (data as osufunc.apiReturn).apiData as any
                 let status = '';
                 switch (datamap.status) {
                     case 'ranked':
