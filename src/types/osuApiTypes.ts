@@ -611,6 +611,10 @@ export type UserCompact = {
     pending_beatmapset_count?: any,
     previous_usernames?: string[],
     rank_history?: any,
+    rank_highest?: {
+        rank: number,
+        updated_at: Timestamp
+    }
     ranked_beatmapset_count?: number,
     replays_watched_counts?: any,
     scores_best_count?: number,

@@ -1635,13 +1635,19 @@ Could not find user
     const grades = osustats.grade_counts;
 
     const playerrank =
-        osudata.statistics.global_rank == null ?
-            '---' :
-            func.separateNum(osudata.statistics.global_rank);
+        osudata.statistics.global_rank ?
+            func.separateNum(osudata.statistics.global_rank) :
+            '---';
     const countryrank =
-        osudata.statistics.country_rank == null ?
-            '---' :
-            func.separateNum(osudata.statistics.country_rank);
+        osudata.statistics.country_rank ?
+            func.separateNum(osudata.statistics.country_rank) :
+            '---';
+
+    const rankglobal = ` ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)`
+
+    const peakRank = osudata?.rank_highest.rank ?
+        `\n**Peak Rank**: #${func.separateNum(osudata.rank_highest.rank)} (#${'---'} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)` :
+        '';
 
     const onlinestatus = osudata.is_online == true ?
         `**${emojis.onlinestatus.online} Online**` :
@@ -1833,7 +1839,7 @@ Could not fetch user\'s most played beatmaps
                 {
                     name: 'Stats',
                     value:
-                        `**Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)
+                        `**Global Rank:**${rankglobal}${peakRank}
 **pp:** ${osustats.pp}
 **Accuracy:** ${(osustats.hit_accuracy != null ? osustats.hit_accuracy : 0).toFixed(2)}%
 **Play Count:** ${playcount}
@@ -1884,7 +1890,7 @@ ${onlinestatus}
             useEmbeds = [osuEmbed, ChartsEmbedRank, ChartsEmbedPlay]
         } else {
             osuEmbed.setDescription(`
-**Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)
+**Global Rank:**${rankglobal}${peakRank}
 **pp:** ${osustats.pp}
 **Accuracy:** ${(osustats.hit_accuracy != null ? osustats.hit_accuracy : 0).toFixed(2)}%
 **Play Count:** ${playcount}
@@ -8386,7 +8392,7 @@ export async function map(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-speed'), 2)
             }
 
-            if(input.args)
+            if (input.args) { }
 
             if (input.args.join(' ').includes('"')) {
                 maptitleq = input.args.join(' ').substring(
