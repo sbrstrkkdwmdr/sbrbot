@@ -8741,7 +8741,7 @@ Could not find beatmapset data
 
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
 
-        if (mapdata?.error) {
+        if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
@@ -8919,9 +8919,8 @@ Could not find beatmap data
 
         mapdata = mapdataReq.apiData
 
-
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
-        if (mapdata?.error) {
+        if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
@@ -9028,12 +9027,13 @@ Could not find beatmap data
     if (overrideSpeed != null && isNaN(overrideSpeed) == false && (overrideBpm == null || isNaN(overrideBpm) == true) && overrideSpeed != 1) {
         overrideBpm = mapdata.bpm * overrideSpeed;
     }
-
     if (mapmods.includes('DT') || mapmods.includes('NC')) {
-        overrideSpeed = overrideSpeed * 1.5
+        overrideSpeed *= 1.5;
+        overrideBpm *= 1.5;
     }
     if (mapmods.includes('HT')) {
-        overrideSpeed = overrideSpeed * 0.75
+        overrideSpeed *= 0.75;
+        overrideBpm *= 0.75;
     }
 
     try {
@@ -9108,9 +9108,9 @@ Could not find beatmap data
     const baseAR = allvals.ar != mapdata.ar ? `${mapdata.ar}=>${allvals.ar}` : allvals.ar
     const baseOD = allvals.od != mapdata.accuracy ? `${mapdata.accuracy}=>${allvals.od}` : allvals.od
     const baseHP = allvals.hp != mapdata.drain ? `${mapdata.drain}=>${allvals.hp}` : allvals.hp
-    const baseBPM = allvals.bpm != mapdata.bpm ? `${mapdata.bpm}=>${allvals.bpm}` : allvals.bpm
+    const baseBPM = mapdata.bpm*(overrideSpeed ?? 1) != mapdata.bpm ? `${mapdata.bpm}=>${mapdata.bpm*(overrideSpeed ?? 1)}` : mapdata.bpm
 
-    let basicvals = `CS${baseCS} AR${baseAR} OD${baseOD} HP${baseHP}`;
+    let basicvals = `CS${baseCS}\n AR${baseAR}\n OD${baseOD}\n HP${baseHP}\n`;
     if (detailed == true) {
         basicvals =
             `CS${baseCS} (${allvals.details.csRadius?.toFixed(2)}r)
@@ -9252,7 +9252,7 @@ Using default json file
                 name: 'MAP VALUES',
                 value:
                     `${basicvals} ${totaldiff}⭐\n` +
-                    `${emojis.mapobjs.bpm}${baseBPM}${overrideBpm ? `=>${overrideBpm}` : ''}\n` +
+                    `${emojis.mapobjs.bpm}${baseBPM}\n` +
                     `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
                     `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull}\n` +
                     `${mapdata.max_combo}x combo`,
