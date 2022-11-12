@@ -2473,10 +2473,36 @@ Could not find user\'s #1 scores offset by ${cinitnum}
             commanduser,
             commandAs: input.commandType
         }
-        input.commandType = 'other';
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                if (input.commandType == 'interaction') {
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                            content: `Error - could not find requested score`,
+                            allowedMentions: { repliedUser: false },
+                        }).catch()
+                    }, 1000)
+                } else {
+                    (input.obj as Discord.Message<any>).reply({
+                        content: `Error - could not find requested score`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
+            }
+            log.logFile('command',
+                `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find requested score
+----------------------------------------------------
+\n\n`,
+                { guildId: `${input.obj.guildId}` }
+            )
             return;
         }
+        input.commandType = 'other';
         await scoreparse(input)
         return;
     }
@@ -2893,10 +2919,36 @@ Could not fetch leaderboards for ${mapid} (API V2)
                 commanduser,
                 commandAs: input.commandType
             }
-            input.commandType = 'other';
             if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+                if (input.commandType != 'button' && input.commandType != 'link') {
+                    if (input.commandType == 'interaction') {
+                        setTimeout(() => {
+                            (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                                content: `Error - could not find requested score`,
+                                allowedMentions: { repliedUser: false },
+                            }).catch()
+                        }, 1000)
+                    } else {
+                        (input.obj as Discord.Message<any>).reply({
+                            content: `Error - could not find requested score`,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }
+                }
+                log.logFile('command',
+                    `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find requested score
+----------------------------------------------------
+\n\n`,
+                    { guildId: `${input.obj.guildId}` }
+                )
                 return;
             }
+            input.commandType = 'other';
             await scoreparse(input)
             return;
         }
@@ -3038,10 +3090,36 @@ Could not fetch leaderboards for ${mapid} (API v1)
                 commanduser,
                 commandAs: input.commandType
             }
-            input.commandType = 'other';
             if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+                if (input.commandType != 'button' && input.commandType != 'link') {
+                    if (input.commandType == 'interaction') {
+                        setTimeout(() => {
+                            (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                                content: `Error - could not find requested score`,
+                                allowedMentions: { repliedUser: false },
+                            }).catch()
+                        }, 1000)
+                    } else {
+                        (input.obj as Discord.Message<any>).reply({
+                            content: `Error - could not find requested score`,
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        }).catch()
+                    }
+                }
+                log.logFile('command',
+                    `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find requested score
+----------------------------------------------------
+\n\n`,
+                    { guildId: `${input.obj.guildId}` }
+                )
                 return;
             }
+            input.commandType = 'other';
             await scoreparse(input)
             return;
         }
@@ -3718,10 +3796,36 @@ Could not find user\'s top scores
             commanduser,
             commandAs: input.commandType
         }
-        input.commandType = 'other';
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                if (input.commandType == 'interaction') {
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                            content: `Error - could not find requested score`,
+                            allowedMentions: { repliedUser: false },
+                        }).catch()
+                    }, 1000)
+                } else {
+                    (input.obj as Discord.Message<any>).reply({
+                        content: `Error - could not find requested score`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
+            }
+            log.logFile('command',
+                `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find requested score
+----------------------------------------------------
+\n\n`,
+                { guildId: `${input.obj.guildId}` }
+            )
             return;
         }
+        input.commandType = 'other';
         await scoreparse(input)
         return;
     }
@@ -4423,10 +4527,37 @@ Could not find user\'s top scores
             commanduser,
             commandAs: input.commandType
         }
-        input.commandType = 'other';
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                if (input.commandType == 'interaction') {
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                            content: `Error - could not find requested score`,
+                            allowedMentions: { repliedUser: false },
+                        }).catch()
+                    }, 1000)
+                } else {
+                    (input.obj as Discord.Message<any>).reply({
+                        content: `Error - could not find requested score`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
+            }
+            log.logFile('command',
+                `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find requested score
+----------------------------------------------------
+\n\n`,
+                { guildId: `${input.obj.guildId}` }
+            )
             return;
         }
+        input.commandType = 'other';
+
         await scoreparse(input)
         return;
     }
@@ -5122,10 +5253,36 @@ Could not find user's pinned scores offset by ${cinitnum}
             commanduser,
             commandAs: input.commandType
         }
-        input.commandType = 'other';
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                if (input.commandType == 'interaction') {
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                            content: `Error - could not find requested score`,
+                            allowedMentions: { repliedUser: false },
+                        }).catch()
+                    }, 1000)
+                } else {
+                    (input.obj as Discord.Message<any>).reply({
+                        content: `Error - could not find requested score`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
+            }
+            log.logFile('command',
+                `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find requested score
+----------------------------------------------------
+\n\n`,
+                { guildId: `${input.obj.guildId}` }
+            )
             return;
         }
+        input.commandType = 'other';
         await scoreparse(input)
         return;
     }
@@ -7321,10 +7478,36 @@ Could not find beatmap scores
             commanduser,
             commandAs: input.commandType
         }
-        input.commandType = 'other';
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                if (input.commandType == 'interaction') {
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                            content: `Error - could not find requested score`,
+                            allowedMentions: { repliedUser: false },
+                        }).catch()
+                    }, 1000)
+                } else {
+                    (input.obj as Discord.Message<any>).reply({
+                        content: `Error - could not find requested score`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
+            }
+            log.logFile('command',
+                `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find requested score
+----------------------------------------------------
+\n\n`,
+                { guildId: `${input.obj.guildId}` }
+            )
             return;
         }
+        input.commandType = 'other';
         await scoreparse(input)
         return;
     }
@@ -10207,10 +10390,36 @@ Could not find user's ${calc.toCapital(filter)} maps
             commanduser,
             commandAs: input.commandType
         }
-        input.commandType = 'other';
         if (input.overrides.id == null) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                if (input.commandType == 'interaction') {
+                    setTimeout(() => {
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                            content: `Error - could not find map`,
+                            allowedMentions: { repliedUser: false },
+                        }).catch()
+                    }, 1000)
+                } else {
+                    (input.obj as Discord.Message<any>).reply({
+                        content: `Error - could not find map`,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    }).catch()
+                }
+            }
+            log.logFile('command',
+                `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find map
+----------------------------------------------------
+\n\n`,
+                { guildId: `${input.obj.guildId}` }
+            )
             return;
         }
+        input.commandType = 'other';
         await map(input)
         return;
     }
