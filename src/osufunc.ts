@@ -1044,7 +1044,7 @@ export type apiGetStrings =
 
 
 export async function searchUser(searchid: string, userdata: any, findMode: boolean) {
-    const findname = await userdata.findOne({ where: { userid: searchid } })
+    const findname = await userdata.findOne({ where: { userid: searchid ?? '0' } })
     let user;
     let errorValue;
     let mode;

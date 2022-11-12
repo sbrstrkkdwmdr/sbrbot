@@ -57,7 +57,7 @@ export async function bws(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            searchid = commanduser.id
+            searchid = commanduser.id;
             user = input.obj.options.getString('user');
         }
             //==============================================================================================================================================================================================
@@ -66,6 +66,7 @@ export async function bws(input: extypes.commandInput) {
         case 'button': {
             input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
         }
             break;
     }
@@ -253,6 +254,7 @@ export async function globals(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
             user = input.obj.options.getString('user');
         }
 
@@ -265,6 +267,7 @@ export async function globals(input: extypes.commandInput) {
                 return;
             }
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
             user = input.obj.message.embeds[0].title.split('for ')[1]
             mode = cmdchecks.toAlphaNum(input.obj.message.embeds[0].description.split('\n')[1])
             page = 0;
@@ -1397,10 +1400,11 @@ export async function osu(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
+            searchid = input.obj.member.user.id;
+
             user = input.obj.options.getString('user');
             detailed = input.obj.options.getBoolean('detailed');
             mode = input.obj.options.getString('mode');
-            searchid = input.obj.member.user.id;
         }
 
             //==============================================================================================================================================================================================
@@ -1412,6 +1416,8 @@ export async function osu(input: extypes.commandInput) {
                 return;
             }
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
+
             if (input.obj.message.embeds[0].fields[0]) {
                 detailed = true
             }
@@ -2085,6 +2091,7 @@ export async function firsts(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
 
             user = input.obj.options.getString('user');
             page = input.obj.options.getInteger('page');
@@ -2111,6 +2118,7 @@ export async function firsts(input: extypes.commandInput) {
             }
 
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
             page = 0;
@@ -2298,7 +2306,7 @@ export async function firsts(input: extypes.commandInput) {
     //if user is not found in database, use discord username
     if (user == null) {
         const cuser = input.client.users.cache.get(searchid);
-        user = cuser.username;
+        user = cuser?.username ?? '';
     }
 
     mode = osufunc.modeValidator(mode);
@@ -2338,7 +2346,7 @@ export async function firsts(input: extypes.commandInput) {
 
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
                     })
@@ -3370,28 +3378,20 @@ export async function nochokes(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
 
             user = input.obj.options.getString('user');
-
             mode = input.obj.options.getString('mode');
-
             mapper = input.obj.options.getString('mapper');
-
             mods = input.obj.options.getString('mods');
-
             sort = input.obj.options.getString('sort');
-
             page = input.obj.options.getInteger('page');
-
             reverse = input.obj.options.getBoolean('reverse');
-
             filterTitle = input.obj.options.getString('filter');
-
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
                 parseScore = true
             }
-            searchid = input.obj.member.user.id
         }
 
             //==============================================================================================================================================================================================
@@ -3403,6 +3403,7 @@ export async function nochokes(input: extypes.commandInput) {
                 return;
             }
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
 
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
 
@@ -4078,6 +4079,8 @@ export async function osutop(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
+
             user = input.obj.options.getString('user');
             mode = input.obj.options.getString('mode');
             mapper = input.obj.options.getString('mapper');
@@ -4092,7 +4095,6 @@ export async function osutop(input: extypes.commandInput) {
             }
 
             reverse = input.obj.options.getBoolean('reverse')
-            searchid = input.obj.member.user.id
         }
 
             //==============================================================================================================================================================================================
@@ -4104,6 +4106,7 @@ export async function osutop(input: extypes.commandInput) {
                 return;
             }
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
 
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]//obj.message.embeds[0].title.split('Top plays of ')[1]
 
@@ -4878,6 +4881,7 @@ export async function pinned(input: extypes.commandInput) {
                 return;
             }
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
 
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
 
@@ -5468,7 +5472,7 @@ export async function recent(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            searchid = input.obj.member.user.id;
+            searchid = commanduser.id;
             user = input.obj.options.getString('user');
             page = input.obj.options.getNumber('page');
             mode = input.obj.options.getString('mode');
@@ -5486,6 +5490,7 @@ export async function recent(input: extypes.commandInput) {
                 return;
             }
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
             user = (input.obj.message as Discord.Message<any>).embeds[0].author.url.split('u/')[1]
             //title.split('for ')[1]
             const modething = input.obj.message.embeds[0].footer ? input.obj.message.embeds[0].description.split('\n')[1] : input.obj.message.embeds[0].description.split(' | ')[1].split('\n')[0]
@@ -7104,7 +7109,7 @@ export async function scores(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            searchid = input.obj.member.user.id;
+            searchid = commanduser.id;
             user = input.obj.options.getString('username');
             mapid = input.obj.options.getNumber('id');
             sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
@@ -7125,6 +7130,7 @@ export async function scores(input: extypes.commandInput) {
                 return;
             }
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
             page = 0;
             user = input.obj.message.embeds[0].author.name.split(' (#')[0]
             mapid = input.obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]
@@ -7771,7 +7777,7 @@ export async function scorestats(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            searchid = input.obj.member.user.id;
+            searchid = commanduser.id;
             input.obj.options.getString('user') ? user = input.obj.options.getString('user') : null;
             input.obj.options.getString('type') ? scoreTypes = input.obj.options.getString('type') as scoretypes : null;
             input.obj.options.getString('mode') ? mode = input.obj.options.getString('mode') as osuApiTypes.GameMode : null;
@@ -7782,6 +7788,7 @@ export async function scorestats(input: extypes.commandInput) {
         case 'button': {
             input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
             user = input.obj.message.embeds[0].author.url.split('/u/')[1].split('/')[0];
             mode = input.obj.message.embeds[0].author.url.split('/u/')[1].split('/')[1] as osuApiTypes.GameMode;
             //user's {type} scores
@@ -12136,9 +12143,9 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
 
             user = input.obj.options.getString('user');
-            searchid = input.obj.member.user.id;
 
             mode = input.obj.options.getString('mode');
 
@@ -12151,6 +12158,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
         case 'button': {
             input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
         }
             break;
     }
