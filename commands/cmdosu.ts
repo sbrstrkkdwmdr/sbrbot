@@ -761,12 +761,14 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
             input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
             if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
             if (input.args.includes('-osu')) {
                 mode = 'osu'
@@ -1965,18 +1967,21 @@ export async function firsts(input: extypes.commandInput) {
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
             if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
 
             if (input.args.includes('-parse')) {
                 parseScore = true;
-                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
-                input.args.splice(input.args.indexOf('-parse'), 2);
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
+                parseId = temp.value
+                input.args = temp.newArgs
             }
 
             if (input.args.includes('-osu')) {
@@ -2061,19 +2066,9 @@ export async function firsts(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
             if (input.args.includes('-?')) {
-                filterTitle = input.args[input.args.indexOf('-?') + 1];
-                if (filterTitle.includes('"')) {
-                    filterTitle = (input.obj as Discord.Message<any>).content.split('-?')[1].split('"')[1]
-                    for (let i = 0; i < input.args.length; i++) {
-                        if (filterTitle.includes(input.args[i].replaceAll('"', '')) && i > input.args.indexOf('-?')) {
-                            input.args.splice(i, 1);
-                            i--;
-                        }
-                    }
-                    input.args.splice(input.args.indexOf('-?'), 1);
-                } else {
-                    input.args.splice(input.args.indexOf('-?'), 2);
-                }
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true)
+                filterTitle = temp.value;
+                input.args = temp.newArgs;
             }
 
             input.args = cleanArgs(input.args);
@@ -2595,18 +2590,21 @@ export async function maplb(input: extypes.commandInput) {
             commanduser = input.obj.author;
 
             if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1])
-                input.args.splice(input.args.indexOf('-page'), 2)
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
             if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1])
-                input.args.splice(input.args.indexOf('-p'), 2)
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
 
             if (input.args.includes('-parse')) {
                 parseScore = true;
-                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
-                input.args.splice(input.args.indexOf('-parse'), 2);
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
+                parseId = temp.value
+                input.args = temp.newArgs
             }
 
             if (input.args.join(' ').includes('+')) {
@@ -3159,12 +3157,14 @@ export async function nochokes(input: extypes.commandInput) {
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
             if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
             mode = null;
             sort = 'pp';
@@ -3174,17 +3174,20 @@ export async function nochokes(input: extypes.commandInput) {
 
             if (input.args.includes('-parse')) {
                 parseScore = true;
-                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
-                input.args.splice(input.args.indexOf('-parse'), 2);
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
+                parseId = temp.value
+                input.args = temp.newArgs
             }
 
             if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
             if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
 
             if (input.args.includes('-osu')) {
@@ -3270,19 +3273,9 @@ export async function nochokes(input: extypes.commandInput) {
             }
 
             if (input.args.includes('-?')) {
-                filterTitle = input.args[input.args.indexOf('-?') + 1];
-                if (filterTitle.includes('"')) {
-                    filterTitle = (input.obj as Discord.Message<any>).content.split('-?')[1].split('"')[1]
-                    for (let i = 0; i < input.args.length; i++) {
-                        if (filterTitle.includes(input.args[i].replaceAll('"', '')) && i > input.args.indexOf('-?')) {
-                            input.args.splice(i, 1);
-                            i--;
-                        }
-                    }
-                    input.args.splice(input.args.indexOf('-?'), 1);
-                } else {
-                    input.args.splice(input.args.indexOf('-?'), 2);
-                }
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true)
+                filterTitle = temp.value;
+                input.args = temp.newArgs;
             }
 
             input.args = cleanArgs(input.args);
@@ -3854,21 +3847,26 @@ export async function osutop(input: extypes.commandInput) {
             detailed = false;
             if (input.args.includes('-parse')) {
                 parseScore = true;
-                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
-                input.args.splice(input.args.indexOf('-parse'), 2);
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
+                parseId = temp.value
+                input.args = temp.newArgs
             }
 
             if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
             if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
+
             if (input.args.includes('-mods')) {
-                mods = (input.args[input.args.indexOf('-mods') + 1]);
-                input.args.splice(input.args.indexOf('-mods'), 2);
+                const temp = func.parseArg(input.args, '-mods', 'string', mods);
+                mods = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-reverse')) {
                 reverse = true
@@ -3958,19 +3956,9 @@ export async function osutop(input: extypes.commandInput) {
             }
 
             if (input.args.includes('-?')) {
-                filterTitle = input.args[input.args.indexOf('-?') + 1];
-                if (filterTitle.includes('"')) {
-                    filterTitle = (input.obj as Discord.Message<any>).content.split('-?')[1].split('"')[1]
-                    for (let i = 0; i < input.args.length; i++) {
-                        if (filterTitle.includes(input.args[i].replaceAll('"', '')) && i > input.args.indexOf('-?')) {
-                            input.args.splice(i, 1);
-                            i--;
-                        }
-                    }
-                    input.args.splice(input.args.indexOf('-?'), 1);
-                } else {
-                    input.args.splice(input.args.indexOf('-?'), 2);
-                }
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true)
+                filterTitle = temp.value;
+                input.args = temp.newArgs;
             }
 
             user = input.args.join(' ');
@@ -4606,17 +4594,20 @@ export async function pinned(input: extypes.commandInput) {
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-parse')) {
                 parseScore = true;
-                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
-                input.args.splice(input.args.indexOf('-parse'), 2);
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
+                parseId = temp.value
+                input.args = temp.newArgs
             }
 
             if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
             if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
 
             if (input.args.includes('-osu')) {
@@ -4702,19 +4693,9 @@ export async function pinned(input: extypes.commandInput) {
             }
 
             if (input.args.includes('-?')) {
-                filterTitle = input.args[input.args.indexOf('-?') + 1];
-                if (filterTitle.includes('"')) {
-                    filterTitle = (input.obj as Discord.Message<any>).content.split('-?')[1].split('"')[1]
-                    for (let i = 0; i < input.args.length; i++) {
-                        if (filterTitle.includes(input.args[i].replaceAll('"', '')) && i > input.args.indexOf('-?')) {
-                            input.args.splice(i, 1);
-                            i--;
-                        }
-                    }
-                    input.args.splice(input.args.indexOf('-?'), 1);
-                } else {
-                    input.args.splice(input.args.indexOf('-?'), 2);
-                }
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true)
+                filterTitle = temp.value;
+                input.args = temp.newArgs;
             }
 
             input.args = cleanArgs(input.args);
@@ -5268,14 +5249,18 @@ export async function recent(input: extypes.commandInput) {
                 list = true;
                 input.args.splice(input.args.indexOf('-l'), 1);
             }
+
             if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
             if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
+
             if (input.args.includes('-mode')) {
                 mode = (input.args[input.args.indexOf('-mode') + 1]);
                 input.args.splice(input.args.indexOf('-mode'), 2);
@@ -5305,19 +5290,9 @@ export async function recent(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-nf'), 1);
             }
             if (input.args.includes('-?')) {
-                filterTitle = input.args[input.args.indexOf('-?') + 1];
-                if (filterTitle.includes('"')) {
-                    filterTitle = (input.obj as Discord.Message<any>).content.split('-?')[1].split('"')[1]
-                    for (let i = 0; i < input.args.length; i++) {
-                        if (filterTitle.includes(input.args[i].replaceAll('"', '')) && i > input.args.indexOf('-?')) {
-                            input.args.splice(i, 1);
-                            i--;
-                        }
-                    }
-                    input.args.splice(input.args.indexOf('-?'), 1);
-                } else {
-                    input.args.splice(input.args.indexOf('-?'), 2);
-                }
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true)
+                filterTitle = temp.value;
+                input.args = temp.newArgs;
             }
 
             input.args = cleanArgs(input.args);
@@ -6936,17 +6911,20 @@ export async function scores(input: extypes.commandInput) {
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-parse')) {
                 parseScore = true;
-                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
-                input.args.splice(input.args.indexOf('-parse'), 2);
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
+                parseId = temp.value
+                input.args = temp.newArgs
             }
 
             if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
             if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
 
             input.args = cleanArgs(input.args);
@@ -7959,8 +7937,9 @@ export async function simulate(input: extypes.commandInput) {
             commanduser = input.obj.author;
             const ctn = input.obj.content;
             if (ctn.includes('-mods')) {
-                mods = input.args[input.args.indexOf('-mods') + 1]
-                input.args.splice(input.args.indexOf('-mods'), 2)
+                const temp = func.parseArg(input.args, '-mods', 'string', mods);
+                mods = temp.value;
+                input.args = temp.newArgs;
             }
             if (ctn.includes('-acc')) {
                 acc = parseFloat(input.args[input.args.indexOf('-acc') + 1])
@@ -8363,10 +8342,10 @@ export async function map(input: extypes.commandInput) {
     const useComponents = [];
     let overwriteModal = null;
 
-    let customCS = 'current';
-    let customAR = 'current';
-    let customOD = 'current';
-    let customHP = 'current';
+    let customCS: 'current' | number = 'current';
+    let customAR: 'current' | number = 'current';
+    let customOD: 'current' | number = 'current';
+    let customHP: 'current' | number = 'current';
 
 
     switch (input.commandType) {
@@ -8384,15 +8363,52 @@ export async function map(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-d'), 1)
             }
             if (input.args.includes('-bpm')) {
-                overrideBpm = parseFloat(input.args[input.args.indexOf('-bpm') + 1])
-                input.args.splice(input.args.indexOf('-bpm'), 2)
+                const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
+                overrideBpm = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-speed')) {
-                overrideSpeed = parseFloat(input.args[input.args.indexOf('-speed') + 1])
-                input.args.splice(input.args.indexOf('-speed'), 2)
+                const temp = func.parseArg(input.args, '-speed', 'number', overrideSpeed);
+                overrideSpeed = temp.value;
+                input.args = temp.newArgs;
             }
 
-            if (input.args) { }
+            if (input.args.includes('-cs')) {
+                const temp = func.parseArg(input.args, '-cs', 'number', customCS);
+                customCS = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-ar')) {
+                const temp = func.parseArg(input.args, '-ar', 'number', customAR);
+                customAR = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-od')) {
+                const temp = func.parseArg(input.args, '-od', 'number', customOD);
+                customOD = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-accuracy')) {
+                const temp = func.parseArg(input.args, '-accuracy', 'number', customOD);
+                customOD = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-hp')) {
+                const temp = func.parseArg(input.args, '-hp', 'number', customHP);
+                customHP = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-drain')) {
+                const temp = func.parseArg(input.args, '-drain', 'number', customHP);
+                customHP = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.includes('-?')) {
+                const temp = func.parseArg(input.args, '-?', 'string', maptitleq, true)
+                maptitleq = temp.value;
+                input.args = temp.newArgs;
+            }
 
             if (input.args.join(' ').includes('"')) {
                 maptitleq = input.args.join(' ').substring(
@@ -8624,12 +8640,14 @@ Could not find beatmapset data
                 }
             }
             if (input.args.includes('-bpm')) {
-                overrideBpm = parseFloat(input.args[input.args.indexOf('-bpm') + 1])
-                input.args.splice(input.args.indexOf('-bpm'), 2)
+                const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
+                overrideBpm = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-speed')) {
-                overrideSpeed = parseFloat(input.args[input.args.indexOf('-speed') + 1])
-                input.args.splice(input.args.indexOf('-speed'), 2)
+                const temp = func.parseArg(input.args, '-speed', 'number', overrideSpeed);
+                overrideSpeed = temp.value;
+                input.args = temp.newArgs;
             }
         }
             break;
@@ -8684,8 +8702,32 @@ Could not find beatmapset data
             },
             {
                 name: 'Detailed',
-                value: detailed
-            }
+                value: `${detailed}`
+            },
+            {
+                name: 'BPM',
+                value: overrideBpm
+            },
+            {
+                name: 'Speed',
+                value: overrideSpeed
+            },
+            {
+                name: 'cs',
+                value: customCS
+            },
+            {
+                name: 'ar',
+                value: customAR
+            },
+            {
+                name: 'od',
+                value: customOD
+            },
+            {
+                name: 'hp',
+                value: customHP
+            },
         ]),
         {
             guildId: `${input.obj.guildId}`
@@ -8991,13 +9033,48 @@ Could not find beatmap data
             break;
     }
 
+    if (customCS == 'current' || isNaN(+customCS)) {
+        customCS = mapdata.cs
+    }
+    if (customAR == 'current' || isNaN(+customAR)) {
+        customAR = mapdata.ar
+    }
+    if (customOD == 'current' || isNaN(+customOD)) {
+        customOD = mapdata.accuracy
+    }
+    if (customHP == 'current' || isNaN(+customHP)) {
+        customHP = mapdata.drain
+    }
+
+    let hitlength = mapdata.hit_length
+
+    if (overrideBpm != null && isNaN(overrideBpm) == false && (overrideSpeed == null || isNaN(overrideSpeed) == true) && overrideBpm != mapdata.bpm) {
+        overrideSpeed = overrideBpm / mapdata.bpm;
+    }
+    if (overrideSpeed != null && isNaN(overrideSpeed) == false && (overrideBpm == null || isNaN(overrideBpm) == true) && overrideSpeed != 1) {
+        overrideBpm = mapdata.bpm * overrideSpeed;
+    }
+    if (mapmods.includes('DT') || mapmods.includes('NC')) {
+        overrideSpeed *= 1.5;
+        overrideBpm *= 1.5;
+    }
+    if (mapmods.includes('HT')) {
+        overrideSpeed *= 0.75;
+        overrideBpm *= 0.75;
+    }
+    if (overrideSpeed) {
+        hitlength /= overrideSpeed
+    }
+
+    console.log(customCS, customAR, customOD, customHP, overrideBpm, hitlength)
+
     const allvals = osumodcalc.calcValues(
-        mapdata.cs,
-        mapdata.ar,
-        mapdata.accuracy,
-        mapdata.drain,
-        mapdata.bpm,
-        mapdata.hit_length,
+        +customCS,
+        +customAR,
+        +customOD,
+        +customHP,
+        overrideBpm ?? mapdata.bpm,
+        hitlength,
         mapmods
     )
     let modissue = ''
@@ -9021,21 +9098,6 @@ Could not find beatmap data
     let ppissue: string;
     let totaldiff: string | number = mapdata.difficulty_rating;
 
-    if (overrideBpm != null && isNaN(overrideBpm) == false && (overrideSpeed == null || isNaN(overrideSpeed) == true) && overrideBpm != mapdata.bpm) {
-        overrideSpeed = overrideBpm / mapdata.bpm;
-    }
-    if (overrideSpeed != null && isNaN(overrideSpeed) == false && (overrideBpm == null || isNaN(overrideBpm) == true) && overrideSpeed != 1) {
-        overrideBpm = mapdata.bpm * overrideSpeed;
-    }
-    if (mapmods.includes('DT') || mapmods.includes('NC')) {
-        overrideSpeed *= 1.5;
-        overrideBpm *= 1.5;
-    }
-    if (mapmods.includes('HT')) {
-        overrideSpeed *= 0.75;
-        overrideBpm *= 0.75;
-    }
-
     try {
         ppComputed = await osufunc.mapcalc({
             mods: mapmods,
@@ -9043,6 +9105,10 @@ Could not find beatmap data
             mapid: mapdata.id,
             calctype: 0,
             clockRate: overrideSpeed ?? 1,
+            customCS,
+            customAR,
+            customOD,
+            customHP
         });
         ppissue = '';
         try {
@@ -9108,7 +9174,7 @@ Could not find beatmap data
     const baseAR = allvals.ar != mapdata.ar ? `${mapdata.ar}=>${allvals.ar}` : allvals.ar
     const baseOD = allvals.od != mapdata.accuracy ? `${mapdata.accuracy}=>${allvals.od}` : allvals.od
     const baseHP = allvals.hp != mapdata.drain ? `${mapdata.drain}=>${allvals.hp}` : allvals.hp
-    const baseBPM = mapdata.bpm*(overrideSpeed ?? 1) != mapdata.bpm ? `${mapdata.bpm}=>${mapdata.bpm*(overrideSpeed ?? 1)}` : mapdata.bpm
+    const baseBPM = mapdata.bpm * (overrideSpeed ?? 1) != mapdata.bpm ? `${mapdata.bpm}=>${mapdata.bpm * (overrideSpeed ?? 1)}` : mapdata.bpm
 
     let basicvals = `CS${baseCS}\n AR${baseAR}\n OD${baseOD}\n HP${baseHP}\n`;
     if (detailed == true) {
@@ -9744,12 +9810,14 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
             if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value
+                input.args = temp.newArgs
             }
 
             if (input.args.includes('-ranked')) {
@@ -9794,23 +9862,15 @@ export async function userBeatmaps(input: extypes.commandInput) {
             }
             if (input.args.includes('-parse')) {
                 parseMap = true;
-                parseId = input.args[input.args.indexOf('-parse') + 1] ?? 0
-                input.args.splice(input.args.indexOf('-parse'), 2);
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
+                parseId = temp.value;
+                input.args = temp.newArgs;
             }
+
             if (input.args.includes('-?')) {
-                filterTitle = input.args[input.args.indexOf('-?') + 1];
-                if (filterTitle.includes('"')) {
-                    filterTitle = (input.obj as Discord.Message<any>).content.split('-?')[1].split('"')[1]
-                    for (let i = 0; i < input.args.length; i++) {
-                        if (filterTitle.includes(input.args[i].replaceAll('"', '')) && i > input.args.indexOf('-?')) {
-                            input.args.splice(i, 1);
-                            i--;
-                        }
-                    }
-                    input.args.splice(input.args.indexOf('-?'), 1);
-                } else {
-                    input.args.splice(input.args.indexOf('-?'), 2);
-                }
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true)
+                filterTitle = temp.value;
+                input.args = temp.newArgs;
             }
 
             input.args = cleanArgs(input.args);
@@ -11420,8 +11480,9 @@ export async function osuset(input: extypes.commandInput) {
             }
 
             if (input.args.includes('-skin')) {
-                skin = input.args.slice(input.args.indexOf('-skin') + 1).join(' ')
-                input.args.splice(input.args.indexOf('-skin'))
+                const temp = func.parseArg(input.args, '-skin', 'string', skin, true);
+                skin = temp.value;
+                input.args = temp.newArgs;
             }
 
             input.args = cleanArgs(input.args);

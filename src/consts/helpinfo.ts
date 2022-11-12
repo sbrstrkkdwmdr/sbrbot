@@ -677,8 +677,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'map',
         description: 'Shows information about a beatmap',
-        usage: 'map "query" [id] +[mods] [-bpm] [-speed]',
-        slashusage: 'map [query] [id] [mods] [detailed] [bpm] [speed]',
+        usage: 'map "query" [id] +[mods] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
+        slashusage: 'map [query] [id] [mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp]',
         examples: [
             {
                 text: 'PREFIXMSGmap "kimi no shiranai monogatari"',
@@ -743,8 +743,8 @@ const osucmds: commandInfo[] = [
                 name: 'bpm',
                 type: 'float',
                 required: false,
-                description: 'The BPM to calculate the map with',
-                options: ['N/A'],
+                description: 'The BPM to calculate the map with. This value is still affected by mods',
+                options: ['1-1000'],
                 defaultValue: 'the map\'s BPM',
                 examples: ['-bpm 200', 'bpm:200'],
                 commandTypes: ['message', 'interaction', 'link']
@@ -753,11 +753,51 @@ const osucmds: commandInfo[] = [
                 name: 'speed',
                 type: 'float',
                 required: false,
-                description: 'The speed multiplier to calculate the map with. Overrides BPM',
-                options: ['N/A'],
+                description: 'The speed multiplier to calculate the map with. Overrides BPM. This value is still affected by mods',
+                options: ['0.1-10'],
                 defaultValue: '1',
                 examples: ['-speed 1.5', 'speed:1.5'],
                 commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'cs',
+                type: 'float',
+                required: false,
+                description: 'The circle size to calculate the map with. This value is still affected by mods',
+                options: ['0-11'],
+                defaultValue: 'The current map\'s value',
+                examples: ['-cs 5.2', 'cs:10'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'ar',
+                type: 'float',
+                required: false,
+                description: 'The approach rate to calculate the map with. This value is still affected by mods',
+                options: ['0-11'],
+                defaultValue: 'The current map\'s value',
+                examples: ['-ar 11', 'ar:10'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'od',
+                type: 'float',
+                required: false,
+                description: 'The overall difficulty to calculate the map with. This value is still affected by mods',
+                options: ['0-11'],
+                defaultValue: 'The current map\'s value',
+                examples: ['-od 11', 'od:9'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'hp',
+                type: 'float',
+                required: false,
+                description: 'The drain rate to calculate the map with. This value is still affected by mods',
+                options: ['0-11'],
+                defaultValue: 'The current map\'s value',
+                examples: ['-hp 3', 'hp:5'],
+                commandTypes: ['message', 'interaction']
             },
             {
                 name: 'Refresh',

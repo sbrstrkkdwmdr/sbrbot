@@ -133,7 +133,7 @@ export function findFile(id: string | number, name: string, mode?: osuApiTypes.G
             return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, 'utf-8'));
         }
         if (name.includes('osudata')) {
-            if(fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`)){
+            if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`)) {
                 return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, 'utf-8'));
             }
         }
@@ -158,4 +158,63 @@ export function findFile(id: string | number, name: string, mode?: osuApiTypes.G
             return false;
         }
     }
+}
+
+/**
+ * 
+ * @param args arguments to search through
+ * @param searchString string to search for (ie. -?)
+ * @param type string or number
+ * @param defaultValue value if failed
+ * @param multipleWords if a string arg can be multiple words (ie. -? "yomi yori")
+ * @param asInt returns an integer instead of a float
+ */
+export function parseArg(
+    args: string[],
+    searchString: string,
+    type: 'string' | 'number',
+    defaultValue: any,
+    multipleWords?: boolean,
+    asInt?: boolean,
+) {
+    let returnArg;
+    let temp;
+    temp = args[args.indexOf(searchString) + 1]
+    if (!temp || temp.startsWith('-')) {
+        returnArg = defaultValue
+    } else {
+        switch (type) {
+            case 'string': {
+                returnArg = temp
+                if (multipleWords == true && temp.includes('"')) {
+                    temp = args.join(' ').split(searchString)[1].split('"')[1]
+                    for (let i = 0; i < args.length; i++) {
+                        if (temp.includes(args[i].replaceAll('"', '')) && i > args.indexOf(searchString)) {
+                            args.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    returnArg = temp;
+                } else {
+                    args.splice(args.indexOf(searchString), 2)
+                }
+            }
+                break;
+            case 'number': {
+                returnArg = +temp
+                if (isNaN(+temp)) {
+                    returnArg = defaultValue
+                } else if (asInt == true){
+                    returnArg = parseInt(temp)
+                }
+                args.splice(args.indexOf(searchString), 2)
+            }
+                break;
+        }
+    }
+    return {
+        value: returnArg,
+        newArgs: args
+    };
+
 }

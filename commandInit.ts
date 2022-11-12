@@ -324,7 +324,39 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                     required: false,
                     minValue: 0.1,
                     maxValue: 10
-                }
+                },
+                {
+                    name: 'cs',
+                    description: 'The circle size to calculate the map with',
+                    type: Discord.ApplicationCommandOptionType.Number,
+                    required: false,
+                    minValue: 0,
+                    maxValue: 11
+                },
+                {
+                    name: 'ar',
+                    description: 'The approach rate to calculate the map with',
+                    type: Discord.ApplicationCommandOptionType.Number,
+                    required: false,
+                    minValue: 0,
+                    maxValue: 11
+                },
+                {
+                    name: 'od',
+                    description: 'The overall difficulty to calculate the map with',
+                    type: Discord.ApplicationCommandOptionType.Number,
+                    required: false,
+                    minValue: 0,
+                    maxValue: 11
+                },
+                {
+                    name: 'hp',
+                    description: 'The health drain rate to calculate the map with',
+                    type: Discord.ApplicationCommandOptionType.Number,
+                    required: false,
+                    minValue: 0,
+                    maxValue: 11
+                },
             ]
         },
         {

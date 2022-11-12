@@ -51,6 +51,10 @@ export async function mapcalc(
         mapid: number,
         calctype: number | null,
         clockRate: number | null,
+        customCS?: number,
+        customAR?: number,
+        customOD?: number,
+        customHP?: number,
     },
     mapIsRank?: string
 ) {
@@ -69,7 +73,22 @@ export async function mapcalc(
 
             const mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
 
-            const map = new rosu.Beatmap({ path: mapPath })
+            const map = new rosu.Beatmap({
+                path: mapPath,
+                cs: obj.customCS
+            })
+            if(obj.customCS){
+                map.cs(obj.customCS)
+            }
+            if(obj.customAR){
+                map.ar(obj.customAR)
+            }
+            if(obj.customOD){
+                map.od(obj.customOD)
+            }
+            if(obj.customHP){
+                map.hp(obj.customHP)
+            }
 
             ppl = []
 
