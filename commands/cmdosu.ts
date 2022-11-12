@@ -8646,67 +8646,6 @@ export async function map(input: extypes.commandInput) {
             const curid = urlnohttp.split('/')[3];
             mapid = curid;
 
-            let bmsdataReq: osufunc.apiReturn;
-            if (func.findFile(setid, `bmsdata`) &&
-                !('error' in func.findFile(setid, `bmsdata`)) &&
-                input.button != 'Refresh') {
-                bmsdataReq = func.findFile(setid, `bmsdata`)
-            } else {
-                bmsdataReq = await osufunc.apiget({
-                    type: 'mapset_get',
-                    params: {
-                        id: setid
-                    }
-                })
-                // bmsdataReq = await osufunc.apiget('mapset_get', `${setid}`)
-            }
-
-            const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
-
-
-            osufunc.debug(bmsdataReq, 'command', 'map', input.obj.guildId, 'bmsData');
-
-            if (bmsdata?.error) {
-                log.logFile('command',
-                    `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmapset data
-----------------------------------------------------
-\n\n`,
-                    { guildId: `${input.obj.guildId}` }
-                )
-                return;
-            }
-
-            func.storeFile(bmsdataReq, setid, `bmsdata`);
-
-            const bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
-            osufunc.debug(bmstosr, 'command', 'map', input.obj.guildId, 'bmsToSr');
-
-            const curmapindex = bmstosr.findIndex(x => `${x.id}` == `${curid}`);
-            if (input.button == `RightArrow`) {
-                if (curmapindex == bmstosr.length - 1) {
-                    mapid = curid;
-                } else {
-                    mapid = bmstosr[curmapindex + 1].id;
-                }
-            }
-            if (input.button == `LeftArrow`) {
-                if (curmapindex == 0) {
-                    mapid = curid;
-                } else {
-                    mapid = bmstosr[curmapindex - 1].id;
-                }
-            }
-            if (input.button == `BigRightArrow`) {
-                mapid = bmstosr[bmstosr.length - 1].id;
-            }
-            if (input.button == `BigLeftArrow`) {
-                mapid = bmstosr[0].id;
-            }
-
             if (input.obj.message.embeds[0].fields[1].value.includes('aim') || input.obj.message.embeds[0].fields[0].value.includes('ms')) {
                 detailed = true
             }
@@ -9255,8 +9194,6 @@ Could not find beatmap data
     if (overrideSpeed) {
         hitlength /= overrideSpeed
     }
-
-    console.log(customCS, customAR, customOD, customHP, overrideBpm, hitlength)
 
     const allvals = osumodcalc.calcValues(
         +customCS,

@@ -75,7 +75,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                 case 'map':
                     {
                         //interaction is converted to a base interaction first because button interaction and select menu interaction don't overlap
-                        overrides.id = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction)[0]
+                        overrides.id = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0]
                         if (interaction?.message?.components[1]?.components[0]) {
                             overrides.overwriteModal = interaction.message.components[1].components[0];
                         }
