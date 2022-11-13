@@ -46,65 +46,65 @@ module.exports = (userdata, client, config:extypes.config, oncooldown, guildSett
 
     const activities = [
         {
-            name: `240BPM | ${config.prefix}-help`,
+            name: `240BPM | ${config.prefix}help`,
             type: 1,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: songsarr[Math.floor(Math.random() * songsarr.length)] + ` | ${config.prefix}-help`,
+            name: songsarr[Math.floor(Math.random() * songsarr.length)] + ` | ${config.prefix}help`,
             type: 2,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: `dt farm maps | ${config.prefix}-help`,
+            name: `dt farm maps | ${config.prefix}help`,
             type: 0,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: `nothing in particular | ${config.prefix}-help`,
+            name: `nothing in particular | ${config.prefix}help`,
             type: 3,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: `games | ${config.prefix}-help`,
+            name: `games | ${config.prefix}help`,
             type: 0,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: `hr | ${config.prefix}-help`,
+            name: `hr | ${config.prefix}help`,
             type: 0,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: songsarr[Math.floor(Math.random() * songsarr.length)] + ` | ${config.prefix}-help`,
+            name: songsarr[Math.floor(Math.random() * songsarr.length)] + ` | ${config.prefix}help`,
             type: 0,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: `you | ${config.prefix}-help`,
+            name: `you | ${config.prefix}help`,
             type: 3,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         }
     ]
     const activityChristmas = [{
-        name: `Merry Christmas! | ${config.prefix}-help`,
+        name: `Merry Christmas! | ${config.prefix}help`,
         type: 0,
         url: 'https://twitch.tv/sbrstrkkdwmdr',
     }]
     const activityHalloween = [{
-        name: `Happy Halloween! | ${config.prefix}-help`,
+        name: `Happy Halloween! | ${config.prefix}help`,
         type: 0,
         url: 'https://twitch.tv/sbrstrkkdwmdr',
     },
     {
-        name: `🎃 | ${config.prefix}-help`,
+        name: `🎃 | ${config.prefix}help`,
         type: 0,
         url: 'https://twitch.tv/sbrstrkkdwmdr',
     }
 
     ]
     const activityNewYear = [{
-        name: `Happy New Year! | ${config.prefix}-help`,
+        name: `Happy New Year! | ${config.prefix}help`,
         type: 0,
         url: 'https://twitch.tv/sbrstrkkdwmdr',
     }]
