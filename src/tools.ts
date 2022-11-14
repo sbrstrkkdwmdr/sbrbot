@@ -68,7 +68,7 @@ export function separateNum(number: string | number, separator?: string) {
  * shortens numbers to their letter form ie
  * 1,254,123 => 1.25M
  */
-export function numToLetter(number: number, decimals: number) {
+export function numToLetter(number: number, decimals?: number) {
     let newnum: string;
     const temp = separateNum(number).split(',')
     switch (temp.length) {
