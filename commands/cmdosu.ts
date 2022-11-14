@@ -7991,9 +7991,9 @@ Could not find user's ${scoreTypes} scores
         Embed.setDescription(`${func.separateNum(scoresdata.length)} scores found\n${reachedMaxCount ? 'Only first 100 scores are calculated' : ''}`)
         const mappers = osufunc.CommonMappers(scoresdata);
         const mods = osufunc.CommonMods(scoresdata);
-        const acc = osufunc.AccStats(scoresdata);
-        const pp = osufunc.PerformanceStats(scoresdata);
-        const combo = osufunc.ComboStats(scoresdata);
+        const acc = osufunc.Stats(scoresdata.map(x =>x.accuracy));
+        const pp = osufunc.Stats(scoresdata.map(x => x.pp));
+        const combo = osufunc.Stats(scoresdata.map(x => x.max_combo));
 
 
         if (input.commandType == 'button') {
@@ -8035,6 +8035,7 @@ Could not find user's ${scoreTypes} scores
 Highest: ${(acc?.highest * 100)?.toFixed(2)}%
 Lowest: ${(acc?.lowest * 100)?.toFixed(2)}%
 Average: ${(acc?.average * 100)?.toFixed(2)}%
+${acc?.ignored > 0 ? `Skipped: ${acc?.ignored}` : ''}
 `,
                 inline: false
             },
@@ -8044,6 +8045,7 @@ Average: ${(acc?.average * 100)?.toFixed(2)}%
 Highest: ${pp?.highest?.toFixed(2)}pp
 Lowest: ${pp?.lowest?.toFixed(2)}pp
 Average: ${pp?.average?.toFixed(2)}pp
+${pp?.ignored > 0 ? `Skipped: ${pp?.ignored}` : ''}
 `,
                 inline: true
             },
@@ -8053,6 +8055,7 @@ Average: ${pp?.average?.toFixed(2)}pp
 Highest: ${combo?.highest}
 Lowest: ${combo?.lowest}
 Average: ${combo?.average}
+${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
 `,
                 inline: true
             }

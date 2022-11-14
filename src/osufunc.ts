@@ -77,16 +77,16 @@ export async function mapcalc(
                 path: mapPath,
                 cs: obj.customCS
             })
-            if(obj.customCS){
+            if (obj.customCS) {
                 map.cs(obj.customCS)
             }
-            if(obj.customAR){
+            if (obj.customAR) {
                 map.ar(obj.customAR)
             }
-            if(obj.customOD){
+            if (obj.customOD) {
                 map.od(obj.customOD)
             }
-            if(obj.customHP){
+            if (obj.customHP) {
                 map.hp(obj.customHP)
             }
 
@@ -1695,51 +1695,24 @@ export function modemappers(arr: osuApiTypes.Score[]) {
 type stat = {
     highest: number,
     average: number,
-    lowest: number
+    lowest: number,
+    ignored?: number,
 }
 
 /**
  * 
- * @param arr array of scores
- * @returns highest, lowest and average accuracy
+ * @param arr array of numbers
+ * @returns stats
  */
-export function AccStats(arr: osuApiTypes.Score[]) {
-    arr = arr.filter(x => x.accuracy != null)
-    arr.sort((a, b) => b.accuracy - a.accuracy)
-
+export function Stats(arr: number[]) {
+    const init = arr.slice()
+    arr = arr.filter(x => x != null);
+    arr.sort((b,a) => b -a)
     const stats: stat = {
-        highest: arr[0].accuracy,
-        average: (arr.map(x => x.accuracy).reduce((b, a) => b + a, 0) / arr.length),
-        lowest: arr[arr.length - 1].accuracy
-    }
-    return stats;
-}
-
-/**
- * 
- * @param arr array of scores
- * @returns highest, lowest and average pp
- */
-export function PerformanceStats(arr: osuApiTypes.Score[]) {
-    arr = arr.filter(x => x.pp != null)
-    arr.sort((a, b) => b.pp - a.pp)
-
-    const stats: stat = {
-        highest: arr[0].pp,
-        average: (arr.map(x => x.pp).reduce((b, a) => b + a, 0) / arr.length),
-        lowest: arr[arr.length - 1].pp
-    }
-    return stats;
-}
-
-export function ComboStats(arr: osuApiTypes.Score[]) {
-    arr = arr.filter(x => x.max_combo != null)
-    arr.sort((a, b) => b.max_combo - a.max_combo)
-
-    const stats: stat = {
-        highest: arr[0].max_combo,
-        average: (arr.map(x => x.max_combo).reduce((b, a) => b + a, 0) / arr.length),
-        lowest: arr[arr.length - 1].max_combo
+        highest: arr[0],
+        average: arr.reduce((b, a) => b + a, 0) / arr.length,
+        lowest: arr[arr.length - 1],
+        ignored: init.length - arr.length
     }
     return stats;
 }
