@@ -396,7 +396,7 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Shows DigitalHypno\'s badge weighted rank'
             },
         ],
-        aliases: [],
+        aliases: ['badgeweightsystem', 'badgeweight', 'badgeweigthseed', 'badgerank'],
         options: [
             {
                 name: 'user',
@@ -507,7 +507,7 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Returns your 3rd most recent first score'
             }
         ],
-        aliases: [],
+        aliases: ['firstplaceranks', 'first', 'fpr', 'fp', '#1s', '1s', '#1'],
         options: [
             {
                 name: 'user',
@@ -2339,7 +2339,7 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Shows SaberStrike\'s stats if they achieved a 300pp score'
             }
         ],
-        aliases: [],
+        aliases: ['wi'],
         options: [
             {
                 name: 'user',
