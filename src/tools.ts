@@ -64,6 +64,39 @@ export function separateNum(number: string | number, separator?: string) {
     return ans;
 }
 
+/**
+ * shortens numbers to their letter form ie
+ * 1,254,123 => 1.25M
+ */
+export function numToLetter(number: number, decimals: number) {
+    let newnum: string;
+    const temp = separateNum(number).split(',')
+    switch (temp.length) {
+        case 1:
+            newnum = `${number}`
+            break;
+        case 2:
+            newnum = `${(number / 1000 ** 1).toFixed(decimals ?? 2)}k`
+            break;
+        case 3:
+            newnum = `${(number / 1000 ** 2).toFixed(decimals ?? 2)}M`
+            break;
+        case 4:
+            newnum = `${(number / 1000 ** 3).toFixed(decimals ?? 2)}B`
+            break;
+        case 5:
+            newnum = `${(number / 1000 ** 4).toFixed(decimals ?? 2)}T`
+            break;
+        case 6:
+            newnum = `${(number / 1000 ** 5).toFixed(decimals ?? 2)}Quad`
+            break;
+        case 7:
+            newnum = `${(number / 1000 ** 6).toFixed(decimals ?? 2)}Quint`
+            break;
+    }
+    return newnum;
+}
+
 export function flagImgUrl(string: string, ver?: 'osu') {
     const flagUrl: string = `https://osuflags.omkserver.nl/${string}`;
     return flagUrl;
@@ -204,7 +237,7 @@ export function parseArg(
                 returnArg = +temp
                 if (isNaN(+temp)) {
                     returnArg = defaultValue
-                } else if (asInt == true){
+                } else if (asInt == true) {
                     returnArg = parseInt(temp)
                 }
                 args.splice(args.indexOf(searchString), 2)

@@ -1088,7 +1088,7 @@ Could not fetch ranking data
                             '---' :
                             func.separateNum(curuser.global_rank)
                         }
-Score: ${curuser.total_score == null ? '---' : func.separateNum(curuser.total_score)} (${curuser.ranked_score == null ? '---' : func.separateNum(curuser.ranked_score)} ranked)
+Score: ${curuser.total_score == null ? '---' : func.numToLetter(curuser.total_score)} (${curuser.ranked_score == null ? '---' : func.numToLetter(curuser.ranked_score)} ranked)
 ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${curuser.pp == null ? '---' : func.separateNum(curuser.pp)}pp | ${curuser.play_count == null ? '---' : func.separateNum(curuser.play_count)} plays
 `
                     ,
