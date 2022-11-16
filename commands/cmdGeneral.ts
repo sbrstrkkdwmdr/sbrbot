@@ -897,13 +897,36 @@ export function help(input: extypes.commandInput) {
             guildId: `${input.obj.guildId}`
         })
 
+    if (rdm == true) {
+        const initrdm = Math.floor(Math.random() * 4)
+        switch (initrdm) {
+            case 1:
+                command = rdmp('cmds')
+                break;
+            case 2:
+                command = rdmp('osucmds')
+                break;
+            case 3:
+                command = rdmp('admincmds')
+                break;
+            case 4:
+                command = rdmp('othercmds')
+                break;
+        }
+    }
+
     //OPTIONS==============================================================================================================================================================================================
 
     log.logFile('command',
         log.optsLog(input.absoluteID, [{
             name: 'Command',
             value: command
-        }]),
+        },
+        {
+            name: 'Random',
+            value: `${rdm}`
+        }
+    ]),
         {
             guildId: `${input.obj.guildId}`
         }
@@ -941,30 +964,33 @@ export function help(input: extypes.commandInput) {
             const reqtxt = opts[i].required ? 'required' : 'optional'
             opttxt += `\n\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options && !opts[i].options.includes('N/A') && !opts[i].options.includes('null') ? `(${opts[i].options.map(x => `\`${x}\``).join('/')})` : ''}\n`
         }
+        if(opttxt.length < 1){
+            opttxt = 'No options'
+        }
 
         const commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none'
         // let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
         const commandexamples = command.examples && command.examples.length > 0 ? command.examples.map(x => x.text).join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
 
         embed.setTitle("Command info for: " + command.name)
-        embed.setDescription(desc)
-        embed.addFields([
-            {
-                name: 'Options',
-                value: opttxt,
-                inline: false
-            },
-            {
-                name: 'Aliases',
-                value: commandaliases,
-                inline: false
-            },
-            {
-                name: 'Examples',
-                value: commandexamples,
-                inline: false
-            }
-        ])
+            .setDescription(desc)
+            .addFields([
+                {
+                    name: 'Options',
+                    value: opttxt,
+                    inline: false
+                },
+                {
+                    name: 'Aliases',
+                    value: commandaliases,
+                    inline: false
+                },
+                {
+                    name: 'Examples',
+                    value: commandexamples,
+                    inline: false
+                }
+            ])
     }
     function getemb() {
         if (command != null) {
@@ -982,7 +1008,6 @@ export function help(input: extypes.commandInput) {
                 const res = helpinfo.cmds.find(obj => obj.aliases.includes(fetchcmd))
                 commandEmb(res, commandInfo)
             }
-
             else if (helpinfo.othercmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'misc';
@@ -1094,23 +1119,6 @@ export function help(input: extypes.commandInput) {
     function rdmp(w: string) {
         const fullyrando = Math.floor(Math.random() * helpinfo[w].length)
         return helpinfo[w][fullyrando].name
-    }
-    if (rdm == true) {
-        const initrdm = Math.floor(Math.random() * 4)
-        switch (initrdm) {
-            case 1:
-                command = rdmp('cmds')
-                break;
-            case 2:
-                command = rdmp('osucmds')
-                break;
-            case 3:
-                command = rdmp('admincmds')
-                break;
-            case 4:
-                command = rdmp('othercmds')
-                break;
-        }
     }
 
     getemb();
