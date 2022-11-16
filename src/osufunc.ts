@@ -10,6 +10,7 @@ import cmdchecks = require('./checks');
 import extypes = require('./types/extratypes');
 import Sequelize = require('sequelize');
 import msgfunc = require('../commands/msgfunc');
+import emojis = require('./consts/emojis');
 
 /* module.exports = {
     modemods, modemappers
@@ -1707,7 +1708,7 @@ type stat = {
 export function Stats(arr: number[]) {
     const init = arr.slice()
     arr = arr.filter(x => x != null);
-    arr.sort((b,a) => b -a)
+    arr.sort((b, a) => b - a)
     const stats: stat = {
         highest: arr[0],
         average: arr.reduce((b, a) => b + a, 0) / arr.length,
@@ -1768,4 +1769,19 @@ export function CommonMods(arr: osuApiTypes.Score[]) {
     modComboArray.sort((a, b) => b.count - a.count)
     modComboArray.forEach(x => x.percentage = (x.count / arr.length) * 100)
     return modComboArray;
+}
+
+export function ModToEmojis(mods: string[], canEmoji?: boolean) {
+    if (canEmoji) {
+        let modEmojis: string[] = [];
+        for (let i = 0; i < mods.length; i++) {
+            let current: string = '';
+            //find
+            current = emojis.mods[mods[i]]
+            //push
+            current ? modEmojis.push(current) : null;
+        }
+    } else {
+        return mods;
+    }
 }
