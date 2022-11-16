@@ -750,8 +750,14 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
             conv = 'Error'
             convtype = 'Error'
             eq = 'Invalid conversion or it hasn\'t been added yet'
-            formula = '`x`'
+            formula = 'null'
             useEmbeds.push(EmbedList)
+            if (!cat2 || !num) {
+                eq = `Missing arguments: 
+${cat2 ? '' : '[to]'}
+${num ? '' : '[number]'}`
+            }
+            break;
 
     }
 
@@ -926,7 +932,7 @@ export function help(input: extypes.commandInput) {
             name: 'Random',
             value: `${rdm}`
         }
-    ]),
+        ]),
         {
             guildId: `${input.obj.guildId}`
         }
@@ -964,7 +970,7 @@ export function help(input: extypes.commandInput) {
             const reqtxt = opts[i].required ? 'required' : 'optional'
             opttxt += `\n\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options && !opts[i].options.includes('N/A') && !opts[i].options.includes('null') ? `(${opts[i].options.map(x => `\`${x}\``).join('/')})` : ''}\n`
         }
-        if(opttxt.length < 1){
+        if (opttxt.length < 1) {
             opttxt = 'No options'
         }
 

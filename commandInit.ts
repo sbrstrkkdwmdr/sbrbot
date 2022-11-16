@@ -28,14 +28,14 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                     name: 'to',
                     description: 'What to convert the value to',
                     type: Discord.ApplicationCommandOptionType.String,
-                    required: true,
+                    required: false,
                     choices: cmdconfig.conversionopts
                 },
                 {
                     name: 'number',
                     description: 'The value to convert',
                     type: Discord.ApplicationCommandOptionType.Number,
-                    required: true
+                    required: false
                 }
             ]
         },
