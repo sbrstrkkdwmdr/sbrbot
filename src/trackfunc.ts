@@ -200,50 +200,56 @@ export async function trackUsers(db, client, guildSettings) {
     }
 
     const allUsers = await db.findAll()
-    allUsers.forEach(user => {
-        let willFetch = false
-        if (!(typeof user.osuid == 'undefined' || user.osuid == null || user.osuid == undefined)) {
-            if (`${user.guildsosu}`.length > 0 && `${user.guildsosu}`.length != 4) {
-                trackUser({
-                    user: user.osuid,
-                    mode: 'osu',
-                    inital: false
-                }, db, client, guildSettings)
-                willFetch = true
-            }
-            if (`${user.guildstaiko}`.length > 0 && `${user.guildstaiko}`.length != 4) {
-                trackUser({
-                    user: user.osuid,
-                    mode: 'taiko',
-                    inital: false
-                }, db, client, guildSettings)
-                willFetch = true
-            }
-            if (`${user.guildsfruits}`.length > 0 && `${user.guildsfruits}`.length != 4) {
-                trackUser({
-                    user: user.osuid,
-                    mode: 'fruits',
-                    inital: false
-                }, db, client, guildSettings)
-                willFetch = true
-            }
-            if (`${user.guildsmania}`.length > 0 && `${user.guildsfruits}`.length != 4) {
-                trackUser({
-                    user: user.osuid,
-                    mode: 'mania',
-                    inital: false
-                }, db, client, guildSettings)
-                willFetch = true
-            }
-        }
+    const WaitTime = 1000 * 60 * 30;
+    console.log(Math.floor(WaitTime / allUsers.length))
+    for (let i = 0; i < allUsers.length; i++) {
+        const user = allUsers[i];
 
-        if (willFetch == true) {
-            osufunc.logCall(`Fetching ${user.osuid}`, 'Tracking')
-        } else {
-            osufunc.logCall(`User ${user.osuid} has no tracked channels`, 'Tracking cancelled')
-        }
+        setTimeout(() => {
+            osufunc.logCall(`index ${i}. Next track in ${Math.floor(WaitTime / allUsers.length)}`, 'Tracking')
+            let willFetch = false
+            if (!(typeof user.osuid == 'undefined' || user.osuid == null || user.osuid == undefined)) {
+                if (`${user.guildsosu}`.length > 0 && `${user.guildsosu}`.length != 4) {
+                    trackUser({
+                        user: user.osuid,
+                        mode: 'osu',
+                        inital: false
+                    }, db, client, guildSettings)
+                    willFetch = true
+                }
+                if (`${user.guildstaiko}`.length > 0 && `${user.guildstaiko}`.length != 4) {
+                    trackUser({
+                        user: user.osuid,
+                        mode: 'taiko',
+                        inital: false
+                    }, db, client, guildSettings)
+                    willFetch = true
+                }
+                if (`${user.guildsfruits}`.length > 0 && `${user.guildsfruits}`.length != 4) {
+                    trackUser({
+                        user: user.osuid,
+                        mode: 'fruits',
+                        inital: false
+                    }, db, client, guildSettings)
+                    willFetch = true
+                }
+                if (`${user.guildsmania}`.length > 0 && `${user.guildsfruits}`.length != 4) {
+                    trackUser({
+                        user: user.osuid,
+                        mode: 'mania',
+                        inital: false
+                    }, db, client, guildSettings)
+                    willFetch = true
+                }
+            }
 
-    })
+            if (willFetch == true) {
+                osufunc.logCall(`Fetching ${user.osuid}`, 'Tracking')
+            } else {
+                osufunc.logCall(`User ${user.osuid} has no tracked channels`, 'Tracking cancelled')
+            }
+        }, (Math.floor(WaitTime / allUsers.length)) * i)
+    }
 }
 
 export async function sendMsg(embed: Discord.EmbedBuilder, curuser: string, trackDb, client, guildSettings) {
@@ -257,7 +263,7 @@ export async function sendMsg(embed: Discord.EmbedBuilder, curuser: string, trac
         [userobj?.guilds]
 
     let channels = []
-    if(!guilds[0]){
+    if (!guilds[0]) {
         return;
     }
 
