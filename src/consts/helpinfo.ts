@@ -1190,13 +1190,21 @@ const osucmds: commandInfo[] = [
             {
                 text: 'PREFIXMSGtop -parse 3',
                 descriptor: 'Returns your 3rd personal best score'
+            },
+            {
+                text:'PREFIXMSGsotarks',
+                descriptor: 'Returns your top plays mapped by sotarks'
             }
         ],
         aliases: [
             'top', 't', 'ot', 'topo', 'toposu',
             'taikotop', 'toptaiko', 'tt', 'topt',
             'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tf', 'tctb', 'topf', 'topc',
-            'maniatop', 'topmania', 'tm', 'topm'
+            'maniatop', 'topmania', 'tm', 'topm',
+            'sotarks', 'sotarksosu', 
+            'sotarkstaiko', 'taikosotarks', 'sotarkst', 'tsotarks',
+            'sotaksfruits', 'fruitssotarks', 'fruitsotarks', 'sotarksfruit', 'sotarkscatch', 'catchsotarks', 'sotarksctb', 'ctbsotarks', 'sotarksf', 'sotarksc',
+            'sotarksmania', 'maniasotarks', 'sotarksm', 'msotarks'
         ],
         options: [
             {

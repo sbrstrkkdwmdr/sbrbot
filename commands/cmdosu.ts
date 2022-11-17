@@ -4208,6 +4208,12 @@ export async function osutop(input: extypes.commandInput) {
         if (input.overrides.mode != null) {
             mode = input.overrides.mode
         }
+        if (input.overrides.filterMapper != null) {
+            mapper = input.overrides.filterMapper
+        }
+        if (input.overrides.filterMods != null) {
+            mapper = input.overrides.filterMods
+        }
     }
 
     //==============================================================================================================================================================================================

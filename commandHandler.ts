@@ -413,7 +413,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'sotarks':
+            case 'sotarks':case 'sotarksosu':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         filterMapper: 'Sotarks'
@@ -423,7 +423,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'sotarkstaiko':
+            case 'sotarkstaiko':case 'taikosotarks':case 'sotarkst':case 'tsotarks':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         filterMapper: 'Sotarks',
@@ -434,7 +434,8 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'sotarksfruits':
+            case 'sotarksfruits':case 'fruitssotarks':case 'fruitsotarks':case 'sotarksfruit':case 'sotarkscatch':case 'catchsotarks':
+            case 'sotarksctb':case 'ctbsotarks':case 'fsotarks':case 'sotarksf':case 'csotarks':case 'sotarksc':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         filterMapper: 'Sotarks',
@@ -445,7 +446,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'sotarksmania':
+            case 'sotarksmania':case 'maniasottarks':case 'sotarksm':case 'msotarks':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         filterMapper: 'Sotarks',

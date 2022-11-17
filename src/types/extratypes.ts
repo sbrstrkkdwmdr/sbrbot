@@ -185,7 +185,9 @@ export type overrides = {
     overwriteModal?: Discord.SelectMenuComponent | Discord.SelectMenuBuilder,
     type?: string,
     commanduser?: Discord.User,
-    commandAs: commandType,
+    commandAs?: commandType,
+    filterMapper?: string,
+    filterMods?: string
 } | null
 
 export type data = Sequelize.ModelStatic<any>
