@@ -149,7 +149,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
         execCommand(interaction.commandName, 'interaction', interaction, null, button, absoluteID, currentDate, interaction.member.user.id, args);
     });
 
-    function execCommand(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: any, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[]) {
+    function execCommand(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[]) {
         if (!checks.botHasPerms(obj, client, ['ReadMessageHistory'])) return;
         if (!checks.botHasPerms(obj, client, ['SendMessages', 'ReadMessageHistory', 'ViewChannel']) && commandType == 'message') return;
         //if is thread check if bot has perms
@@ -233,7 +233,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                 }
                 break;
 
-            case '8ball' || 'ask':
+            case '8ball': case 'ask':
                 misccmds._8ball({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 break;
             // case 'gif':
@@ -243,14 +243,14 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
             //         checkcmds.noperms(commandType, obj, 'bot')
             //     }
             //     break;
-            case 'image' || 'imagesearch':
+            case 'image': case 'imagesearch':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     misccmds.image({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'poll' || 'vote':
+            case 'poll': case 'vote':
                 if ((
                     (checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') ||
                     commandType == 'interaction') &&
@@ -270,7 +270,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
             //         checkcmds.noperms(commandType, obj, 'bot')
             //     }
             //     break;
-            case 'ytsearch' || 'yt':
+            case 'ytsearch': case 'yt':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     misccmds.ytsearch({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
@@ -280,7 +280,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
 
             //osu commands below
 
-            case 'bws' || 'badgeweightsystem' || 'badgeweight' || 'badgeweightseed' || 'badgerank':
+            case 'bws': case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.bws({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
@@ -304,7 +304,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'firsts' || 'firstplaceranks' || 'fpr' || 'fp' || '#1s' || 'first' || '#1' || '1s':
+            case 'firsts': case 'firstplaceranks': case 'fpr': case 'fp': case '#1s': case 'first': case '#1': case '1s':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.firsts({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
@@ -314,7 +314,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
             case 'globals':
                 osucmds.globals({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 break;
-            case 'leaderboard' || 'maplb' || 'mapleaderboard':
+            case 'leaderboard': case 'maplb': case 'mapleaderboard':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.maplb({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
@@ -328,28 +328,28 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'map' || 'm':
+            case 'map': case 'm':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.map({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'nochokes' || 'nc':
+            case 'nochokes': case 'nc':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.nochokes({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'osu' || 'profile' || 'o':
+            case 'osu': case 'profile': case 'o':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'osuset' || 'setuser' || 'set':
+            case 'osuset': case 'setuser': case 'set':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.osuset({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
@@ -376,14 +376,14 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'osutop' || 'top' || 't' || 'ot' || 'toposu' || 'topo':
+            case 'osutop': case 'top': case 't': case 'ot': case 'toposu': case 'topo':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'taikotop' || 'toptaiko' || 'tt' || 'topt':
+            case 'taikotop': case 'toptaiko': case 'tt': case 'topt':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'taiko'
@@ -393,7 +393,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'ctbtop' || 'fruitstop' || 'catchtop' || 'topctb' || 'topfruits' || 'topcatch' || 'tctb' || 'tf' || 'topf' || 'topc':
+            case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tctb': case 'tf': case 'topf': case 'topc':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'fruits'
@@ -403,7 +403,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'maniatop' || 'topmania' || 'tm' || 'topm':
+            case 'maniatop': case 'topmania': case 'tm': case 'topm':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'mania'
@@ -413,6 +413,50 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
+            case 'sotarks':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    overrides = {
+                        filterMapper: 'Sotarks'
+                    }
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+            case 'sotarkstaiko':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    overrides = {
+                        filterMapper: 'Sotarks',
+                        mode: 'taiko'
+                    }
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+            case 'sotarksfruits':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    overrides = {
+                        filterMapper: 'Sotarks',
+                        mode: 'fruits'
+                    }
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+            case 'sotarksmania':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    overrides = {
+                        filterMapper: 'Sotarks',
+                        mode: 'mania'
+                    }
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
+
             case 'pinned':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.pinned({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
@@ -449,15 +493,15 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'rs' || 'recent' || 'r':
+            case 'rs': case 'recent': case 'r':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'rs best' || 'recent best':
-            case 'rsbest' || 'recentbest' || 'rb':
+            case 'rs best': case 'recent best':
+            case 'rsbest': case 'recentbest': case 'rb':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         type: 'list',
@@ -468,7 +512,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'recentlist' || 'rl':
+            case 'recentlist': case 'rl':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         type: 'list'
@@ -478,7 +522,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'recentlisttaiko' || 'rlt':
+            case 'recentlisttaiko': case 'rlt':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         type: 'list',
@@ -489,7 +533,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'recentlistfruits' || 'rlf' || 'rlctb' || 'rlc':
+            case 'recentlistfruits': case 'rlf': case 'rlctb': case 'rlc':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         type: 'list',
@@ -500,7 +544,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'recentlistmania' || 'rlm':
+            case 'recentlistmania': case 'rlm':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         type: 'list',
@@ -511,7 +555,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'recenttaiko' || 'rt':
+            case 'recenttaiko': case 'rt':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'taiko'
@@ -521,7 +565,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'recentfruits' || 'rf' || 'rctb':
+            case 'recentfruits': case 'rf': case 'rctb':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'fruits'
@@ -531,7 +575,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'recentmania' || 'rm':
+            case 'recentmania': case 'rm':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         mode: 'mania'
@@ -549,28 +593,28 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                 }
                 break;
 
-            case 'scoreparse' || 'score' || 'sp':
+            case 'scoreparse': case 'score': case 'sp':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'scores' || 'c':
+            case 'scores': case 'c':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.scores({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'scorestats' || 'ss':
+            case 'scorestats': case 'ss':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.scorestats({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'simplay' || 'simulate' || 'sim':
+            case 'simplay': case 'simulate': case 'sim':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.simulate({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
@@ -589,13 +633,13 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'trackadd' || 'track' || 'ta':
+            case 'trackadd': case 'track': case 'ta':
                 osucmds.trackadd({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings, graphChannel })
                 break;
-            case 'trackremove' || 'trackrm' || 'tr' || 'untrack':
+            case 'trackremove': case 'trackrm': case 'tr': case 'untrack':
                 osucmds.trackremove({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings, graphChannel })
                 break;
-            case 'trackchannel' || 'tc':
+            case 'trackchannel': case 'tc':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
                     osucmds.trackchannel({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings, graphChannel })
                 } else {
@@ -604,17 +648,17 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     )
                 }
                 break;
-            case 'tracklist' || 'tl':
+            case 'tracklist': case 'tl':
                 osucmds.tracklist({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, trackDb, guildSettings, graphChannel })
                 break;
-            case 'userbeatmaps' || 'ub' || 'userb' || 'ubm' || 'um' || 'usermaps':
+            case 'userbeatmaps': case 'ub': case 'userb': case 'ubm': case 'um': case 'usermaps':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.userBeatmaps({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'whatif' || 'wi':
+            case 'whatif': case 'wi':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.whatif({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache, graphChannel })
                 } else {
@@ -623,14 +667,14 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                 break;
 
             //admincmds below
-            case 'avatar' || 'av' || 'pfp':
+            case 'avatar': case 'av': case 'pfp':
                 if (checks.botHasPerms(obj, client, ['Administrator'])) {
                     admincmds.getUserAv({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'checkperms' || 'fetchperms' || 'checkpermissions' || 'permissions' || 'perms':
+            case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
                 if (checks.botHasPerms(obj, client, ['Administrator'])) {
                     if ((checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid))) {
                         admincmds.checkperms({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
@@ -675,7 +719,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
             //         checkcmds.noperms(commandType, obj, 'bot')
             //     }
             //     break;
-            case 'leaveguild' || 'leave':
+            case 'leaveguild': case 'leave':
                 if (checks.isAdmin(userid, obj.guildId, client) || checks.isOwner(userid)) {
                     admincmds.leaveguild({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
@@ -694,7 +738,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     )
                 }
                 break;
-            case 'user' || 'userinfo':
+            case 'user': case 'userinfo':
                 if (checks.botHasPerms(obj, client, ['Administrator'])) {
                     admincmds.getUser({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
                 } else {
