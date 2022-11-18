@@ -201,7 +201,6 @@ export async function trackUsers(db, client, guildSettings) {
 
     const allUsers = await db.findAll()
     const WaitTime = 1000 * 60 * 30;
-    console.log(Math.floor(WaitTime / allUsers.length))
     for (let i = 0; i < allUsers.length; i++) {
         const user = allUsers[i];
 
@@ -248,7 +247,8 @@ export async function trackUsers(db, client, guildSettings) {
             } else {
                 osufunc.logCall(`User ${user.osuid} has no tracked channels`, 'Tracking cancelled')
             }
-        }, (Math.floor(WaitTime / allUsers.length)) * i)
+        },
+            i < 1 ? 0 : (Math.floor(WaitTime / allUsers.length)))
     }
 }
 
