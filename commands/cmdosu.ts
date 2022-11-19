@@ -1654,7 +1654,7 @@ Could not find user
     const rankglobal = ` ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)`
 
     const peakRank = osudata?.rank_highest.rank ?
-        `\n**Peak Rank**: #${func.separateNum(osudata.rank_highest.rank)} (#${'---'} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)` :
+        `\n**Peak Rank**: #${func.separateNum(osudata.rank_highest.rank)} (<t:${new Date(osudata.rank_highest.updated_at).getTime() / 1000}:R>)` :
         '';
 
     const onlinestatus = osudata.is_online == true ?
