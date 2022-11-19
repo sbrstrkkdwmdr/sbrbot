@@ -691,7 +691,7 @@ export async function apiget(input: apiInput) {
                     url += `scores/${input.params.mode ?? 'osu'}/${input.params.id}`
                     break;
                 case 'scores_get_best': case 'osutop': case 'best':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/best?mode=${input.params.mode ?? 'osu'}&offset=0`
+                    url += `users/${input.params.username ?? input.params.userid}/scores/best?mode=${input.params.mode ?? 'osu'}`
                     break;
                 case 'scores_get_first': case 'firsts':
                     url += `users/${input.params.username ?? input.params.userid}/scores/firsts?mode=${input.params.mode ?? 'osu'}`

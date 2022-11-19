@@ -4423,7 +4423,7 @@ Could not find user
             params: {
                 userid: osudata.id,
                 mode: mode,
-                opts: ['limit=100']
+                opts: ['limit=100', 'offset=0']
             }
         })
     }
@@ -7832,7 +7832,24 @@ export async function scorestats(input: extypes.commandInput) {
         })
     //OPTIONS==============================================================================================================================================================================================
     log.logFile('command',
-        log.optsLog(input.absoluteID, []),
+        log.optsLog(input.absoluteID, [
+            {
+                name: 'Score Type',
+                value: scoreTypes
+            },
+            {
+                name: 'User',
+                value: user
+            },
+            {
+                name: 'Mode',
+                value: mode
+            },
+            {
+                name: 'Search ID',
+                value: searchid
+            }
+        ]),
         {
             guildId: `${input.obj.guildId}`
         }
@@ -7927,7 +7944,7 @@ Could not find user
             type: scoreTypes,
             params: {
                 userid: `${osudata.id}`,
-                opts: [`offset=${cinitnum}`, 'limit=100', `mode=${mode}`],
+                opts: [`offset=${cinitnum}`, 'limit=100', `mode=${osufunc.modeValidator(mode)}`],
             },
             version: 2,
 
