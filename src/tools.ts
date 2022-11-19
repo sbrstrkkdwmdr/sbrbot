@@ -107,6 +107,7 @@ const cacheById = [
     'mapdata',
     'osudata',
     'scoredata',
+    'maplistdata'
 ]
 
 /**
@@ -115,7 +116,7 @@ const cacheById = [
  * @param id command id. if storing a map use the map id/md5 or user id if storing a user
  * @param name 
  */
-export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuApiTypes.Beatmapset[] | osuApiTypes.Beatmap[]) & osuApiTypes.Error), id: string | number, name: string, mode?: osuApiTypes.GameMode) {
+export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuApiTypes.Beatmapset[] | osuApiTypes.Beatmap[]) & osuApiTypes.Error), id: string | number, name: string, mode?: osuApiTypes.GameMode, type?:string) {
     try {
         if (cacheById.some(x => name.includes(x))) {
             if (name.includes('mapdata')) {
@@ -141,6 +142,8 @@ export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuA
                 fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2))
             } else if (name.includes('osudata')) {
                 fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, JSON.stringify(data, null, 2))
+            } else if (name.includes('maplistdata')) {
+                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2))
             }
             else {
                 fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2))
@@ -160,7 +163,7 @@ export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuA
  * @param name 
  * @returns 
  */
-export function findFile(id: string | number, name: string, mode?: osuApiTypes.GameMode) {
+export function findFile(id: string | number, name: string, mode?: osuApiTypes.GameMode, type?:string) {
     if (cacheById.some(x => name.includes(x))) {
         if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`)) {
             return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, 'utf-8'));
@@ -179,6 +182,10 @@ export function findFile(id: string | number, name: string, mode?: osuApiTypes.G
                 return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`, 'utf-8'));
             } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`)) {
                 return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`, 'utf-8'));
+            }
+        } else if (name.includes('maplistdata')){
+            if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`)) {
+                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, 'utf-8'));
             }
         }
         else {

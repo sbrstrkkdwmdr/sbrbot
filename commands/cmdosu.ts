@@ -7016,7 +7016,7 @@ Could not find user
         .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.id}`)
         .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`)
         .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('') ): ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
 ${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 \`${hitlist}\`
 ${scoredata.max_combo}x/**${mapdata.max_combo}x**
@@ -8014,7 +8014,7 @@ Could not find user's ${scoreTypes} scores
         Embed.setDescription(`${func.separateNum(scoresdata.length)} scores found\n${reachedMaxCount ? 'Only first 100 scores are calculated' : ''}`)
         const mappers = osufunc.CommonMappers(scoresdata);
         const mods = osufunc.CommonMods(scoresdata);
-        const acc = osufunc.Stats(scoresdata.map(x =>x.accuracy));
+        const acc = osufunc.Stats(scoresdata.map(x => x.accuracy));
         const pp = osufunc.Stats(scoresdata.map(x => x.pp));
         const combo = osufunc.Stats(scoresdata.map(x => x.max_combo));
 
@@ -10319,18 +10319,17 @@ Could not find user's ${calc.toCapital(filter)} maps
 
     }
 
-    if (func.findFile(input.absoluteID, 'maplistdata') &&
-        input.commandType == 'button' &&
-        !('error' in func.findFile(input.absoluteID, 'maplistdata')) &&
+    if (func.findFile(osudata.id, 'maplistdata', null, filter) &&
+        !('error' in func.findFile(osudata.id, 'maplistdata', null, filter)) &&
         input.button != 'Refresh'
     ) {
-        maplistdata = func.findFile(input.absoluteID, 'maplistdata')
+        maplistdata = func.findFile(osudata.id, 'maplistdata', null, filter)
     } else {
         await getScoreCount(0);
     }
 
     osufunc.debug(maplistdata, 'command', 'userbeatmaps', input.obj.guildId, 'mapListData');
-    func.storeFile(maplistdata, input.absoluteID, 'maplistdata');
+    func.storeFile(maplistdata, osudata.id, 'maplistdata', null, filter);
 
     if (filterTitle) {
         maplistdata = maplistdata.filter((map) =>
