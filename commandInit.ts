@@ -698,7 +698,7 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                     required: false,
                     choices: [
                         { name: 'firsts', value: 'firsts' },
-                        { name: 'top', value: 'best'},
+                        { name: 'top', value: 'best' },
                         { name: 'recent', value: 'recent' },
                         { name: 'pinned', value: 'pinned' },
                     ]
@@ -821,6 +821,7 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                         { name: 'favourites', value: 'favourite' },
                         { name: 'pending', value: 'pending' },
                         { name: 'graveyard', value: 'graveyard' },
+                        { name: 'nominated', value: 'nominated' }
                     ]
                 },
                 {

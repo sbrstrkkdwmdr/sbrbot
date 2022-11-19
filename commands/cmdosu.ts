@@ -9938,7 +9938,7 @@ ID: ${input.absoluteID}
  * list of user's maps
  */
 export async function userBeatmaps(input: extypes.commandInput) {
-    let filter: 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' = 'favourite';
+    let filter: 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' | 'nominated' = 'favourite';
     let sort:
         'title' | 'artist' |
         'difficulty' | 'status' |
@@ -10009,6 +10009,15 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 filter = 'pending';
                 input.args.splice(input.args.indexOf('-pending'), 1);
             }
+            if (input.args.includes('-nominated')) {
+                filter = 'nominated';
+                input.args.splice(input.args.indexOf('-nominated'), 1);
+            }
+            if (input.args.includes('-bn')) {
+                filter = 'nominated';
+                input.args.splice(input.args.indexOf('-bn'), 1);
+            }
+
             if (input.args.includes('-reverse')) {
                 reverse = true;
                 input.args.splice(input.args.indexOf('-reverse'), 1);
