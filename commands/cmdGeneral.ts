@@ -968,7 +968,9 @@ export function help(input: extypes.commandInput) {
         let opttxt = '';
         for (let i = 0; i < opts.length; i++) {
             const reqtxt = opts[i].required ? 'required' : 'optional'
-            opttxt += `\n\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options && !opts[i].options.includes('N/A') && !opts[i].options.includes('null') ? `(${opts[i].options.map(x => `\`${x}\``).join('/')})` : ''}\n`
+            opttxt += `\n\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options && 
+                !opts[i].options.includes('N/A') && !opts[i].options.includes('null') && !opts[i].options.includes('true') && !opts[i].options.includes('false') 
+                ? `(${opts[i].options.map(x => `\`${x}\``).join('/')})` : ''}\n`
         }
         if (opttxt.length < 1) {
             opttxt = 'No options'
