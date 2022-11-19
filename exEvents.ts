@@ -233,6 +233,7 @@ module.exports = (userdata, client, config:extypes.config, oncooldown, guildSett
         'mapdata',
         'osudata',
         'scoredata',
+        'maplistdata'
     ]
 
     const permanentCache = [
@@ -278,7 +279,7 @@ module.exports = (userdata, client, config:extypes.config, oncooldown, guildSett
                         //do nothing
                     }
                     else if (cacheById.some(x => file.startsWith(x))) {
-                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24)) {
                             fs.unlinkSync('./cache/commandData/' + file)
                             osufunc.logCall(file, 'deleted file')
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
