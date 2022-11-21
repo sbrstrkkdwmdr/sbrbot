@@ -1785,3 +1785,28 @@ export function ModToEmojis(mods: string[], canEmoji?: boolean) {
         return mods;
     }
 }
+
+export function randomMap(type?: 'Ranked' | 'Loved' | 'Approved' | 'Qualified' | 'Pending' | 'WIP' | 'Graveyard') {
+    let returnId = 4204;
+    let errormsg = null
+    //check if cache exists
+    const cache = fs.existsSync('cache/commandData')
+    if (cache) {
+        let mapsExist = fs.readdirSync('cache/commandData').filter(x => x.includes('mapdata'))
+        if (type) {
+            mapsExist = mapsExist.filter(x => x.includes(type))
+        }
+        if (mapsExist.length > 0) {
+            const curmap = JSON.parse(fs.readFileSync(`cache/commandData/${mapsExist[Math.floor(Math.random() * mapsExist.length)]}`, 'utf-8')) as apiReturn;
+            returnId = curmap?.apiData?.id ?? 4204
+        } else {
+            errormsg = `No ${type ?? ''} maps found`
+        }
+    } else {
+        errormsg = ' '
+    }
+    return {
+        returnId,
+        err: errormsg
+    };
+}

@@ -9603,6 +9603,181 @@ ID: ${input.absoluteID}
 
 }
 
+export async function randomMap(input: extypes.commandInput) {
+
+    type thingyFr = 'Ranked' | 'Loved' | 'Approved' | 'Qualified' | 'Pending' | 'WIP' | 'Graveyard';
+    let commanduser: Discord.User;
+    let mapType: thingyFr = null;
+    let useRandomRanked: boolean = false;
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+            if (input.args.includes('-ranked')) {
+                mapType = 'Ranked';
+                input.args.splice(input.args.indexOf('-ranked'), 1);
+            }
+            if (input.args.includes('-rank')) {
+                mapType = 'Ranked';
+                input.args.splice(input.args.indexOf('-rank'), 1);
+            }
+            if (input.args.includes('-leaderboard')) {
+                useRandomRanked = true;
+                input.args.splice(input.args.indexOf('-leaderboard'), 1);
+            }
+            if (input.args.includes('-lb')) {
+                useRandomRanked = true;
+                input.args.splice(input.args.indexOf('-lb'), 1);
+            }
+            if (input.args.includes('-loved')) {
+                mapType = 'Loved';
+                input.args.splice(input.args.indexOf('-loved'), 1);
+            }
+            if (input.args.includes('-love')) {
+                mapType = 'Loved';
+                input.args.splice(input.args.indexOf('-love'), 1);
+            }
+            if (input.args.includes('-approved')) {
+                mapType = 'Approved';
+                input.args.splice(input.args.indexOf('-approved'), 1);
+            }
+            if (input.args.includes('-approve')) {
+                mapType = 'Approved';
+                input.args.splice(input.args.indexOf('-approve'), 1);
+            }
+            if (input.args.includes('-qualified')) {
+                mapType = 'Qualified';
+                input.args.splice(input.args.indexOf('-qualified'), 1);
+            }
+            if (input.args.includes('-qualify')) {
+                mapType = 'Qualified';
+                input.args.splice(input.args.indexOf('-qualify'), 1);
+            }
+            if (input.args.includes('-qual')) {
+                mapType = 'Qualified';
+                input.args.splice(input.args.indexOf('-qual'), 1);
+            }
+            if (input.args.includes('-pending')) {
+                mapType = 'Pending';
+                input.args.splice(input.args.indexOf('-pending'), 1);
+            }
+            if (input.args.includes('-pend')) {
+                mapType = 'Pending';
+                input.args.splice(input.args.indexOf('-pend'), 1);
+            }
+            if (input.args.includes('-wip')) {
+                mapType = 'WIP';
+                input.args.splice(input.args.indexOf('-wip'), 1);
+            }
+            if (input.args.includes('-unfinished')) {
+                mapType = 'WIP';
+                input.args.splice(input.args.indexOf('-unfinished'), 1);
+            }
+            if (input.args.includes('-graveyarded')) {
+                mapType = 'Graveyard';
+                input.args.splice(input.args.indexOf('-graveyarded'), 1);
+            }
+            if (input.args.includes('-graveyard')) {
+                mapType = 'Graveyard';
+                input.args.splice(input.args.indexOf('-graveyard'), 1);
+            }
+            if (input.args.includes('-grave')) {
+                mapType = 'Graveyard';
+                input.args.splice(input.args.indexOf('-grave'), 1);
+            }
+            if (input.args.includes('-unranked')) {
+                mapType = 'Graveyard';
+                input.args.splice(input.args.indexOf('-unranked'), 1);
+            }
+            input.args = cleanArgs(input.args);
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+
+    }
+    //==============================================================================================================================================================================================
+
+    log.logFile(
+        'command',
+        log.commandLog('random map', input.commandType, input.absoluteID, commanduser
+        ),
+        {
+            guildId: `${input.obj.guildId}`
+        })
+    //OPTIONS==============================================================================================================================================================================================
+    log.logFile('command',
+        log.optsLog(input.absoluteID, [
+            {
+                name: 'Map type',
+                value: mapType
+            },
+            {
+                name: 'Random ranked type',
+                value: `${useRandomRanked}`
+            }
+        ]),
+        {
+            guildId: `${input.obj.guildId}`
+        }
+    )
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    let txt = ''
+
+    if (useRandomRanked) {
+        const arr: ('Ranked' | 'Loved' | 'Approved')[] = ['Ranked', 'Loved', 'Approved']
+        mapType = arr[Math.floor(Math.random() * arr.length)]
+    }
+
+    const randomMap = osufunc.randomMap(mapType)
+    if (randomMap.err != null) {
+        txt = randomMap.err
+    } else {
+        txt = `https://osu.ppy.sh/b/${randomMap.returnId}`
+    }
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            content: txt
+        }
+    })
+
+    log.logFile('command',
+        `
+----------------------------------------------------
+success
+ID: ${input.absoluteID}
+----------------------------------------------------
+\n\n`,
+        { guildId: `${input.obj.guildId}` }
+    )
+
+}
+
 /**
  * parse .osu file and return data
  */

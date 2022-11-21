@@ -335,6 +335,13 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
+            case 'maprandom': case 'f2': case 'maprand': case 'mapsuggest': case 'randommap': case 'randmap':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    osucmds.randomMap({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot')
+                }
+                break;
             case 'nochokes': case 'nc':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.nochokes({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel })
@@ -413,7 +420,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'sotarks':case 'sotarksosu':
+            case 'sotarks': case 'sotarksosu':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         filterMapper: 'Sotarks'
@@ -423,7 +430,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'sotarkstaiko':case 'taikosotarks':case 'sotarkst':case 'tsotarks':
+            case 'sotarkstaiko': case 'taikosotarks': case 'sotarkst': case 'tsotarks':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         filterMapper: 'Sotarks',
@@ -434,8 +441,8 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'sotarksfruits':case 'fruitssotarks':case 'fruitsotarks':case 'sotarksfruit':case 'sotarkscatch':case 'catchsotarks':
-            case 'sotarksctb':case 'ctbsotarks':case 'fsotarks':case 'sotarksf':case 'csotarks':case 'sotarksc':
+            case 'sotarksfruits': case 'fruitssotarks': case 'fruitsotarks': case 'sotarksfruit': case 'sotarkscatch': case 'catchsotarks':
+            case 'sotarksctb': case 'ctbsotarks': case 'fsotarks': case 'sotarksf': case 'csotarks': case 'sotarksc':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         filterMapper: 'Sotarks',
@@ -446,7 +453,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'sotarksmania':case 'maniasottarks':case 'sotarksm':case 'msotarks':
+            case 'sotarksmania': case 'maniasottarks': case 'sotarksm': case 'msotarks':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     overrides = {
                         filterMapper: 'Sotarks',
@@ -487,7 +494,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot')
                 }
                 break;
-            case 'ranking':
+            case 'ranking': case 'rankings':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.ranking({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache, graphChannel })
                 } else {

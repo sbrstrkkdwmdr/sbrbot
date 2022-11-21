@@ -881,6 +881,33 @@ const osucmds: commandInfo[] = [
         ]
     },
     {
+        name: 'maprandom',
+        description: 'Returns the link to a random beatmap. Uses local storage so selection might be limited',
+        usage: 'maprandom [-(type)]',
+        slashusage: 'maprandom [type]',
+        examples: [
+            {
+                text: 'PREFIXMSGf2',
+                descriptor: 'Returns a random beatmap'
+            },
+            {
+                text: 'PREFIXMSGmaprand -ranked',
+                descriptor: 'Returns a random ranked beatmap'
+            }
+        ],
+        aliases: ['f2', 'maprand', 'mapsuggest', 'randommap', 'randmap'],
+        options: [{
+            name: 'Type',
+            type: 'string',
+            required: false,
+            description: 'Filters to only pick from this type of map',
+            options: ['Ranked', 'Loved', 'Approved', 'Qualified', 'Pending', 'WIP', 'Graveyard'],
+            defaultValue: 'null',
+            examples: ['-ranked', '-wip'],
+            commandTypes: ['message', 'interaction']
+        }]
+    },
+    {
         name: 'nochokes',
         description: 'Shows the user\'s top plays without misses',
         usage: 'nochokes [user] [-page/-p] [-(mode)] [-parse] [-?]',
@@ -1192,7 +1219,7 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Returns your 3rd personal best score'
             },
             {
-                text:'PREFIXMSGsotarks',
+                text: 'PREFIXMSGsotarks',
                 descriptor: 'Returns your top plays mapped by sotarks'
             }
         ],
@@ -1201,7 +1228,7 @@ const osucmds: commandInfo[] = [
             'taikotop', 'toptaiko', 'tt', 'topt',
             'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tf', 'tctb', 'topf', 'topc',
             'maniatop', 'topmania', 'tm', 'topm',
-            'sotarks', 'sotarksosu', 
+            'sotarks', 'sotarksosu',
             'sotarkstaiko', 'taikosotarks', 'sotarkst', 'tsotarks',
             'sotaksfruits', 'fruitssotarks', 'fruitsotarks', 'sotarksfruit', 'sotarkscatch', 'catchsotarks', 'sotarksctb', 'ctbsotarks', 'sotarksf', 'sotarksc',
             'sotarksmania', 'maniasotarks', 'sotarksm', 'msotarks'
