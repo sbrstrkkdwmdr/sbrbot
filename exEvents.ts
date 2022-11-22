@@ -9,7 +9,7 @@ import Sequelize = require('sequelize');
 import osufunc = require('./src/osufunc');
 import osuApiTypes = require('./src/types/osuApiTypes');
 
-module.exports = (userdata, client, config:extypes.config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, trackDb, statsCache) => {
+module.exports = (userdata, client, config: extypes.config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, trackDb, statsCache) => {
 
     setInterval(() => {
         clearMapFiles();
@@ -233,11 +233,13 @@ module.exports = (userdata, client, config:extypes.config, oncooldown, guildSett
         'mapdata',
         'osudata',
         'scoredata',
-        'maplistdata'
+        'maplistdata',
+        'firstscoresdata'
     ]
 
     const permanentCache = [
-        'mapdataRank', 'mapdataLoved', 'mapdataApproved'
+        'mapdataRanked', 'mapdataLoved', 'mapdataApproved',
+        'bmsdataRanked', 'bmsdataLoved', 'bmsdataApproved',
     ]
 
     /**

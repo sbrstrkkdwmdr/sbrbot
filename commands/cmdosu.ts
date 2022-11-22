@@ -2431,17 +2431,16 @@ Could not find user\'s #1 scores offset by ${cinitnum}
         }
         return;
     }
-    if (func.findFile(input.absoluteID, 'firstscoresdata') &&
-        input.commandType == 'button' &&
-        !('error' in func.findFile(input.absoluteID, 'firstscoresdata')) &&
+    if (func.findFile(osudata.id, 'firstscoresdata') &&
+        !('error' in func.findFile(osudata.id, 'firstscoresdata')) &&
         input.button != 'Refresh'
     ) {
-        firstscoresdata = func.findFile(input.absoluteID, 'firstscoresdata')
+        firstscoresdata = func.findFile(osudata.id, 'firstscoresdata')
     } else {
         await getScoreCount(0);
     }
     osufunc.debug(firstscoresdata, 'command', 'firsts', input.obj.guildId, 'firstsScoresData');
-    func.storeFile(firstscoresdata, input.absoluteID, 'firstscoresdata');
+    func.storeFile(firstscoresdata, osudata.id, 'firstscoresdata');
 
     if (filterTitle) {
         firstscoresdata = firstscoresdata.filter((array) =>
