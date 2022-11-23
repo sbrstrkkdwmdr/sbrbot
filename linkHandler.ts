@@ -36,7 +36,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
             ex: null,
             commandAs: commandType
         }
-        let absoluteID = null
+        let absoluteID = func.generateId();
 
         let settings: extypes.guildSettings;
         try {
@@ -72,7 +72,6 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
 
                 if (message.attachments.size > 0) {
                     if (message.attachments.first().url.includes('.png') || message.attachments.first().url.includes('.jpg')) {
-                        absoluteID = func.generateId();
                         const worker = tesseract.createWorker({
                             logger: m => {
                                 fs.appendFileSync(`logs/gen/imagerender${obj.guildId}.log`,
@@ -134,7 +133,9 @@ progress: ${m.progress ? m.progress : 'none'}
             osucmds.map({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
         }
         if (messagenohttp.startsWith('osu.ppy.sh/u/') || messagenohttp.startsWith('osu.ppy.sh/users/')) {
-            absoluteID = func.generateId();
+            if (absoluteID == null) {
+                absoluteID = func.generateId();
+            }
             osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
         }
 
@@ -142,7 +143,9 @@ progress: ${m.progress ? m.progress : 'none'}
             if (settings.osuParseReplays == false) {
                 return;
             }
-            absoluteID = func.generateId();
+            if (absoluteID == null) {
+                absoluteID = func.generateId();
+            }
             const attachosr = message.attachments.first().url
             const osrdlfile = fs.createWriteStream('./files/replay.osr')
             https.get(`${attachosr}`, function (response) {
@@ -156,7 +159,10 @@ progress: ${m.progress ? m.progress : 'none'}
             osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
         }
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osu'))) {
-            absoluteID = func.generateId();
+            return;
+            if (absoluteID == null) {
+                absoluteID = func.generateId();
+            }
             const attachosu = message.attachments.first().url
             const osudlfile = fs.createWriteStream('./files/tempdiff.osu')
             https.get(`${attachosu}`, function (response) {
