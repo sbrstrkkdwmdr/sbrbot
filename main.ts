@@ -1,4 +1,4 @@
-console.log('Loading...')
+console.log('Loading...');
 const initdate = new Date();
 
 import Discord = require('discord.js');
@@ -40,7 +40,7 @@ const client = new Client({
         Partials.Channel,
         Partials.User
     ]
-})
+});
 
 const sequelize = new Sequelize.Sequelize('database', 'username', 'password', {
     host: 'localhost',
@@ -123,7 +123,7 @@ const trackDb = sequelize.define('trackUsers', {
     guildsmania: {
         type: Sequelize.STRING,
     },
-})
+});
 
 const statsCache = sequelize.define('statsCache', {
     osuid: {
@@ -147,7 +147,7 @@ const statsCache = sequelize.define('statsCache', {
     maniapp: Sequelize.STRING,
     maniarank: Sequelize.STRING,
     maniaacc: Sequelize.STRING,
-})
+});
 
 client.once('ready', () => {
     const currentDate = new Date();
@@ -156,7 +156,7 @@ client.once('ready', () => {
     guildSettings.sync();
     trackDb.sync();
     statsCache.sync();
-    const timetostart = currentDate.getTime() - initdate.getTime()
+    const timetostart = currentDate.getTime() - initdate.getTime();
     const initlog = `
 ====================================================
 BOT IS NOW ONLINE
@@ -168,8 +168,8 @@ Current Time (epoch, ms): ${currentDate.getTime()}
 Current Client:           ${client.user.tag} 
 Current Client ID:        ${client.user.id}
 ====================================================
-`
-    console.log(initlog)
+`;
+    console.log(initlog);
 
     const oncooldown = new Set();
 
@@ -228,7 +228,7 @@ Current Client ID:        ${client.user.id}
         console.log(`Creating previous IDs folder (./previous)`);
         fs.mkdirSync(`./cache/previous`);
     }
-    if(!fs.existsSync(`./cache/graphs`)){
+    if (!fs.existsSync(`./cache/graphs`)) {
         console.log(`Creating ./cache/graphs/ folder`);
         fs.mkdirSync(`./cache/graphs`);
     }
@@ -238,11 +238,11 @@ Current Client ID:        ${client.user.id}
             if (!fs.existsSync(`./logs/moderator/${guild.id}.log`)) {
                 console.log(`Creating moderator log for ${guild.name}`);
                 fs.writeFileSync(`./logs/moderator/${guild.id}.log`, ''
-                )
+                );
             }
 
         }
-        )
+        );
     })();
 
     fs.appendFileSync('logs/general.log', `\n\n\n${initlog}\n\n\n`, 'utf-8');
@@ -263,8 +263,8 @@ Current Client ID:        ${client.user.id}
 
     }).then(res => res.json())
         .then(res => {
-            fs.writeFileSync('config/osuauth.json', JSON.stringify(res))
-            fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
+            fs.writeFileSync('config/osuauth.json', JSON.stringify(res));
+            fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
 
         }
         )
@@ -281,7 +281,7 @@ Date (epoch, ms): ${rn.getTime()}
 ----------------------------------------------------
 node-fetch error: ${error}
 ====================================================
-`, 'utf-8')
+`, 'utf-8');
             return;
         });
 });
@@ -297,7 +297,7 @@ Date (epoch, ms): ${rn.getTime()}
 ----------------------------------------------------
 ${info}
 ====================================================
-`
+`;
 
 
     fs.appendFileSync(`./logs/debug.log`, text + '\n', 'utf-8');
@@ -314,7 +314,7 @@ Date (epoch, ms): ${rn.getTime()}
 ----------------------------------------------------
 ${info}
 ====================================================
-`
+`;
     fs.appendFileSync(`./logs/warn.log`, text + '\n', 'utf-8');
 });
 client.on('error', (error) => {
@@ -329,12 +329,12 @@ Date (epoch, ms): ${rn.getTime()}
 ----------------------------------------------------
 ${error}
 ====================================================
-`
+`;
     fs.appendFileSync(`./logs/err.log`, text + '\n', 'utf-8');
 });
 
 
-client.login(config.token)
+client.login(config.token);
 
 export { };
 
