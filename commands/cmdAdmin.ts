@@ -38,7 +38,7 @@ export function checkperms(input: extypes.commandInput) {
                 if (input.obj.mentions.users.size > 0) {
                     searchUser = input.obj.mentions.users.first();
                 } else {
-                    searchUser = input.client.users.cache.get(input.args.join(' '))
+                    searchUser = input.client.users.cache.get(input.args.join(' '));
                 }
             } else {
                 searchUser = commanduser;
@@ -72,28 +72,20 @@ export function checkperms(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('checkperms', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'check permissions',
+        options: [
             {
                 name: 'User',
                 value: searchUser.id ?? commanduser.id
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
-
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -105,7 +97,7 @@ export function checkperms(input: extypes.commandInput) {
     }
 
 
-    const embed = new Discord.EmbedBuilder()
+    const embed = new Discord.EmbedBuilder();
     try {
         const userAsMember = input.obj.guild.members.cache.get(searchUser.id);
         //get perms
@@ -114,12 +106,12 @@ export function checkperms(input: extypes.commandInput) {
         embed
             .setTitle(`${searchUser.username}'s Permissions`)
             .setDescription(`**${perms}**`)
-            .setColor(colours.embedColour.admin.dec)
+            .setColor(colours.embedColour.admin.dec);
 
     } catch (err) {
         embed.setTitle('Error')
             .setDescription('An error occured while trying to get the permissions of the user.')
-            .setColor(colours.embedColour.admin.dec)
+            .setColor(colours.embedColour.admin.dec);
 
     }
 
@@ -134,7 +126,7 @@ export function checkperms(input: extypes.commandInput) {
         args: {
             embeds: [embed],
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -144,7 +136,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -182,27 +174,20 @@ export function crash(input: extypes.commandInput) {
 
 
     //==============================================================================================================================================================================================
-    log.logFile(
-        'command',
-        log.commandLog('crash', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'crash',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    console.log('executed crash command')
-    process.exit(1)
+    console.log('executed crash command');
+    process.exit(1);
 }
 
 export function getUser(input: extypes.commandInput) {
@@ -217,11 +202,11 @@ export function getUser(input: extypes.commandInput) {
             id = input.args[0];
             if (input.obj.mentions.users.size > 0) {
 
-                id = input.obj.mentions.users.first().id
+                id = input.obj.mentions.users.first().id;
             }
 
             if (isNaN(id) && !(input.obj.mentions.users.size > 0)) {
-                id = commanduser.id
+                id = commanduser.id;
             }
         }
             break;
@@ -247,28 +232,20 @@ export function getUser(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('find', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'get user',
+        options: [
             {
                 name: 'Id',
                 value: id
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
-
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -282,7 +259,7 @@ export function getUser(input: extypes.commandInput) {
     let userfind;
     input.client.guilds.cache.forEach(guild => {
         if (guild.members.cache.has(id)) {
-            userfind = guild.members.cache.get(id)//.user.tag
+            userfind = guild.members.cache.get(id);//.user.tag
             let up = 'null or offline status';
             if (userfind.presence) {
                 up = '';
@@ -293,35 +270,35 @@ export function getUser(input: extypes.commandInput) {
                                                     ${userfind.presence.activities.length > 0 ? 'Activity Type: [' + userfind.presence.activities[i].type + '](https://discord.com/developers/docs/topics/gateway#activity-object-activity-types)': ''}
                                                     \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
                                                     ` */
-                    let t
+                    let t;
                     switch (userfind.presence.activities[i].type) {
                         case 0:
-                            t = 'Playing'
+                            t = 'Playing';
                             break;
                         case 1:
-                            t = 'Streaming'
+                            t = 'Streaming';
                             break;
                         case 2:
-                            t = 'Listening'
+                            t = 'Listening';
                             break;
                         case 3:
-                            t = 'Watching'
+                            t = 'Watching';
                             break;
                         case 4:
-                            t = 'Custom Status'
+                            t = 'Custom Status';
                             break;
                         case 5:
-                            t = 'Competing in'
+                            t = 'Competing in';
                             break;
                         default:
-                            t = 'Unknown Activity Type'
+                            t = 'Unknown Activity Type';
                             break;
 
                     }
                     up += `
                     ${t} ${userfind.presence.activities.length > 0 && t != 'Custom Status' ? `\`${userfind.presence.activities[i].name}\`` : ''}
                     \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
-                    `
+                    `;
                 }
             }
 
@@ -336,7 +313,7 @@ export function getUser(input: extypes.commandInput) {
                     `);
             return;
         }
-    })
+    });
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -347,7 +324,7 @@ export function getUser(input: extypes.commandInput) {
         args: {
             embeds: [Embedr]
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -357,7 +334,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -374,11 +351,11 @@ export function getUserAv(input: extypes.commandInput) {
 
             if (input.obj.mentions.users.size > 0) {
 
-                id = input.obj.mentions.users.first().id
+                id = input.obj.mentions.users.first().id;
             }
 
             if (isNaN(id) && !(input.obj.mentions.users.size > 0)) {
-                id = commanduser.id
+                id = commanduser.id;
             }
         }
             break;
@@ -404,28 +381,20 @@ export function getUserAv(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('find', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'get user avatar',
+        options: [
             {
                 name: 'Id',
                 value: id
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
-
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -438,13 +407,13 @@ export function getUserAv(input: extypes.commandInput) {
     let userfind;
     input.client.guilds.cache.forEach(guild => {
         if (guild.members.cache.has(id)) {
-            userfind = guild.members.cache.get(id)//.user.tag
+            userfind = guild.members.cache.get(id);//.user.tag
             Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`)
                 .setImage(`${userfind.user.avatarURL()}?size=512`)
-                .setDescription('_')
+                .setDescription('_');
             return;
         }
-    })
+    });
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -455,7 +424,7 @@ export function getUserAv(input: extypes.commandInput) {
         args: {
             embeds: [Embedr]
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -465,7 +434,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -480,27 +449,27 @@ export async function debug(input: extypes.commandInput) {
     let type: debugtype;
     let inputstr;
     let failed = false;
-    let errorstr = 'Error: null'
+    let errorstr = 'Error: null';
     if (inputstr == 1) {
-        type = inputstr
+        type = inputstr;
     }
 
     let usemsgArgs: any = {
         content: 'null'
-    }
+    };
 
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             if (!input.args[0]) {
-                failed = true
-                errorstr = 'Error: missing first argument (type)'
+                failed = true;
+                errorstr = 'Error: missing first argument (type)';
             }
             type = input.args?.[0] as debugtype;
 
-            input.args.shift()
-            inputstr = input.args?.join(' ')
+            input.args.shift();
+            inputstr = input.args?.join(' ');
         }
             break;
         //==============================================================================================================================================================================================
@@ -521,20 +490,24 @@ export async function debug(input: extypes.commandInput) {
 
     }
     //==============================================================================================================================================================================================
-    log.logFile(
-        'command',
-        log.commandLog('debug', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'debug',
+        options: [
+            {
+                name: 'Type',
+                value: type
+            },
+            {
+                name: 'Input String',
+                value: inputstr
+            },
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -545,35 +518,35 @@ export async function debug(input: extypes.commandInput) {
             args: {
                 content: errorstr
             }
-        })
+        });
         return;
     }
 
     switch (type) {
         //return api files for []
         case 'commandfile': {
-            let cmdidcur = '0'
+            let cmdidcur = '0';
             if (!inputstr || isNaN(+inputstr)) {
-                cmdidcur = fs.readFileSync('id.txt', 'utf-8')
+                cmdidcur = fs.readFileSync('id.txt', 'utf-8');
             } else {
-                cmdidcur = inputstr
+                cmdidcur = inputstr;
             }
-            const files = fs.readdirSync('cache/commandData/')
+            const files = fs.readdirSync('cache/commandData/');
             if (files.length < 1) {
                 usemsgArgs = {
                     content: 'Cache folder is currently empty'
-                }
+                };
             } else {
-                const searchfiles = files.filter(x => `${x}`.includes(`${cmdidcur}`))
+                const searchfiles = files.filter(x => `${x}`.includes(`${cmdidcur}`));
                 if (searchfiles.length < 1) {
                     usemsgArgs = {
                         content: `No files found with the id ${cmdidcur}`
-                    }
+                    };
                 } else {
                     usemsgArgs = {
                         content: `Files found matching ${cmdidcur}: `,
                         files: searchfiles.map(x => './cache/commandData/' + x)
-                    }
+                    };
                 }
             }
         }
@@ -582,23 +555,23 @@ export async function debug(input: extypes.commandInput) {
         case 'servers': {
             {
                 const servers = ((input.client.guilds.cache.map((guild) => {
-             return `
+                    return `
 ----------------------------------------------------
 Name:     ${guild.name}
 ID:       ${guild.id}
 Owner ID: ${guild.ownerId}
 ----------------------------------------------------
-`
-}
+`;
+                }
                 )))
-                    .join('\n')
-                    console.log(servers)
-                fs.writeFileSync('files/servers.txt', servers, 'utf-8')
+                    .join('\n');
+                console.log(servers);
+                fs.writeFileSync('files/servers.txt', servers, 'utf-8');
             }
             usemsgArgs = {
                 content: 'All servers connected to the client',
                 files: ['files/servers.txt']
-            }
+            };
 
         }
             break;
@@ -606,15 +579,15 @@ Owner ID: ${guild.ownerId}
         case 'channels': {
             let serverId: string;
             if (!inputstr || isNaN(+inputstr)) {
-                serverId = input.obj.guildId
+                serverId = input.obj.guildId;
             } else {
-                serverId = inputstr
+                serverId = inputstr;
             }
-            const curServer = input.client.guilds.cache.get(serverId)
+            const curServer = input.client.guilds.cache.get(serverId);
             if (!curServer) {
                 usemsgArgs = {
                     content: `Server ${serverId} not found - does not exist or bot is not in the guild`
-                }
+                };
             } else {
                 const channels = curServer.channels.cache.map(channel =>
                     `
@@ -627,13 +600,13 @@ Parent ID: ${channel.parentId}
 Created:   ${channel.createdAt}
 ----------------------------------------------------
 `
-                ).join('\n')
-                fs.writeFileSync(`files/channels${serverId}.txt`, channels, 'utf-8')
+                ).join('\n');
+                fs.writeFileSync(`files/channels${serverId}.txt`, channels, 'utf-8');
 
                 usemsgArgs = {
                     content: `Channels in guild ${serverId}`,
                     files: [`files/channels${serverId}.txt`]
-                }
+                };
             }
 
         }
@@ -642,15 +615,15 @@ Created:   ${channel.createdAt}
         case 'users': {
             let serverId: string;
             if (!inputstr || isNaN(+inputstr)) {
-                serverId = input.obj.guildId
+                serverId = input.obj.guildId;
             } else {
-                serverId = inputstr
+                serverId = inputstr;
             }
-            const curServer = input.client.guilds.cache.get(serverId)
+            const curServer = input.client.guilds.cache.get(serverId);
             if (!curServer) {
                 usemsgArgs = {
                     content: `Server ${serverId} not found - does not exist or bot is not in the guild`
-                }
+                };
             } else {
                 const users = curServer.members.cache.map(member =>
                     `
@@ -667,57 +640,57 @@ Joined:         ${member.joinedAt}
 Joined(EPOCH):  ${member.joinedTimestamp}
 ----------------------------------------------------
 `
-                ).join('\n')
-                fs.writeFileSync(`files/users${serverId}.txt`, users, 'utf-8')
+                ).join('\n');
+                fs.writeFileSync(`files/users${serverId}.txt`, users, 'utf-8');
 
                 usemsgArgs = {
                     content: `Users in guild ${serverId}`,
                     files: [`files/users${serverId}.txt`]
-                }
+                };
             }
         }
             break;
         //force osutrack to update
         case 'forcetrack': {
-            trackfunc.trackUsers(input.trackDb, input.client, input.guildSettings)
+            trackfunc.trackUsers(input.trackDb, input.client, input.guildSettings);
             usemsgArgs = {
                 content: `Running osu!track...`
-            }
+            };
         }
             break;
         //get id of current cmd
         case 'curcmdid': {
-            const cmdidcur = fs.readFileSync('id.txt', 'utf-8')
+            const cmdidcur = fs.readFileSync('id.txt', 'utf-8');
             usemsgArgs = {
                 content: 'Last command\'s ID is ' + cmdidcur
-            }
+            };
         }
             break;
         //returns command logs for server
         case 'logs': {
             let serverId: string;
             if (!inputstr || isNaN(+inputstr)) {
-                serverId = input.obj.guildId
+                serverId = input.obj.guildId;
             } else {
-                serverId = inputstr
+                serverId = inputstr;
             }
-            const curServer = fs.existsSync(`logs/cmd/commands${serverId}.log`)
+            const curServer = fs.existsSync(`logs/cmd/commands${serverId}.log`);
             if (!curServer) {
                 usemsgArgs = {
                     content: `Server ${serverId} not found - does not exist or bot is not in the guild`
-                }
+                };
             } else {
                 usemsgArgs = {
                     content: `Logs for ${serverId}`,
                     files: [`logs/cmd/commands${serverId}.log`]
-                }
+                };
             }
         }
             break;
         default: {
             usemsgArgs = {
                 content: 'Invalid type. Valid types are: \`commandfile\`,\`servers\`,\`channels\`,\`users\`,\`forcetrack\`,\`curcmdid\`,\`logs\`'
-            }
+            };
         }
     }
 
@@ -726,7 +699,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
         commandType: input.commandType,
         obj: input.obj,
         args: usemsgArgs
-    })
+    });
 
     log.logFile('command',
         `
@@ -736,7 +709,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 }
 
 /**
@@ -761,15 +734,15 @@ export function find(input: extypes.commandInput) {
             }
             if (input.obj.mentions.channels.size > 0) {
                 type = 'channel';
-                id = input.obj.mentions.channels.first().id
+                id = input.obj.mentions.channels.first().id;
             }
             if (input.obj.mentions.roles.size > 0) {
                 type = 'role';
-                id = input.obj.mentions.roles.first().id
+                id = input.obj.mentions.roles.first().id;
             }
             if (input.obj.content.includes('<:') && !isNaN(+input.obj.content.split('<:')[1].split('>')[0].split(':')[1])) {
                 type = 'emoji';
-                id = input.obj.content.split('<:')[1].split('>')[0].split(':')[1]
+                id = input.obj.content.split('<:')[1].split('>')[0].split(':')[1];
             }
             if (isNaN(id) && (!(input.obj.mentions.users.size > 0 && type == 'user') || !(input.obj.mentions.channels.size > 0 && type == 'channel') || !(input.obj.mentions.roles.size == 1 && type == 'roles'))) {
 
@@ -802,18 +775,14 @@ export function find(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('find', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'find',
+        options: [
             {
                 name: 'Type',
                 value: type
@@ -822,12 +791,8 @@ export function find(input: extypes.commandInput) {
                 name: 'Id',
                 value: id
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
-
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -844,7 +809,7 @@ export function find(input: extypes.commandInput) {
                 let userfind;
                 input.client.guilds.cache.forEach(guild => {
                     if (guild.members.cache.has(id)) {
-                        userfind = guild.members.cache.get(id)//.user.tag
+                        userfind = guild.members.cache.get(id);//.user.tag
                         let up = 'null or offline status';
                         if (userfind.presence) {
                             up = '';
@@ -855,39 +820,39 @@ export function find(input: extypes.commandInput) {
                                                                 ${userfind.presence.activities.length > 0 ? 'Activity Type: [' + userfind.presence.activities[i].type + '](https://discord.com/developers/docs/topics/gateway#activity-object-activity-types)': ''}
                                                                 \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
                                                                 ` */
-                                let t
+                                let t;
                                 switch (userfind.presence.activities[i].type) {
                                     case 0:
-                                        t = 'Playing'
+                                        t = 'Playing';
                                         break;
                                     case 1:
-                                        t = 'Streaming'
+                                        t = 'Streaming';
                                         break;
                                     case 2:
-                                        t = 'Listening'
+                                        t = 'Listening';
                                         break;
                                     case 3:
-                                        t = 'Watching'
+                                        t = 'Watching';
                                         break;
                                     case 4:
-                                        t = 'Custom Status'
+                                        t = 'Custom Status';
                                         break;
                                     case 5:
-                                        t = 'Competing in'
+                                        t = 'Competing in';
                                         break;
                                     default:
-                                        t = 'Unknown Activity Type'
+                                        t = 'Unknown Activity Type';
                                         break;
 
                                 }
                                 up += `
                     ${t} ${userfind.presence.activities.length > 0 && t != 'Custom Status' ? `\`${userfind.presence.activities[i].name}\`` : ''}
                     \`${userfind.presence.activities.length > 0 ? userfind.presence.activities[i].state : ''}\`
-                    `
+                    `;
                             }
                         }
 
-                        Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`)
+                        Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`);
                         Embedr.setThumbnail(`${userfind.user.avatarURL()}`);
                         Embedr.setDescription(
                             `ID: ${userfind.user.id}
@@ -898,18 +863,18 @@ export function find(input: extypes.commandInput) {
                     `);
                         return;
                     }
-                })
+                });
             }
             break;
         case 'guild':
             {
                 if (!(cmdchecks.isOwner(commanduser.id) || (id == input.obj.guildId && cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)))) {
-                    Embedr.setDescription('You don\'t have permissions to use this command')
+                    Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
                     let guildfind;
                     input.client.guilds.cache.forEach(guild => {
                         if (guild.id == id) {
-                            guildfind = guild
+                            guildfind = guild;
                             Embedr.setTitle(`${guildfind.name}`);
                             if (guildfind.iconURL()) {
                                 Embedr.setThumbnail(`${guildfind.iconURL()}`);
@@ -923,22 +888,22 @@ export function find(input: extypes.commandInput) {
                 Total user count: ${guildfind.members.cache.size}
                 Total channel count: ${guildfind.channels.cache.size}
                 Creation date: ${guildfind.createdAt}
-                `)
+                `);
                             return;
                         }
-                    })
+                    });
                 }
             }
             break;
         case 'channel':
             {
                 if (!(cmdchecks.isOwner(commanduser.id) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client))) {
-                    Embedr.setDescription('You don\'t have permissions to use this command')
+                    Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
                     let channelfind;
                     input.client.guilds.cache.forEach(guild => {
                         if (guild.channels.cache.has(id)) {
-                            channelfind = guild.channels.cache.get(id)
+                            channelfind = guild.channels.cache.get(id);
                             Embedr.setTitle(`Channel: #${channelfind.name}`);
                             if (guild.iconURL()) {
                                 Embedr.setThumbnail(`${guild.iconURL()}`);
@@ -949,22 +914,22 @@ export function find(input: extypes.commandInput) {
                 [Type: ${channelfind.type}](https://discord-api-types.dev/api/discord-api-types-v10/enum/ChannelType)
                 Parent: ${channelfind.parent ? channelfind.parent.name : 'No parent'} ${channelfind.parent ? '| ' + channelfind.parent.id + ' | Type ' + channelfind.parent.type : ''}
                 Guild: ${guild.name} | ${guild.id}
-                `)
+                `);
                             return;
                         }
-                    })
+                    });
                 }
             }
             break;
         case 'role':
             {
                 if (!(cmdchecks.isOwner(commanduser.id) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client))) {
-                    Embedr.setDescription('You don\'t have permissions to use this command')
+                    Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
                     let rolefind;
                     input.client.guilds.cache.forEach(guild => {
                         if (guild.roles.cache.has(id)) {
-                            rolefind = guild.roles.cache.get(id)
+                            rolefind = guild.roles.cache.get(id);
                             Embedr.setTitle(`Role: ${rolefind.name}`);
                             if (guild.iconURL()) {
                                 Embedr.setThumbnail(`${guild.iconURL()}`);
@@ -974,11 +939,11 @@ export function find(input: extypes.commandInput) {
                 Colour: [${rolefind.color ? rolefind.color : 'null'}](https://discord.js.org/#/docs/discord.js/main/class/Role?scrollTo=color)
                 Emoji: ${rolefind.unicodeEmoji ? rolefind.unicodeEmoji : 'null'}
                 Guild: ${guild.name} | ${guild.id}
-                `)
+                `);
                             Embedr.setColor(rolefind.color);
                             return;
                         }
-                    })
+                    });
                 }
             }
             break;
@@ -986,7 +951,7 @@ export function find(input: extypes.commandInput) {
             let emojifind;
             input.client.guilds.cache.forEach(guild => {
                 if (guild.emojis.cache.has(id)) {
-                    emojifind = guild.emojis.cache.get(id)
+                    emojifind = guild.emojis.cache.get(id);
                     Embedr.setTitle(`Emoji: ${emojifind.name}`);
                     if (emojifind.url) {
                         Embedr.setThumbnail(`${emojifind.url}`);
@@ -995,17 +960,17 @@ export function find(input: extypes.commandInput) {
                 ID: ${emojifind.id}
                 Emoji: \`<:${guild.emojis.cache.get(id).name}:${id}>\`
                 Guild: ${guild.name} | ${guild.id}
-                `)
+                `);
                     return;
                 }
-            })
+            });
         }
             break;
         default:
-            Embedr.setTitle('Invalid search parameters')
+            Embedr.setTitle('Invalid search parameters');
             Embedr.setDescription(`
         Valid Types: user, guild, channel, role, emoji
-        `)
+        `);
             break;
     }
 
@@ -1017,7 +982,7 @@ export function find(input: extypes.commandInput) {
         args: {
             embeds: [Embedr]
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -1027,7 +992,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -1068,27 +1033,20 @@ export function leaveguild(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('leaveguild', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'leave guild',
+        options: [
             {
                 name: 'Guild Id',
                 value: guildId
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
     if (cmdchecks.isOwner(commanduser.id)) {
@@ -1114,7 +1072,7 @@ export function leaveguild(input: extypes.commandInput) {
         args: {
             content: 'You don\'t have permissions to use this command'
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -1124,7 +1082,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -1165,24 +1123,20 @@ export async function prefix(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('prefix', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [{
-            name: 'Prefix',
-            value: newPrefix
-        }]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'prefix',
+        options: [
+            {
+                name: 'Prefix',
+                value: newPrefix
+            }
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -1192,13 +1146,13 @@ export async function prefix(input: extypes.commandInput) {
         replymsg = 'Error: Guild settings not found';
     } else {
         if (typeof newPrefix != 'string' || newPrefix.length < 1 || !(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id))) {
-            replymsg = `The current prefix is \`${curGuildSettings.prefix}\``
+            replymsg = `The current prefix is \`${curGuildSettings.prefix}\``;
         } else {
             curGuildSettings.update({
                 prefix: newPrefix
             }, {
                 where: { guildid: input.obj.guildId }
-            })
+            });
             replymsg = `Prefix set to \`${newPrefix}\``;
         }
     }
@@ -1211,7 +1165,7 @@ export async function prefix(input: extypes.commandInput) {
         args: {
             content: replymsg
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -1221,7 +1175,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -1259,65 +1213,36 @@ export function servers(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-servers-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('⬅')
-            /* .setLabel('Start') */,
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-servers-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('◀'),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-servers-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('▶')
-            /* .setLabel('Next') */,
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-servers-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('➡')
-            /* .setLabel('End') */,
-        );
-
-    log.logFile(
-        'command',
-        log.commandLog('servers', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    fs.appendFileSync(`logs/cmd/commands${input.obj.guildId}.log`,
-        log.optsLog(
-            input.absoluteID,
-            []
-        ), 'utf-8')
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'servers',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const servers = (input.client.guilds.cache.map(guild => ` **${guild.name}** => \`${guild.id}\` | <@${guild.ownerId}> \`||\``)).join('')
+    const servers = (input.client.guilds.cache.map(guild => ` **${guild.name}** => \`${guild.id}\` | <@${guild.ownerId}> \`||\``)).join('');
     const embed = new Discord.EmbedBuilder()
         .setTitle('Guilds')
-        .setDescription(`${servers}`)
+        .setDescription(`${servers}`);
 
 
     let rw: {
         content?: string,
         embeds?: Discord.EmbedBuilder[],
-        files?: string[]
+        files?: string[];
     } = {
         embeds: [embed],
-    }
+    };
     if (servers.length > 2000) {
-        fs.writeFileSync('debug/guilds.txt', servers, 'utf-8')
+        fs.writeFileSync('debug/guilds.txt', servers, 'utf-8');
         rw = {
             files: ['./debug/guilds.txt'],
-        }
+        };
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -1326,7 +1251,7 @@ export function servers(input: extypes.commandInput) {
         commandType: input.commandType,
         obj: input.obj,
         args: rw
-    })
+    });
 
     fs.appendFileSync(`logs/cmd/commands${input.obj.guildId}.log`,
         `
@@ -1334,6 +1259,6 @@ export function servers(input: extypes.commandInput) {
 success
 ID: ${input.absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`, 'utf-8');
 
 }

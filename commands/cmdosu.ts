@@ -49,7 +49,7 @@ export async function bws(input: extypes.commandInput) {
 
             user = input.args.join(' ');
             if (!input.args[0] || input.args[0].includes(searchid)) {
-                user = null
+                user = null;
             }
         }
             break;
@@ -73,23 +73,16 @@ export async function bws(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('bws', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [{
-            name: 'User',
-            value: user
-        }]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'bws (Badge Weight System)',
+        options: []
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     //if user is null, use searchid
@@ -108,7 +101,7 @@ export async function bws(input: extypes.commandInput) {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-        }).catch()
+        }).catch();
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -117,7 +110,7 @@ export async function bws(input: extypes.commandInput) {
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator('osu'))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -125,7 +118,7 @@ export async function bws(input: extypes.commandInput) {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator('osu')
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
@@ -139,14 +132,14 @@ export async function bws(input: extypes.commandInput) {
                     (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
-                    })
+                    });
                 }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                })
+                });
             }
         }
         log.logFile('command',
@@ -158,18 +151,18 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
     let badgecount = 0;
     for (const badge of osudata.badges) {
-        badgecount++
+        badgecount++;
     }
     function bwsF(badgenum: number) {
         return badgenum > 0 ?
             osudata.statistics.global_rank ** (0.9937 ** (badgenum ** 2)) :
-            osudata.statistics.global_rank
+            osudata.statistics.global_rank;
 
     }
 
@@ -200,7 +193,7 @@ Could not find user
                 value: `${Math.floor(bwsF(badgecount + 2))}`,
                 inline: true
             },
-        ])
+        ]);
     //\nFormula: rank^(0.9937^badges^2)
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage({
@@ -209,7 +202,7 @@ Could not find user
         args: {
             embeds: [embed]
         }
-    })
+    });
     log.logFile('command',
         `
 ----------------------------------------------------
@@ -218,7 +211,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 }
 
 /**
@@ -243,9 +236,9 @@ export async function globals(input: extypes.commandInput) {
 
             user = input.args.join(' ');
             if (!input.args[0] || input.args[0].includes(searchid)) {
-                user = null
+                user = null;
             }
-            page = 0
+            page = 0;
         }
             break;
 
@@ -268,8 +261,8 @@ export async function globals(input: extypes.commandInput) {
             }
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
-            user = input.obj.message.embeds[0].title.split('for ')[1]
-            mode = cmdchecks.toAlphaNum(input.obj.message.embeds[0].description.split('\n')[1])
+            user = input.obj.message.embeds[0].title.split('for ')[1];
+            mode = cmdchecks.toAlphaNum(input.obj.message.embeds[0].description.split('\n')[1]);
             page = 0;
 
         }
@@ -277,24 +270,20 @@ export async function globals(input: extypes.commandInput) {
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = input.overrides.page
+            page = input.overrides.page;
         }
     }
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('firsts', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'globals',
+        options: [
             {
                 name: 'User',
                 value: user
@@ -306,18 +295,15 @@ export async function globals(input: extypes.commandInput) {
             {
                 name: 'Mode',
                 value: mode
-            },
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+            }
+        ]
+    });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     //if user is null, use searchid
     if (user == null) {
@@ -340,7 +326,7 @@ export async function globals(input: extypes.commandInput) {
             username: cmdchecks.toHexadecimal(user),
             mode: 'osu'
         }
-    })
+    });
     const osudata: osuApiTypes.User = osudataReq.apiData;
     osufunc.debug(osudataReq, 'command', 'globals', input.obj.guildId, 'osuData');
     if (osudata?.error) {
@@ -348,7 +334,7 @@ export async function globals(input: extypes.commandInput) {
             content: `User not found`,
             allowedMentions: { repliedUser: false },
             failIfNotExists: false,
-        }).catch()
+        }).catch();
         log.logFile('command',
             `
 ----------------------------------------------------
@@ -358,7 +344,7 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
@@ -372,7 +358,7 @@ Could not find user
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-        }).catch()
+        }).catch();
     }
 
     const scorecount = osudata?.scores_first_count ?? 0;
@@ -380,9 +366,9 @@ Could not find user
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            osufunc.logCall(error)
+            osufunc.logCall(error);
         }
     }
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -392,7 +378,7 @@ Could not find user
         args: {
             content: `${user} has ${scorecount} #1 scores`
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -402,7 +388,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -423,16 +409,16 @@ export async function lb(input: extypes.commandInput) {
             commanduser = input.obj.author;
             const gamemode = input.args[0];
             if (!input.args[0] || gamemode == 'osu' || gamemode == 'o' || gamemode == '0' || gamemode == 'standard' || gamemode == 'std') {
-                mode = 'osu'
+                mode = 'osu';
             }
             if (gamemode == 'taiko' || gamemode == 't' || gamemode == '1' || gamemode == 'drums') {
-                mode = 'taiko'
+                mode = 'taiko';
             }
             if (gamemode == 'fruits' || gamemode == 'c' || gamemode == '2' || gamemode == 'catch' || gamemode == 'ctb') {
-                mode = 'fruits'
+                mode = 'fruits';
             }
             if (gamemode == 'mania' || gamemode == 'm' || gamemode == '3' || gamemode == 'piano') {
-                mode = 'mania'
+                mode = 'mania';
             }
             input.args = cleanArgs(input.args);
         }
@@ -445,16 +431,16 @@ export async function lb(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
             const gamemode = input.obj.options.getString('mode');
             if (!gamemode || gamemode == 'osu' || gamemode == 'o' || gamemode == '0' || gamemode == 'standard' || gamemode == 'std') {
-                mode = 'osu'
+                mode = 'osu';
             }
             if (gamemode == 'taiko' || gamemode == 't' || gamemode == '1' || gamemode == 'drums') {
-                mode = 'taiko'
+                mode = 'taiko';
             }
             if (gamemode == 'fruits' || gamemode == 'c' || gamemode == '2' || gamemode == 'catch' || gamemode == 'ctb') {
-                mode = 'fruits'
+                mode = 'fruits';
             }
             if (gamemode == 'mania' || gamemode == 'm' || gamemode == '3' || gamemode == 'piano') {
-                mode = 'mania'
+                mode = 'mania';
             }
         }
 
@@ -500,18 +486,14 @@ export async function lb(input: extypes.commandInput) {
                 .setEmoji(buttonsthing.label.page.last),
         );
 
-    log.logFile(
-        'command',
-        log.commandLog('lb', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'lb (Server Leaderboard)',
+        options: [
             {
                 name: 'Page',
                 value: page
@@ -520,21 +502,19 @@ export async function lb(input: extypes.commandInput) {
                 name: 'Mode',
                 value: mode
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number') {
         page = 1;
     }
-    page--
+    page--;
 
     const serverlb = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.userlist.dec)
-        .setTitle(`server leaderboard for ${guild.name}`)
+        .setTitle(`server leaderboard for ${guild.name}`);
     const userids = await input.userdata.findAll();
     const useridsarraylen = await input.userdata.count();
     let rtxt = `\n`;
@@ -544,7 +524,7 @@ export async function lb(input: extypes.commandInput) {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-        }).catch()
+        }).catch();
     }
 
 
@@ -561,21 +541,21 @@ export async function lb(input: extypes.commandInput) {
                         case 'osu':
                         default:
                             {
-                                acc = user.osuacc
+                                acc = user.osuacc;
                                 if (isNaN(acc) || acc == null) {
-                                    acc = 'null '
+                                    acc = 'null ';
                                 } else {
-                                    acc = user.osuacc.toFixed(2)
+                                    acc = user.osuacc.toFixed(2);
                                 }
-                                pp = user.osupp
+                                pp = user.osupp;
                                 if (isNaN(pp) || pp == null) {
-                                    pp = 'null '
+                                    pp = 'null ';
                                 } else {
-                                    pp = Math.floor(user.osupp)
+                                    pp = Math.floor(user.osupp);
                                 }
                                 rank = user.osurank;
                                 if (isNaN(rank) || rank == null) {
-                                    rank = 'null '
+                                    rank = 'null ';
                                 }
                                 rarr.push(
                                     {
@@ -590,22 +570,22 @@ export async function lb(input: extypes.commandInput) {
                                         pp:
                                             (pp.toString() + 'pp').padEnd(9 - 2, ' '),
                                     }
-                                )
+                                );
                             }
                             break;
                         case 'taiko':
                             {
-                                acc = user.taikoacc
+                                acc = user.taikoacc;
                                 if (isNaN(acc) || acc == null) {
-                                    acc = 'null '
+                                    acc = 'null ';
                                 }
-                                pp = user.taikopp
+                                pp = user.taikopp;
                                 if (isNaN(pp) || pp == null) {
-                                    pp = 'null '
+                                    pp = 'null ';
                                 }
                                 rank = user.taikorank;
                                 if (isNaN(rank) || rank == null) {
-                                    rank = 'null '
+                                    rank = 'null ';
                                 }
                                 rarr.push(
                                     {
@@ -620,26 +600,26 @@ export async function lb(input: extypes.commandInput) {
                                         pp:
                                             (pp.toString() + 'pp').padEnd(9 - 2, ' '),
                                     }
-                                )
+                                );
                             }
                             break;
                         case 'fruits':
                             {
-                                acc = user.fruitsacc
+                                acc = user.fruitsacc;
                                 if (isNaN(acc) || acc == null) {
-                                    acc = 'null '
+                                    acc = 'null ';
                                 } else {
-                                    acc = user.fruitsacc.toFixed(2)
+                                    acc = user.fruitsacc.toFixed(2);
                                 }
-                                pp = user.fruitspp
+                                pp = user.fruitspp;
                                 if (isNaN(pp) || pp == null) {
-                                    pp = 'null '
+                                    pp = 'null ';
                                 } else {
-                                    pp = Math.floor(user.fruitspp)
+                                    pp = Math.floor(user.fruitspp);
                                 }
                                 rank = user.fruitsrank;
                                 if (isNaN(rank) || rank == null) {
-                                    rank = 'null '
+                                    rank = 'null ';
                                 }
                                 rarr.push(
                                     {
@@ -654,26 +634,26 @@ export async function lb(input: extypes.commandInput) {
                                         pp:
                                             (pp.toString() + 'pp').padEnd(9 - 2, ' '),
                                     }
-                                )
+                                );
                             }
                             break;
                         case 'mania':
                             {
-                                acc = user.maniaacc
+                                acc = user.maniaacc;
                                 if (isNaN(acc) || acc == null) {
-                                    acc = 'null '
+                                    acc = 'null ';
                                 } else {
-                                    acc = user.maniaacc.toFixed(2)
+                                    acc = user.maniaacc.toFixed(2);
                                 }
-                                pp = user.maniapp
+                                pp = user.maniapp;
                                 if (isNaN(pp) || pp == null) {
-                                    pp = 'null '
+                                    pp = 'null ';
                                 } else {
-                                    pp = Math.floor(user.maniapp)
+                                    pp = Math.floor(user.maniapp);
                                 }
                                 rank = user.maniarank;
                                 if (isNaN(rank) || rank == null) {
-                                    rank = 'null '
+                                    rank = 'null ';
                                 }
                                 rarr.push(
                                     {
@@ -688,27 +668,27 @@ export async function lb(input: extypes.commandInput) {
                                         pp:
                                             (pp.toString() + 'pp').padEnd(9 - 2, ' '),
                                     }
-                                )
+                                );
                             }
                             break;
                     }
                 }
 
             }
-        })
+        });
 
     }
 
     // let iterator = 0;
 
-    const another = rarr.slice().sort((b, a) => b.rank - a.rank) //for some reason this doesn't sort even tho it does in testing
-    rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `
+    const another = rarr.slice().sort((b, a) => b.rank - a.rank); //for some reason this doesn't sort even tho it does in testing
+    rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `;
     for (let i = 0; i < rarr.length && i < 10; i++) {
         if (!another[i]) break;
-        rtxt += `\n#${i + 1 + ')'.padEnd(5, ' ')} ${another[i].discname}   ${another[i].osuname}   ${another[i].rank.toString().padEnd(10 - 2, ' ').substring(0, 8)}   ${another[i].acc}%   ${another[i].pp}  `
+        rtxt += `\n#${i + 1 + ')'.padEnd(5, ' ')} ${another[i].discname}   ${another[i].osuname}   ${another[i].rank.toString().padEnd(10 - 2, ' ').substring(0, 8)}   ${another[i].acc}%   ${another[i].pp}  `;
     }
 
-    rtxt += `\n\``
+    rtxt += `\n\``;
     serverlb.setDescription(rtxt);
     serverlb.setFooter({ text: mode + ` | Page 1/${Math.ceil(rarr.length / 10)}` });
     const endofcommand = new Date().getTime();
@@ -733,7 +713,7 @@ export async function lb(input: extypes.commandInput) {
             components: [pgbuttons],
             edit: true
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -743,14 +723,14 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
 /**
  * global leaderboards
  */
-export async function ranking(input: extypes.commandInput & { statsCache: any }) {
+export async function ranking(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
     let country = 'ALL';
@@ -765,53 +745,53 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
             commanduser = input.obj.author;
             if (input.args.includes('-page')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
             if (input.args.includes('-f')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-f'))
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
             }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             if (input.args.includes('-m')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-m'))
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
             }
 
             input.args = cleanArgs(input.args);
@@ -836,23 +816,23 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
             input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
             const pageParsed =
-                parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0])
+                parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]);
             page = pageParsed;
             switch (input.button) {
                 case 'BigLeftArrow':
-                    page = 1
+                    page = 1;
                     break;
                 case 'LeftArrow':
-                    page = pageParsed - 1
+                    page = pageParsed - 1;
                     break;
                 case 'RightArrow':
-                    page = pageParsed + 1
+                    page = pageParsed + 1;
                     break;
                 case 'BigRightArrow':
-                    page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
+                    page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
                     break;
                 default:
-                    page = pageParsed
+                    page = pageParsed;
                     break;
             }
             let base: string = input.obj.message.embeds[0].title;
@@ -910,51 +890,47 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                 .setEmoji(buttonsthing.label.main.refresh),
         );
 
-    log.logFile(
-        'command',
-        log.commandLog('ranking', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'ranking',
+        options: [
             {
-                name: 'country',
+                name: 'Country',
                 value: country
             },
             {
-                name: 'mode',
+                name: 'Mode',
                 value: mode
             },
             {
-                name: 'type',
+                name: 'Type',
                 value: type
             },
             {
-                name: 'page',
-                value: `${page}`
+                name: 'Page',
+                value: page
             },
             {
-                name: 'spotlight',
-                value: `${spotlight}`
+                name: 'Spotlight',
+                value: spotlight
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     let url = `rankings/${mode}/${type}`;
     if (country != 'ALL') {
         if (type == 'performance') {
-            url += `?country=${country}`
+            url += `?country=${country}`;
         }
     }
     if (type == 'charts' && !isNaN(+spotlight)) {
@@ -967,7 +943,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
         !('error' in func.findFile(input.absoluteID, 'rankingdata')) &&
         input.button != 'Refresh'
     ) {
-        rankingdataReq = func.findFile(input.absoluteID, 'rankingdata')
+        rankingdataReq = func.findFile(input.absoluteID, 'rankingdata');
     } else {
         rankingdataReq = (await osufunc.apiget({
             type: 'custom',
@@ -984,7 +960,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                }).catch();
             } else {
                 (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                     content: 'Error',
@@ -992,12 +968,12 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                     files: [],
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                }).catch();
             }
             return;
         })) as osufunc.apiReturn;
     }
-    func.storeFile(rankingdataReq, input.absoluteID, 'rankingdata')
+    func.storeFile(rankingdataReq, input.absoluteID, 'rankingdata');
 
     const rankingdata: osuApiTypes.Rankings = rankingdataReq.apiData;
 
@@ -1008,14 +984,14 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                     (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: 'Error - could not fetch rankings',
                         allowedMentions: { repliedUser: false },
-                    }).catch()
-                }, 1000)
+                    }).catch();
+                }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: 'Error - could not fetch rankings',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                }).catch();
             }
         }
         log.logFile('command',
@@ -1027,13 +1003,13 @@ Could not fetch ranking data
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
 
     try {
-        osufunc.debug(rankingdataReq, 'command', 'ranking', input.obj.guildId, 'rankingData')
+        osufunc.debug(rankingdataReq, 'command', 'ranking', input.obj.guildId, 'rankingData');
     } catch (e) {
         return;
     }
@@ -1045,17 +1021,17 @@ Could not fetch ranking data
             files: [],
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
-        }).catch()
+        }).catch();
         return;
     }
 
     let ifchart = '';
     if (type == 'charts') {
-        ifchart = `[${rankingdata.spotlight.name}](https://osu.ppy.sh/rankings/${mode}/charts?spotlight=${rankingdata.spotlight.id})`
+        ifchart = `[${rankingdata.spotlight.name}](https://osu.ppy.sh/rankings/${mode}/charts?spotlight=${rankingdata.spotlight.id})`;
     }
 
     if (country == 'ALL' && input.button == null) {
-        osufunc.userStatsCache(rankingdata.ranking, input.statsCache, osufunc.modeValidator(mode))
+        osufunc.userStatsCache(rankingdata.ranking, input.statsCache, osufunc.modeValidator(mode));
     }
 
     const embed = new Discord.EmbedBuilder()
@@ -1072,7 +1048,7 @@ Could not fetch ranking data
         : '';
 
     if (page > Math.ceil(rankingdata.ranking.length / 5)) {
-        page = Math.ceil(rankingdata.ranking.length / 5)
+        page = Math.ceil(rankingdata.ranking.length / 5);
     }
 
     for (let i = 0; i < 5 && i + (page * 5) < rankingdata.ranking.length; i++) {
@@ -1095,7 +1071,7 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
                     inline: false
                 }
             ]
-        )
+        );
     }
     if (page + 1 >= Math.ceil(rankingdata.ranking.length / 5)) {
 
@@ -1118,7 +1094,7 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
             embeds: [embed],
             components: [pgbuttons, buttons]
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -1128,14 +1104,14 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
 /**
  * estimate rank from pp or vice versa
  */
-export async function rankpp(input: extypes.commandInput & { statsCache: any }) {
+export async function rankpp(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -1147,44 +1123,44 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
             input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
             if (input.args.includes('-f')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-f'))
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
             }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             if (input.args.includes('-m')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-m'))
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
             }
 
             input.args = cleanArgs(input.args);
@@ -1213,40 +1189,34 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
     }
     //==============================================================================================================================================================================================
 
-
-    log.logFile(
-        'command',
-        log.commandLog('rankpp', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'rank/pp',
+        options: [
             {
                 name: 'Type',
                 value: type
             },
             {
                 name: 'Value',
-                value: `${value}`
+                value: value
             },
             {
                 name: 'Mode',
-                value: `${mode}`
+                value: mode
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const Embed = new Discord.EmbedBuilder()
         .setTitle('null')
-        .setDescription('null')
+        .setDescription('null');
 
     let returnval: string | number;
 
@@ -1254,12 +1224,12 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
         case 'pp': {
             returnval = await osufunc.getRankPerformance('pp->rank', value, input.userdata, mode, input.statsCache);
             if (typeof returnval == 'number') {
-                returnval = 'approx. rank #' + func.separateNum(Math.ceil(returnval))
+                returnval = 'approx. rank #' + func.separateNum(Math.ceil(returnval));
             } else {
-                returnval = 'null'
+                returnval = 'null';
             }
             Embed
-                .setTitle(`Approximate rank for ${value}pp`)
+                .setTitle(`Approximate rank for ${value}pp`);
         }
             break;
         case 'rank': {
@@ -1267,18 +1237,18 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
             returnval = await osufunc.getRankPerformance('rank->pp', value, input.userdata, mode, input.statsCache);
 
             if (typeof returnval == 'number') {
-                returnval = 'approx. ' + func.separateNum(returnval) + 'pp'
+                returnval = 'approx. ' + func.separateNum(returnval) + 'pp';
             } else {
-                returnval = 'null'
+                returnval = 'null';
             }
 
             Embed
-                .setTitle(`Approximate performance for rank #${value}`)
+                .setTitle(`Approximate performance for rank #${value}`);
         }
             break;
     }
     Embed
-        .setDescription(`${returnval}\n${emojis.gamemodes[mode]}`)
+        .setDescription(`${returnval}\n${emojis.gamemodes[mode]}`);
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -1288,7 +1258,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any }) 
         args: {
             embeds: [Embed]
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -1298,7 +1268,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -1346,51 +1316,51 @@ export async function osu(input: extypes.commandInput) {
             }
 
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
             if (input.args.includes('-f')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-f'))
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
             }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             if (input.args.includes('-m')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-m'))
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
             }
 
             input.args = cleanArgs(input.args);
 
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
+                user = null;
             }
         }
             break;
@@ -1419,10 +1389,10 @@ export async function osu(input: extypes.commandInput) {
             searchid = commanduser.id;
 
             if (input.obj.message.embeds[0].fields[0]) {
-                detailed = true
+                detailed = true;
             }
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
+            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
+            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
 
             if (input.button == 'DetailEnable') {
                 detailed = true;
@@ -1432,14 +1402,14 @@ export async function osu(input: extypes.commandInput) {
             }
             if (input.button == 'Refresh') {
                 if (input.obj.message.embeds[0].fields[0]) {
-                    detailed = true
+                    detailed = true;
                 } else {
-                    detailed = false
+                    detailed = false;
                 }
             }
 
             if (!input.obj.message.embeds[0].title) {
-                graphonly = true
+                graphonly = true;
             }
         }
             break;
@@ -1448,16 +1418,16 @@ export async function osu(input: extypes.commandInput) {
 
             commanduser = input.obj.author;
 
-            const msgnohttp: string = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
+            const msgnohttp: string = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
 
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            user = msgnohttp.includes(' ') ? msgnohttp.split('/')[2].split(' ')[0] : msgnohttp.split('/')[2]
+            user = msgnohttp.includes(' ') ? msgnohttp.split('/')[2].split(' ')[0] : msgnohttp.split('/')[2];
             mode = msgnohttp.includes(' ') ?
                 msgnohttp.split('/')[3] ?
                     msgnohttp.split('/')[3] : null
                 :
                 msgnohttp.split('/')[3] ?
-                    msgnohttp.split('/')[3] : null
+                    msgnohttp.split('/')[3] : null;
             //u
         }
     }
@@ -1470,22 +1440,19 @@ export async function osu(input: extypes.commandInput) {
                 .setCustomId(`Refresh-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-        )
-
-    log.logFile(
-        'command',
-        log.commandLog('osu', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
+        );
 
     //OPTIONS==============================================================================================================================================================================================
 
-    log.logFile('command',
-        log.optsLog(
-            input.absoluteID,
-            [{
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'osu',
+        options: [
+            {
                 name: 'User',
                 value: user
             },
@@ -1505,11 +1472,9 @@ export async function osu(input: extypes.commandInput) {
                 name: 'Graph',
                 value: `${graphonly}`
             }
-            ]
-        ), {
-        guildId: `${input.obj.guildId}`
-    }
-    )
+
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -1519,14 +1484,14 @@ export async function osu(input: extypes.commandInput) {
                 .setCustomId(`DetailDisable-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed)
-        )
+        );
     } else {
         buttons.addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`DetailEnable-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed)
-        )
+        );
     }
 
     //if user is null, use searchid
@@ -1551,7 +1516,7 @@ export async function osu(input: extypes.commandInput) {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-        }).catch()
+        }).catch();
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -1560,7 +1525,7 @@ export async function osu(input: extypes.commandInput) {
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -1568,7 +1533,7 @@ export async function osu(input: extypes.commandInput) {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
             }
-        })
+        });
     }
 
     let osudata: osuApiTypes.User = osudataReq.apiData;
@@ -1582,7 +1547,7 @@ export async function osu(input: extypes.commandInput) {
                     (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
-                    })
+                    });
                 }, 1000);
             } else {
 
@@ -1590,7 +1555,7 @@ export async function osu(input: extypes.commandInput) {
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                })
+                });
             }
         }
         log.logFile('command',
@@ -1602,7 +1567,7 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
@@ -1614,28 +1579,28 @@ Could not find user
     ) &&
         osudata.playmode != 'osu' &&
         typeof mode != 'undefined') {
-        mode = osudata.playmode
+        mode = osudata.playmode;
         osudataReq = await osufunc.apiget({
             type: 'user',
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
             }
-        })
+        });
         osudata = osudataReq.apiData;
         osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
     } else {
-        mode = mode ?? 'osu'
+        mode = mode ?? 'osu';
     }
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            osufunc.logCall(error)
+            osufunc.logCall(error);
         }
     }
 
@@ -1651,7 +1616,7 @@ Could not find user
             func.separateNum(osudata.statistics.country_rank) :
             '---';
 
-    const rankglobal = ` ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)`
+    const rankglobal = ` ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)`;
 
     const peakRank = osudata?.rank_highest.rank ?
         `\n**Peak Rank**: #${func.separateNum(osudata.rank_highest.rank)} (<t:${new Date(osudata.rank_highest.updated_at).getTime() / 1000}:R>)` :
@@ -1659,7 +1624,7 @@ Could not find user
 
     const onlinestatus = osudata.is_online == true ?
         `**${emojis.onlinestatus.online} Online**` :
-        `**${emojis.onlinestatus.offline} Offline** | Last online <t:${(new Date(osudata.last_visit)).getTime() / 1000}:R>`
+        `**${emojis.onlinestatus.offline} Offline** | Last online <t:${(new Date(osudata.last_visit)).getTime() / 1000}:R>`;
 
     const prevnames = osudata.previous_usernames.length > 0 ?
         '**Previous Usernames:** ' + osudata.previous_usernames.join(', ') :
@@ -1674,18 +1639,18 @@ Could not find user
         osustats.level.progress != null && osustats.level.progress > 0 ?
             `${osustats.level.current}.${Math.floor(osustats.level.progress)}` :
             `${osustats.level.current}` :
-        '---'
+        '---';
 
     const osuEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.user.dec)
         .setTitle(`${osudata.username}'s ${mode ?? 'osu!'} profile`)
         .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
-        .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
+        .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`);
 
     let useEmbeds = [];
     if (graphonly == true) {
-        const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
-        const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
+        const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',');
+        const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',');
 
         const chartplay = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true));
         const chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
@@ -1721,8 +1686,8 @@ Could not find user
                     }, 1000);
                 }
             }
-            const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
-            const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
+            const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',');
+            const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',');
 
             const chartplay = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true));
             const chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
@@ -1742,7 +1707,7 @@ Could not find user
                 !('error' in func.findFile(input.absoluteID, 'osutopdata')) &&
                 input.button != 'Refresh'
             ) {
-                osutopdataReq = func.findFile(input.absoluteID, 'osutopdata')
+                osutopdataReq = func.findFile(input.absoluteID, 'osutopdata');
             } else {
                 osutopdataReq = await osufunc.apiget({
                     type: 'best',
@@ -1751,7 +1716,7 @@ Could not find user
                         mode: mode,
                         opts: ['limit=100']
                     }
-                })
+                });
             }
 
             const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData;
@@ -1764,15 +1729,15 @@ Could not find user
                             (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                                 content: 'Error - could not fetch user\'s top scores',
                                 allowedMentions: { repliedUser: false },
-                            }).catch()
-                        }, 1000)
+                            }).catch();
+                        }, 1000);
                     } else {
 
                         (input.obj as Discord.Message<any>).reply({
                             content: 'Error - could not fetch user\'s top scores',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
-                        }).catch()
+                        }).catch();
                     }
                 }
                 log.logFile('command',
@@ -1784,7 +1749,7 @@ Could not fetch user\'s top scores
 ----------------------------------------------------
 \n\n`,
                     { guildId: `${input.obj.guildId}` }
-                )
+                );
                 return;
             }
 
@@ -1794,7 +1759,7 @@ Could not fetch user\'s top scores
                 params: {
                     userid: osudata.id,
                 }
-            })
+            });
             const mostplayeddata: osuApiTypes.BeatmapPlaycount[] & osuApiTypes.Error = mostplayeddataReq.apiData;
             osufunc.debug(mostplayeddataReq, 'command', 'osu', input.obj.guildId, 'mostPlayedData');
 
@@ -1805,15 +1770,15 @@ Could not fetch user\'s top scores
                             (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                                 content: 'Error - could not fetch user\'s most played beatmaps',
                                 allowedMentions: { repliedUser: false },
-                            }).catch()
-                        }, 1000)
+                            }).catch();
+                        }, 1000);
                     } else {
 
                         (input.obj as Discord.Message<any>).reply({
                             content: 'Error - could not fetch user\'s most played beatmaps',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
-                        }).catch()
+                        }).catch();
                     }
                 }
                 log.logFile('command',
@@ -1825,23 +1790,23 @@ Could not fetch user\'s most played beatmaps
 ----------------------------------------------------
 \n\n`,
                     { guildId: `${input.obj.guildId}` }
-                )
+                );
                 return;
             }
-            const secperplay = osudata?.statistics.play_time / parseFloat(playcount.replaceAll(',', ''))
+            const secperplay = osudata?.statistics.play_time / parseFloat(playcount.replaceAll(',', ''));
 
             const highestcombo = func.separateNum((osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo);
-            const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
-            const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
+            const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2);
+            const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2);
             let totalpp = 0;
             for (let i2 = 0; i2 < osutopdata.length; i2++) {
-                totalpp += osutopdata[i2].pp
+                totalpp += osutopdata[i2].pp;
             }
-            const avgpp = (totalpp / osutopdata.length).toFixed(2)
-            let mostplaytxt = ``
+            const avgpp = (totalpp / osutopdata.length).toFixed(2);
+            let mostplaytxt = ``;
             for (let i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
-                const bmpc = mostplayeddata[i2]
-                mostplaytxt += `\`${bmpc.count.toString() + ' plays'.padEnd(15, ' ')}\` | [${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id})\n`
+                const bmpc = mostplayeddata[i2];
+                mostplaytxt += `\`${bmpc.count.toString() + ' plays'.padEnd(15, ' ')}\` | [${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id})\n`;
             }
             osuEmbed.addFields([
                 {
@@ -1866,13 +1831,13 @@ ${onlinestatus}
 **Avg time per play:** ${calc.secondsToTime(secperplay)}`,
                     inline: true
                 }
-            ])
+            ]);
             osuEmbed.addFields([{
                 name: 'Most Played Beatmaps',
                 value: mostplaytxt != `` ? mostplaytxt : 'No data',
                 inline: false
             }]
-            )
+            );
 
 
             osuEmbed.addFields([
@@ -1893,9 +1858,9 @@ ${onlinestatus}
         **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
         **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%`,
                     inline: true
-                }])
+                }]);
 
-            useEmbeds = [osuEmbed, ChartsEmbedRank, ChartsEmbedPlay]
+            useEmbeds = [osuEmbed, ChartsEmbedRank, ChartsEmbedPlay];
         } else {
             osuEmbed.setDescription(`
 **Global Rank:**${rankglobal}${peakRank}
@@ -1909,8 +1874,8 @@ ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.
 ${prevnames}
 ${onlinestatus}
 **Total Play Time:** ${calc.secondsToTimeReadable(osudata?.statistics.play_time, true, false)}
-        `)
-            useEmbeds = [osuEmbed]
+        `);
+            useEmbeds = [osuEmbed];
         }
     }
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
@@ -1925,7 +1890,7 @@ ${onlinestatus}
             components: graphonly == true ? [] : [buttons],
             edit: true
         }
-    })
+    });
 
 
     log.logFile('command',
@@ -1936,7 +1901,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -1974,61 +1939,61 @@ export async function firsts(input: extypes.commandInput) {
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-page')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.includes('-parse')) {
                 parseScore = true;
-                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
-                parseId = temp.value
-                input.args = temp.newArgs
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+                parseId = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
             if (input.args.includes('-f')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-f'))
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
             }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             if (input.args.includes('-m')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-m'))
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
             }
 
             if (input.args.includes('-recent')) {
@@ -2057,7 +2022,7 @@ export async function firsts(input: extypes.commandInput) {
             }
             if (input.args.includes('-misses')) {
                 sort = 'miss',
-                    input.args.splice(input.args.indexOf('-misses'))
+                    input.args.splice(input.args.indexOf('-misses'));
             }
             if (input.args.includes('-miss')) {
                 sort = 'miss';
@@ -2072,7 +2037,7 @@ export async function firsts(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
             if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true)
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
                 filterTitle = temp.value;
                 input.args = temp.newArgs;
             }
@@ -2081,7 +2046,7 @@ export async function firsts(input: extypes.commandInput) {
 
             user = input.args.join(' ');
             if (!input.args[0] || input.args[0].includes(searchid)) {
-                user = null
+                user = null;
             }
         }
             break;
@@ -2104,7 +2069,7 @@ export async function firsts(input: extypes.commandInput) {
             filterTitle = input.obj.options.getString('filter');
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
-                parseScore = true
+                parseScore = true;
             }
         }
 
@@ -2119,8 +2084,8 @@ export async function firsts(input: extypes.commandInput) {
 
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
+            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
+            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
             page = 0;
             if (input.obj.message.embeds[0].description) {
                 if (input.obj.message.embeds[0].description.includes('mapper')) {
@@ -2132,55 +2097,55 @@ export async function firsts(input: extypes.commandInput) {
                 if (input.obj.message.embeds[0].description.includes('map')) {
                     filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
                 }
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 switch (true) {
                     case sort1.includes('score'):
-                        sort = 'score'
+                        sort = 'score';
                         break;
                     case sort1.includes('acc'):
-                        sort = 'acc'
+                        sort = 'acc';
                         break;
                     case sort1.includes('pp'):
-                        sort = 'pp'
+                        sort = 'pp';
                         break;
                     case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent'
+                        sort = 'recent';
                         break;
                     case sort1.includes('combo'):
-                        sort = 'combo'
+                        sort = 'combo';
                         break;
                     case sort1.includes('miss'):
-                        sort = 'miss'
+                        sort = 'miss';
                         break;
                     case sort1.includes('rank'):
-                        sort = 'rank'
+                        sort = 'rank';
                         break;
 
                 }
 
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
-                    reverse = true
+                    reverse = true;
                 } else {
-                    reverse = false
+                    reverse = false;
                 }
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
-                page = 0
+                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
+                page = 0;
                 switch (input.button) {
                     case 'BigLeftArrow':
-                        page = 1
+                        page = 1;
                         break;
                     case 'LeftArrow':
-                        page = pageParsed - 1
+                        page = pageParsed - 1;
                         break;
                     case 'RightArrow':
-                        page = pageParsed + 1
+                        page = pageParsed + 1;
                         break;
                     case 'BigRightArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
                         break;
                     default:
-                        page = pageParsed
+                        page = pageParsed;
                         break;
                 }
             }
@@ -2190,24 +2155,20 @@ export async function firsts(input: extypes.commandInput) {
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = input.overrides.page
+            page = input.overrides.page;
         }
     }
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('firsts', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'firsts',
+        options: [
             {
                 name: 'User',
                 value: user
@@ -2252,17 +2213,15 @@ export async function firsts(input: extypes.commandInput) {
                 name: 'Filter',
                 value: filterTitle
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
@@ -2292,7 +2251,7 @@ export async function firsts(input: extypes.commandInput) {
             .setCustomId(`Refresh-firsts-${commanduser.id}-${input.absoluteID}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.main.refresh),
-    )
+    );
 
     //if user is null, use searchid
     if (user == null) {
@@ -2317,7 +2276,7 @@ export async function firsts(input: extypes.commandInput) {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-        }).catch()
+        }).catch();
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -2326,7 +2285,7 @@ export async function firsts(input: extypes.commandInput) {
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -2334,7 +2293,7 @@ export async function firsts(input: extypes.commandInput) {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode),
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
@@ -2349,14 +2308,14 @@ export async function firsts(input: extypes.commandInput) {
                     (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
-                    })
+                    });
                 }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                })
+                });
             }
         }
         log.logFile('command',
@@ -2368,7 +2327,7 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
@@ -2390,7 +2349,7 @@ Could not find user
             },
             version: 2,
 
-        })
+        });
         const fd: osuApiTypes.Score[] & osuApiTypes.Error = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
@@ -2399,14 +2358,14 @@ Could not find user
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: 'Error - could not find user\'s #1 scores',
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: 'Error - could not find user\'s #1 scores',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -2418,16 +2377,16 @@ Could not find user\'s #1 scores offset by ${cinitnum}
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
         for (let i = 0; i < fd.length; i++) {
             if (!fd[i] || typeof fd[i] == 'undefined') { break; }
 
-            await firstscoresdata.push(fd[i])
+            await firstscoresdata.push(fd[i]);
         }
         if (fd.length == 100) {
-            await getScoreCount(cinitnum + 100)
+            await getScoreCount(cinitnum + 100);
         }
         return;
     }
@@ -2435,7 +2394,7 @@ Could not find user\'s #1 scores offset by ${cinitnum}
         !('error' in func.findFile(osudata.id, 'firstscoresdata')) &&
         input.button != 'Refresh'
     ) {
-        firstscoresdata = func.findFile(osudata.id, 'firstscoresdata')
+        firstscoresdata = func.findFile(osudata.id, 'firstscoresdata');
     } else {
         await getScoreCount(0);
     }
@@ -2463,23 +2422,23 @@ Could not find user\'s #1 scores offset by ${cinitnum}
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
             ||
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
-        )
+        );
     }
 
     if (parseScore == true) {
-        let pid = parseInt(parseId) - 1
+        let pid = parseInt(parseId) - 1;
         if (pid < 0) {
-            pid = 0
+            pid = 0;
         }
         if (pid > firstscoresdata.length) {
-            pid = firstscoresdata.length - 1
+            pid = firstscoresdata.length - 1;
         }
         input.overrides = {
             mode: firstscoresdata?.[0]?.mode ?? 'osu',
             id: firstscoresdata?.[pid]?.best_id,
             commanduser,
             commandAs: input.commandType
-        }
+        };
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
@@ -2487,14 +2446,14 @@ Could not find user\'s #1 scores offset by ${cinitnum}
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not find requested score`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -2506,11 +2465,11 @@ Could not find requested score
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
         input.commandType = 'other';
-        await scoreparse(input)
+        await scoreparse(input);
         return;
     }
 
@@ -2526,7 +2485,7 @@ Could not find requested score
         })
         ;
     if (page >= Math.ceil(firstscoresdata.length / 5)) {
-        page = Math.ceil(firstscoresdata.length / 5) - 1
+        page = Math.ceil(firstscoresdata.length / 5) - 1;
     }
 
     const scoresarg = await embedStuff.scoreList({
@@ -2542,8 +2501,8 @@ Could not find requested score
         filteredMods: filteredMods,
         filterMapTitle: filterTitle,
         reverse: reverse,
-    })
-    firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`)
+    });
+    firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
 
     if (scoresarg.fields.length == 0) {
         firstsEmbed.addFields([{
@@ -2558,7 +2517,7 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         for (let i = 0; i < scoresarg.fields.length; i++) {
-            firstsEmbed.addFields([scoresarg.fields[i]])
+            firstsEmbed.addFields([scoresarg.fields[i]]);
         }
     }
 
@@ -2574,9 +2533,9 @@ Could not find requested score
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            osufunc.logCall(error)
+            osufunc.logCall(error);
         }
     }
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -2588,7 +2547,7 @@ Could not find requested score
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    });
 
 
 
@@ -2600,7 +2559,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -2624,30 +2583,30 @@ export async function maplb(input: extypes.commandInput) {
 
             if (input.args.includes('-page')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.includes('-parse')) {
                 parseScore = true;
-                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
-                parseId = temp.value
-                input.args = temp.newArgs
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+                parseId = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.join(' ').includes('+')) {
-                mapmods = input.args.join(' ').split('+')[1]
+                mapmods = input.args.join(' ').split('+')[1];
                 mapmods.includes(' ') ? mapmods = mapmods.split(' ')[0] : null;
-                input.args = input.args.join(' ').replace('+', '').replace(mapmods, '').split(' ')
+                input.args = input.args.join(' ').replace('+', '').replace(mapmods, '').split(' ');
             }
             input.args = cleanArgs(input.args);
 
-            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map;
         }
             break;
 
@@ -2661,7 +2620,7 @@ export async function maplb(input: extypes.commandInput) {
             mapmods = input.obj.options.getString('mods');
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
-                parseScore = true
+                parseScore = true;
             }
         }
 
@@ -2674,26 +2633,26 @@ export async function maplb(input: extypes.commandInput) {
                 return;
             }
             commanduser = input.obj.member.user;
-            mapid = input.obj.message.embeds[0].url.split('/b/')[1]
+            mapid = input.obj.message.embeds[0].url.split('/b/')[1];
             if (input.obj.message.embeds[0].title.includes('+')) {
-                mapmods = input.obj.message.embeds[0].title.split('+')[1]
+                mapmods = input.obj.message.embeds[0].title.split('+')[1];
             }
-            page = 0
+            page = 0;
             switch (input.button) {
                 case 'BigLeftArrow':
-                    page = 1
+                    page = 1;
                     break;
                 case 'LeftArrow':
-                    page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
+                    page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1;
                     break;
                 case 'RightArrow':
-                    page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
+                    page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1;
                     break;
                 case 'BigRightArrow':
-                    page = parseInt((input.obj.message.embeds[0].description).split('/')[1].split('\n')[0])
+                    page = parseInt((input.obj.message.embeds[0].description).split('/')[1].split('\n')[0]);
                     break;
                 case 'Refresh':
-                    page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1])
+                    page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]);
                     break;
             }
         }
@@ -2701,7 +2660,7 @@ export async function maplb(input: extypes.commandInput) {
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = input.overrides.page
+            page = input.overrides.page;
         }
     }
 
@@ -2713,7 +2672,7 @@ export async function maplb(input: extypes.commandInput) {
                 .setCustomId(`Refresh-leaderboard-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-        )
+        );
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
@@ -2738,18 +2697,14 @@ export async function maplb(input: extypes.commandInput) {
                 .setEmoji(buttonsthing.label.page.last),
         );
 
-    log.logFile(
-        'command',
-        log.commandLog('maplb', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'maplb',
+        options: [
             {
                 name: 'Map ID',
                 value: mapid
@@ -2766,17 +2721,15 @@ export async function maplb(input: extypes.commandInput) {
                 name: 'Parse',
                 value: `${parseId}`
             },
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number') {
         page = 1;
     }
-    page--
+    page--;
 
     if (!mapid) {
         mapid = osufunc.getPreviousId('map', input.obj.guildId);
@@ -2786,7 +2739,7 @@ export async function maplb(input: extypes.commandInput) {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-        }).catch()
+        }).catch();
     }
 
     let mapdataReq: osufunc.apiReturn;
@@ -2794,7 +2747,7 @@ export async function maplb(input: extypes.commandInput) {
         !('error' in func.findFile(mapid, 'mapdata')) &&
         input.button != 'Refresh'
     ) {
-        mapdataReq = func.findFile(mapid, 'mapdata')
+        mapdataReq = func.findFile(mapid, 'mapdata');
     } else {
         mapdataReq = await osufunc.apiget(
             {
@@ -2803,7 +2756,7 @@ export async function maplb(input: extypes.commandInput) {
                     id: mapid
                 }
             }
-        )
+        );
     }
     const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
     osufunc.debug(mapdataReq, 'command', 'maplb', input.obj.guildId, 'mapData');
@@ -2815,14 +2768,14 @@ export async function maplb(input: extypes.commandInput) {
                     (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
-                    }).catch()
-                }, 1000)
+                    }).catch();
+                }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                }).catch();
             }
         }
         log.logFile('command',
@@ -2834,11 +2787,11 @@ Could not fetch beatmap data for ${mapid}
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
-    func.storeFile(mapdataReq, mapid, 'mapdata')
+    func.storeFile(mapdataReq, mapid, 'mapdata');
 
     let title = 'n';
     let fulltitle = 'n';
@@ -2851,13 +2804,13 @@ Could not fetch beatmap data for ${mapid}
             .catch();
         return;
     }
-    fulltitle = `${artist} - ${title} [${mapdata.version}]`
+    fulltitle = `${artist} - ${title} [${mapdata.version}]`;
 
     let mods;
     if (mapmods) {
-        mods = osumodcalc.OrderMods(mapmods) + ''
+        mods = osumodcalc.OrderMods(mapmods) + '';
     }
-    const lbEmbed = new Discord.EmbedBuilder()
+    const lbEmbed = new Discord.EmbedBuilder();
 
     let lbdataReq: osufunc.apiReturn;
     if (mods == null) {
@@ -2866,16 +2819,16 @@ Could not fetch beatmap data for ${mapid}
             !('error' in func.findFile(input.absoluteID, 'lbdata')) &&
             input.button != 'Refresh'
         ) {
-            lbdataReq = func.findFile(input.absoluteID, 'lbdata')
+            lbdataReq = func.findFile(input.absoluteID, 'lbdata');
         } else {
             lbdataReq = await osufunc.apiget({
                 type: 'scores_get_map',
                 params: {
                     id: mapid
                 }
-            })
+            });
         }
-        const lbdataf: osuApiTypes.BeatmapScores = lbdataReq.apiData
+        const lbdataf: osuApiTypes.BeatmapScores = lbdataReq.apiData;
 
         osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbDataF');
 
@@ -2886,14 +2839,14 @@ Could not fetch beatmap data for ${mapid}
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -2905,27 +2858,27 @@ Could not fetch leaderboards for ${mapid} (API V2)
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
-        func.storeFile(lbdataReq, input.absoluteID, 'lbdata')
+        func.storeFile(lbdataReq, input.absoluteID, 'lbdata');
 
-        const lbdata = lbdataf.scores
+        const lbdata = lbdataf.scores;
 
         if (parseScore == true) {
-            let pid = parseInt(parseId) - 1
+            let pid = parseInt(parseId) - 1;
             if (pid < 0) {
-                pid = 0
+                pid = 0;
             }
             if (pid > lbdata.length) {
-                pid = lbdata.length - 1
+                pid = lbdata.length - 1;
             }
             input.overrides = {
                 mode: lbdata?.[0]?.mode ?? 'osu',
                 id: lbdata?.[pid]?.best_id,
                 commanduser,
                 commandAs: input.commandType
-            }
+            };
             if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
                 if (input.commandType != 'button' && input.commandType != 'link') {
                     if (input.commandType == 'interaction') {
@@ -2933,14 +2886,14 @@ Could not fetch leaderboards for ${mapid} (API V2)
                             (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                                 content: `Error - could not find requested score`,
                                 allowedMentions: { repliedUser: false },
-                            }).catch()
-                        }, 1000)
+                            }).catch();
+                        }, 1000);
                     } else {
                         (input.obj as Discord.Message<any>).reply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
-                        }).catch()
+                        }).catch();
                     }
                 }
                 log.logFile('command',
@@ -2952,11 +2905,11 @@ Could not find requested score
 ----------------------------------------------------
 \n\n`,
                     { guildId: `${input.obj.guildId}` }
-                )
+                );
                 return;
             }
             input.commandType = 'other';
-            await scoreparse(input)
+            await scoreparse(input);
             return;
         }
 
@@ -2969,14 +2922,14 @@ Could not find requested score
 
         let scoretxt: string;
         if (lbdata.length < 1) {
-            scoretxt = 'Error - no scores found '
+            scoretxt = 'Error - no scores found ';
         }
         if (mapdata.status == 'graveyard' || mapdata.status == 'pending') {
-            scoretxt = 'Error - map is unranked'
+            scoretxt = 'Error - map is unranked';
         }
 
         if (page >= Math.ceil(lbdata.length / 5)) {
-            page = Math.ceil(lbdata.length / 5) - 1
+            page = Math.ceil(lbdata.length / 5) - 1;
         }
 
         osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbData');
@@ -2996,7 +2949,7 @@ Could not find requested score
             reverse: false,
             mapidOverride: mapdata.id,
             showUserName: true
-        })
+        });
 
         if (scoresarg.fields.length == 0) {
             lbEmbed.addFields([{
@@ -3012,11 +2965,11 @@ Could not find requested score
 
         } else {
             for (let i = 0; i < scoresarg.fields.length; i++) {
-                lbEmbed.addFields([scoresarg.fields[i]])
+                lbEmbed.addFields([scoresarg.fields[i]]);
             }
         }
 
-        lbEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(scoresarg.maxPages)}`)
+        lbEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(scoresarg.maxPages)}`);
 
         if (scoresarg.isFirstPage) {
             (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
@@ -3034,7 +2987,7 @@ Could not find requested score
             !('error' in func.findFile(input.absoluteID, 'lbdata')) &&
             input.button != 'Refresh'
         ) {
-            lbdataReq = func.findFile(input.absoluteID, 'lbdata')
+            lbdataReq = func.findFile(input.absoluteID, 'lbdata');
         } else {
             lbdataReq = await osufunc.apiget(
                 {
@@ -3046,9 +2999,9 @@ Could not find requested score
                     },
                     version: 1
                 }
-            )
+            );
         }
-        const lbdata = lbdataReq.apiData
+        const lbdata = lbdataReq.apiData;
         osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbData');
 
         if (lbdata?.error) {
@@ -3058,14 +3011,14 @@ Could not find requested score
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -3077,26 +3030,26 @@ Could not fetch leaderboards for ${mapid} (API v1)
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
 
-        func.storeFile(lbdataReq, input.absoluteID, 'lbdata')
+        func.storeFile(lbdataReq, input.absoluteID, 'lbdata');
 
         if (parseScore == true) {
-            let pid = parseInt(parseId) - 1
+            let pid = parseInt(parseId) - 1;
             if (pid < 0) {
-                pid = 0
+                pid = 0;
             }
             if (pid > lbdata.length) {
-                pid = lbdata.length - 1
+                pid = lbdata.length - 1;
             }
             input.overrides = {
                 mode: lbdata?.[0]?.mode ?? 'osu',
                 id: lbdata?.[pid]?.best_id,
                 commanduser,
                 commandAs: input.commandType
-            }
+            };
             if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
                 if (input.commandType != 'button' && input.commandType != 'link') {
                     if (input.commandType == 'interaction') {
@@ -3104,14 +3057,14 @@ Could not fetch leaderboards for ${mapid} (API v1)
                             (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                                 content: `Error - could not find requested score`,
                                 allowedMentions: { repliedUser: false },
-                            }).catch()
-                        }, 1000)
+                            }).catch();
+                        }, 1000);
                     } else {
                         (input.obj as Discord.Message<any>).reply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
-                        }).catch()
+                        }).catch();
                     }
                 }
                 log.logFile('command',
@@ -3123,11 +3076,11 @@ Could not find requested score
 ----------------------------------------------------
 \n\n`,
                     { guildId: `${input.obj.guildId}` }
-                )
+                );
                 return;
             }
             input.commandType = 'other';
-            await scoreparse(input)
+            await scoreparse(input);
             return;
         }
 
@@ -3137,30 +3090,30 @@ Could not find requested score
             .setURL(`https://osu.ppy.sh/b/${mapid}`)
             .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`);
 
-        let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`
+        let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`;
 
         for (let i = 0; i < (lbdata).length && i < 5; i++) {
             let hitlist;
             let acc;
-            const score = lbdata[i + (page * 5)]
+            const score = lbdata[i + (page * 5)];
             if (!score) break;
-            const mode = mapdata.mode
+            const mode = mapdata.mode;
             switch (mode) {
                 case 'osu':
-                    hitlist = `${score.count300}/${score.count100}/${score.count50}/${score.countmiss}`
-                    acc = osumodcalc.calcgrade(parseInt(score.count300), parseInt(score.count100), parseInt(score.count50), parseInt(score.countmiss)).accuracy
+                    hitlist = `${score.count300}/${score.count100}/${score.count50}/${score.countmiss}`;
+                    acc = osumodcalc.calcgrade(parseInt(score.count300), parseInt(score.count100), parseInt(score.count50), parseInt(score.countmiss)).accuracy;
                     break;
                 case 'taiko':
-                    hitlist = `${score.count300}/${score.count100}/${score.countmiss}`
-                    acc = osumodcalc.calcgradeTaiko(parseInt(score.count300), parseInt(score.count100), parseInt(score.countmiss)).accuracy
+                    hitlist = `${score.count300}/${score.count100}/${score.countmiss}`;
+                    acc = osumodcalc.calcgradeTaiko(parseInt(score.count300), parseInt(score.count100), parseInt(score.countmiss)).accuracy;
                     break;
                 case 'fruits':
-                    hitlist = `${score.count300}/${score.count100}/${score.count50}/${score.countkatu}/${score.countmiss}`
-                    acc = osumodcalc.calcgradeCatch(parseInt(score.count300), parseInt(score.count100), parseInt(score.count50), parseInt(score.countkatu), parseInt(score.countmiss)).accuracy
+                    hitlist = `${score.count300}/${score.count100}/${score.count50}/${score.countkatu}/${score.countmiss}`;
+                    acc = osumodcalc.calcgradeCatch(parseInt(score.count300), parseInt(score.count100), parseInt(score.count50), parseInt(score.countkatu), parseInt(score.countmiss)).accuracy;
                     break;
                 case 'mania':
-                    hitlist = `${score.countgeki}/${score.count300}/${score.countkatu}/${score.count100}/${score.count50}/${score.countmiss}`
-                    acc = osumodcalc.calcgradeMania(parseInt(score.countgeki), parseInt(score.count300), parseInt(score.countkatu), parseInt(score.count100), parseInt(score.count50), parseInt(score.countmiss)).accuracy
+                    hitlist = `${score.countgeki}/${score.count300}/${score.countkatu}/${score.count100}/${score.count50}/${score.countmiss}`;
+                    acc = osumodcalc.calcgradeMania(parseInt(score.countgeki), parseInt(score.count300), parseInt(score.countkatu), parseInt(score.count100), parseInt(score.count50), parseInt(score.countmiss)).accuracy;
                     break;
             }
             scoretxt += `
@@ -3170,15 +3123,15 @@ Could not find requested score
             ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.maxcombo}x/**${mapdata.max_combo}x**
             ${hitlist}
             Has replay: ${score.replay_available == 1 ? '✅' : '❌'}
-            `
+            `;
         }
         if ((lbdata as any).length < 1 || scoretxt.length < 10) {
-            scoretxt = 'Error - no scores found '
+            scoretxt = 'Error - no scores found ';
         }
         if (mapdata.status == 'graveyard' || mapdata.status == 'pending') {
-            scoretxt = 'Error - map is unranked'
+            scoretxt = 'Error - map is unranked';
         }
-        lbEmbed.setDescription(`${scoretxt}`)
+        lbEmbed.setDescription(`${scoretxt}`);
 
         osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
 
@@ -3202,7 +3155,7 @@ Could not find requested score
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -3212,7 +3165,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -3243,13 +3196,13 @@ export async function nochokes(input: extypes.commandInput) {
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-page')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             mode = null;
             sort = 'pp';
@@ -3259,61 +3212,61 @@ export async function nochokes(input: extypes.commandInput) {
 
             if (input.args.includes('-parse')) {
                 parseScore = true;
-                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
-                parseId = temp.value
-                input.args = temp.newArgs
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+                parseId = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.includes('-page')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
             if (input.args.includes('-f')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-f'))
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
             }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             if (input.args.includes('-m')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-m'))
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
             }
 
             if (input.args.includes('-recent')) {
@@ -3342,7 +3295,7 @@ export async function nochokes(input: extypes.commandInput) {
             }
             if (input.args.includes('-misses')) {
                 sort = 'miss',
-                    input.args.splice(input.args.indexOf('-misses'))
+                    input.args.splice(input.args.indexOf('-misses'));
             }
             if (input.args.includes('-miss')) {
                 sort = 'miss';
@@ -3358,7 +3311,7 @@ export async function nochokes(input: extypes.commandInput) {
             }
 
             if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true)
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
                 filterTitle = temp.value;
                 input.args = temp.newArgs;
             }
@@ -3367,7 +3320,7 @@ export async function nochokes(input: extypes.commandInput) {
 
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
+                user = null;
             }
         }
             break;
@@ -3389,7 +3342,7 @@ export async function nochokes(input: extypes.commandInput) {
             filterTitle = input.obj.options.getString('filter');
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
-                parseScore = true
+                parseScore = true;
             }
         }
 
@@ -3404,9 +3357,9 @@ export async function nochokes(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
 
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
+            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
 
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
+            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
 
             if (input.obj.message.embeds[0].description) {
                 if (input.obj.message.embeds[0].description.includes('mapper')) {
@@ -3424,57 +3377,57 @@ export async function nochokes(input: extypes.commandInput) {
                     filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
                 }
 
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 switch (true) {
                     case sort1.includes('score'):
-                        sort = 'score'
+                        sort = 'score';
                         break;
                     case sort1.includes('acc'):
-                        sort = 'acc'
+                        sort = 'acc';
                         break;
                     case sort1.includes('pp'):
-                        sort = 'pp'
+                        sort = 'pp';
                         break;
                     case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent'
+                        sort = 'recent';
                         break;
                     case sort1.includes('combo'):
-                        sort = 'combo'
+                        sort = 'combo';
                         break;
                     case sort1.includes('miss'):
-                        sort = 'miss'
+                        sort = 'miss';
                         break;
                     case sort1.includes('rank'):
-                        sort = 'rank'
+                        sort = 'rank';
                         break;
 
                 }
 
 
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
-                    reverse = true
+                    reverse = true;
                 } else {
-                    reverse = false
+                    reverse = false;
                 }
 
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
-                page = 0
+                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
+                page = 0;
                 switch (input.button) {
                     case 'BigLeftArrow':
-                        page = 1
+                        page = 1;
                         break;
                     case 'LeftArrow':
-                        page = pageParsed - 1
+                        page = pageParsed - 1;
                         break;
                     case 'RightArrow':
-                        page = pageParsed + 1
+                        page = pageParsed + 1;
                         break;
                     case 'BigRightArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
                         break;
                     default:
-                        page = pageParsed
+                        page = pageParsed;
                         break;
                 }
             }
@@ -3483,10 +3436,10 @@ export async function nochokes(input: extypes.commandInput) {
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = input.overrides.page
+            page = input.overrides.page;
         }
         if (input.overrides.sort != null) {
-            sort = input.overrides.sort
+            sort = input.overrides.sort;
         }
         if (input.overrides.reverse != null) {
             reverse = input.overrides.reverse === true;
@@ -3495,20 +3448,15 @@ export async function nochokes(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('nochokes', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(
-            input.absoluteID,
-            [{
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'nochokes',
+        options: [
+            {
                 name: 'User',
                 value: user
             },
@@ -3548,17 +3496,16 @@ export async function nochokes(input: extypes.commandInput) {
                 name: 'Filter',
                 value: filterTitle
             }
-            ]
-        ), {
-        guildId: `${input.obj.guildId}`
-    })
+
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     const buttons = new Discord.ActionRowBuilder()
         .addComponents(
@@ -3566,7 +3513,7 @@ export async function nochokes(input: extypes.commandInput) {
                 .setCustomId(`Refresh-nochokes-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-        )
+        );
 
     //if user is null, use searchid
     if (user == null) {
@@ -3614,7 +3561,7 @@ export async function nochokes(input: extypes.commandInput) {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-        }).catch()
+        }).catch();
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -3623,7 +3570,7 @@ export async function nochokes(input: extypes.commandInput) {
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -3631,7 +3578,7 @@ export async function nochokes(input: extypes.commandInput) {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
@@ -3645,14 +3592,14 @@ export async function nochokes(input: extypes.commandInput) {
                     (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
-                    })
+                    });
                 }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                })
+                });
             }
         }
         log.logFile('command',
@@ -3664,7 +3611,7 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
@@ -3677,7 +3624,7 @@ Could not find user
         !('error' in func.findFile(input.absoluteID, 'nochokedata')) &&
         input.button != 'Refresh'
     ) {
-        nochokedataReq = func.findFile(input.absoluteID, 'nochokedata')
+        nochokedataReq = func.findFile(input.absoluteID, 'nochokedata');
     } else {
         nochokedataReq = await osufunc.apiget({
             type: 'best',
@@ -3686,7 +3633,7 @@ Could not find user
                 mode: mode,
                 opts: ['limit=100']
             }
-        })
+        });
     }
     let nochokedata: osuApiTypes.Score[] & osuApiTypes.Error = nochokedataReq.apiData;
 
@@ -3699,14 +3646,14 @@ Could not find user
                     (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
-                    })
+                    });
                 }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                })
+                });
             }
         }
         log.logFile('command',
@@ -3718,7 +3665,7 @@ Could not find user\'s top scores
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
@@ -3726,7 +3673,7 @@ Could not find user\'s top scores
     osufunc.debug(nochokedataReq, 'command', 'osutop', input.obj.guildId, 'noChokeData');
 
     try {
-        nochokedata[0].user.username
+        nochokedata[0].user.username;
     } catch (error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
@@ -3755,7 +3702,7 @@ Could not find user\'s top scores
     }
 
     if (page >= Math.ceil(nochokedata.length / 5)) {
-        page = Math.ceil(nochokedata.length / 5) - 1
+        page = Math.ceil(nochokedata.length / 5) - 1;
     }
 
     if (filterTitle) {
@@ -3779,23 +3726,23 @@ Could not find user\'s top scores
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
             ||
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
-        )
+        );
     }
 
     if (parseScore == true) {
-        let pid = parseInt(parseId) - 1
+        let pid = parseInt(parseId) - 1;
         if (pid < 0) {
-            pid = 0
+            pid = 0;
         }
         if (pid > nochokedata.length) {
-            pid = nochokedata.length - 1
+            pid = nochokedata.length - 1;
         }
         input.overrides = {
             mode: nochokedata?.[0]?.mode ?? 'osu',
             id: nochokedata?.[pid]?.best_id,
             commanduser,
             commandAs: input.commandType
-        }
+        };
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
@@ -3803,14 +3750,14 @@ Could not find user\'s top scores
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not find requested score`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -3822,11 +3769,11 @@ Could not find requested score
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
         input.commandType = 'other';
-        await scoreparse(input)
+        await scoreparse(input);
         return;
     }
 
@@ -3839,7 +3786,7 @@ Could not find requested score
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
-        })
+        });
     const scoresarg = await embedStuff.scoreList(
         {
             scores: nochokedata.filter(a => a.statistics.count_miss == 0),
@@ -3854,8 +3801,8 @@ Could not find requested score
             filteredMods: mods,
             filterMapTitle: filterTitle,
             reverse: reverse
-        })
-    topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`)
+        });
+    topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`);
     if (scoresarg.fields.length == 0) {
         topEmbed.addFields([{
             name: 'Error',
@@ -3869,7 +3816,7 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         for (let i = 0; scoresarg.fields.length > i; i++) {
-            topEmbed.addFields(scoresarg.fields[i])
+            topEmbed.addFields(scoresarg.fields[i]);
         }
     }
 
@@ -3885,9 +3832,9 @@ Could not find requested score
     }
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            osufunc.logCall(error)
+            osufunc.logCall(error);
         }
     }
 
@@ -3901,7 +3848,7 @@ Could not find requested score
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -3911,7 +3858,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -3951,20 +3898,20 @@ export async function osutop(input: extypes.commandInput) {
             detailed = false;
             if (input.args.includes('-parse')) {
                 parseScore = true;
-                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
-                parseId = temp.value
-                input.args = temp.newArgs
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+                parseId = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.includes('-page')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.includes('-mods')) {
@@ -3973,49 +3920,49 @@ export async function osutop(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
             if (input.args.includes('-reverse')) {
-                reverse = true
+                reverse = true;
                 input.args.splice(input.args.indexOf('-reverse'), 1);
             }
 
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
             if (input.args.includes('-f')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-f'))
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
             }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             if (input.args.includes('-m')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-m'))
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
             }
 
             if (input.args.includes('-recent')) {
@@ -4044,7 +3991,7 @@ export async function osutop(input: extypes.commandInput) {
             }
             if (input.args.includes('-misses')) {
                 sort = 'miss',
-                    input.args.splice(input.args.indexOf('-misses'))
+                    input.args.splice(input.args.indexOf('-misses'));
             }
             if (input.args.includes('-miss')) {
                 sort = 'miss';
@@ -4060,7 +4007,7 @@ export async function osutop(input: extypes.commandInput) {
             }
 
             if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true)
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
                 filterTitle = temp.value;
                 input.args = temp.newArgs;
             }
@@ -4068,7 +4015,7 @@ export async function osutop(input: extypes.commandInput) {
             user = input.args.join(' ');
 
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
+                user = null;
             }
         }
             break;
@@ -4090,10 +4037,10 @@ export async function osutop(input: extypes.commandInput) {
             filterTitle = input.obj.options.getString('filter');
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
-                parseScore = true
+                parseScore = true;
             }
 
-            reverse = input.obj.options.getBoolean('reverse')
+            reverse = input.obj.options.getBoolean('reverse');
         }
 
             //==============================================================================================================================================================================================
@@ -4107,9 +4054,9 @@ export async function osutop(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
 
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]//obj.message.embeds[0].title.split('Top plays of ')[1]
+            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];//obj.message.embeds[0].title.split('Top plays of ')[1]
 
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
+            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
 
             if (input.obj.message.embeds[0].description) {
                 if (input.obj.message.embeds[0].description.includes('mapper')) {
@@ -4126,62 +4073,62 @@ export async function osutop(input: extypes.commandInput) {
                     filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
                 }
 
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 switch (true) {
                     case sort1.includes('score'):
-                        sort = 'score'
+                        sort = 'score';
                         break;
                     case sort1.includes('acc'):
-                        sort = 'acc'
+                        sort = 'acc';
                         break;
                     case sort1.includes('pp'):
-                        sort = 'pp'
+                        sort = 'pp';
                         break;
                     case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent'
+                        sort = 'recent';
                         break;
                     case sort1.includes('combo'):
-                        sort = 'combo'
+                        sort = 'combo';
                         break;
                     case sort1.includes('miss'):
-                        sort = 'miss'
+                        sort = 'miss';
                         break;
                     case sort1.includes('rank'):
-                        sort = 'rank'
+                        sort = 'rank';
                         break;
 
                 }
 
 
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
-                    reverse = true
+                    reverse = true;
                 } else {
-                    reverse = false
+                    reverse = false;
                 }
 
                 if (input.obj.message.embeds[0].fields.length == 7 || input.obj.message.embeds[0].fields.length == 11) {
-                    detailed = true
+                    detailed = true;
                 } else {
-                    detailed = false
+                    detailed = false;
                 }
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
-                page = 0
+                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
+                page = 0;
                 switch (input.button) {
                     case 'BigLeftArrow':
-                        page = 1
+                        page = 1;
                         break;
                     case 'LeftArrow':
-                        page = pageParsed - 1
+                        page = pageParsed - 1;
                         break;
                     case 'RightArrow':
-                        page = pageParsed + 1
+                        page = pageParsed + 1;
                         break;
                     case 'BigRightArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
                         break;
                     default:
-                        page = pageParsed
+                        page = pageParsed;
                         break;
                 }
             }
@@ -4196,41 +4143,36 @@ export async function osutop(input: extypes.commandInput) {
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = input.overrides.page
+            page = input.overrides.page;
         }
         if (input.overrides.sort != null) {
-            sort = input.overrides.sort
+            sort = input.overrides.sort;
         }
         if (input.overrides.reverse != null) {
             reverse = input.overrides.reverse === true;
         }
         if (input.overrides.mode != null) {
-            mode = input.overrides.mode
+            mode = input.overrides.mode;
         }
         if (input.overrides.filterMapper != null) {
-            mapper = input.overrides.filterMapper
+            mapper = input.overrides.filterMapper;
         }
         if (input.overrides.filterMods != null) {
-            mapper = input.overrides.filterMods
+            mapper = input.overrides.filterMods;
         }
     }
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('osutop', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(
-            input.absoluteID,
-            [{
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'osutop',
+        options: [
+            {
                 name: 'User',
                 value: user
             },
@@ -4270,18 +4212,16 @@ export async function osutop(input: extypes.commandInput) {
                 name: 'Filter',
                 value: filterTitle
             }
-            ],
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
+
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     const buttons = new Discord.ActionRowBuilder()
         .addComponents(
@@ -4289,7 +4229,7 @@ export async function osutop(input: extypes.commandInput) {
                 .setCustomId(`Refresh-osutop-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-        )
+        );
 
     //if user is null, use searchid
     if (user == null) {
@@ -4314,14 +4254,14 @@ export async function osutop(input: extypes.commandInput) {
                 .setCustomId(`DetailDisable-osutop-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed)
-        )
+        );
     } else {
         buttons.addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`DetailEnable-osutop-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed)
-        )
+        );
     }
 
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
@@ -4352,7 +4292,7 @@ export async function osutop(input: extypes.commandInput) {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-        }).catch()
+        }).catch();
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -4361,7 +4301,7 @@ export async function osutop(input: extypes.commandInput) {
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -4369,7 +4309,7 @@ export async function osutop(input: extypes.commandInput) {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
@@ -4383,14 +4323,14 @@ export async function osutop(input: extypes.commandInput) {
                     (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
-                    })
+                    });
                 }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                })
+                });
             }
         }
         log.logFile('command',
@@ -4402,7 +4342,7 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
@@ -4415,7 +4355,7 @@ Could not find user
         !('error' in func.findFile(input.absoluteID, 'osutopdata')) &&
         input.button != 'Refresh'
     ) {
-        osutopdataReq = func.findFile(input.absoluteID, 'osutopdata')
+        osutopdataReq = func.findFile(input.absoluteID, 'osutopdata');
     } else {
         osutopdataReq = await osufunc.apiget({
             type: 'best',
@@ -4424,7 +4364,7 @@ Could not find user
                 mode: mode,
                 opts: ['limit=100', 'offset=0']
             }
-        })
+        });
     }
 
     let osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData;
@@ -4438,14 +4378,14 @@ Could not find user
                     (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                         content: `Error - could not find \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
-                    })
+                    });
                 }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                })
+                });
             }
         }
         log.logFile('command',
@@ -4457,14 +4397,14 @@ Could not find user\'s top scores
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
-    func.storeFile(osutopdataReq, input.absoluteID, 'osutopdata')
+    func.storeFile(osutopdataReq, input.absoluteID, 'osutopdata');
 
     try {
-        osutopdata[0].user.username
+        osutopdata[0].user.username;
     } catch (error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
@@ -4494,7 +4434,7 @@ Could not find user\'s top scores
     }
 
     if (page >= Math.ceil(osutopdata.length / 5)) {
-        page = Math.ceil(osutopdata.length / 5) - 1
+        page = Math.ceil(osutopdata.length / 5) - 1;
     }
 
     if (filterTitle) {
@@ -4518,23 +4458,23 @@ Could not find user\'s top scores
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
             ||
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
-        )
+        );
     }
 
     if (parseScore == true) {
-        let pid = parseInt(parseId) - 1
+        let pid = parseInt(parseId) - 1;
         if (pid < 0) {
-            pid = 0
+            pid = 0;
         }
         if (pid > osutopdata.length) {
-            pid = osutopdata.length - 1
+            pid = osutopdata.length - 1;
         }
         input.overrides = {
             mode: osutopdata?.[0]?.mode ?? 'osu',
             id: osutopdata?.[pid]?.best_id,
             commanduser,
             commandAs: input.commandType
-        }
+        };
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
@@ -4542,14 +4482,14 @@ Could not find user\'s top scores
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not find requested score`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -4561,12 +4501,12 @@ Could not find requested score
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
         input.commandType = 'other';
 
-        await scoreparse(input)
+        await scoreparse(input);
         return;
     }
 
@@ -4579,7 +4519,7 @@ Could not find requested score
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
-        })
+        });
     const scoresarg = await embedStuff.scoreList(
         {
             scores: osutopdata,
@@ -4594,8 +4534,8 @@ Could not find requested score
             filteredMods: mods,
             filterMapTitle: filterTitle,
             reverse: reverse
-        })
-    topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`)
+        });
+    topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`);
     if (scoresarg.fields.length == 0) {
         topEmbed.addFields([{
             name: 'Error',
@@ -4609,32 +4549,32 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         for (let i = 0; scoresarg.fields.length > i; i++) {
-            topEmbed.addFields(scoresarg.fields[i])
+            topEmbed.addFields(scoresarg.fields[i]);
         }
     }
 
 
     if (detailed == true) {
         const highestcombo = func.separateNum((osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo);
-        const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
-        const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
+        const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2);
+        const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2);
         let totalpp = 0;
         for (let i2 = 0; i2 < osutopdata.length; i2++) {
-            totalpp += osutopdata[i2].pp
+            totalpp += osutopdata[i2].pp;
         }
-        const avgpp = (totalpp / osutopdata.length).toFixed(2)
+        const avgpp = (totalpp / osutopdata.length).toFixed(2);
         let hittype: string;
         if (mode == 'osu') {
-            hittype = `hit300/hit100/hit50/miss`
+            hittype = `hit300/hit100/hit50/miss`;
         }
         if (mode == 'taiko') {
-            hittype = `Great(300)/Good(100)/miss`
+            hittype = `Great(300)/Good(100)/miss`;
         }
         if (mode == 'fruits' || mode == 'catch') {
-            hittype = `Fruit(300)/Drops(100)/Droplets(50)/miss`
+            hittype = `Fruit(300)/Drops(100)/Droplets(50)/miss`;
         }
         if (mode == 'mania') {
-            hittype = `300+(geki)/300/200(katu)/100/50/miss`
+            hittype = `300+(geki)/300/200(katu)/100/50/miss`;
         }
         topEmbed.addFields([{
             name: '-',
@@ -4656,7 +4596,7 @@ Could not find requested score
         **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
         **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
     `, inline: true
-        }])
+        }]);
     }
 
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
@@ -4671,9 +4611,9 @@ Could not find requested score
     }
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            osufunc.logCall(error)
+            osufunc.logCall(error);
         }
     }
 
@@ -4686,7 +4626,7 @@ Could not find requested score
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -4696,7 +4636,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -4733,61 +4673,61 @@ export async function pinned(input: extypes.commandInput) {
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-parse')) {
                 parseScore = true;
-                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
-                parseId = temp.value
-                input.args = temp.newArgs
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+                parseId = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.includes('-page')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
             if (input.args.includes('-f')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-f'))
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
             }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             if (input.args.includes('-m')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-m'))
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
             }
 
             if (input.args.includes('-recent')) {
@@ -4816,7 +4756,7 @@ export async function pinned(input: extypes.commandInput) {
             }
             if (input.args.includes('-misses')) {
                 sort = 'miss',
-                    input.args.splice(input.args.indexOf('-misses'))
+                    input.args.splice(input.args.indexOf('-misses'));
             }
             if (input.args.includes('-miss')) {
                 sort = 'miss';
@@ -4832,7 +4772,7 @@ export async function pinned(input: extypes.commandInput) {
             }
 
             if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true)
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
                 filterTitle = temp.value;
                 input.args = temp.newArgs;
             }
@@ -4841,7 +4781,7 @@ export async function pinned(input: extypes.commandInput) {
 
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
+                user = null;
             }
         }
             break;
@@ -4870,7 +4810,7 @@ export async function pinned(input: extypes.commandInput) {
 
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
-                parseScore = true
+                parseScore = true;
             }
 
             filteredMods = input.obj.options.getString('mods');
@@ -4888,9 +4828,9 @@ export async function pinned(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
 
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
+            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
 
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
+            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
             page = 0;
 
             if (input.obj.message.embeds[0].description) {
@@ -4911,59 +4851,59 @@ export async function pinned(input: extypes.commandInput) {
                 }
 
 
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 switch (true) {
                     case sort1.includes('score'):
-                        sort = 'score'
+                        sort = 'score';
                         break;
                     case sort1.includes('acc'):
-                        sort = 'acc'
+                        sort = 'acc';
                         break;
                     case sort1.includes('pp'):
-                        sort = 'pp'
+                        sort = 'pp';
                         break;
                     case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent'
+                        sort = 'recent';
                         break;
                     case sort1.includes('combo'):
-                        sort = 'combo'
+                        sort = 'combo';
                         break;
                     case sort1.includes('miss'):
-                        sort = 'miss'
+                        sort = 'miss';
                         break;
                     case sort1.includes('rank'):
-                        sort = 'rank'
+                        sort = 'rank';
                         break;
 
                 }
 
 
 
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
-                    reverse = true
+                    reverse = true;
                 } else {
-                    reverse = false
+                    reverse = false;
                 }
 
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
-                page = 0
+                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
+                page = 0;
                 switch (input.button) {
                     case 'BigLeftArrow':
-                        page = 1
+                        page = 1;
                         break;
                     case 'LeftArrow':
-                        page = pageParsed - 1
+                        page = pageParsed - 1;
                         break;
                     case 'RightArrow':
-                        page = pageParsed + 1
+                        page = pageParsed + 1;
                         break;
                     case 'BigRightArrow':
 
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
                         break;
                     default:
-                        page = pageParsed
+                        page = pageParsed;
                         break;
                 }
             }
@@ -4972,7 +4912,7 @@ export async function pinned(input: extypes.commandInput) {
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = parseInt(`${input.overrides.page}`)
+            page = parseInt(`${input.overrides.page}`);
         }
     }
 
@@ -4984,20 +4924,16 @@ export async function pinned(input: extypes.commandInput) {
                 .setCustomId(`Refresh-pinned-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-        )
+        );
 
-    log.logFile(
-        'command',
-        log.commandLog('pinned', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'pinned',
+        options: [
             {
                 name: 'User',
                 value: user
@@ -5042,18 +4978,16 @@ export async function pinned(input: extypes.commandInput) {
                 name: 'Filter',
                 value: filterTitle
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
@@ -5100,7 +5034,7 @@ export async function pinned(input: extypes.commandInput) {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-        }).catch()
+        }).catch();
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -5109,7 +5043,7 @@ export async function pinned(input: extypes.commandInput) {
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -5117,7 +5051,7 @@ export async function pinned(input: extypes.commandInput) {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
@@ -5129,14 +5063,14 @@ export async function pinned(input: extypes.commandInput) {
                 (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
-                })
+                });
             }, 1000);
         } else {
             (input.obj as Discord.Message<any>).reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
-            })
+            });
         }
         log.logFile('command',
             `
@@ -5147,7 +5081,7 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
@@ -5167,7 +5101,7 @@ Could not find user
                 opts: [`offset=${cinitnum}`, 'limit=100', `mode=${mode}`],
             },
             version: 2,
-        })
+        });
         const fd: osuApiTypes.Score[] & osuApiTypes.Error = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
@@ -5176,14 +5110,14 @@ Could not find user
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: 'Error - could not find user\'s pinned scores',
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: 'Error - could not find user\'s pinned scores',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -5195,16 +5129,16 @@ Could not find user's pinned scores offset by ${cinitnum}
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
         for (let i = 0; i < fd.length; i++) {
             if (!fd[i] || typeof fd[i] == 'undefined') { break; }
 
-            await pinnedscoresdata.push(fd[i])
+            await pinnedscoresdata.push(fd[i]);
         }
         if (fd.length == 100) {
-            await getScoreCount(cinitnum + 100)
+            await getScoreCount(cinitnum + 100);
         }
 
     }
@@ -5213,7 +5147,7 @@ Could not find user's pinned scores offset by ${cinitnum}
         !('error' in func.findFile(input.absoluteID, 'pinnedscoresdata')) &&
         input.button != 'Refresh'
     ) {
-        pinnedscoresdata = func.findFile(input.absoluteID, 'pinnedscoresdata')
+        pinnedscoresdata = func.findFile(input.absoluteID, 'pinnedscoresdata');
     } else {
         await getScoreCount(0);
     }
@@ -5221,7 +5155,7 @@ Could not find user's pinned scores offset by ${cinitnum}
     func.storeFile(pinnedscoresdata, input.absoluteID, 'pinnedscoresdata');
 
     if (page >= Math.ceil(pinnedscoresdata.length / 5)) {
-        page = Math.ceil(pinnedscoresdata.length / 5) - 1
+        page = Math.ceil(pinnedscoresdata.length / 5) - 1;
     }
 
     if (filterTitle) {
@@ -5245,23 +5179,23 @@ Could not find user's pinned scores offset by ${cinitnum}
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
             ||
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
-        )
+        );
     }
 
     if (parseScore == true) {
-        let pid = parseInt(parseId) - 1
+        let pid = parseInt(parseId) - 1;
         if (pid < 0) {
-            pid = 0
+            pid = 0;
         }
         if (pid > pinnedscoresdata.length) {
-            pid = pinnedscoresdata.length - 1
+            pid = pinnedscoresdata.length - 1;
         }
         input.overrides = {
             mode: pinnedscoresdata?.[0]?.mode ?? 'osu',
             id: pinnedscoresdata?.[pid]?.best_id,
             commanduser,
             commandAs: input.commandType
-        }
+        };
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
@@ -5269,14 +5203,14 @@ Could not find user's pinned scores offset by ${cinitnum}
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not find requested score`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -5288,11 +5222,11 @@ Could not find requested score
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
         input.commandType = 'other';
-        await scoreparse(input)
+        await scoreparse(input);
         return;
     }
 
@@ -5305,7 +5239,7 @@ Could not find requested score
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
-        })
+        });
 
     const scoresarg = await embedStuff.scoreList(
         {
@@ -5322,7 +5256,7 @@ Could not find requested score
             filterMapTitle: filterTitle,
             reverse: false
         });
-    pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`)
+    pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
     if (scoresarg.fields.length == 0) {
         pinnedEmbed.addFields([{
             name: 'Error',
@@ -5336,7 +5270,7 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         for (let i = 0; i < scoresarg.fields.length; i++) {
-            pinnedEmbed.addFields([scoresarg.fields[i]])
+            pinnedEmbed.addFields([scoresarg.fields[i]]);
         }
     }
     if (scoresarg.isFirstPage) {
@@ -5351,9 +5285,9 @@ Could not find requested score
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            osufunc.logCall(error)
+            osufunc.logCall(error);
         }
     }
 
@@ -5365,7 +5299,7 @@ Could not find requested score
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    });
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
@@ -5377,7 +5311,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -5418,13 +5352,13 @@ export async function recent(input: extypes.commandInput) {
 
             if (input.args.includes('-page')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.includes('-mode')) {
@@ -5456,7 +5390,7 @@ export async function recent(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-nf'), 1);
             }
             if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true)
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
                 filterTitle = temp.value;
                 input.args = temp.newArgs;
             }
@@ -5465,7 +5399,7 @@ export async function recent(input: extypes.commandInput) {
 
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
+                user = null;
             }
             isFirstPage = true;
 
@@ -5496,9 +5430,9 @@ export async function recent(input: extypes.commandInput) {
             }
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
-            user = (input.obj.message as Discord.Message<any>).embeds[0].author.url.split('u/')[1]
+            user = (input.obj.message as Discord.Message<any>).embeds[0].author.url.split('u/')[1];
             //title.split('for ')[1]
-            const modething = input.obj.message.embeds[0].footer ? input.obj.message.embeds[0].description.split('\n')[1] : input.obj.message.embeds[0].description.split(' | ')[1].split('\n')[0]
+            const modething = input.obj.message.embeds[0].footer ? input.obj.message.embeds[0].description.split('\n')[1] : input.obj.message.embeds[0].description.split(' | ')[1].split('\n')[0];
             switch (true) {
                 case modething.includes('osu'): {
                     mode = 'osu';
@@ -5518,32 +5452,32 @@ export async function recent(input: extypes.commandInput) {
             }
 
             if (input.obj.message.embeds[0].title.includes('Best')) {
-                sort = 'pp'
+                sort = 'pp';
             }
 
-            page = 0
+            page = 0;
             if (input.button == 'BigLeftArrow') {
-                page = 1
-                isFirstPage = true
+                page = 1;
+                isFirstPage = true;
             }
             if (input.obj.message.embeds[0].title.includes('plays') || input.obj.message.embeds[0].title.includes('passes')) {
                 switch (input.button) {
                     case 'LeftArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1;
                         break;
                     case 'RightArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1;
                         break;
                     case 'BigRightArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n')[0])
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n')[0]);
                         break;
                     case 'Refresh':
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0])
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]);
                         break;
                 }
-                list = true
+                list = true;
                 if (isNaN(+(input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) || ((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) == 'NaN') {
-                    page = 1
+                    page = 1;
                 }
                 if (page < 2) {
                     isFirstPage = true;
@@ -5554,59 +5488,59 @@ export async function recent(input: extypes.commandInput) {
             } else {
                 switch (input.button) {
                     case 'LeftArrow':
-                        page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) - 1
+                        page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) - 1;
                         break;
                     case 'RightArrow':
-                        page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) + 1
+                        page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) + 1;
                         break;
                     case 'Refresh':
-                        page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1])
+                        page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]);
                         break;
                 }
                 if (page < 2) {
-                    page == 1
+                    page == 1;
                 }
             }
 
             if (input.obj.message.embeds[0].title.includes('passes')) {
-                showFails = 0
+                showFails = 0;
             } else {
-                showFails = 1
+                showFails = 1;
             }
 
             if (input.obj.message.embeds[0].description.includes('Filter:')) {
 
-                filterTitle = input.obj.message.embeds[0].description.split('Filter: ')[1].split('\n')[0]
+                filterTitle = input.obj.message.embeds[0].description.split('Filter: ')[1].split('\n')[0];
             }
         }
             break;
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = parseInt(`${input.overrides.page}`)
+            page = parseInt(`${input.overrides.page}`);
         }
         if (input.overrides.type != null) {
             if (input.overrides.type == 'list') {
-                list = true
+                list = true;
             }
             if (input.overrides.type == 'listtaiko') {
-                list = true
-                mode = 'taiko'
+                list = true;
+                mode = 'taiko';
             }
             if (input.overrides.type == 'listfruits') {
-                list = true
-                mode = 'fruits'
+                list = true;
+                mode = 'fruits';
             }
             if (input.overrides.type == 'listmania') {
-                list = true
-                mode = 'mania'
+                list = true;
+                mode = 'mania';
             }
         }
         if (input?.overrides?.sort != null) {
-            sort = input?.overrides?.sort ?? 'recent'
+            sort = input?.overrides?.sort ?? 'recent';
         }
         if (input.overrides.mode != null) {
-            mode = input.overrides.mode
+            mode = input.overrides.mode;
         }
     }
 
@@ -5618,19 +5552,16 @@ export async function recent(input: extypes.commandInput) {
                 .setCustomId(`Refresh-recent-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-        )
-    log.logFile(
-        'command',
-        log.commandLog('recent', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
+        );
 
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'recent',
+        options: [
             {
                 name: 'User',
                 value: user
@@ -5655,11 +5586,10 @@ export async function recent(input: extypes.commandInput) {
                 name: 'Filter',
                 value: filterTitle
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     //if user is null, use searchid
@@ -5683,7 +5613,7 @@ export async function recent(input: extypes.commandInput) {
         isFirstPage = true;
         page = 1;
     }
-    page--
+    page--;
     let pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
@@ -5714,7 +5644,7 @@ export async function recent(input: extypes.commandInput) {
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -5722,7 +5652,7 @@ export async function recent(input: extypes.commandInput) {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
@@ -5735,7 +5665,7 @@ export async function recent(input: extypes.commandInput) {
                 content: `Error - could not fetch user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
-            }).catch()
+            }).catch();
         }
         log.logFile('command',
             `
@@ -5746,7 +5676,7 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
@@ -5756,7 +5686,7 @@ Could not find user
                 content: `Error - could not fetch user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
-            }).catch()
+            }).catch();
         }
         return;
     }
@@ -5769,7 +5699,7 @@ Could not find user
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         })
-            .catch()
+            .catch();
     }
 
     let rsdataReq: osufunc.apiReturn;
@@ -5778,7 +5708,7 @@ Could not find user
         !('error' in func.findFile(input.absoluteID, 'rsdata')) &&
         input.button != 'Refresh'
     ) {
-        rsdataReq = func.findFile(input.absoluteID, 'rsdata')
+        rsdataReq = func.findFile(input.absoluteID, 'rsdata');
     } else {
         rsdataReq = await osufunc.apiget({
             type: 'recent',
@@ -5787,7 +5717,7 @@ Could not find user
                 mode,
                 opts: [`include_fails=${showFails}`, 'offset=0', 'limit=100']
             }
-        })
+        });
     }
 
     let rsdata: osuApiTypes.Score[] & osuApiTypes.Error = rsdataReq.apiData;
@@ -5800,14 +5730,14 @@ Could not find user
                     (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: `Error - could not fetch \`${user}\`'s recent scores`,
                         allowedMentions: { repliedUser: false },
-                    }).catch()
-                }, 1000)
+                    }).catch();
+                }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not fetch \`${user}\`'s recent scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                }).catch();
             }
 
         }
@@ -5820,11 +5750,11 @@ Could not find user's recent scores
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
-    func.storeFile(rsdataReq, input.absoluteID, 'rsdata')
+    func.storeFile(rsdataReq, input.absoluteID, 'rsdata');
 
     if (filterTitle) {
         rsdata = rsdata.filter((array) =>
@@ -5847,7 +5777,7 @@ Could not find user's recent scores
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
             ||
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
-        )
+        );
     }
 
     const rsEmbed = new Discord.EmbedBuilder()
@@ -5857,19 +5787,19 @@ Could not find user's recent scores
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
     if (list != true) {
-        rsEmbed.setColor(colours.embedColour.score.dec)
+        rsEmbed.setColor(colours.embedColour.score.dec);
 
-        page = rsdata[page] ? page : 0
+        page = rsdata[page] ? page : 0;
 
         if (input.button == 'BigRightArrow') {
-            page = rsdata.length - 1
+            page = rsdata.length - 1;
         }
 
-        const curscore = rsdata[0 + page]
+        const curscore = rsdata[0 + page];
         if (!curscore || curscore == undefined || curscore == null) {
-            let err = `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores`
+            let err = `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores`;
             if (filterTitle) {
-                err = `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores matching \`${filterTitle}\``
+                err = `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores matching \`${filterTitle}\``;
             }
 
             if (input.button == null) {
@@ -5878,8 +5808,8 @@ Could not find user's recent scores
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: err,
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply(
                         {
@@ -5892,24 +5822,24 @@ Could not find user's recent scores
             }
             return;
         }
-        const curbm = curscore.beatmap
-        const curbms = curscore.beatmapset
+        const curbm = curscore.beatmap;
+        const curbms = curscore.beatmapset;
 
         let mapdataReq: osufunc.apiReturn;
         if (func.findFile(curbm.id, 'mapdata') &&
             !('error' in func.findFile(curbm.id, 'mapdata')) &&
             input.button != 'Refresh'
         ) {
-            mapdataReq = func.findFile(curbm.id, 'mapdata')
+            mapdataReq = func.findFile(curbm.id, 'mapdata');
         } else {
             mapdataReq = await osufunc.apiget({
                 type: 'map',
                 params: {
                     id: curbm.id
                 }
-            })
+            });
         }
-        const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData
+        const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
 
         osufunc.debug(mapdataReq, 'command', 'recent', input.obj.guildId, 'mapData');
         if (mapdata?.error) {
@@ -5919,14 +5849,14 @@ Could not find user's recent scores
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: 'Error - could not find beatmap',
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: 'Error - could not find beatmap',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -5938,11 +5868,11 @@ Could not find beatmap data for ${curbm.id}
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
 
-        func.storeFile(mapdataReq, curbm.id, 'mapdata')
+        func.storeFile(mapdataReq, curbm.id, 'mapdata');
 
         let accgr;
         let fcaccgr;
@@ -5955,14 +5885,14 @@ Could not find beatmap data for ${curbm.id}
                         gamehits.count_100,
                         gamehits.count_50,
                         gamehits.count_miss
-                    )
+                    );
                 fcaccgr =
                     osumodcalc.calcgrade(
                         gamehits.count_300,
                         gamehits.count_100,
                         gamehits.count_50,
                         0
-                    )
+                    );
                 break;
             case 'taiko':
                 accgr =
@@ -5970,13 +5900,13 @@ Could not find beatmap data for ${curbm.id}
                         gamehits.count_300,
                         gamehits.count_100,
                         gamehits.count_miss
-                    )
+                    );
                 fcaccgr =
                     osumodcalc.calcgradeTaiko(
                         gamehits.count_300,
                         gamehits.count_100,
                         0
-                    )
+                    );
                 break;
             case 'fruits':
                 accgr =
@@ -5986,7 +5916,7 @@ Could not find beatmap data for ${curbm.id}
                         gamehits.count_50,
                         gamehits.count_katu,
                         gamehits.count_miss
-                    )
+                    );
                 fcaccgr =
                     osumodcalc.calcgradeCatch(
                         gamehits.count_300,
@@ -5994,7 +5924,7 @@ Could not find beatmap data for ${curbm.id}
                         gamehits.count_50,
                         gamehits.count_katu,
                         0
-                    )
+                    );
                 break;
             case 'mania':
                 accgr =
@@ -6005,7 +5935,7 @@ Could not find beatmap data for ${curbm.id}
                         gamehits.count_100,
                         gamehits.count_50,
                         gamehits.count_miss
-                    )
+                    );
                 fcaccgr =
                     osumodcalc.calcgradeMania(
                         gamehits.count_geki,
@@ -6014,7 +5944,7 @@ Could not find beatmap data for ${curbm.id}
                         gamehits.count_100,
                         gamehits.count_50,
                         0
-                    )
+                    );
                 break;
         }
         let rspassinfo = '';
@@ -6040,54 +5970,54 @@ Could not find beatmap data for ${curbm.id}
         let rsgrade;
         switch (curscore.rank.toUpperCase()) {
             case 'F':
-                rspassinfo = `\n${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.hit_length)})`
-                rsgrade = emojis.grades.F
+                rspassinfo = `\n${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.hit_length)})`;
+                rsgrade = emojis.grades.F;
                 break;
             case 'D':
-                rsgrade = emojis.grades.D
+                rsgrade = emojis.grades.D;
                 break;
             case 'C':
-                rsgrade = emojis.grades.C
+                rsgrade = emojis.grades.C;
                 break;
             case 'B':
-                rsgrade = emojis.grades.B
+                rsgrade = emojis.grades.B;
                 break;
             case 'A':
-                rsgrade = emojis.grades.A
+                rsgrade = emojis.grades.A;
                 break;
             case 'S':
-                rsgrade = emojis.grades.S
+                rsgrade = emojis.grades.S;
                 break;
             case 'SH':
-                rsgrade = emojis.grades.SH
+                rsgrade = emojis.grades.SH;
                 break;
             case 'X':
-                rsgrade = emojis.grades.X
+                rsgrade = emojis.grades.X;
                 break;
             case 'XH':
-                rsgrade = emojis.grades.XH
+                rsgrade = emojis.grades.XH;
                 break;
         }
         let totaldiff: string;
         let hitlist: string;
         switch (curscore.mode) {
             case 'osu': default:
-                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
+                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
                 break;
             case 'taiko':
-                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`
+                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`;
                 break;
             case 'fruits':
-                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
+                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
                 break;
             case 'mania':
-                hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
+                hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
                 break;
         }
         let rspp: string | number = 0;
         let ppissue: string = '';
         let ppcalcing: PerformanceAttributes[];
-        let fcflag = ''
+        let fcflag = '';
         try {
             ppcalcing = await osufunc.scorecalc({
                 mods: curscore.mods.join('').length > 1 ?
@@ -6100,26 +6030,26 @@ Could not find beatmap data for ${curbm.id}
                 score: curscore.score,
                 calctype: 0,
                 passedObj: embedStuff.getTotalHits(curscore.mode, curscore),
-            })
+            });
 
-            totaldiff = ppcalcing[0].difficulty.stars.toFixed(2)
+            totaldiff = ppcalcing[0].difficulty.stars.toFixed(2);
 
             rspp =
                 curscore.pp ?
                     curscore.pp.toFixed(2) :
-                    ppcalcing[0].pp.toFixed(2)
+                    ppcalcing[0].pp.toFixed(2);
             osufunc.debug(ppcalcing, 'command', 'recent', input.obj.guildId, 'ppCalcing');
 
             if (curscore.accuracy < 1 && curscore.perfect == true) {
-                fcflag = `FC\n**${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
+                fcflag = `FC\n**${ppcalcing[2].pp.toFixed(2)}**pp IF SS`;
             }
             if (curscore.perfect == false) {
                 fcflag =
                     `\n**${ppcalcing[1].pp.toFixed(2)}**pp IF ${fcaccgr.accuracy.toFixed(2)}% FC
-                **${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
+                **${ppcalcing[2].pp.toFixed(2)}**pp IF SS`;
             }
             if (curscore.perfect == true && curscore.accuracy == 1) {
-                fcflag = 'FC'
+                fcflag = 'FC';
             }
 
 
@@ -6127,23 +6057,23 @@ Could not find beatmap data for ${curbm.id}
             rspp =
                 curscore.pp ?
                     curscore.pp.toFixed(2) :
-                    NaN
-            ppissue = 'Error - pp calculator could not calculate beatmap'
-            osufunc.logCall(error)
+                    NaN;
+            ppissue = 'Error - pp calculator could not calculate beatmap';
+            osufunc.logCall(error);
         }
         const title =
             curbms.title == curbms.title_unicode ?
                 curbms.title :
-                `${curbms.title} (${curbms.title_unicode})`
+                `${curbms.title} (${curbms.title_unicode})`;
         const artist =
             curbms.artist == curbms.artist_unicode ?
                 curbms.artist :
-                `${curbms.artist} (${curbms.artist_unicode})`
-        const fulltitle = `${artist} - ${title} [${curbm.version}]`
-        let trycount = 1
+                `${curbms.artist} (${curbms.artist_unicode})`;
+        const fulltitle = `${artist} - ${title} [${curbm.version}]`;
+        let trycount = 1;
         for (let i = rsdata.length - 1; i > (page); i--) {
             if (curbm.id == rsdata[i].beatmap.id) {
-                trycount++
+                trycount++;
             }
         }
         const trycountstr = `try #${trycount}`;
@@ -6175,7 +6105,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
                     value: `**${rspp}**pp ${fcflag}\n${ppissue}`,
                     inline: true
                 }
-            ])
+            ]);
 
         //if first page, disable previous button
         if (page == 0) {
@@ -6196,9 +6126,9 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         }
 
 
-        osufunc.writePreviousId('map', input.obj.guildId, `${curbm.id}`)
-        osufunc.writePreviousId('score', input.obj.guildId, JSON.stringify(curscore))
-        osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`)
+        osufunc.writePreviousId('map', input.obj.guildId, `${curbm.id}`);
+        osufunc.writePreviousId('score', input.obj.guildId, JSON.stringify(curscore));
+        osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
 
     } else if (list == true) {
         pgbuttons = new Discord.ActionRowBuilder()
@@ -6223,14 +6153,14 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
                     .setCustomId(`BigRightArrow-recent-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.last),
-            )
+            );
         rsEmbed
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`Recent ${showFails == 1 ? 'plays' : 'passes'} for ${osudata.username}`)
             .setThumbnail(`${osudata.avatar_url ?? def.images.any.url}`)
             ;
         if (sort == 'pp') {
-            rsEmbed.setTitle(`Best recent ${showFails == 1 ? 'play' : 'passes'} for ${osudata.username}`)
+            rsEmbed.setTitle(`Best recent ${showFails == 1 ? 'play' : 'passes'} for ${osudata.username}`);
         }
 
         const scoresarg = await embedStuff.scoreList(
@@ -6247,7 +6177,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
                 filteredMods: null,
                 filterMapTitle: filterTitle,
                 reverse: false
-            })
+            });
         if (scoresarg.fields.length == 0) {
             rsEmbed.addFields([{
                 name: 'Error',
@@ -6261,14 +6191,14 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
             (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         } else {
             for (let i = 0; scoresarg.fields.length > i; i++) {
-                rsEmbed.addFields(scoresarg.fields[i])
+                rsEmbed.addFields(scoresarg.fields[i]);
             }
         }
         rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 5)}
 ${emojis.gamemodes[mode]}
 ${filterTitle ? `Filter: ${filterTitle}` : ''}
-`)
-        rsEmbed.setFooter({ text: `-` })
+`);
+        rsEmbed.setFooter({ text: `-` });
         if (scoresarg.isFirstPage) {
             (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
             (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
@@ -6282,9 +6212,9 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
 
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            osufunc.logCall(error)
+            osufunc.logCall(error);
         }
     }
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -6297,7 +6227,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -6307,7 +6237,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -6352,27 +6282,20 @@ export async function replayparse(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('replayparse', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'replay parse',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     try {
-        replay = replayparser.parseReplay('./files/replay.osr')
+        replay = replayparser.parseReplay('./files/replay.osr');
     } catch (err) {
         return;
     }
@@ -6385,7 +6308,7 @@ export async function replayparse(input: extypes.commandInput) {
 
         !('error' in func.findFile(replay.beatmapMD5, `mapdata`)) &&
         input.button != 'Refresh') {
-        mapdataReq = func.findFile(replay.beatmapMD5, `mapdata`)
+        mapdataReq = func.findFile(replay.beatmapMD5, `mapdata`);
     } else {
         mapdataReq = await osufunc.apiget(
             {
@@ -6393,14 +6316,14 @@ export async function replayparse(input: extypes.commandInput) {
                 params: {
                     md5: replay.beatmapMD5
                 }
-            })
+            });
     }
     mapdata = mapdataReq.apiData;
-    func.storeFile(mapdataReq, replay.beatmapMD5, 'mapdata')
+    func.storeFile(mapdataReq, replay.beatmapMD5, 'mapdata');
 
     osufunc.debug(mapdataReq, 'fileparse', 'replay', input.obj.guildId, 'mapData');
     if (mapdata?.id) {
-        typeof mapdata.id == 'number' ? osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`) : ''
+        typeof mapdata.id == 'number' ? osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`) : '';
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -6409,7 +6332,7 @@ export async function replayparse(input: extypes.commandInput) {
         !('error' in func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu'))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu'))
+        osudataReq = func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu'));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -6417,84 +6340,84 @@ export async function replayparse(input: extypes.commandInput) {
                 username: replay.playerName,
                 mode: osufunc.modeValidator('osu')
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(replay.gameMode))
-    func.storeFile(osudataReq, replay.playerName, 'osudata', osufunc.modeValidator(replay.gameMode))
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(replay.gameMode));
+    func.storeFile(osudataReq, replay.playerName, 'osudata', osufunc.modeValidator(replay.gameMode));
     osufunc.debug(osudataReq, 'fileparse', 'replay', input.obj.guildId, 'osuData');
     let userid: string | number;
     try {
-        userid = osudata.id
+        userid = osudata.id;
     } catch (err) {
-        userid = 0
-        return
+        userid = 0;
+        return;
     }
     let mapbg: string;
     let mapcombo: string | number;
     let fulltitle: string;
     let mapdataid: string;
     try {
-        mapbg = mapdata.beatmapset.covers['list@2x']
-        fulltitle = `${mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist}`
+        mapbg = mapdata.beatmapset.covers['list@2x'];
+        fulltitle = `${mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist}`;
         fulltitle += ` - ${mapdata.beatmapset.title != mapdata.beatmapset.title_unicode ? `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})` : mapdata.beatmapset.title}`
-            + ` [${mapdata.version}]`
-        mapcombo = mapdata.max_combo ? mapdata.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : NaN
-        mapdataid = 'https://osu.ppy.sh/b/' + mapdata.id
+            + ` [${mapdata.version}]`;
+        mapcombo = mapdata.max_combo ? mapdata.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : NaN;
+        mapdataid = 'https://osu.ppy.sh/b/' + mapdata.id;
     } catch (error) {
-        fulltitle = 'Unknown/unavailable map'
+        fulltitle = 'Unknown/unavailable map';
         mapbg = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
-        mapcombo = NaN
-        mapdataid = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png'
+        mapcombo = NaN;
+        mapdataid = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
     }
 
-    const mods = replay.mods
+    const mods = replay.mods;
     let ifmods: string;
     if (mods != 0) {
-        ifmods = `+${osumodcalc.ModIntToString(mods)}`
+        ifmods = `+${osumodcalc.ModIntToString(mods)}`;
     } else {
-        ifmods = ''
+        ifmods = '';
     }
-    const gameMode = replay.gameMode
+    const gameMode = replay.gameMode;
     let accuracy: number;
     let xpp: object;
     let hitlist: string;
     let fcacc: number;
     let ppissue: string;
-    let totalhits = 0
+    let totalhits = 0;
 
     switch (gameMode) {
         case 0:
-            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
-            accuracy = osumodcalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, replay.misses).accuracy
-            fcacc = osumodcalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, 0).accuracy
-            totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.misses
+            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`;
+            accuracy = osumodcalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, replay.misses).accuracy;
+            fcacc = osumodcalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, 0).accuracy;
+            totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.misses;
             break;
         case 1:
 
-            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.misses}`
-            accuracy = osumodcalc.calcgradeTaiko(replay.number_300s, replay.number_100s, replay.misses).accuracy
-            fcacc = osumodcalc.calcgradeTaiko(replay.number_300s, replay.number_100s, 0).accuracy
-            totalhits = replay.number_300s + replay.number_100s + replay.misses
+            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.misses}`;
+            accuracy = osumodcalc.calcgradeTaiko(replay.number_300s, replay.number_100s, replay.misses).accuracy;
+            fcacc = osumodcalc.calcgradeTaiko(replay.number_300s, replay.number_100s, 0).accuracy;
+            totalhits = replay.number_300s + replay.number_100s + replay.misses;
             break;
         case 2:
 
-            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
-            accuracy = osumodcalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, replay.misses).accuracy
-            fcacc = osumodcalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, 0).accuracy
-            totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.katus + replay.misses
+            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`;
+            accuracy = osumodcalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, replay.misses).accuracy;
+            fcacc = osumodcalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, 0).accuracy;
+            totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.katus + replay.misses;
             break;
         case 3:
 
-            hitlist = `${replay.gekis}/${replay.number_300s}/${replay.katus}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
-            accuracy = osumodcalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, replay.misses).accuracy
-            fcacc = osumodcalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, 0).accuracy
-            totalhits = replay.gekis + replay.number_300s + replay.katus + replay.number_100s + replay.number_50s + replay.misses
+            hitlist = `${replay.gekis}/${replay.number_300s}/${replay.katus}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`;
+            accuracy = osumodcalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, replay.misses).accuracy;
+            fcacc = osumodcalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, 0).accuracy;
+            totalhits = replay.gekis + replay.number_300s + replay.katus + replay.number_100s + replay.number_50s + replay.misses;
             break;
     }
-    const failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true
+    const failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true;
 
     try {
         xpp = await osufunc.scorecalc({
@@ -6507,41 +6430,41 @@ export async function replayparse(input: extypes.commandInput) {
             score: replay.score,
             calctype: 0,
             passedObj: totalhits,
-        })
-        ppissue = ''
+        });
+        ppissue = '';
     } catch (error) {
         xpp = [{
             pp: 0
         },
         {
             pp: 0
-        }]
-        ppissue = 'Error - could not fetch beatmap'
+        }];
+        ppissue = 'Error - could not fetch beatmap';
     }
 
-    const lifebar = replay.life_bar.split('|')
-    const lifebarF = []
+    const lifebar = replay.life_bar.split('|');
+    const lifebarF = [];
     for (let i = 0; i < lifebar.length; i++) {
-        lifebarF.push(lifebar[i].split(',')[0])
+        lifebarF.push(lifebar[i].split(',')[0]);
     }
-    lifebarF.shift()
+    lifebarF.shift();
 
-    const dataLabel = ['Start']
+    const dataLabel = ['Start'];
 
     for (let i = 0; i < lifebarF.length; i++) {
-        dataLabel.push('')
+        dataLabel.push('');
 
     }
 
-    dataLabel.push('end')
+    dataLabel.push('end');
 
-    const passper = Math.abs(totalhits / (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners)) * 100
+    const passper = Math.abs(totalhits / (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners)) * 100;
 
     const isfail = failed ?
         `${passper.toFixed(2)}% passed (${calc.secondsToTime(passper / 100 * mapdata.hit_length)}/${calc.secondsToTime(mapdata.hit_length)})`
-        : ''
+        : '';
 
-    const chart = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay'))
+    const chart = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay'));
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.score.dec)
         .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
@@ -6567,7 +6490,7 @@ ${isfail}
         args: {
             embeds: [Embed]
         }
-    })
+    });
 
 
     log.logFile('command',
@@ -6578,7 +6501,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -6624,11 +6547,11 @@ export async function scoreparse(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.Message<any>);
 
             commanduser = input.obj.author;
-            const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
+            const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
             try {
-                scorelink = messagenohttp.split('/scores/')[1]
-                scoremode = scorelink.split('/')[0]
-                scoreid = scorelink.split('/')[1]
+                scorelink = messagenohttp.split('/scores/')[1];
+                scoremode = scorelink.split('/')[0];
+                scoreid = scorelink.split('/')[1];
             } catch (error) {
                 return;
             }
@@ -6637,34 +6560,30 @@ export async function scoreparse(input: extypes.commandInput) {
 
     if (input.overrides != null) {
         if (input.overrides?.id != null) {
-            scoreid = input.overrides.id
+            scoreid = input.overrides.id;
         }
         if (input.overrides?.mode != null) {
-            scoremode = input.overrides.mode
+            scoremode = input.overrides.mode;
         }
         if (input.overrides?.commanduser != null) {
-            commanduser = input.overrides.commanduser
+            commanduser = input.overrides.commanduser;
         }
         if (input.overrides?.commandAs != null) {
-            input.commandType = input.overrides.commandAs
+            input.commandType = input.overrides.commandAs;
         }
     }
 
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('scoreparse', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'score parse',
+        options: [
             {
                 name: 'Score Link',
                 value: `${scorelink}`
@@ -6677,11 +6596,8 @@ export async function scoreparse(input: extypes.commandInput) {
                 name: 'Score ID',
                 value: `${scoreid}`
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let scoredataReq: osufunc.apiReturn;
@@ -6691,7 +6607,7 @@ export async function scoreparse(input: extypes.commandInput) {
         !('error' in func.findFile(scoreid, 'scoredata')) &&
         input.button != 'Refresh'
     ) {
-        scoredataReq = func.findFile(scoreid, 'scoredata')
+        scoredataReq = func.findFile(scoreid, 'scoredata');
     } else {
         scoredataReq = await osufunc.apiget(
             {
@@ -6700,10 +6616,10 @@ export async function scoreparse(input: extypes.commandInput) {
                     id: scoreid,
                     mode: osufunc.modeValidator(scoremode)
                 }
-            })
+            });
     }
 
-    scoredata = scoredataReq.apiData
+    scoredata = scoredataReq.apiData;
 
 
     if (scoredata?.error) {
@@ -6712,7 +6628,7 @@ export async function scoreparse(input: extypes.commandInput) {
                 content: 'Error - could not fetch score data',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
-            }).catch()
+            }).catch();
 
         }
         log.logFile('command',
@@ -6724,7 +6640,7 @@ Could not fetch score data for ${scoreid}
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
     try {
@@ -6740,12 +6656,12 @@ Invalid score
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
     } catch (error) {
     }
-    func.storeFile(scoredataReq, scoreid, 'scoredata')
+    func.storeFile(scoredataReq, scoreid, 'scoredata');
 
     if (input.commandType == 'interaction' && input.overrides == null) {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
@@ -6765,14 +6681,14 @@ Invalid score
     if (func.findFile(scoredata.beatmap.id, 'mapdata') &&
         !('error' in func.findFile(scoredata.beatmap.id, 'mapdata')) &&
         input.button != 'Refresh') {
-        mapdataReq = func.findFile(scoredata.beatmap.id, 'mapdata')
+        mapdataReq = func.findFile(scoredata.beatmap.id, 'mapdata');
     } else {
         mapdataReq = await osufunc.apiget({
             type: 'map',
             params: {
                 id: scoredata.beatmap.id,
             }
-        })
+        });
     }
 
     const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
@@ -6784,14 +6700,14 @@ Invalid score
                     (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: 'Error - could not fetch beatmap data',
                         allowedMentions: { repliedUser: false },
-                    }).catch()
-                }, 1000)
+                    }).catch();
+                }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: 'Error - could not fetch beatmap data',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                }).catch();
             }
         }
         log.logFile('command',
@@ -6803,67 +6719,67 @@ Could not find beatmap data
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
     func.storeFile(mapdataReq, scoredata.beatmap.id, 'mapdata');
 
-    const ranking = scoredata.rank ? scoredata.rank : 'f'
-    let scoregrade = emojis.grades.F
+    const ranking = scoredata.rank ? scoredata.rank : 'f';
+    let scoregrade = emojis.grades.F;
     switch (ranking.toUpperCase()) {
         case 'F':
-            scoregrade = emojis.grades.F
+            scoregrade = emojis.grades.F;
             break;
         case 'D':
-            scoregrade = emojis.grades.D
+            scoregrade = emojis.grades.D;
             break;
         case 'C':
-            scoregrade = emojis.grades.C
+            scoregrade = emojis.grades.C;
             break;
         case 'B':
-            scoregrade = emojis.grades.B
+            scoregrade = emojis.grades.B;
             break;
         case 'A':
-            scoregrade = emojis.grades.A
+            scoregrade = emojis.grades.A;
             break;
         case 'S':
-            scoregrade = emojis.grades.S
+            scoregrade = emojis.grades.S;
             break;
         case 'SH':
-            scoregrade = emojis.grades.SH
+            scoregrade = emojis.grades.SH;
             break;
         case 'X':
-            scoregrade = emojis.grades.X
+            scoregrade = emojis.grades.X;
             break;
         case 'XH':
-            scoregrade = emojis.grades.XH
+            scoregrade = emojis.grades.XH;
 
             break;
     }
-    const gamehits = scoredata.statistics
+    const gamehits = scoredata.statistics;
 
-    const mode = scoredata.mode
+    const mode = scoredata.mode;
     let hitlist: string;
     let fcacc: number;
     let ppissue: string;
 
     if (mode == 'osu') {
-        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
-        fcacc = osumodcalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy
+        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
+        fcacc = osumodcalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy;
     }
     if (mode == 'taiko') {
-        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_miss}`
-        fcacc = osumodcalc.calcgradeTaiko(gamehits.count_300, gamehits.count_100, gamehits.count_miss).accuracy
+        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_miss}`;
+        fcacc = osumodcalc.calcgradeTaiko(gamehits.count_300, gamehits.count_100, gamehits.count_miss).accuracy;
 
     }
     if (mode == 'fruits') {
-        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
-        fcacc = osumodcalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_katu, gamehits.count_miss).accuracy
+        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
+        fcacc = osumodcalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_katu, gamehits.count_miss).accuracy;
     }
     if (mode == 'mania') {
-        hitlist = `${gamehits.count_geki}/${gamehits.count_300}/${gamehits.count_katu}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
-        fcacc = osumodcalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy
+        hitlist = `${gamehits.count_geki}/${gamehits.count_300}/${gamehits.count_katu}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
+        fcacc = osumodcalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy;
     }
     let ppcalcing: PerformanceAttributes[];
     try {
@@ -6878,7 +6794,7 @@ Could not find beatmap data
             score: scoredata.score,
             calctype: 0,
             passedObj: embedStuff.getTotalHits(scoredata.mode, scoredata),
-        })
+        });
 
         ppissue = '';
         osufunc.debug(ppcalcing, 'command', 'scoreparse', input.obj.guildId, 'ppCalcing');
@@ -6920,36 +6836,36 @@ Could not find beatmap data
             ppComputedTemp,
             ppComputedTemp,
             ppComputedTemp
-        ]
-        ppissue = 'Error - pp calculator could not fetch beatmap'
+        ];
+        ppissue = 'Error - pp calculator could not fetch beatmap';
 
     }
 
-    let artist = scoredata.beatmapset.artist
-    const artistuni = scoredata.beatmapset.artist_unicode
-    let title = scoredata.beatmapset.title
-    const titleuni = scoredata.beatmapset.title_unicode
+    let artist = scoredata.beatmapset.artist;
+    const artistuni = scoredata.beatmapset.artist_unicode;
+    let title = scoredata.beatmapset.title;
+    const titleuni = scoredata.beatmapset.title_unicode;
 
     if (artist != artistuni) {
-        artist = `${artist} (${artistuni})`
+        artist = `${artist} (${artistuni})`;
     }
 
     if (title != titleuni) {
-        title = `${title} (${titleuni})`
+        title = `${title} (${titleuni})`;
     }
-    let pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`
+    let pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`;
 
     if (scoredata.accuracy == 1) {
         if (scoredata.perfect == true) {
-            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp`
+            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp`;
         } else {
-            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`
+            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`;
         }
     } else {
         if (scoredata.perfect == true) {
-            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[2].pp.toFixed(2)}pp if SS`
+            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[2].pp.toFixed(2)}pp if SS`;
         } else {
-            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC | ${ppcalcing[2].pp.toFixed(2)}pp if SS`
+            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC | ${ppcalcing[2].pp.toFixed(2)}pp if SS`;
         }
     }
 
@@ -6959,7 +6875,7 @@ Could not find beatmap data
         !('error' in func.findFile(scoredata.user.username, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(scoredata.user.username, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(scoredata.user.username, 'osudata', osufunc.modeValidator(mode));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -6967,26 +6883,26 @@ Could not find beatmap data
                 username: scoredata.user.username,
                 mode: osufunc.modeValidator(mode)
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    osufunc.debug(osudataReq, 'command', 'scoreparse', input.obj.guildId, 'osuData')
+    osufunc.debug(osudataReq, 'command', 'scoreparse', input.obj.guildId, 'osuData');
     if (osudata?.error) {
         if (input.commandType == 'interaction') {
             setTimeout(() => {
                 (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${scoredata?.user?.username}\``,
                     allowedMentions: { repliedUser: false },
-                })
+                });
             }, 1000);
         } else {
             (input.obj as Discord.Message<any>).reply({
                 content: `Error - could not find user \`${scoredata?.user?.username}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
-            })
+            });
         }
         log.logFile('command',
             `
@@ -6997,7 +6913,7 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
@@ -7020,9 +6936,9 @@ ${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/,
 \`${hitlist}\`
 ${scoredata.max_combo}x/**${mapdata.max_combo}x**
 ${pptxt}\n${ppissue}
-`)
+`);
 
-    osufunc.writePreviousId('score', input.obj.guildId, JSON.stringify(scoredata, null, 2))
+    osufunc.writePreviousId('score', input.obj.guildId, JSON.stringify(scoredata, null, 2));
     osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -7034,7 +6950,7 @@ ${pptxt}\n${ppissue}
             embeds: [scoreembed],
             edit: true
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -7044,7 +6960,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -7078,33 +6994,33 @@ export async function scores(input: extypes.commandInput) {
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-parse')) {
                 parseScore = true;
-                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
-                parseId = temp.value
-                input.args = temp.newArgs
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+                parseId = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.includes('-page')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
 
             input.args = cleanArgs(input.args);
 
-            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map;
             if (mapid != null) {
-                input.args.splice(input.args.indexOf(input.args.find(arg => arg.includes('https://osu.ppy.sh/'))), 1)
+                input.args.splice(input.args.indexOf(input.args.find(arg => arg.includes('https://osu.ppy.sh/'))), 1);
             }
 
-            user = input.args.join(' ')
+            user = input.args.join(' ');
 
             if (!input.args[0] || input.args.join(' ').includes(searchid) || user == undefined) {
-                user = null
+                user = null;
             }
         }
             break;
@@ -7122,7 +7038,7 @@ export async function scores(input: extypes.commandInput) {
 
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
-                parseScore = true
+                parseScore = true;
             }
         }
 
@@ -7137,8 +7053,8 @@ export async function scores(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
             page = 0;
-            user = input.obj.message.embeds[0].author.name.split(' (#')[0]
-            mapid = input.obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]
+            user = input.obj.message.embeds[0].author.name.split(' (#')[0];
+            mapid = input.obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1];
             if (input.obj.message.embeds[0].description) {
                 if (input.obj.message.embeds[0].description.includes('mapper')) {
                     filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
@@ -7146,77 +7062,77 @@ export async function scores(input: extypes.commandInput) {
                 if (input.obj.message.embeds[0].description.includes('mods')) {
                     filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
                 }
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 switch (true) {
                     case sort1.includes('score'):
-                        sort = 'score'
+                        sort = 'score';
                         break;
                     case sort1.includes('acc'):
-                        sort = 'acc'
+                        sort = 'acc';
                         break;
                     case sort1.includes('pp'):
-                        sort = 'pp'
+                        sort = 'pp';
                         break;
                     case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent'
+                        sort = 'recent';
                         break;
                     case sort1.includes('combo'):
-                        sort = 'combo'
+                        sort = 'combo';
                         break;
                     case sort1.includes('miss'):
-                        sort = 'miss'
+                        sort = 'miss';
                         break;
                     case sort1.includes('rank'):
-                        sort = 'rank'
+                        sort = 'rank';
                         break;
 
                 }
 
 
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
-                    reverse = true
+                    reverse = true;
                 } else {
-                    reverse = false
+                    reverse = false;
                 }
-                page = 0
+                page = 0;
                 switch (input.button) {
                     case 'BigLeftArrow':
-                        page = 1
+                        page = 1;
                         break;
                     case 'LeftArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
+                        page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1;
                         break;
                     case 'RightArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
+                        page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1;
                         break;
                     case 'BigRightArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('/')[1].split('\n')[0])
+                        page = parseInt((input.obj.message.embeds[0].description).split('/')[1].split('\n')[0]);
                         break;
                     case 'Refresh':
-                        page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1])
+                        page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]);
                         break;
                 }
-                mode = input.obj.message.embeds[0].description.split('mode: ')[1].split('\n')[0]
+                mode = input.obj.message.embeds[0].description.split('mode: ')[1].split('\n')[0];
             }
-            const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
-            page = 0
+            const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
+            page = 0;
             switch (input.button) {
                 case 'BigLeftArrow':
-                    page = 1
+                    page = 1;
                     break;
                 case 'LeftArrow':
-                    page = pageParsed - 1
+                    page = pageParsed - 1;
                     break;
                 case 'RightArrow':
-                    page = pageParsed + 1
+                    page = pageParsed + 1;
                     break;
                 case 'BigRightArrow':
-                    page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
+                    page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
 
                     break;
                 default:
-                    page = pageParsed
+                    page = pageParsed;
                     break;
             }
         }
@@ -7224,13 +7140,13 @@ export async function scores(input: extypes.commandInput) {
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = input.overrides.page
+            page = input.overrides.page;
         }
         if (input.overrides.sort != null) {
-            sort = input.overrides.sort
+            sort = input.overrides.sort;
         }
         if (input.overrides.reverse != null) {
-            reverse = input.overrides.reverse
+            reverse = input.overrides.reverse;
         }
     }
 
@@ -7242,20 +7158,16 @@ export async function scores(input: extypes.commandInput) {
                 .setCustomId(`Refresh-scores-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-        )
+        );
 
-    log.logFile(
-        'command',
-        log.commandLog('scores', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'scores',
+        options: [
             {
                 name: 'User',
                 value: user
@@ -7288,11 +7200,9 @@ export async function scores(input: extypes.commandInput) {
                 name: 'Parse',
                 value: `${parseId}`
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
@@ -7323,7 +7233,7 @@ export async function scores(input: extypes.commandInput) {
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     //if user is null, use searchid
     if (user == null) {
@@ -7350,7 +7260,7 @@ export async function scores(input: extypes.commandInput) {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-        }).catch()
+        }).catch();
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -7359,7 +7269,7 @@ export async function scores(input: extypes.commandInput) {
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -7367,7 +7277,7 @@ export async function scores(input: extypes.commandInput) {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
@@ -7380,14 +7290,14 @@ export async function scores(input: extypes.commandInput) {
                 (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
-                })
+                });
             }, 1000);
         } else {
             (input.obj as Discord.Message<any>).reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
-            })
+            });
         }
         log.logFile('command',
             `
@@ -7398,13 +7308,13 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
 
     }
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     let scoredataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'scores') &&
@@ -7412,7 +7322,7 @@ Could not find user
         !('error' in func.findFile(input.absoluteID, 'scores')) &&
         input.button != 'Refresh'
     ) {
-        scoredataReq = func.findFile(input.absoluteID, 'scores')
+        scoredataReq = func.findFile(input.absoluteID, 'scores');
     } else {
         scoredataReq = await osufunc.apiget({
             type: 'user_get_scores_map',
@@ -7420,7 +7330,7 @@ Could not find user
                 userid: osudata.id,
                 id: mapid,
             }
-        })
+        });
     }
 
     const scoredataPresort: osuApiTypes.ScoreArrA = scoredataReq.apiData;
@@ -7434,14 +7344,14 @@ Could not find user
                     (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: 'Error - could not fetch scores',
                         allowedMentions: { repliedUser: false },
-                    }).catch()
-                }, 1000)
+                    }).catch();
+                }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: 'Error - could not fetch scores',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                }).catch();
             }
         }
         log.logFile('command',
@@ -7453,15 +7363,15 @@ Could not find beatmap scores
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
-    func.storeFile(scoredataReq, input.absoluteID, 'scores')
+    func.storeFile(scoredataReq, input.absoluteID, 'scores');
 
-    const scoredata: osuApiTypes.Score[] = scoredataPresort.scores
+    const scoredata: osuApiTypes.Score[] = scoredataPresort.scores;
     try {
-        scoredata.length < 1
+        scoredata.length < 1;
     } catch (error) {
         return (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: `Error - no scores found for \`${user}\` on map \`${mapid}\``,
@@ -7474,12 +7384,12 @@ Could not find beatmap scores
 
 
     if (parseScore == true) {
-        let pid = parseInt(parseId) - 1
+        let pid = parseInt(parseId) - 1;
         if (pid < 0) {
-            pid = 0
+            pid = 0;
         }
         if (pid > scoredata.length) {
-            pid = scoredata.length - 1
+            pid = scoredata.length - 1;
         }
         input.overrides = {
             mode: scoredata?.[0]?.mode ?? 'osu',
@@ -7488,7 +7398,7 @@ Could not find beatmap scores
             )?.[pid]?.best_id,
             commanduser,
             commandAs: input.commandType
-        }
+        };
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
@@ -7496,14 +7406,14 @@ Could not find beatmap scores
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not find requested score`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -7515,11 +7425,11 @@ Could not find requested score
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
         input.commandType = 'other';
-        await scoreparse(input)
+        await scoreparse(input);
         return;
     }
 
@@ -7528,16 +7438,16 @@ Could not find requested score
         !('error' in func.findFile(mapid, 'mapdata')) &&
         input.button != 'Refresh'
     ) {
-        mapdataReq = func.findFile(mapid, 'mapdata')
+        mapdataReq = func.findFile(mapid, 'mapdata');
     } else {
         mapdataReq = await osufunc.apiget({
             type: 'map',
             params: {
                 id: mapid
             }
-        })
+        });
     }
-    const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData
+    const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
 
     osufunc.debug(mapdataReq, 'command', 'scores', input.obj.guildId, 'mapData');
     if (mapdata?.error) {
@@ -7547,14 +7457,14 @@ Could not find requested score
                     (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: 'Error - could not fetch beatmap data',
                         allowedMentions: { repliedUser: false },
-                    }).catch()
-                }, 1000)
+                    }).catch();
+                }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: 'Error - could not fetch beatmap data',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                }).catch();
             }
         }
         log.logFile('command',
@@ -7566,11 +7476,11 @@ Could not find beatmap data
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
-    func.storeFile(mapdataReq, mapid, 'mapdata')
+    func.storeFile(mapdataReq, mapid, 'mapdata');
 
     const title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
     const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
@@ -7586,12 +7496,12 @@ Could not find beatmap data
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
-        .setURL(`https://osu.ppy.sh/b/${mapid}`)
+        .setURL(`https://osu.ppy.sh/b/${mapid}`);
 
-    scoresEmbed.setFooter({ text: `Page ${page + 1}/${Math.ceil(scoredata.length / 5)}` })
+    scoresEmbed.setFooter({ text: `Page ${page + 1}/${Math.ceil(scoredata.length / 5)}` });
 
     if (page >= Math.ceil(scoredata.length / 5)) {
-        page = Math.ceil(scoredata.length / 5) - 1
+        page = Math.ceil(scoredata.length / 5) - 1;
     }
 
     const scoresarg = await embedStuff.scoreList(
@@ -7609,8 +7519,8 @@ Could not find beatmap data
             filterMapTitle: null,
             reverse: reverse,
             mapidOverride: mapdata.id
-        })
-    scoresEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\nmode: ${mode}\n`)
+        });
+    scoresEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\nmode: ${mode}\n`);
     if (scoresarg.fields.length == 0) {
         scoresEmbed.addFields([{
             name: 'Error',
@@ -7624,7 +7534,7 @@ Could not find beatmap data
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         for (let i = 0; i < scoresarg.fields.length && i < 5; i++) {
-            scoresEmbed.addFields([scoresarg.fields[i]])
+            scoresEmbed.addFields([scoresarg.fields[i]]);
         }
     }
 
@@ -7651,7 +7561,7 @@ Could not find beatmap data
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -7661,7 +7571,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -7671,7 +7581,7 @@ ID: ${input.absoluteID}
 export async function scorestats(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
-    type scoretypes = 'firsts' | 'best' | 'recent' | 'pinned'
+    type scoretypes = 'firsts' | 'best' | 'recent' | 'pinned';
     let scoreTypes: scoretypes = 'best';
     let user = null;
     let searchid;
@@ -7685,88 +7595,88 @@ export async function scorestats(input: extypes.commandInput) {
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
             if (input.args.includes('-f')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-f'))
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
             }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             if (input.args.includes('-m')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-m'))
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
             }
 
             if (input.args.includes('-firsts')) {
-                scoreTypes = 'firsts'
+                scoreTypes = 'firsts';
                 input.args.splice(input.args.indexOf('-firsts'), 1);
             }
             if (input.args.includes('-first')) {
-                scoreTypes = 'firsts'
+                scoreTypes = 'firsts';
                 input.args.splice(input.args.indexOf('-first'), 1);
             }
             if (input.args.includes('-globals')) {
-                scoreTypes = 'firsts'
+                scoreTypes = 'firsts';
                 input.args.splice(input.args.indexOf('-globals'), 1);
             }
             if (input.args.includes('-global')) {
-                scoreTypes = 'firsts'
+                scoreTypes = 'firsts';
                 input.args.splice(input.args.indexOf('-global'), 1);
             }
             if (input.args.includes('-osutop')) {
-                scoreTypes = 'best'
+                scoreTypes = 'best';
                 input.args.splice(input.args.indexOf('-osutop'), 1);
             }
             if (input.args.includes('-top')) {
-                scoreTypes = 'best'
+                scoreTypes = 'best';
                 input.args.splice(input.args.indexOf('-top'), 1);
             }
             if (input.args.includes('-recent')) {
-                scoreTypes = 'recent'
+                scoreTypes = 'recent';
                 input.args.splice(input.args.indexOf('-recent'), 1);
             }
             if (input.args.includes('-r')) {
-                scoreTypes = 'recent'
+                scoreTypes = 'recent';
                 input.args.splice(input.args.indexOf('-r'), 1);
             }
             if (input.args.includes('-pinned')) {
-                scoreTypes = 'pinned'
+                scoreTypes = 'pinned';
                 input.args.splice(input.args.indexOf('-pinned'), 1);
             }
             if (input.args.includes('-pins')) {
-                scoreTypes = 'pinned'
+                scoreTypes = 'pinned';
                 input.args.splice(input.args.indexOf('-pins'), 1);
             }
             if (input.args.includes('-pin')) {
-                scoreTypes = 'pinned'
+                scoreTypes = 'pinned';
                 input.args.splice(input.args.indexOf('-pin'), 1);
             }
 
@@ -7774,7 +7684,7 @@ export async function scorestats(input: extypes.commandInput) {
 
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
+                user = null;
             }
         }
             break;
@@ -7821,17 +7731,14 @@ export async function scorestats(input: extypes.commandInput) {
                 .setEmoji(buttonsthing.label.main.detailed),
         );
 
-
-    log.logFile(
-        'command',
-        log.commandLog('scorestats', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'score stats',
+        options: [
             {
                 name: 'Score Type',
                 value: scoreTypes
@@ -7848,11 +7755,8 @@ export async function scorestats(input: extypes.commandInput) {
                 name: 'Search ID',
                 value: searchid
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -7877,7 +7781,7 @@ export async function scorestats(input: extypes.commandInput) {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-        }).catch()
+        }).catch();
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -7886,7 +7790,7 @@ export async function scorestats(input: extypes.commandInput) {
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -7894,7 +7798,7 @@ export async function scorestats(input: extypes.commandInput) {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
@@ -7907,7 +7811,7 @@ export async function scorestats(input: extypes.commandInput) {
                 content: `Error - could not fetch user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
-            }).catch()
+            }).catch();
         }
         log.logFile('command',
             `
@@ -7918,7 +7822,7 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
@@ -7928,7 +7832,7 @@ Could not find user
                 content: `Error - could not fetch user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
-            }).catch()
+            }).catch();
         }
         return;
     }
@@ -7947,7 +7851,7 @@ Could not find user
             },
             version: 2,
 
-        })
+        });
         const fd: osuApiTypes.Score[] & osuApiTypes.Error = req.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
@@ -7956,14 +7860,14 @@ Could not find user
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not find user\'s ${scoreTypes} scores`,
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not find user\'s ${scoreTypes} scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -7975,12 +7879,12 @@ Could not find user's ${scoreTypes} scores
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
         for (let i = 0; i < fd.length; i++) {
             if (!fd[i] || typeof fd[i] == 'undefined') { break; }
-            await scoresdata.push(fd[i])
+            await scoresdata.push(fd[i]);
         }
         if (fd.length == 100 && (scoreTypes == 'firsts' || scoreTypes == 'pinned')) {
             reachedMaxCount = true;
@@ -7991,11 +7895,11 @@ Could not find user's ${scoreTypes} scores
         !('error' in func.findFile(input.absoluteID, 'reqdata')) &&
         input.button != 'Refresh'
     ) {
-        scoresdata = func.findFile(input.absoluteID, 'reqdata')
+        scoresdata = func.findFile(input.absoluteID, 'reqdata');
     } else {
         await getScoreCount(0);
     }
-    func.storeFile(scoresdata, input.absoluteID, 'reqdata')
+    func.storeFile(scoresdata, input.absoluteID, 'reqdata');
 
     let useFiles: string[] = [];
 
@@ -8008,9 +7912,9 @@ Could not find user's ${scoreTypes} scores
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
     if (scoresdata.length == 0) {
-        Embed.setDescription('No scores found')
+        Embed.setDescription('No scores found');
     } else {
-        Embed.setDescription(`${func.separateNum(scoresdata.length)} scores found\n${reachedMaxCount ? 'Only first 100 scores are calculated' : ''}`)
+        Embed.setDescription(`${func.separateNum(scoresdata.length)} scores found\n${reachedMaxCount ? 'Only first 100 scores are calculated' : ''}`);
         const mappers = osufunc.CommonMappers(scoresdata);
         const mods = osufunc.CommonMods(scoresdata);
         const acc = osufunc.Stats(scoresdata.map(x => x.accuracy));
@@ -8019,26 +7923,26 @@ Could not find user's ${scoreTypes} scores
 
 
         if (input.commandType == 'button') {
-            let frmappertxt = ''
-            let frmodstxt = ''
+            let frmappertxt = '';
+            let frmodstxt = '';
             for (let i = 0; i < mappers.length; i++) {
-                frmappertxt += `#${i + 1}. ${mappers[i].mapper} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`
+                frmappertxt += `#${i + 1}. ${mappers[i].mapper} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`;
             }
             for (let i = 0; i < mods.length; i++) {
-                frmodstxt += `#${i + 1}. ${mods[i].mods} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`
+                frmodstxt += `#${i + 1}. ${mods[i].mods} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`;
             }
 
-            fs.writeFileSync(`cache/commandData/${input.absoluteID}Mappers.txt`, frmappertxt, 'utf-8')
-            fs.writeFileSync(`cache/commandData/${input.absoluteID}Mods.txt`, frmodstxt, 'utf-8')
-            useFiles = [`cache/commandData/${input.absoluteID}Mappers.txt`, `cache/commandData/${input.absoluteID}Mods.txt`]
+            fs.writeFileSync(`cache/commandData/${input.absoluteID}Mappers.txt`, frmappertxt, 'utf-8');
+            fs.writeFileSync(`cache/commandData/${input.absoluteID}Mods.txt`, frmodstxt, 'utf-8');
+            useFiles = [`cache/commandData/${input.absoluteID}Mappers.txt`, `cache/commandData/${input.absoluteID}Mods.txt`];
         } else {
             let mappersStr = '';
             for (let i = 0; i < mappers.length && i < 5; i++) {
-                mappersStr += `#${i + 1}. ${mappers[i].mapper} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`
+                mappersStr += `#${i + 1}. ${mappers[i].mapper} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`;
             }
             let modsStr = '';
             for (let i = 0; i < mods.length && i < 5; i++) {
-                modsStr += `#${i + 1}. ${mods[i].mods} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`
+                modsStr += `#${i + 1}. ${mods[i].mods} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`;
             }
 
             Embed.addFields([{
@@ -8081,7 +7985,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
 `,
                 inline: true
             }
-            ])
+            ]);
         }
     }
 
@@ -8097,8 +8001,8 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
         }).catch(error => {
             (input.obj as Discord.ButtonInteraction<any>).editReply({
                 files: useFiles,
-            })
-        })
+            });
+        });
 
 
     } else {
@@ -8112,7 +8016,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
                 components: [buttons],
                 files: useFiles
             }
-        })
+        });
     }
 
     log.logFile('command',
@@ -8123,7 +8027,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -8157,108 +8061,108 @@ export async function simulate(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
             if (ctn.includes('-acc')) {
-                acc = parseFloat(input.args[input.args.indexOf('-acc') + 1])
-                input.args.splice(input.args.indexOf('-acc'), 2)
-                acc = parseFloat(ctn.split('acc=')[1].split(' ')[0])
+                acc = parseFloat(input.args[input.args.indexOf('-acc') + 1]);
+                input.args.splice(input.args.indexOf('-acc'), 2);
+                acc = parseFloat(ctn.split('acc=')[1].split(' ')[0]);
             }
             if (ctn.includes('-accuracy')) {
-                acc = parseFloat(input.args[input.args.indexOf('-accuracy') + 1])
-                input.args.splice(input.args.indexOf('-accuracy'), 2)
+                acc = parseFloat(input.args[input.args.indexOf('-accuracy') + 1]);
+                input.args.splice(input.args.indexOf('-accuracy'), 2);
             }
             if (ctn.includes('-combo')) {
-                combo = parseInt(input.args[input.args.indexOf('-combo') + 1])
-                input.args.splice(input.args.indexOf('-combo'), 2)
+                combo = parseInt(input.args[input.args.indexOf('-combo') + 1]);
+                input.args.splice(input.args.indexOf('-combo'), 2);
             }
             if (ctn.includes('-n300')) {
-                n300 = parseInt(input.args[input.args.indexOf('-n300') + 1])
-                input.args.splice(input.args.indexOf('-n300'), 2)
+                n300 = parseInt(input.args[input.args.indexOf('-n300') + 1]);
+                input.args.splice(input.args.indexOf('-n300'), 2);
             }
             if (ctn.includes('-300s')) {
-                n300 = parseInt(input.args[input.args.indexOf('-300s') + 1])
-                input.args.splice(input.args.indexOf('-300s'), 2)
+                n300 = parseInt(input.args[input.args.indexOf('-300s') + 1]);
+                input.args.splice(input.args.indexOf('-300s'), 2);
             }
             if (ctn.includes('-n100')) {
-                n100 = parseInt(input.args[input.args.indexOf('-n100') + 1])
-                input.args.splice(input.args.indexOf('-n100'), 2)
+                n100 = parseInt(input.args[input.args.indexOf('-n100') + 1]);
+                input.args.splice(input.args.indexOf('-n100'), 2);
             }
             if (ctn.includes('-100s')) {
-                n100 = parseInt(input.args[input.args.indexOf('-100s') + 1])
-                input.args.splice(input.args.indexOf('-100s'), 2)
+                n100 = parseInt(input.args[input.args.indexOf('-100s') + 1]);
+                input.args.splice(input.args.indexOf('-100s'), 2);
             }
             if (ctn.includes('-n50')) {
-                n50 = parseInt(input.args[input.args.indexOf('-n50') + 1])
-                input.args.splice(input.args.indexOf('-n50'), 2)
+                n50 = parseInt(input.args[input.args.indexOf('-n50') + 1]);
+                input.args.splice(input.args.indexOf('-n50'), 2);
             }
             if (ctn.includes('-50s')) {
-                n50 = parseInt(input.args[input.args.indexOf('-50s') + 1])
-                input.args.splice(input.args.indexOf('-50s'), 2)
+                n50 = parseInt(input.args[input.args.indexOf('-50s') + 1]);
+                input.args.splice(input.args.indexOf('-50s'), 2);
             }
             if (ctn.includes('-miss')) {
-                nMiss = parseInt(input.args[input.args.indexOf('-miss') + 1])
-                input.args.splice(input.args.indexOf('-miss'), 2)
+                nMiss = parseInt(input.args[input.args.indexOf('-miss') + 1]);
+                input.args.splice(input.args.indexOf('-miss'), 2);
             }
             if (ctn.includes('-misses')) {
-                nMiss = parseInt(input.args[input.args.indexOf('-misses') + 1])
-                input.args.splice(input.args.indexOf('-misses'), 2)
+                nMiss = parseInt(input.args[input.args.indexOf('-misses') + 1]);
+                input.args.splice(input.args.indexOf('-misses'), 2);
             }
             if (input.args.includes('-bpm')) {
-                overrideBpm = parseFloat(input.args[input.args.indexOf('-bpm') + 1])
-                input.args.splice(input.args.indexOf('-bpm'), 2)
+                overrideBpm = parseFloat(input.args[input.args.indexOf('-bpm') + 1]);
+                input.args.splice(input.args.indexOf('-bpm'), 2);
             }
             if (input.args.includes('-speed')) {
-                overrideSpeed = parseFloat(input.args[input.args.indexOf('-speed') + 1])
-                input.args.splice(input.args.indexOf('-speed'), 2)
+                overrideSpeed = parseFloat(input.args[input.args.indexOf('-speed') + 1]);
+                input.args.splice(input.args.indexOf('-speed'), 2);
             }
             if (ctn.includes('mods=')) {
-                mods = ctn.split('mods=')[1].split(' ')[0]
+                mods = ctn.split('mods=')[1].split(' ')[0];
             }
             if (ctn.includes('acc=')) {
-                acc = parseFloat(ctn.split('acc=')[1].split(' ')[0])
+                acc = parseFloat(ctn.split('acc=')[1].split(' ')[0]);
             }
             if (ctn.includes('accuracy=')) {
-                acc = parseFloat(ctn.split('accuracy=')[1].split(' ')[0])
+                acc = parseFloat(ctn.split('accuracy=')[1].split(' ')[0]);
             }
             if (ctn.includes('combo=')) {
-                combo = parseInt(ctn.split('combo=')[1].split(' ')[0])
+                combo = parseInt(ctn.split('combo=')[1].split(' ')[0]);
             }
             if (ctn.includes('n300=')) {
-                n300 = parseInt(ctn.split('n300=')[1].split(' ')[0])
+                n300 = parseInt(ctn.split('n300=')[1].split(' ')[0]);
             }
             if (ctn.includes('300s=')) {
-                n300 = parseInt(ctn.split('300s=')[1].split(' ')[0])
+                n300 = parseInt(ctn.split('300s=')[1].split(' ')[0]);
             }
             if (ctn.includes('n100=')) {
-                n100 = parseInt(ctn.split('n100=')[1].split(' ')[0])
+                n100 = parseInt(ctn.split('n100=')[1].split(' ')[0]);
             }
             if (ctn.includes('100s=')) {
-                n100 = parseInt(ctn.split('100s=')[1].split(' ')[0])
+                n100 = parseInt(ctn.split('100s=')[1].split(' ')[0]);
             }
             if (ctn.includes('n50=')) {
-                n50 = parseInt(ctn.split('n50=')[1].split(' ')[0])
+                n50 = parseInt(ctn.split('n50=')[1].split(' ')[0]);
             }
             if (ctn.includes('50s=')) {
-                n50 = parseInt(ctn.split('50s=')[1].split(' ')[0])
+                n50 = parseInt(ctn.split('50s=')[1].split(' ')[0]);
             }
             if (ctn.includes('miss=')) {
-                nMiss = parseInt(ctn.split('miss=')[1].split(' ')[0])
+                nMiss = parseInt(ctn.split('miss=')[1].split(' ')[0]);
             }
             if (ctn.includes('misses=')) {
-                nMiss = parseInt(ctn.split('misses=')[1].split(' ')[0])
+                nMiss = parseInt(ctn.split('misses=')[1].split(' ')[0]);
             }
             if (input.args.includes('bpm=')) {
-                overrideBpm = parseFloat(ctn.split('bpm=')[1].split(' ')[0])
+                overrideBpm = parseFloat(ctn.split('bpm=')[1].split(' ')[0]);
             }
             if (input.args.includes('speed=')) {
-                overrideSpeed = parseFloat(ctn.split('speed=')[1].split(' ')[0])
+                overrideSpeed = parseFloat(ctn.split('speed=')[1].split(' ')[0]);
             }
 
             input.args = cleanArgs(input.args);
 
             if (isNaN(+input.args[0])) {
-                mapid = +input.args[0]
+                mapid = +input.args[0];
             }
             if (ctn.includes('+')) {
-                mods = ctn.split('+')[1].split(' ')[0]
+                mods = ctn.split('+')[1].split(' ')[0];
             }
         }
             break;
@@ -8268,14 +8172,14 @@ export async function simulate(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            mapid = input.obj.options.getInteger('id')
-            mods = input.obj.options.getString('mods')
-            acc = input.obj.options.getNumber('accuracy')
-            combo = input.obj.options.getInteger('combo')
-            n300 = input.obj.options.getInteger('n300')
-            n100 = input.obj.options.getInteger('n100')
-            n50 = input.obj.options.getInteger('n50')
-            nMiss = input.obj.options.getInteger('miss')
+            mapid = input.obj.options.getInteger('id');
+            mods = input.obj.options.getString('mods');
+            acc = input.obj.options.getNumber('accuracy');
+            combo = input.obj.options.getInteger('combo');
+            n300 = input.obj.options.getInteger('n300');
+            n100 = input.obj.options.getInteger('n100');
+            n50 = input.obj.options.getInteger('n50');
+            nMiss = input.obj.options.getInteger('miss');
         }
 
             //==============================================================================================================================================================================================
@@ -8291,18 +8195,14 @@ export async function simulate(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('simulate', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'simulate',
+        options: [
             {
                 name: 'Map ID',
                 value: mapid
@@ -8335,11 +8235,8 @@ export async function simulate(input: extypes.commandInput) {
                 name: 'Misses',
                 value: nMiss
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -8358,14 +8255,14 @@ export async function simulate(input: extypes.commandInput) {
     if (func.findFile(mapid, 'mapdata') &&
         !('error' in func.findFile(mapid, 'mapdata')) &&
         input.button != 'Refresh') {
-        mapdataReq = func.findFile(mapid, 'mapdata')
+        mapdataReq = func.findFile(mapid, 'mapdata');
     } else {
         mapdataReq = await osufunc.apiget({
             type: 'map_get',
             params: {
                 id: mapid
             }
-        })
+        });
     }
 
     const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
@@ -8378,7 +8275,7 @@ export async function simulate(input: extypes.commandInput) {
                 content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
-            }).catch()
+            }).catch();
 
         }
         log.logFile('command',
@@ -8390,7 +8287,7 @@ Could not find beatmap data
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
     func.storeFile(mapdataReq, mapid, 'mapdata');
@@ -8398,24 +8295,24 @@ Could not find beatmap data
 
 
     if (!mods) {
-        mods = 'NM'
+        mods = 'NM';
     }
     if (!combo) {
-        combo = mapdata.max_combo
+        combo = mapdata.max_combo;
     }
 
     if (overrideBpm && !overrideSpeed) {
-        overrideSpeed = overrideBpm / mapdata.bpm
+        overrideSpeed = overrideBpm / mapdata.bpm;
     }
     if (overrideSpeed && !overrideBpm) {
-        overrideBpm = overrideSpeed * mapdata.bpm
+        overrideBpm = overrideSpeed * mapdata.bpm;
     }
 
     if (mods.includes('DT') || mods.includes('NC')) {
-        overrideSpeed = overrideSpeed * 1.5
+        overrideSpeed = overrideSpeed * 1.5;
     }
     if (mods.includes('HT')) {
-        overrideSpeed = overrideSpeed * 0.75
+        overrideSpeed = overrideSpeed * 0.75;
     }
 
     const score = await osufunc.scorecalc({
@@ -8440,12 +8337,12 @@ Could not find beatmap data
             n100,
             n50,
             0
-        )
+        );
     const specAcc = isNaN(fcaccgr.accuracy) ?
         acc ?
             acc :
             100 :
-        fcaccgr.accuracy
+        fcaccgr.accuracy;
 
     const mapPerf = await osufunc.mapcalc({
         mods,
@@ -8459,7 +8356,7 @@ Could not find beatmap data
         mapdata.beatmapset?.title != mapdata.beatmapset?.title_unicode ?
             `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title}) [${mapdata.version}]` :
             `${mapdata.beatmapset.title_unicode} [${mapdata.version}]` :
-        'unknown map'
+        'unknown map';
 
     const scoreEmbed = new Discord.EmbedBuilder()
         .setTitle(`Simulated play on ${title}`)
@@ -8513,7 +8410,7 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
                 `,
                 inline: true
             },
-        ])
+        ]);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage({
@@ -8523,7 +8420,7 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
             embeds: [scoreEmbed],
             edit: true
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -8533,7 +8430,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -8571,11 +8468,11 @@ export async function map(input: extypes.commandInput) {
 
             if (input.args.includes('-detailed')) {
                 detailed = true;
-                input.args.splice(input.args.indexOf('-detailed'), 1)
+                input.args.splice(input.args.indexOf('-detailed'), 1);
             }
             if (input.args.includes('-d')) {
                 detailed = true;
-                input.args.splice(input.args.indexOf('-d'), 1)
+                input.args.splice(input.args.indexOf('-d'), 1);
             }
             if (input.args.includes('-bpm')) {
                 const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
@@ -8620,7 +8517,7 @@ export async function map(input: extypes.commandInput) {
             }
 
             if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', maptitleq, true)
+                const temp = func.parseArg(input.args, '-?', 'string', maptitleq, true);
                 maptitleq = temp.value;
                 input.args = temp.newArgs;
             }
@@ -8629,17 +8526,17 @@ export async function map(input: extypes.commandInput) {
                 maptitleq = input.args.join(' ').substring(
                     input.args.join(' ').indexOf('"') + 1,
                     input.args.join(' ').lastIndexOf('"')
-                )
-                input.args = input.args.join(' ').replace(maptitleq, '').split(' ')
+                );
+                input.args = input.args.join(' ').replace(maptitleq, '').split(' ');
             }
             if (input.args.join(' ').includes('+')) {
-                mapmods = input.args.join(' ').split('+')[1]
+                mapmods = input.args.join(' ').split('+')[1];
                 mapmods.includes(' ') ? mapmods = mapmods.split(' ')[0] : null;
-                input.args = input.args.join(' ').replace('+', '').replace(mapmods, '').split(' ')
+                input.args = input.args.join(' ').replace('+', '').replace(mapmods, '').split(' ');
             }
             input.args = cleanArgs(input.args);
 
-            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map;
         }
             break;
 
@@ -8672,7 +8569,7 @@ export async function map(input: extypes.commandInput) {
             mapid = curid;
 
             if (input.obj.message.embeds[0].fields[1].value.includes('aim') || input.obj.message.embeds[0].fields[0].value.includes('ms')) {
-                detailed = true
+                detailed = true;
             }
             mapmods = input.obj.message.embeds[0].title.split('+')[1];
             if (input.button == 'DetailEnable') {
@@ -8683,10 +8580,10 @@ export async function map(input: extypes.commandInput) {
             }
             if (input.button == 'Refresh') {
                 mapid = curid;
-                detailed = input.obj.message.embeds[0].fields[1].value.includes('aim') || input.obj.message.embeds[0].fields[0].value.includes('ms')
+                detailed = input.obj.message.embeds[0].fields[1].value.includes('aim') || input.obj.message.embeds[0].fields[0].value.includes('ms');
             }
             if (input.obj.message.embeds[0].fields[0].value.includes('=>')) {
-                overrideBpm = parseFloat(input.obj.message.embeds[0].fields[0].value.split('=>')[1].split('\n')[0])
+                overrideBpm = parseFloat(input.obj.message.embeds[0].fields[0].value.split('=>')[1].split('\n')[0]);
             }
         }
             break;
@@ -8696,12 +8593,12 @@ export async function map(input: extypes.commandInput) {
 
             commanduser = input.obj.author;
 
-            const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
+            const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
             mapmods =
                 input.obj.content.includes('+') ?
                     messagenohttp.split('+')[1] : 'NM';
             if (input.args[0] && input.args[0].startsWith('query')) {
-                maptitleq = input.args[1]
+                maptitleq = input.args[1];
             } else if (
                 (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmapsets/') && messagenohttp.includes('#'))) ||
                 (!messagenohttp.includes('/s/') && (messagenohttp.includes('/b/'))) ||
@@ -8711,17 +8608,17 @@ export async function map(input: extypes.commandInput) {
                 try {
                     if (messagenohttp.includes('beatmapsets')) {
 
-                        idfirst = messagenohttp.split('#')[1].split('/')[1]
+                        idfirst = messagenohttp.split('#')[1].split('/')[1];
                     } else if (messagenohttp.includes('?')) {
-                        idfirst = messagenohttp.split('beatmaps/')[1].split('?')[0]
+                        idfirst = messagenohttp.split('beatmaps/')[1].split('?')[0];
                     }
                     else {
-                        idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1]
+                        idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1];
                     }
                     if (isNaN(+idfirst)) {
-                        mapid = parseInt(idfirst.split(' ')[0])
+                        mapid = parseInt(idfirst.split(' ')[0]);
                     } else {
-                        mapid = parseInt(idfirst)
+                        mapid = parseInt(idfirst);
                     }
                 } catch (error) {
                     (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
@@ -8739,30 +8636,30 @@ export async function map(input: extypes.commandInput) {
             } else {
                 let setid = 910392;
                 if (!messagenohttp.includes('/beatmapsets/')) {
-                    setid = +messagenohttp.split('/s/')[1]
+                    setid = +messagenohttp.split('/s/')[1];
 
                     if (isNaN(setid)) {
-                        setid = +messagenohttp.split('/s/')[1].split(' ')[0]
+                        setid = +messagenohttp.split('/s/')[1].split(' ')[0];
                     }
                 } else if (!messagenohttp.includes('/s/')) {
-                    setid = +messagenohttp.split('/beatmapsets/')[1]
+                    setid = +messagenohttp.split('/beatmapsets/')[1];
 
                     if (isNaN(setid)) {
-                        setid = +messagenohttp.split('/s/')[1].split(' ')[0]
+                        setid = +messagenohttp.split('/s/')[1].split(' ')[0];
                     }
                 }
                 let bmsdataReq: osufunc.apiReturn;
                 if (func.findFile(setid, `bmsdata`) &&
                     !('error' in func.findFile(setid, `bmsdata`)) &&
                     input.button != 'Refresh') {
-                    bmsdataReq = func.findFile(setid, `bmsdata`)
+                    bmsdataReq = func.findFile(setid, `bmsdata`);
                 } else {
                     bmsdataReq = await osufunc.apiget({
                         type: 'mapset_get',
                         params: {
                             id: setid
                         }
-                    })
+                    });
                     // bmsdataReq = await osufunc.apiget('mapset_get', `${setid}`)
                 }
 
@@ -8777,7 +8674,7 @@ Could not find beatmapset data
 ----------------------------------------------------
 \n\n`,
                         { guildId: `${input.obj.guildId}` }
-                    )
+                    );
                     return;
                 }
                 try {
@@ -8808,16 +8705,16 @@ Could not find beatmapset data
     }
     if (input.overrides != null) {
         if (input.overrides?.overwriteModal != null) {
-            overwriteModal = input?.overrides?.overwriteModal ?? overwriteModal
+            overwriteModal = input?.overrides?.overwriteModal ?? overwriteModal;
         }
         if (input.overrides?.id != null) {
-            mapid = input?.overrides?.id ?? mapid
+            mapid = input?.overrides?.id ?? mapid;
         }
         if (input.overrides?.commanduser != null) {
-            commanduser = input.overrides.commanduser
+            commanduser = input.overrides.commanduser;
         }
         if (input.overrides?.commandAs != null) {
-            input.commandType = input.overrides.commandAs
+            input.commandType = input.overrides.commandAs;
         }
     }
 
@@ -8828,20 +8725,16 @@ Could not find beatmapset data
             .setCustomId(`Refresh-map-${commanduser.id}-${input.absoluteID}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.main.refresh),
-    )
+    );
 
-    log.logFile(
-        'command',
-        log.commandLog('map', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'map',
+        options: [
             {
                 name: 'Map ID',
                 value: mapid
@@ -8882,11 +8775,8 @@ Could not find beatmapset data
                 name: 'hp',
                 value: customHP
             },
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
 
@@ -8899,14 +8789,14 @@ Could not find beatmapset data
                 .setCustomId(`DetailDisable-map-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed)
-        )
+        );
     } else {
         buttons.addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`DetailEnable-map-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed)
-        )
+        );
     }
     let mapdataReq: osufunc.apiReturn;
     let mapdata: osuApiTypes.Beatmap;
@@ -8915,21 +8805,21 @@ Could not find beatmapset data
 
     const inputModal = new Discord.SelectMenuBuilder()
         .setCustomId(`Select-map-${commanduser.id}-${input.absoluteID}`)
-        .setPlaceholder('Select a map')
+        .setPlaceholder('Select a map');
 
     //fetch map data and mapset data from id
     if (maptitleq == null) {
         if (func.findFile(mapid, 'mapdata') &&
             !('error' in func.findFile(mapid, 'mapdata')) &&
             input.button != 'Refresh') {
-            mapdataReq = func.findFile(mapid, 'mapdata')
+            mapdataReq = func.findFile(mapid, 'mapdata');
         } else {
             mapdataReq = await osufunc.apiget({
                 type: 'map_get',
                 params: {
                     id: mapid
                 }
-            })
+            });
         }
 
         mapdata = mapdataReq.apiData;
@@ -8954,16 +8844,16 @@ Could not find beatmap data
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
 
-        func.storeFile(mapdataReq, mapid, 'mapdata')
+        func.storeFile(mapdataReq, mapid, 'mapdata');
 
         if (func.findFile(mapdata.beatmapset_id, `bmsdata`) &&
             !('error' in func.findFile(mapdata.beatmapset_id, `bmsdata`)) &&
             input.button != 'Refresh') {
-            bmsdataReq = func.findFile(mapdata.beatmapset_id, `bmsdata`)
+            bmsdataReq = func.findFile(mapdata.beatmapset_id, `bmsdata`);
         } else {
             bmsdataReq = await osufunc.apiget(
                 {
@@ -8971,7 +8861,7 @@ Could not find beatmap data
                     params: {
                         id: mapdata.beatmapset_id
                     }
-                })
+                });
         }
         bmsdata = bmsdataReq.apiData;
 
@@ -8983,7 +8873,7 @@ Could not find beatmap data
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                }).catch();
             }
             log.logFile('command',
                 `
@@ -8994,11 +8884,11 @@ Could not find beatmap data
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
 
-        func.storeFile(bmsdataReq, mapdata.beatmapset_id, `bmsdata`)
+        func.storeFile(bmsdataReq, mapdata.beatmapset_id, `bmsdata`);
 
         //options thing to switch to other maps in the mapset
         if (typeof bmsdata?.beatmaps == 'undefined' || bmsdata?.beatmaps?.length < 2) {
@@ -9013,10 +8903,10 @@ Could not find beatmap data
                     .setLabel(`#${1}`)
                     .setDescription(`${mapdata.version} ${mapdata.difficulty_rating}⭐`)
                     .setValue(`${mapdata.id}`)
-            )
+            );
         } else {
             for (let i = 0; i < bmsdata.beatmaps.length && i < 25; i++) {
-                const curmap = bmsdata.beatmaps.slice().sort((a, b) => b.difficulty_rating - a.difficulty_rating)[i]
+                const curmap = bmsdata.beatmaps.slice().sort((a, b) => b.difficulty_rating - a.difficulty_rating)[i];
                 if (!curmap) break;
                 inputModal.addOptions(
                     new Discord.SelectMenuOptionBuilder()
@@ -9029,7 +8919,7 @@ Could not find beatmap data
                         .setLabel(`#${i + 1} | ${bmsdata.title}`)
                         .setDescription(`${curmap.version} ${curmap.difficulty_rating}⭐`)
                         .setValue(`${curmap.id}`)
-                )
+                );
             }
         }
     }
@@ -9042,8 +8932,8 @@ Could not find beatmap data
                 searchString: maptitleq,
                 opts: [`s=${searchRestrict}`]
             }
-        })
-        const mapidtest = mapidtestReq.apiData
+        });
+        const mapidtest = mapidtestReq.apiData;
         osufunc.debug(mapidtestReq, 'command', 'map', input.obj.guildId, 'mapIdTestData');
 
         if (mapidtest?.error) {
@@ -9052,7 +8942,7 @@ Could not find beatmap data
                     content: 'Error - could not fetch beatmap search data.',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                }).catch();
             }
             log.logFile('command',
                 `
@@ -9063,7 +8953,7 @@ Could not find beatmap data
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
 
@@ -9076,13 +8966,13 @@ Could not find beatmap data
             return;
         }
         try {
-            mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating)
+            mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
         } catch (error) {
             (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 .catch();
             return;
         }
-        const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset }[] = [];
+        const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset; }[] = [];
 
         //get maps to add to options menu
         for (let i = 0; i < mapidtest.beatmapsets.length; i++) {
@@ -9094,7 +8984,7 @@ Could not find beatmap data
                     mode_int: mapidtest.beatmapsets[i].beatmaps[j].mode_int,
                     map: mapidtest.beatmapsets[i].beatmaps[j],
                     mapset: mapidtest.beatmapsets[i]
-                })
+                });
             }
         }
 
@@ -9102,18 +8992,18 @@ Could not find beatmap data
             input.commandType == 'button' &&
             !('error' in func.findFile(mapidtest2[0].id, 'mapdata')) &&
             input.button != 'Refresh') {
-            mapdataReq = func.findFile(mapidtest2[0].id, 'mapdata')
+            mapdataReq = func.findFile(mapidtest2[0].id, 'mapdata');
         } else {
             mapdataReq = await osufunc.apiget({
                 type: 'map_get',
                 params: {
                     id: mapidtest2[0].id
                 }
-            })
+            });
             // mapdataReq = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
         }
 
-        mapdata = mapdataReq.apiData
+        mapdata = mapdataReq.apiData;
 
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
         if (mapdata?.error || !mapdata.id) {
@@ -9133,15 +9023,15 @@ Could not find beatmap data
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
 
-        func.storeFile(mapdataReq, mapidtest2[0].id, 'mapdata')
+        func.storeFile(mapdataReq, mapidtest2[0].id, 'mapdata');
 
         //options menu to switch to other maps
         for (let i = 0; i < allmaps.length && i < 25; i++) {
-            const curmap = allmaps[i]
+            const curmap = allmaps[i];
             if (!curmap.map) break;
             inputModal.addOptions(
                 new Discord.SelectMenuOptionBuilder()
@@ -9154,7 +9044,7 @@ Could not find beatmap data
                     .setLabel(`#${i + 1} | ${curmap.mapset?.title} // ${curmap.mapset?.creator}`)
                     .setDescription(`[${curmap.map.version}] ${curmap.map.difficulty_rating}⭐`)
                     .setValue(`${curmap.map.id}`)
-            )
+            );
         }
     }
 
@@ -9188,19 +9078,19 @@ Could not find beatmap data
     }
 
     if (customCS == 'current' || isNaN(+customCS)) {
-        customCS = mapdata.cs
+        customCS = mapdata.cs;
     }
     if (customAR == 'current' || isNaN(+customAR)) {
-        customAR = mapdata.ar
+        customAR = mapdata.ar;
     }
     if (customOD == 'current' || isNaN(+customOD)) {
-        customOD = mapdata.accuracy
+        customOD = mapdata.accuracy;
     }
     if (customHP == 'current' || isNaN(+customHP)) {
-        customHP = mapdata.drain
+        customHP = mapdata.drain;
     }
 
-    let hitlength = mapdata.hit_length
+    let hitlength = mapdata.hit_length;
 
     if (overrideBpm != null && isNaN(overrideBpm) == false && (overrideSpeed == null || isNaN(overrideSpeed) == true) && overrideBpm != mapdata.bpm) {
         overrideSpeed = overrideBpm / mapdata.bpm;
@@ -9217,7 +9107,7 @@ Could not find beatmap data
         overrideBpm *= 0.75;
     }
     if (overrideSpeed) {
-        hitlength /= overrideSpeed
+        hitlength /= overrideSpeed;
     }
 
     const allvals = osumodcalc.calcValues(
@@ -9228,10 +9118,10 @@ Could not find beatmap data
         overrideBpm ?? mapdata.bpm,
         hitlength,
         mapmods
-    )
-    let modissue = ''
+    );
+    let modissue = '';
     if (mapmods.includes('TD')) {
-        modissue = '\ncalculations aren\'t supported for TD'
+        modissue = '\ncalculations aren\'t supported for TD';
     }
     let mapimg = emojis.gamemodes.standard;
 
@@ -9264,7 +9154,7 @@ Could not find beatmap data
         });
         ppissue = '';
         try {
-            totaldiff = ppComputed[0].difficulty.stars?.toFixed(2)
+            totaldiff = ppComputed[0].difficulty.stars?.toFixed(2);
         } catch (error) {
             totaldiff = mapdata.difficulty_rating;
         }
@@ -9320,13 +9210,13 @@ Could not find beatmap data
             ppComputedTemp,
             ppComputedTemp,
             ppComputedTemp,
-        ]
+        ];
     }
-    const baseCS = allvals.cs != mapdata.cs ? `${mapdata.cs}=>${allvals.cs}` : allvals.cs
-    const baseAR = allvals.ar != mapdata.ar ? `${mapdata.ar}=>${allvals.ar}` : allvals.ar
-    const baseOD = allvals.od != mapdata.accuracy ? `${mapdata.accuracy}=>${allvals.od}` : allvals.od
-    const baseHP = allvals.hp != mapdata.drain ? `${mapdata.drain}=>${allvals.hp}` : allvals.hp
-    const baseBPM = mapdata.bpm * (overrideSpeed ?? 1) != mapdata.bpm ? `${mapdata.bpm}=>${mapdata.bpm * (overrideSpeed ?? 1)}` : mapdata.bpm
+    const baseCS = allvals.cs != mapdata.cs ? `${mapdata.cs}=>${allvals.cs}` : allvals.cs;
+    const baseAR = allvals.ar != mapdata.ar ? `${mapdata.ar}=>${allvals.ar}` : allvals.ar;
+    const baseOD = allvals.od != mapdata.accuracy ? `${mapdata.accuracy}=>${allvals.od}` : allvals.od;
+    const baseHP = allvals.hp != mapdata.drain ? `${mapdata.drain}=>${allvals.hp}` : allvals.hp;
+    const baseBPM = mapdata.bpm * (overrideSpeed ?? 1) != mapdata.bpm ? `${mapdata.bpm}=>${mapdata.bpm * (overrideSpeed ?? 1)}` : mapdata.bpm;
 
     let basicvals = `CS${baseCS}\n AR${baseAR}\n OD${baseOD}\n HP${baseHP}\n`;
     if (detailed == true) {
@@ -9334,19 +9224,19 @@ Could not find beatmap data
             `CS${baseCS} (${allvals.details.csRadius?.toFixed(2)}r)
 AR${baseAR}  (${allvals.details.arMs?.toFixed(2)}ms)
 OD${baseOD} (300: ${allvals.details.odMs.hitwindow_300?.toFixed(2)}ms 100: ${allvals.details.odMs.hitwindow_100?.toFixed(2)}ms 50:  ${allvals.details.odMs.hitwindow_50?.toFixed(2)}ms)
-HP${baseHP}`
+HP${baseHP}`;
     }
 
     const mapname = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
     const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
-    const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
+    const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`;
 
     let mapperdataReq: osufunc.apiReturn;
     let mapperdata: osuApiTypes.User;
     if (func.findFile(mapdata.beatmapset.user_id, `osudata`) &&
         !('error' in func.findFile(mapdata.beatmapset.user_id, `osudata`)) &&
         input.button != 'Refresh') {
-        mapperdataReq = func.findFile(mapdata.beatmapset.user_id, `osudata`)
+        mapperdataReq = func.findFile(mapdata.beatmapset.user_id, `osudata`);
     } else {
         mapperdataReq = await osufunc.apiget(
             {
@@ -9354,7 +9244,7 @@ HP${baseHP}`
                 params: {
                     userid: mapdata.beatmapset.user_id,
                 }
-            })
+            });
     }
 
     mapperdata = mapperdataReq.apiData;
@@ -9382,11 +9272,11 @@ Using default json file
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
     }
-    func.storeFile(mapperdataReq, mapperdata.id, `osudata`)
+    func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
 
-    const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
+    const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode);
     try {
         osufunc.debug(strains, 'command', 'map', input.obj.guildId, 'strains');
 
@@ -9395,49 +9285,49 @@ Using default json file
     }
     let mapgraph;
     if (strains) {
-        mapgraph = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains'))
+        mapgraph = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains'));
     } else {
-        mapgraph = null
+        mapgraph = null;
     }
     let detailedmapdata = '-';
     if (detailed == true) {
         switch (mapdata.mode) {
             case 'osu': {
-                const curattr = ppComputed as OsuPerformanceAttributes[]
+                const curattr = ppComputed as OsuPerformanceAttributes[];
                 detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Aim: ${curattr[0].ppAim?.toFixed(2)} | Speed: ${curattr[0].ppSpeed?.toFixed(2)} | Acc: ${curattr[0].ppAcc?.toFixed(2)} \n ` +
                     `**99**: ${curattr[1].pp?.toFixed(2)} | Aim: ${curattr[1].ppAim?.toFixed(2)} | Speed: ${curattr[1].ppSpeed?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} \n ` +
                     `**97**: ${curattr[3].pp?.toFixed(2)} | Aim: ${curattr[3].ppAim?.toFixed(2)} | Speed: ${curattr[3].ppSpeed?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} \n ` +
                     `**95**: ${curattr[5].pp?.toFixed(2)} | Aim: ${curattr[5].ppAim?.toFixed(2)} | Speed: ${curattr[5].ppSpeed?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} \n ` +
-                    `${modissue}\n${ppissue}`
+                    `${modissue}\n${ppissue}`;
             }
                 break;
             case 'taiko': {
-                const curattr = ppComputed as TaikoPerformanceAttributes[]
+                const curattr = ppComputed as TaikoPerformanceAttributes[];
                 detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Acc: ${curattr[0].ppAcc?.toFixed(2)} | Strain: ${curattr[0].ppDifficulty?.toFixed(2)} \n ` +
                     `**99**: ${curattr[1].pp?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
                     `**97**: ${curattr[3].pp?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
                     `**95**: ${curattr[5].pp?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
-                    `${modissue}\n${ppissue}`
+                    `${modissue}\n${ppissue}`;
             }
                 break;
             case 'fruits': {
-                const curattr = ppComputed as CatchPerformanceAttributes[]
+                const curattr = ppComputed as CatchPerformanceAttributes[];
                 detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Strain: ${curattr[0].ppDifficulty?.toFixed(2)} \n ` +
                     `**99**: ${curattr[1].pp?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
                     `**97**: ${curattr[3].pp?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
                     `**95**: ${curattr[5].pp?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
-                    `${modissue}\n${ppissue}`
+                    `${modissue}\n${ppissue}`;
             }
                 break;
             case 'mania': {
-                const curattr = ppComputed as ManiaPerformanceAttributes[]
+                const curattr = ppComputed as ManiaPerformanceAttributes[];
                 detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} \n ` +
                     `**99**: ${curattr[1].pp?.toFixed(2)} \n ` +
                     `**98**: ${curattr[2].pp?.toFixed(2)} \n ` +
                     `**97**: ${curattr[3].pp?.toFixed(2)} \n ` +
                     `**96**: ${curattr[4].pp?.toFixed(2)} \n ` +
                     `**95**: ${curattr[5].pp?.toFixed(2)} \n ` +
-                    `${modissue}\n${ppissue}`
+                    `${modissue}\n${ppissue}`;
             }
                 break;
 
@@ -9453,7 +9343,7 @@ Using default json file
         }${mapdata.status == 'loved' ?
             `Loved <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
         }\n` +
-        `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`
+        `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`;
 
     const Embed = new Discord.EmbedBuilder()
         .setColor(0x91ff9a)
@@ -9508,37 +9398,37 @@ Using default json file
                 ,
                 inline: false
             }
-        ])
+        ]);
     if (mapgraph) {
-        Embed.setImage(`${mapgraph}`)
+        Embed.setImage(`${mapgraph}`);
     }
     switch (true) {
         case parseFloat(totaldiff.toString()) >= 8:
-            Embed.setColor(colours.diffcolour[7].dec)
+            Embed.setColor(colours.diffcolour[7].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 7:
-            Embed.setColor(colours.diffcolour[6].dec)
+            Embed.setColor(colours.diffcolour[6].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 6:
-            Embed.setColor(colours.diffcolour[5].dec)
+            Embed.setColor(colours.diffcolour[5].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 4.5:
-            Embed.setColor(colours.diffcolour[4].dec)
+            Embed.setColor(colours.diffcolour[4].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 3.25:
-            Embed.setColor(colours.diffcolour[3].dec)
+            Embed.setColor(colours.diffcolour[3].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 2.5:
-            Embed.setColor(colours.diffcolour[2].dec)
+            Embed.setColor(colours.diffcolour[2].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 2:
-            Embed.setColor(colours.diffcolour[1].dec)
+            Embed.setColor(colours.diffcolour[1].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 1.5:
-            Embed.setColor(colours.diffcolour[0].dec)
+            Embed.setColor(colours.diffcolour[0].dec);
             break;
         default:
-            Embed.setColor(colours.diffcolour[0].dec)
+            Embed.setColor(colours.diffcolour[0].dec);
             break;
     }
     const embeds = [Embed];
@@ -9548,7 +9438,7 @@ Using default json file
         const exitval = mapdata.failtimes.exit;
         const numofval = [];
         for (let i = 0; i < failval.length; i++) {
-            numofval.push(i)
+            numofval.push(i);
         }
 
         const passurl = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits'));
@@ -9565,11 +9455,11 @@ Using default json file
 
     let frmod = inputModal;
     if (overwriteModal != null) {
-        frmod = overwriteModal
+        frmod = overwriteModal;
     }
 
     const selectrow = new Discord.ActionRowBuilder()
-        .addComponents(frmod)
+        .addComponents(frmod);
 
     if (!(inputModal.options.length < 1)) {
         useComponents.push(selectrow);
@@ -9588,7 +9478,7 @@ Using default json file
             components: useComponents,
             edit: true
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -9598,7 +9488,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -9716,16 +9606,14 @@ export async function randomMap(input: extypes.commandInput) {
     }
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('random map', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'map (random)',
+        options: [
             {
                 name: 'Map type',
                 value: mapType
@@ -9734,26 +9622,23 @@ export async function randomMap(input: extypes.commandInput) {
                 name: 'Random ranked type',
                 value: `${useRandomRanked}`
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let txt = ''
+    let txt = '';
 
     if (useRandomRanked) {
-        const arr: ('Ranked' | 'Loved' | 'Approved')[] = ['Ranked', 'Loved', 'Approved']
-        mapType = arr[Math.floor(Math.random() * arr.length)]
+        const arr: ('Ranked' | 'Loved' | 'Approved')[] = ['Ranked', 'Loved', 'Approved'];
+        mapType = arr[Math.floor(Math.random() * arr.length)];
     }
 
-    const randomMap = osufunc.randomMap(mapType)
+    const randomMap = osufunc.randomMap(mapType);
     if (randomMap.err != null) {
-        txt = randomMap.err
+        txt = randomMap.err;
     } else {
-        txt = `https://osu.ppy.sh/b/${randomMap.returnId}`
+        txt = `https://osu.ppy.sh/b/${randomMap.returnId}`;
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -9763,7 +9648,7 @@ export async function randomMap(input: extypes.commandInput) {
         args: {
             content: txt
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -9773,7 +9658,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -9816,69 +9701,61 @@ export async function maplocal(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('localmapparse', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
-
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'map (file)',
+        options: []
+    });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let map: string = ''
+    let map: string = '';
     if (fs.existsSync('./files/tempdiff.osu')) {
-        map = fs.readFileSync('./files/tempdiff.osu', 'utf-8')
+        map = fs.readFileSync('./files/tempdiff.osu', 'utf-8');
     } else {
         return;
     }
-    const errmap = fs.readFileSync('./files/errmap.osu', 'utf-8')
+    const errmap = fs.readFileSync('./files/errmap.osu', 'utf-8');
     let errtxt = '';
-    let mods = 'NM'
+    let mods = 'NM';
 
     if ((input.obj as Discord.Message<any>).content.includes('+')) {
-        mods = (input.obj as Discord.Message<any>).content.split('+')[1].split(' ')[0]
+        mods = (input.obj as Discord.Message<any>).content.split('+')[1].split(' ')[0];
     }
 
     try {
-        map.split('[HitObjects]')[1].split('\n')
+        map.split('[HitObjects]')[1].split('\n');
     } catch (error) {
-        errtxt += '\nError - invalid section: [HitObjects]'
+        errtxt += '\nError - invalid section: [HitObjects]';
     }
     let metadata;
     try {
-        metadata = map.split('[Metadata]')[1].split('[')[0]
+        metadata = map.split('[Metadata]')[1].split('[')[0];
     } catch (error) {
-        errtxt += '\nError - invalid section: [Metadata]'
-        metadata = errmap.split('[Metadata]')[1].split('[')[0]
+        errtxt += '\nError - invalid section: [Metadata]';
+        metadata = errmap.split('[Metadata]')[1].split('[')[0];
     }
     let ppcalcing: PerformanceAttributes[];
     try {
-        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', null, 0)
+        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', null, 0);
     } catch (error) {
-        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', './files/errmap.osu', 0)
-        errtxt += '\nError - pp calculations failed'
+        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', './files/errmap.osu', 0);
+        errtxt += '\nError - pp calculations failed';
     }
 
     let general;
     let diff;
     try {
-        general = map.split('[General]')[1].split('[')[0]
-        diff = map.split('[Difficulty]')[1].split('[')[0]
+        general = map.split('[General]')[1].split('[')[0];
+        diff = map.split('[Difficulty]')[1].split('[')[0];
     } catch (error) {
-        errtxt += '\nError - invalid section: [General] or [Difficulty]'
+        errtxt += '\nError - invalid section: [General] or [Difficulty]';
 
-        general = errmap.split('[General]')[1].split('[')[0]
-        diff = errmap.split('[Difficulty]')[1].split('[')[0]
+        general = errmap.split('[General]')[1].split('[')[0];
+        diff = errmap.split('[Difficulty]')[1].split('[')[0];
     }
     let title;
     let artist;
@@ -9890,65 +9767,65 @@ export async function maplocal(input: extypes.commandInput) {
             metadata.split('Title:')[1].split('\n')[0]
             ?
             metadata.split('TitleUnicode:')[1].split('\n')[0] :
-            `${metadata.split('Title:')[1].split('\n')[0]} (${metadata.split('TitleUnicode:')[1].split('\n')[0]})`
+            `${metadata.split('Title:')[1].split('\n')[0]} (${metadata.split('TitleUnicode:')[1].split('\n')[0]})`;
         artist = metadata.split('Artist:')[1].split('\n')[0]
             ==
             metadata.split('ArtistUnicode:')[1].split('\n')[0]
             ?
             metadata.split('ArtistUnicode:')[1].split('\n')[0] :
-            `${metadata.split('Artist:')[1].split('\n')[0]} (${metadata.split('ArtistUnicode:')[1].split('\n')[0]})`
+            `${metadata.split('Artist:')[1].split('\n')[0]} (${metadata.split('ArtistUnicode:')[1].split('\n')[0]})`;
 
-        creator = metadata.split('Creator:')[1].split('\n')[0]
-        version = metadata.split('Version:')[1].split('\n')[0]
+        creator = metadata.split('Creator:')[1].split('\n')[0];
+        version = metadata.split('Version:')[1].split('\n')[0];
     } catch (error) {
-        errtxt += '\nError - invalid section: [Metadata]'
+        errtxt += '\nError - invalid section: [Metadata]';
 
         title = errmap.split('Title:')[1].split('\n')[0]
             == errmap.split('TitleUnicode:')[1].split('\n')[0] ?
             errmap.split('TitleUnicode:')[1].split('\n')[0] :
-            `${errmap.split('Title:')[1].split('\n')[0]} (${errmap.split('TitleUnicode:')[1].split('\n')[0]})`
+            `${errmap.split('Title:')[1].split('\n')[0]} (${errmap.split('TitleUnicode:')[1].split('\n')[0]})`;
         artist = errmap.split('Artist:')[1].split('\n')[0]
             == errmap.split('ArtistUnicode:')[1].split('\n')[0] ?
             errmap.split('ArtistUnicode:')[1].split('\n')[0] :
-            `${errmap.split('Artist:')[1].split('\n')[0]} (${errmap.split('ArtistUnicode:')[1].split('\n')[0]})`
-        creator = errmap.split('Creator:')[1].split('\n')[0]
-        version = errmap.split('Version:')[1].split('\n')[0]
+            `${errmap.split('Artist:')[1].split('\n')[0]} (${errmap.split('ArtistUnicode:')[1].split('\n')[0]})`;
+        creator = errmap.split('Creator:')[1].split('\n')[0];
+        version = errmap.split('Version:')[1].split('\n')[0];
     }
-    const ftstr = `${artist} - ${title} [${version}] //${creator} ${mods ? `+${mods}` : ''}`
+    const ftstr = `${artist} - ${title} [${version}] //${creator} ${mods ? `+${mods}` : ''}`;
     let hitobjs;
     try {
-        hitobjs = map.split('[HitObjects]')[1].split('\n')
+        hitobjs = map.split('[HitObjects]')[1].split('\n');
     } catch (error) {
-        errtxt += '\nError - invalid section: [HitObjects]'
+        errtxt += '\nError - invalid section: [HitObjects]';
 
-        hitobjs = errmap.split('[HitObjects]')[1].split('\n')
+        hitobjs = errmap.split('[HitObjects]')[1].split('\n');
     }
-    let countcircle = 0
-    let countslider = 0
-    let countspinner = 0
+    let countcircle = 0;
+    let countslider = 0;
+    let countspinner = 0;
     //to get count_circle, get every line without a |
     try {
         for (let i = 0; i < hitobjs.length; i++) {
-            const curobj = hitobjs[i]
+            const curobj = hitobjs[i];
             if (curobj.includes('|')) {
-                countslider++
+                countslider++;
             } else if (curobj.split(',').length > 5) {
-                countspinner++
+                countspinner++;
             } else {
-                countcircle++
+                countcircle++;
             }
         }
     } catch (error) {
-        errtxt += '\nError - invalid section: [HitObjects] (counting objects)'
+        errtxt += '\nError - invalid section: [HitObjects] (counting objects)';
 
         for (let i = 0; i < errmap.split('[HitObjects]')[1].split('\n').length; i++) {
-            const curobj = errmap.split('[HitObjects]')[1].split('\n')[i]
+            const curobj = errmap.split('[HitObjects]')[1].split('\n')[i];
             if (curobj.includes('|')) {
-                countslider++
+                countslider++;
             } else if (curobj.split(',').length > 5) {
-                countspinner++
+                countspinner++;
             } else {
-                countcircle++
+                countcircle++;
             }
         }
     }
@@ -9956,17 +9833,17 @@ export async function maplocal(input: extypes.commandInput) {
     let firsttimep;
     let fintimep;
     try {
-        firsttimep = hitobjs[1].split(',')[2]
-        fintimep = hitobjs[hitobjs.length - 2].split(',')[2] //inaccurate cos of sliders n stuff
+        firsttimep = hitobjs[1].split(',')[2];
+        fintimep = hitobjs[hitobjs.length - 2].split(',')[2]; //inaccurate cos of sliders n stuff
     } catch (error) {
-        errtxt += '\nError - invalid section: [HitObjects] (getting object timings)'
+        errtxt += '\nError - invalid section: [HitObjects] (getting object timings)';
 
-        firsttimep = errmap.split('[HitObjects]')[1].split('\n')[1].split(',')[2]
-        fintimep = errmap.split('[HitObjects]')[1].split('\n')[errmap.split('[HitObjects]').length - 2].split(',')[2] //inaccurate cos of sliders n stuff                                                                            
+        firsttimep = errmap.split('[HitObjects]')[1].split('\n')[1].split(',')[2];
+        fintimep = errmap.split('[HitObjects]')[1].split('\n')[errmap.split('[HitObjects]').length - 2].split(',')[2]; //inaccurate cos of sliders n stuff                                                                            
     }
-    const mslen = parseInt(fintimep) - parseInt(firsttimep)
+    const mslen = parseInt(fintimep) - parseInt(firsttimep);
 
-    const nlength = mslen / 1000
+    const nlength = mslen / 1000;
     const truelen = nlength > 60 ? // if length over 60
         nlength % 60 < 10 ? //if length over 60 and seconds under 10
             Math.floor(nlength / 60) + ':0' + Math.floor(nlength % 60) : //seconds under 10
@@ -9974,67 +9851,67 @@ export async function maplocal(input: extypes.commandInput) {
         : //false
         nlength % 60 < 10 ? //length under 60 and 10
             '00:' + Math.floor(nlength) : //true
-            '00:' + Math.floor(nlength) //false
+            '00:' + Math.floor(nlength); //false
 
-    let bpm = NaN
+    let bpm = NaN;
 
     let timing;
     try {
-        timing = map.split('[TimingPoints]')[1].split('[')[0]
+        timing = map.split('[TimingPoints]')[1].split('[')[0];
     } catch (error) {
-        errtxt += '\nError - invalid section: [TimingPoints]'
+        errtxt += '\nError - invalid section: [TimingPoints]';
 
-        timing = errmap.split('[TimingPoints]')[1].split('[')[0]
+        timing = errmap.split('[TimingPoints]')[1].split('[')[0];
     }
     function pointToBPM(point: string) {
-        const arr = point.split(',')
+        const arr = point.split(',');
         //'a,b,c'
         //b is time in milliseconds between each beat
         //https://osu.ppy.sh/community/forums/topics/59274?n=4
-        const bpm = 60000 / parseInt(arr[1])
+        const bpm = 60000 / parseInt(arr[1]);
         return bpm;
     }
-    let totalpoints = 0
-    let bpmmax = 0
-    let bpmmin = 0
+    let totalpoints = 0;
+    let bpmmax = 0;
+    let bpmmin = 0;
     for (let i = 0; i < timing.split('\n').length; i++) {
-        const curpoint = timing.split('\n')[i]
+        const curpoint = timing.split('\n')[i];
         if (curpoint.includes(',')) {
             if (curpoint.includes('-')) {
                 break;
             }
-            bpm = pointToBPM(curpoint)
-            totalpoints++
+            bpm = pointToBPM(curpoint);
+            totalpoints++;
             if (bpm > bpmmax) {
-                bpmmax = bpm
+                bpmmax = bpm;
             }
             if (bpm < bpmmin || bpmmin == 0) {
-                bpmmin = bpm
+                bpmmin = bpm;
             }
         }
     }
     const bpmavg = bpm / totalpoints
 
         ;
-    let gm = '0'
+    let gm = '0';
     try {
-        gm = general.split('Mode:')[1].split('\n')[0].replaceAll(' ', '')
+        gm = general.split('Mode:')[1].split('\n')[0].replaceAll(' ', '');
     } catch (error) {
-        gm = '0'
+        gm = '0';
     }
     let strains;
-    let mapgraph
+    let mapgraph;
     try {
-        strains = await osufunc.straincalclocal(null, mods, 0, osumodcalc.ModeIntToName(parseInt(gm)))
+        strains = await osufunc.straincalclocal(null, mods, 0, osumodcalc.ModeIntToName(parseInt(gm)));
     } catch (error) {
-        errtxt += '\nError - strains calculation failed'
+        errtxt += '\nError - strains calculation failed';
 
         strains = {
             strainTime: [0, 0],
             value: [0, 0]
-        }
+        };
 
-        strains = await osufunc.straincalclocal('./files/errmap.osu', mods, 0, osumodcalc.ModeIntToName(parseInt(gm)))
+        strains = await osufunc.straincalclocal('./files/errmap.osu', mods, 0, osumodcalc.ModeIntToName(parseInt(gm)));
 
     }
 
@@ -10046,7 +9923,7 @@ export async function maplocal(input: extypes.commandInput) {
             content: 'Error - calculating strain graph.',
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
-        })
+        });
     }
     let osuEmbed;
     try {
@@ -10079,13 +9956,13 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
                     inline: true
                 }
             ])
-            .setImage(`${mapgraph}`)
+            .setImage(`${mapgraph}`);
     } catch (error) {
         (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Error - unknown',
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
-        })
+        });
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -10095,7 +9972,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
         args: {
             embeds: [osuEmbed]
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -10105,7 +9982,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 }
 
 /**
@@ -10138,13 +10015,13 @@ export async function userBeatmaps(input: extypes.commandInput) {
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-page')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value
-                input.args = temp.newArgs
+                page = temp.value;
+                input.args = temp.newArgs;
             }
 
             if (input.args.includes('-ranked')) {
@@ -10198,13 +10075,13 @@ export async function userBeatmaps(input: extypes.commandInput) {
             }
             if (input.args.includes('-parse')) {
                 parseMap = true;
-                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true)
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
                 parseId = temp.value;
                 input.args = temp.newArgs;
             }
 
             if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true)
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
                 filterTitle = temp.value;
                 input.args = temp.newArgs;
             }
@@ -10213,7 +10090,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
+                user = null;
             }
         }
             break;
@@ -10235,7 +10112,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
-                parseMap = true
+                parseMap = true;
             }
 
         }
@@ -10248,13 +10125,13 @@ export async function userBeatmaps(input: extypes.commandInput) {
             searchid = commanduser.id;
             const curembed: Discord.Embed = input.obj.message.embeds[0];
             if (!curembed) return;
-            user = curembed.author.url.split('u/')[1]
+            user = curembed.author.url.split('u/')[1];
             sort = 'dateadded';
             //@ts-expect-error string not assignable blah blah
-            filter = curembed.title.split('Maps')[0].split('\'s')[1].toLowerCase().replaceAll(' ', '')
+            filter = curembed.title.split('Maps')[0].split('\'s')[1].toLowerCase().replaceAll(' ', '');
             const curpage = parseInt(
                 curembed.description.split('Page: ')[1].split('/')[0]
-            )
+            );
 
 
             curembed.description.includes('Filter:') ?
@@ -10263,21 +10140,21 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
             switch (input.button) {
                 case 'BigLeftArrow':
-                    page = 1
+                    page = 1;
                     break;
                 case 'LeftArrow':
-                    page = curpage - 1
+                    page = curpage - 1;
                     break;
                 case 'RightArrow':
-                    page = curpage + 1
+                    page = curpage + 1;
                     break;
                 case 'BigRightArrow':
                     page = parseInt(
                         curembed.description.split('Page: ')[1].split('/')[1].split('\n')[0]
-                    )
+                    );
                     break;
                 default:
-                    page = curpage
+                    page = curpage;
                     break;
             }
         }
@@ -10314,16 +10191,14 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 .setEmoji(buttonsthing.label.page.last),
         );
 
-    log.logFile(
-        'command',
-        log.commandLog('userbeatmaps', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'user beatmaps',
+        options: [
             {
                 name: 'User',
                 value: user
@@ -10352,18 +10227,15 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 name: 'Filter',
                 value: filterTitle
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     //if user is null, use searchid
     if (user == null) {
@@ -10381,7 +10253,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
-        }).catch()
+        }).catch();
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -10390,7 +10262,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator('osu'))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -10398,7 +10270,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator('osu')
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
@@ -10411,14 +10283,14 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
-                })
+                });
             }, 1000);
         } else {
             (input.obj as Discord.Message<any>).reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
-            })
+            });
         }
         log.logFile('command',
             `
@@ -10429,14 +10301,14 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator('osu'));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator('osu'));
 
-    let maplistdata: osuApiTypes.Beatmapset[] & osuApiTypes.Error = []
+    let maplistdata: osuApiTypes.Beatmapset[] & osuApiTypes.Error = [];
 
     async function getScoreCount(cinitnum) {
         if (cinitnum >= 499) {
@@ -10452,7 +10324,7 @@ Could not find user
             },
             version: 2,
 
-        })
+        });
         const fd: osuApiTypes.Beatmapset[] & osuApiTypes.Error = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
@@ -10461,14 +10333,14 @@ Could not find user
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not find user's ${calc.toCapital(filter)} maps`,
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not find user's ${calc.toCapital(filter)} maps`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -10480,15 +10352,15 @@ Could not find user's ${calc.toCapital(filter)} maps
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
         for (let i = 0; i < fd.length; i++) {
             if (!fd[i] || typeof fd[i] == 'undefined') { break; }
-            maplistdata.push(fd[i])
+            maplistdata.push(fd[i]);
         }
         if (fd.length == 100) {
-            await getScoreCount(cinitnum + 100)
+            await getScoreCount(cinitnum + 100);
         }
 
     }
@@ -10497,7 +10369,7 @@ Could not find user's ${calc.toCapital(filter)} maps
         !('error' in func.findFile(osudata.id, 'maplistdata', null, filter)) &&
         input.button != 'Refresh'
     ) {
-        maplistdata = func.findFile(osudata.id, 'maplistdata', null, filter)
+        maplistdata = func.findFile(osudata.id, 'maplistdata', null, filter);
     } else {
         await getScoreCount(0);
     }
@@ -10526,11 +10398,11 @@ Could not find user's ${calc.toCapital(filter)} maps
             filterTitle.toLowerCase().replaceAll(' ', '').includes(map.artist.toLowerCase().replaceAll(' ', ''))
             ||
             filterTitle.toLowerCase().replaceAll(' ', '').includes(map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', ''))
-        )
+        );
     }
 
     if (parseMap == true) {
-        let pid = parseInt(parseId) - 1
+        let pid = parseInt(parseId) - 1;
         if (pid < 0) {
             pid = 0;
         }
@@ -10541,7 +10413,7 @@ Could not find user's ${calc.toCapital(filter)} maps
             id: maplistdata[pid]?.beatmaps[0]?.id,
             commanduser,
             commandAs: input.commandType
-        }
+        };
         if (input.overrides.id == null) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
@@ -10549,14 +10421,14 @@ Could not find user's ${calc.toCapital(filter)} maps
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                             content: `Error - could not find map`,
                             allowedMentions: { repliedUser: false },
-                        }).catch()
-                    }, 1000)
+                        }).catch();
+                    }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
                         content: `Error - could not find map`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
-                    }).catch()
+                    }).catch();
                 }
             }
             log.logFile('command',
@@ -10568,16 +10440,16 @@ Could not find map
 ----------------------------------------------------
 \n\n`,
                 { guildId: `${input.obj.guildId}` }
-            )
+            );
             return;
         }
         input.commandType = 'other';
-        await map(input)
+        await map(input);
         return;
     }
 
     if (page >= Math.ceil(maplistdata.length / 5)) {
-        page = Math.ceil(maplistdata.length / 5) - 1
+        page = Math.ceil(maplistdata.length / 5) - 1;
     }
 
     const mapList = new Discord.EmbedBuilder()
@@ -10596,7 +10468,7 @@ Could not find map
         page: page,
         sort,
         reverse,
-    })
+    });
 
     if (mapsarg.fields.length == 0) {
         mapList.addFields([{
@@ -10611,7 +10483,7 @@ Could not find map
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         for (let i = 0; i < mapsarg.fields.length; i++) {
-            mapList.addFields([mapsarg.fields[i]])
+            mapList.addFields([mapsarg.fields[i]]);
         }
     }
     if (mapsarg.isFirstPage) {
@@ -10627,7 +10499,7 @@ ${mapsarg.filter}
 Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}
 ${filterTitle ? `Filter: ${filterTitle}` : ''}
 ${reachedMaxCount ? 'Only the first 500 mapsets are shown' : ''}
-`)
+`);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage({
@@ -10638,7 +10510,7 @@ ${reachedMaxCount ? 'Only the first 500 mapsets are shown' : ''}
             embeds: [mapList],
             components: [pgbuttons]
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -10648,7 +10520,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 
 }
@@ -10672,40 +10544,40 @@ export async function trackadd(input: extypes.commandInput) {
 
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             if (input.args.includes('-m')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-m'), 1)
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'), 1);
             }
             user = input.args[0];
         }
@@ -10728,31 +10600,30 @@ export async function trackadd(input: extypes.commandInput) {
     }
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('track add', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'track add',
+        options: [
             {
-                name: 'user',
-                value: `${user}`
+                name: 'User',
+                value: user
+            },
+            {
+                name: 'Mode',
+                value: mode
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const guildsetting = await input.guildSettings.findOne({
         where: { guildId: input.obj.guildId }
-    })
+    });
 
     if (!guildsetting.dataValues.trackChannel) {
         (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
@@ -10761,7 +10632,7 @@ export async function trackadd(input: extypes.commandInput) {
             files: [],
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
-        }).catch()
+        }).catch();
         return;
     }
 
@@ -10771,7 +10642,7 @@ export async function trackadd(input: extypes.commandInput) {
         !('error' in func.findFile(user, 'osudata', mode)) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', mode)
+        osudataReq = func.findFile(user, 'osudata', mode);
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -10779,7 +10650,7 @@ export async function trackadd(input: extypes.commandInput) {
                 username: cmdchecks.toHexadecimal(user),
                 mode: mode
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
@@ -10787,7 +10658,7 @@ export async function trackadd(input: extypes.commandInput) {
     let replymsg;
 
     if (osudata?.error || !osudata.id) {
-        replymsg = `Error - could not find user \`${user}\``
+        replymsg = `Error - could not find user \`${user}\``;
         log.logFile('command',
             `
 ----------------------------------------------------
@@ -10797,10 +10668,10 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
     } else {
 
-        replymsg = `Added \`${osudata.username}\` to the tracking list\nGamemode: \`${mode}\``
+        replymsg = `Added \`${osudata.username}\` to the tracking list\nGamemode: \`${mode}\``;
 
         func.storeFile(osudataReq, osudata.id, 'osudata', mode);
         func.storeFile(osudataReq, user, 'osudata', mode);
@@ -10812,7 +10683,7 @@ Could not find user
             guildId: input.obj.guildId,
             guildSettings: input.guildSettings,
             mode: mode
-        })
+        });
     }
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
@@ -10822,7 +10693,7 @@ Could not find user
         args: {
             content: replymsg,
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -10832,7 +10703,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -10850,40 +10721,40 @@ export async function trackremove(input: extypes.commandInput) {
 
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             if (input.args.includes('-m')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-m'), 1)
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'), 1);
             }
             user = input.args[0];
         }
@@ -10905,25 +10776,24 @@ export async function trackremove(input: extypes.commandInput) {
     }
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('track remove', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'track remove',
+        options: [
             {
-                name: 'user',
-                value: `${user}`
+                name: 'User',
+                value: user
+            },
+            {
+                name: 'Mode',
+                value: mode
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -10948,7 +10818,7 @@ export async function trackremove(input: extypes.commandInput) {
         !('error' in func.findFile(user, 'osudata', mode)) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', mode)
+        osudataReq = func.findFile(user, 'osudata', mode);
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -10956,7 +10826,7 @@ export async function trackremove(input: extypes.commandInput) {
                 username: cmdchecks.toHexadecimal(user),
                 mode
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
@@ -10964,7 +10834,7 @@ export async function trackremove(input: extypes.commandInput) {
     let replymsg;
 
     if (osudata?.error || !osudata.id) {
-        replymsg = `Error - could not find user \`${user}\``
+        replymsg = `Error - could not find user \`${user}\``;
         log.logFile('command',
             `
 ----------------------------------------------------
@@ -10974,13 +10844,13 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
     } else {
 
-        replymsg = `Removed \`${osudata.username}\` from the tracking list`
+        replymsg = `Removed \`${osudata.username}\` from the tracking list`;
 
-        func.storeFile(osudataReq, osudata.id, 'osudata', mode)
-        func.storeFile(osudataReq, user, 'osudata', mode)
+        func.storeFile(osudataReq, osudata.id, 'osudata', mode);
+        func.storeFile(osudataReq, user, 'osudata', mode);
 
         trackfunc.editTrackUser({
             database: input.trackDb,
@@ -10989,7 +10859,7 @@ Could not find user
             guildId: input.obj.guildId,
             guildSettings: input.guildSettings,
             mode
-        })
+        });
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -11000,7 +10870,7 @@ Could not find user
         args: {
             content: replymsg,
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -11010,7 +10880,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -11029,7 +10899,7 @@ export async function trackchannel(input: extypes.commandInput) {
             commanduser = input.obj.author;
             channelId = input.args[0];
             if (input.obj.content.includes('<#')) {
-                channelId = input.obj.content.split('<#')[1].split('>')[0]
+                channelId = input.obj.content.split('<#')[1].split('>')[0];
             }
         }
             break;
@@ -11050,25 +10920,20 @@ export async function trackchannel(input: extypes.commandInput) {
     }
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('set channel', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'track channel',
+        options: [
             {
                 name: 'Channel id',
                 value: `${channelId}`
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -11083,7 +10948,7 @@ export async function trackchannel(input: extypes.commandInput) {
                 files: [],
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
-            }).catch()
+            }).catch();
             return;
         }
         (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
@@ -11092,7 +10957,7 @@ export async function trackchannel(input: extypes.commandInput) {
             files: [],
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
-        }).catch()
+        }).catch();
         return;
     }
 
@@ -11103,7 +10968,7 @@ export async function trackchannel(input: extypes.commandInput) {
             files: [],
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
-        }).catch()
+        }).catch();
         return;
     }
 
@@ -11112,7 +10977,7 @@ export async function trackchannel(input: extypes.commandInput) {
         trackChannel: channelId
     }, {
         where: { guildid: input.obj.guildId }
-    })
+    });
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
@@ -11122,7 +10987,7 @@ export async function trackchannel(input: extypes.commandInput) {
         args: {
             content: `Tracking channel set to <#${channelId}>`,
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -11132,7 +10997,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -11191,20 +11056,15 @@ export async function tracklist(input: extypes.commandInput) {
             /* .setLabel('End') */,
         );
 
-    log.logFile(
-        'command',
-        log.commandLog('track list', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'track list',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -11221,7 +11081,7 @@ export async function tracklist(input: extypes.commandInput) {
 
     for (let i = 0; i < useridsarraylen; i++) {
         const user = users[i].dataValues;
-        let guilds
+        let guilds;
         try {
             if (user.guilds.length < 3) throw new Error('no guilds');
             guilds = user.guilds.includes(',')
@@ -11238,7 +11098,7 @@ export async function tracklist(input: extypes.commandInput) {
                 osuid: `${user.osuid}`,
                 userid: `${user.userid}`,
                 mode: `${user.mode}`
-            })
+            });
         }
     }
     const userListEmbed = new Discord.EmbedBuilder()
@@ -11246,7 +11106,7 @@ export async function tracklist(input: extypes.commandInput) {
         .setColor(colours.embedColour.userlist.dec)
         .setDescription(`There are ${userList.length} users being tracked in this server\n\n` +
             `${userList.map((user, i) => `${i + 1}. [${user.mode}]https://osu.ppy.sh/u/${user.osuid}`).join('\n')}`
-        )
+        );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage({
@@ -11255,7 +11115,7 @@ export async function tracklist(input: extypes.commandInput) {
         args: {
             embeds: [userListEmbed],
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -11265,7 +11125,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 }
 
 //other
@@ -11293,9 +11153,9 @@ export async function compare(input: extypes.commandInput) {
                 secondsearchid = input.obj.mentions.users.size > 1 ? input.obj.mentions.users.at(1).id : null;
             } else if (input.obj.mentions.users.size == 1) {
                 firstsearchid = input.obj.author.id;
-                secondsearchid = input.obj.mentions.users.at(0).id
+                secondsearchid = input.obj.mentions.users.at(0).id;
             } else {
-                firstsearchid = input.obj.author.id
+                firstsearchid = input.obj.author.id;
             }
             first = null;
             second = input.args[0] ?? null;
@@ -11316,8 +11176,8 @@ export async function compare(input: extypes.commandInput) {
             type = input.obj.options.getString('type') ?? 'profile';
             first = input.obj.options.getString('first');
             second = input.obj.options.getString('second');
-            firstsearchid = commanduser.id
-            mode = input.obj.options.getString('mode') ?? 'osu'
+            firstsearchid = commanduser.id;
+            mode = input.obj.options.getString('mode') ?? 'osu';
             if (second == null && first != null) {
                 second = first;
                 first = null;
@@ -11334,9 +11194,9 @@ export async function compare(input: extypes.commandInput) {
             }
             commanduser = input.obj.member.user;
             type = 'top';
-            const pawge = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[0])
+            const pawge = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[0]);
 
-            const pagefin = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[1])
+            const pagefin = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[1]);
             switch (input.button) {
                 case 'BigLeftArrow': {
                     page = 0;
@@ -11363,8 +11223,8 @@ export async function compare(input: extypes.commandInput) {
             if (page > pagefin) page = pagefin;
 
 
-            const firsti = input.obj.message.embeds[0].description.split('and')[0]
-            const secondi = input.obj.message.embeds[0].description.split('and')[1].split('have')[0]
+            const firsti = input.obj.message.embeds[0].description.split('and')[0];
+            const secondi = input.obj.message.embeds[0].description.split('and')[1].split('have')[0];
 
             //user => [name](url)
             first = firsti.split('u/')[1].split(')')[0];
@@ -11378,16 +11238,14 @@ export async function compare(input: extypes.commandInput) {
     }
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('compare', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'compare',
+        options: [
             {
                 name: 'Type',
                 value: type
@@ -11416,11 +11274,8 @@ export async function compare(input: extypes.commandInput) {
                 name: 'Page',
                 value: page
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -11428,27 +11283,27 @@ export async function compare(input: extypes.commandInput) {
         name: 'First',
         value: 'Loading...',
         inline: true
-    }
+    };
     let fieldSecond: Discord.EmbedField = {
         name: 'Second',
         value: 'Loading...',
         inline: true
-    }
+    };
     let fieldComparison: Discord.EmbedField = {
         name: 'Comparison',
         value: 'Loading...',
         inline: false
-    }
+    };
     let embedTitle: string = 'w';
-    const usefields: Discord.EmbedField[] = []
+    const usefields: Discord.EmbedField[] = [];
 
-    const useComponents: Discord.ActionRowBuilder[] = []
+    const useComponents: Discord.ActionRowBuilder[] = [];
     let embedescription = null;
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     try {
         if (second == null) {
@@ -11457,15 +11312,15 @@ export async function compare(input: extypes.commandInput) {
                 second = cuser.username;
                 if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
                     if (input.commandType != 'button') {
-                        throw new Error('Second user not found')
+                        throw new Error('Second user not found');
                     }
                     return;
                 }
             } else {
                 if (osufunc.getPreviousId('user', `${input.obj.guildId}`) == null) {
-                    throw new Error('Second user not found')
+                    throw new Error('Second user not found');
                 }
-                second = osufunc.getPreviousId('user', `${input.obj.guildId}`)
+                second = osufunc.getPreviousId('user', `${input.obj.guildId}`);
             }
         }
         if (first == null) {
@@ -11477,12 +11332,12 @@ export async function compare(input: extypes.commandInput) {
                 }
                 if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
                     if (input.commandType != 'button') {
-                        throw new Error('First user not found')
+                        throw new Error('First user not found');
                     }
                     return;
                 }
             } else {
-                throw new Error('first user not found')
+                throw new Error('first user not found');
             }
         }
 
@@ -11491,7 +11346,7 @@ export async function compare(input: extypes.commandInput) {
             !('error' in func.findFile(first, 'osudata')) &&
             input.button != 'Refresh'
         ) {
-            firstuserReq = func.findFile(first, 'osudata')
+            firstuserReq = func.findFile(first, 'osudata');
         } else {
             firstuserReq = await osufunc.apiget(
                 {
@@ -11499,14 +11354,14 @@ export async function compare(input: extypes.commandInput) {
                     params: {
                         username: first
                     }
-                })
+                });
         }
 
-        const firstuser = firstuserReq.apiData
+        const firstuser = firstuserReq.apiData;
 
         if (firstuser?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                throw new Error('could not fetch first user data')
+                throw new Error('could not fetch first user data');
 
             }
             return;
@@ -11518,7 +11373,7 @@ export async function compare(input: extypes.commandInput) {
             !('error' in func.findFile(second, 'osudata')) &&
             input.button != 'Refresh'
         ) {
-            seconduserReq = func.findFile(second, 'osudata')
+            seconduserReq = func.findFile(second, 'osudata');
         } else {
             seconduserReq = await osufunc.apiget(
                 {
@@ -11526,27 +11381,27 @@ export async function compare(input: extypes.commandInput) {
                     params: {
                         username: second
                     }
-                })
+                });
         }
 
-        const seconduser = seconduserReq.apiData
+        const seconduser = seconduserReq.apiData;
 
         if (seconduser?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                throw new Error('could not fetch second user data')
+                throw new Error('could not fetch second user data');
             }
             return;
         }
 
-        func.storeFile(firstuserReq, first, 'osudata')
-        func.storeFile(firstuserReq, firstuser.id, 'osudata')
-        func.storeFile(seconduserReq, seconduser.id, 'osudata')
-        func.storeFile(seconduserReq, second, 'osudata')
+        func.storeFile(firstuserReq, first, 'osudata');
+        func.storeFile(firstuserReq, firstuser.id, 'osudata');
+        func.storeFile(seconduserReq, seconduser.id, 'osudata');
+        func.storeFile(seconduserReq, second, 'osudata');
 
 
         switch (type) {
             case 'profile': {
-                embedTitle = 'Comparing profiles'
+                embedTitle = 'Comparing profiles';
                 fieldFirst = {
                     name: `**${firstuser.username}**`,
                     value:
@@ -11579,21 +11434,21 @@ export async function compare(input: extypes.commandInput) {
 **Level:** ${func.separateNum(Math.abs(firstuser.statistics.level.current - seconduser.statistics.level.current))}
 `,
                     inline: false
-                }
-                usefields.push(fieldFirst, fieldSecond, fieldComparison)
+                };
+                usefields.push(fieldFirst, fieldSecond, fieldComparison);
             }
                 break;
 
 
 
             case 'top': {
-                page
+                page;
                 let firsttopdataReq: osufunc.apiReturn;
                 if (func.findFile(input.absoluteID, 'firsttopdata') &&
                     !('error' in func.findFile(input.absoluteID, 'firsttopdata')) &&
                     input.button != 'Refresh'
                 ) {
-                    firsttopdataReq = func.findFile(input.absoluteID, 'firsttopdata')
+                    firsttopdataReq = func.findFile(input.absoluteID, 'firsttopdata');
                 } else {
                     firsttopdataReq = await osufunc.apiget({
                         type: 'best',
@@ -11602,14 +11457,14 @@ export async function compare(input: extypes.commandInput) {
                             mode: osufunc.modeValidator(mode),
                             opts: ['limit=100']
                         }
-                    })
+                    });
                 }
 
                 const firsttopdata: osuApiTypes.Score[] & osuApiTypes.Error = firsttopdataReq.apiData;
 
                 if (firsttopdata?.error) {
                     if (input.commandType != 'button' && input.commandType != 'link') {
-                        throw new Error('could not fetch first user\'s top scores')
+                        throw new Error('could not fetch first user\'s top scores');
                     }
                     return;
                 }
@@ -11619,7 +11474,7 @@ export async function compare(input: extypes.commandInput) {
                     !('error' in func.findFile(input.absoluteID, 'secondtopdata')) &&
                     input.button != 'Refresh'
                 ) {
-                    secondtopdataReq = func.findFile(input.absoluteID, 'secondtopdata')
+                    secondtopdataReq = func.findFile(input.absoluteID, 'secondtopdata');
                 } else {
                     secondtopdataReq = await osufunc.apiget({
                         type: 'best',
@@ -11628,29 +11483,29 @@ export async function compare(input: extypes.commandInput) {
                             mode: osufunc.modeValidator(mode),
                             opts: ['limit=100']
                         }
-                    })
+                    });
                 }
 
                 const secondtopdata: osuApiTypes.Score[] & osuApiTypes.Error = secondtopdataReq.apiData;
 
                 if (secondtopdata?.error) {
                     if (input.commandType != 'button' && input.commandType != 'link') {
-                        throw new Error('could not fetch second user\'s top scores')
+                        throw new Error('could not fetch second user\'s top scores');
                     }
                     return;
                 }
-                func.storeFile(firsttopdataReq, input.absoluteID, 'firsttopdata')
-                func.storeFile(secondtopdataReq, input.absoluteID, 'secondtopdata')
+                func.storeFile(firsttopdataReq, input.absoluteID, 'firsttopdata');
+                func.storeFile(secondtopdataReq, input.absoluteID, 'secondtopdata');
 
                 const filterfirst = [];
                 //filter so that scores that have a shared beatmap id with the second user are kept
                 for (let i = 0; i < firsttopdata.length; i++) {
                     if (secondtopdata.find(score => score.beatmap.id == firsttopdata[i].beatmap.id)) {
-                        filterfirst.push(firsttopdata[i])
+                        filterfirst.push(firsttopdata[i]);
                     }
                 }
-                filterfirst.sort((a, b) => b.pp - a.pp)
-                embedTitle = 'Comparing top scores'
+                filterfirst.sort((a, b) => b.pp - a.pp);
+                embedTitle = 'Comparing top scores';
                 const arrscore = [];
 
 
@@ -11658,27 +11513,27 @@ export async function compare(input: extypes.commandInput) {
                 for (let i = 0; i < filterfirst.length && i < 5; i++) {
                     const firstscore: osuApiTypes.Score = filterfirst[i + (page * 5)];
                     if (!firstscore) break;
-                    const secondscore: osuApiTypes.Score = secondtopdata.find(score => score.beatmap.id == firstscore.beatmap.id)
+                    const secondscore: osuApiTypes.Score = secondtopdata.find(score => score.beatmap.id == firstscore.beatmap.id);
                     if (secondscore == null) break;
                     const firstscorestr =
-                        `\`${firstscore.pp.toFixed(2)}pp | ${(firstscore.accuracy * 100).toFixed(2)}% ${firstscore.mods.length > 0 ? '| +' + firstscore.mods.join('') : ''}`//.padEnd(30, ' ').substring(0, 30)
+                        `\`${firstscore.pp.toFixed(2)}pp | ${(firstscore.accuracy * 100).toFixed(2)}% ${firstscore.mods.length > 0 ? '| +' + firstscore.mods.join('') : ''}`;//.padEnd(30, ' ').substring(0, 30)
                     const secondscorestr =
-                        `${secondscore.pp.toFixed(2)}pp | ${(secondscore.accuracy * 100).toFixed(2)}% ${secondscore.mods.length > 0 ? '| +' + secondscore.mods.join('') : ''}\`\n`//.padEnd(30, ' ').substring(0, 30)
+                        `${secondscore.pp.toFixed(2)}pp | ${(secondscore.accuracy * 100).toFixed(2)}% ${secondscore.mods.length > 0 ? '| +' + secondscore.mods.join('') : ''}\`\n`;//.padEnd(30, ' ').substring(0, 30)
                     arrscore.push(
                         `**[${firstscore.beatmapset.title} [${firstscore.beatmap.version}]](https://osu.ppy.sh/b/${firstscore.beatmap.id})**
 \`${firstuser.username.padEnd(30, ' ').substring(0, 30)} | ${seconduser.username.padEnd(30, ' ').substring(0, 30)}\`
 ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
-                    )
+                    );
                 }
 
-                const scores = arrscore.length > 0 ? arrscore.slice().join('\n') : 'No shared scores'
+                const scores = arrscore.length > 0 ? arrscore.slice().join('\n') : 'No shared scores';
 
                 embedescription = `**[${firstuser.username}](https://osu.ppy.sh/u/${firstuser.id})** and **[${seconduser.username}](https://osu.ppy.sh/u/${seconduser.id})** have ${filterfirst.length} shared scores
-                Page: ${page + 1}/${Math.ceil(filterfirst.length / 5)}`
+                Page: ${page + 1}/${Math.ceil(filterfirst.length / 5)}`;
 
-                fieldFirst.name = '‎ '
-                fieldFirst.value = scores
-                usefields.push(fieldFirst)
+                fieldFirst.name = '‎ ';
+                fieldFirst.value = scores;
+                usefields.push(fieldFirst);
 
 
                 const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
@@ -11705,42 +11560,42 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                             .setEmoji(buttonsthing.label.page.last),
                     );
 
-                useComponents.push(pgbuttons)
+                useComponents.push(pgbuttons);
             }
                 break;
 
 
 
             case 'mapscore': {
-                embedTitle = 'Comparing map scores'
+                embedTitle = 'Comparing map scores';
                 fieldFirst = {
                     name: `**${firstuser.username}**`,
                     value: '',
                     inline: true
-                }
+                };
                 fieldSecond = {
                     name: `**${seconduser.username}**`,
                     value: 's',
                     inline: true
-                }
+                };
                 fieldComparison = {
                     name: `**Difference**`,
                     value: 'w',
                     inline: false
-                }
-                usefields.push(fieldFirst, fieldSecond, fieldComparison)
+                };
+                usefields.push(fieldFirst, fieldSecond, fieldComparison);
             }
                 break;
 
         }
-        osufunc.writePreviousId('user', input.obj.guildId, `${seconduser.id}`)
+        osufunc.writePreviousId('user', input.obj.guildId, `${seconduser.id}`);
     } catch (error) {
-        embedTitle = 'Error'
+        embedTitle = 'Error';
         usefields.push({
             name: 'Error',
             value: `${error}`,
             inline: false
-        })
+        });
         log.logFile('command',
             `
 ----------------------------------------------------
@@ -11750,13 +11605,13 @@ ${error}
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
     }
 
     const embed = new Discord.EmbedBuilder()
         .setTitle(embedTitle)
-        .addFields(usefields)
-    if (embedescription) embed.setDescription(embedescription)
+        .addFields(usefields);
+    if (embedescription) embed.setDescription(embedescription);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage({
@@ -11766,7 +11621,7 @@ ${error}
             embeds: [embed],
             components: useComponents
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -11776,7 +11631,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -11800,44 +11655,44 @@ export async function osuset(input: extypes.commandInput) {
 
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
             if (input.args.includes('-f')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-f'))
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
             }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             if (input.args.includes('-m')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-m'))
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
             }
 
             if (input.args.includes('-skin')) {
@@ -11877,30 +11732,28 @@ export async function osuset(input: extypes.commandInput) {
         if (input.overrides.type != null) {
             switch (input.overrides.type) {
                 case 'mode':
-                    mode = name
+                    mode = name;
                     break;
                 case 'skin':
-                    skin = name
+                    skin = name;
                     break;
             }
-            name = null
+            name = null;
         }
     }
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('osuset', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
     //OPTIONS==============================================================================================================================================================================================
 
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'osuset',
+        options: [
             {
                 name: 'Name',
                 value: name
@@ -11921,26 +11774,15 @@ export async function osuset(input: extypes.commandInput) {
                 name: 'Value',
                 value: value
             },
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    // if (typeof name == 'undefined' || name == null) {
-    //     (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
-    //         content: 'Error - username undefined',
-    //         allowedMentions: { repliedUser: false },
-    //         failIfNotExists: true
-    //     });
-    //     return;
-    // }
-
-    let txt = 'null'
+    let txt = 'null';
 
     if (mode) {
-        const thing = osufunc.modeValidatorAlt(mode)
+        const thing = osufunc.modeValidatorAlt(mode);
         mode = thing.mode;
         if (thing.isincluded == false) {
 
@@ -11960,10 +11802,10 @@ export async function osuset(input: extypes.commandInput) {
         skin?: string,
     } = {
         userid: commanduser.id
-    }
+    };
     updateRows = {
         userid: commanduser.id,
-    }
+    };
     if (name != null) {
         updateRows['osuname'] = name;
     }
@@ -11974,7 +11816,7 @@ export async function osuset(input: extypes.commandInput) {
         updateRows['skin'] = skin;
     }
 
-    const findname = await input.userdata.findOne({ where: { userid: commanduser.id } })
+    const findname = await input.userdata.findOne({ where: { userid: commanduser.id } });
     if (findname == null) {
         try {
             await input.userdata.create({
@@ -11982,20 +11824,20 @@ export async function osuset(input: extypes.commandInput) {
                 osuname: name ?? 'undefined',
                 mode: mode ?? 'osu',
                 skin: skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117'
-            })
-            txt = 'Added to database'
+            });
+            txt = 'Added to database';
             if (name) {
-                txt += `\nSet your username to \`${name}\``
+                txt += `\nSet your username to \`${name}\``;
             }
             if (mode) {
-                txt += `\nSet your mode to \`${mode}\``
+                txt += `\nSet your mode to \`${mode}\``;
             }
             if (skin) {
-                txt += `\nSet your skin to \`${skin}\``
+                txt += `\nSet your skin to \`${skin}\``;
             }
         } catch (error) {
-            txt = 'There was an error trying to update your settings'
-            log.errLog('Database error', error, `${input.absoluteID}`)
+            txt = 'There was an error trying to update your settings';
+            log.errLog('Database error', error, `${input.absoluteID}`);
         }
     } else {
         const affectedRows = await input.userdata.update(
@@ -12004,19 +11846,19 @@ export async function osuset(input: extypes.commandInput) {
         );
 
         if (affectedRows.length > 0 || affectedRows[0] > 0) {
-            txt = 'Updated your settings:'
+            txt = 'Updated your settings:';
             if (name) {
-                txt += `\nSet your username to \`${name}\``
+                txt += `\nSet your username to \`${name}\``;
             }
             if (mode) {
-                txt += `\nSet your mode to \`${mode}\``
+                txt += `\nSet your mode to \`${mode}\``;
             }
             if (skin) {
-                txt += `\nSet your skin to \`${skin}\``
+                txt += `\nSet your skin to \`${skin}\``;
             }
         } else {
-            txt = 'There was an error trying to update your settings'
-            log.errLog('Database error', `${affectedRows}`, `${input.absoluteID}`)
+            txt = 'There was an error trying to update your settings';
+            log.errLog('Database error', `${affectedRows}`, `${input.absoluteID}`);
         }
     }
 
@@ -12028,7 +11870,7 @@ export async function osuset(input: extypes.commandInput) {
         args: {
             content: txt,
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -12038,7 +11880,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -12064,7 +11906,7 @@ export async function saved(input: extypes.commandInput) {
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             user = input.args.join(' ');
             if (!input.args[0] || input.args[0].includes(searchid)) {
-                user = null
+                user = null;
             }
         }
             break;
@@ -12091,50 +11933,45 @@ export async function saved(input: extypes.commandInput) {
                         name: true,
                         mode: false,
                         skin: false
-                    }
+                    };
                     break;
                 case 'mode':
                     show = {
                         name: false,
                         mode: true,
                         skin: false
-                    }
+                    };
                     break;
                 case 'skin':
                     show = {
                         name: false,
                         mode: false,
                         skin: true
-                    }
+                    };
                     break;
             }
         }
         if (input?.overrides?.ex != null) {
-            overrideTitle = input?.overrides?.ex
+            overrideTitle = input?.overrides?.ex;
         }
     }
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('saved', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'saved',
+        options: [
             {
                 name: 'User id',
                 value: searchid
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -12150,40 +11987,40 @@ export async function saved(input: extypes.commandInput) {
     }
 
     const Embed = new Discord.EmbedBuilder()
-        .setTitle(`${user != null ? user : fr}'s ${overrideTitle ?? 'saved settings'}`)
+        .setTitle(`${user != null ? user : fr}'s ${overrideTitle ?? 'saved settings'}`);
 
     if (user == null) {
         cuser = await input.userdata.findOne({ where: { userid: searchid } });
     } else {
         const allUsers = await input.userdata.findAll();
 
-        cuser = allUsers.filter(x => (`${x.osuname}`.trim().toLowerCase() == `${user}`.trim().toLowerCase()))[0]
+        cuser = allUsers.filter(x => (`${x.osuname}`.trim().toLowerCase() == `${user}`.trim().toLowerCase()))[0];
     }
 
     if (cuser) {
-        const fields = []
+        const fields = [];
         if (show.name == true) {
             fields.push({
                 name: 'Username',
                 value: `${cuser.osuname && cuser.mode.length > 1 ? cuser.osuname : 'undefined'}`,
                 inline: true
-            })
+            });
         }
         if (show.mode == true) {
             fields.push({
                 name: 'Mode',
                 value: `${cuser.mode && cuser.mode.length > 1 ? cuser.mode : 'osu (default)'}`,
-            })
+            });
         }
         if (show.skin == true) {
             fields.push({
                 name: 'Skin',
                 value: `${cuser.skin && cuser.skin.length > 1 ? cuser.skin : 'None'}`,
-            })
+            });
         }
-        Embed.addFields(fields)
+        Embed.addFields(fields);
     } else {
-        Embed.setDescription('No saved settings found')
+        Embed.setDescription('No saved settings found');
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -12193,7 +12030,7 @@ export async function saved(input: extypes.commandInput) {
         args: {
             embeds: [Embed],
         }
-    })
+    });
     log.logFile('command',
         `
 ----------------------------------------------------
@@ -12202,13 +12039,13 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 }
 
 /**
  * estimate stats if x pp score
  */
-export async function whatif(input: extypes.commandInput & { statsCache: any }) {
+export async function whatif(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
     let user;
@@ -12225,44 +12062,44 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
 
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
             if (input.args.includes('-f')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-f'))
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
             }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
             if (input.args.includes('-m')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-m'))
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
             }
 
             input.args = cleanArgs(input.args);
@@ -12273,9 +12110,9 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
 
             if ((input.args[0] && input.args[1])) {
                 if (input.args[0].includes(searchid)) {
-                    user = null
+                    user = null;
                 } else {
-                    user = input.args[0]
+                    user = input.args[0];
                 }
                 pp = input.args[1] ?? null;
 
@@ -12311,17 +12148,14 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('whatif', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'what if',
+        options: [
             {
                 name: 'user',
                 value: user
@@ -12338,11 +12172,9 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
                 name: 'searchid',
                 value: searchid
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     //if user is null, use searchid
@@ -12370,7 +12202,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode))
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -12378,7 +12210,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
             }
-        })
+        });
     }
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
@@ -12390,14 +12222,14 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
                     (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
-                    })
+                    });
                 }, 1000);
             } else {
                 (input.obj as Discord.Message<any>).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                })
+                });
             }
         }
         log.logFile('command',
@@ -12409,12 +12241,12 @@ Could not find user
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode))
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode))
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     osufunc.debug(osudataReq, 'command', 'whatif', input.obj.guildId, 'osuData');
 
@@ -12429,7 +12261,7 @@ Could not find user
             mode: mode,
             opts: ['limit=100']
         }
-    })
+    });
 
 
     const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData; osufunc.debug(osutopdataReq, 'command', 'whatif', input.obj.guildId, 'osuTopData');
@@ -12441,15 +12273,15 @@ Could not find user
                     (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                         content: 'Error - could not fetch user\'s top scores',
                         allowedMentions: { repliedUser: false },
-                    }).catch()
-                }, 1000)
+                    }).catch();
+                }, 1000);
             } else {
 
                 (input.obj as Discord.Message<any>).reply({
                     content: 'Error - could not fetch user\'s top scores',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
-                }).catch()
+                }).catch();
             }
         }
         log.logFile('command',
@@ -12461,7 +12293,7 @@ Could not fetch user\'s top scores
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
         return;
     }
 
@@ -12488,7 +12320,7 @@ Could not fetch user\'s top scores
 
     const bonus = osudata.statistics.pp - newBonus.reduce((a, b) => a + b, 0);
 
-    const guessrank = await osufunc.getRankPerformance('pp->rank', (total + bonus), input.userdata, `${osufunc.modeValidator(mode)}`, input.statsCache)
+    const guessrank = await osufunc.getRankPerformance('pp->rank', (total + bonus), input.userdata, `${osufunc.modeValidator(mode)}`, input.statsCache);
 
     const embed = new Discord.EmbedBuilder()
         .setTitle(`What if ${osudata.username} gained ${pp}pp?`)
@@ -12504,7 +12336,7 @@ Could not fetch user\'s top scores
 Their pp would change by **${Math.abs((total + bonus) - osudata.statistics.pp).toFixed(2)}pp** and their new total pp would be **${(total + bonus).toFixed(2)}pp**.
 Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - guessrank}).
 `
-        )
+        );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage({
@@ -12513,7 +12345,7 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
         args: {
             embeds: [embed]
         }
-    })
+    });
 
 
     log.logFile('command',
@@ -12524,7 +12356,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 

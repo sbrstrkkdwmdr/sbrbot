@@ -31,20 +31,20 @@ export function convert(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            cat1 = input.args[0]
-            cat2 = input.args[1]
-            num = parseFloat(input.args[2])
+            cat1 = input.args[0];
+            cat2 = input.args[1];
+            num = parseFloat(input.args[2]);
             if (!input.args[0]) {
-                cat1 = 'help'
+                cat1 = 'help';
             }
             if (!input.args[1]) {
-                cat2 = 'help'
+                cat2 = 'help';
             }
             if (isNaN(parseFloat(num))) {
-                num = 0
+                num = 0;
             }
             if (!input.args[2]) {
-                num = 0
+                num = 0;
             }
         }
             break;
@@ -55,11 +55,11 @@ export function convert(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
 
-            cat1 = input.obj.options.getString('from')
+            cat1 = input.obj.options.getString('from');
 
-            cat2 = input.obj.options.getString('to')
+            cat2 = input.obj.options.getString('to');
 
-            num = input.obj.options.getNumber('number')
+            num = input.obj.options.getNumber('number');
         }
 
             //==============================================================================================================================================================================================
@@ -74,18 +74,14 @@ export function convert(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('convert', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'convert',
+        options: [
             {
                 name: 'From',
                 value: cat1
@@ -98,11 +94,8 @@ export function convert(input: extypes.commandInput) {
                 name: 'Number',
                 value: `${num}`
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -197,47 +190,47 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
     switch (true) {
         case (cat1 == cat2):
             conv = 'No conversion';
-            convtype = `${cat1} to ${cat2}`
-            eq = `did you really just convert ${cat1.toLowerCase()} to ${cat2.toLowerCase()}? smh my head`
-            formula = `None. You're stupid.`
+            convtype = `${cat1} to ${cat2}`;
+            eq = `did you really just convert ${cat1.toLowerCase()} to ${cat2.toLowerCase()}? smh my head`;
+            formula = `None. You're stupid.`;
             break;
 
         //temperature
         case (cat1 == 'f' || cat1 == 'fahrenheit') && (cat2 == 'c' || cat2 == 'celsius' || cat2 == 'celcius'):
-            conv = 'Temperature conversion'
-            convtype = 'Farhenheit to Celsius'
-            eq = `${num}f => ${Math.abs((num - 32) * 5 / 9)}c`
-            formula = '`((x)-32)*5/9`'
+            conv = 'Temperature conversion';
+            convtype = 'Farhenheit to Celsius';
+            eq = `${num}f => ${Math.abs((num - 32) * 5 / 9)}c`;
+            formula = '`((x)-32)*5/9`';
             break;
         case (cat1 == 'f' || cat1 == 'fahrenheit') && (cat2 == 'k' || cat2 == 'kelvin'):
-            conv = 'Temperature conversion'
-            convtype = 'Farhenheit to Kelvin'
-            eq = `${num}f => ${Math.abs((num - 32) * 5 / 9 + 273.15)}c`
-            formula = `((x)-32)*5/9 + 273.15`
+            conv = 'Temperature conversion';
+            convtype = 'Farhenheit to Kelvin';
+            eq = `${num}f => ${Math.abs((num - 32) * 5 / 9 + 273.15)}c`;
+            formula = `((x)-32)*5/9 + 273.15`;
             break;
         case (cat1 == 'c' || cat1 == 'celsius' || cat1 == 'celcius') && (cat2 == 'f' || cat2 == 'fahrenheit'):
-            conv = 'Temperature conversion'
-            convtype = 'Celsius to Farhenheit'
-            eq = `${num}c => ${Math.abs(num * 9 / 5 + 32)}f`
-            formula = '`x*9/5+32`'
+            conv = 'Temperature conversion';
+            convtype = 'Celsius to Farhenheit';
+            eq = `${num}c => ${Math.abs(num * 9 / 5 + 32)}f`;
+            formula = '`x*9/5+32`';
             break;
         case (cat1 == 'c' || cat1 == 'celsius' || cat1 == 'celcius') && (cat2 == 'k' || cat2 == 'kelvin'):
-            conv = 'Temperature conversion'
-            convtype = 'Celsius to Kelvin'
-            eq = `${num}c => ${Math.abs(num + 273.15)}k`
-            formula = '`x+273.15`'
+            conv = 'Temperature conversion';
+            convtype = 'Celsius to Kelvin';
+            eq = `${num}c => ${Math.abs(num + 273.15)}k`;
+            formula = '`x+273.15`';
             break;
         case (cat1 == 'k' || cat1 == 'kelvin') && (cat2 == 'c' || cat2 == 'celsius' || cat2 == 'celcius'):
-            conv = 'Temperature conversion'
-            convtype = 'Kelvin to Celsius'
-            eq = `${num}k => ${Math.abs(num - 273.15)}c`
-            formula = '`x-273.15`'
+            conv = 'Temperature conversion';
+            convtype = 'Kelvin to Celsius';
+            eq = `${num}k => ${Math.abs(num - 273.15)}c`;
+            formula = '`x-273.15`';
             break;
         case (cat1 == 'k' || cat1 == 'kelvin') && (cat2 == 'f' || cat2 == 'fahrenheit'):
-            conv = 'Temperature conversion'
-            convtype = 'Kelvin to Farhenheit'
-            eq = `${num}k => ${Math.abs((num - 273.15) * 9 / 5 + 32)}f`
-            formula = '`(x-273.15)*9/5+32`'
+            conv = 'Temperature conversion';
+            convtype = 'Kelvin to Farhenheit';
+            eq = `${num}k => ${Math.abs((num - 273.15) * 9 / 5 + 32)}f`;
+            formula = '`(x-273.15)*9/5+32`';
             break;
 
 
@@ -245,217 +238,217 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
 
         //distance
         case (cat1 == 'in' || cat1 == 'inch') && (cat2 == 'ft' || cat2 == 'feet'):
-            conv = 'Distance conversion'
-            convtype = 'Inches to Feet'
-            eq = `${num}in => ${num / 12}ft`
-            formula = '`x/12`'
+            conv = 'Distance conversion';
+            convtype = 'Inches to Feet';
+            eq = `${num}in => ${num / 12}ft`;
+            formula = '`x/12`';
             break;
         case (cat1 == 'in' || cat1 == 'inch') && (cat2 == 'm' || cat2 == 'metres'):
-            conv = 'Distance conversion'
-            convtype = 'Inches to Metres'
-            eq = `${num}in => ${Math.abs(num / 39.37)}m`
-            formula = '`x/39.37`'
+            conv = 'Distance conversion';
+            convtype = 'Inches to Metres';
+            eq = `${num}in => ${Math.abs(num / 39.37)}m`;
+            formula = '`x/39.37`';
             break;
         case (cat1 == 'in' || cat1 == 'inch') && (cat2 == 'mi' || cat2 == 'miles'):
-            conv = 'Distance conversion'
-            convtype = 'Inches to Miles'
-            eq = `${num}in => ${Math.abs(num / 63360)}mi`
-            formula = '`x/63360`'
+            conv = 'Distance conversion';
+            convtype = 'Inches to Miles';
+            eq = `${num}in => ${Math.abs(num / 63360)}mi`;
+            formula = '`x/63360`';
             break;
 
         case (cat1 == 'ft' || cat1 == 'feet') && (cat2 == 'in' || cat2 == 'inch'):
-            conv = 'Distance conversion'
-            convtype = 'Feet to Inches'
-            eq = `${num}ft => ${num * 12}in`
-            formula = '`x*12`'
+            conv = 'Distance conversion';
+            convtype = 'Feet to Inches';
+            eq = `${num}ft => ${num * 12}in`;
+            formula = '`x*12`';
             break;
         case (cat1 == 'ft' || cat1 == 'feet') && (cat2 == 'm' || cat2 == 'metres'):
-            conv = 'Distance conversion'
-            convtype = 'Feet to Metres'
-            eq = `${num}ft => ${Math.abs(num / 3.28084)}m`
-            formula = '`x/3.28084` (approx)'
+            conv = 'Distance conversion';
+            convtype = 'Feet to Metres';
+            eq = `${num}ft => ${Math.abs(num / 3.28084)}m`;
+            formula = '`x/3.28084` (approx)';
             break;
         case (cat1 == 'ft' || cat1 == 'feet') && (cat2 == 'mi' || cat2 == 'miles'):
-            conv = 'Distance conversion'
-            convtype = 'Feet to Miles'
-            eq = `${num}ft => ${Math.abs(num / 5280)}mi`
-            formula = '`x/5280`'
+            conv = 'Distance conversion';
+            convtype = 'Feet to Miles';
+            eq = `${num}ft => ${Math.abs(num / 5280)}mi`;
+            formula = '`x/5280`';
             break;
 
         case (cat1 == 'm' || cat1 == 'metres') && (cat2 == 'in' || cat2 == 'inch'):
-            conv = 'Distance conversion'
-            convtype = 'Metres to Inches'
-            eq = `${num}m => ${num * 39.37}in`
-            formula = '`x*39.37`'
+            conv = 'Distance conversion';
+            convtype = 'Metres to Inches';
+            eq = `${num}m => ${num * 39.37}in`;
+            formula = '`x*39.37`';
             break;
         case (cat1 == 'm' || cat1 == 'metres') && (cat2 == 'ft' || cat2 == 'feet'):
-            conv = 'Distance conversion'
-            convtype = 'Metres to Feet'
-            eq = `${num}m => ${num * 3.28084}ft`
-            formula = '`x*3.28084`'
+            conv = 'Distance conversion';
+            convtype = 'Metres to Feet';
+            eq = `${num}m => ${num * 3.28084}ft`;
+            formula = '`x*3.28084`';
             break;
         case (cat1 == 'm' || cat1 == 'metres') && (cat2 == 'mi' || cat2 == 'miles'):
-            conv = 'Distance conversion'
-            convtype = 'Metres to Miles'
-            eq = `${num}m => ${num / 1609.344}mi`
-            formula = '`x/1609.344`'
+            conv = 'Distance conversion';
+            convtype = 'Metres to Miles';
+            eq = `${num}m => ${num / 1609.344}mi`;
+            formula = '`x/1609.344`';
             break;
 
         case (cat1 == 'mi' || cat1 == 'miles') && (cat2 == 'in' || cat2 == 'inch'):
-            conv = 'Distance conversion'
-            convtype = 'Miles to Inches'
-            eq = `${num}mi => ${num * 63360}in`
-            formula = '`x*63360`'
+            conv = 'Distance conversion';
+            convtype = 'Miles to Inches';
+            eq = `${num}mi => ${num * 63360}in`;
+            formula = '`x*63360`';
             break;
         case (cat1 == 'mi' || cat1 == 'miles') && (cat2 == 'ft' || cat2 == 'feet'):
-            conv = 'Distance conversion'
-            convtype = 'Miles to Feet'
-            eq = `${num}mi => ${num * 5280}ft`
-            formula = '`x*5280`'
+            conv = 'Distance conversion';
+            convtype = 'Miles to Feet';
+            eq = `${num}mi => ${num * 5280}ft`;
+            formula = '`x*5280`';
             break;
         case (cat1 == 'mi' || cat1 == 'miles') && (cat2 == 'm' || cat2 == 'metres'):
-            conv = 'Distance conversion'
-            convtype = 'Miles to Metres'
-            eq = `${num}mi => ${num * 1609.344}m`
-            formula = '`x*1609.344`'
+            conv = 'Distance conversion';
+            convtype = 'Miles to Metres';
+            eq = `${num}mi => ${num * 1609.344}m`;
+            formula = '`x*1609.344`';
             break;
 
 
         //time
         case ((cat1 == 's' || cat1 == 'seconds' || cat1 == 'secs') && cat2 == 'min' || cat2 == 'minutes'):
-            conv = 'Time conversion'
-            convtype = 'Seconds to Minutes'
-            eq = `${num}s => ${num / 60}min`
-            formula = '`x/60`'
+            conv = 'Time conversion';
+            convtype = 'Seconds to Minutes';
+            eq = `${num}s => ${num / 60}min`;
+            formula = '`x/60`';
             break;
         case ((cat1 == 's' || cat1 == 'seconds' || cat1 == 'secs') && cat2 == 'h' || cat2 == 'hours' || cat2 == 'hr'):
-            conv = 'Time conversion'
-            convtype = 'Seconds to Hours'
-            eq = `${num}s => ${num / 60 / 60}h`
-            formula = '`x/60/60`'
+            conv = 'Time conversion';
+            convtype = 'Seconds to Hours';
+            eq = `${num}s => ${num / 60 / 60}h`;
+            formula = '`x/60/60`';
             break;
         case ((cat1 == 's' || cat1 == 'seconds' || cat1 == 'secs') && cat2 == 'd' || cat2 == 'days'):
-            conv = 'Time conversion'
-            convtype = 'Seconds to Days'
-            eq = `${num}s => ${num / 60 / 60 / 24} days`
-            formula = '`x/60/60/24`'
+            conv = 'Time conversion';
+            convtype = 'Seconds to Days';
+            eq = `${num}s => ${num / 60 / 60 / 24} days`;
+            formula = '`x/60/60/24`';
             break;
 
         case ((cat1 == 's' || cat1 == 'seconds' || cat1 == 'secs') && cat2 == 'y' || cat2 == 'years' || cat2 == 'yr'):
-            conv = 'Time conversion'
-            convtype = 'Seconds to Years'
-            eq = `${num}s => ${num / 60 / 60 / 24 / 365.24}y`
-            formula = '`x/60/60/365.24`'
+            conv = 'Time conversion';
+            convtype = 'Seconds to Years';
+            eq = `${num}s => ${num / 60 / 60 / 24 / 365.24}y`;
+            formula = '`x/60/60/365.24`';
             break;
 
         case (cat1 == 'min' || cat1 == 'minutes') && (cat2 == 's' || cat2 == 'seconds' || cat2 == 'secs'):
-            conv = 'Time conversion'
-            convtype = 'Minutes to Seconds'
-            eq = `${num}min => ${num * 60}s`
-            formula = '`x*60`'
+            conv = 'Time conversion';
+            convtype = 'Minutes to Seconds';
+            eq = `${num}min => ${num * 60}s`;
+            formula = '`x*60`';
             break;
 
         case (cat1 == 'min' || cat1 == 'minutes') && (cat2 == 'h' || cat2 == 'hours' || cat2 == 'hr'):
-            conv = 'Time conversion'
-            convtype = 'Minutes to Hours'
-            eq = `${num}min => ${num / 60}h`
-            formula = '`x/60`'
+            conv = 'Time conversion';
+            convtype = 'Minutes to Hours';
+            eq = `${num}min => ${num / 60}h`;
+            formula = '`x/60`';
             break;
 
         case (cat1 == 'min' || cat1 == 'minutes') && (cat2 == 'd' || cat2 == 'days'):
-            conv = 'Time conversion'
-            convtype = 'Minutes to Days'
-            eq = `${num}min => ${num / 60 / 24} days`
-            formula = '`x/60/24`'
+            conv = 'Time conversion';
+            convtype = 'Minutes to Days';
+            eq = `${num}min => ${num / 60 / 24} days`;
+            formula = '`x/60/24`';
             break;
 
         case (cat1 == 'min' || cat1 == 'minutes') && (cat2 == 'y' || cat2 == 'years' || cat2 == 'yr'):
-            conv = 'Time conversion'
-            convtype = 'Minutes to Years'
-            eq = `${num}min => ${num / 60 / 24 / 365.24}y`
-            formula = '`x/60/24/365.24`'
+            conv = 'Time conversion';
+            convtype = 'Minutes to Years';
+            eq = `${num}min => ${num / 60 / 24 / 365.24}y`;
+            formula = '`x/60/24/365.24`';
             break;
 
 
         case (cat1 == 'h' || cat1 == 'hours' || cat1 == 'hr') && (cat2 == 's' || cat2 == 'seconds' || cat2 == 'secs'):
-            conv = 'Time conversion'
-            convtype = 'Hours to Seconds'
-            eq = `${num}h => ${num * 60 * 60}s`
-            formula = '`x*60*60`'
+            conv = 'Time conversion';
+            convtype = 'Hours to Seconds';
+            eq = `${num}h => ${num * 60 * 60}s`;
+            formula = '`x*60*60`';
             break;
 
         case (cat1 == 'h' || cat1 == 'hours' || cat1 == 'hr') && (cat2 == 'min' || cat2 == 'minutes'):
-            conv = 'Time conversion'
-            convtype = 'Hours to Minutes'
-            eq = `${num}h => ${num * 60}min`
-            formula = '`x*60`'
+            conv = 'Time conversion';
+            convtype = 'Hours to Minutes';
+            eq = `${num}h => ${num * 60}min`;
+            formula = '`x*60`';
             break;
         case (cat1 == 'h' || cat1 == 'hours' || cat1 == 'hr') && (cat2 == 'd' || cat2 == 'days'):
-            conv = 'Time conversion'
-            convtype = 'Hours to Days'
-            eq = `${num}h => ${num / 24} days`
-            formula = '`x/24`'
+            conv = 'Time conversion';
+            convtype = 'Hours to Days';
+            eq = `${num}h => ${num / 24} days`;
+            formula = '`x/24`';
             break;
         case (cat1 == 'h' || cat1 == 'hours' || cat1 == 'hr') && (cat2 == 'y' || cat2 == 'years' || cat2 == 'yr'):
-            conv = 'Time conversion'
-            convtype = 'Hours to Years'
-            eq = `${num}h => ${num / 24 / 365.24}y`
-            formula = '`x/24/365.24`'
+            conv = 'Time conversion';
+            convtype = 'Hours to Years';
+            eq = `${num}h => ${num / 24 / 365.24}y`;
+            formula = '`x/24/365.24`';
             break;
 
 
         case (cat1 == 'd' || cat1 == 'days') && (cat2 == 's' || cat2 == 'seconds' || cat2 == 'secs'):
-            conv = 'Time conversion'
-            convtype = 'Days to Seconds'
-            eq = `${num} days => ${num * 24 * 60 * 60}s`
-            formula = '`x*24*60*60`'
+            conv = 'Time conversion';
+            convtype = 'Days to Seconds';
+            eq = `${num} days => ${num * 24 * 60 * 60}s`;
+            formula = '`x*24*60*60`';
             break;
         case (cat1 == 'd' || cat1 == 'days') && (cat2 == 'min' || cat2 == 'minutes'):
-            conv = 'Time conversion'
-            convtype = 'Days to Minutes'
-            eq = `${num} days => ${num * 24 * 60}min`
-            formula = '`x*24*60`'
+            conv = 'Time conversion';
+            convtype = 'Days to Minutes';
+            eq = `${num} days => ${num * 24 * 60}min`;
+            formula = '`x*24*60`';
 
             break;
         case (cat1 == 'd' || cat1 == 'days') && (cat2 == 'h' || cat2 == 'hours' || cat2 == 'hr'):
-            conv = 'Time conversion'
-            convtype = 'Days to Hours'
-            eq = `${num} days => ${num * 24}h`
-            formula = '`x*24`'
+            conv = 'Time conversion';
+            convtype = 'Days to Hours';
+            eq = `${num} days => ${num * 24}h`;
+            formula = '`x*24`';
 
             break;
         case (cat1 == 'd' || cat1 == 'days') && (cat2 == 'y' || cat2 == 'years' || cat2 == 'yr'):
-            conv = 'Time conversion'
-            convtype = 'Days to Years'
-            eq = `${num} days => ${num / 365.24}y`
-            formula = '`x/365.24`'
+            conv = 'Time conversion';
+            convtype = 'Days to Years';
+            eq = `${num} days => ${num / 365.24}y`;
+            formula = '`x/365.24`';
             break;
 
 
         case (cat1 == 'y' || cat1 == 'years' || cat1 == 'yr') && (cat2 == 's' || cat2 == 'seconds' || cat2 == 'secs'):
-            conv = 'Time conversion'
-            convtype = 'Years to Seconds'
-            eq = `${num}y => ${num * 365.24 * 24 * 60 * 60}s`
-            formula = '`x*365.24*24*60*60`'
+            conv = 'Time conversion';
+            convtype = 'Years to Seconds';
+            eq = `${num}y => ${num * 365.24 * 24 * 60 * 60}s`;
+            formula = '`x*365.24*24*60*60`';
             break;
         case (cat1 == 'y' || cat1 == 'years' || cat1 == 'yr') && (cat2 == 'min' || cat2 == 'minutes'):
-            conv = 'Time conversion'
-            convtype = 'Years to Minutes'
-            eq = `${num}y => ${num * 365.24 * 24 * 60}min`
-            formula = '`x*365.24*24*60`'
+            conv = 'Time conversion';
+            convtype = 'Years to Minutes';
+            eq = `${num}y => ${num * 365.24 * 24 * 60}min`;
+            formula = '`x*365.24*24*60`';
             break;
         case (cat1 == 'y' || cat1 == 'years' || cat1 == 'yr') && (cat2 == 'h' || cat2 == 'hours' || cat1 == 'hr'):
-            conv = 'Time conversion'
-            convtype = 'Years to Hours'
-            eq = `${num}y => ${num * 365.24 * 24}h`
-            formula = '`x*365.24*24`'
+            conv = 'Time conversion';
+            convtype = 'Years to Hours';
+            eq = `${num}y => ${num * 365.24 * 24}h`;
+            formula = '`x*365.24*24`';
 
             break;
         case (cat1 == 'y' || cat1 == 'years' || cat1 == 'yr') && (cat2 == 'd' || cat2 == 'days'):
-            conv = 'Time conversion'
-            convtype = 'Years to Days'
-            eq = `${num}y => ${num * 365.24} days`
-            formula = '`x*365.24`'
+            conv = 'Time conversion';
+            convtype = 'Years to Days';
+            eq = `${num}y => ${num * 365.24} days`;
+            formula = '`x*365.24`';
             break;
 
 
@@ -463,196 +456,196 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
 
         //volume
         case (cat1 == 'floz' || cat1 == 'fluidounces') && (cat2 == 'cup'):
-            conv = 'Volume conversion'
-            convtype = 'Fluid Ounces to Cups'
-            eq = `${num}fl.oz => ${num / 8.11537} cup`
-            formula = '~`x/8.11537'
+            conv = 'Volume conversion';
+            convtype = 'Fluid Ounces to Cups';
+            eq = `${num}fl.oz => ${num / 8.11537} cup`;
+            formula = '~`x/8.11537';
             break;
         case (cat1 == 'floz' || cat1 == 'fluidounces') && (cat2 == 'pt' || cat2 == 'pint'):
-            conv = 'Volume conversion'
-            convtype = 'Fluid Ounces to Pints'
-            eq = `${num}fl.oz => ${num / 16}pt`
-            formula = '`x/16`'
+            conv = 'Volume conversion';
+            convtype = 'Fluid Ounces to Pints';
+            eq = `${num}fl.oz => ${num / 16}pt`;
+            formula = '`x/16`';
             break;
         case (cat1 == 'floz' || cat1 == 'fluidounces') && (cat2 == 'l' || cat2 == 'litres'):
-            conv = 'Volume conversion'
-            convtype = 'Fluid Ounces to Litres'
-            eq = `${num}fl.oz => ${num / 33.814}l`
-            formula = '`x/33.814`'
+            conv = 'Volume conversion';
+            convtype = 'Fluid Ounces to Litres';
+            eq = `${num}fl.oz => ${num / 33.814}l`;
+            formula = '`x/33.814`';
 
             break;
         case (cat1 == 'floz' || cat1 == 'fluidounces') && (cat2 == 'gal' || cat2 == 'gallons'):
-            conv = 'Volume conversion'
-            convtype = 'Fluid Ounces to Gallons'
-            eq = `${num}fl.oz => ${num / 128}gal`
-            formula = 'x/128``'
+            conv = 'Volume conversion';
+            convtype = 'Fluid Ounces to Gallons';
+            eq = `${num}fl.oz => ${num / 128}gal`;
+            formula = 'x/128``';
             break;
         case (cat1 == 'floz' || cat1 == 'fluidounces') && (cat2 == 'm3'):
-            conv = 'Volume conversion'
-            convtype = 'Fluid Ounces to Cubic Metres'
-            eq = `${num}fl.oz => ${num / 33814}m^3`
-            formula = '`x/33814`'
+            conv = 'Volume conversion';
+            convtype = 'Fluid Ounces to Cubic Metres';
+            eq = `${num}fl.oz => ${num / 33814}m^3`;
+            formula = '`x/33814`';
 
             break;
 
 
         case (cat1 == 'cup') && (cat2 == 'floz' || cat2 == 'fluidounces'):
-            conv = 'Volume conversion'
-            convtype = 'Cups to Fluid Ounces'
-            eq = `${num} cup => ${num * 8.11537}fl.oz`
-            formula = '~`x*8.11537`'
+            conv = 'Volume conversion';
+            convtype = 'Cups to Fluid Ounces';
+            eq = `${num} cup => ${num * 8.11537}fl.oz`;
+            formula = '~`x*8.11537`';
             break;
         case (cat1 == 'cup') && (cat2 == 'pt' || cat2 == 'pint'):
-            conv = 'Volume conversion'
-            convtype = 'Cups to Pints'
-            eq = `${num} cup => ${num / 1.972}pt`
-            formula = '~`x/1.972`'
+            conv = 'Volume conversion';
+            convtype = 'Cups to Pints';
+            eq = `${num} cup => ${num / 1.972}pt`;
+            formula = '~`x/1.972`';
             break;
         case (cat1 == 'cup') && (cat2 == 'l' || cat2 == 'litres'):
-            conv = 'Volume conversion'
-            convtype = 'Cups to Litres'
-            eq = `${num} cup => ${num / 4.167}l`
-            formula = '~`x/4.167`'
+            conv = 'Volume conversion';
+            convtype = 'Cups to Litres';
+            eq = `${num} cup => ${num / 4.167}l`;
+            formula = '~`x/4.167`';
             break;
         case (cat1 == 'cup') && (cat2 == 'gal' || cat2 == 'gallons'):
-            conv = 'Volume conversion'
-            convtype = 'Cups to Gallons'
-            eq = `${num} cup => ${num / 15.722}gal`
-            formula = '~`x/15.722`'
+            conv = 'Volume conversion';
+            convtype = 'Cups to Gallons';
+            eq = `${num} cup => ${num / 15.722}gal`;
+            formula = '~`x/15.722`';
             break;
         case (cat1 == 'cup') && (cat2 == 'm3'):
-            conv = 'Volume conversion'
-            convtype = 'Cups to Cubic Metres'
-            eq = `${num} cup => ${num / 4167}m^3`
-            formula = '~`x/4166.67`'
+            conv = 'Volume conversion';
+            convtype = 'Cups to Cubic Metres';
+            eq = `${num} cup => ${num / 4167}m^3`;
+            formula = '~`x/4166.67`';
             break;
 
 
         case (cat1 == 'pt' || cat1 == 'pints') && (cat2 == 'floz' || cat2 == 'fluidounces'):
-            conv = 'Volume conversion'
-            convtype = 'Pints to Fluid Ounces'
-            eq = `${num}pt => ${num * 16}fl.oz`
-            formula = '`x*16`'
+            conv = 'Volume conversion';
+            convtype = 'Pints to Fluid Ounces';
+            eq = `${num}pt => ${num * 16}fl.oz`;
+            formula = '`x*16`';
             break;
         case (cat1 == 'pt' || cat1 == 'pints') && (cat2 == 'cup'):
-            conv = 'Volume conversion'
-            convtype = 'Pints to Cups'
-            eq = `${num}pt => ${num * 1.97157} cup`
-            formula = '~`x*1.97157`'
+            conv = 'Volume conversion';
+            convtype = 'Pints to Cups';
+            eq = `${num}pt => ${num * 1.97157} cup`;
+            formula = '~`x*1.97157`';
             break;
         case (cat1 == 'pt' || cat1 == 'pints') && (cat2 == 'l' || cat2 == 'litres'):
-            conv = 'Volume conversion'
-            convtype = 'Pints to Litres'
-            eq = `${num}pt => ${num / 2.11338}l`
-            formula = '`x/2.11338`'
+            conv = 'Volume conversion';
+            convtype = 'Pints to Litres';
+            eq = `${num}pt => ${num / 2.11338}l`;
+            formula = '`x/2.11338`';
             break;
         case (cat1 == 'pt' || cat1 == 'pints') && (cat2 == 'gal' || cat2 == 'gallons'):
-            conv = 'Volume conversion'
-            convtype = 'Pints to Gallons'
-            eq = `${num}pt => ${num / 8}gal`
-            formula = '`x/8`'
+            conv = 'Volume conversion';
+            convtype = 'Pints to Gallons';
+            eq = `${num}pt => ${num / 8}gal`;
+            formula = '`x/8`';
             break;
         case (cat1 == 'pt' || cat1 == 'pints') && (cat2 == 'm3'):
-            conv = 'Volume conversion'
-            convtype = 'Pints to Cubic Metres'
-            eq = `${num}pt => ${num / 2113.37810957}`
-            formula = '`x/2113.37810957`'
+            conv = 'Volume conversion';
+            convtype = 'Pints to Cubic Metres';
+            eq = `${num}pt => ${num / 2113.37810957}`;
+            formula = '`x/2113.37810957`';
             break;
 
 
         case (cat1 == 'l' || cat1 == 'litres') && (cat2 == 'floz' || cat2 == 'fluidounces'):
-            conv = 'Volume conversion'
-            convtype = 'Litres to Fluid Ounces'
-            eq = `${num}l => ${num * 33.814}fl.oz`
-            formula = '`x*33.814`'
+            conv = 'Volume conversion';
+            convtype = 'Litres to Fluid Ounces';
+            eq = `${num}l => ${num * 33.814}fl.oz`;
+            formula = '`x*33.814`';
             break;
         case (cat1 == 'l' || cat1 == 'litres') && (cat2 == 'cup'):
-            conv = 'Volume conversion'
-            convtype = 'Litres to Cups'
-            eq = `${num}l => ${num * 4.16667} cup`
-            formula = '`x*4.16667`'
+            conv = 'Volume conversion';
+            convtype = 'Litres to Cups';
+            eq = `${num}l => ${num * 4.16667} cup`;
+            formula = '`x*4.16667`';
             break;
         case (cat1 == 'l' || cat1 == 'litres') && (cat2 == 'pt' || cat2 == 'pint'):
-            conv = 'Volume conversion'
-            convtype = 'Litres to Pints'
-            eq = `${num}l => ${num * 2.11338}pt`
-            formula = '`x*2.11338`'
+            conv = 'Volume conversion';
+            convtype = 'Litres to Pints';
+            eq = `${num}l => ${num * 2.11338}pt`;
+            formula = '`x*2.11338`';
             break;
         case (cat1 == 'l' || cat1 == 'litres') && (cat2 == 'gal' || cat2 == 'gallons'):
-            conv = 'Volume conversion'
-            convtype = 'Litres to Gallons'
-            eq = `${num} => ${num / 3.78541}gal`
-            formula = '`x/3.78541`'
+            conv = 'Volume conversion';
+            convtype = 'Litres to Gallons';
+            eq = `${num} => ${num / 3.78541}gal`;
+            formula = '`x/3.78541`';
             break;
         case (cat1 == 'l' || cat1 == 'litres') && (cat2 == 'm3'):
-            conv = 'Volume conversion'
-            convtype = 'Litres to Cubic Metres'
-            eq = `${num}l => ${num / 1000}m^3`
-            formula = '`x/1000`'
+            conv = 'Volume conversion';
+            convtype = 'Litres to Cubic Metres';
+            eq = `${num}l => ${num / 1000}m^3`;
+            formula = '`x/1000`';
             break;
 
 
         case (cat1 == 'gal' || cat1 == 'gallons') && (cat2 == 'floz' || cat2 == 'fluidounces'):
-            conv = 'Volume conversion'
-            convtype = 'Gallons to Fluid Ounces'
-            eq = `${num}gal => ${num * 128}fl.oz`
-            formula = '`x*128`'
+            conv = 'Volume conversion';
+            convtype = 'Gallons to Fluid Ounces';
+            eq = `${num}gal => ${num * 128}fl.oz`;
+            formula = '`x*128`';
             break;
         case (cat1 == 'gal' || cat1 == 'gallons') && (cat2 == 'cup'):
-            conv = 'Volume conversion'
-            convtype = 'Gallons to Cups'
-            eq = `${num}gal => ${num * 15.7725} cup`
-            formula = '`x*15.7725`'
+            conv = 'Volume conversion';
+            convtype = 'Gallons to Cups';
+            eq = `${num}gal => ${num * 15.7725} cup`;
+            formula = '`x*15.7725`';
             break;
         case (cat1 == 'gal' || cat1 == 'gallons') && (cat2 == 'pt' || cat2 == 'pint'):
-            conv = 'Volume conversion'
-            convtype = 'Gallons to Pints'
-            eq = `${num}gal => ${num * 8}pt`
-            formula = '`x*8`'
+            conv = 'Volume conversion';
+            convtype = 'Gallons to Pints';
+            eq = `${num}gal => ${num * 8}pt`;
+            formula = '`x*8`';
             break;
         case (cat1 == 'gal' || cat1 == 'gallons') && (cat2 == 'l' || cat2 == 'litres'):
-            conv = 'Volume conversion'
-            convtype = 'Gallons to Litres'
-            eq = `${num}gal => ${num * 3.78541}l`
-            formula = '`x*3.78541`'
+            conv = 'Volume conversion';
+            convtype = 'Gallons to Litres';
+            eq = `${num}gal => ${num * 3.78541}l`;
+            formula = '`x*3.78541`';
             break;
         case (cat1 == 'gal' || cat1 == 'gallons') && (cat2 == 'm3'):
-            conv = 'Volume conversion'
-            convtype = 'Gallons to Cubic Metres'
-            eq = `${num}gal => ${num / 264.1722636962499564}m^3`
-            formula = '`x/264.1722636962499564`'
+            conv = 'Volume conversion';
+            convtype = 'Gallons to Cubic Metres';
+            eq = `${num}gal => ${num / 264.1722636962499564}m^3`;
+            formula = '`x/264.1722636962499564`';
             break;
 
 
         case (cat1 == 'm3') && (cat2 == 'floz' || cat2 == 'fluidounces'):
-            conv = 'Volume conversion'
-            convtype = 'Cubic Metres to Fluid Ounces'
-            eq = `${num}m^3 => ${num * 33814}fl.oz`
-            formula = '`x*33814`'
+            conv = 'Volume conversion';
+            convtype = 'Cubic Metres to Fluid Ounces';
+            eq = `${num}m^3 => ${num * 33814}fl.oz`;
+            formula = '`x*33814`';
             break;
         case (cat1 == 'm3') && (cat2 == 'cup'):
-            conv = 'Volume conversion'
-            convtype = 'Cubic Metres to Cups'
-            eq = `${num}m^3 => ${num * 4166.67} cup`
-            formula = '`x*4166.67`'
+            conv = 'Volume conversion';
+            convtype = 'Cubic Metres to Cups';
+            eq = `${num}m^3 => ${num * 4166.67} cup`;
+            formula = '`x*4166.67`';
             break;
         case (cat1 == 'm3') && (cat2 == 'pt' || cat2 == 'pint'):
-            conv = 'Volume conversion'
-            convtype = 'Cubic Metres to Pints'
-            eq = `${num}m^3 => ${num * 2113.37810957}pt`
-            formula = '`x*2113.37810957`'
+            conv = 'Volume conversion';
+            convtype = 'Cubic Metres to Pints';
+            eq = `${num}m^3 => ${num * 2113.37810957}pt`;
+            formula = '`x*2113.37810957`';
             break;
         case (cat1 == 'm3') && (cat2 == 'l' || cat2 == 'litres'):
-            conv = 'Volume conversion'
-            convtype = 'Cubic Metres to Litres'
-            eq = `${num}m^3 => ${num * 1000}l`
-            formula = '`x*1000`'
+            conv = 'Volume conversion';
+            convtype = 'Cubic Metres to Litres';
+            eq = `${num}m^3 => ${num * 1000}l`;
+            formula = '`x*1000`';
             break;
         case (cat1 == 'm3') && (cat2 == 'gal' || cat2 == 'gallons'):
-            conv = 'Volume conversion'
-            convtype = 'Cubic Metres to Gallons'
-            eq = `${num}m^3 => ${num * 264.1722636962499564}gal`
-            formula = '`x*264.1722636962499564`'
+            conv = 'Volume conversion';
+            convtype = 'Cubic Metres to Gallons';
+            eq = `${num}m^3 => ${num * 264.1722636962499564}gal`;
+            formula = '`x*264.1722636962499564`';
             break;
 
 
@@ -660,82 +653,82 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
 
         //mass
         case (cat1 == 'g' || cat1 == 'grams') && (cat2 == 'oz' || cat2 == 'ounces'):
-            conv = 'Mass conversion'
-            convtype = 'Grams to Ounces'
-            eq = `${num}g => ${num / 28.3495}oz`
-            formula = '`x/28.3495`'
+            conv = 'Mass conversion';
+            convtype = 'Grams to Ounces';
+            eq = `${num}g => ${num / 28.3495}oz`;
+            formula = '`x/28.3495`';
             break;
         case (cat1 == 'g' || cat1 == 'grams') && (cat2 == 'lb' || cat2 == 'pounds'):
-            conv = 'Mass conversion'
-            convtype = 'Grams to Pounds'
-            eq = `${num}g => ${num / 453.592}lb`
-            formula = '`x/453.592`'
+            conv = 'Mass conversion';
+            convtype = 'Grams to Pounds';
+            eq = `${num}g => ${num / 453.592}lb`;
+            formula = '`x/453.592`';
             break;
         case (cat1 == 'g' || cat1 == 'grams') && (cat2 == 'ton' || cat2 == 'tonnes'):
-            conv = 'Mass conversion'
-            convtype = 'Grams to Tonnes'
-            eq = `${num}g => ${num / (10 ** 6)}ton`
-            formula = '`x/10^6 (1,000,000)'
+            conv = 'Mass conversion';
+            convtype = 'Grams to Tonnes';
+            eq = `${num}g => ${num / (10 ** 6)}ton`;
+            formula = '`x/10^6 (1,000,000)';
             break;
 
 
         case (cat1 == 'oz' || cat1 == 'ounces') && (cat2 == 'g' || cat2 == 'grams'):
-            conv = 'Mass conversion'
-            convtype = 'Ounces to Grams'
-            eq = `${num}oz => ${num * 28.3495}g`
-            formula = '`x*28.3495`'
+            conv = 'Mass conversion';
+            convtype = 'Ounces to Grams';
+            eq = `${num}oz => ${num * 28.3495}g`;
+            formula = '`x*28.3495`';
             break;
         case (cat1 == 'oz' || cat1 == 'ounces') && (cat2 == 'lb' || cat2 == 'pounds'):
-            conv = 'Mass conversion'
-            convtype = 'Ounces to Pounds'
-            eq = `${num}oz => ${num / 16}lb`
-            formula = '`x/16`'
+            conv = 'Mass conversion';
+            convtype = 'Ounces to Pounds';
+            eq = `${num}oz => ${num / 16}lb`;
+            formula = '`x/16`';
             break;
         case (cat1 == 'oz' || cat1 == 'ounces') && (cat2 == 'ton' || cat2 == 'tonnes'):
-            conv = 'Mass conversion'
-            convtype = 'Ounces to Tonnes'
-            eq = `${num}oz => ${num / 35274}ton`
-            formula = '`x/35274`'
+            conv = 'Mass conversion';
+            convtype = 'Ounces to Tonnes';
+            eq = `${num}oz => ${num / 35274}ton`;
+            formula = '`x/35274`';
             break;
 
 
         case (cat1 == 'lb' || cat1 == 'pounds') && (cat2 == 'g' || cat2 == 'grams'):
-            conv = 'Mass conversion'
-            convtype = 'Pounds to Grams'
-            eq = `${num}lb => ${num * 453.592}g`
-            formula = '`x*453.592`'
+            conv = 'Mass conversion';
+            convtype = 'Pounds to Grams';
+            eq = `${num}lb => ${num * 453.592}g`;
+            formula = '`x*453.592`';
             break;
         case (cat1 == 'lb' || cat1 == 'pounds') && (cat2 == 'oz' || cat2 == 'ounces'):
-            conv = 'Mass conversion'
-            convtype = 'Pounds to Ounces'
-            eq = `${num}lb => ${num * 16}oz`
-            formula = '`x*16`'
+            conv = 'Mass conversion';
+            convtype = 'Pounds to Ounces';
+            eq = `${num}lb => ${num * 16}oz`;
+            formula = '`x*16`';
             break;
         case (cat1 == 'lb' || cat1 == 'pounds') && (cat2 == 'ton' || cat2 == 'tonnes'):
-            conv = 'Mass conversion'
-            convtype = 'Pounds to Tonnes'
-            eq = `${num}lb => ${num / 2204.62504693}ton`
-            formula = '`x/2204.62504693`'
+            conv = 'Mass conversion';
+            convtype = 'Pounds to Tonnes';
+            eq = `${num}lb => ${num / 2204.62504693}ton`;
+            formula = '`x/2204.62504693`';
             break;
 
 
         case (cat1 == 'ton' || cat1 == 'tonnes') && (cat2 == 'g' || cat2 == 'grams'):
-            conv = 'Mass conversion'
-            convtype = 'Tonnes to Grams'
-            eq = `${num}ton => ${num * (10 ** 6)}g`
-            formula = '`x*10^6 (1,000,000)`'
+            conv = 'Mass conversion';
+            convtype = 'Tonnes to Grams';
+            eq = `${num}ton => ${num * (10 ** 6)}g`;
+            formula = '`x*10^6 (1,000,000)`';
             break;
         case (cat1 == 'ton' || cat1 == 'tonnes') && (cat2 == 'oz' || cat2 == 'ounces'):
-            conv = 'Mass conversion'
-            convtype = 'Tonnes to Ounces'
-            eq = `${num}ton => ${num * 35274}oz`
-            formula = '`x*35274`'
+            conv = 'Mass conversion';
+            convtype = 'Tonnes to Ounces';
+            eq = `${num}ton => ${num * 35274}oz`;
+            formula = '`x*35274`';
             break;
         case (cat1 == 'ton' || cat1 == 'tonnes') && (cat2 == 'lb' || cat2 == 'pounds'):
-            conv = 'Mass conversion'
-            convtype = 'Tonnes to Pounds'
-            eq = `${num}ton => ${num * 2204.62504693}lb`
-            formula = '`x*2204.62504693`'
+            conv = 'Mass conversion';
+            convtype = 'Tonnes to Pounds';
+            eq = `${num}ton => ${num * 2204.62504693}lb`;
+            formula = '`x*2204.62504693`';
             break;
         //template
         /*
@@ -747,21 +740,21 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
             break;
         */
         default:
-            conv = 'Error'
-            convtype = 'Error'
-            eq = 'Invalid conversion or it hasn\'t been added yet'
-            formula = 'null'
-            useEmbeds.push(EmbedList)
+            conv = 'Error';
+            convtype = 'Error';
+            eq = 'Invalid conversion or it hasn\'t been added yet';
+            formula = 'null';
+            useEmbeds.push(EmbedList);
             if (!cat2 || !num) {
                 eq = `Missing arguments: 
 ${cat2 ? '' : '[to]'}
-${num ? '' : '[number]'}`
+${num ? '' : '[number]'}`;
             }
             break;
 
     }
 
-    embedres.setTitle(`${conv}`)
+    embedres.setTitle(`${conv}`);
     embedres.addFields([
         {
             name: `${convtype}`,
@@ -773,8 +766,8 @@ ${num ? '' : '[number]'}`
             value: formula,
             inline: false
         }
-    ])
-    useEmbeds.push(embedres)
+    ]);
+    useEmbeds.push(embedres);
     if (cat1 == 'help' || cat2 == 'help') {
         useEmbeds = [EmbedList];
     }
@@ -791,7 +784,7 @@ ${num ? '' : '[number]'}`
                 embeds: useEmbeds
             }
         }
-    )
+    );
 
     log.logFile('command',
         `
@@ -801,7 +794,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -853,7 +846,7 @@ export function help(input: extypes.commandInput) {
             commanduser = input.obj.author;
             command = input.args[0];
             if (!input.args[0]) {
-                command = null
+                command = null;
             }
         }
             break;
@@ -889,54 +882,49 @@ export function help(input: extypes.commandInput) {
 
     if (input.overrides != null) {
         if (input.overrides.ex) {
-            command = `${input.overrides.ex}`
+            command = `${input.overrides.ex}`;
         }
     }
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('help', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
     if (rdm == true) {
-        const initrdm = Math.floor(Math.random() * 4)
+        const initrdm = Math.floor(Math.random() * 4);
         switch (initrdm) {
             case 1:
-                command = rdmp('cmds')
+                command = rdmp('cmds');
                 break;
             case 2:
-                command = rdmp('osucmds')
+                command = rdmp('osucmds');
                 break;
             case 3:
-                command = rdmp('admincmds')
+                command = rdmp('admincmds');
                 break;
             case 4:
-                command = rdmp('othercmds')
+                command = rdmp('othercmds');
                 break;
         }
     }
 
-    //OPTIONS==============================================================================================================================================================================================
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'help',
+        options: [
+            {
+                name: 'Command',
+                value: command
+            },
+            {
+                name: 'Random',
+                value: `${rdm}`
+            }
+        ]
+    });
 
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [{
-            name: 'Command',
-            value: command
-        },
-        {
-            name: 'Random',
-            value: `${rdm}`
-        }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const buttons = new Discord.ActionRowBuilder()
@@ -949,36 +937,36 @@ export function help(input: extypes.commandInput) {
                 .setCustomId(`Detailed-help-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed)
-        )
+        );
 
-    const useEmbeds = []
-    const useComponents: any = [buttons]
+    const useEmbeds = [];
+    const useComponents: any = [buttons];
 
     function commandEmb(command: helpinfo.commandInfo, embed) {
-        let desc = ''
-        desc += command.description + "\n"
+        let desc = '';
+        desc += command.description + "\n";
         if (command.usage) {
-            desc += `\nCommand: \`${input.config.prefix}${command.usage}\``
+            desc += `\nCommand: \`${input.config.prefix}${command.usage}\``;
         }
         if (command.slashusage) {
-            desc += `\nSlash Command: \`/${command.slashusage}\``
+            desc += `\nSlash Command: \`/${command.slashusage}\``;
         }
 
-        const opts = command.options
+        const opts = command.options;
         let opttxt = '';
         for (let i = 0; i < opts.length; i++) {
-            const reqtxt = opts[i].required ? 'required' : 'optional'
-            opttxt += `\n\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options && 
-                !opts[i].options.includes('N/A') && !opts[i].options.includes('null') && !opts[i].options.includes('true') && !opts[i].options.includes('false') 
-                ? `(${opts[i].options.map(x => `\`${x}\``).join('/')})` : ''}\n`
+            const reqtxt = opts[i].required ? 'required' : 'optional';
+            opttxt += `\n\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options &&
+                !opts[i].options.includes('N/A') && !opts[i].options.includes('null') && !opts[i].options.includes('true') && !opts[i].options.includes('false')
+                ? `(${opts[i].options.map(x => `\`${x}\``).join('/')})` : ''}\n`;
         }
         if (opttxt.length < 1) {
-            opttxt = 'No options'
+            opttxt = 'No options';
         }
 
-        const commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none'
+        const commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none';
         // let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
-        const commandexamples = command.examples && command.examples.length > 0 ? command.examples.map(x => x.text).join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
+        const commandexamples = command.examples && command.examples.length > 0 ? command.examples.map(x => x.text).join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none';
 
         embed.setTitle("Command info for: " + command.name)
             .setDescription(desc)
@@ -998,58 +986,58 @@ export function help(input: extypes.commandInput) {
                     value: commandexamples,
                     inline: false
                 }
-            ])
+            ]);
     }
     function getemb() {
         if (command != null) {
-            const fetchcmd = command.toString()
+            const fetchcmd = command.toString();
             const commandInfo = new Discord.EmbedBuilder()
-                .setColor(colours.embedColour.info.dec)
+                .setColor(colours.embedColour.info.dec);
             if (helpinfo.cmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'gen';
-                const res = helpinfo.cmds.find(obj => obj.name == fetchcmd)
-                commandEmb(res, commandInfo)
+                const res = helpinfo.cmds.find(obj => obj.name == fetchcmd);
+                commandEmb(res, commandInfo);
             } else if (helpinfo.cmds.find(obj => obj.aliases.includes(fetchcmd))) {
                 commandfound = true;
                 commandCategory = 'gen';
-                const res = helpinfo.cmds.find(obj => obj.aliases.includes(fetchcmd))
-                commandEmb(res, commandInfo)
+                const res = helpinfo.cmds.find(obj => obj.aliases.includes(fetchcmd));
+                commandEmb(res, commandInfo);
             }
             else if (helpinfo.othercmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'misc';
-                const res = helpinfo.othercmds.find(obj => obj.name == fetchcmd)
-                commandEmb(res, commandInfo)
+                const res = helpinfo.othercmds.find(obj => obj.name == fetchcmd);
+                commandEmb(res, commandInfo);
             } else if (helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd))) {
                 commandfound = true;
                 commandCategory = 'misc';
-                const res = helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd))
-                commandEmb(res, commandInfo)
+                const res = helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd));
+                commandEmb(res, commandInfo);
             }
 
             else if (helpinfo.osucmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'osu';
-                const res = helpinfo.osucmds.find(obj => obj.name == fetchcmd)
-                commandEmb(res, commandInfo)
+                const res = helpinfo.osucmds.find(obj => obj.name == fetchcmd);
+                commandEmb(res, commandInfo);
             } else if (helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd))) {
                 commandfound = true;
                 commandCategory = 'osu';
-                const res = helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd))
-                commandEmb(res, commandInfo)
+                const res = helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd));
+                commandEmb(res, commandInfo);
             }
 
             else if (helpinfo.admincmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'admin';
-                const res = helpinfo.admincmds.find(obj => obj.name == fetchcmd)
-                commandEmb(res, commandInfo)
+                const res = helpinfo.admincmds.find(obj => obj.name == fetchcmd);
+                commandEmb(res, commandInfo);
             } else if (helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd))) {
                 commandfound = true;
                 commandCategory = 'admin';
-                const res = helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd))
-                commandEmb(res, commandInfo)
+                const res = helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd));
+                commandEmb(res, commandInfo);
             }
             else if (command.includes('CategoryMenu')) {
                 switch (true) {
@@ -1097,7 +1085,7 @@ export function help(input: extypes.commandInput) {
                         break;
                     case command.includes('misc'): {
                         commandInfo.setTitle("General Commands");
-                        let desctxt = ''
+                        let desctxt = '';
                         for (let i = 0; i < helpinfo.othercmds.length; i++) {
                             desctxt += `\n\`${helpinfo.othercmds[i].name}\`: ${helpinfo.othercmds[i].description}`;
                         }
@@ -1113,20 +1101,20 @@ export function help(input: extypes.commandInput) {
             }
 
             else {
-                command = null
-                getemb()
+                command = null;
+                getemb();
                 return;
             }
 
-            useEmbeds.push(commandInfo)
+            useEmbeds.push(commandInfo);
         } else {
-            useEmbeds.push(fullCommandList)
+            useEmbeds.push(fullCommandList);
             commandCategory = 'default';
         }
     }
     function rdmp(w: string) {
-        const fullyrando = Math.floor(Math.random() * helpinfo[w].length)
-        return helpinfo[w][fullyrando].name
+        const fullyrando = Math.floor(Math.random() * helpinfo[w].length);
+        return helpinfo[w][fullyrando].name;
     }
 
     getemb();
@@ -1189,7 +1177,7 @@ export function help(input: extypes.commandInput) {
                     .setLabel(curpick[i]?.label ?? `#${i + 1}`)
                     .setDescription(curpick[i]?.name ?? '_')
                     .setValue(curpick[i]?.val ?? curpick[i].name)
-            )
+            );
             inputMenu.addOptions(
                 new Discord.SelectMenuOptionBuilder()
                     .setEmoji(curpick[i]?.emoji ?? '📜')
@@ -1213,7 +1201,7 @@ export function help(input: extypes.commandInput) {
                 components: useComponents
             }
         }
-    )
+    );
 
     log.logFile('command',
         `
@@ -1223,7 +1211,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -1269,22 +1257,15 @@ export function info(input: extypes.commandInput) {
                 .setStyle(Discord.ButtonStyle.Link)
         );
 
-    log.logFile(
-        'command',
-        log.commandLog('info', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'info',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -1298,7 +1279,7 @@ Coded in: TypeScript
 [Creator](https://sbrstrkkdwmdr.github.io/sbr-web/)
 [Commands](https://sbrstrkkdwmdr.github.io/sbrbot/commands)
 PP version: 2022-10-24 (rosu-pp v0.9.1)
-`)
+`);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
@@ -1311,7 +1292,7 @@ PP version: 2022-10-24 (rosu-pp v0.9.1)
                 components: [buttons]
             }
         }
-    )
+    );
 
 
     log.logFile('command',
@@ -1322,7 +1303,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -1369,47 +1350,41 @@ export function math(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('math', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [{
-            name: 'Type',
-            value: type
-        },
-        {
-            name: 'Num1',
-            value: num1
-        },
-        {
-            name: 'Num2',
-            value: num2
-        },
-        {
-            name: 'Query',
-            value: `${input?.args?.[0] ? input.args.join(' ') : null}`
-        }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'math',
+        options: [
+            {
+                name: 'Type',
+                value: type
+            },
+            {
+                name: 'Num1',
+                value: num1
+            },
+            {
+                name: 'Num2',
+                value: num2
+            },
+            {
+                name: 'Query',
+                value: `${input?.args?.[0] ? input.args.join(' ') : null}`
+            }
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let equation = 'null';
 
     if (type == 'basic') {
-        const string = input.args.join(' ')
-        const evalstr = eval(cmdchecks.toMath(string).toString().replaceAll('^', '**').replaceAll('pi', 'Math.PI').toString()).toString()
-        equation = evalstr
+        const string = input.args.join(' ');
+        const evalstr = eval(cmdchecks.toMath(string).toString().replaceAll('^', '**').replaceAll('pi', 'Math.PI').toString()).toString();
+        equation = evalstr;
     } else if (type == 'help') {
         equation = `-
 + = add
@@ -1421,79 +1396,79 @@ export function math(input: extypes.commandInput) {
 % = divide and return remainder
 ++ = +1
 -- = -1
-        `
+        `;
     }
     else {
         switch (type) {
             case 'sqrt':
-                equation = (`${Math.sqrt(num1)}`)
+                equation = (`${Math.sqrt(num1)}`);
                 break;
             case 'square':
                 if (num2) {
-                    equation = (`${num1 ** num2}`)
+                    equation = (`${num1 ** num2}`);
                 }
-                equation = (`${num1 * num1}`)
+                equation = (`${num1 * num1}`);
                 break;
             case '!':
-                equation = (`${calc.factorial(num1)}`)
+                equation = (`${calc.factorial(num1)}`);
                 break;
             case 'hcf':
                 if (!num2) {
-                    equation = ('Missing second number.')
+                    equation = ('Missing second number.');
                 }
-                equation = (`${calc.findHCF(num1, num2)}`)
+                equation = (`${calc.findHCF(num1, num2)}`);
                 break;
             case 'lcm':
                 if (!num2) {
-                    equation = ('Missing second number.')
+                    equation = ('Missing second number.');
                 }
-                equation = (`${calc.findLCM(num1, num2)}`)
+                equation = (`${calc.findLCM(num1, num2)}`);
                 break;
             case 'pythag':
                 if (!num2) {
-                    equation = 'Missing second number.'
+                    equation = 'Missing second number.';
                 }
-                equation = (`${calc.pythag(num1, num2)}`)
+                equation = (`${calc.pythag(num1, num2)}`);
                 break;
             case 'sigfig':
                 if (!num2) {
-                    num2 = null
+                    num2 = null;
                 }
                 if (num2 < 2 && num2 != null) {
-                    num2 = 2
+                    num2 = 2;
                 }
-                equation = (`${calc.sigfig(num1, num2).number}\nTo ${calc.sigfig(num1, num2).sigfig} significant figures`)
+                equation = (`${calc.sigfig(num1, num2).number}\nTo ${calc.sigfig(num1, num2).sigfig} significant figures`);
 
                 break;
             case 'ardt':
-                equation = (`AR${osumodcalc.DoubleTimeAR(num1).ar}, ${osumodcalc.DoubleTimeAR(num1).ms}ms`)
+                equation = (`AR${osumodcalc.DoubleTimeAR(num1).ar}, ${osumodcalc.DoubleTimeAR(num1).ms}ms`);
                 break;
             case 'arht':
-                equation = (`AR${osumodcalc.HalfTimeAR(num1).ar}, ${osumodcalc.HalfTimeAR(num1).ms}ms`)
+                equation = (`AR${osumodcalc.HalfTimeAR(num1).ar}, ${osumodcalc.HalfTimeAR(num1).ms}ms`);
                 break;
             case 'oddt':
-                odcalc = osumodcalc.odDT(num1)
-                equation = (`OD${odcalc.od_num}\n300:+-${odcalc.hitwindow_300}\n100:+-${odcalc.hitwindow_100}\n50:+-${odcalc.hitwindow_50}`)
+                odcalc = osumodcalc.odDT(num1);
+                equation = (`OD${odcalc.od_num}\n300:+-${odcalc.hitwindow_300}\n100:+-${odcalc.hitwindow_100}\n50:+-${odcalc.hitwindow_50}`);
                 break;
             case 'odht':
-                odcalc = osumodcalc.odHT(num1)
-                equation = (`OD${odcalc.od_num}\n300:+-${odcalc.hitwindow_300}\n100:+-${odcalc.hitwindow_100}\n50:+-${odcalc.hitwindow_50}`)
+                odcalc = osumodcalc.odHT(num1);
+                equation = (`OD${odcalc.od_num}\n300:+-${odcalc.hitwindow_300}\n100:+-${odcalc.hitwindow_100}\n50:+-${odcalc.hitwindow_50}`);
                 break;
             case 'odms':
-                odcalc = osumodcalc.ODtoms(num1)
-                equation = (`300:+-${odcalc.range300}\n100:+-${odcalc.range100}\n50:+-${odcalc.range50}`)
+                odcalc = osumodcalc.ODtoms(num1);
+                equation = (`300:+-${odcalc.range300}\n100:+-${odcalc.range100}\n50:+-${odcalc.range50}`);
                 break;
             case 'arms':
-                equation = (`${osumodcalc.ARtoms(num1)}ms`)
+                equation = (`${osumodcalc.ARtoms(num1)}ms`);
                 break;
             case 'msar':
-                equation = (`AR${osumodcalc.msToAR(num1)}`)
+                equation = (`AR${osumodcalc.msToAR(num1)}`);
                 break;
             case 'modintstring':
-                equation = (`Mods: ${osumodcalc.ModIntToString(num1)}`)
+                equation = (`Mods: ${osumodcalc.ModIntToString(num1)}`);
                 break;
             default:
-                equation = ('Error - invalid type')
+                equation = ('Error - invalid type');
                 break;
         }
 
@@ -1508,7 +1483,7 @@ export function math(input: extypes.commandInput) {
                 content: equation
             }
         }
-    )
+    );
 
 
     log.logFile('command',
@@ -1519,7 +1494,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -1576,26 +1551,19 @@ export function ping(input: extypes.commandInput) {
                 .setEmoji('➡'),
         );
 
-    log.logFile(
-        'command',
-        log.commandLog('ping', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'ping',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const trueping = `${calc.toCapital(input.commandType)} latency: ${Math.abs(input.obj.createdAt.getTime() - new Date().getTime())}ms`
+    const trueping = `${calc.toCapital(input.commandType)} latency: ${Math.abs(input.obj.createdAt.getTime() - new Date().getTime())}ms`;
 
     const pingEmbed = new Discord.EmbedBuilder()
         .setTitle('Pong!')
@@ -1606,7 +1574,7 @@ ${trueping}`);
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
 
-    const preEdit = new Date()
+    const preEdit = new Date();
     //@ts-expect-error aaaaaaaaaa
     //This expression is not callable.
     //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
@@ -1615,7 +1583,7 @@ ${trueping}`);
         allowedMentions: { repliedUser: false },
         failIfNotExists: true
     }).then((msg: Discord.Message<any> | Discord.CommandInteraction) => {
-        const timeToEdit = new Date().getTime() - preEdit.getTime()
+        const timeToEdit = new Date().getTime() - preEdit.getTime();
         pingEmbed.setDescription(`
 Client latency: ${input.client.ws.ping}ms
 ${trueping}
@@ -1627,14 +1595,14 @@ ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
                 msg.edit({
                     embeds: [pingEmbed],
                     allowedMentions: { repliedUser: false },
-                })
+                });
                 break;
             case 'interaction':
                 //@ts-expect-error 'editReply' property does not exist on Message<any>
                 input.obj.editReply({
                     embeds: [pingEmbed],
                     allowedMentions: { repliedUser: false },
-                })
+                });
                 break;
 
         }
@@ -1652,7 +1620,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 }
 
 /**
@@ -1671,8 +1639,8 @@ export function remind(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            time = input.args[0]
-            remindertxt = input.args.join(' ').replaceAll(input.args[0], '')
+            time = input.args[0];
+            remindertxt = input.args.join(' ').replaceAll(input.args[0], '');
             sendtochannel = false;
             user = input.obj.author;
 
@@ -1683,11 +1651,11 @@ export function remind(input: extypes.commandInput) {
                     args: {
                         content: 'Please specify a time'
                     }
-                })
+                });
 
             }
             if (!input.args[1]) {
-                remindertxt = 'null'
+                remindertxt = 'null';
             }
             if (!input.args[0].endsWith('d') && !input.args[0].endsWith('h') && !input.args[0].endsWith('m') && !input.args[0].endsWith('s') && !time.includes(':') && !time.includes('.')) {
                 return msgfunc.sendMessage({
@@ -1696,7 +1664,7 @@ export function remind(input: extypes.commandInput) {
                     args: {
                         content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`'
                     }
-                })
+                });
             }
         }
             break;
@@ -1725,7 +1693,7 @@ export function remind(input: extypes.commandInput) {
                         content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`',
                         ephemeral: true
                     }
-                })
+                });
             }
         }
 
@@ -1742,18 +1710,14 @@ export function remind(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('remind', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'remind',
+        options: [
             {
                 name: 'Time',
                 value: time
@@ -1770,11 +1734,8 @@ export function remind(input: extypes.commandInput) {
                 name: 'User',
                 value: user.id
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -1782,26 +1743,26 @@ export function remind(input: extypes.commandInput) {
         try {
             if (sendchannel == true) {
                 setTimeout(() => {
-                    input.obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` })
+                    input.obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` });
 
                 }, calc.timeToMs(time));
             }
             else {
                 setTimeout(() => {
-                    usersent.send({ embeds: [reminder] })
+                    usersent.send({ embeds: [reminder] });
 
                 }, calc.timeToMs(time));
             }
         } catch (error) {
-            console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
+            console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt);
         }
     }
     const reminder = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
         .setTitle('REMINDER')
-        .setDescription(`${remindertxt}`)
+        .setDescription(`${remindertxt}`);
 
-    sendremind(reminder, time, input.obj, sendtochannel, remindertxt, user)
+    sendremind(reminder, time, input.obj, sendtochannel, remindertxt, user);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage(
@@ -1811,7 +1772,7 @@ export function remind(input: extypes.commandInput) {
             args: {
                 react: true
             }
-        })
+        });
 
 
 
@@ -1823,7 +1784,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -1861,33 +1822,26 @@ export function stats(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('stats', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'stats',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString())
-    const trueping = input.obj.createdAt.getTime() - new Date().getTime() + 'ms'
+    const starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString());
+    const trueping = input.obj.createdAt.getTime() - new Date().getTime() + 'ms';
 
     const uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
     const uptimehours = Math.floor(uptime / 3600) >= 10 ? Math.floor(uptime / 3600) : '0' + Math.floor(uptime / 3600);
     const uptimeminutes = Math.floor((uptime % 3600) / 60) >= 10 ? Math.floor((uptime % 3600) / 60) : '0' + Math.floor((uptime % 3600) / 60);
     const uptimeseconds = Math.floor(uptime % 60) >= 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
-    const upandtime = `Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}`
+    const upandtime = `Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}`;
 
     const totalusers: number = input.client.users.cache.size;
     // let totalusersnobots: Discord.Collection<any, Discord.User>;
@@ -1906,7 +1860,7 @@ Commands sent: ${commandssent}
 Prefix: \`${input.config.prefix}\`
 Commands: https://sbrstrkkdwmdr.github.io/sbrbot/commands
 `
-        )
+        );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage({
@@ -1915,7 +1869,7 @@ Commands: https://sbrstrkkdwmdr.github.io/sbrbot/commands
         args: {
             embeds: [Embed],
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -1925,7 +1879,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -1942,7 +1896,7 @@ export function time(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            fetchtimezone = input.args.join(' ')
+            fetchtimezone = input.args.join(' ');
         }
             break;
 
@@ -1952,7 +1906,7 @@ export function time(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
 
-            fetchtimezone = input.obj.options.getString('timezone')
+            fetchtimezone = input.obj.options.getString('timezone');
         }
 
             //==============================================================================================================================================================================================
@@ -1968,91 +1922,84 @@ export function time(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('time', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'time',
+        options: [
             {
                 name: 'Timezone',
                 value: `${fetchtimezone}`
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const epoch = new Date().getTime()
-    const Datenow = new Date(input.currentDate).toUTCString()
+    const epoch = new Date().getTime();
+    const Datenow = new Date(input.currentDate).toUTCString();
 
-    const msepochsince = (epoch) - 1640995200000
-    const thedaysthingyiuseonmydiscordstatus = (msepochsince / 1000 / 60 / 60 / 24).toFixed(2)
+    const msepochsince = (epoch) - 1640995200000;
+    const thedaysthingyiuseonmydiscordstatus = (msepochsince / 1000 / 60 / 60 / 24).toFixed(2);
 
-    const rn = new Date()
-    const datenow12hhours = calc.to12htime(rn)
-    const day = calc.dayhuman(rn.getUTCDay())
-    const date = rn.getUTCDate()
-    const month = calc.tomonthname(rn.getUTCMonth())//tomonthname(rn.getUTCMonth())
-    const year = rn.getUTCFullYear()
-    const datenow12h = `${day}, ${date} ${month} ${year} ${datenow12hhours}`
+    const rn = new Date();
+    const datenow12hhours = calc.to12htime(rn);
+    const day = calc.dayhuman(rn.getUTCDay());
+    const date = rn.getUTCDate();
+    const month = calc.tomonthname(rn.getUTCMonth());//tomonthname(rn.getUTCMonth())
+    const year = rn.getUTCFullYear();
+    const datenow12h = `${day}, ${date} ${month} ${year} ${datenow12hhours}`;
     const lasttime = fs.existsSync('debug/timesince.txt') ? (fs.readFileSync('debug/timesince.txt')).toString() :
-        (new Date()).toString()
+        (new Date()).toString();
 
 
-    const lasttimetodateobj = new Date(lasttime)
-    const timetonum = (rn.getTime() - lasttimetodateobj.getTime()) / (1000 * 60)
+    const lasttimetodateobj = new Date(lasttime);
+    const timetonum = (rn.getTime() - lasttimetodateobj.getTime()) / (1000 * 60);
 
     const lasvisdays = (Math.trunc(timetonum / 60 / 24));
     const lastvishours = (Math.trunc(timetonum / 60)) % 24;
     const lastvisminutes = Math.trunc(timetonum % 60);
-    let minlastvisw = ''
+    let minlastvisw = '';
 
     if (lasvisdays > 0) {
-        minlastvisw += lasvisdays + "d "
+        minlastvisw += lasvisdays + "d ";
     }
     if (lastvishours > 0) {
-        minlastvisw += lastvishours + "h "
+        minlastvisw += lastvishours + "h ";
     }
     if (lastvisminutes > 0) {
-        minlastvisw += lastvisminutes + "m " //+ lastvisminutes + "m");
+        minlastvisw += lastvisminutes + "m "; //+ lastvisminutes + "m");
     }
     if (minlastvisw == '') {
-        minlastvisw = 'now'
+        minlastvisw = 'now';
     }
 
 
-    fs.writeFileSync('debug/timesince.txt', rn.toString())
+    fs.writeFileSync('debug/timesince.txt', rn.toString());
 
-    let monthnum: number | string = rn.getUTCMonth()
-    let daynum: number | string = rn.getUTCDate()
-    if (monthnum < 10) { monthnum = '0' + monthnum }
-    if (daynum < 10) { daynum = '0' + daynum }
-    const truedate = `${year}/${monthnum}/${daynum}`
+    let monthnum: number | string = rn.getUTCMonth();
+    let daynum: number | string = rn.getUTCDate();
+    if (monthnum < 10) { monthnum = '0' + monthnum; }
+    if (daynum < 10) { daynum = '0' + daynum; }
+    const truedate = `${year}/${monthnum}/${daynum}`;
 
-    const offsetnum = rn.getTimezoneOffset()
-    const offset = calc.fixoffset(offsetnum)
+    const offsetnum = rn.getTimezoneOffset();
+    const offset = calc.fixoffset(offsetnum);
 
-    const reldatenow12hhours = calc.relto12htime(rn)
-    const relday = calc.dayhuman(rn.getDay())
-    const reldate = rn.getDate()
-    const relmonth = calc.tomonthname(rn.getMonth())//tomonthname(rn.getUTCMonth())
-    const relyear = rn.getFullYear()
-    const reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`
+    const reldatenow12hhours = calc.relto12htime(rn);
+    const relday = calc.dayhuman(rn.getDay());
+    const reldate = rn.getDate();
+    const relmonth = calc.tomonthname(rn.getMonth());//tomonthname(rn.getUTCMonth())
+    const relyear = rn.getFullYear();
+    const reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`;
 
-    let relmonthnum: number | string = rn.getMonth()
-    let reldaynum: number | string = rn.getDate()
-    if (relmonthnum < 10) { relmonthnum = '0' + relmonthnum }
-    if (reldaynum < 10) { reldaynum = '0' + reldaynum }
-    const reltruedate = `${relyear}/${relmonthnum}/${reldaynum}`
+    let relmonthnum: number | string = rn.getMonth();
+    let reldaynum: number | string = rn.getDate();
+    if (relmonthnum < 10) { relmonthnum = '0' + relmonthnum; }
+    if (reldaynum < 10) { reldaynum = '0' + reldaynum; }
+    const reltruedate = `${relyear}/${relmonthnum}/${reldaynum}`;
 
 
     const Embed = new Discord.EmbedBuilder()
@@ -2079,32 +2026,32 @@ export function time(input: extypes.commandInput) {
             ,
             inline: false
         }]
-        )
+        );
     if (fetchtimezone != null && fetchtimezone != '') {
         if (fetchtimezone.includes('/')) {
             const timezone = input.args.splice(0, 1000).join(" ");
             const timeopts = {
                 timeZone: `${timezone}`,
                 hour12: false
-            }
+            };
             const timeopts2 = {
                 timeZone: `${timezone}`,
                 hour12: true
-            }
+            };
             try {
                 const optionaldatefirst = new Date(new Date().toLocaleString('en-US', timeopts));//).toISOString();
-                const optionaldateISO = new Date(optionaldatefirst).toISOString()
+                const optionaldateISO = new Date(optionaldatefirst).toISOString();
                 const optionaldateDate = new Date(optionaldateISO).toLocaleDateString();
-                const optionaldate = new Date(optionaldateISO)//.toString();
+                const optionaldate = new Date(optionaldateISO);//.toString();
                 const optionaldate12hfirst = new Date(new Date().toLocaleString('en-US', timeopts2));
 
-                const optionaldate2 = `${calc.dayhuman(optionaldate.getDay())}, ${calc.tomonthname(optionaldate.getMonth())} ${optionaldate.getDate()} ${optionaldate.getFullYear()}`
-                const optionaldatetime = calc.relto12htime(new Date(optionaldate12hfirst))
-                const optionaldate12h = `${optionaldate2} ${optionaldatetime}`
+                const optionaldate2 = `${calc.dayhuman(optionaldate.getDay())}, ${calc.tomonthname(optionaldate.getMonth())} ${optionaldate.getDate()} ${optionaldate.getFullYear()}`;
+                const optionaldatetime = calc.relto12htime(new Date(optionaldate12hfirst));
+                const optionaldate12h = `${optionaldate2} ${optionaldatetime}`;
 
-                const optionaldatehours = (optionaldate.getHours())
-                const optionaldateutchours = (new Date().getUTCHours())
-                const optionaldateoffsetNEW = calc.fixoffset((optionaldateutchours - optionaldatehours) * 60) //had to remake another version of offset 
+                const optionaldatehours = (optionaldate.getHours());
+                const optionaldateutchours = (new Date().getUTCHours());
+                const optionaldateoffsetNEW = calc.fixoffset((optionaldateutchours - optionaldatehours) * 60); //had to remake another version of offset 
 
                 Embed
                     .addFields([{
@@ -2114,7 +2061,7 @@ export function time(input: extypes.commandInput) {
                             `\n**Full Date(24h)**: ${`${optionaldate}`.split('GMT')[0]}` +
                             `\n**Full Date ISO8601**: ${optionaldateISO}`,
                         inline: false
-                    }])
+                    }]);
             } catch (error) {
                 Embed.addFields([{
                     name: `UTC/GMT +??:?? (Requested Time)`,
@@ -2124,7 +2071,7 @@ export function time(input: extypes.commandInput) {
                     ,
                     inline: false
                 }]
-                )
+                );
                 msgfunc.sendMessage({
                     commandType: input.commandType,
                     obj: input.obj,
@@ -2144,7 +2091,7 @@ export function time(input: extypes.commandInput) {
                     `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
                 ,
                 inline: false
-            }])
+            }]);
         }
     }
 
@@ -2165,6 +2112,6 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }

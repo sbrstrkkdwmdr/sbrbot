@@ -26,21 +26,24 @@ export function _8ball(input: extypes.commandInput) {
     let commanduser;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
         }
             break;
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -49,28 +52,22 @@ export function _8ball(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('8ball', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: '8ball',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const responses = [
         'yes', 'no', 'What? no', '知らない', 'nope', 'yeahhh', 'a strong maybe', 'definitely maybe not', 'nah', 'yeah of course', '多分', '絶対!!!',
         'come again?', 'ehhhh', '⠀', '💀', '🥺', 'bruhhh', 'splish splash your question is trash', 3
-    ]
+    ];
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
@@ -80,7 +77,7 @@ export function _8ball(input: extypes.commandInput) {
         args: {
             content: `${responses[Math.floor(Math.random() * responses.length)]}`,
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -90,7 +87,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -103,7 +100,8 @@ export function gif(input: extypes.commandInput) {
     let type;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             type = input.args.join(' ');
         }
@@ -111,7 +109,8 @@ export function gif(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
             type = input.obj.options.getString('type');
         }
@@ -119,7 +118,8 @@ export function gif(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -128,27 +128,20 @@ export function gif(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('gif', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'gif',
+        options: [
             {
                 name: 'Type',
                 value: type
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -166,7 +159,7 @@ export function gif(input: extypes.commandInput) {
         'https://tenor.com/view/reisen-cry-about-it-reisen-udongein-touhou-gif-24775462', //reisen udongein inaba fumo
         'https://tenor.com/view/cry-about-it-gif-19162157', //the marble hit each other thing 
         'https://media.discordapp.net/attachments/716812353034780703/855178667420024863/ezgif.com-gif-maker_1.gif', //zitron map og
-    ]
+    ];
     const speechbubble = [
         //'https://cdn.discordapp.com/attachments/724514625005158403/979287600852500490/amogus_speak.png', // among ASS speaking
         'https://cdn.discordapp.com/attachments/724514625005158403/979287601443926032/guardian_speak.png', //minecraft guardian inside glass inside a stone box surrounding my guardian farm
@@ -216,56 +209,56 @@ export function gif(input: extypes.commandInput) {
         'https://media.discordapp.net/attachments/1011582321511645264/1016887451295428679/yuyu_sin.gif', //yuyuko with the microphone
         'https://cdn.discordapp.com/attachments/1015133324114661436/1018411223450144832/20220910_235606.jpg', //fat ass peter griffin being moved with a forklift
         'https://media.discordapp.net/attachments/1001881826824044615/1006829538908569631/D4994339-F98C-4CF2-A0CA-C805F3853E2A.gif', //googling googl
-    ]
+    ];
     const reaction = [
         'https://tenor.com/view/jerma-jerma985-burger-eating-tucker-carson-gif-22054018', // jerma eating
         'https://tenor.com/view/live-garfield-reaction-gif-25354213', //garfield
         'https://tenor.com/view/live-eating-reaction-sauceland-twili-gif-25355949', //minecraft bedrock eating baked potato
         'https://tenor.com/view/armstron-senator-armstrong-armstrong-mgrr-metal-gif-25128679', // live armstrong reaction
         'https://tenor.com/view/live-nuclear-reaction-live-tucker-reaction-live-reaction-gif-25285499' // live nuclear reaction
-    ]
+    ];
 
     const skillissue = [
         'https://media.discordapp.net/attachments/894054954661204009/940062600119611452/gg_skill_issue.gif', // gg skill issue okuu
         'https://tenor.com/view/metal-gear-rising-gif-24563434', // metal gear sword skill issue
         'https://tenor.com/view/skill-issue-gif-23142299', // sounds like skill issue
-    ]
+    ];
 
     const nobitches = [
         'https://tenor.com/view/no-bitches-no-damsels-meme-cubism-gif-24935368', // no damsels
         'https://tenor.com/view/foss-no-bitches-no-hoes-0bitches-no-gif-24529727', // no bitches
         'https://tenor.com/view/no-bitches-no-girls-funny-gif-25343933', // travel thru space no bitches
-    ]
+    ];
 
     const agree = [
         'https://tenor.com/view/jojo-anime-yes-yes-yes-yeah-its-a-yes-gif-17161748', // jojo yes yes yes
-    ]
+    ];
 
     const cope = [
         'https://tenor.com/view/cope-cope-harder-copium-digicharat-anime-dance-gif-24244737',//anime girls cope harder
         'https://tenor.com/view/cope-harder-cope-harder-baboon-mentality-gif-22115122', //copy long charlie moistcritikal
         'https://media.discordapp.net/attachments/883455161450762301/944520240270802984/caption.gif', //tetris
-    ]
+    ];
 
     const disagree = [
         'https://tenor.com/view/yakuzalad-gif-22281385', // i dont agree with your opinion press phone then boom everyone dies
-    ]
+    ];
 
     const nocare = [
         'https://tenor.com/view/ice-eating-ok-and-gif-19666657', // ok and eat ice
         'https://tenor.com/view/eating-the-chip-chips-chip-eating-chip-man-eating-three-chips-gif-18885184', //eating chips
-    ]
+    ];
 
     const misspell = [
         'https://tenor.com/view/clone-drone-in-the-danger-zone-yroue-gif-22600859', //yroue
         'https://tenor.com/view/omaru-polka-minor-spelling-mistake-death-fading-hololive-gif-23611404', // minor spelling mistake polka
         'https://tenor.com/view/omori-gif-21640508', //when you youer
-    ]
+    ];
 
     const compliment = [
         'https://media.discordapp.net/attachments/511546997979873282/717030857000353873/image0-6.gif', //this dude is fucking
         'https://tenor.com/view/reddit-wholesome-redditor-heckin-chonker-big-chungus-gif-18690103', //wholesome redditor
-    ]
+    ];
 
     const insult = [
         'https://tenor.com/view/dies-dies-of-cringe-dies-from-cringe-meme-dr-strange-dr-strange2-gif-25621125', //dies from cringe
@@ -273,88 +266,88 @@ export function gif(input: extypes.commandInput) {
         'https://tenor.com/view/i-know-your-ip-address-we-know-your-ip-address-im-outside-your-house-meme-memes-gif-23579728', // maccas happy meal ip address
         'https://tenor.com/view/touhou-fumo-reisen-gif-20875565', // reisen fumo die
         'https://tenor.com/view/kys-gif-24272600', // capri sun kill urself
-    ]
+    ];
 
     const ratio = [
         'https://tenor.com/view/dont-care-didnt-ask-cope-_ratio-skill-issue-canceled-gif-24148064', //ratio guy goes into car
         'https://tenor.com/view/ratio-skill-issue-skill-issue-ur-bald-gif-23967610', //nerd emoji
         'https://tenor.com/view/ratiobozo-ratio-gif-23500921', //dog smiley wtf
         'https://tenor.com/view/ratio-didnt-ask-you-fell-off-cope-dont-know-what-youre-talking-about-gif-23606778',
-    ]
+    ];
     const reactiontoinf = [
         'https://tenor.com/view/kumala-la-kumala-mrtti-gif-25688572'
 
-    ]
+    ];
     let thelink: string;
     switch (type) {
         case 'cry about it':
-            thelink = cryabtit[Math.floor(Math.random() * cryabtit.length)]
+            thelink = cryabtit[Math.floor(Math.random() * cryabtit.length)];
 
             break;
         case 'speech bubble':
-            thelink = speechbubble[Math.floor(Math.random() * speechbubble.length)]
+            thelink = speechbubble[Math.floor(Math.random() * speechbubble.length)];
 
             break;
         case 'chad speak':
-            thelink = 'https://cdn.discordapp.com/attachments/724514625005158403/979287601146118184/gigachad_speak.png'
+            thelink = 'https://cdn.discordapp.com/attachments/724514625005158403/979287601146118184/gigachad_speak.png';
 
             break;
         case 'reaction':
-            thelink = reaction[Math.floor(Math.random() * reaction.length)]
+            thelink = reaction[Math.floor(Math.random() * reaction.length)];
 
             break;
         case 'skill issue':
-            thelink = skillissue[Math.floor(Math.random() * skillissue.length)]
+            thelink = skillissue[Math.floor(Math.random() * skillissue.length)];
 
             break;
         case 'no bitches':
-            thelink = nobitches[Math.floor(Math.random() * nobitches.length)]
+            thelink = nobitches[Math.floor(Math.random() * nobitches.length)];
 
             break;
         case 'agree':
-            thelink = agree[Math.floor(Math.random() * agree.length)]
+            thelink = agree[Math.floor(Math.random() * agree.length)];
 
             break;
         case 'cope':
-            thelink = cope[Math.floor(Math.random() * cope.length)]
+            thelink = cope[Math.floor(Math.random() * cope.length)];
 
             break;
         case 'disagree':
-            thelink = disagree[Math.floor(Math.random() * disagree.length)]
+            thelink = disagree[Math.floor(Math.random() * disagree.length)];
 
             break;
         case 'nocare':
-            thelink = nocare[Math.floor(Math.random() * nocare.length)]
+            thelink = nocare[Math.floor(Math.random() * nocare.length)];
 
             break;
         case 'misspell':
-            thelink = misspell[Math.floor(Math.random() * misspell.length)]
+            thelink = misspell[Math.floor(Math.random() * misspell.length)];
 
             break;
         case 'compliment':
-            thelink = compliment[Math.floor(Math.random() * compliment.length)]
+            thelink = compliment[Math.floor(Math.random() * compliment.length)];
 
             break;
         case 'insult':
-            thelink = insult[Math.floor(Math.random() * insult.length)]
+            thelink = insult[Math.floor(Math.random() * insult.length)];
 
             break;
         case 'ratio':
-            thelink = ratio[Math.floor(Math.random() * ratio.length)]
+            thelink = ratio[Math.floor(Math.random() * ratio.length)];
 
             break;
         case 'reaction to info':
-            thelink = reactiontoinf[Math.floor(Math.random() * reactiontoinf.length)]
+            thelink = reactiontoinf[Math.floor(Math.random() * reactiontoinf.length)];
             break;
         default:
-            thelink = 'err'
+            thelink = 'err';
             break;
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
     if (thelink == 'err') {
-        commanduser.send('Error - invalid/missing type')
+        commanduser.send('Error - invalid/missing type');
         return;
     }
 
@@ -369,7 +362,7 @@ export function gif(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj =(input.obj as Discord.ChatInputCommandInteraction)
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             input.obj.reply({
                 content: 'success',
                 embeds: [],
@@ -396,7 +389,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -410,7 +403,8 @@ export async function image(input: extypes.commandInput) {
     let iserr = false;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             query = input.args.join(' ');
             if (!input.args[0]) {
@@ -421,15 +415,17 @@ export async function image(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            query = input.obj.options.getString('query')
+            query = input.obj.options.getString('query');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -438,34 +434,27 @@ export async function image(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('image', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'image',
+        options: [
             {
                 name: 'Query',
                 value: query
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const res = await fetch(
         `https://customsearch.googleapis.com/customsearch/v1?q=${query}&cx=${input.config.google.engineId}&key=${input.config.google.apiKey}&searchType=image`
-    )
+    );
 
 
     if (!res || res.status !== 200) {
@@ -479,7 +468,7 @@ export async function image(input: extypes.commandInput) {
     }
 
     const response: extypes.imagesearches = await res.json() as any;
-    fs.writeFileSync(`debug/command-image=imageSearch=${input.obj.guildId}.json`, JSON.stringify(response, null, 4), 'utf-8')
+    fs.writeFileSync(`debug/command-image=imageSearch=${input.obj.guildId}.json`, JSON.stringify(response, null, 4), 'utf-8');
 
     if (!response.items) {
         (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction).reply({
@@ -494,7 +483,7 @@ export async function image(input: extypes.commandInput) {
     let resimg = '';
     let i: number;
     for (i = 0; i < response.items.length && i < 5; i++) {
-        resimg += `\n\n<${response.items[i].link}>`
+        resimg += `\n\n<${response.items[i].link}>`;
     }
 
     const imageEmbed = new Discord.EmbedBuilder()
@@ -507,7 +496,7 @@ export async function image(input: extypes.commandInput) {
     for (let i = 0; i < 5; i++) {
         const curimg = new Discord.EmbedBuilder()
             .setURL(`${'https://www.google.com/search?q=' + query.replaceAll(' ', '+')}`)
-            .setImage(`${response.items[i].image.thumbnailLink}`)
+            .setImage(`${response.items[i].image.thumbnailLink}`);
         useEmbeds.push(curimg);
     }
 
@@ -518,7 +507,7 @@ export async function image(input: extypes.commandInput) {
         args: {
             embeds: useEmbeds
         }
-    })
+    });
 
     fs.appendFileSync(`logs/cmd/commands${input.obj.guildId}.log`,
         `
@@ -526,7 +515,7 @@ export async function image(input: extypes.commandInput) {
 success
 ID: ${input.absoluteID}
 ----------------------------------------------------
-\n\n`, 'utf-8')
+\n\n`, 'utf-8');
 
 }
 
@@ -542,40 +531,43 @@ export function poll(input: extypes.commandInput) {
     let pollOptsInit: string;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            pollTitle = input.args.join(' ')
-            pollOpts = ['yes', 'no']
-            overrideEmojis = ['✔', '❌']
+            pollTitle = input.args.join(' ');
+            pollOpts = ['yes', 'no'];
+            overrideEmojis = ['✔', '❌'];
         }
             break;
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-            pollTitle = input.obj.options.getString('title')
-            pollOptsInit = input.obj.options.getString('options')
+            pollTitle = input.obj.options.getString('title');
+            pollOptsInit = input.obj.options.getString('options');
             if (pollOptsInit.includes(',')) {
-                pollOpts = pollOptsInit.split(',')
+                pollOpts = pollOptsInit.split(',');
             }
             else if (pollOptsInit.includes('+')) {
-                pollOpts = pollOptsInit.split('+')
+                pollOpts = pollOptsInit.split('+');
             }
             else if (pollOptsInit.includes('|')) {
-                pollOpts = pollOptsInit.split('|')
+                pollOpts = pollOptsInit.split('|');
             }
             else if (pollOptsInit.includes('&')) {
-                pollOpts = pollOptsInit.split('&')
+                pollOpts = pollOptsInit.split('&');
             } else {
-                pollOpts = [pollOptsInit]
+                pollOpts = [pollOptsInit];
             }
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -584,18 +576,14 @@ export function poll(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('poll', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'poll',
+        options: [
             {
                 name: 'Title',
                 value: pollTitle
@@ -604,11 +592,8 @@ export function poll(input: extypes.commandInput) {
                 name: 'Options',
                 value: pollOptsInit
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const actualOpts: string[] = [];
@@ -640,11 +625,11 @@ export function poll(input: extypes.commandInput) {
         '🇽',
         '🇾',
         '🇿'
-    ]
+    ];
 
     for (let i = 0; i < pollOpts.length; i++) {
         if (pollOpts[i].length >= 1) {
-            actualOpts.push(pollOpts[i])
+            actualOpts.push(pollOpts[i]);
         }
     }
     let optsToTxt: string = '';
@@ -664,11 +649,12 @@ export function poll(input: extypes.commandInput) {
 
     const pollEmbed = new Discord.EmbedBuilder()
         .setTitle(`${pollTitle}`)
-        .setDescription(`${optsToTxt}`)
+        .setDescription(`${optsToTxt}`);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     switch (input.commandType) {
-        case 'message': case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'message': case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             input.obj.channel.send({
                 content: '',
                 embeds: [pollEmbed],
@@ -701,7 +687,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -715,22 +701,24 @@ export function roll(input: extypes.commandInput) {
     let minNum: number;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            maxNum = parseInt(input.args[0])
-            minNum = parseInt(input.args[1])
+            maxNum = parseInt(input.args[0]);
+            minNum = parseInt(input.args[1]);
             if (isNaN(maxNum) || !input.args[0]) {
                 maxNum = 100;
             }
             if (isNaN(minNum) || !input.args[1]) {
-                minNum = 0
+                minNum = 0;
             }
         }
             break;
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
             maxNum = input.obj.options.getNumber('max') ? Math.floor(input.obj.options.getNumber('max')) : 100;
             minNum = input.obj.options.getNumber('min') ? Math.floor(input.obj.options.getNumber('min')) : 0;
@@ -739,7 +727,8 @@ export function roll(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -748,18 +737,14 @@ export function roll(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('roll', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'roll',
+        options: [
             {
                 name: 'Maximum number',
                 value: maxNum
@@ -768,20 +753,17 @@ export function roll(input: extypes.commandInput) {
                 name: 'Minimum number',
                 value: minNum
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
     if (isNaN(maxNum)) {
         maxNum = 100;
     }
     if (isNaN(minNum)) {
-        minNum = 0
+        minNum = 0;
     }
-    const eq = Math.floor(Math.random() * (maxNum - minNum)) + minNum
+    const eq = Math.floor(Math.random() * (maxNum - minNum)) + minNum;
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
@@ -791,7 +773,7 @@ export function roll(input: extypes.commandInput) {
         args: {
             content: `${eq}`,
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -801,7 +783,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -815,16 +797,18 @@ export function say(input: extypes.commandInput) {
     let channel;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             channel = input.obj.channel;
-            msg = input.args.join(' ')
+            msg = input.args.join(' ');
         }
             break;
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
             channel = input.obj.options.getChannel('channel');
             if (channel == null || channel == undefined) {
@@ -836,7 +820,8 @@ export function say(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -845,18 +830,14 @@ export function say(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('say', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'say',
+        options: [
             {
                 name: 'Message',
                 value: msg
@@ -865,17 +846,14 @@ export function say(input: extypes.commandInput) {
                 name: 'Channel',
                 value: channel.id
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (msg.length < 1) {
-        msg = def.chocoMOF
+        msg = def.chocoMOF;
     }
     if (msg == def.chocoMOF) {
         channel.send({
@@ -883,16 +861,17 @@ export function say(input: extypes.commandInput) {
                 .setDescription(msg)
                 .setColor(colours.embedColour.info.dec)
             ]
-        })
+        });
     } else {
-        channel.send({ content: msg })
+        channel.send({ content: msg });
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     switch (input.commandType) {
         //==============================================================================================================================================================================================
 
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             input.obj.delete().catch();
         }
             break;
@@ -923,7 +902,7 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
 
@@ -936,7 +915,8 @@ export async function ytsearch(input: extypes.commandInput) {
     let query: string;
 
     switch (input.commandType) {
-        case 'message': {input.obj = (input.obj as Discord.Message<any>);
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             query = input.args.join(' ');
         }
@@ -944,7 +924,8 @@ export async function ytsearch(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
             query = input.obj.options.getString('query');
         }
@@ -952,7 +933,8 @@ export async function ytsearch(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {input.obj = (input.obj as Discord.ButtonInteraction<any>);
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
         }
             break;
@@ -984,22 +966,20 @@ export async function ytsearch(input: extypes.commandInput) {
             /* .setLabel('End') */,
         );
 
-    log.logFile(
-        'command',
-        log.commandLog('ytsearch', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'ytsearch',
+        options: [
+            {
+                name: 'Query',
+                value: query
+            }
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -1007,20 +987,20 @@ export async function ytsearch(input: extypes.commandInput) {
         return (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction).reply({
             content: 'Please provide a search query.',
             ephemeral: true
-        })
+        });
     }
     const searchEmbed: Discord.EmbedBuilder = new Discord.EmbedBuilder()
         .setTitle(`YouTube search results for: ${query}`)
         .setColor(colours.embedColour.query.dec);
 
     const initSearch: extypes.ytSearch = await yts.search(query);
-    fs.writeFileSync(`debug/command-ytsearch=ytsSearch=${input.obj.guildId}.json`, JSON.stringify(initSearch, null, 4), 'utf-8')
+    fs.writeFileSync(`debug/command-ytsearch=ytsSearch=${input.obj.guildId}.json`, JSON.stringify(initSearch, null, 4), 'utf-8');
 
 
     if (initSearch.videos.length < 1) {
-        searchEmbed.setDescription('No results found.')
+        searchEmbed.setDescription('No results found.');
     } else {
-        const objs = initSearch.videos
+        const objs = initSearch.videos;
         for (let i = 0; i < 5 && i < objs.length; i++) {
             const curItem = objs[i];
             searchEmbed.addFields([
@@ -1033,7 +1013,7 @@ Description: \`${curItem.description}\`
 `,
                     inline: false
                 }
-            ])
+            ]);
         }
     }
 
@@ -1046,7 +1026,7 @@ Description: \`${curItem.description}\`
         args: {
             embeds: [searchEmbed]
         }
-    })
+    });
 
     log.logFile('command',
         `
@@ -1056,6 +1036,6 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
         { guildId: `${input.obj.guildId}` }
-    )
+    );
 
 }
