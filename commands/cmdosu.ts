@@ -9399,6 +9399,47 @@ Using default json file
                 inline: false
             }
         ]);
+
+    if (mapdata.user_id != mapdata.beatmapset.user_id) {
+        let gdReq: osufunc.apiReturn;
+        let gdData: osuApiTypes.User;
+        if (func.findFile(mapdata.user_id, `osudata`) &&
+            !('error' in func.findFile(mapdata.user_id, `osudata`)) &&
+            input.button != 'Refresh') {
+            gdReq = func.findFile(mapdata.user_id, `osudata`);
+        } else {
+            gdReq = await osufunc.apiget(
+                {
+                    type: 'user',
+                    params: {
+                        userid: mapdata.user_id,
+                    }
+                });
+        }
+
+        gdData = gdReq.apiData;
+
+
+        osufunc.debug(gdReq, 'command', 'map', input.obj.guildId, 'guestData');
+
+        if (gdData?.error) {
+            gdData = JSON.parse(fs.readFileSync('./files/defaults/mapper.json', 'utf8'));
+            log.logFile('command',
+                `
+----------------------------------------------------
+Command Error
+ID: ${input.absoluteID}
+Could not find gd data
+Using default json file
+----------------------------------------------------
+\n\n`,
+                { guildId: `${input.obj.guildId}` }
+            );
+        }
+        func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
+        Embed.setDescription(`Guest difficulty by [${gdData?.username}](https://osu.ppy.sh/u/${mapdata.user_id})`);
+    }
+
     if (mapgraph) {
         Embed.setImage(`${mapgraph}`);
     }
@@ -9989,7 +10030,7 @@ ID: ${input.absoluteID}
  * list of user's maps
  */
 export async function userBeatmaps(input: extypes.commandInput) {
-    let filter: 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' | 'nominated' = 'favourite';
+    let filter: 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' | 'nominated' | 'guest' = 'favourite';
     let sort:
         'title' | 'artist' |
         'difficulty' | 'status' |
@@ -10067,6 +10108,14 @@ export async function userBeatmaps(input: extypes.commandInput) {
             if (input.args.includes('-bn')) {
                 filter = 'nominated';
                 input.args.splice(input.args.indexOf('-bn'), 1);
+            }
+            if (input.args.includes('-guest')) {
+                filter = 'guest';
+                input.args.splice(input.args.indexOf('-guest'), 1);
+            }
+            if (input.args.includes('-gd')) {
+                filter = 'guest';
+                input.args.splice(input.args.indexOf('-gd'), 1);
             }
 
             if (input.args.includes('-reverse')) {
