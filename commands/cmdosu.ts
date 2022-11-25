@@ -6965,6 +6965,270 @@ ID: ${input.absoluteID}
 }
 
 /**
+ * generates scorepost thumbnail/title
+ */
+export async function scorepost(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+
+    let scoreId: number;
+    let customString: string;
+    let mode: osuApiTypes.GameMode = 'osu';
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+
+            if (input.args.includes('-osu')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-f')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
+            }
+
+            input.args = cleanArgs(input.args);
+
+            //attempt to fetch score id
+            if (!isNaN(+input.args[0])) {
+                scoreId = +input.args[0];
+                input.args.splice(input.args.indexOf(input.args[0]), 1);
+            }
+            if (!isNaN(+input.args[input.args.length - 1])) {
+                scoreId = +input.args[input.args.length - 1];
+                input.args.splice(input.args.indexOf(input.args[input.args.length - 1]), 1);
+            }
+
+            input.args.length > 0 ? customString = input.args.join(' ') : null;
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+
+            scoreId = input.obj.options.getInteger('id');
+            customString = input.obj.options.getString('custom');
+            mode = input.obj.options.getString('mode') as osuApiTypes.GameMode;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'COMMANDNAME',
+        options: [
+            {
+                name: 'Score ID',
+                value: scoreId
+            },
+            {
+                name: 'Custom String',
+                value: customString
+            }
+        ]
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+
+    let scoredataReq: osufunc.apiReturn;
+    let scoredata: osuApiTypes.Score;
+
+    if (func.findFile(scoreId, 'scoredata') &&
+        !('error' in func.findFile(scoreId, 'scoredata')) &&
+        input.button != 'Refresh'
+    ) {
+        scoredataReq = func.findFile(scoreId, 'scoredata');
+    } else {
+        scoredataReq = await osufunc.apiget(
+            {
+                type: 'score',
+                params: {
+                    id: scoreId,
+                    mode: osufunc.modeValidator(mode)
+                }
+            });
+    }
+
+    scoredata = scoredataReq.apiData;
+
+    if (scoredata?.error) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                content: 'Error - could not fetch score data',
+                allowedMentions: { repliedUser: false },
+                failIfNotExists: true
+            }).catch();
+        }
+        return;
+    }
+
+    let mapdataReq: osufunc.apiReturn;
+    if (func.findFile(scoredata.beatmap.id, 'mapdata') &&
+        !('error' in func.findFile(scoredata.beatmap.id, 'mapdata')) &&
+        input.button != 'Refresh'
+    ) {
+        mapdataReq = func.findFile(scoredata.beatmap.id, 'mapdata');
+    } else {
+        mapdataReq = await osufunc.apiget(
+            {
+                type: 'map',
+                params: {
+                    id: scoredata.beatmap.id
+                }
+            }
+        );
+    }
+    const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
+    osufunc.debug(mapdataReq, 'command', 'maplb', input.obj.guildId, 'mapData');
+
+    if (mapdata?.error) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            if (input.commandType == 'interaction') {
+                setTimeout(() => {
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        content: `Error - could not fetch beatmap data for map \`${scoredata.beatmap.id}\`.`,
+                        allowedMentions: { repliedUser: false },
+                    }).catch();
+                }, 1000);
+            } else {
+                (input.obj as Discord.Message<any>).reply({
+                    content: `Error - could not fetch beatmap data for map \`${scoredata.beatmap.id}\`.`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).catch();
+            }
+        }
+        log.logFile('command',
+            `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not fetch beatmap data for ${scoredata.beatmap.id}
+----------------------------------------------------
+\n\n`,
+            { guildId: `${input.obj.guildId}` }
+        );
+        return;
+    }
+
+    func.storeFile(mapdataReq, scoredata.beatmap.id, 'mapdata');
+
+    const ppCalc = await osufunc.scorecalc({
+        mods: scoredata.mods.join(''),
+        gamemode: mode,
+        miss: scoredata.statistics.count_miss,
+        acc: scoredata.accuracy,
+        maxcombo: scoredata.max_combo,
+        mapid: scoredata.beatmap.id
+    });
+
+    let pptxt: string;
+
+    if (scoredata.accuracy == 1) {
+        pptxt = `${scoredata.pp}`;
+    } else {
+        if (scoredata.perfect) {
+            pptxt = `${scoredata.pp} (${ppCalc[3].pp} if SS)`;
+        } else {
+            pptxt = `${scoredata.pp} (${ppCalc[2].pp} if FC)`;
+        }
+    }
+
+    let nonFcString: string = '';
+
+    scoredata.statistics.count_miss > 0 ?
+        nonFcString += `${scoredata.statistics.count_miss}❌` : null;
+    scoredata.perfect ? null :
+        nonFcString += ` ${scoredata.max_combo}/${mapdata.max_combo}`;
+    
+    if(nonFcString.length < 1){
+        nonFcString = 'FC'
+    }
+
+    const titleString =
+        `${scoredata.user.username}` + ' | ' +
+        `${scoredata.beatmapset.artist} - ${scoredata.beatmapset.title} [${scoredata.beatmap.version}] ` +
+        `${scoredata.mods.length > 0 ? `+${scoredata.mods.join('')}` : ''} ${(scoredata.accuracy * 100).toFixed(2)}% ` +
+        `${nonFcString} ` +
+        `${pptxt} | ${scoredata.mode}`;
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            content: titleString
+        }
+    });
+
+    log.logFile('command',
+        `
+----------------------------------------------------
+success
+ID: ${input.absoluteID}
+----------------------------------------------------
+\n\n`,
+        { guildId: `${input.obj.guildId}` }
+    );
+
+}
+
+/**
  * list of user's scores on a map
  */
 export async function scores(input: extypes.commandInput) {
