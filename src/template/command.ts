@@ -90,20 +90,15 @@ module.exports = {
                     .setEmoji(buttonsthing.label.main.refresh),
             );
 
-        log.logFile(
-            'command',
-            log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
-            ),
-            {
-                guildId: `${input.obj.guildId}`
-            })
-        //OPTIONS==============================================================================================================================================================================================
-        log.logFile('command',
-            log.optsLog(input.absoluteID, []),
-            {
-                guildId: `${input.obj.guildId}`
-            }
-        )
+        log.logCommand({
+            event: 'Command',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            commanduser,
+            object: input.obj,
+            commandName: 'COMMANDNAME',
+            options: []
+        });
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -115,7 +110,7 @@ module.exports = {
             obj: input.obj,
             args: {
             }
-        })
+        });
 
         log.logFile('command',
             `
@@ -125,6 +120,6 @@ ID: ${input.absoluteID}
 ----------------------------------------------------
 \n\n`,
             { guildId: `${input.obj.guildId}` }
-        )
+        );
     }
-}
+};
