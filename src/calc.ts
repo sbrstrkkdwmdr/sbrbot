@@ -48,8 +48,8 @@ export function findLCM(n1: number, n2: number) {
 export function pythag(a: number, b: number) {
     if (isNaN(a) || isNaN(b)) return NaN;
     const cp = (a ** 2) + (b ** 2);
-    const c: number = Math.sqrt(cp)
-    return (c)
+    const c: number = Math.sqrt(cp);
+    return (c);
 }
 /**
  * 
@@ -62,16 +62,16 @@ export function sigfig(a: number, b: number) {
         number: a,
         sigfig: NaN,
     };
-    const aAsArr = `${a}`.replaceAll('.', '').split('')
-    if (b < 2 || b == null) { b = aAsArr.length }
-    const sigfig = aAsArr.slice(1, b).join('')
-    let mult: number = Math.floor(a / parseFloat(aAsArr[0] + '.' + sigfig))
-    if (mult < 1 && mult != 0) { mult = mult.toString().length - 1 }
-    const answer = aAsArr[0] + '.' + sigfig + '*10^' + mult
+    const aAsArr = `${a}`.replaceAll('.', '').split('');
+    if (b < 2 || b == null) { b = aAsArr.length; }
+    const sigfig = aAsArr.slice(1, b).join('');
+    let mult: number = Math.floor(a / parseFloat(aAsArr[0] + '.' + sigfig));
+    if (mult < 1 && mult != 0) { mult = mult.toString().length - 1; }
+    const answer = aAsArr[0] + '.' + sigfig + '*10^' + mult;
     return {
         number: answer,
         sigfig: sigfig.length + 1,
-    }
+    };
 }
 
 /**
@@ -107,18 +107,18 @@ export function to12htime(date) {
     let seconds = date.getUTCSeconds();
     let amorpm;
     if (parseInt(hours) >= 12) {
-        amorpm = 'PM'
+        amorpm = 'PM';
     }
     else {
-        amorpm = 'AM'
+        amorpm = 'AM';
     }
     hours = hours % 12;
-    if (hours == 0) hours = 12
+    if (hours == 0) hours = 12;
     if (minutes < 10) {
-        minutes = '0' + minutes
+        minutes = '0' + minutes;
     }
     if (seconds < 10) {
-        seconds = '0' + seconds
+        seconds = '0' + seconds;
     }
     return hours + ':' + minutes + ':' + seconds + amorpm;
 }
@@ -133,18 +133,18 @@ export function relto12htime(date) { //relative version of above
     let seconds = date.getSeconds();
     let amorpm;
     if (parseInt(hours) >= 12) {
-        amorpm = 'PM'
+        amorpm = 'PM';
     }
     else {
-        amorpm = 'AM'
+        amorpm = 'AM';
     }
     hours = hours % 12;
-    if (hours == 0) hours = 12
+    if (hours == 0) hours = 12;
     if (minutes < 10) {
-        minutes = '0' + minutes
+        minutes = '0' + minutes;
     }
     if (seconds < 10) {
-        seconds = '0' + seconds
+        seconds = '0' + seconds;
 
     }
     return hours + ':' + minutes + ':' + seconds + amorpm;
@@ -159,28 +159,28 @@ export function dayhuman(weekdaynum: number) { //date.getUTCDay returns an int s
     let str: string;
     switch (weekdaynum.toString()) {
         case '0':
-            str = 'Sun'
+            str = 'Sun';
             break;
         case '1':
-            str = 'Mon'
+            str = 'Mon';
             break;
         case '2':
-            str = 'Tue'
+            str = 'Tue';
             break;
         case '3':
-            str = 'Wed'
+            str = 'Wed';
             break;
         case '4':
-            str = 'Thu'
+            str = 'Thu';
             break;
         case '5':
-            str = 'Fri'
+            str = 'Fri';
             break;
         case '6':
-            str = 'Sat'
+            str = 'Sat';
             break;
         default:
-            str = 'idk'
+            str = 'idk';
             break;
     }
     return str;
@@ -194,43 +194,43 @@ export function tomonthname(monthnum: number) {//date.getUTCMonth returns an int
     let str: string;
     switch (monthnum.toString()) {
         case '0':
-            str = 'Jan'
+            str = 'Jan';
             break;
         case '1':
-            str = 'Feb'
+            str = 'Feb';
             break;
         case '2':
-            str = 'Mar'
+            str = 'Mar';
             break;
         case '3':
-            str = 'Apr'
+            str = 'Apr';
             break;
         case '4':
-            str = 'May'
+            str = 'May';
             break;
         case '5':
-            str = 'Jun'
+            str = 'Jun';
             break;
         case '6':
-            str = 'Jul'
+            str = 'Jul';
             break;
         case '7':
-            str = 'Aug'
+            str = 'Aug';
             break;
         case '8':
-            str = 'Sep'
+            str = 'Sep';
             break;
         case '9':
-            str = 'Oct'
+            str = 'Oct';
             break;
         case '10':
-            str = 'Nov'
+            str = 'Nov';
             break;
         case '11':
-            str = 'December'
+            str = 'December';
             break;
         default:
-            str = 'idk'
+            str = 'idk';
             break;
     }
     return str;
@@ -256,10 +256,10 @@ export function fixoffset(time: number) {
  */
 export function timeToMs(str: string) {
     if (str.includes('d') || str.includes('h') || str.includes('m') || str.includes('s')) {
-        let daysstr = '0'
-        let hoursstr = '0'
-        let minutesstr = '0'
-        let secondsstr = '0'
+        let daysstr = '0';
+        let hoursstr = '0';
+        let minutesstr = '0';
+        let secondsstr = '0';
 
         if (str.includes('d')) {
             daysstr = str.split('d')[0];
@@ -448,21 +448,21 @@ export function toOrdinal(num: number) {
  * @returns shorthand ie 1000 -> 1k, 1254 -> 1.25k
  */
 export function shorthandNumber(number: number, decimal?: number) {
-    let newNum: string = `0`
+    let newNum: string = `0`;
     if (!decimal) {
-        decimal = 2
+        decimal = 2;
     }
     if (number > 10 ** 12) {
-        newNum = (number / 1000).toFixed(decimal) + 'T'
+        newNum = (number / 1000).toFixed(decimal) + 'T';
     }
     if (number > 10 ** 9) {
-        newNum = (number / 1000).toFixed(decimal) + 'B'
+        newNum = (number / 1000).toFixed(decimal) + 'B';
     }
     if (number > 10 ** 6) {
-        newNum = (number / 1000).toFixed(decimal) + 'M'
+        newNum = (number / 1000).toFixed(decimal) + 'M';
     }
     if (number > 10 ** 3) {
-        newNum = (number / 1000).toFixed(decimal) + 'k'
+        newNum = (number / 1000).toFixed(decimal) + 'k';
     }
     return newNum;
 }
@@ -473,7 +473,7 @@ export async function waitPls(func: () => any, seconds: number) {
             func();
             resolve('success');
         }, seconds);
-    })
+    });
     return;
 }
 

@@ -15,16 +15,16 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
         if (!(interaction.type == Discord.InteractionType.MessageComponent || interaction.type == Discord.InteractionType.ModalSubmit)) return;
         if (interaction.applicationId != client.application.id) return;
 
-        interaction = interaction as Discord.ButtonInteraction //| Discord.SelectMenuInteraction
+        interaction = interaction as Discord.ButtonInteraction; //| Discord.SelectMenuInteraction
 
         const currentDate = new Date();
 
         const args = null;
         const obj = interaction;
-        const command = interaction.customId.split('-')[1]
+        const command = interaction.customId.split('-')[1];
         const button = interaction.customId.split('-')[0] as extypes.commandButtonTypes;
-        const specid = interaction.customId.split('-')[2]
-        const absoluteID = interaction.customId.split('-')[3]
+        const specid = interaction.customId.split('-')[2];
+        const absoluteID = interaction.customId.split('-')[3];
 
         //buttonType-baseCommand-userId-commandId
 
@@ -39,7 +39,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
             id: null,
             overwriteModal: null,
             commandAs: commandType,
-        }
+        };
         if (specid && specid != interaction.user.id) {
             interaction.deferUpdate()
                 .catch(error => { });
@@ -47,10 +47,10 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
         }
         const errorEmbed = new Discord.EmbedBuilder()
             .setTitle('Error - Button does not work')
-            .setDescription('Feature not yet implemented/supported')
+            .setDescription('Feature not yet implemented/supported');
 
-        const PageOnlyCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'scores', 'userbeatmaps']
-        const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores']
+        const PageOnlyCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'scores', 'userbeatmaps'];
+        const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores'];
         if (button == 'Search' && PageOnlyCommands.includes(command)) {
             const menu = new Discord.ModalBuilder()
                 .setTitle('Page')
@@ -75,7 +75,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                 case 'map':
                     {
                         //interaction is converted to a base interaction first because button interaction and select menu interaction don't overlap
-                        overrides.id = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0]
+                        overrides.id = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
                         if (interaction?.message?.components[1]?.components[0]) {
                             overrides.overwriteModal = interaction.message.components[1].components[0];
                         }
@@ -83,7 +83,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     break;
                 case 'help':
                     {
-                        overrides.ex = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0]
+                        overrides.ex = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
                     }
             }
         }
@@ -185,6 +185,6 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     .catch(error => { });
                 break;
         }
-        fs.appendFileSync('logs/totalcommands.txt', 'x')
+        fs.appendFileSync('logs/totalcommands.txt', 'x');
     });
-}
+};

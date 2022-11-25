@@ -1,1 +1,1 @@
-export const path = `${__dirname}`
+export const path = `${__dirname}`;

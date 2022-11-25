@@ -4,7 +4,7 @@
  * @returns r,g,b as string
  */
 function hexToRgb(str: string) {
-    const str1 = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(str.replace('#', ''))
+    const str1 = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(str.replace('#', ''));
 
     const r = parseInt(str1[1], 16);
     const g = parseInt(str1[2], 16);

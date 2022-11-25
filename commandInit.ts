@@ -9,7 +9,7 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
             if (settoguild == 1 && guild) {
                 commands = guild.commands
             } else { */
-    const commands = client.application?.commands
+    const commands = client.application?.commands;
 
     commands?.set([
         {
@@ -1152,5 +1152,5 @@ module.exports = (userdata, client/* :Discord.Client */, config, oncooldown) => 
                 }
             ]
         },
-    ])
-}
+    ]);
+};

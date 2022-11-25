@@ -42,7 +42,7 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
         "Ascension to Heaven [Death] +HDDTHR",
         "Can't Defeat Airman [Holy Shit! It's Airman!!!]",
         "The Big Black [WHO'S AFRAID OF THE BIG BLACK]"
-    ]
+    ];
 
     const activities = [
         {
@@ -85,12 +85,12 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
             type: 3,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         }
-    ]
+    ];
     const activityChristmas = [{
         name: `Merry Christmas! | ${config.prefix}help`,
         type: 0,
         url: 'https://twitch.tv/sbrstrkkdwmdr',
-    }]
+    }];
     const activityHalloween = [{
         name: `Happy Halloween! | ${config.prefix}help`,
         type: 0,
@@ -102,12 +102,12 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
         url: 'https://twitch.tv/sbrstrkkdwmdr',
     }
 
-    ]
+    ];
     const activityNewYear = [{
         name: `Happy New Year! | ${config.prefix}help`,
         type: 0,
         url: 'https://twitch.tv/sbrstrkkdwmdr',
-    }]
+    }];
 
     client.user.setPresence({
         activities: [activities[0]],
@@ -160,7 +160,7 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
 
     client.on('messageCreate', async (message) => {
 
-        const currentGuildId = message.guildId
+        const currentGuildId = message.guildId;
         let settings: extypes.guildSettings;
         let prefix: string = config.prefix;
 
@@ -175,15 +175,15 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
         //if message mentions bot and no other args given, return prefix
         if (message.mentions.users.size > 0) {
             if (message.mentions.users.first().id == client.user.id && message.content.replaceAll(' ', '').length == (`<@${client.user.id}>`).length) {
-                let serverPrefix = 'null'
+                let serverPrefix = 'null';
                 try {
                     const curGuildSettings = await guildSettings.findOne({ where: { guildid: message.guildId } });
                     settings = curGuildSettings.dataValues;
-                    serverPrefix = settings.prefix
+                    serverPrefix = settings.prefix;
                 } catch (error) {
-                    serverPrefix = config.prefix
+                    serverPrefix = config.prefix;
                 }
-                return message.reply({ content: `Global prefix is \`${prefix}\`\nServer prefix is \`${serverPrefix}\``, allowedMentions: { repliedUser: false } })
+                return message.reply({ content: `Global prefix is \`${prefix}\`\nServer prefix is \`${serverPrefix}\``, allowedMentions: { repliedUser: false } });
             }
         }
 
@@ -192,16 +192,16 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
             setTimeout(() => {
                 message.delete()
                     .catch(err => {
-                    })
-            }, 3000)
+                    });
+            }, 3000);
         }
-    })
+    });
 
 
     //create settings for new guilds
     client.on('guildCreate', async (guild) => {
         createGuildSettings(guild);
-    })
+    });
     setInterval(() => {
         clearUnused();
     }, 10 * 60 * 1000);
@@ -214,9 +214,9 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
                 guildid: guild.id ?? null,
                 guildname: guild.name ?? null,
                 prefix: config.prefix,
-            })
+            });
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
 
@@ -224,7 +224,7 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
         (async () => {
             await guildSettings.destroy({
                 where: { guildid: null, guildname: null }
-            })
+            });
         })();
     }
 
@@ -235,18 +235,18 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
         'scoredata',
         'maplistdata',
         'firstscoresdata'
-    ]
+    ];
 
     const permanentCache = [
         'mapdataRanked', 'mapdataLoved', 'mapdataApproved',
         'bmsdataRanked', 'bmsdataLoved', 'bmsdataApproved',
-    ]
+    ];
 
     /**
      * removes map files that are older than 1 hour
      */
     function clearMapFiles() {
-        const files = fs.readdirSync('./files/maps')
+        const files = fs.readdirSync('./files/maps');
         for (const file of files) {
             fs.stat('./files/maps/' + file, (err, stat) => {
                 if (err) {
@@ -254,13 +254,13 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
                 } else {
                     if (file.includes('temp')) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
-                            fs.unlinkSync('./files/maps/' + file)
-                            osufunc.logCall(file, 'deleted file')
+                            fs.unlinkSync('./files/maps/' + file);
+                            osufunc.logCall(file, 'deleted file');
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     }
                 }
-            })
+            });
 
         }
     }
@@ -271,7 +271,7 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
      * maps and users are stored for an hour
      */
     function clearCommandCache() {
-        const files = fs.readdirSync('./cache/commandData')
+        const files = fs.readdirSync('./cache/commandData');
         for (const file of files) {
             fs.stat('./cache/commandData/' + file, (err, stat) => {
                 if (err) {
@@ -282,19 +282,19 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
                     }
                     else if (cacheById.some(x => file.startsWith(x))) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24)) {
-                            fs.unlinkSync('./cache/commandData/' + file)
-                            osufunc.logCall(file, 'deleted file')
+                            fs.unlinkSync('./cache/commandData/' + file);
+                            osufunc.logCall(file, 'deleted file');
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     } else {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 15)) {
-                            fs.unlinkSync('./cache/commandData/' + file)
-                            osufunc.logCall(file, 'deleted file')
+                            fs.unlinkSync('./cache/commandData/' + file);
+                            osufunc.logCall(file, 'deleted file');
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     }
                 }
-            })
+            });
 
         }
     }
@@ -322,4 +322,4 @@ module.exports = (userdata, client, config: extypes.config, oncooldown, guildSet
         // );
     }
 
-}
+};

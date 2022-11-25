@@ -7,14 +7,14 @@ import func = require('./tools');
 import embedstuff = require('./embed');
 import log = require('./log');
 import def = require('./consts/defaults');
-import rosu = require('rosu-pp')
+import rosu = require('rosu-pp');
 export async function editTrackUser(fr: {
     database: Sequelize.ModelStatic<any>,
     userid: string | number,
     action?: 'add' | 'remove',
     guildId: string | number,
     guildSettings: Sequelize.ModelStatic<any>,
-    mode: string
+    mode: string;
 }
 ) {
 
@@ -23,15 +23,15 @@ export async function editTrackUser(fr: {
             await fr.database.create({
                 osuid: fr.userid,
                 [`guilds${fr.mode}`]: fr.guildId
-            })
+            });
 
         } catch (error) {
-            log.logFile('error', log.errLog('database track user creation err', error))
-            const previous = await fr.database.findOne({ where: { osuid: fr.userid } })
-            const prevchannels: string[] = previous?.dataValues?.guilds?.split(',') ?? []
+            log.logFile('error', log.errLog('database track user creation err', error));
+            const previous = await fr.database.findOne({ where: { osuid: fr.userid } });
+            const prevchannels: string[] = previous?.dataValues?.guilds?.split(',') ?? [];
 
             if (!prevchannels.includes(`${fr.guildId}`)) {
-                prevchannels.push(`${fr.guildId}`)
+                prevchannels.push(`${fr.guildId}`);
             }
 
             await fr.database.update({
@@ -41,12 +41,12 @@ export async function editTrackUser(fr: {
                 where: {
                     osuid: fr.userid,
                 }
-            })
+            });
         }
     } else {
-        const curuser = await fr.database.findOne({ where: { osuid: fr.userid } })
-        const curguilds: string[] = curuser.dataValues[`guilds${fr.mode}`].split(',')
-        const newguilds = curguilds.filter(channel => channel != fr.guildId)
+        const curuser = await fr.database.findOne({ where: { osuid: fr.userid } });
+        const curguilds: string[] = curuser.dataValues[`guilds${fr.mode}`].split(',');
+        const newguilds = curguilds.filter(channel => channel != fr.guildId);
         await fr.database.update({
             osuid: fr.userid,
             [`guilds${fr.mode}`]: newguilds.join(',')
@@ -54,14 +54,14 @@ export async function editTrackUser(fr: {
             where: {
                 osuid: fr.userid
             }
-        })
+        });
 
     }
     return true;
 }
 
 
-export async function trackUser(fr: { user: string, mode: string, inital?: boolean }, trackDb, client, guildSettings) {
+export async function trackUser(fr: { user: string, mode: string, inital?: boolean; }, trackDb, client, guildSettings) {
     if (!fr.user) return;
     const curdata: osuApiTypes.Score[] & osuApiTypes.Error = (await osufunc.apiget({
         type: 'osutop',
@@ -77,17 +77,17 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
     // osufunc.updateUserStats(thisUser, fr.mode, userdata)
 
     if (curdata?.[0]?.user_id && fr.inital == true) {
-        fs.writeFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata, null, 2))
+        fs.writeFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata, null, 2));
         return;
     }
     if (curdata?.[0]?.user_id) {
         if (fs.existsSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`)) {
             let previous: osuApiTypes.Score[] & osuApiTypes.Error;
             try {
-                previous = JSON.parse(fs.readFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, 'utf-8'))
+                previous = JSON.parse(fs.readFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, 'utf-8'));
             }
             catch {
-                fs.writeFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata, null, 2))
+                fs.writeFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata, null, 2));
                 return;
             }
 
@@ -95,13 +95,13 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
 
 
                 if (!previous.find(x => x.id == curdata[i].id)) {
-                    osufunc.logCall(curdata[i]?.user?.username ?? 'null name', 'Found new score for')
+                    osufunc.logCall(curdata[i]?.user?.username ?? 'null name', 'Found new score for');
                     sendMsg(await getEmbed({
                         scoredata: curdata[i],
                         scorepos: i
                     }), fr.user,
                         trackDb, client, guildSettings
-                    )
+                    );
                 }
             }
         }
@@ -109,7 +109,7 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
             parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
             -
             parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
-        ), null, 2))
+        ), null, 2));
     }
 }
 
@@ -125,16 +125,16 @@ export async function getEmbed(
 
     switch (curscore.mode) {
         case 'osu': default:
-            totalhits = scorestats.count_300 + scorestats.count_100 + scorestats.count_50 + scorestats.count_miss
+            totalhits = scorestats.count_300 + scorestats.count_100 + scorestats.count_50 + scorestats.count_miss;
             break;
         case 'taiko':
-            totalhits = scorestats.count_300 + scorestats.count_100 + scorestats.count_miss
+            totalhits = scorestats.count_300 + scorestats.count_100 + scorestats.count_miss;
             break;
         case 'fruits':
-            totalhits = scorestats.count_300 + scorestats.count_100 + scorestats.count_50 + scorestats.count_miss
+            totalhits = scorestats.count_300 + scorestats.count_100 + scorestats.count_50 + scorestats.count_miss;
             break;
         case 'mania':
-            totalhits = scorestats.count_geki + scorestats.count_300 + scorestats.count_katu + scorestats.count_100 + scorestats.count_50 + scorestats.count_miss
+            totalhits = scorestats.count_geki + scorestats.count_300 + scorestats.count_katu + scorestats.count_100 + scorestats.count_50 + scorestats.count_miss;
             break;
     }
 
@@ -152,13 +152,13 @@ export async function getEmbed(
             calctype: 0,
             passedObj: totalhits,
             failed: false
-        })
+        });
 
     let pp: string;
     if (data.scoredata.accuracy != 1) {
-        pp = `${data.scoredata.pp}pp ${data.scoredata.perfect ? '(FC)' : `(${ppcalc[1].pp.toFixed(2)} if FC)`}`
+        pp = `${data.scoredata.pp}pp ${data.scoredata.perfect ? '(FC)' : `(${ppcalc[1].pp.toFixed(2)} if FC)`}`;
     } else {
-        pp = `${data.scoredata.pp}pp (SS)`
+        pp = `${data.scoredata.pp}pp (SS)`;
     }
 
     const embed = new Discord.EmbedBuilder()
@@ -184,7 +184,7 @@ export async function getEmbed(
                 count_miss: data.scoredata.statistics.count_miss,
             })} | ${data.scoredata.max_combo}x\n` +
             `${pp}`
-        )
+        );
     return embed;
 }
 
@@ -192,63 +192,63 @@ export async function trackUsers(db, client, guildSettings) {
 
 
     if (!db || !client || !guildSettings) {
-        osufunc.logCall(`Missing object`, 'Error')
-        osufunc.logCall(`${db != null}`, 'Database exists')
-        osufunc.logCall(`${client != null}`, 'Client exists')
-        osufunc.logCall(`${guildSettings != null}`, 'Guild Settings exists')
+        osufunc.logCall(`Missing object`, 'Error');
+        osufunc.logCall(`${db != null}`, 'Database exists');
+        osufunc.logCall(`${client != null}`, 'Client exists');
+        osufunc.logCall(`${guildSettings != null}`, 'Guild Settings exists');
         return;
     }
 
-    const allUsers = await db.findAll()
+    const allUsers = await db.findAll();
     const WaitTime = 1000 * 60 * 30;
     for (let i = 0; i < allUsers.length; i++) {
         const user = allUsers[i];
 
         setTimeout(() => {
-            osufunc.logCall(`index ${i}. Next track in ${Math.floor(WaitTime / allUsers.length)}`, 'Tracking')
-            let willFetch = false
+            osufunc.logCall(`index ${i}. Next track in ${Math.floor(WaitTime / allUsers.length)}`, 'Tracking');
+            let willFetch = false;
             if (!(typeof user.osuid == 'undefined' || user.osuid == null || user.osuid == undefined)) {
                 if (`${user.guildsosu}`.length > 0 && `${user.guildsosu}`.length != 4) {
                     trackUser({
                         user: user.osuid,
                         mode: 'osu',
                         inital: false
-                    }, db, client, guildSettings)
-                    willFetch = true
+                    }, db, client, guildSettings);
+                    willFetch = true;
                 }
                 if (`${user.guildstaiko}`.length > 0 && `${user.guildstaiko}`.length != 4) {
                     trackUser({
                         user: user.osuid,
                         mode: 'taiko',
                         inital: false
-                    }, db, client, guildSettings)
-                    willFetch = true
+                    }, db, client, guildSettings);
+                    willFetch = true;
                 }
                 if (`${user.guildsfruits}`.length > 0 && `${user.guildsfruits}`.length != 4) {
                     trackUser({
                         user: user.osuid,
                         mode: 'fruits',
                         inital: false
-                    }, db, client, guildSettings)
-                    willFetch = true
+                    }, db, client, guildSettings);
+                    willFetch = true;
                 }
                 if (`${user.guildsmania}`.length > 0 && `${user.guildsfruits}`.length != 4) {
                     trackUser({
                         user: user.osuid,
                         mode: 'mania',
                         inital: false
-                    }, db, client, guildSettings)
-                    willFetch = true
+                    }, db, client, guildSettings);
+                    willFetch = true;
                 }
             }
 
             if (willFetch == true) {
-                osufunc.logCall(`Fetching ${user.osuid}`, 'Tracking')
+                osufunc.logCall(`Fetching ${user.osuid}`, 'Tracking');
             } else {
-                osufunc.logCall(`User ${user.osuid} has no tracked channels`, 'Tracking cancelled')
+                osufunc.logCall(`User ${user.osuid} has no tracked channels`, 'Tracking cancelled');
             }
         },
-            i < 1 ? 0 : (Math.floor(WaitTime / allUsers.length)))
+            i < 1 ? 0 : (Math.floor(WaitTime / allUsers.length)));
     }
 }
 
@@ -257,12 +257,12 @@ export async function sendMsg(embed: Discord.EmbedBuilder, curuser: string, trac
         where: {
             osuid: curuser
         }
-    })
+    });
     const guilds = userobj?.guilds?.includes(',') ? userobj?.guilds?.split(',')
         :
-        [userobj?.guilds]
+        [userobj?.guilds];
 
-    let channels = []
+    let channels = [];
     if (!guilds[0]) {
         return;
     }
@@ -274,36 +274,36 @@ export async function sendMsg(embed: Discord.EmbedBuilder, curuser: string, trac
                     where: {
                         guildid: guild2.id
                     }
-                })
+                });
                 if (curset?.dataValues?.trackChannel) {
-                    await channels.push(`${curset.trackChannel}`)
-                    osufunc.logCall(`${curset.trackChannel}`, 'Found channel in guild settings')
+                    await channels.push(`${curset.trackChannel}`);
+                    osufunc.logCall(`${curset.trackChannel}`, 'Found channel in guild settings');
                 } else {
-                    osufunc.logCall('No channel set', 'Found channel in guild settings')
+                    osufunc.logCall('No channel set', 'Found channel in guild settings');
                 }
             }
-        })
-    })
+        });
+    });
 
     //filter out duplicates
-    channels = await channels.filter((item, index) => channels.indexOf(item) === index)
+    channels = await channels.filter((item, index) => channels.indexOf(item) === index);
 
 
     setTimeout(() => {
         channels.filter((item, index) => channels.indexOf(item) === index).forEach(channel => {
-            const curchannel: Discord.GuildTextBasedChannel = client.channels.cache.get(channel) as Discord.GuildTextBasedChannel
+            const curchannel: Discord.GuildTextBasedChannel = client.channels.cache.get(channel) as Discord.GuildTextBasedChannel;
             if (curchannel) {
-                osufunc.logCall(curchannel.id, 'Sending to channel')
+                osufunc.logCall(curchannel.id, 'Sending to channel');
                 curchannel.send({
                     embeds: [embed]
                 }).catch(error => {
-                    osufunc.logCall(error, 'error sending to channel')
-                    log.logFile('error', log.errLog('sending track embed', error))
-                })
+                    osufunc.logCall(error, 'error sending to channel');
+                    log.logFile('error', log.errLog('sending track embed', error));
+                });
             } else {
-                osufunc.logCall('Channel not found', 'error sending to channel')
+                osufunc.logCall('Channel not found', 'error sending to channel');
             }
-        })
-    }, 2000)
+        });
+    }, 2000);
 
 }

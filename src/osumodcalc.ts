@@ -4,15 +4,15 @@ export type OverallDifficultyObj = {
     hitwindow_100: number,
     hitwindow_50: number,
     od_num?: number,
-}
+};
 export type ApproachRateObj = {
     ar: number,
     ms: number,
-}
+};
 export type AccGra = {
     grade: string,
-    accuracy: number
-}
+    accuracy: number;
+};
 export type ValObj = {
     cs: number,
     ar: number,
@@ -27,10 +27,10 @@ export type ValObj = {
         arMs: number,
         odMs: OverallDifficultyObj,
         lengthFull: string,
-    }
-}
+    };
+};
 export type ModList =
-    'EZ' | 'HD' | 'FI' | 'HT' | 'DT' | 'NC' | 'HR' | 'SD' | 'PF' | 'FL' | 'NF' | 'AT' | 'RX' | 'AP' | 'TP' | 'SO' | 'TD' | '1K' | '2K' | '3K' | '4K' | '5K' | '6K' | '7K' | '8K' | '9K' | 'CP' | 'RD' | 'MR'
+    'EZ' | 'HD' | 'FI' | 'HT' | 'DT' | 'NC' | 'HR' | 'SD' | 'PF' | 'FL' | 'NF' | 'AT' | 'RX' | 'AP' | 'TP' | 'SO' | 'TD' | '1K' | '2K' | '3K' | '4K' | '5K' | '6K' | '7K' | '8K' | '9K' | 'CP' | 'RD' | 'MR';
 
 
 /**
@@ -48,7 +48,7 @@ function DoubleTimeAR(ar: number) {
     const ms = ar > 5 ? 200 + (11 - ar) * 100 : 800 + (5 - ar) * 80;
     let newAR: number;
     if (ms < 300) {
-        newAR = 11
+        newAR = 11;
     }
     else if (ms < 1200) {
         newAR = Math.round((11 - (ms - 300) / 150) * 100) / 100;
@@ -59,7 +59,7 @@ function DoubleTimeAR(ar: number) {
     const arobj: ApproachRateObj = {
         ar: newAR,
         ms: ms,
-    }
+    };
     return arobj;
 }
 /**
@@ -79,7 +79,7 @@ function HalfTimeAR(ar: number) {
     const ms = ogtoms * (4 / 3);
 
     if (ms < 300) {
-        newAR = 11
+        newAR = 11;
     }
     else if (ms < 1200) {
         newAR = Math.round((11 - (ms - 300) / 150) * 100) / 100;
@@ -90,7 +90,7 @@ function HalfTimeAR(ar: number) {
     const arobj: ApproachRateObj = {
         ar: newAR,
         ms: ms,
-    }
+    };
     return arobj;
 }
 /**
@@ -103,7 +103,7 @@ function ODtoms(od: number) {
         hitwindow_300: 79 - (od * 6) + 0.5,
         hitwindow_100: 139 - (od * 8) + 0.5,
         hitwindow_50: 199 - (od * 10) + 0.5,
-    }
+    };
     return rangeobj;
 }
 /**
@@ -118,7 +118,7 @@ function ARtoms(ar: number) {
         else {
             ogtoms = 1800 - (((ar) * 10) * 12)
         } */
-    const ogtoms = ar > 5 ? 1200 - (((ar - 5) * 10) * 15) : 1800 - (((ar) * 10) * 12)
+    const ogtoms = ar > 5 ? 1200 - (((ar - 5) * 10) * 15) : 1800 - (((ar) * 10) * 12);
     return ogtoms;
 }
 /**
@@ -132,18 +132,18 @@ function ARtoms(ar: number) {
 function msToOD(hitwindow300: number, hitwindow100: number, hitwindow50: number) {
     let od: string;
     if (!isNaN(hitwindow300)) {
-        od = ((79.5 - hitwindow300) / 6).toFixed(2)
+        od = ((79.5 - hitwindow300) / 6).toFixed(2);
     }
     else if (!isNaN(hitwindow100)) {
-        od = ((139.5 - hitwindow100) / 8).toFixed(2)
+        od = ((139.5 - hitwindow100) / 8).toFixed(2);
     }
     else if (!isNaN(hitwindow50)) {
-        od = ((199.5 - hitwindow50) / 10).toFixed(2)
+        od = ((199.5 - hitwindow50) / 10).toFixed(2);
     } else {
-        od = '???'
+        od = '???';
     }
     if (parseFloat(od) > 11) {
-        od = '11'
+        od = '11';
     }
     return parseFloat(od);
 }
@@ -153,9 +153,9 @@ function msToOD(hitwindow300: number, hitwindow100: number, hitwindow50: number)
  * @returns ar (approach rate)
  */
 function msToAR(ms: number) {
-    let ar: number
+    let ar: number;
     if (ms < 300) {
-        ar = 11
+        ar = 11;
     }
     else if (ms < 1200) {
         ar = Math.round((11 - (ms - 300) / 150) * 100) / 100;
@@ -163,7 +163,7 @@ function msToAR(ms: number) {
     else {
         ar = Math.round((5 - (ms - 1200) / 120) * 100) / 100;
     }
-    return ar
+    return ar;
 }
 
 
@@ -174,13 +174,13 @@ function msToAR(ms: number) {
  * @returns ms values for the od hitwindows and converts to double time
  */
 function odDT(od: number) {
-    const range300 = (79 - (od * 6) + 0.5) * 2 / 3
+    const range300 = (79 - (od * 6) + 0.5) * 2 / 3;
     const odobj: OverallDifficultyObj = {
         hitwindow_300: range300,
         hitwindow_100: (139 - (od * 8) + 0.5) * 2 / 3,
         hitwindow_50: (199 - (od * 10) + 0.5) * 2 / 3,
         od_num: parseFloat(((79.5 - range300) / 6).toFixed(2)) > 11 ? 11 : parseFloat(((79.5 - range300) / 6).toFixed(2)),
-    }
+    };
 
     return odobj;
 
@@ -191,13 +191,13 @@ function odDT(od: number) {
  * @returns ms values for the od hitwindows and converts to half time
  */
 function odHT(od: number) {
-    const range300 = (79 - (od * 6) + 0.5) * 4 / 3
+    const range300 = (79 - (od * 6) + 0.5) * 4 / 3;
     const odobj = {
         hitwindow_300: range300,
         hitwindow_100: (139 - (od * 8) + 0.5) * 4 / 3,
         hitwindow_50: (199 - (od * 10) + 0.5) * 4 / 3,
         od_num: parseFloat(((79.5 - range300) / 6).toFixed(2)) > 11 ? 11 : parseFloat(((79.5 - range300) / 6).toFixed(2)),
-    }
+    };
 
     return odobj;
 }
@@ -211,29 +211,29 @@ function odHT(od: number) {
  * @returns an array containing grades and accuracy
  */
 function calcgrade(hit300: number, hit100: number, hit50: number, miss: number) {
-    const totalhits = hit300 + hit100 + hit50 + miss
-    const equation = ((Math.floor((300 * hit300) + (100 * hit100) + (50 * hit50))) / (Math.floor(300 * (hit300 + hit100 + hit50 + miss)))) * 100
+    const totalhits = hit300 + hit100 + hit50 + miss;
+    const equation = ((Math.floor((300 * hit300) + (100 * hit100) + (50 * hit50))) / (Math.floor(300 * (hit300 + hit100 + hit50 + miss)))) * 100;
     //https://osu.ppy.sh/wiki/en/FAQ#grades
     let grade = 'D';
     if (hit300 / totalhits > 0.6) {
-        grade = 'C'
+        grade = 'C';
     }
     if ((hit300 / totalhits > 0.7 && miss == 0) || (hit300 / totalhits > 0.8)) {
-        grade = 'B'
+        grade = 'B';
     }
     if ((hit300 / totalhits > 0.8 && miss == 0) || (hit300 / totalhits > 0.9)) {
-        grade = 'A'
+        grade = 'A';
     }
     if (Math.abs(hit300 / totalhits) > 0.9 && miss == 0 && Math.abs(hit50 / totalhits) < 0.01) {
-        grade = 'S'
+        grade = 'S';
     }
     if (hit100 < 1 && hit50 < 1 && miss == 0) {
-        grade = 'SS'
+        grade = 'SS';
     }
     const finalarr: AccGra = {
         grade: grade,
         accuracy: equation,
-    }
+    };
 
     return finalarr;
 }
@@ -245,25 +245,25 @@ function calcgrade(hit300: number, hit100: number, hit50: number, miss: number) 
  * @returns an array containing grades and accuracy
  */
 function calcgradeTaiko(hit300: number, hit100: number, miss: number) {
-    const equation = (Math.abs(hit300 + (hit100 / 2))) / (Math.abs(hit300 + hit100 + miss))
+    const equation = (Math.abs(hit300 + (hit100 / 2))) / (Math.abs(hit300 + hit100 + miss));
     //grade = 'https://osu.ppy.sh/wiki/en/FAQ#grades'
     let grade = 'D';
     if (equation > 0.8) {
-        grade = 'B'
+        grade = 'B';
     }
     if (equation > 0.9) {
-        grade = 'A'
+        grade = 'A';
     }
     if (equation > 0.95) {
-        grade = 'S'
+        grade = 'S';
     }
     if (equation == 1) {
-        grade = 'SS'
+        grade = 'SS';
     }
     const finalarr: AccGra = {
         grade: grade,
         accuracy: equation * 100,
-    }
+    };
     return finalarr;
 
 }
@@ -277,28 +277,28 @@ function calcgradeTaiko(hit300: number, hit100: number, miss: number) {
  * @returns an array containing grades and accuracy
  */
 function calcgradeCatch(hit300: number, hit100: number, hit50: number, hitkatu: number, miss: number) {
-    const equation = Math.floor(hit300 + hit100 + hit50) / Math.floor(hit300 + hit100 + hit50 + hitkatu + miss)
-    let grade = 'D'
+    const equation = Math.floor(hit300 + hit100 + hit50) / Math.floor(hit300 + hit100 + hit50 + hitkatu + miss);
+    let grade = 'D';
     if (equation > 0.85) {
-        grade = 'C'
+        grade = 'C';
     }
     if (equation > 0.9) {
-        grade = 'B'
+        grade = 'B';
     }
     if (equation > 0.94) {
-        grade = 'A'
+        grade = 'A';
     }
     if (equation > 0.98) {
-        grade = 'S'
+        grade = 'S';
     }
     if (equation == 1) {
-        grade = 'SS'
+        grade = 'SS';
     }
 
     const finalarr: AccGra = {
         grade: grade,
         accuracy: equation * 100,
-    }
+    };
     return finalarr;
 }
 /**
@@ -312,27 +312,27 @@ function calcgradeCatch(hit300: number, hit100: number, hit50: number, hitkatu: 
  * @returns an array containing grades and accuracy
  */
 function calcgradeMania(hit300max: number, hit300: number, hit200: number, hit100: number, hit50: number, miss: number) {
-    const equation = Math.floor((300 * (hit300max + hit300)) + (200 * hit200) + (100 * hit100) + (50 * hit50)) / Math.floor(300 * (hit300max + hit300 + hit200 + hit100 + hit50 + miss))
-    let grade = 'D'
+    const equation = Math.floor((300 * (hit300max + hit300)) + (200 * hit200) + (100 * hit100) + (50 * hit50)) / Math.floor(300 * (hit300max + hit300 + hit200 + hit100 + hit50 + miss));
+    let grade = 'D';
     if (equation > 0.7) {
-        grade = 'C'
+        grade = 'C';
     }
     if (equation > 0.8) {
-        grade = 'B'
+        grade = 'B';
     }
     if (equation > 0.9) {
-        grade = 'A'
+        grade = 'A';
     }
     if (equation > 0.95) {
-        grade = 'S'
+        grade = 'S';
     }
     if (equation == 1) {
-        grade = 'SS'
+        grade = 'SS';
     }
     const finalarr: AccGra = {
         grade: grade,
         accuracy: equation * 100,
-    }
+    };
     return finalarr;
 
 
@@ -352,7 +352,7 @@ function toHR(cs: number, ar: number, od: number, hp: number) {
         ar: ar * 1.4 > 10 ? 10 : ar * 1.4,
         od: od * 1.4 > 10 ? 10 : od * 1.4,
         hp: hp * 1.4 > 10 ? 10 : hp * 1.4,
-    }
+    };
     return hrobj;
 }
 /**
@@ -370,7 +370,7 @@ function toEZ(cs: number, ar: number, od: number, hp: number) {
         ar: ar / 2 > 10 ? 10 : ar / 2,
         od: od / 2 > 10 ? 10 : od / 2,
         hp: hp / 2 > 10 ? 10 : hp / 2,
-    }
+    };
     return ezobj;
 }
 
@@ -524,10 +524,10 @@ function ModIntToString(modInt: number) {
     modString += modInt & 536870912 ? 'SV2' : '';
     modString += modInt & 1073741824 ? 'MR' : '';
     if (modString.includes('DT') && modString.includes('NC')) {
-        modString = modString.replace('DT', '')
+        modString = modString.replace('DT', '');
     }
     if (modString.includes('SD') && modString.includes('PF')) {
-        modString = modString.replace('SD', '')
+        modString = modString.replace('SD', '');
     }
     return OrderMods(modString);
 }
@@ -537,28 +537,28 @@ function ModIntToString(modInt: number) {
  * @returns reorders mods to be in the correct order and removes duplicates.
  */
 function OrderMods(modString: string) {
-    const ModsOrder: ModList[] = ['EZ', 'HD', 'FI', 'HT', 'DT', 'NC', 'HR', 'SD', 'PF', 'FL', 'NF', 'AT', 'RX', 'AP', 'TP', 'SO', 'TD', '1K', '2K', '3K', '4K', '5K', '6K', '7K', '8K', '9K', 'CP', 'RD', 'MR']
+    const ModsOrder: ModList[] = ['EZ', 'HD', 'FI', 'HT', 'DT', 'NC', 'HR', 'SD', 'PF', 'FL', 'NF', 'AT', 'RX', 'AP', 'TP', 'SO', 'TD', '1K', '2K', '3K', '4K', '5K', '6K', '7K', '8K', '9K', 'CP', 'RD', 'MR'];
     const modStringArray = modString.toUpperCase().replaceAll(' ', '').replaceAll(',', '').replace(/(.{2})/g, "$1 ")
         .replaceAll('RLX', 'RX')
         .replaceAll('RL', 'RX')
         .replaceAll('AU', 'AT')
-        .split(' ')
-    const modStringArrayOrdered = []
-    const modStringArrayOrderedtest = []
+        .split(' ');
+    const modStringArrayOrdered = [];
+    const modStringArrayOrderedtest = [];
     for (let i = 0; i < ModsOrder.length; i++) {
         for (let j = 0; j < modStringArray.length; j++) {
             if (ModsOrder[i] === modStringArray[j]) {
-                modStringArrayOrderedtest.push(modStringArray[j])
+                modStringArrayOrderedtest.push(modStringArray[j]);
             }
         }
     }
     for (let i = 0; i < modStringArrayOrderedtest.length; i++) {
         if (modStringArrayOrderedtest.indexOf(modStringArrayOrderedtest[i]) === i) {
-            modStringArrayOrdered.push(modStringArrayOrderedtest[i])
+            modStringArrayOrdered.push(modStringArrayOrderedtest[i]);
         }
     }
 
-    return modStringArrayOrdered.join('')
+    return modStringArrayOrdered.join('');
 }
 
 
@@ -658,7 +658,7 @@ function longModName(modstring: string) {
  * @returns the radius of the circle
  */
 function csToRadius(cs: number) {
-    return (0.00005556 * cs ** 2 - 4.483 * cs + 54.42)
+    return (0.00005556 * cs ** 2 - 4.483 * cs + 54.42);
 }
 
 /**
@@ -668,7 +668,7 @@ function csToRadius(cs: number) {
  */
 
 function csFromRadius(radius: number) {
-    return (5000 / 8104533921) * radius ** 2 - (1808448550 / 8104533921) * radius + (8582285633270972 / 706821088118109)
+    return (5000 / 8104533921) * radius ** 2 - (1808448550 / 8104533921) * radius + (8582285633270972 / 706821088118109);
 }
 
 /**
@@ -694,18 +694,18 @@ function calcValues(cs: number, ar: number, od: number, hp: number, bpm: number,
 
     switch (true) {
         case ((nmods.includes('HR') && nmods.includes('EZ')) || (nmods.includes('DT') && nmods.includes('HT'))):
-            ncs = cs
-            nar = ar
-            nod = od
-            nhp = hp
-            nbpm = bpm
-            nlength = length
+            ncs = cs;
+            nar = ar;
+            nod = od;
+            nhp = hp;
+            nbpm = bpm;
+            nlength = length;
             if (nmods.includes('HR') && nmods.includes('EZ')) {
-                error = 'HR and EZ are not compatible'
+                error = 'HR and EZ are not compatible';
             } else if (nmods.includes('DT') && nmods.includes('HT')) {
-                error = 'DT and HT are not compatible'
+                error = 'DT and HT are not compatible';
             } else {
-                error = 'Invalid mod combination'
+                error = 'Invalid mod combination';
             }
             break;
         case (nmods.includes('HR') && !nmods.includes('DT') && !nmods.includes('HT')):
@@ -721,66 +721,66 @@ function calcValues(cs: number, ar: number, od: number, hp: number, bpm: number,
             nhp = hp * 0.5 > 10 ? 10 : hp * 0.5;
             break;
         case (nmods.includes('DT') && !nmods.includes('HR') && !nmods.includes('EZ')):
-            ncs = cs
-            nar = DoubleTimeAR(ar).ar
-            nod = odDT(od).od_num
-            nhp = hp
+            ncs = cs;
+            nar = DoubleTimeAR(ar).ar;
+            nod = odDT(od).od_num;
+            nhp = hp;
 
-            nbpm = bpm * 1.5
-            nlength = length / 1.5
+            nbpm = bpm * 1.5;
+            nlength = length / 1.5;
             break;
         case (nmods.includes('HT') && !nmods.includes('HR') && !nmods.includes('EZ')):
-            ncs = cs
-            nar = HalfTimeAR(ar).ar
-            nod = odHT(od).od_num
-            nhp = hp
+            ncs = cs;
+            nar = HalfTimeAR(ar).ar;
+            nod = odHT(od).od_num;
+            nhp = hp;
 
-            nbpm = bpm * 0.75
-            nlength = length / 0.75
+            nbpm = bpm * 0.75;
+            nlength = length / 0.75;
             break;
         case (nmods.includes('DT') && nmods.includes('EZ')):
-            ncs = cs * 0.5
-            nar = DoubleTimeAR(ar * 0.5).ar
-            nod = odDT(od * 0.5).od_num
-            nhp = hp * 0.5
+            ncs = cs * 0.5;
+            nar = DoubleTimeAR(ar * 0.5).ar;
+            nod = odDT(od * 0.5).od_num;
+            nhp = hp * 0.5;
 
-            nbpm = bpm * 1.5
-            nlength = length / 1.5
+            nbpm = bpm * 1.5;
+            nlength = length / 1.5;
             break;
         case (nmods.includes('DT') && nmods.includes('HR')):
             ncs = cs * 1.3 > 10 ? 10 : cs * 1.3;
-            nar = DoubleTimeAR(ar * 1.4 > 10 ? 10 : ar * 1.4).ar
-            nod = odDT(od * 1.4 > 10 ? 10 : od * 1.4).od_num
+            nar = DoubleTimeAR(ar * 1.4 > 10 ? 10 : ar * 1.4).ar;
+            nod = odDT(od * 1.4 > 10 ? 10 : od * 1.4).od_num;
             nhp = hp * 1.4 > 10 ? 10 : hp * 1.4;
 
-            nbpm = bpm * 1.5
-            nlength = length / 1.5
+            nbpm = bpm * 1.5;
+            nlength = length / 1.5;
             break;
         case (nmods.includes('HT') && nmods.includes('EZ')):
-            ncs = cs * 0.5
-            nar = HalfTimeAR(ar * 0.5).ar
-            nod = odHT(od * 0.5).od_num
-            nhp = hp * 0.5
+            ncs = cs * 0.5;
+            nar = HalfTimeAR(ar * 0.5).ar;
+            nod = odHT(od * 0.5).od_num;
+            nhp = hp * 0.5;
 
-            nbpm = bpm * 0.75
-            nlength = length / 0.75
+            nbpm = bpm * 0.75;
+            nlength = length / 0.75;
             break;
         case (nmods.includes('HT') && nmods.includes('HR')):
             ncs = cs * 1.3 > 10 ? 10 : cs * 1.3;
-            nar = HalfTimeAR(ar * 1.4 > 10 ? 10 : ar * 1.4).ar
-            nod = odHT(od * 1.4 > 10 ? 10 : od * 1.4).od_num
+            nar = HalfTimeAR(ar * 1.4 > 10 ? 10 : ar * 1.4).ar;
+            nod = odHT(od * 1.4 > 10 ? 10 : od * 1.4).od_num;
             nhp = hp * 1.4 > 10 ? 10 : hp * 1.4;
 
-            nbpm = bpm * 0.75
-            nlength = length / 0.75
+            nbpm = bpm * 0.75;
+            nlength = length / 0.75;
             break;
         default:
-            ncs = cs
-            nar = ar
-            nod = od
-            nhp = hp
-            nbpm = bpm
-            nlength = length
+            ncs = cs;
+            nar = ar;
+            nod = od;
+            nhp = hp;
+            nbpm = bpm;
+            nlength = length;
             break;
     }
 
@@ -807,7 +807,7 @@ function calcValues(cs: number, ar: number, od: number, hp: number, bpm: number,
                     Math.floor(nlength / 60) + ':0' + Math.floor(nlength % 60) :
                     Math.floor(nlength / 60) + ':' + Math.floor(nlength % 60)
         }
-    }
+    };
     return obj;
 }
 /**
@@ -861,5 +861,5 @@ export {
     csToRadius, csFromRadius,
     calcValues,
     ModeNameToInt, ModeIntToName
-}
+};
 

@@ -21,14 +21,14 @@ module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.Model
     }
     function a() {
         try {
-            trackfunc.trackUsers(trackDb, client, guildSettings)
+            trackfunc.trackUsers(trackDb, client, guildSettings);
         } catch (err) {
-            console.log(err)
-            console.log('temporarily disabling tracking for an hour')
+            console.log(err);
+            console.log('temporarily disabling tracking for an hour');
             enableTrack = false;
             setTimeout(() => {
                 enableTrack = true;
             }, 1000 * 60 * 60);
         }
     }
-}
+};

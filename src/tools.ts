@@ -1,7 +1,7 @@
-import fs = require('fs')
+import fs = require('fs');
 // import truepath = require('../path').path
 import { path } from '../path';
-const truepath = `${path}`
+const truepath = `${path}`;
 import osuApiTypes = require('../src/types/osuApiTypes');
 import calc = require('./calc');
 import osufunc = require('./osufunc');
@@ -19,26 +19,26 @@ export function generateId() {
 }
 
 export function readAllFiles(directory: string) {
-    const filesArr = []
-    const init = fs.readdirSync(directory)
+    const filesArr = [];
+    const init = fs.readdirSync(directory);
     //add init to filesArr
     //add all files in subdirectories to filesArr
     for (let i = 0; i < init.length; i++) {
         if (fs.statSync(directory + '/' + init[i]).isDirectory()) {
-            const sub = fs.readdirSync(directory + '/' + init[i])
+            const sub = fs.readdirSync(directory + '/' + init[i]);
             for (let j = 0; j < sub.length; j++) {
                 //add sub-sub-directories to filesArr, and so on and so on
                 if (fs.statSync(directory + '/' + init[i] + '/' + sub[j]).isDirectory()) {
-                    const subsub = fs.readdirSync(directory + '/' + init[i] + '/' + sub[j])
+                    const subsub = fs.readdirSync(directory + '/' + init[i] + '/' + sub[j]);
                     for (let k = 0; k < subsub.length; k++) {
-                        filesArr.push(init[i] + '/' + sub[j] + '/' + subsub[k])
+                        filesArr.push(init[i] + '/' + sub[j] + '/' + subsub[k]);
                     }
                 } else {
-                    filesArr.push(init[i] + '/' + sub[j])
+                    filesArr.push(init[i] + '/' + sub[j]);
                 }
             }
         } else {
-            filesArr.push(init[i])
+            filesArr.push(init[i]);
         }
     }
     return filesArr;
@@ -51,15 +51,15 @@ export function readAllFiles(directory: string) {
  * @returns string
  */
 export function separateNum(number: string | number, separator?: string) {
-    let cursep = ','
+    let cursep = ',';
     if (separator) {
-        cursep = separator
+        cursep = separator;
     }
-    let ans = `${number}`.replace(/\B(?=(\d{3})+(?!\d))/g, cursep)
+    let ans = `${number}`.replace(/\B(?=(\d{3})+(?!\d))/g, cursep);
     if (`${number}`.includes('.')) {
         const init = number.toString().split('.')[0];
         const after = number.toString().split('.')[1];
-        ans = init.replace(/\B(?=(\d{3})+(?!\d))/g, cursep) + `.${after}`
+        ans = init.replace(/\B(?=(\d{3})+(?!\d))/g, cursep) + `.${after}`;
     }
     return ans;
 }
@@ -70,28 +70,28 @@ export function separateNum(number: string | number, separator?: string) {
  */
 export function numToLetter(number: number, decimals?: number) {
     let newnum: string;
-    const temp = separateNum(number).split(',')
+    const temp = separateNum(number).split(',');
     switch (temp.length) {
         case 1:
-            newnum = `${number}`
+            newnum = `${number}`;
             break;
         case 2:
-            newnum = `${(number / 1000 ** 1).toFixed(decimals ?? 2)}k`
+            newnum = `${(number / 1000 ** 1).toFixed(decimals ?? 2)}k`;
             break;
         case 3:
-            newnum = `${(number / 1000 ** 2).toFixed(decimals ?? 2)}M`
+            newnum = `${(number / 1000 ** 2).toFixed(decimals ?? 2)}M`;
             break;
         case 4:
-            newnum = `${(number / 1000 ** 3).toFixed(decimals ?? 2)}B`
+            newnum = `${(number / 1000 ** 3).toFixed(decimals ?? 2)}B`;
             break;
         case 5:
-            newnum = `${(number / 1000 ** 4).toFixed(decimals ?? 2)}T`
+            newnum = `${(number / 1000 ** 4).toFixed(decimals ?? 2)}T`;
             break;
         case 6:
-            newnum = `${(number / 1000 ** 5).toFixed(decimals ?? 2)}Quad`
+            newnum = `${(number / 1000 ** 5).toFixed(decimals ?? 2)}Quad`;
             break;
         case 7:
-            newnum = `${(number / 1000 ** 6).toFixed(decimals ?? 2)}Quint`
+            newnum = `${(number / 1000 ** 6).toFixed(decimals ?? 2)}Quint`;
             break;
     }
     return newnum;
@@ -109,7 +109,7 @@ const cacheById = [
     'scoredata',
     'maplistdata',
     'firstscoresdata'
-]
+];
 
 /**
  * 
@@ -121,57 +121,57 @@ export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuA
     try {
         if (cacheById.some(x => name.includes(x))) {
             if (name.includes('mapdata')) {
-                const datamap: osuApiTypes.Beatmap = (data as osufunc.apiReturn).apiData as any
+                const datamap: osuApiTypes.Beatmap = (data as osufunc.apiReturn).apiData as any;
                 let status = '';
                 switch (datamap.status) {
                     case 'ranked':
-                        status = 'Ranked'
+                        status = 'Ranked';
                         break;
                     case 'loved':
-                        status = 'Loved'
+                        status = 'Loved';
                         break;
                     case 'approved':
-                        status = 'Approved'
+                        status = 'Approved';
                         break;
                     case 'pending':
-                        status = 'Pending'
+                        status = 'Pending';
                         break;
                     default: case 'graveyard':
-                        status = 'Graveyard'
+                        status = 'Graveyard';
                         break;
                 }
-                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2))
+                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
             } else if (name.includes('bmsdata')) {
-                const datamap: osuApiTypes.Beatmapset = (data as osufunc.apiReturn).apiData as any
+                const datamap: osuApiTypes.Beatmapset = (data as osufunc.apiReturn).apiData as any;
                 let status = '';
                 switch (datamap.status) {
                     case 'ranked':
-                        status = 'Ranked'
+                        status = 'Ranked';
                         break;
                     case 'loved':
-                        status = 'Loved'
+                        status = 'Loved';
                         break;
                     case 'approved':
-                        status = 'Approved'
+                        status = 'Approved';
                         break;
                     case 'pending':
-                        status = 'Pending'
+                        status = 'Pending';
                         break;
                     default: case 'graveyard':
-                        status = 'Graveyard'
+                        status = 'Graveyard';
                         break;
                 }
-                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2))
+                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
             } else if (name.includes('osudata')) {
-                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, JSON.stringify(data, null, 2))
+                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, JSON.stringify(data, null, 2));
             } else if (name.includes('maplistdata')) {
-                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2))
+                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2));
             }
             else {
-                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2))
+                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2));
             }
         } else {
-            fs.writeFileSync(`${truepath}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, JSON.stringify(data, null, 2))
+            fs.writeFileSync(`${truepath}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, JSON.stringify(data, null, 2));
         }
         return true;
     } catch (error) {
@@ -251,15 +251,15 @@ export function parseArg(
 ) {
     let returnArg;
     let temp;
-    temp = args[args.indexOf(searchString) + 1]
+    temp = args[args.indexOf(searchString) + 1];
     if (!temp || temp.startsWith('-')) {
-        returnArg = defaultValue
+        returnArg = defaultValue;
     } else {
         switch (type) {
             case 'string': {
-                returnArg = temp
+                returnArg = temp;
                 if (multipleWords == true && temp.includes('"')) {
-                    temp = args.join(' ').split(searchString)[1].split('"')[1]
+                    temp = args.join(' ').split(searchString)[1].split('"')[1];
                     for (let i = 0; i < args.length; i++) {
                         if (temp.includes(args[i].replaceAll('"', '')) && i > args.indexOf(searchString)) {
                             args.splice(i, 1);
@@ -268,18 +268,18 @@ export function parseArg(
                     }
                     returnArg = temp;
                 } else {
-                    args.splice(args.indexOf(searchString), 2)
+                    args.splice(args.indexOf(searchString), 2);
                 }
             }
                 break;
             case 'number': {
-                returnArg = +temp
+                returnArg = +temp;
                 if (isNaN(+temp)) {
-                    returnArg = defaultValue
+                    returnArg = defaultValue;
                 } else if (asInt == true) {
-                    returnArg = parseInt(temp)
+                    returnArg = parseInt(temp);
                 }
-                args.splice(args.indexOf(searchString), 2)
+                args.splice(args.indexOf(searchString), 2);
             }
                 break;
         }

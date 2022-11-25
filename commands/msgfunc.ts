@@ -4,7 +4,7 @@ import log = require('../src/log');
 import fs = require('fs');
 
 export async function sendMessage(input: {
-    commandType: extypes.commandType
+    commandType: extypes.commandType,
     obj: extypes.commandObject,
     args: {
         content?: string,
@@ -14,7 +14,7 @@ export async function sendMessage(input: {
         ephemeral?: boolean,
         react?: boolean,
         edit?: boolean,
-    }
+    };
 }) {
     try {
         if (input.args.react == true) {
@@ -132,20 +132,20 @@ export async function sendMessage(input: {
 }
 
 export async function SendFileToChannel(channel: Discord.GuildTextBasedChannel, filePath: string) {
-    let url = 'https://cdn.discordapp.com/attachments/762455063922737174/1039051414082691112/image.png'
+    let url = 'https://cdn.discordapp.com/attachments/762455063922737174/1039051414082691112/image.png';
     await new Promise(async (resolve, reject) => {
 
         if (!filePath.includes('/') || typeof channel == 'undefined' || !fs.existsSync(filePath)) {
-            reject('invalid/null path')
+            reject('invalid/null path');
         }
 
         channel.send({
             files: [filePath]
         }).then(message => {
-            const attachment = filePath.split('/')[filePath.split('/').length - 1]
-            url = message.attachments.at(0).url
+            const attachment = filePath.split('/')[filePath.split('/').length - 1];
+            url = message.attachments.at(0).url;
             resolve(1);
         });
-    })
+    });
     return url;
 }

@@ -10,7 +10,7 @@ import cmdchecks = require('./checks');
 import extypes = require('./types/extratypes');
 import Sequelize = require('sequelize');
 
-async function mapToObject(path:string){
+async function mapToObject(path: string) {
     let mapString = fs.readFileSync(path, 'utf8');
     /**
      * osu file format v{num}
@@ -82,7 +82,7 @@ async function mapToObject(path:string){
      * {hitObjects}
      */
 
-    let mapObject:mapObject = {
+    let mapObject: mapObject = {
         general: {
             audioFilename: '',
             audioLeadIn: 0,
@@ -138,7 +138,7 @@ async function mapToObject(path:string){
 
         }
 
-    }
+    };
 
 
 }
@@ -154,13 +154,13 @@ export type mapObject = {
         mode: number,
         letterboxInBreaks: number,
         specialStyle: number,
-        widescreenStoryboard: number
+        widescreenStoryboard: number;
     },
     editor: {
         distanceSpacing: number,
         beatDivisor: number,
         gridSize: number,
-        timelineZoom: number
+        timelineZoom: number;
     },
     metadata: {
         title: string,
@@ -172,7 +172,7 @@ export type mapObject = {
         source: string,
         tags: string,
         beatmapID: number,
-        beatmapSetID: number
+        beatmapSetID: number;
     },
     difficulty: {
         hpDrainRate: number,
@@ -180,24 +180,24 @@ export type mapObject = {
         overallDifficulty: number,
         approachRate: number,
         sliderMultiplier: number,
-        sliderTickRate: number
+        sliderTickRate: number;
     },
     events: {
         backgroundAndVideoEvents: string[],
-        breakPeriods: string[]
+        breakPeriods: string[];
         storyboardLayer0: string[],
         storyboardLayer1: string[],
         storyboardLayer2: string[],
         storyboardLayer3: string[],
         storyboardLayer4: string[],
-        storyboardSoundSamples: string[]
+        storyboardSoundSamples: string[];
     },
     timingPoints: {
 
     },
     hitObjects: {
     },
-}
+};
 
 /**
  * {string} {number} {number} {number|string} {number}
@@ -209,9 +209,9 @@ export type storyboardLayer = {
     filepath: string,
     x: number,
     y: number,
-    actions: storyboardActions[]
-}
-export type storyboardActions = string | number
+    actions: storyboardActions[];
+};
+export type storyboardActions = string | number;
 
 /**
  * offset, num, num, num, num, vol%, num, num,
@@ -231,10 +231,10 @@ export type timingPoints = {
     sampleSet: number,
     volume: number,
     inherited: number,
-    kiai: number
-}
+    kiai: number;
+};
 
-export type hitObjects = circle | slider | spinner
+export type hitObjects = circle | slider | spinner;
 
 /**
  * 112,120,154,5,0,0:0:0:0:
@@ -242,16 +242,16 @@ export type hitObjects = circle | slider | spinner
  */
 export type circle = {
 
-}
+};
 
 /**
  * 390,275,5270,6,0,P|395:333|403:346,3,46.4100002832642,10|8|8|8,0:2|0:3|0:3|0:3,0:0:0:0:
  * x, y, time, type, hitsound, curve, repeat, pixelLength, edgeHitsounds, edgeAdditions
  */
-export type slider = {}
+export type slider = {};
 
 /**
  * 256,192,29536,12,14,30506,0:0:0:0:
  * x, y, time, 
  */
-export type spinner = {}
+export type spinner = {};

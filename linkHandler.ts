@@ -18,12 +18,12 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
 
     client.on('messageCreate', async (message) => {
         const currentDate = new Date();
-        const interaction = null
-        const button = null
-        const args = []
-        const obj = message
-        let parse = null
-        const commandType: extypes.commandType = 'link'
+        const interaction = null;
+        const button = null;
+        const args = [];
+        const obj = message;
+        let parse = null;
+        const commandType: extypes.commandType = 'link';
         if (!(message.content.startsWith('http') || message.content.includes('osu.') || message.attachments.size > 0)) {
             return;
         }
@@ -35,7 +35,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
             reverse: null,
             ex: null,
             commandAs: commandType
-        }
+        };
         let absoluteID = func.generateId();
 
         let settings: extypes.guildSettings;
@@ -51,7 +51,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     osuParseLinks: true,
                     osuParseScreenshots: true,
                     osuParseReplays: true,
-                })
+                });
             } catch (error) {
 
             }
@@ -86,27 +86,27 @@ status: ${m.status ? m.status : 'none/completed'}
 progress: ${m.progress ? m.progress : 'none'}
 ================================
 `
-                                )
+                                );
                             }
                         });
-                        imgParseCooldown = true
+                        imgParseCooldown = true;
                         await (async () => {
                             await worker.load();
                             await worker.loadLanguage('eng');
                             await worker.initialize('eng');
                             const { data: { text } } = await worker.recognize(message.attachments.first().url);
                             if (text.includes('Beatmap by')) {
-                                const txttitle = text.split('\n')[0]
-                                const txtcreator = text.split('Beatmap by ')[1].split('\n')[0]
+                                const txttitle = text.split('\n')[0];
+                                const txtcreator = text.split('Beatmap by ')[1].split('\n')[0];
 
-                                parse = `${txttitle} ${txtcreator}`
+                                parse = `${txttitle} ${txtcreator}`;
 
                             }
                             if (text.includes('Mapped by')) {
-                                const txttitle = text.split('\n')[0]
-                                const txtcreator = text.split('Mapped by ')[1].split('\n')[0]
+                                const txttitle = text.split('\n')[0];
+                                const txtcreator = text.split('Mapped by ')[1].split('\n')[0];
 
-                                parse = `${txttitle} ${txtcreator}`
+                                parse = `${txttitle} ${txtcreator}`;
                             }
                         })();
                     }
@@ -114,19 +114,19 @@ progress: ${m.progress ? m.progress : 'none'}
             }
             if (imgParseCooldown == true) {
                 setTimeout(() => {
-                    imgParseCooldown = false
+                    imgParseCooldown = false;
                 }, 5000);
             }
         }
 
         if (parse) {
-            args.push('query', parse)
+            args.push('query', parse);
         }
 
-        const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '')
+        const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '');
 
         if (messagenohttp.startsWith('osu.ppy.sh/b/') || messagenohttp.startsWith('osu.ppy.sh/beatmaps/') || messagenohttp.startsWith('osu.ppy.sh/beatmapsets') || messagenohttp.startsWith('osu.ppy.sh/s/') || parse != null) {
-            overrides.ex = 'link'
+            overrides.ex = 'link';
             if (absoluteID == null) {
                 absoluteID = func.generateId();
             }
@@ -146,14 +146,14 @@ progress: ${m.progress ? m.progress : 'none'}
             if (absoluteID == null) {
                 absoluteID = func.generateId();
             }
-            const attachosr = message.attachments.first().url
-            const osrdlfile = fs.createWriteStream('./files/replay.osr')
+            const attachosr = message.attachments.first().url;
+            const osrdlfile = fs.createWriteStream('./files/replay.osr');
             https.get(`${attachosr}`, function (response) {
                 response.pipe(osrdlfile);
             });//
             setTimeout(() => {
                 osucmds.replayparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
-            }, 1500)
+            }, 1500);
         }
         if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
             osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
@@ -163,15 +163,15 @@ progress: ${m.progress ? m.progress : 'none'}
             if (absoluteID == null) {
                 absoluteID = func.generateId();
             }
-            const attachosu = message.attachments.first().url
-            const osudlfile = fs.createWriteStream('./files/tempdiff.osu')
+            const attachosu = message.attachments.first().url;
+            const osudlfile = fs.createWriteStream('./files/tempdiff.osu');
             https.get(`${attachosu}`, function (response) {
                 response.pipe(osudlfile);
             });
             setTimeout(() => {
                 osucmds.maplocal({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
-            }, 1500)
+            }, 1500);
         }
 
     });
-}
+};

@@ -10,10 +10,10 @@ const config = require('../config/config.json');
 function isOwner(userid: string | number) {
     for (let i = 0; i < config.ownerusers.length; i++) {
         if (`${config.ownerusers[i]}` == `${userid}`) {
-            return true
+            return true;
         }
     }
-    return false
+    return false;
 }
 
 /**
@@ -25,8 +25,8 @@ function isOwner(userid: string | number) {
 function isAdmin(userid: string | number, guildid: string | number, client: Discord.Client) {
     try {
         if (client.guilds.cache.has(`${guildid}`)) {
-            const curguild = client.guilds.cache.get(`${guildid}`)
-            const curmem = curguild.members.cache.has(`${userid}`) ? curguild.members.cache.get(`${userid}`) : null
+            const curguild = client.guilds.cache.get(`${guildid}`);
+            const curmem = curguild.members.cache.has(`${userid}`) ? curguild.members.cache.get(`${userid}`) : null;
             if (curmem != null) {
                 if (curmem.permissions.toArray().includes('Administrator')) {
                     return true;
@@ -34,7 +34,7 @@ function isAdmin(userid: string | number, guildid: string | number, client: Disc
             }
         }
     } catch (error) {
-        return false
+        return false;
     }
     return false;
 }
@@ -45,23 +45,23 @@ function isAdmin(userid: string | number, guildid: string | number, client: Disc
  * @param client bot client
  */
 function botHasPerms(object: Discord.Interaction | Discord.Message, client: Discord.Client, requiredPerms: Discord.PermissionsString[]) {
-    const guild = client.guilds.cache.get(object.guildId)
-    const botmember = guild.members.cache.get(client.user.id)
-    const botperms = botmember.permissions.toArray()
+    const guild = client.guilds.cache.get(object.guildId);
+    const botmember = guild.members.cache.get(client.user.id);
+    const botperms = botmember.permissions.toArray();
     //if all of the elements in requiredPerms are in botperms return true
-    const len = requiredPerms.length
-    let newLen = 0
+    const len = requiredPerms.length;
+    let newLen = 0;
     for (const i in requiredPerms) {
         if (botperms.includes(requiredPerms[i])) {
-            newLen++
+            newLen++;
         }
     }
-    const channel = client.channels.cache.get(object.channelId) as Discord.TextChannel | Discord.ThreadChannel
-    const botchannelperms = channel.permissionsFor(client.user.id).toArray()
-    let channelPermLen = 0
+    const channel = client.channels.cache.get(object.channelId) as Discord.TextChannel | Discord.ThreadChannel;
+    const botchannelperms = channel.permissionsFor(client.user.id).toArray();
+    let channelPermLen = 0;
     for (const i in requiredPerms) {
         if (botchannelperms.includes(requiredPerms[i])) {
-            channelPermLen++
+            channelPermLen++;
         }
     }
 
@@ -100,7 +100,7 @@ function getMentionId(mentions, type: 'user' | 'channel' | 'role') {
  * @returns exec('console input')
  * @info use it to put input into the console
  */
-function exec(cmd: string, handler = function (error, stdout, stderr) { console.log(stdout); if (error !== null) { console.log(stderr) } }) {
+function exec(cmd: string, handler = function (error, stdout, stderr) { console.log(stdout); if (error !== null) { console.log(stderr); } }) {
     const childfork = require('child_process');
     return childfork.exec(cmd, handler);
 }
@@ -112,9 +112,9 @@ function exec(cmd: string, handler = function (error, stdout, stderr) { console.
 function shorten(txt: string) {
     let newtxt: string;
     if (txt.length > 65) {
-        newtxt = txt.substring(0, 64) + '...'
+        newtxt = txt.substring(0, 64) + '...';
     } else {
-        newtxt = txt
+        newtxt = txt;
     }
 
     return newtxt;
@@ -135,7 +135,7 @@ function lengthshorten(txt: string) {
  */
 function discshort(txt: string) {
     const newtxt = txt.length > 4000 ? txt.substring(0, 3999) : txt;
-    return newtxt
+    return newtxt;
 }
 //file extensions for videos
 const vidfiletypes: string[] = [
@@ -181,7 +181,7 @@ const vidfiletypes: string[] = [
     "webm",
     "wmv",
     "yuv"
-]
+];
 
 //file types of images
 const imgfiletype: string[] = [
@@ -191,7 +191,7 @@ const imgfiletype: string[] = [
     'jpg',
     'pdn',
     'png'
-]
+];
 
 const audiofiletype: string[] = [
     'aac',
@@ -199,7 +199,7 @@ const audiofiletype: string[] = [
     'mp3',
     'ogg',
     'wav'
-]
+];
 
 /**
  * 
@@ -254,10 +254,10 @@ function checkisaudio(filename: Discord.Attachment) {
 function checkisfileblocked(userid: number) {
     for (let i = 0; i < config.fileblockedusers.length; i++) {
         if (config.fileblockedusers[i] == userid) {
-            return true
+            return true;
         }
     }
-    return false
+    return false;
 }
 /**
  * 
@@ -267,7 +267,7 @@ function checkisfileblocked(userid: number) {
  * @returns the index of the nth time a substring appears in a string
  */
 function nthIndex(str: string, pat: string, n: number) {
-    const L = str.length
+    const L = str.length;
     let i = -1;
     while (n-- && i++ < L) {
         i = str.indexOf(pat, i);
@@ -352,11 +352,11 @@ function toMath(str: string) {
     return newstr;
 }
 
-export function isNotNull(property:string){
+export function isNotNull(property: string) {
     //(`${user.guildstaiko}` != 'null' || `${user.guildstaiko}` != 'undefined' || user.guildstaiko != null || user.guildstaiko != undefined)
-    if(`${property}`.toLowerCase() != 'null' && `${property}`.toLowerCase() != 'undefined' && property != null && property != undefined){
+    if (`${property}`.toLowerCase() != 'null' && `${property}`.toLowerCase() != 'undefined' && property != null && property != undefined) {
         return true;
-    } 
+    }
     return false;
 }
 

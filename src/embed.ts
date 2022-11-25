@@ -26,96 +26,96 @@ export async function scoreList(
         showUserName?: boolean,
     }
 ) {
-    let filtereddata = asObj.scores.slice()
+    let filtereddata = asObj.scores.slice();
     let filterinfo = '';
 
     if (asObj.filteredMapper != null) {
-        filtereddata = filtereddata.filter(array => array.beatmapset.creator.toLowerCase() == asObj.filteredMapper.toLowerCase())
-        filterinfo += `\nmapper: ${asObj.filteredMapper}`
+        filtereddata = filtereddata.filter(array => array.beatmapset.creator.toLowerCase() == asObj.filteredMapper.toLowerCase());
+        filterinfo += `\nmapper: ${asObj.filteredMapper}`;
     }
-    let calcmods = osumodcalc.OrderMods(asObj.filteredMods + '')
+    let calcmods = osumodcalc.OrderMods(asObj.filteredMods + '');
     if (calcmods.length < 1) {
-        calcmods = 'NM'
-        asObj.filteredMods = null
+        calcmods = 'NM';
+        asObj.filteredMods = null;
     }
     if (asObj.filteredMods != null && !asObj.filteredMods.includes('any')) {
-        filtereddata = filtereddata.filter(array => array.mods.toString().replaceAll(',', '') == calcmods)
-        filterinfo += `\nmods: ${asObj.filteredMods}`
+        filtereddata = filtereddata.filter(array => array.mods.toString().replaceAll(',', '') == calcmods);
+        filterinfo += `\nmods: ${asObj.filteredMods}`;
     }
     if (asObj.filteredMods != null && asObj.filteredMods.includes('any')) {
-        filtereddata = filtereddata.filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods))
-        filterinfo += `\nmods: ${asObj.filteredMods}`
+        filtereddata = filtereddata.filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods));
+        filterinfo += `\nmods: ${asObj.filteredMods}`;
     }
     if (asObj.filterMapTitle != null) {
-        filterinfo += `\nmap: ${asObj.filterMapTitle}`
+        filterinfo += `\nmap: ${asObj.filterMapTitle}`;
     }
 
-    let newData = filtereddata.slice()
+    let newData = filtereddata.slice();
     let sortinfo;
     switch (asObj.sort) {
         case 'score':
-            newData = await filtereddata.slice().sort((a, b) => b.score - a.score)
-            sortinfo = `\nsorted by highest score`
+            newData = await filtereddata.slice().sort((a, b) => b.score - a.score);
+            sortinfo = `\nsorted by highest score`;
             break;
         case 'acc':
-            newData = await filtereddata.slice().sort((a, b) => b.accuracy - a.accuracy)
-            sortinfo = `\nsorted by highest accuracy`
+            newData = await filtereddata.slice().sort((a, b) => b.accuracy - a.accuracy);
+            sortinfo = `\nsorted by highest accuracy`;
             break;
         case 'pp': default:
-            newData = await filtereddata.slice().sort((a, b) => b.pp - a.pp)
-            sortinfo = `\nsorted by highest pp`
-            asObj.sort = 'pp'
+            newData = await filtereddata.slice().sort((a, b) => b.pp - a.pp);
+            sortinfo = `\nsorted by highest pp`;
+            asObj.sort = 'pp';
             break;
         case 'recent':
             newData = await filtereddata.slice().sort((a, b) =>
                 parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
                 -
-                parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
-            sortinfo = `\nsorted by most recent`
+                parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')));
+            sortinfo = `\nsorted by most recent`;
             break;
         case 'combo':
-            newData = await filtereddata.slice().sort((a, b) => b.max_combo - a.max_combo)
-            sortinfo = `\nsorted by highest combo`
+            newData = await filtereddata.slice().sort((a, b) => b.max_combo - a.max_combo);
+            sortinfo = `\nsorted by highest combo`;
             break;
         case 'miss':
-            newData = await filtereddata.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
-            sortinfo = `\nsorted by least misses`
+            newData = await filtereddata.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss);
+            sortinfo = `\nsorted by least misses`;
             break;
         case 'rank':
-            newData = await filtereddata.slice().sort((a, b) => a.rank.localeCompare(b.rank))
-            sortinfo = `\nsorted by best rank`
+            newData = await filtereddata.slice().sort((a, b) => a.rank.localeCompare(b.rank));
+            sortinfo = `\nsorted by best rank`;
             break;
     }
     if (asObj.reverse == true) {
-        newData.reverse()
+        newData.reverse();
         switch (asObj.sort) {
             case 'score':
-                sortinfo = `\nsorted by lowest score`
+                sortinfo = `\nsorted by lowest score`;
                 break;
             case 'acc':
-                sortinfo = `\nsorted by lowest accuracy`
+                sortinfo = `\nsorted by lowest accuracy`;
                 break;
             case 'pp': default:
-                sortinfo = `\nsorted by lowest pp`
+                sortinfo = `\nsorted by lowest pp`;
                 break;
             case 'recent':
-                sortinfo = `\nsorted by oldest`
+                sortinfo = `\nsorted by oldest`;
                 break;
             case 'combo':
-                sortinfo = `\nsorted by lowest combo`
+                sortinfo = `\nsorted by lowest combo`;
                 break;
             case 'miss':
-                sortinfo = `\nsorted by most misses`
+                sortinfo = `\nsorted by most misses`;
                 break;
             case 'rank':
-                sortinfo = `\nsorted by worst rank`
+                sortinfo = `\nsorted by worst rank`;
                 break;
         }
     }
-    filterinfo += sortinfo
+    filterinfo += sortinfo;
 
     if (asObj.page >= Math.ceil(newData.length / 5)) {
-        asObj.page = Math.ceil(newData.length / 5) - 1
+        asObj.page = Math.ceil(newData.length / 5) - 1;
     }
 
     const scoresAsArrStr = [];
@@ -125,59 +125,59 @@ export async function scoreList(
 
     let trueIndex: string | number = '';
 
-    let truePosArr = newData.slice()
+    let truePosArr = newData.slice();
 
     if (asObj.showTruePosition && asObj.sort != asObj.truePosType) {
         switch (asObj.truePosType) {
             case 'score':
-                truePosArr = await asObj.scores.slice().sort((a, b) => b.score - a.score)
+                truePosArr = await asObj.scores.slice().sort((a, b) => b.score - a.score);
                 break;
             case 'acc':
-                truePosArr = await asObj.scores.slice().sort((a, b) => b.accuracy - a.accuracy)
+                truePosArr = await asObj.scores.slice().sort((a, b) => b.accuracy - a.accuracy);
                 break;
             case 'pp': default:
-                truePosArr = await asObj.scores.slice().sort((a, b) => b.pp - a.pp)
+                truePosArr = await asObj.scores.slice().sort((a, b) => b.pp - a.pp);
                 break;
             case 'recent':
                 truePosArr = await asObj.scores.slice().sort((a, b) =>
                     parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
                     -
                     parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
-                )
+                );
                 break;
             case 'combo':
-                truePosArr = await asObj.scores.slice().sort((a, b) => b.max_combo - a.max_combo)
+                truePosArr = await asObj.scores.slice().sort((a, b) => b.max_combo - a.max_combo);
                 break;
             case 'miss':
-                truePosArr = await asObj.scores.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
+                truePosArr = await asObj.scores.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss);
                 break;
             case 'rank':
-                truePosArr = await asObj.scores.slice().sort((a, b) => a.rank.localeCompare(b.rank))
+                truePosArr = await asObj.scores.slice().sort((a, b) => a.rank.localeCompare(b.rank));
                 break;
         }
     }
 
     for (let i = 0; i < 5 && i < newData.length; i++) {
-        const scoreoffset = asObj.page * 5 + i
-        const curscore = newData[scoreoffset]
+        const scoreoffset = asObj.page * 5 + i;
+        const curscore = newData[scoreoffset];
 
         if (!curscore) {
             break;
         }
         if (asObj.showTruePosition && asObj.sort != asObj.truePosType) {
             if (curscore.id != truePosArr[scoreoffset].id) {
-                trueIndex = await truePosArr.indexOf(curscore) + 1
+                trueIndex = await truePosArr.indexOf(curscore) + 1;
             } else {
-                trueIndex = ''
+                trueIndex = '';
             }
         }
 
         const mapid = asObj.mapidOverride ?? curscore.beatmap.id;
 
-        const ranking = curscore.rank.toUpperCase()
+        const ranking = curscore.rank.toUpperCase();
         const grade: string = gradeToEmoji(ranking);
 
-        const hitstats = curscore.statistics
+        const hitstats = curscore.statistics;
 
         const hitlist: string = hitList(
             {
@@ -189,15 +189,15 @@ export async function scoreList(
                 count_50: hitstats.count_50,
                 count_miss: hitstats.count_miss,
             }
-        )
+        );
 
-        const tempMods = curscore.mods
+        const tempMods = curscore.mods;
         let ifmods: string;
 
         if (!tempMods || tempMods.join('') == '' || tempMods == null || tempMods == undefined) {
-            ifmods = ''
+            ifmods = '';
         } else {
-            ifmods = '+' + osumodcalc.OrderMods(tempMods.join(''))
+            ifmods = '+' + osumodcalc.OrderMods(tempMods.join(''));
         }
 
         let pptxt: string;
@@ -214,43 +214,43 @@ export async function scoreList(
                 calctype: 0,
                 passedObj: 0,
                 failed: false
-            })
+            });
         if (curscore.accuracy != 1) {
             if (curscore.pp == null || isNaN(curscore.pp)) {
-                pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
+                pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`;
             } else {
-                pptxt = `${curscore.pp.toFixed(2)}pp`
+                pptxt = `${curscore.pp.toFixed(2)}pp`;
             }
             if (curscore.perfect == false) {
-                pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`
+                pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`;
             }
-            pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`
+            pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`;
         } else {
             if (curscore.pp == null || isNaN(curscore.pp)) {
                 pptxt =
-                    `${await ppcalcing[0].pp.toFixed(2)}pp`
+                    `${await ppcalcing[0].pp.toFixed(2)}pp`;
             } else {
                 pptxt =
-                    `${curscore.pp.toFixed(2)}pp`
+                    `${curscore.pp.toFixed(2)}pp`;
             }
         }
 
         let showtitle: string;
 
         if (asObj.showMapTitle == true) {
-            showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}\n`
+            showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}\n`;
         } else {
-            showtitle = `[Score #${i + 1 + (asObj.page * 5)}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
+            showtitle = `[Score #${i + 1 + (asObj.page * 5)}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `;
         }
         if (asObj.showUserName == true) {
-            showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
+            showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `;
         }
 
         let weighted;
         if (asObj.showWeights == true) {
-            weighted = `\n${(curscore?.weight?.pp)?.toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`
+            weighted = `\n${(curscore?.weight?.pp)?.toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`;
         } else {
-            weighted = ''
+            weighted = '';
         }
 
         scoresAsFields.push({
@@ -260,14 +260,14 @@ export async function scoreList(
 \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 ${pptxt} ${weighted}`,
             inline: false
-        })
+        });
         scoresAsArrStr.push(
             `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
 **${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 ${pptxt} ${weighted}
 `
-        )
+        );
 
     }
 
@@ -278,7 +278,7 @@ ${pptxt} ${weighted}
         maxPages: Math.ceil(newData.length / 5),
         isFirstPage: asObj.page == 0,
         isLastPage: asObj.page >= Math.ceil(newData.length / 5) - 1
-    }
+    };
 
 }
 
@@ -295,7 +295,7 @@ export function score(score: osuapitypes.Score, map: osuapitypes.Beatmap, detail
     return fields;
 }
 
-export type scoreSort = 'pp' | 'score' | 'acc' | 'recent' | 'combo' | 'miss' | 'rank'
+export type scoreSort = 'pp' | 'score' | 'acc' | 'recent' | 'combo' | 'miss' | 'rank';
 
 export function user() { }
 
@@ -308,37 +308,37 @@ export function userList(data: {
 
 }
 
-export type userSort = 'pp' | 'rank' | 'acc' | 'playcount' | 'level' | 'joindate' | 'countryrank' | 'countrypp' | 'score' | 'score_ranked'
+export type userSort = 'pp' | 'rank' | 'acc' | 'playcount' | 'level' | 'joindate' | 'countryrank' | 'countrypp' | 'score' | 'score_ranked';
 
 export function gradeToEmoji(str: string) {
     let grade;
     switch (str) {
         case 'F':
-            grade = emojis.grades.F
+            grade = emojis.grades.F;
             break;
         case 'D':
-            grade = emojis.grades.D
+            grade = emojis.grades.D;
             break;
         case 'C':
-            grade = emojis.grades.C
+            grade = emojis.grades.C;
             break;
         case 'B':
-            grade = emojis.grades.B
+            grade = emojis.grades.B;
             break;
         case 'A':
-            grade = emojis.grades.A
+            grade = emojis.grades.A;
             break;
         case 'S':
-            grade = emojis.grades.S
+            grade = emojis.grades.S;
             break;
         case 'SH':
-            grade = emojis.grades.SH
+            grade = emojis.grades.SH;
             break;
         case 'X':
-            grade = emojis.grades.X
+            grade = emojis.grades.X;
             break;
         case 'XH':
-            grade = emojis.grades.XH
+            grade = emojis.grades.XH;
             break;
     }
     return grade;
@@ -347,9 +347,9 @@ export function gradeToEmoji(str: string) {
 export function hitList(
     obj: {
         gamemode: osuapitypes.GameMode,
-        count_geki?: number
+        count_geki?: number;
         count_300: number,
-        count_katu?: number
+        count_katu?: number;
         count_100: number,
         count_50?: number,
         count_miss: number,
@@ -359,16 +359,16 @@ export function hitList(
     switch (obj.gamemode) {
         case 'osu':
         default:
-            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`
+            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`;
             break;
         case 'taiko':
-            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_miss)}`
+            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_miss)}`;
             break;
         case 'fruits':
-            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`
+            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`;
             break;
         case 'mania':
-            hitList = `${func.separateNum(obj.count_geki)}/${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_katu)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`
+            hitList = `${func.separateNum(obj.count_geki)}/${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_katu)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`;
             break;
     }
     return hitList;
@@ -394,69 +394,69 @@ export async function mapList(
             const maps = data.maps as osuapitypes.Beatmapset[];
             switch (data.sort) {
                 case 'title':
-                    maps.sort((a, b) => a.title.localeCompare(b.title))
+                    maps.sort((a, b) => a.title.localeCompare(b.title));
                     sortinfo = 'Sorted by title';
                     break;
                 case 'artist':
-                    maps.sort((a, b) => a.artist.localeCompare(b.artist))
+                    maps.sort((a, b) => a.artist.localeCompare(b.artist));
                     sortinfo = 'Sorted by artist';
                     break;
                 case 'difficulty':
                     maps.sort((a, b) =>
                         b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].difficulty_rating -
                         a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].difficulty_rating
-                    )
+                    );
                     sortinfo = 'Sorted by difficulty';
                     break;
                 case 'plays':
-                    maps.sort((a, b) => b.play_count - a.play_count)
+                    maps.sort((a, b) => b.play_count - a.play_count);
                     sortinfo = 'Sorted by playcount';
                     break;
                 case 'dateadded':
-                    maps.sort((a, b) => new Date(b.submitted_date).getTime() - new Date(a.submitted_date).getTime())
+                    maps.sort((a, b) => new Date(b.submitted_date).getTime() - new Date(a.submitted_date).getTime());
                     sortinfo = 'Sorted by date added';
                     break;
                 case 'favourites':
-                    maps.sort((a, b) => b.favourite_count - a.favourite_count)
+                    maps.sort((a, b) => b.favourite_count - a.favourite_count);
                     sortinfo = 'Sorted by favourites';
                     break;
                 case 'bpm':
-                    maps.sort((a, b) => b.bpm - a.bpm)
+                    maps.sort((a, b) => b.bpm - a.bpm);
                     sortinfo = 'Sorted by bpm';
                     break;
                 case 'cs':
                     maps.sort((a, b) =>
                         b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].cs -
                         a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].cs
-                    )
+                    );
                     sortinfo = 'Sorted by circle size';
                     break;
                 case 'ar':
                     maps.sort((a, b) =>
                         b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].ar -
                         a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].ar
-                    )
+                    );
                     sortinfo = 'Sorted by approach rate';
                     break;
                 case 'od':
                     maps.sort((a, b) =>
                         b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].accuracy -
                         a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].accuracy
-                    )
+                    );
                     sortinfo = 'Sorted by overall difficulty';
                     break;
                 case 'hp':
                     maps.sort((a, b) =>
                         b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].drain -
                         a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].drain
-                    )
+                    );
                     sortinfo = 'Sorted by hp';
                     break;
                 case 'length':
                     maps.sort((a, b) =>
                         b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].total_length -
                         a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].total_length
-                    )
+                    );
                     sortinfo = 'Sorted by length';
                     break;
                 default:
@@ -467,9 +467,9 @@ export async function mapList(
                 maps.reverse();
                 sortinfo += ' (reversed)';
             }
-            filterinfo += sortinfo
+            filterinfo += sortinfo;
             if (page >= Math.ceil(maps.length / 5)) {
-                page = Math.ceil(maps.length / 5) - 1
+                page = Math.ceil(maps.length / 5) - 1;
             }
             if (page < 0) {
                 page = 0;
@@ -478,8 +478,8 @@ export async function mapList(
             newData = maps;
 
             for (let i = 0; i < 5 && i < maps.length; i++) {
-                const offset = page * 5 + i
-                const curmapset = maps[offset]
+                const offset = page * 5 + i;
+                const curmapset = maps[offset];
                 if (!curmapset) {
                     break;
                 }
@@ -493,7 +493,7 @@ export async function mapList(
                  * ranked date
                  * favourite count
                  */
-                const topmap = curmapset.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0]
+                const topmap = curmapset.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0];
                 mapsArr.push({
                     name: `${offset + 1}`,
                     value:
@@ -511,7 +511,7 @@ ${topmap.status == 'ranked' ?
                             `Loved <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
                         }`,
                     inline: false
-                })
+                });
             }
         }
             break;
@@ -527,7 +527,7 @@ ${topmap.status == 'ranked' ?
         maxPages: Math.ceil(newData.length / 5),
         isFirstPage: page == 0,
         isLastPage: page >= Math.ceil(newData.length / 5) - 1
-    }
+    };
 }
 
 export async function sortScores(input: {
@@ -552,23 +552,23 @@ export type mapSort = 'title' | 'artist' |
     'difficulty' | 'status' | 'rating' |
     'fails' | 'plays' |
     'dateadded' | 'favourites' | 'bpm' |
-    'cs' | 'ar' | 'od' | 'hp' | 'length'
+    'cs' | 'ar' | 'od' | 'hp' | 'length';
 
 export function getTotalHits(mode: osuapitypes.GameMode, score: osuapitypes.Score) {
     let totalHits = 0;
-    const stats = score.statistics
+    const stats = score.statistics;
     switch (mode) {
         case 'osu': default:
-            totalHits = stats.count_300 + stats.count_100 + stats.count_50 + stats.count_miss
+            totalHits = stats.count_300 + stats.count_100 + stats.count_50 + stats.count_miss;
             break;
         case 'taiko':
-            totalHits = stats.count_300 + stats.count_100 + stats.count_miss
+            totalHits = stats.count_300 + stats.count_100 + stats.count_miss;
             break;
         case 'fruits':
-            totalHits = stats.count_300 + stats.count_100 + stats.count_50 + stats.count_miss
+            totalHits = stats.count_300 + stats.count_100 + stats.count_50 + stats.count_miss;
             break;
         case 'mania':
-            totalHits = stats.count_geki + stats.count_300 + stats.count_katu + stats.count_100 + stats.count_50 + stats.count_miss
+            totalHits = stats.count_geki + stats.count_300 + stats.count_katu + stats.count_100 + stats.count_50 + stats.count_miss;
             break;
     }
     return totalHits;
