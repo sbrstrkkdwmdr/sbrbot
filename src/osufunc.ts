@@ -1708,7 +1708,7 @@ type stat = {
 export function Stats(arr: number[]) {
     const init = arr.slice();
     arr = arr.filter(x => x != null);
-    arr.sort((b, a) => b - a);
+    arr.sort((a, b) => b - a);
     const stats: stat = {
         highest: arr[0],
         average: arr.reduce((b, a) => b + a, 0) / arr.length,
