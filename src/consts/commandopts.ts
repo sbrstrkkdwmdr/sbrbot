@@ -8,7 +8,7 @@ const modeopts = [
     { name: 'taiko', value: 'taiko' },
     { name: 'catch', value: 'fruits' },
     { name: 'mania', value: 'mania' }
-]
+];
 /**
  * @info what to sort plays by
  */
@@ -20,7 +20,7 @@ const playsortopts = [
     { name: 'Combo', value: 'combo' },
     { name: 'Misses', value: 'miss' },
     { name: 'Rank', value: 'rank' },
-]
+];
 const skincmdopts = [
     { name: 'SaberStrikeCustom', value: '1' },
     { name: 'SaberStrikeCustom[v2]', value: '2' },
@@ -40,7 +40,7 @@ const skincmdopts = [
     { name: 'SaberStrike『0』_-Levi-_ edit', value: 'b5' },
     { name: 'SaberStrike『Soragaton』', value: 'b6' },
     { name: 'sbr『-hANOJI』', value: 'b7' }
-]
+];
 
 const mathcmdopts = [
     //{ name: 'Help', value: 'help' },
@@ -63,7 +63,7 @@ const mathcmdopts = [
     { name: 'Mod integer to string', value: 'modintstring' }
 
 
-]
+];
 
 const conversionopts = [
     //https://www.ewh.ieee.org/soc/ias/pub-dept/abbreviation.pdf
@@ -112,7 +112,7 @@ const conversionopts = [
     { name: 'Metric Tonne', value: 'ton' }
     //4
 
-]
+];
 
 const gifopts = [
     { name: 'cry about it', value: 'cry about it' },
@@ -130,7 +130,7 @@ const gifopts = [
     { name: 'insult', value: 'insult' },
     { name: 'ratio', value: 'ratio' },
     { name: 'reaction to that information', value: 'reaction to info' }
-]
+];
 
 
 const timezoneopts = [
@@ -509,7 +509,7 @@ const timezoneopts = [
     //
     //
     //
-]
+];
 
 //
 
@@ -583,7 +583,7 @@ const osutopOpts = [
         required: false,
     }
 
-]
+];
 
 const playArrayOpts = [
     {
@@ -646,7 +646,7 @@ const playArrayOpts = [
         type: Discord.ApplicationCommandOptionType.String,
         required: false,
     }
-]
+];
 
 const useridsortopts = [
     {
@@ -689,7 +689,7 @@ const useridsortopts = [
         type: Discord.ApplicationCommandOptionType.Integer,
         required: false,
     },
-]
+];
 
 const useroffsetmodeopts = [
     {
@@ -712,7 +712,7 @@ const useroffsetmodeopts = [
         type: ApplicationCommandOptionType.String,
         choices: modeopts
     }
-]
+];
 const rsopts = [
     {
         name: 'user',
@@ -747,7 +747,7 @@ const rsopts = [
         type: Discord.ApplicationCommandOptionType.String,
         required: false,
     }
-]
+];
 
 
 export { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts, playArrayOpts, osutopOpts };

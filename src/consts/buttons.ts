@@ -2,7 +2,7 @@ import Discord = require('discord.js');
 export const type = {
     current: Discord.ButtonStyle.Secondary,
     next: Discord.ButtonStyle.Primary,
-}
+};
 // Discord.ButtonStyle.Danger //red
 // Discord.ButtonStyle.Link //link
 // Discord.ButtonStyle.Primary //blue

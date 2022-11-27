@@ -7,7 +7,7 @@ const mapobjs = {
     spinner: '<:count_spinners:1007196071388262400>',
     bpm: '<:bpm:1007196066220871723>',
     total_length: '<:total_length:1007196072956940348>'
-}
+};
 
 const gamemodes = {
     standard: '<:modeosu:944181096868884481>', //standard, STD, osu!
@@ -15,7 +15,7 @@ const gamemodes = {
     taiko: '<:modetaiko:944181097053442068>', //taiko, drums
     fruits: '<:modefruits:944181096206176326>', //catch, catch the beat, ctb
     mania: '<:modemania:944181095874834453>' //piano
-}
+};
 
 const rankedstatus = {
     ranked: '<:statusranked:944512775579926609>',
@@ -23,7 +23,7 @@ const rankedstatus = {
     qualified: '<:statusapproved:944512764913811467>',
     loved: '<:statusloved:944512775810588733>',
     graveyard: '<:statusgraveyard:944512765282897940>'
-}
+};
 
 const grades = {
     XH: '<:rankingxh:927797179597357076>', //platinum SS
@@ -35,11 +35,11 @@ const grades = {
     C: '<:rankingC:927797179584757842>',
     D: '<:rankingD:927797179534438421>',
     F: 'F',
-}
+};
 const onlinestatus = {
     online: '<:osu_online:927800818445455421>',
     offline: '<:osu_offline:927800829153513472>'
-}
+};
 const mods = {
     //full name
     none: '',
@@ -132,8 +132,8 @@ const mods = {
     score2: '',
     version2: '',
     //Lazer
-}
+};
 
 //module.exports = { mapobjs, gamemodes, rankedstatus, grades, onlinestatus }
-export { mapobjs, gamemodes, rankedstatus, grades, onlinestatus, mods }
+export { mapobjs, gamemodes, rankedstatus, grades, onlinestatus, mods };
 

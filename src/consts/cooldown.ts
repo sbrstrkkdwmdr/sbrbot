@@ -27,4 +27,4 @@ export const cooldownCommands = [
     'gif',
     'image', 'imagesearch',
     'ytsearch', 'yt',
-]
+];

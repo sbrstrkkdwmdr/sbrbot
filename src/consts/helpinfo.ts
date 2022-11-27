@@ -10,7 +10,7 @@
 
 //PREFIXMSG gets replaced later
 
-import extypes = require('../types/extratypes')
+import extypes = require('../types/extratypes');
 
 export type commandInfo = {
     name: string,
@@ -19,9 +19,9 @@ export type commandInfo = {
     slashusage?: string,
     examples: {
         text: string,
-        descriptor: string
+        descriptor: string;
     }[],
-    aliases?: string[]
+    aliases?: string[];
     options: {
         name: string,
         type: string,
@@ -31,9 +31,9 @@ export type commandInfo = {
         defaultValue: string,
         commandTypes: extypes.commandType[],
         examples: string[],
-        aliases?: string[]
+        aliases?: string[];
     }[],
-}
+};
 
 const mods = [
     'NM',
@@ -68,7 +68,7 @@ const mods = [
     'KC',
     'S2', 'V2', 'SV2',
     'MR'
-]
+];
 
 const cmds: commandInfo[] = [
     {
@@ -374,7 +374,7 @@ const cmds: commandInfo[] = [
             }
         ]
     }
-]
+];
 
 const osucmds: commandInfo[] = [
     {
@@ -2408,7 +2408,7 @@ const osucmds: commandInfo[] = [
             }
         ]
     }
-]
+];
 
 const othercmds: commandInfo[] = [
     {
@@ -2613,7 +2613,7 @@ const othercmds: commandInfo[] = [
             }
         ]
     }
-]
+];
 
 const admincmds: commandInfo[] = [
     {
@@ -2758,7 +2758,7 @@ const admincmds: commandInfo[] = [
         aliases: [],
         options: []
     }
-]
+];
 
-export { cmds, othercmds, osucmds, admincmds }
+export { cmds, othercmds, osucmds, admincmds };
 

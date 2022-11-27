@@ -57,7 +57,7 @@ const diffcolour = [
         cym: ''
     }, //s>8.0
 
-]
+];
 
 const embedColour = {
     score: {
@@ -92,7 +92,7 @@ const embedColour = {
         hex: '#91BC5C',
         dec: colourcalc.hexToDec('#91BC5C'),
     },
-}
+};
 
 export { diffcolour, embedColour };
 
