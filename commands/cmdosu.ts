@@ -3170,699 +3170,6 @@ ID: ${input.absoluteID}
 }
 
 /**
- * top plays without misses
- */
-export async function nochokes(input: extypes.commandInput) {
-
-    let commanduser: Discord.User;
-
-    let user;
-    let mode;
-    let sort;
-    let reverse;
-    let page;
-    let mapper;
-    let mods;
-    let searchid;
-    let filterTitle = null;
-
-    let parseScore = false;
-    let parseId = null;
-
-    switch (input.commandType) {
-        case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
-            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if (input.args.includes('-page')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            mode = null;
-            sort = 'pp';
-            page = 1;
-            mapper = null;
-            mods = null;
-
-            if (input.args.includes('-parse')) {
-                parseScore = true;
-                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
-                parseId = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            if (input.args.includes('-page')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
-            }
-
-            if (input.args.includes('-recent')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-recent'), 1);
-            }
-            if (input.args.includes('-performance')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-performance'), 1);
-            }
-            if (input.args.includes('-pp')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-pp'), 1);
-            }
-            if (input.args.includes('-score')) {
-                sort = 'score';
-                input.args.splice(input.args.indexOf('-score'), 1);
-            }
-            if (input.args.includes('-acc')) {
-                sort = 'acc';
-                input.args.splice(input.args.indexOf('-acc'), 1);
-            }
-            if (input.args.includes('-combo')) {
-                sort = 'combo';
-                input.args.splice(input.args.indexOf('-combo'), 1);
-            }
-            if (input.args.includes('-misses')) {
-                sort = 'miss',
-                    input.args.splice(input.args.indexOf('-misses'));
-            }
-            if (input.args.includes('-miss')) {
-                sort = 'miss';
-                input.args.splice(input.args.indexOf('-miss'), 1);
-            }
-            if (input.args.includes('-rank')) {
-                sort = 'rank';
-                input.args.splice(input.args.indexOf('-rank'), 1);
-            }
-            if (input.args.includes('-r')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-
-            if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
-                filterTitle = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            input.args = cleanArgs(input.args);
-
-            user = input.args.join(' ');
-            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null;
-            }
-        }
-            break;
-
-        //==============================================================================================================================================================================================
-
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
-            commanduser = input.obj.member.user;
-            searchid = commanduser.id;
-
-            user = input.obj.options.getString('user');
-            mode = input.obj.options.getString('mode');
-            mapper = input.obj.options.getString('mapper');
-            mods = input.obj.options.getString('mods');
-            sort = input.obj.options.getString('sort');
-            page = input.obj.options.getInteger('page');
-            reverse = input.obj.options.getBoolean('reverse');
-            filterTitle = input.obj.options.getString('filter');
-            parseId = input.obj.options.getInteger('parse');
-            if (parseId != null) {
-                parseScore = true;
-            }
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
-            if (!input.obj.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.obj.member.user;
-            searchid = commanduser.id;
-
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
-
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
-
-            if (input.obj.message.embeds[0].description) {
-                if (input.obj.message.embeds[0].description.includes('mapper')) {
-
-                    mapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }
-
-                if (input.obj.message.embeds[0].description.includes('mods')) {
-
-                    mods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }
-
-                if (input.obj.message.embeds[0].description.includes('map')) {
-
-                    filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
-                }
-
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
-                switch (true) {
-                    case sort1.includes('score'):
-                        sort = 'score';
-                        break;
-                    case sort1.includes('acc'):
-                        sort = 'acc';
-                        break;
-                    case sort1.includes('pp'):
-                        sort = 'pp';
-                        break;
-                    case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent';
-                        break;
-                    case sort1.includes('combo'):
-                        sort = 'combo';
-                        break;
-                    case sort1.includes('miss'):
-                        sort = 'miss';
-                        break;
-                    case sort1.includes('rank'):
-                        sort = 'rank';
-                        break;
-
-                }
-
-
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
-                if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
-                    reverse = true;
-                } else {
-                    reverse = false;
-                }
-
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
-                page = 0;
-                switch (input.button) {
-                    case 'BigLeftArrow':
-                        page = 1;
-                        break;
-                    case 'LeftArrow':
-                        page = pageParsed - 1;
-                        break;
-                    case 'RightArrow':
-                        page = pageParsed + 1;
-                        break;
-                    case 'BigRightArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
-                        break;
-                    default:
-                        page = pageParsed;
-                        break;
-                }
-            }
-        }
-            break;
-    }
-    if (input.overrides != null) {
-        if (input.overrides.page != null) {
-            page = input.overrides.page;
-        }
-        if (input.overrides.sort != null) {
-            sort = input.overrides.sort;
-        }
-        if (input.overrides.reverse != null) {
-            reverse = input.overrides.reverse === true;
-        }
-    }
-
-    //==============================================================================================================================================================================================
-
-    log.logCommand({
-        event: 'Command',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        commanduser,
-        object: input.obj,
-        commandName: 'nochokes',
-        options: [
-            {
-                name: 'User',
-                value: user
-            },
-            {
-                name: 'Search ID',
-                value: searchid
-            },
-            {
-                name: 'Mode',
-                value: mode
-            },
-            {
-                name: 'Sort',
-                value: sort
-            },
-            {
-                name: 'Reverse',
-                value: reverse
-            },
-            {
-                name: 'Page',
-                value: page
-            },
-            {
-                name: 'Mapper',
-                value: mapper
-            },
-            {
-                name: 'Mods',
-                value: mods
-            },
-            {
-                name: 'Parse',
-                value: `${parseId}`
-            },
-            {
-                name: 'Filter',
-                value: filterTitle
-            }
-
-        ]
-    });
-
-    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-    if (page < 2 || typeof page != 'number' || isNaN(page)) {
-        page = 1;
-    }
-    page--;
-
-    const buttons = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-nochokes-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.refresh),
-        );
-
-    //if user is null, use searchid
-    if (user == null) {
-        const cuser = await osufunc.searchUser(searchid, input.userdata, true);
-        user = cuser.username;
-        if (mode == null) {
-            mode = cuser.gamemode;
-        }
-    }
-
-    //if user is not found in database, use discord username
-    if (user == null) {
-        const cuser = input.client.users.cache.get(searchid);
-        user = cuser.username;
-    }
-
-    mode = osufunc.modeValidator(mode);
-
-    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-nochokes-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.first),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-nochokes-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.previous),
-            new Discord.ButtonBuilder()
-                .setCustomId(`Search-nochokes-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.search),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-nochokes-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.next),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-nochokes-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.last),
-        );
-
-    if (input.commandType == 'interaction') {
-
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
-    }
-
-    let osudataReq: osufunc.apiReturn;
-
-    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
-        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
-        input.button != 'Refresh'
-    ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
-    } else {
-        osudataReq = await osufunc.apiget({
-            type: 'user',
-            params: {
-                username: cmdchecks.toHexadecimal(user),
-                mode: osufunc.modeValidator(mode)
-            }
-        });
-    }
-
-    const osudata: osuApiTypes.User = osudataReq.apiData;
-
-    osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
-
-    if (osudata?.error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
-                        content: `Error - could not find user \`${user}\``,
-                        allowedMentions: { repliedUser: false },
-                    });
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message<any>).reply({
-                    content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                });
-            }
-        }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
-        return;
-    }
-
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
-    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
-
-    let nochokedataReq: osufunc.apiReturn;
-    if (func.findFile(input.absoluteID, 'nochokedata') &&
-        input.commandType == 'button' &&
-        !('error' in func.findFile(input.absoluteID, 'nochokedata')) &&
-        input.button != 'Refresh'
-    ) {
-        nochokedataReq = func.findFile(input.absoluteID, 'nochokedata');
-    } else {
-        nochokedataReq = await osufunc.apiget({
-            type: 'best',
-            params: {
-                userid: osudata.id,
-                mode: mode,
-                opts: ['limit=100']
-            }
-        });
-    }
-    let nochokedata: osuApiTypes.Score[] & osuApiTypes.Error = nochokedataReq.apiData;
-
-
-    if (nochokedata?.error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
-                        content: `Error - could not find \`${user}\`'s top scores`,
-                        allowedMentions: { repliedUser: false },
-                    });
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message<any>).reply({
-                    content: `Error - could not find \`${user}\`'s top scores`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                });
-            }
-        }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user\'s top scores
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
-        return;
-    }
-
-    func.storeFile(nochokedataReq, input.absoluteID, 'nochokedata');
-    osufunc.debug(nochokedataReq, 'command', 'osutop', input.obj.guildId, 'noChokeData');
-
-    try {
-        nochokedata[0].user.username;
-    } catch (error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
-                        content: `Error - could not fetch \`${user}\`'s top scores`,
-                        allowedMentions: { repliedUser: false },
-                    })
-                        .catch();
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message<any>).reply({
-                    content: `Error - could not fetch \`${user}\`'s top scores`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
-            }
-        }
-        return;
-    }
-
-    let showtrue = false;
-    if (sort != 'pp') {
-        showtrue = true;
-    }
-
-    if (page >= Math.ceil(nochokedata.length / 5)) {
-        page = Math.ceil(nochokedata.length / 5) - 1;
-    }
-
-    if (filterTitle) {
-        nochokedata = nochokedata.filter((array) =>
-            (
-                array.beatmapset.title.toLowerCase().replaceAll(' ', '')
-                +
-                array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
-                +
-                array.beatmap.version.toLowerCase().replaceAll(' ', '')
-            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            ||
-            array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            ||
-            array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            ||
-            array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            ||
-            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
-            ||
-            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
-            ||
-            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
-        );
-    }
-
-    if (parseScore == true) {
-        let pid = parseInt(parseId) - 1;
-        if (pid < 0) {
-            pid = 0;
-        }
-        if (pid > nochokedata.length) {
-            pid = nochokedata.length - 1;
-        }
-        input.overrides = {
-            mode: nochokedata?.[0]?.mode ?? 'osu',
-            id: nochokedata?.[pid]?.best_id,
-            commanduser,
-            commandAs: input.commandType
-        };
-        if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
-            if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
-                            content: `Error - could not find requested score`,
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message<any>).reply({
-                        content: `Error - could not find requested score`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
-            }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find requested score
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
-            return;
-        }
-        input.commandType = 'other';
-        await scoreparse(input);
-        return;
-    }
-
-    const topEmbed = new Discord.EmbedBuilder()
-        .setColor(colours.embedColour.scorelist.dec)
-        .setTitle(`Top no choke scores of ${osudata.username}`)
-        .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
-        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${nochokedata?.[0]?.mode ?? osufunc.modeValidator(mode)}`)
-        .setAuthor({
-            name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
-            iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
-        });
-    const scoresarg = await embedStuff.scoreList(
-        {
-            scores: nochokedata.filter(a => a.statistics.count_miss == 0),
-            detailed: false,
-            showWeights: true,
-            page: page,
-            showMapTitle: true,
-            showTruePosition: showtrue,
-            sort: sort,
-            truePosType: 'pp',
-            filteredMapper: mapper,
-            filteredMods: mods,
-            filterMapTitle: filterTitle,
-            reverse: reverse
-        });
-    topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`);
-    if (scoresarg.fields.length == 0) {
-        topEmbed.addFields([{
-            name: 'Error',
-            value: 'No scores found',
-            inline: false
-        }]);
-        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
-        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
-        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
-        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
-        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
-    } else {
-        for (let i = 0; scoresarg.fields.length > i; i++) {
-            topEmbed.addFields(scoresarg.fields[i]);
-        }
-    }
-
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
-
-    if (scoresarg.isFirstPage) {
-        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
-        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
-    }
-    if (scoresarg.isLastPage) {
-        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
-        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
-    }
-    if (input.commandType != 'button' || input.button == 'Refresh') {
-        try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
-        } catch (error) {
-            osufunc.logCall(error);
-        }
-    }
-
-    //SEND/EDIT MSG==============================================================================================================================================================================================
-
-    msgfunc.sendMessage({
-        commandType: input.commandType,
-        obj: input.obj,
-        args: {
-            embeds: [topEmbed],
-            components: [pgbuttons, buttons],
-            edit: true
-        }
-    });
-
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
-
-}
-
-/**
  * list of top plays
  */
 export async function osutop(input: extypes.commandInput) {
@@ -3871,7 +3178,6 @@ export async function osutop(input: extypes.commandInput) {
 
     let user;
     let mode;
-    let detailed;
     let sort: embedStuff.scoreSort;
     let reverse;
     let page;
@@ -3880,6 +3186,7 @@ export async function osutop(input: extypes.commandInput) {
     let filterTitle;
 
     let searchid;
+    let noMiss = false;
 
     let parseScore = false;
     let parseId = null;
@@ -3895,7 +3202,6 @@ export async function osutop(input: extypes.commandInput) {
 
             mapper = null;
             mods = null;
-            detailed = false;
             if (input.args.includes('-parse')) {
                 parseScore = true;
                 const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
@@ -4035,7 +3341,6 @@ export async function osutop(input: extypes.commandInput) {
             mods = input.obj.options.getString('mods');
             sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
             page = input.obj.options.getInteger('page');
-            detailed = input.obj.options.getBoolean('detailed');
             filterTitle = input.obj.options.getString('filter');
             parseId = input.obj.options.getInteger('parse');
             if (parseId != null) {
@@ -4109,11 +3414,6 @@ export async function osutop(input: extypes.commandInput) {
                     reverse = false;
                 }
 
-                if (input.obj.message.embeds[0].fields.length == 7 || input.obj.message.embeds[0].fields.length == 11) {
-                    detailed = true;
-                } else {
-                    detailed = false;
-                }
                 const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
                 page = 0;
                 switch (input.button) {
@@ -4133,12 +3433,6 @@ export async function osutop(input: extypes.commandInput) {
                         page = pageParsed;
                         break;
                 }
-            }
-            if (input.button == 'DetailEnable') {
-                detailed = true;
-            }
-            if (input.button == 'DetailDisable') {
-                detailed = false;
             }
         }
             break;
@@ -4161,6 +3455,9 @@ export async function osutop(input: extypes.commandInput) {
         }
         if (input.overrides.filterMods != null) {
             mapper = input.overrides.filterMods;
+        }
+        if (input.overrides.miss != null) {
+            noMiss = true;
         }
     }
 
@@ -4213,6 +3510,10 @@ export async function osutop(input: extypes.commandInput) {
             {
                 name: 'Filter',
                 value: filterTitle
+            },
+            {
+                name: 'No misses',
+                value: noMiss
             }
 
         ]
@@ -4225,10 +3526,13 @@ export async function osutop(input: extypes.commandInput) {
     }
     page--;
 
+    const commandButtonName: 'osutop' | 'nochokes' =
+        noMiss == true ? 'nochokes' : 'osutop';
+
     const buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-osutop-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`Refresh-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
@@ -4250,42 +3554,26 @@ export async function osutop(input: extypes.commandInput) {
 
     mode = osufunc.modeValidator(mode);
 
-    if (detailed == true) {
-        buttons.addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`DetailDisable-osutop-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailed)
-        );
-    } else {
-        buttons.addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`DetailEnable-osutop-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailed)
-        );
-    }
-
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-osutop-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`BigLeftArrow-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.first),
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-osutop-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`LeftArrow-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous),
             new Discord.ButtonBuilder()
-                .setCustomId(`Search-osutop-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`Search-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.search),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-osutop-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`RightArrow-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.next),
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-osutop-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`BigRightArrow-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
@@ -4463,6 +3751,10 @@ Could not find user\'s top scores
         );
     }
 
+    if (noMiss) {
+        osutopdata = osutopdata.filter(x => x.statistics.count_miss == 0);
+    }
+
     if (parseScore == true) {
         let pid = parseInt(parseId) - 1;
         if (pid < 0) {
@@ -4514,7 +3806,7 @@ Could not find requested score
 
     const topEmbed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.scorelist.dec)
-        .setTitle(`Top plays of ${osudata.username}`)
+        .setTitle(`${commandButtonName == 'osutop' ? 'Top' : 'Top no choke'} plays of ${osudata.username}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osutopdata?.[0]?.mode ?? osufunc.modeValidator(mode)}`)
         .setAuthor({
@@ -4525,7 +3817,7 @@ Could not find requested score
     const scoresarg = await embedStuff.scoreList(
         {
             scores: osutopdata,
-            detailed: detailed,
+            detailed: false,
             showWeights: true,
             page: page,
             showMapTitle: true,
@@ -4556,50 +3848,50 @@ Could not find requested score
     }
 
 
-    if (detailed == true) {
-        const highestcombo = func.separateNum((osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo);
-        const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2);
-        const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2);
-        let totalpp = 0;
-        for (let i2 = 0; i2 < osutopdata.length; i2++) {
-            totalpp += osutopdata[i2].pp;
-        }
-        const avgpp = (totalpp / osutopdata.length).toFixed(2);
-        let hittype: string;
-        if (mode == 'osu') {
-            hittype = `hit300/hit100/hit50/miss`;
-        }
-        if (mode == 'taiko') {
-            hittype = `Great(300)/Good(100)/miss`;
-        }
-        if (mode == 'fruits' || mode == 'catch') {
-            hittype = `Fruit(300)/Drops(100)/Droplets(50)/miss`;
-        }
-        if (mode == 'mania') {
-            hittype = `300+(geki)/300/200(katu)/100/50/miss`;
-        }
-        topEmbed.addFields([{
-            name: '-',
-            value: `
-        **Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
-        **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
-        **Gamemode:** ${mode}
-        **Hits:** ${hittype}
-        **Highest combo:** ${highestcombo}
-    `,
-            inline: true
-        },
-        {
-            name: '-',
-            value: `
-        **Highest pp:** ${maxpp}
-        **Lowest pp:** ${minpp}
-        **Average pp:** ${avgpp}
-        **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
-        **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
-    `, inline: true
-        }]);
-    }
+    // if (detailed == true) {
+    //     const highestcombo = func.separateNum((osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo);
+    //     const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2);
+    //     const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2);
+    //     let totalpp = 0;
+    //     for (let i2 = 0; i2 < osutopdata.length; i2++) {
+    //         totalpp += osutopdata[i2].pp;
+    //     }
+    //     const avgpp = (totalpp / osutopdata.length).toFixed(2);
+    //     let hittype: string;
+    //     if (mode == 'osu') {
+    //         hittype = `hit300/hit100/hit50/miss`;
+    //     }
+    //     if (mode == 'taiko') {
+    //         hittype = `Great(300)/Good(100)/miss`;
+    //     }
+    //     if (mode == 'fruits' || mode == 'catch') {
+    //         hittype = `Fruit(300)/Drops(100)/Droplets(50)/miss`;
+    //     }
+    //     if (mode == 'mania') {
+    //         hittype = `300+(geki)/300/200(katu)/100/50/miss`;
+    //     }
+    //     topEmbed.addFields([{
+    //         name: '-',
+    //         value: `
+    //     **Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
+    //     **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
+    //     **Gamemode:** ${mode}
+    //     **Hits:** ${hittype}
+    //     **Highest combo:** ${highestcombo}
+    // `,
+    //         inline: true
+    //     },
+    //     {
+    //         name: '-',
+    //         value: `
+    //     **Highest pp:** ${maxpp}
+    //     **Lowest pp:** ${minpp}
+    //     **Average pp:** ${avgpp}
+    //     **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
+    //     **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
+    // `, inline: true
+    //     }]);
+    // }
 
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
 
@@ -7197,9 +6489,9 @@ Could not fetch beatmap data for ${scoredata.beatmap.id}
         nonFcString += `${scoredata.statistics.count_miss}❌` : null;
     scoredata.perfect ? null :
         nonFcString += ` ${scoredata.max_combo}/${mapdata.max_combo}`;
-    
-    if(nonFcString.length < 1){
-        nonFcString = 'FC'
+
+    if (nonFcString.length < 1) {
+        nonFcString = 'FC';
     }
 
     const titleString =

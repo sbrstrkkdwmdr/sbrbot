@@ -156,7 +156,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
         if (!checks.botHasPerms(obj, client, ['SendMessagesInThreads']) &&
             obj.channel.type == Discord.ChannelType.GuildPublicThread ||
             obj.channel.type == Discord.ChannelType.GuildPrivateThread) return;
-        const input: extypes.commandInput = { commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel };
+        // const input: extypes.commandInput = { commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel };
         switch (command) {
             case 'convert':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
@@ -342,13 +342,6 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
                 break;
-            case 'nochokes': case 'nc':
-                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.nochokes({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot');
-                }
-                break;
             case 'osu': case 'profile': case 'o':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
@@ -379,6 +372,16 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                         type: 'skin'
                     };
                     osucmds.osuset({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot');
+                }
+                break;
+            case 'nochokes': case 'nc':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    overrides = {
+                        miss: true
+                    };
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }

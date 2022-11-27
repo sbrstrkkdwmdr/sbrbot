@@ -7,6 +7,7 @@ import admincmds = require('./commands/cmdAdmin');
 import misccmds = require('./commands/cmdMisc');
 import checkcmds = require('./commands/cmdChecks');
 import extypes = require('./src/types/extratypes');
+import embedStuff = require('./src/embed');
 
 module.exports = (userdata, client: Discord.Client, config: extypes.config, oncooldown, statsCache) => {
     const graphChannel = client.channels.cache.get(config.graphChannelId) as Discord.TextChannel;
@@ -29,7 +30,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
         //buttonType-baseCommand-userId-commandId
 
         const commandType: extypes.commandType = 'button';
-        const overrides = {
+        const overrides:extypes.overrides = {
             user: null,
             page: null,
             mode: null,
@@ -77,7 +78,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                         //interaction is converted to a base interaction first because button interaction and select menu interaction don't overlap
                         overrides.id = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
                         if (interaction?.message?.components[1]?.components[0]) {
-                            overrides.overwriteModal = interaction.message.components[1].components[0];
+                            overrides.overwriteModal = interaction.message.components[1].components[0] as any;
                         }
                     }
                     break;
@@ -103,8 +104,8 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
             }
         }
         if (button == 'SortMenu' && ScoreSortCommands.includes(command)) {
-            overrides.sort = ((interaction as Discord.BaseInteraction) as Discord.ModalSubmitInteraction).fields.fields.at(0).value;
-            overrides.reverse = ((interaction as Discord.BaseInteraction) as Discord.ModalSubmitInteraction).fields.fields.at(1).value;
+            overrides.sort = ((interaction as Discord.BaseInteraction) as Discord.ModalSubmitInteraction).fields.fields.at(0).value as embedStuff.scoreSort;
+            overrides.reverse = ((interaction as Discord.BaseInteraction) as Discord.ModalSubmitInteraction).fields.fields.at(1).value as unknown as boolean;
         }
 
 
@@ -135,7 +136,8 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     .catch(error => { });
                 break;
             case 'nochokes':
-                osucmds.nochokes({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                overrides.miss = true; 
+                osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
