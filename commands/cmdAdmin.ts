@@ -16,7 +16,7 @@ import extypes = require('../src/types/extraTypes');
 import helpinfo = require('../src/consts/helpinfo');
 import msgfunc = require('./msgfunc');
 import trackfunc = require('../src/trackfunc');
-
+import mainconst = require('../src/consts/main');
 
 export function name(input: extypes.commandInput) {
 

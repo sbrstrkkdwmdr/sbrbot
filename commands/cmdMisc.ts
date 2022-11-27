@@ -17,6 +17,7 @@ import helpinfo = require('../src/consts/helpinfo');
 import msgfunc = require('./msgfunc');
 import fetch from 'node-fetch';
 import yts = require('yt-search');
+import mainconst = require('../src/consts/main');
 
 /**
  * yes or no
@@ -946,21 +947,21 @@ export async function ytsearch(input: extypes.commandInput) {
     const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-ytsearch-${commanduser.id}`)
+                .setCustomId(`${mainconst.version}-BigLeftArrow-ytsearch-${commanduser.id}`)
                 .setStyle(Discord.ButtonStyle.Primary)
                 .setEmoji('⬅')
             /* .setLabel('Start') */,
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-ytsearch-${commanduser.id}`)
+                .setCustomId(`${mainconst.version}-LeftArrow-ytsearch-${commanduser.id}`)
                 .setStyle(Discord.ButtonStyle.Primary)
                 .setEmoji('◀'),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-ytsearch-${commanduser.id}`)
+                .setCustomId(`${mainconst.version}-RightArrow-ytsearch-${commanduser.id}`)
                 .setStyle(Discord.ButtonStyle.Primary)
                 .setEmoji('▶')
             /* .setLabel('Next') */,
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-ytsearch-${commanduser.id}`)
+                .setCustomId(`${mainconst.version}-BigRightArrow-ytsearch-${commanduser.id}`)
                 .setStyle(Discord.ButtonStyle.Primary)
                 .setEmoji('➡')
             /* .setLabel('End') */,

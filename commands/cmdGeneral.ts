@@ -15,7 +15,7 @@ import buttonsthing = require('../src/consts/buttons');
 import extypes = require('../src/types/extraTypes');
 import helpinfo = require('../src/consts/helpinfo');
 import msgfunc = require('./msgfunc');
-
+import mainconst = require('../src/consts/main');
 
 /**
  * convert a value
@@ -930,11 +930,11 @@ export function help(input: extypes.commandInput) {
     const buttons = new Discord.ActionRowBuilder()
         .setComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Random-help-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Random-help-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.random),
             new Discord.ButtonBuilder()
-                .setCustomId(`Detailed-help-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Detailed-help-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed)
         );
@@ -1120,11 +1120,11 @@ export function help(input: extypes.commandInput) {
     getemb();
 
     const inputMenu = new Discord.SelectMenuBuilder()
-        .setCustomId(`SelectMenu1-help-${commanduser.id}-${input.absoluteID}`)
+        .setCustomId(`${mainconst.version}-SelectMenu1-help-${commanduser.id}-${input.absoluteID}`)
         .setPlaceholder('Select a command');
 
     const selectCategoryMenu = new Discord.SelectMenuBuilder()
-        .setCustomId(`SelectMenu2-help-${commanduser.id}-${input.absoluteID}`)
+        .setCustomId(`${mainconst.version}-SelectMenu2-help-${commanduser.id}-${input.absoluteID}`)
         .setPlaceholder('Select a command category')
         .setOptions(
             new Discord.SelectMenuOptionBuilder()
@@ -1534,19 +1534,19 @@ export function ping(input: extypes.commandInput) {
     const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-ping-${commanduser.id}`)
+                .setCustomId(`${mainconst.version}-BigLeftArrow-ping-${commanduser.id}`)
                 .setStyle(Discord.ButtonStyle.Primary)
                 .setEmoji('⬅'),
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-ping-${commanduser.id}`)
+                .setCustomId(`${mainconst.version}-LeftArrow-ping-${commanduser.id}`)
                 .setStyle(Discord.ButtonStyle.Primary)
                 .setEmoji('◀'),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-ping-${commanduser.id}`)
+                .setCustomId(`${mainconst.version}-RightArrow-ping-${commanduser.id}`)
                 .setStyle(Discord.ButtonStyle.Primary)
                 .setEmoji('▶'),
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-ping-${commanduser.id}`)
+                .setCustomId(`${mainconst.version}-BigRightArrow-ping-${commanduser.id}`)
                 .setStyle(Discord.ButtonStyle.Primary)
                 .setEmoji('➡'),
         );

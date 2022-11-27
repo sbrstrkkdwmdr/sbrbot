@@ -11,6 +11,7 @@ import osucmds = require('./commands/cmdosu');
 import admincmds = require('./commands/cmdAdmin');
 import misccmds = require('./commands/cmdMisc');
 import checkcmds = require('./commands/cmdChecks');
+import mainconst = require('./src/consts/main');
 
 module.exports = (userdata, client: Discord.Client, config: extypes.config, oncooldown, guildSettings, trackDb, statsCache) => {
     let timeouttime;

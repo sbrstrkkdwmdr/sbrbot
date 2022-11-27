@@ -8,6 +8,7 @@ import misccmds = require('./commands/cmdMisc');
 import checkcmds = require('./commands/cmdChecks');
 import extypes = require('./src/types/extratypes');
 import embedStuff = require('./src/embed');
+import mainconst = require('./src/consts/main');
 
 module.exports = (userdata, client: Discord.Client, config: extypes.config, oncooldown, statsCache) => {
     const graphChannel = client.channels.cache.get(config.graphChannelId) as Discord.TextChannel;
@@ -22,15 +23,22 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
 
         const args = null;
         const obj = interaction;
-        const command = interaction.customId.split('-')[1];
-        const button = interaction.customId.split('-')[0] as extypes.commandButtonTypes;
-        const specid = interaction.customId.split('-')[2];
-        const absoluteID = interaction.customId.split('-')[3];
 
-        //buttonType-baseCommand-userId-commandId
+        //version-buttonType-baseCommand-userId-commandId
+        const buttonsplit = interaction.customId.split('-');
+        const buttonVer = buttonsplit[0];
+        const button = buttonsplit[1] as extypes.commandButtonTypes;
+        const command = buttonsplit[2];
+        const specid = buttonsplit[3];
+        const absoluteID = buttonsplit[4];
+
+        if (buttonVer != mainconst.version) {
+            checkcmds.outdated('button', interaction, 'command');
+            return;
+        }
 
         const commandType: extypes.commandType = 'button';
-        const overrides:extypes.overrides = {
+        const overrides: extypes.overrides = {
             user: null,
             page: null,
             mode: null,
@@ -136,7 +144,7 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     .catch(error => { });
                 break;
             case 'nochokes':
-                overrides.miss = true; 
+                overrides.miss = true;
                 osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
                 interaction.deferUpdate()
                     .catch(error => { });

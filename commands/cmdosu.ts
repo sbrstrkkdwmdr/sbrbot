@@ -22,7 +22,7 @@ import {
     CatchPerformanceAttributes,
     ManiaPerformanceAttributes, OsuPerformanceAttributes, PerformanceAttributes, TaikoPerformanceAttributes
 } from 'rosu-pp';
-
+import mainconst = require('../src/consts/main');
 
 
 export async function name(input: extypes.commandInput) {
@@ -465,23 +465,23 @@ export async function lb(input: extypes.commandInput) {
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-lb-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigLeftArrow-lb-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.first),
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-lb-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-LeftArrow-lb-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous),
             new Discord.ButtonBuilder()
-                .setCustomId(`Search-lb-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Search-lb-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.search),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-lb-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-RightArrow-lb-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.next),
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-lb-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigRightArrow-lb-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
@@ -862,30 +862,30 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-ranking-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigLeftArrow-ranking-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.first),
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-ranking-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-LeftArrow-ranking-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous),
             new Discord.ButtonBuilder()
-                .setCustomId(`Search-ranking-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Search-ranking-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.search),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-ranking-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-RightArrow-ranking-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.next),
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-ranking-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigRightArrow-ranking-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
     const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-ranking-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-ranking-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
@@ -1437,7 +1437,7 @@ export async function osu(input: extypes.commandInput) {
     const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-osu-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
@@ -1481,14 +1481,14 @@ export async function osu(input: extypes.commandInput) {
     if (detailed == true) {
         buttons.addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`DetailDisable-osu-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-DetailDisable-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed)
         );
     } else {
         buttons.addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`DetailEnable-osu-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-DetailEnable-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed)
         );
@@ -2226,29 +2226,29 @@ export async function firsts(input: extypes.commandInput) {
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-firsts-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigLeftArrow-firsts-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.first),
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-firsts-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-LeftArrow-firsts-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous),
             new Discord.ButtonBuilder()
-                .setCustomId(`Search-firsts-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Search-firsts-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.search),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-firsts-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-RightArrow-firsts-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.next),
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-firsts-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigRightArrow-firsts-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
     const buttons = new Discord.ActionRowBuilder().addComponents(
         new Discord.ButtonBuilder()
-            .setCustomId(`Refresh-firsts-${commanduser.id}-${input.absoluteID}`)
+            .setCustomId(`${mainconst.version}-Refresh-firsts-${commanduser.id}-${input.absoluteID}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.main.refresh),
     );
@@ -2669,30 +2669,30 @@ export async function maplb(input: extypes.commandInput) {
     const buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-leaderboard-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-leaderboard-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-maplb-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigLeftArrow-maplb-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.first),
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-maplb-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-LeftArrow-maplb-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous),
             new Discord.ButtonBuilder()
-                .setCustomId(`Search-maplb-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Search-maplb-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.search),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-maplb-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-RightArrow-maplb-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.next),
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-maplb-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigRightArrow-maplb-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
@@ -3532,7 +3532,7 @@ export async function osutop(input: extypes.commandInput) {
     const buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
@@ -3557,23 +3557,23 @@ export async function osutop(input: extypes.commandInput) {
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigLeftArrow-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.first),
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-LeftArrow-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous),
             new Discord.ButtonBuilder()
-                .setCustomId(`Search-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Search-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.search),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-RightArrow-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.next),
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigRightArrow-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
@@ -4215,7 +4215,7 @@ export async function pinned(input: extypes.commandInput) {
     const buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-pinned-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-pinned-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
@@ -4286,23 +4286,23 @@ export async function pinned(input: extypes.commandInput) {
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-pinned-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigLeftArrow-pinned-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.first),
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-pinned-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-LeftArrow-pinned-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous),
             new Discord.ButtonBuilder()
-                .setCustomId(`Search-pinned-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Search-pinned-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.search),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-pinned-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-RightArrow-pinned-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.next),
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-pinned-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigRightArrow-pinned-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
@@ -4843,7 +4843,7 @@ export async function recent(input: extypes.commandInput) {
     const buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-recent-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-recent-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
@@ -4911,22 +4911,22 @@ export async function recent(input: extypes.commandInput) {
     let pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigLeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.first)
                 .setDisabled(isFirstPage),
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-LeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous)
                 .setDisabled(isFirstPage),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-recent-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-RightArrow-recent-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.next)
                 .setDisabled(isLastPage),
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-recent-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigRightArrow-recent-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last)
                 .setDisabled(isLastPage),
@@ -5428,23 +5428,23 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         pgbuttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-BigLeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.first),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-LeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.previous),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Search-recent-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-Search-recent-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.search),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-recent-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-RightArrow-recent-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.next),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-recent-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-BigRightArrow-recent-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.last),
             );
@@ -6713,7 +6713,7 @@ export async function scores(input: extypes.commandInput) {
     const buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-scores-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-scores-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
@@ -6766,23 +6766,23 @@ export async function scores(input: extypes.commandInput) {
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-scores-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigLeftArrow-scores-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.first).setDisabled(false),
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-scores-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-LeftArrow-scores-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous),
             new Discord.ButtonBuilder()
-                .setCustomId(`Search-scores-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Search-scores-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.search),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-scores-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-RightArrow-scores-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.next),
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-scores-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigRightArrow-scores-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
@@ -7284,7 +7284,7 @@ export async function scorestats(input: extypes.commandInput) {
     const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Details-scorestats-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Details-scorestats-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed),
         );
@@ -8280,7 +8280,7 @@ Could not find beatmapset data
 
     const buttons = new Discord.ActionRowBuilder().addComponents(
         new Discord.ButtonBuilder()
-            .setCustomId(`Refresh-map-${commanduser.id}-${input.absoluteID}`)
+            .setCustomId(`${mainconst.version}-Refresh-map-${commanduser.id}-${input.absoluteID}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.main.refresh),
     );
@@ -8344,14 +8344,14 @@ Could not find beatmapset data
     if (detailed == true) {
         buttons.addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`DetailDisable-map-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-DetailDisable-map-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed)
         );
     } else {
         buttons.addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`DetailEnable-map-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-DetailEnable-map-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.detailed)
         );
@@ -8362,7 +8362,7 @@ Could not find beatmapset data
     let bmsdata: osuApiTypes.Beatmapset;
 
     const inputModal = new Discord.SelectMenuBuilder()
-        .setCustomId(`Select-map-${commanduser.id}-${input.absoluteID}`)
+        .setCustomId(`${mainconst.version}-Select-map-${commanduser.id}-${input.absoluteID}`)
         .setPlaceholder('Select a map');
 
     //fetch map data and mapset data from id
@@ -9777,23 +9777,23 @@ export async function userBeatmaps(input: extypes.commandInput) {
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigLeftArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.first),
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-LeftArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous),
             new Discord.ButtonBuilder()
-                .setCustomId(`Search-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Search-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.search),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-RightArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.next),
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-BigRightArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.last),
         );
@@ -10643,21 +10643,21 @@ export async function tracklist(input: extypes.commandInput) {
     const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-tracklist-${commanduser.id}`)
+                .setCustomId(`${mainconst.version}-BigLeftArrow-tracklist-${commanduser.id}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji('⬅')
             /* .setLabel('Start') */,
             new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-tracklist-${commanduser.id}`)
+                .setCustomId(`${mainconst.version}-LeftArrow-tracklist-${commanduser.id}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji('◀'),
             new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-tracklist-${commanduser.id}`)
+                .setCustomId(`${mainconst.version}-RightArrow-tracklist-${commanduser.id}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji('▶')
             /* .setLabel('Next') */,
             new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-tracklist-${commanduser.id}`)
+                .setCustomId(`${mainconst.version}-BigRightArrow-tracklist-${commanduser.id}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji('➡')
             /* .setLabel('End') */,
@@ -11146,23 +11146,23 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                 const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
                     .addComponents(
                         new Discord.ButtonBuilder()
-                            .setCustomId(`BigLeftArrow-compare-${commanduser.id}-${input.absoluteID}`)
+                            .setCustomId(`${mainconst.version}-BigLeftArrow-compare-${commanduser.id}-${input.absoluteID}`)
                             .setStyle(buttonsthing.type.current)
                             .setEmoji(buttonsthing.label.page.first),
                         new Discord.ButtonBuilder()
-                            .setCustomId(`LeftArrow-compare-${commanduser.id}-${input.absoluteID}`)
+                            .setCustomId(`${mainconst.version}-LeftArrow-compare-${commanduser.id}-${input.absoluteID}`)
                             .setStyle(buttonsthing.type.current)
                             .setEmoji(buttonsthing.label.page.previous),
                         new Discord.ButtonBuilder()
-                            .setCustomId(`Search-compare-${commanduser.id}-${input.absoluteID}`)
+                            .setCustomId(`${mainconst.version}-Search-compare-${commanduser.id}-${input.absoluteID}`)
                             .setStyle(buttonsthing.type.current)
                             .setEmoji(buttonsthing.label.page.search),
                         new Discord.ButtonBuilder()
-                            .setCustomId(`RightArrow-compare-${commanduser.id}-${input.absoluteID}`)
+                            .setCustomId(`${mainconst.version}-RightArrow-compare-${commanduser.id}-${input.absoluteID}`)
                             .setStyle(buttonsthing.type.current)
                             .setEmoji(buttonsthing.label.page.next),
                         new Discord.ButtonBuilder()
-                            .setCustomId(`BigRightArrow-compare-${commanduser.id}-${input.absoluteID}`)
+                            .setCustomId(`${mainconst.version}-BigRightArrow-compare-${commanduser.id}-${input.absoluteID}`)
                             .setStyle(buttonsthing.type.current)
                             .setEmoji(buttonsthing.label.page.last),
                     );

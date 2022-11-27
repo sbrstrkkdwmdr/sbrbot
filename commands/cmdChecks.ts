@@ -15,6 +15,7 @@ import buttonsthing = require('../src/consts/buttons');
 import extypes = require('../src/types/extraTypes');
 import helpinfo = require('../src/consts/helpinfo');
 import msgfunc = require('./msgfunc');
+import mainconst = require('../src/consts/main');
 
 export function name(input: extypes.commandInput) {
 }
@@ -23,55 +24,74 @@ export function name(input: extypes.commandInput) {
  * if no permissions
  */
 export function noperms(commandType, obj, type: 'bot' | 'user') {
-    
 
-        switch (type) {
-            case 'user': {
-                switch (commandType) {
-                    //==============================================================================================================================================================================================
-                    case 'interaction': {
-                        obj.reply({
-                            content: 'You do not have permission to use this command.',
-                            embeds: [],
-                            files: [],
-                            ephemeral: true,
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch();
-                    }
 
+    switch (type) {
+        case 'user': {
+            switch (commandType) {
+                //==============================================================================================================================================================================================
+                case 'interaction': {
+                    obj.reply({
+                        content: 'You do not have permission to use this command.',
+                        embeds: [],
+                        files: [],
+                        ephemeral: true,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
                 }
+
             }
-                break;
-            case 'bot': {
-                switch (commandType) {
-                    case 'message': {
-                        obj.reply({
-                            content: 'I am missing permissions to use this command.',
-                            embeds: [],
-                            files: [],
-                            ephemeral: true,
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch();
-                    }
-                        break;
-                    //==============================================================================================================================================================================================
-                    case 'interaction': {
-                        obj.reply({
-                            content: 'I am missing permissions to use this command.',
-                            embeds: [],
-                            files: [],
-                            ephemeral: true,
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                            .catch();
-                    }
+        }
+            break;
+        case 'bot': {
+            switch (commandType) {
+                case 'message': {
+                    obj.reply({
+                        content: 'I am missing permissions to use this command.',
+                        embeds: [],
+                        files: [],
+                        ephemeral: true,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                }
+                    break;
+                //==============================================================================================================================================================================================
+                case 'interaction': {
+                    obj.reply({
+                        content: 'I am missing permissions to use this command.',
+                        embeds: [],
+                        files: [],
+                        ephemeral: true,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
                 }
             }
         }
-    
+    }
+
+}
+
+export function outdated(commandType, obj, type: 'command') {
+    switch (type) {
+        case 'command': {
+            switch (commandType) {
+                case 'button':
+                    obj.reply({
+                        content: 'This command is outdated and cannot be used.',
+                        ephemeral: true,
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                    break;
+            }
+        }
+            break;
+    }
 }
