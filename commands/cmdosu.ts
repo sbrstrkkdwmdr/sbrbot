@@ -4012,6 +4012,8 @@ export async function osutop(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
 
+            input.args = cleanArgs(input.args);
+
             user = input.args.join(' ');
 
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
